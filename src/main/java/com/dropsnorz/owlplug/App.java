@@ -1,13 +1,55 @@
 package com.dropsnorz.owlplug;
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+
 /**
  * Hello world!
  *
  */
-public class App 
+@SpringBootApplication
+public class App extends Application
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+	
+	private ConfigurableApplicationContext context;
+	private Parent rootNode;
+	
+    
+    @Override
+    public void init() throws Exception {
+        SpringApplicationBuilder builder = new SpringApplicationBuilder(App.class);
+        context = builder.run(getParameters().getRaw().toArray(new String[0]));
+ 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+        loader.setControllerFactory(context::getBean);
+        rootNode = loader.load();
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        double width = 800;
+        double height = 400;
+ 
+        primaryStage.setScene(new Scene(rootNode, width, height));
+        primaryStage.centerOnScreen();
+        primaryStage.show();
+    }
+ 
+    @Override
+    public void stop() throws Exception {
+        context.close();
+    }
+    
+    public static void main(String[] args) {
+        launch(App.class, args);
     }
 }
