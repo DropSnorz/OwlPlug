@@ -4,6 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import com.dropsnorz.owlplug.services.PluginExplorer;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -42,6 +44,10 @@ public class App extends Application
         primaryStage.setScene(new Scene(rootNode, width, height));
         primaryStage.centerOnScreen();
         primaryStage.show();
+        
+        PluginExplorer explorer = new PluginExplorer("C:/vst", "C:/vst");
+        explorer.explore();
+        
     }
  
     @Override
