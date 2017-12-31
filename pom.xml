@@ -15,6 +15,14 @@
       <version>1.5.7.RELEASE</version>
       <relativePath/> <!-- lookup parent from repository -->
   </parent>
+  
+  <repositories>
+    <repository>
+		<name>data</name>
+        <id>local-maven-repo</id>
+        <url>file:${project.basedir}/repo</url>
+    </repository>
+</repositories>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,13 +45,19 @@
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-core</artifactId>
     <version>${logback.version}</version>
-</dependency>
+	</dependency>
 
-<dependency>
-    <groupId>commons-io</groupId>
-    <artifactId>commons-io</artifactId>
-    <version>2.4</version>
-</dependency>
+	<dependency>
+	    <groupId>commons-io</groupId>
+	    <artifactId>commons-io</artifactId>
+	    <version>2.4</version>
+	</dependency>
+	
+ <dependency>  
+  <groupId>org.boris</groupId>
+  <artifactId>jvst</artifactId>
+  <version>0.0.1</version> 
+</dependency> 
     
   </dependencies>
   
