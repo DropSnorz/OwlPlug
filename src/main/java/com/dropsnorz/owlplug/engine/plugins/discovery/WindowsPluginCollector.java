@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.services.plugins;
+package com.dropsnorz.owlplug.engine.plugins.discovery;
 
 import java.io.File;
 import java.util.ArrayList;
