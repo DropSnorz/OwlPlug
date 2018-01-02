@@ -9,8 +9,13 @@ import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.jfoenix.controls.JFXTreeView;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.TreeItem;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 
 @Controller
 public class MainController {
@@ -21,9 +26,13 @@ public class MainController {
 	@FXML
 	JFXTreeView<Object> treeView;
 	
+	@FXML
+	BorderPane mainPane;
+	
 	
     @FXML
-    public void initialize() {
+    public void initialize() {  
+    	
     	
     	TreeItem<Object> treeRootNode = 
     	        new TreeItem<Object>("(all)");

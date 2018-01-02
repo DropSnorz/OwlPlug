@@ -9,37 +9,59 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
    <center>
       <HBox layoutY="215.0" prefHeight="100.0" prefWidth="581.0">
          <children>
             <JFXTabPane prefHeight="100.0" prefWidth="441.0" HBox.hgrow="ALWAYS">
                <tabs>
-                  <Tab text="Plugins">
+                  <Tab closable="false" disable="true" text="OwlPlug">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab closable="false" text="Plugins">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <HBox prefHeight="215.0" prefWidth="639.0">
+                              <HBox prefHeight="280.0" prefWidth="600.0">
                                  <children>
-                                    <JFXTreeView fx:id="treeView"/>
+                                    <VBox>
+                                       <children>
+                                          <HBox alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="311.0">
+                                             <children>
+                                                <JFXTextField />
+                                                <JFXButton text="Search" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="10.0" left="5.0" top="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <JFXTreeView fx:id="treeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="280.0" prefWidth="500.0" />
                                  </children>
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
                               </HBox>
                            </children>
                         </AnchorPane>
                     </content>
                   </Tab>
-                  <Tab text="Store">
+                  <Tab closable="false" text="Store">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab closable="false" text="Options">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                     </content>
                   </Tab>
                </tabs>
             </JFXTabPane>
-            <HBox alignment="TOP_RIGHT" prefHeight="400.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <JFXButton prefHeight="37.0" prefWidth="75.0" text="Options" />
-               </children>
-            </HBox>
          </children>
       </HBox>
    </center>

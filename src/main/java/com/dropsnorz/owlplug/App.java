@@ -41,7 +41,11 @@ public class App extends Application
         double width = 800;
         double height = 400;
  
-        primaryStage.setScene(new Scene(rootNode, width, height));
+        Scene scene = new Scene(rootNode, width, height);
+        String css = App.class.getResource("/owlplug.css").toExternalForm();
+		scene.getStylesheets().add(css);
+        
+        primaryStage.setScene(scene);
         primaryStage.centerOnScreen();
         primaryStage.show();
         

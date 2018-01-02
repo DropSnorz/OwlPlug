@@ -1,0 +1,17 @@
+#mainPane{
+	-fx-background-color:linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);
+}
+
+JFXTreeView{
+	-fx-background-color:rgb(66,66,66);
+	-fx-text-fill:white;
+}
+
+.tree-view, .tree-cell {
+    -fx-background-color: rgb(66,66,66) ;
+    -fx-text-fill: white ;
+}
+
+.jfx-tab-pane *.tab-header-background{
+	-fx-background-color:rgb(66,66,66);
+}
