@@ -7,6 +7,7 @@ import java.util.List;
 import org.boris.jvst.AEffect;
 import org.boris.jvst.VST;
 import org.boris.jvst.VSTException;
+import org.springframework.stereotype.Component;
 
 import com.dropsnorz.owlplug.engine.plugins.discovery.NativePluginBuilder;
 import com.dropsnorz.owlplug.engine.plugins.discovery.NativePluginBuilderFactory;
@@ -16,14 +17,16 @@ import com.dropsnorz.owlplug.model.OSType;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginType;
 
+@Component
 public class PluginExplorer {
 
 	protected String VST2Path;
-	protected String Platform;
+	protected String platform;
 
-	public PluginExplorer(String platform, String VST2Path){
+	public PluginExplorer(){
 
-		this.VST2Path = VST2Path;
+		this.VST2Path = "C:/vst";
+		this.platform ="WIN";
 
 	}
 

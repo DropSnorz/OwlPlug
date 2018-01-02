@@ -45,8 +45,6 @@ public class App extends Application
         primaryStage.centerOnScreen();
         primaryStage.show();
         
-        PluginExplorer explorer = new PluginExplorer("C:/vst", "C:/vst");
-        explorer.explore();
         
     }
  
