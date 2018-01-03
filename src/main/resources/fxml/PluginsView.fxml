@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="537.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.dropsnorz.owlplug.controllers.PluginsController">
+	<children>
+		<HBox prefHeight="350.0" prefWidth="600.0">
+			<children>
+				<VBox>
+					<children>
+						<HBox alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="311.0">
+							<children>
+								<JFXTextField />
+								<JFXButton text="Search" />
+							</children>
+							<padding>
+								<Insets bottom="10.0" left="5.0" top="5.0" />
+							</padding>
+						</HBox>
+						<HBox VBox.vgrow="ALWAYS">
+							<children>
+								<JFXTabPane fx:id="treeViewTabPane" side="LEFT" styleClass="small-tree-view">
+									<tabs>
+										<Tab text="All" fx:id="treeTabAll" />
+										<Tab text="Directories" fx:id="treeTabDirectories">
+											<content>
+												<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+											</content>
+										</Tab>
+									</tabs>
+								</JFXTabPane>
+								<JFXTreeView fx:id="treeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+									<padding>
+										<Insets left="-8.0" />
+									</padding>
+								</JFXTreeView>
+							</children>
+						</HBox>
+					</children>
+				</VBox>
+				<VBox prefHeight="280.0" prefWidth="500.0" />
+			</children>
+			<padding>
+				<Insets left="10.0" />
+			</padding>
+		</HBox>
+	</children>
+</AnchorPane>

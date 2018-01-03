@@ -22,52 +22,7 @@
                   </Tab>
                   <Tab closable="false" text="Plugins">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <HBox prefHeight="350.0" prefWidth="600.0">
-                                 <children>
-                                    <VBox>
-                                       <children>
-                                          <HBox alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="311.0">
-                                             <children>
-                                                <JFXTextField />
-                                                <JFXButton text="Search" />
-                                             </children>
-                                             <padding>
-                                                <Insets bottom="10.0" left="5.0" top="5.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox VBox.vgrow="ALWAYS">
-                                             <children>
-                                                <JFXTabPane side="LEFT" styleClass="small-tree-view">
-                                                   <tabs>
-                                                      <Tab text="All" />
-                                                      <Tab text="Directories">
-                                                        <content>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                                        </content>
-                                                      </Tab>
-                                                   </tabs>
-                                                   <HBox.margin>
-                                                      <Insets />
-                                                   </HBox.margin>
-                                                </JFXTabPane>
-                                                <JFXTreeView fx:id="treeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                                                   <padding>
-                                                      <Insets left="-8.0" />
-                                                   </padding></JFXTreeView>
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </VBox>
-                                    <VBox prefHeight="280.0" prefWidth="500.0" />
-                                 </children>
-                                 <padding>
-                                    <Insets left="10.0" />
-                                 </padding>
-                              </HBox>
-                           </children>
-                        </AnchorPane>
+                     <fx:include source="PluginsView.fxml" fx:id="pluginView" />
                     </content>
                   </Tab>
                   <Tab closable="false" text="Store">
