@@ -18,7 +18,8 @@ public class WindowsPluginBuilder extends NativePluginBuilder {
 		
 		if(pluginType == PluginType.VST2){
 			String pluginName = FilenameUtils.removeExtension(file.getName());
-			return new Plugin(pluginName);
+			String pluginPath = file.getAbsolutePath().replace("\\", "/");
+			return new Plugin(pluginName, pluginPath);
 		}
 		
 		return null;

@@ -15,7 +15,7 @@ public class OSXPluginBuilder extends NativePluginBuilder {
 	public Plugin build(File file) {
 		
 		if(pluginType == PluginType.VST2){
-			return new Plugin(file.getName());
+			return new Plugin(file.getName(), file.getAbsolutePath());
 		}
 		
 		return null;

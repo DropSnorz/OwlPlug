@@ -5,7 +5,21 @@
 JFXTreeView{
 	-fx-background-color:rgb(66,66,66);
 	-fx-text-fill:white;
+	-fx-border-color: transparent;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	-fx-background-insets: 0, 1;
+    -fx-padding: 1;
 }
+JFXTreeView:focused{
+	-fx-border-color: transparent;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	
+}
+
+
+
 
 .tree-view, .tree-cell {
     -fx-background-color: rgb(66,66,66) ;
@@ -14,4 +28,8 @@ JFXTreeView{
 
 .jfx-tab-pane *.tab-header-background{
 	-fx-background-color:rgb(66,66,66);
+}
+
+.small-tree-view *.tab *.tab-label{
+	-fx-font-size: 15px;
 }

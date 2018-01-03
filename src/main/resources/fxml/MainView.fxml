@@ -24,7 +24,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <HBox prefHeight="280.0" prefWidth="600.0">
+                              <HBox prefHeight="350.0" prefWidth="600.0">
                                  <children>
                                     <VBox>
                                        <children>
@@ -37,7 +37,27 @@
                                                 <Insets bottom="10.0" left="5.0" top="5.0" />
                                              </padding>
                                           </HBox>
-                                          <JFXTreeView fx:id="treeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" />
+                                          <HBox VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <JFXTabPane side="LEFT" styleClass="small-tree-view">
+                                                   <tabs>
+                                                      <Tab text="All" />
+                                                      <Tab text="Directories">
+                                                        <content>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                        </content>
+                                                      </Tab>
+                                                   </tabs>
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                </JFXTabPane>
+                                                <JFXTreeView fx:id="treeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                                                   <padding>
+                                                      <Insets left="-8.0" />
+                                                   </padding></JFXTreeView>
+                                             </children>
+                                          </HBox>
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="280.0" prefWidth="500.0" />
