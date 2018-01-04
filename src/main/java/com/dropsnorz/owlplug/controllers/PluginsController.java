@@ -28,7 +28,7 @@ public class PluginsController {
 
 	@Autowired
 	PluginExplorer pluginExplorer;
-	
+
 	@Autowired
 	NodeInfoController nodeInfoController;
 
@@ -47,7 +47,7 @@ public class PluginsController {
 
 	TreeItem<Object> treeFileRootNode; 
 
-	
+
 	private Image folderImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
 	private Image brickImage  = new Image(getClass().getResourceAsStream("/icons/soundwave-blue-16.png"));;
 
@@ -67,7 +67,7 @@ public class PluginsController {
 			treeRootNode.getChildren().add(item);
 
 		}
-		
+
 		treeRootNode.setExpanded(true);
 
 		treeFileRootNode = new TreeItem<Object>("(all)");
@@ -76,21 +76,21 @@ public class PluginsController {
 		buildChildren(pluginTree, treeFileRootNode);
 
 		treeView.setRoot(treeRootNode);
-		
-		 treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
 
-		        @Override
-		        public void changed(ObservableValue observable, Object oldValue,
-		                Object newValue){
-		        	
-		        	if(newValue != null){
-		        		TreeItem<Object> selectedItem = (TreeItem<Object>) newValue;
-				        nodeInfoController.setNode(selectedItem.getValue());
-		        	}
-		            
-		        }
+		treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
 
-		      });
+			@Override
+			public void changed(ObservableValue observable, Object oldValue,
+					Object newValue){
+
+				if(newValue != null){
+					TreeItem<Object> selectedItem = (TreeItem<Object>) newValue;
+					nodeInfoController.setNode(selectedItem.getValue());
+				}
+
+			}
+
+		});
 
 
 
@@ -123,17 +123,33 @@ public class PluginsController {
 				String segment = subDirs[i];
 				FileTree ft = new FileTree();
 
-				if(i == subDirs.length - 1){
-					ft.setNodeValue(plug);
+				if(node.get(segment) == null){
+					if(i == subDirs.length - 1){
+						ft.setNodeValue(plug);
+					}
+					else{
+
+						PluginDirectory directory = new PluginDirectory();
+						directory.setName(segment);
+						directory.setPath(currentPath);
+						
+						//Should be optimized
+						List<Plugin> localPluginList = new ArrayList<Plugin>();
+						
+						for(Plugin p : pluginList){
+							if(p.getPath().startsWith(currentPath)){
+								localPluginList.add(p);
+							}
+						}
+						
+						directory.setPluginList(localPluginList);
+						ft.setNodeValue(directory);
+						
+					}
+					node.put(segment, ft);
+					
 				}
-				else{
-					PluginDirectory directory = new PluginDirectory();
-					directory.setName(segment);
-					directory.setPath(currentPath);
-					directory.setPluginList(new ArrayList<Plugin>());
-					ft.setNodeValue(directory);
-				}
-				node = node.computeIfAbsent(segment, s -> ft);
+				node = node.get(segment);
 			}
 		}
 
