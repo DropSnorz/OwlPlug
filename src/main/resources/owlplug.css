@@ -18,12 +18,13 @@ JFXTreeView:focused{
 	
 }
 
-
-
-
 .tree-view, .tree-cell {
     -fx-background-color: rgb(66,66,66) ;
     -fx-text-fill: white ;
+}
+
+.tree-cell > .tree-disclosure-node > .arrow  {
+    -fx-background-color: white;
 }
 
 .jfx-tab-pane *.tab-header-background{
