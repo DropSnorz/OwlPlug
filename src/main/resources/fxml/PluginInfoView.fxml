@@ -8,18 +8,25 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.PluginInfoController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" spacing="15.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.PluginInfoController">
    <children>
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../icons/picture-grey-240.png" />
-         </image>
-      </ImageView>
-      <VBox>
+      <VBox alignment="CENTER" styleClass="panel-transparent">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/picture-grey-240.png" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox styleClass="panel-transparent">
          <children>
             <HBox alignment="CENTER" prefHeight="25.0" prefWidth="460.0">
                <children>
-                  <Label fx:id="pluginTitleLabel" text="UNKNOW" />
+                  <Label fx:id="pluginTitleLabel" contentDisplay="RIGHT" text="UNKNOW">
+                     <graphic>
+                        <ImageView fx:id="pluginTypeIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic></Label>
                </children>
             </HBox>
             <HBox alignment="TOP_RIGHT" prefHeight="38.0" prefWidth="460.0">
@@ -30,7 +37,7 @@
             </HBox>
          </children>
       </VBox>
-      <GridPane>
+      <GridPane styleClass="panel-transparent">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -43,31 +50,31 @@
          <children>
             <TextFlow prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Label text="Plugin Name:" />
+                  <Label text="Plugin Name: " />
                   <Label fx:id="pluginNameLabel" text="UNKNOW" />
                </children>
             </TextFlow>
             <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
-                  <Label text="Plugin Version:" />
+                  <Label text="Plugin Version: " />
                   <Label fx:id="pluginVersionLabel" text="UNKNOW" />
                </children>
             </TextFlow>
             <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <Label text="Bundle Id:" />
+                  <Label text="Bundle Id: " />
                   <Label fx:id="pluginBundleIdLabel" text="UNKNOW" />
                </children>
             </TextFlow>
             <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <Label text="Id:" />
+                  <Label text="Id: " />
                   <Label fx:id="pluginIdLabel" text="UNKNOW" />
                </children>
             </TextFlow>
             <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
-                  <Label text="Path:" />
+                  <Label text="Path: " />
                   <Label fx:id="pluginPathLabel" text="UNKNOW" />
                </children>
             </TextFlow>

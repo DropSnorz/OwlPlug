@@ -33,7 +33,7 @@ public class Plugin {
 
 	@Override
 	public String toString() {
-		return "Plugin [name=" + name + "]";
+		return name;
 	}
 	
 	

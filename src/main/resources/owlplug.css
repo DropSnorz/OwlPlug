@@ -34,3 +34,13 @@ JFXTreeView:focused{
 .small-tree-view *.tab *.tab-label{
 	-fx-font-size: 15px;
 }
+
+.panel-transparent{
+	-fx-background-color: rgba(66,66,66, 0.5);
+	-fx-padding:10,10,10,10;
+}
+
+.panel-transparent Label{
+	-fx-text-fill:white;
+	
+}
