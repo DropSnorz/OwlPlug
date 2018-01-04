@@ -20,6 +20,13 @@ public class PluginInfoController {
 	@FXML
 	private Label pluginNameLabel;
 	@FXML
+	private Label pluginVersionLabel;
+	@FXML
+	private Label pluginBundleIdLabel;
+	@FXML
+	private Label pluginIdLabel;
+	
+	@FXML
 	private Label pluginPathLabel;
 	
 	private Image brickImage  = new Image(getClass().getResourceAsStream("/icons/soundwave-blue-16.png"));;
@@ -33,6 +40,9 @@ public class PluginInfoController {
 		pluginTypeIcon.setImage(brickImage);
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());
+		pluginVersionLabel.setText("");
+		pluginIdLabel.setText("");
+		pluginBundleIdLabel.setText("");
 		pluginPathLabel.setText(plugin.getPath());
 	}
 

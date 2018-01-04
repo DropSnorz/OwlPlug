@@ -6,5 +6,6 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.NodeInfoController">
    <children>
       <fx:include fx:id="pluginInfoView" source="PluginInfoView.fxml" />
+      <fx:include fx:id="directoryInfoView" source="DirectoryInfoView.fxml" />
    </children>
 </AnchorPane>

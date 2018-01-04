@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="341.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.DirectoryInfoController">
+   <children>
+      <VBox alignment="TOP_CENTER" minWidth="-Infinity" prefHeight="300.0" prefWidth="460.0" styleClass="panel-transparent" HBox.hgrow="ALWAYS">
+         <children>
+            <Label fx:id="directoryPathLabel" text="DirectoryPath" />
+            <HBox prefHeight="37.0" prefWidth="460.0" />
+            <JFXListView fx:id="pluginDirectoryListView" prefHeight="222.0" prefWidth="460.0" />
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets left="20.0" right="20.0" />
+   </padding>
+</HBox>

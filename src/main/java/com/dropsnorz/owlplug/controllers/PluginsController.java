@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.model.Plugin;
+import com.dropsnorz.owlplug.model.PluginDirectory;
 import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTreeView;
@@ -115,12 +117,21 @@ public class PluginsController {
 			FileTree node = pluginTree;
 
 			String[] subDirs = plug.getPath().split("/");
+			String currentPath= "";
 			for (int i = 0; i < subDirs.length; i ++) {
+				currentPath = currentPath + subDirs[i] +"/";
 				String segment = subDirs[i];
 				FileTree ft = new FileTree();
 
 				if(i == subDirs.length - 1){
 					ft.setNodeValue(plug);
+				}
+				else{
+					PluginDirectory directory = new PluginDirectory();
+					directory.setName(segment);
+					directory.setPath(currentPath);
+					directory.setPluginList(new ArrayList<Plugin>());
+					ft.setNodeValue(directory);
 				}
 				node = node.computeIfAbsent(segment, s -> ft);
 			}
@@ -145,7 +156,7 @@ public class PluginsController {
 
 			}
 			else{
-				TreeItem<Object> item = new TreeItem<Object>(dir);
+				TreeItem<Object> item = new TreeItem<Object>(pluginTree.get(dir).getNodeValue());
 				node.getChildren().add(item);
 
 				buildChildren(pluginTree.get(dir), item);
