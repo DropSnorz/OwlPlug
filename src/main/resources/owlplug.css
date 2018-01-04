@@ -35,6 +35,15 @@ JFXTreeView:focused{
 	-fx-font-size: 15px;
 }
 
+JFXListView{
+	-fx-background-color: rgba(66,66,66, 0.5);
+	-fx-text-fill:white;
+	
+}
+.list-view .list-cell{
+	-fx-background-color: rgba(66,66,66, 0.5);
+	-fx-text-fill:white;
+}
 .panel-transparent{
 	-fx-background-color: rgba(66,66,66, 0.5);
 	-fx-padding:10,10,10,10;
