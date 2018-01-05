@@ -4,9 +4,13 @@
 <?import javafx.scene.layout.*?>
 
 
-<Pane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.NodeInfoController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.NodeInfoController">
    <children>
-      <fx:include fx:id="pluginInfoView" source="PluginInfoView.fxml" />
-      <fx:include fx:id="directoryInfoView" source="DirectoryInfoView.fxml" />
+      <fx:include fx:id="pluginInfoView" source="PluginInfoView.fxml" AnchorPane.topAnchor="0.0"
+             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+             AnchorPane.bottomAnchor="0.0"/>
+      <fx:include fx:id="directoryInfoView" source="DirectoryInfoView.fxml" AnchorPane.topAnchor="0.0"
+             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+             AnchorPane.bottomAnchor="0.0"/>
    </children>
-</Pane>
+</AnchorPane>

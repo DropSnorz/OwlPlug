@@ -15,11 +15,7 @@
 		</JFXTreeView>
 	</center>
 	<right>
-      <Pane>
-         <children>
-      				<fx:include source="NodeInfoView.fxml" />
-         </children>
-      </Pane>
+				<fx:include source="NodeInfoView.fxml" />
 	</right>
 	<bottom>
 		<VBox minHeight="30.0" prefHeight="30.0" prefWidth="537.0" BorderPane.alignment="CENTER" />

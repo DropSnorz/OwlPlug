@@ -7,10 +7,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.DirectoryInfoController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.DirectoryInfoController">
    <children>
-      <VBox alignment="TOP_CENTER" minWidth="-Infinity" prefWidth="460.0" styleClass="panel-transparent" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="460.0" styleClass="panel-transparent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
          <children>
             <Label fx:id="directoryPathLabel" text="DirectoryPath">
                <graphic>
@@ -22,11 +21,20 @@
                </graphic>
             </Label>
             <HBox prefHeight="37.0" prefWidth="460.0" />
-            <JFXListView fx:id="pluginDirectoryListView" prefHeight="300.0" prefWidth="460.0" VBox.vgrow="ALWAYS" />
+            <JFXListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="440.0" VBox.vgrow="ALWAYS">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin></JFXListView>
          </children>
          <VBox.margin>
             <Insets left="20.0" right="20.0" />
          </VBox.margin>
       </VBox>
    </children>
-</VBox>
+   <padding>
+      <Insets left="20.0" right="20.0" />
+   </padding>
+</AnchorPane>
