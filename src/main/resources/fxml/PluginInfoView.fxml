@@ -26,25 +26,25 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="25.0" prefWidth="460.0">
                      <children>
-                        <Label fx:id="pluginTitleLabel" contentDisplay="RIGHT" text="UNKNOW">
+                        <Label fx:id="pluginTitleLabel" text="UNKNOW">
                            <graphic>
                               <ImageView fx:id="pluginTypeIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </Label>
                      </children>
                   </HBox>
-                  <HBox alignment="TOP_RIGHT" prefHeight="38.0" prefWidth="460.0">
+                  <HBox alignment="TOP_RIGHT" prefHeight="38.0" prefWidth="460.0" spacing="5.0">
                      <children>
-                        <JFXButton buttonType="RAISED" text="Update" />
-                        <JFXButton buttonType="RAISED" text="Uninstall" />
+                        <JFXButton text="Update" />
+                        <JFXButton text="Uninstall" />
                      </children>
                   </HBox>
                </children>
             </VBox>
             <GridPane styleClass="panel-transparent">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="230.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="230.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -76,12 +76,21 @@
                         <Label fx:id="pluginIdLabel" text="UNKNOW" />
                      </children>
                   </TextFlow>
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                  <HBox alignment="BASELINE_LEFT" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                      <children>
-                        <Label text="Path: " />
-                        <Label fx:id="pluginPathLabel" text="UNKNOW" />
+                        <TextFlow GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Path: " />
+                              <Label fx:id="pluginPathLabel" text="UNKNOW" />
+                           </children>
+                        </TextFlow>
+                        <JFXButton fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" text="Open folder">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </JFXButton>
                      </children>
-                  </TextFlow>
+                  </HBox>
                </children>
             </GridPane>
             <HBox alignment="CENTER" prefHeight="20.0" prefWidth="460.0" />

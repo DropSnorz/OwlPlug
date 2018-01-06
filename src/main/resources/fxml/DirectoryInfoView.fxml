@@ -20,7 +20,10 @@
                   </ImageView>
                </graphic>
             </Label>
-            <HBox prefHeight="37.0" prefWidth="460.0" />
+            <HBox alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="460.0">
+               <children>
+                  <JFXButton fx:id="openDirectoryButton" text="Open directory" />
+               </children></HBox>
             <JFXListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="440.0" VBox.vgrow="ALWAYS">
                <opaqueInsets>
                   <Insets />
@@ -32,6 +35,9 @@
          <VBox.margin>
             <Insets left="20.0" right="20.0" />
          </VBox.margin>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
       </VBox>
    </children>
    <padding>

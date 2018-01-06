@@ -2,6 +2,11 @@
 	-fx-background-color:linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);
 }
 
+JFXButton{
+	-fx-text-fill:white;
+	-fx-background-color:rgba(0,0,0,0.1);
+}
+
 JFXTreeView{
 	-fx-background-color:rgb(66,66,66);
 	-fx-text-fill:white;
