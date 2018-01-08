@@ -35,7 +35,7 @@
 	<top>
 		<HBox alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="311.0" BorderPane.alignment="CENTER">
 			<children>
-				<JFXTextField />
+				<JFXTextField fx:id="searchTextField" />
 				<JFXButton text="Search" />
 			</children>
 			<padding>

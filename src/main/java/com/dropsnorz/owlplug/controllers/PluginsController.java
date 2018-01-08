@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javafx.beans.binding.Bindings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.components.FilterableTreeItem;
+import com.dropsnorz.owlplug.components.TreeItemPredicate;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
 import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 
 import javafx.beans.value.ChangeListener;
@@ -37,15 +41,18 @@ public class PluginsController {
 
 	@FXML
 	JFXTabPane treeViewTabPane;
+	
+	@FXML
+	JFXTextField searchTextField;
 
 	List<Plugin> pluginList;
 
 
 	FileTree pluginTree;
 
-	TreeItem<Object> treeRootNode;
+	FilterableTreeItem<Object> treeRootNode;
 
-	TreeItem<Object> treeFileRootNode; 
+	FilterableTreeItem<Object> treeFileRootNode; 
 
 
 	private Image folderImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
@@ -55,22 +62,24 @@ public class PluginsController {
 	public void initialize() {  
 
 		treeRootNode = 
-				new TreeItem<Object>("(all)");
+				new FilterableTreeItem<Object>("(all)");
 
 		List<Plugin> pluginList = pluginExplorer.explore();
 		this.pluginList = pluginList;
 
 		for(Plugin plugin : pluginList){
 
-			TreeItem<Object> item = new TreeItem<Object>(plugin);
+			TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
 			item.setGraphic(new ImageView(brickImage));
-			treeRootNode.getChildren().add(item);
+			treeRootNode.getInternalChildren().add(item);
+			
 
 		}
 
 		treeRootNode.setExpanded(true);
+		
 
-		treeFileRootNode = new TreeItem<Object>("(all)");
+		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
 
 		generatePluginTree();
 		buildChildren(pluginTree, treeFileRootNode);
@@ -107,6 +116,20 @@ public class PluginsController {
 					}
 				}
 				);
+		
+		
+		treeRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+            if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
+                return null;
+            return TreeItemPredicate.create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
+		}, searchTextField.textProperty()));
+		
+		
+		treeFileRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+            if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
+                return null;
+            return TreeItemPredicate.create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
+		}, searchTextField.textProperty()));
 	}
 
 	public void generatePluginTree(){
@@ -156,7 +179,7 @@ public class PluginsController {
 
 	}
 
-	public void buildChildren(FileTree pluginTree, TreeItem<Object> node){
+	public void buildChildren(FileTree pluginTree, FilterableTreeItem<Object> node){
 
 		node.setGraphic(new ImageView(folderImage));
 		node.setExpanded(true);
@@ -164,16 +187,16 @@ public class PluginsController {
 		for(String dir : pluginTree.keySet()){
 
 			if(pluginTree.get(dir).values().size() == 0){
-				TreeItem<Object> plug = new TreeItem<Object>(pluginTree.get(dir).getNodeValue());
+				FilterableTreeItem<Object> plug = new FilterableTreeItem<Object>(pluginTree.get(dir).getNodeValue());
 				plug.setGraphic(new ImageView(brickImage));
 
 
-				node.getChildren().add(plug);
+				node.getInternalChildren().add(plug);
 
 			}
 			else{
-				TreeItem<Object> item = new TreeItem<Object>(pluginTree.get(dir).getNodeValue());
-				node.getChildren().add(item);
+				FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(pluginTree.get(dir).getNodeValue());
+				node.getInternalChildren().add(item);
 
 				buildChildren(pluginTree.get(dir), item);
 
