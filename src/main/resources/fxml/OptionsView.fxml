@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.OptionsController">
+   <children>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox spacing="30.0" styleClass="panel-transparent">
+                     <children>
+                        <Label styleClass="heading-1" text="Audio Plugins" />
+                        <VBox VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="heading-2" text="VST 2" />
+                              <FlowPane prefWidth="200.0">
+                                 <children>
+                                    <JFXToggleButton fx:id="vst2ToggleButton" text="Manage VST2 plugins" />
+                                 </children>
+                              </FlowPane>
+                              <HBox alignment="BASELINE_LEFT" spacing="5.0">
+                                 <children>
+                                    <Label text="VST2 Folder" />
+                                    <JFXTextField fx:id="vst2DirectoryTextField" HBox.hgrow="ALWAYS" />
+                                    <JFXButton fx:id="vst2DirectoryButton" text="..." />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="15.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox VBox.vgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="heading-2" text="VST 3" />
+                              <FlowPane prefWidth="200.0">
+                                 <children>
+                                    <JFXToggleButton fx:id="vst3ToggleButton" text="Manage VST3 plugins" />
+                                 </children>
+                              </FlowPane>
+                              <HBox alignment="BASELINE_LEFT" spacing="5.0">
+                                 <children>
+                                    <Label text="VST3 Folder" />
+                                    <JFXTextField fx:id="vst3DirectoryTextField" HBox.hgrow="ALWAYS" />
+                                    <JFXButton fx:id="vst3DirectoryButton" text="..." />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="15.0" />
+                                 </VBox.margin>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox styleClass="panel-transparent" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label styleClass="heading-1" text="Preferences" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>

@@ -32,7 +32,7 @@
                   </Tab>
                   <Tab closable="false" text="Options">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <fx:include source="OptionsView.fxml" fx:id="optionView" />
                     </content>
                   </Tab>
                </tabs>

@@ -2,9 +2,22 @@
 	-fx-background-color:linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);
 }
 
+.heading-1{
+	-fx-font-size: 22px;
+	-fx-margin:0,0,8,0;
+}
+
+.heading-2{
+	-fx-font-size: 20px;
+}
+
 JFXButton{
 	-fx-text-fill:white;
 	-fx-background-color:rgba(0,0,0,0.1);
+}
+
+JFXToggleButton{
+	-fx-text-fill:white;
 }
 
 JFXTreeView{
@@ -50,7 +63,7 @@ JFXListView{
 	-fx-text-fill:white;
 }
 .panel-transparent{
-	-fx-background-color: rgba(66,66,66, 0.5);
+	-fx-background-color: rgba(66,66,66, 0.7);
 	-fx-padding:10,10,10,10;
 }
 
