@@ -8,7 +8,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.PluginInfoController">
    <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" spacing="15.0">
@@ -85,9 +84,7 @@
                            </children>
                         </TextFlow>
                         <JFXButton fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" text="Open folder">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
+                           
                         </JFXButton>
                      </children>
                   </HBox>
@@ -96,9 +93,6 @@
             <HBox alignment="CENTER" prefHeight="20.0" prefWidth="460.0" />
             <HBox prefHeight="20.0" prefWidth="460.0" />
          </children>
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
       </VBox>
    </children>
 </AnchorPane>
