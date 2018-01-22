@@ -11,6 +11,25 @@
 	-fx-font-size: 20px;
 }
 
+JFXDialog{
+	-fx-background-color:rgba(0,0,0,0.5);
+	
+}
+
+.jfx-dialog-overlay-pane > StackPane {
+    -fx-background-color: rgb(66,66,66);
+    
+}
+
+Label{ 
+ 	-fx-fill: white;
+}
+Text{ 
+ 	-fx-fill: white;
+}
+JFXTextField{
+	-fx-text-fill:white;
+}
 JFXButton{
 	-fx-text-fill:white;
 	-fx-background-color:rgba(0,0,0,0.1);

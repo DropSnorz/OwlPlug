@@ -22,6 +22,8 @@ import javafx.scene.layout.StackPane;
 public class MainController {
 	
 	
+	@FXML 
+	StackPane rootPane;
 	@FXML
 	BorderPane mainPane;
 		
@@ -30,7 +32,10 @@ public class MainController {
     public void initialize() {  
     	
 
-    	
+    }
+    
+    public StackPane getRootPane() {
+    	return rootPane;
     }
     
    

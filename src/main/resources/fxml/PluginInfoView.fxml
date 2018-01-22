@@ -35,7 +35,7 @@
                   <HBox alignment="TOP_RIGHT" prefHeight="38.0" prefWidth="460.0" spacing="5.0">
                      <children>
                         <JFXButton text="Update" />
-                        <JFXButton text="Uninstall" />
+                        <JFXButton fx:id="uninstallButton" buttonType="RAISED" text="Uninstall" />
                      </children>
                   </HBox>
                </children>

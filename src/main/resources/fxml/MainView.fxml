@@ -9,35 +9,40 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
-   <center>
-      <HBox layoutY="215.0" prefHeight="100.0" prefWidth="581.0">
-         <children>
-            <JFXTabPane prefHeight="100.0" prefWidth="441.0" HBox.hgrow="ALWAYS">
-               <tabs>
-                  <Tab closable="false" disable="true" text="OwlPlug">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
-                  </Tab>
-                  <Tab closable="false" text="Plugins">
-                    <content>
-                     <fx:include source="PluginsView.fxml" fx:id="pluginView" />
-                    </content>
-                  </Tab>
-                  <Tab closable="false" text="Store">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
-                  </Tab>
-                  <Tab closable="false" text="Options">
-                    <content>
-                      <fx:include source="OptionsView.fxml" fx:id="optionView" />
-                    </content>
-                  </Tab>
-               </tabs>
-            </JFXTabPane>
-         </children>
-      </HBox>
-   </center>
-</BorderPane>
+
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
+   <children>
+      <BorderPane fx:id="mainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0">
+         <center>
+            <HBox layoutY="215.0" prefHeight="100.0" prefWidth="581.0">
+               <children>
+                  <JFXTabPane prefHeight="100.0" prefWidth="441.0" HBox.hgrow="ALWAYS">
+                     <tabs>
+                        <Tab closable="false" disable="true" text="OwlPlug">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab closable="false" text="Plugins">
+                          <content>
+                           <fx:include fx:id="pluginView" source="PluginsView.fxml" />
+                          </content>
+                        </Tab>
+                        <Tab closable="false" text="Store">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab closable="false" text="Options">
+                          <content>
+                            <fx:include fx:id="optionView" source="OptionsView.fxml" />
+                          </content>
+                        </Tab>
+                     </tabs>
+                  </JFXTabPane>
+               </children>
+            </HBox>
+         </center>
+      </BorderPane>
+   </children>
+</StackPane>
