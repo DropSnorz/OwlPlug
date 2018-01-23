@@ -85,8 +85,15 @@ JFXListView{
 	-fx-background-color: rgba(66,66,66, 0.7);
 	-fx-padding:10,10,10,10;
 }
-
 .panel-transparent Label{
 	-fx-text-fill:white;
-	
+}
+
+.panel-dark{
+	-fx-background-color: rgb(66,66,66);
+	-fx-padding:10,10,10,10;
+}
+
+.panel-dark Label{
+	-fx-text-fill:white;
 }

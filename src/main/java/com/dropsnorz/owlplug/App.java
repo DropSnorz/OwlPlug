@@ -40,7 +40,7 @@ public class App extends Application
     @Override
     public void start(Stage primaryStage) throws Exception {
         double width = 900;
-        double height = 500;
+        double height = 550;
  
         Scene scene = new Scene(rootNode, width, height);
         String css = App.class.getResource("/owlplug.css").toExternalForm();
