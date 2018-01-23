@@ -1,6 +1,7 @@
 package com.dropsnorz.owlplug.controllers;
 
 import java.io.File;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,9 +73,9 @@ public class PluginInfoController {
 		pluginTypeIcon.setImage(brickImage);
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());
-		if(plugin.getVersion() != null) pluginVersionLabel.setText(plugin.getVersion());
+		pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse(""));
 		pluginIdLabel.setText("");
-		if(plugin.getBundleId() != null) pluginBundleIdLabel.setText(plugin.getBundleId());
+		pluginBundleIdLabel.setText(Optional.ofNullable(plugin.getBundleId()).orElse(""));
 		pluginPathLabel.setText(plugin.getPath());
 	}
 

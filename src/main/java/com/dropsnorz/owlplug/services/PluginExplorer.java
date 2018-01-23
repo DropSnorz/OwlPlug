@@ -7,8 +7,11 @@ import java.util.List;
 import org.boris.jvst.AEffect;
 import org.boris.jvst.VST;
 import org.boris.jvst.VSTException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.engine.plugins.discovery.NativePluginBuilder;
 import com.dropsnorz.owlplug.engine.plugins.discovery.NativePluginBuilderFactory;
 import com.dropsnorz.owlplug.engine.plugins.discovery.NativePluginCollector;
@@ -17,30 +20,33 @@ import com.dropsnorz.owlplug.model.OSType;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginType;
 
-@Component
+@Service
 public class PluginExplorer {
-
+	
+	@Autowired
+	protected ApplicationDefaults applicationDefaults;
+	
 	protected String VST2Path;
-	protected String platform;
 
 	public PluginExplorer(){
 
 		this.VST2Path = "C:/vst";
-		this.platform ="WIN";
 
 	}
 
 	public List<Plugin> explore(){
 		
+		OSType platform = applicationDefaults.getPlatform();
+		
 		ArrayList<Plugin> discoveredPlugins = new ArrayList<Plugin>();
 
 		PluginType[] types = {PluginType.VST2};
-		NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(OSType.MAC, types);
+		NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, types);
 		List<File> files = collector.collect(VST2Path);
 
 		System.out.println("-- WIN VST2 - PLUGINS --");
 		
-		NativePluginBuilder builder =NativePluginBuilderFactory.createPluginBuilder(OSType.MAC, PluginType.VST2);
+		NativePluginBuilder builder =NativePluginBuilderFactory.createPluginBuilder(platform, PluginType.VST2);
 		
 		for(File file: files){
 
