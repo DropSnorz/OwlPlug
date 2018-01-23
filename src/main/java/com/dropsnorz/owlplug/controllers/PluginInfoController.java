@@ -72,9 +72,9 @@ public class PluginInfoController {
 		pluginTypeIcon.setImage(brickImage);
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());
-		pluginVersionLabel.setText("");
+		if(plugin.getVersion() != null) pluginVersionLabel.setText(plugin.getVersion());
 		pluginIdLabel.setText("");
-		pluginBundleIdLabel.setText("");
+		if(plugin.getBundleId() != null) pluginBundleIdLabel.setText(plugin.getBundleId());
 		pluginPathLabel.setText(plugin.getPath());
 	}
 

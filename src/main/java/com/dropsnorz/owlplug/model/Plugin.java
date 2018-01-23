@@ -2,8 +2,10 @@ package com.dropsnorz.owlplug.model;
 
 public class Plugin {
 	
-	String name;
-	String path;
+	protected String name;
+	protected String path;
+	protected String bundleId;
+	protected String version;
 	
 	
 	public Plugin(){
@@ -30,6 +32,25 @@ public class Plugin {
 	public void setPath(String path) {
 		this.path = path;
 	}
+	
+	public String getBundleId() {
+		return bundleId;
+	}
+
+	public void setBundleId(String bundleId) {
+		this.bundleId = bundleId;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	
+	
 
 	@Override
 	public String toString() {

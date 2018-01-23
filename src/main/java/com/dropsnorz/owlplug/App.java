@@ -50,7 +50,6 @@ public class App extends Application
         primaryStage.centerOnScreen();
         primaryStage.show();
         
-        
     }
  
     @Override

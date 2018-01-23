@@ -35,12 +35,12 @@ public class PluginExplorer {
 		ArrayList<Plugin> discoveredPlugins = new ArrayList<Plugin>();
 
 		PluginType[] types = {PluginType.VST2};
-		NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(OSType.WIN, types);
+		NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(OSType.MAC, types);
 		List<File> files = collector.collect(VST2Path);
 
 		System.out.println("-- WIN VST2 - PLUGINS --");
 		
-		NativePluginBuilder builder =NativePluginBuilderFactory.createPluginBuilder(OSType.WIN, PluginType.VST2);
+		NativePluginBuilder builder =NativePluginBuilderFactory.createPluginBuilder(OSType.MAC, PluginType.VST2);
 		
 		for(File file: files){
 
