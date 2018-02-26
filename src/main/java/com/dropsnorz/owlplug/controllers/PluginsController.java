@@ -10,15 +10,21 @@ import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.components.FilterableTreeItem;
 import com.dropsnorz.owlplug.components.TreeItemPredicate;
+import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
 import com.dropsnorz.owlplug.services.PluginExplorer;
+import com.dropsnorz.owlplug.services.TaskManager;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
@@ -29,12 +35,18 @@ import javafx.scene.control.TreeItem;
 
 @Controller
 public class PluginsController {
+	
+	@Autowired
+	TaskManager taskManager;
 
 	@Autowired
 	PluginExplorer pluginExplorer;
 
 	@Autowired
 	NodeInfoController nodeInfoController;
+	
+	@FXML
+	JFXButton syncButton;
 
 	@FXML
 	JFXTreeView<Object> treeView;
@@ -130,6 +142,13 @@ public class PluginsController {
                 return null;
             return TreeItemPredicate.create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
 		}, searchTextField.textProperty()));
+		
+		
+		syncButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				taskManager.addTask(new SyncPluginTask(pluginExplorer));
+			};
+		});	
 	}
 
 	public void generatePluginTree(){

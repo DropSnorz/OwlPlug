@@ -46,7 +46,7 @@
          <children>
             <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0" VBox.vgrow="NEVER">
                <children>
-                  <JFXButton buttonType="RAISED" text="Sync" />
+                  <JFXButton fx:id="syncButton" buttonType="RAISED" text="Sync" />
                </children>
             </HBox>
             <AnchorPane VBox.vgrow="ALWAYS">

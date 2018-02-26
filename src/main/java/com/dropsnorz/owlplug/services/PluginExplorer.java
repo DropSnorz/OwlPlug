@@ -21,7 +21,7 @@ import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginType;
 
 @Service
-public class PluginExplorer {
+public class PluginExplorer{
 	
 	@Autowired
 	protected ApplicationDefaults applicationDefaults;

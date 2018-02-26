@@ -10,9 +10,9 @@ import javafx.scene.control.ProgressBar;
 public class TaskBarController {
 	
 	@FXML
-	protected Label taskLabel;
+	public Label taskLabel;
 	@FXML
-	protected ProgressBar taskProgressBar;
+	public ProgressBar taskProgressBar;
 	
 	
 	@FXML
