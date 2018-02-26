@@ -8,9 +8,11 @@ import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.controllers.dialog.DialogController;
 import com.dropsnorz.owlplug.model.Plugin;
+import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,12 +20,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 
 @Controller
 public class PluginInfoController {
 
 	@Autowired
 	private DialogController dialogController;
+	
+	@Autowired
+	private TaskFactory taskFactory;
+	
 	@FXML
 	private ImageView pluginTypeIcon;
 	@FXML
@@ -49,6 +56,8 @@ public class PluginInfoController {
 	private Image brickImage  = new Image(getClass().getResourceAsStream("/icons/soundwave-blue-16.png"));;
 	private Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
 
+	private Plugin currentPlugin = null;
+	
 	@FXML
 	public void initialize() { 
 
@@ -63,13 +72,44 @@ public class PluginInfoController {
 
 		uninstallButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				JFXDialog dialog = dialogController.newSimpleInfoDialog("Hi !", "Lorem ipsum dolor sit amet...");
+				
+				
+				JFXDialog dialog = dialogController.newDialog();
+				
+				JFXDialogLayout layout = new JFXDialogLayout();
+				
+				layout.setHeading(new Label("Remove plugin"));
+				layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName() 
+				+ " ? This will this will permanently delete the file from your hard drive."));
+				
+				JFXButton cancelButton = new JFXButton("Cancel");
+				
+				cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent e) {
+						dialog.close();
+					};
+				});	
+				
+				JFXButton removeButton = new JFXButton("Remove");
+				
+				removeButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent e) {
+						dialog.close();
+						taskFactory.run(taskFactory.createpluginRemoveTask(currentPlugin));
+					};
+				});	
+				removeButton.getStyleClass().add("button-danger");
+				
+				layout.setActions(removeButton, cancelButton);
+				dialog.setContent(layout);
 				dialog.show();
+				
 			};
 		});		
 	}
 
 	public void setPlugin(Plugin plugin){
+		this.currentPlugin = plugin;
 		pluginTypeIcon.setImage(brickImage);
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());

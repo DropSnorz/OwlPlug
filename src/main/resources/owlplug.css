@@ -16,6 +16,11 @@ JFXDialog{
 	
 }
 
+JFXDialog Label{
+	-fx-text-fill: white;
+	
+}
+
 .jfx-dialog-overlay-pane > StackPane {
     -fx-background-color: rgb(66,66,66);
     
@@ -33,6 +38,20 @@ JFXTextField{
 JFXButton{
 	-fx-text-fill:white;
 	-fx-background-color:rgba(0,0,0,0.1);
+}
+
+.button-danger{
+	-fx-background-color:#d9534f;
+	
+}
+.button-danger:hover{
+	-fx-background-color:#c9302c;
+	
+}
+
+.button-danger:pressed{
+	-fx-background-color:#ac2925;
+	
 }
 
 JFXToggleButton{
