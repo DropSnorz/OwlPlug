@@ -76,7 +76,14 @@ public class PluginsController {
 
 	@FXML
 	public void initialize() {  
+		treeRootNode = 
+				new FilterableTreeItem<Object>("(all)");
+		
+		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
+		
+		treeView.setRoot(treeRootNode);
 
+		
 		refreshPlugins();
 
 		treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
@@ -133,8 +140,8 @@ public class PluginsController {
 	}
 	
 	public void refreshPlugins() {
-		treeRootNode = 
-				new FilterableTreeItem<Object>("(all)");
+		
+		treeRootNode.getInternalChildren().clear();
 
 		Iterable<Plugin> pluginList = pluginRepository.findAll();
 		this.pluginList = pluginList;
@@ -151,12 +158,11 @@ public class PluginsController {
 		treeRootNode.setExpanded(true);
 		
 
-		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
-
+		treeFileRootNode.getInternalChildren().clear();
+		
 		generatePluginTree();
 		buildChildren(pluginTree, treeFileRootNode);
 		
-		treeView.setRoot(treeRootNode);
 		
 	}
 
