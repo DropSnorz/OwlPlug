@@ -1,8 +1,11 @@
 package com.dropsnorz.owlplug;
 
+import java.util.prefs.Preferences;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 import com.dropsnorz.owlplug.services.PluginExplorer;
 
@@ -54,6 +57,12 @@ public class App extends Application
         primaryStage.centerOnScreen();
         primaryStage.show();
         
+    }
+    
+    @Bean
+    Preferences getPreference() {
+    	return 	Preferences.userRoot().node("com.dropsnorz.owlplug.user");
+
     }
  
     @Override

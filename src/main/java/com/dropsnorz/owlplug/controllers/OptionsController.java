@@ -1,7 +1,9 @@
 package com.dropsnorz.owlplug.controllers;
 
 import java.io.File;
+import java.util.prefs.Preferences;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.jfoenix.controls.JFXButton;
@@ -18,6 +20,9 @@ import javafx.stage.Window;
 
 @Controller
 public class OptionsController {
+	
+	@Autowired
+	Preferences prefs;
 
 	@FXML
 	JFXToggleButton vst2ToggleButton;
@@ -34,7 +39,12 @@ public class OptionsController {
 
 	@FXML
 	public void initialize() {
-
+		
+		vst2DirectoryTextField.setDisable(false);
+		vst2DirectoryButton.setDisable(false);
+		vst3DirectoryTextField.setDisable(false);
+		vst3DirectoryButton.setDisable(false);
+		
 		vst2ToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>(){
 
 			@Override
@@ -48,6 +58,8 @@ public class OptionsController {
 					vst2DirectoryTextField.setDisable(true);
 					vst2DirectoryButton.setDisable(true);
 				}
+				
+				prefs.putBoolean("VST2_DISCOVERY_ENABLED", newValue);
 			}
 
 		});
@@ -65,6 +77,7 @@ public class OptionsController {
 					vst3DirectoryTextField.setDisable(true);
 					vst3DirectoryButton.setDisable(true);
 				}
+				prefs.putBoolean("VST3_DISCOVERY_ENABLED", newValue);
 			}
 
 		});
@@ -102,8 +115,26 @@ public class OptionsController {
 				}
 			}
 		});
+		
+		vst2DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			prefs.put("VST2_DIRECTORY", newValue);
+		});
+		vst3DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			prefs.put("VST3_DIRECTORY", newValue);
+		});
 
+		refreshView();
 
+	}
+	
+	public void refreshView() {
+		
+		
+		vst2ToggleButton.setSelected(prefs.getBoolean("VST2_DISCOVERY_ENABLED", false));
+		vst2DirectoryTextField.setText(prefs.get("VST2_DIRECTORY", ""));
+		vst3ToggleButton.setSelected(prefs.getBoolean("VST3_DISCOVERY_ENABLED", false));
+		vst3DirectoryTextField.setText(prefs.get("VST3_DIRECTORY", ""));
+		
 	}
 
 }

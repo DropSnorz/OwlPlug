@@ -5,11 +5,11 @@ import com.dropsnorz.owlplug.model.PluginType;
 
 public class NativePluginCollectorFactory {
 	
-	public static NativePluginCollector getPluginFinder(OSType platform, PluginType[] types){
+	public static NativePluginCollector getPluginFinder(OSType platform, PluginType type){
 		
 		switch(platform){
-			case WIN: return new WindowsPluginCollector(types);
-			case MAC: return new OSXPluginCollector(types);
+			case WIN: return new WindowsPluginCollector(type);
+			case MAC: return new OSXPluginCollector(type);
 		default: break;
 		}
 		return null;

@@ -11,11 +11,11 @@ import com.dropsnorz.owlplug.model.PluginType;
 
 public class OSXPluginCollector implements NativePluginCollector {
 
-	PluginType[] pluginTypes;
+	PluginType pluginType;
 	ArrayList<File> fileList = new ArrayList<File>();
 	
-	public OSXPluginCollector(PluginType[] types) {
-		this.pluginTypes = types;
+	public OSXPluginCollector(PluginType type) {
+		this.pluginType = type;
 	}
 
 	@Override
@@ -26,7 +26,6 @@ public class OSXPluginCollector implements NativePluginCollector {
 
 		for(File file: baseFiles){
 			
-			for(PluginType pluginType : pluginTypes){
 
 				if(pluginType == PluginType.VST2){
 					if (file.getAbsolutePath().endsWith(".vst")) fileList.add(file);
@@ -35,7 +34,6 @@ public class OSXPluginCollector implements NativePluginCollector {
 					if (file.getAbsolutePath().endsWith(".vst3")) fileList.add(file);
 
 				}
-			}
 
 		}
 

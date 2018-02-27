@@ -13,12 +13,12 @@ import com.dropsnorz.owlplug.model.PluginType;
 
 public class WindowsPluginCollector implements NativePluginCollector {
 
-	PluginType[] pluginTypes;
+	PluginType pluginType;
 	ArrayList<File> fileList = new ArrayList<File>();
 
-	public WindowsPluginCollector(PluginType[] types) {
+	public WindowsPluginCollector(PluginType type) {
 
-		this.pluginTypes  = types;
+		this.pluginType  = type;
 
 	}
 
@@ -29,17 +29,16 @@ public class WindowsPluginCollector implements NativePluginCollector {
 		List<File> baseFiles = (List<File>) FileUtils.listFiles(dir,  TrueFileFilter.TRUE,  TrueFileFilter.TRUE);
 
 		for(File file: baseFiles){
-			
-			for(PluginType pluginType : pluginTypes){
 
-				if(pluginType == PluginType.VST2){
-					if (file.getAbsolutePath().endsWith(".dll") && file.isFile()) fileList.add(file);
-				}
-				else if (pluginType == PluginType.VST3){
-					if (file.getAbsolutePath().endsWith(".vst3")) fileList.add(file);
 
-				}
+			if(pluginType == PluginType.VST2){
+				if (file.getAbsolutePath().endsWith(".dll") && file.isFile()) fileList.add(file);
 			}
+			else if (pluginType == PluginType.VST3){
+				if (file.getAbsolutePath().endsWith(".vst3")) fileList.add(file);
+
+			}
+
 
 		}
 
