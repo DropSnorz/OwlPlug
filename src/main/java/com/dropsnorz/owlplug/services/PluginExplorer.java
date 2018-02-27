@@ -25,7 +25,7 @@ public class PluginExplorer{
 	
 	@Autowired
 	protected ApplicationDefaults applicationDefaults;
-	
+		
 	protected String VST2Path;
 
 	public PluginExplorer(){

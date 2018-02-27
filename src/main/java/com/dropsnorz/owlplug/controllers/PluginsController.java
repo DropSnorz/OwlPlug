@@ -13,7 +13,9 @@ import com.dropsnorz.owlplug.components.TreeItemPredicate;
 import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
+import com.dropsnorz.owlplug.repositories.PluginRepository;
 import com.dropsnorz.owlplug.services.PluginExplorer;
+import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.services.TaskManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -37,10 +39,13 @@ import javafx.scene.control.TreeItem;
 public class PluginsController {
 	
 	@Autowired
-	TaskManager taskManager;
+	TaskFactory taskFactory;
 
 	@Autowired
 	PluginExplorer pluginExplorer;
+	
+	@Autowired 
+	PluginRepository pluginRepository;
 
 	@Autowired
 	NodeInfoController nodeInfoController;
@@ -57,8 +62,7 @@ public class PluginsController {
 	@FXML
 	JFXTextField searchTextField;
 
-	List<Plugin> pluginList;
-
+	Iterable<Plugin> pluginList;
 
 	FileTree pluginTree;
 
@@ -73,30 +77,7 @@ public class PluginsController {
 	@FXML
 	public void initialize() {  
 
-		treeRootNode = 
-				new FilterableTreeItem<Object>("(all)");
-
-		List<Plugin> pluginList = pluginExplorer.explore();
-		this.pluginList = pluginList;
-
-		for(Plugin plugin : pluginList){
-
-			TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
-			item.setGraphic(new ImageView(brickImage));
-			treeRootNode.getInternalChildren().add(item);
-			
-
-		}
-
-		treeRootNode.setExpanded(true);
-		
-
-		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
-
-		generatePluginTree();
-		buildChildren(pluginTree, treeFileRootNode);
-
-		treeView.setRoot(treeRootNode);
+		refreshPlugins();
 
 		treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
 
@@ -146,9 +127,37 @@ public class PluginsController {
 		
 		syncButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				taskManager.addTask(new SyncPluginTask(pluginExplorer));
+				taskFactory.run(taskFactory.createSyncPluginTask());
 			};
 		});	
+	}
+	
+	public void refreshPlugins() {
+		treeRootNode = 
+				new FilterableTreeItem<Object>("(all)");
+
+		Iterable<Plugin> pluginList = pluginRepository.findAll();
+		this.pluginList = pluginList;
+
+		for(Plugin plugin : pluginList){
+
+			TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
+			item.setGraphic(new ImageView(brickImage));
+			treeRootNode.getInternalChildren().add(item);
+			
+
+		}
+
+		treeRootNode.setExpanded(true);
+		
+
+		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
+
+		generatePluginTree();
+		buildChildren(pluginTree, treeFileRootNode);
+		
+		treeView.setRoot(treeRootNode);
+		
 	}
 
 	public void generatePluginTree(){

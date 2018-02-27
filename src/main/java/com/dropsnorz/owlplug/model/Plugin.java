@@ -1,7 +1,17 @@
 package com.dropsnorz.owlplug.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Plugin {
-	
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+    
 	protected String name;
 	protected String path;
 	protected String bundleId;
