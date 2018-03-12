@@ -87,6 +87,17 @@ JFXTreeView:focused{
 	-fx-background-color:rgb(66,66,66);
 }
 
+.no-header-tab-pane {
+    -fx-tab-max-height: 0 ;
+} 
+.no-header-tab-pane > .tab-header-area {
+    visibility: hidden ;
+}
+
+.jfx-drawer-side-pane {
+    -fx-background-color: rgb(66,66,66);
+}
+
 .small-tree-view *.tab *.tab-label{
 	-fx-font-size: 15px;
 }

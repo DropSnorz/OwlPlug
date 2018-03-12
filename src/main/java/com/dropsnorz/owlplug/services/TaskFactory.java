@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dropsnorz.owlplug.controllers.PluginsController;
+import com.dropsnorz.owlplug.dao.PluginDAO;
 import com.dropsnorz.owlplug.engine.tasks.PluginRemoveTask;
 import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.model.Plugin;
-import com.dropsnorz.owlplug.repositories.PluginRepository;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -23,7 +23,7 @@ public class TaskFactory {
 	@Autowired
 	TaskManager taskManager;
 	@Autowired
-	PluginRepository pluginRepository;
+	PluginDAO pluginRepository;
 	
 	
 	@Autowired

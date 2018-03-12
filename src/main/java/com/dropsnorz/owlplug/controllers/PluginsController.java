@@ -10,15 +10,16 @@ import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.components.FilterableTreeItem;
 import com.dropsnorz.owlplug.components.TreeItemPredicate;
+import com.dropsnorz.owlplug.dao.PluginDAO;
 import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
-import com.dropsnorz.owlplug.repositories.PluginRepository;
 import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.services.TaskManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
@@ -42,10 +43,10 @@ public class PluginsController {
 	TaskFactory taskFactory;
 
 	@Autowired
-	PluginExplorer pluginExplorer;
+	MainController mainController;
 	
 	@Autowired 
-	PluginRepository pluginRepository;
+	PluginDAO pluginRepository;
 
 	@Autowired
 	NodeInfoController nodeInfoController;
@@ -61,6 +62,10 @@ public class PluginsController {
 	
 	@FXML
 	JFXTextField searchTextField;
+	
+	@FXML
+	JFXButton newRepositoryButton;
+	
 
 	Iterable<Plugin> pluginList;
 
@@ -76,14 +81,20 @@ public class PluginsController {
 
 	@FXML
 	public void initialize() {  
+		
+		
+		newRepositoryButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				mainController.getLeftDrawer().open();
+			};
+		});	
+		
 		treeRootNode = 
 				new FilterableTreeItem<Object>("(all)");
 		
 		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
 		
 		treeView.setRoot(treeRootNode);
-
-		
 		refreshPlugins();
 
 		treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {

@@ -6,21 +6,20 @@ import java.nio.file.Files;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dropsnorz.owlplug.dao.PluginDAO;
 import com.dropsnorz.owlplug.model.Plugin;
-import com.dropsnorz.owlplug.repositories.PluginRepository;
 
 @Service
 public class PluginService {
 	
 	@Autowired
-	PluginRepository pluginRepository;
+	PluginDAO pluginDAO;
 	
 	public boolean removePlugin(Plugin plugin) {
 	
-		pluginRepository.delete(plugin);
 		File pluginFile = new File(plugin.getPath());
 		if(pluginFile.delete()) {
-			pluginRepository.delete(plugin);
+			pluginDAO.delete(plugin);
 			return true;
 		}
 		

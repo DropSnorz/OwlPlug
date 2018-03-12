@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.paint.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.geometry.*?>
@@ -9,49 +10,59 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
-	<children>
-		<BorderPane fx:id="mainPane" maxHeight="1.7976931348623157E308"
-			maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0">
-			<center>
-				<HBox layoutY="215.0" prefHeight="100.0" prefWidth="581.0">
-					<children>
-						<JFXTabPane prefHeight="100.0" prefWidth="441.0"
-							HBox.hgrow="ALWAYS">
-							<tabs>
-								<Tab closable="false" disable="true" text="OwlPlug">
-									<content>
-										<AnchorPane minHeight="0.0" minWidth="0.0"
-											prefHeight="180.0" prefWidth="200.0" />
-									</content>
-								</Tab>
-								<Tab closable="false" text="Plugins">
-									<content>
-										<fx:include fx:id="pluginView" source="PluginsView.fxml" />
-									</content>
-								</Tab>
-								<Tab closable="false" text="Store">
-									<content>
-										<AnchorPane minHeight="0.0" minWidth="0.0"
-											prefHeight="180.0" prefWidth="200.0" />
-									</content>
-								</Tab>
-								<Tab closable="false" text="Options">
-									<content>
-										<fx:include fx:id="optionView" source="OptionsView.fxml" />
-									</content>
-								</Tab>
-							</tabs>
-						</JFXTabPane>
-					</children>
-				</HBox>
-			</center>
-
-			<bottom>
-				<fx:include fx:id="taskBarView" source="TaskBarView.fxml" />
-			</bottom>
-		</BorderPane>
-	</children>
-</StackPane>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
+   <children>
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXTabPane fx:id="tabPaneHeader" VBox.vgrow="NEVER">
+               <tabs>
+                  <Tab disable="true" text="OwlPlug" />
+                  <Tab text="Plugins" />
+                  <Tab text="Store" />
+                  <Tab text="Options" />
+               </tabs>
+            </JFXTabPane>
+            <JFXDrawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <content>
+            		<BorderPane fx:id="mainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0">
+            			<center>
+                        <VBox>
+                           <children>
+            						<JFXTabPane fx:id="tabPaneContent" prefHeight="100.0" prefWidth="441.0" styleClass="no-header-tab-pane" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            							<tabs>
+            								<Tab closable="false" disable="true" text="OwlPlug">
+            									<content>
+            										<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            									</content>
+            								</Tab>
+            								<Tab closable="false" text="Plugins">
+            									<content>
+            										<fx:include fx:id="pluginView" source="PluginsView.fxml" />
+            									</content>
+            								</Tab>
+            								<Tab closable="false" text="Store">
+            									<content>
+            										<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            									</content>
+            								</Tab>
+            								<Tab closable="false" text="Options">
+            									<content>
+            										<fx:include fx:id="optionView" source="OptionsView.fxml" />
+            									</content>
+            								</Tab>
+            							</tabs>
+            						</JFXTabPane>
+                           </children>
+                        </VBox>
+            			</center>
+            
+                                                      			<bottom>
+            				<fx:include fx:id="taskBarView" source="TaskBarView.fxml" />
+            			</bottom>
+            		</BorderPane>
+               </content>
+            </JFXDrawer>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

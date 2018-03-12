@@ -2,8 +2,8 @@ package com.dropsnorz.owlplug.engine.tasks;
 
 import java.util.List;
 
+import com.dropsnorz.owlplug.dao.PluginDAO;
 import com.dropsnorz.owlplug.model.Plugin;
-import com.dropsnorz.owlplug.repositories.PluginRepository;
 import com.dropsnorz.owlplug.services.PluginExplorer;
 
 import javafx.concurrent.Task;
@@ -11,11 +11,11 @@ import javafx.concurrent.Task;
 public class SyncPluginTask extends Task<Void>{
 	
 	protected PluginExplorer pluginExplorer;
-	protected PluginRepository pluginRepository;
+	protected PluginDAO pluginDAO;
 	
-	public SyncPluginTask(PluginExplorer pluginExplorer, PluginRepository pluginRepository) {
+	public SyncPluginTask(PluginExplorer pluginExplorer, PluginDAO pluginDAO) {
 		this.pluginExplorer = pluginExplorer;
-		this.pluginRepository = pluginRepository;
+		this.pluginDAO = pluginDAO;
 	}
 
 
@@ -29,8 +29,8 @@ public class SyncPluginTask extends Task<Void>{
 		
 		this.updateProgress(1, 2);
 
-		pluginRepository.deleteAll();
-		pluginRepository.save(plugins);
+		pluginDAO.deleteAll();
+		pluginDAO.save(plugins);
 		
 		this.updateProgress(2, 2);
 
