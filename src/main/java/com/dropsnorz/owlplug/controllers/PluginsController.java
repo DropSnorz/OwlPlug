@@ -12,8 +12,10 @@ import com.dropsnorz.owlplug.components.FilterableTreeItem;
 import com.dropsnorz.owlplug.components.TreeItemPredicate;
 import com.dropsnorz.owlplug.dao.PluginDAO;
 import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
+import com.dropsnorz.owlplug.model.FileSystemRepository;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
+import com.dropsnorz.owlplug.model.Repository;
 import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.services.TaskManager;
@@ -74,6 +76,9 @@ public class PluginsController {
 	FilterableTreeItem<Object> treeRootNode;
 
 	FilterableTreeItem<Object> treeFileRootNode; 
+	
+	FilterableTreeItem<Object> treeRepositoryRootNode; 
+
 
 
 	private Image folderImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
@@ -94,6 +99,9 @@ public class PluginsController {
 				new FilterableTreeItem<Object>("(all)");
 		
 		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
+		
+		treeRepositoryRootNode = new FilterableTreeItem<Object>("Repositories");
+
 		
 		treeView.setRoot(treeRootNode);
 		refreshPlugins();
@@ -121,6 +129,9 @@ public class PluginsController {
 					public void changed(ObservableValue<? extends Tab> ov, Tab oldTab, Tab newTab) {
 						if(newTab.getId().equals("treeTabAll")){
 							treeView.setRoot(treeRootNode);
+						}
+						else if (newTab.getId().equals("treeTabRepositories")) {
+							treeView.setRoot(treeRepositoryRootNode);
 						}
 						else{
 							treeView.setRoot(treeFileRootNode);
@@ -169,12 +180,21 @@ public class PluginsController {
 
 		treeRootNode.setExpanded(true);
 		
-
 		treeFileRootNode.getInternalChildren().clear();
-		
 		generatePluginTree();
 		buildChildren(pluginTree, treeFileRootNode);
 		
+		
+		treeRepositoryRootNode.setExpanded(true);
+		treeRepositoryRootNode.getInternalChildren().clear();
+
+		ArrayList<Repository> repositories = new ArrayList<Repository>();
+		repositories.add(new FileSystemRepository("Demo Repository"));
+
+		for(Repository repository : repositories) {
+			TreeItem<Object> item = new FilterableTreeItem<Object>(repository);
+			treeRepositoryRootNode.getInternalChildren().add(item);
+		}
 		
 	}
 

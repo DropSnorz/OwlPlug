@@ -5,7 +5,8 @@ import javax.persistence.Entity;
 @Entity
 public class FileSystemRepository extends Repository {
 
-	public FileSystemRepository() {
+	public FileSystemRepository(String name) {
+		super(name);
 		
 	}
 }

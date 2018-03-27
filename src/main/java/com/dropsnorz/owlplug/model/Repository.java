@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class Repository {
+public abstract class Repository {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,6 +14,16 @@ public class Repository {
 	protected String name;
 	protected String localPath;
 	protected String remoteUrl;
+	
+	Repository(String name){
+		this.name = name;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 
 	
 }
