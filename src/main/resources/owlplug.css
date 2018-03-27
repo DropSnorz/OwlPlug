@@ -27,7 +27,7 @@ JFXDialog Label{
 }
 
 Label{ 
- 	-fx-fill: white;
+ 	-fx-text-fill: white;
 }
 Text{ 
  	-fx-fill: white;

@@ -85,6 +85,7 @@ public class PluginsController {
 		
 		newRepositoryButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
+				mainController.setLeftDrawerFXML("/fxml/NewRepositoryMenu.fxml");
 				mainController.getLeftDrawer().open();
 			};
 		});	

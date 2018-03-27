@@ -10,7 +10,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
+
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -56,7 +57,7 @@
                         </VBox>
             			</center>
             
-                                                      			<bottom>
+                                                            			<bottom>
             				<fx:include fx:id="taskBarView" source="TaskBarView.fxml" />
             			</bottom>
             		</BorderPane>
@@ -65,4 +66,4 @@
          </children>
       </VBox>
    </children>
-</AnchorPane>
+</StackPane>
