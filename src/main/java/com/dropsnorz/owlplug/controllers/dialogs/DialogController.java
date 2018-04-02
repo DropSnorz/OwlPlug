@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.controllers.dialog;
+package com.dropsnorz.owlplug.controllers.dialogs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +28,27 @@ public class DialogController {
 		dialog.setDialogContainer(mainController.getRootPane());
 				
 		return dialog;
+	}
+	
+	public JFXDialog newDialog(Node node) {
+		
+		JFXDialogLayout layout = new JFXDialogLayout();
+		layout.setBody(node);
+		return newDialog(layout);
+
+		
+	}
+	
+	public JFXDialog newBigDialog(Node node) {
+		
+		JFXDialogLayout layout = new JFXDialogLayout();
+		layout.setMaxSize(500, 300);
+		layout.setPrefSize(500, 300);
+		layout.setBody(node);
+		
+		return newDialog(layout);
+
+		
 	}
 	
 	public JFXDialog newDialog(JFXDialogLayout layout) {

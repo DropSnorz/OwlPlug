@@ -70,15 +70,25 @@ public class MainController {
     }
     
     public void setLeftDrawerFXML(String ressource) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ressource));
-        loader.setControllerFactory(context::getBean);
-        try {
-			Parent node = loader.load();
-			leftDrawer.setSidePane(node);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+       
+    	Parent node = loadFxml(ressource);
+    	if(node != null) {
+    		leftDrawer.setSidePane(node);
+    	}
+    }
+    
+    public Parent loadFxml(String ressource) {
+    	 FXMLLoader loader = new FXMLLoader(getClass().getResource(ressource));
+         loader.setControllerFactory(context::getBean);
+         try {
+ 			Parent node = loader.load();
+ 			return node;
+ 		} catch (IOException e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 		}
+         
+         return null;
     }
     
    

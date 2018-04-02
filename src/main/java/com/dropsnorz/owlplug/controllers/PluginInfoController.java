@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.dropsnorz.owlplug.controllers.dialog.DialogController;
+import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.utils.PlatformUtils;

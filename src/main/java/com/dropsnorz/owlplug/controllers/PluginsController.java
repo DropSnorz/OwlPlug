@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.components.FilterableTreeItem;
 import com.dropsnorz.owlplug.components.TreeItemPredicate;
+import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.dao.PluginDAO;
 import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.model.FileSystemRepository;
@@ -21,6 +22,7 @@ import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.services.TaskManager;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
@@ -46,6 +48,9 @@ public class PluginsController {
 
 	@Autowired
 	MainController mainController;
+	
+	@Autowired
+	DialogController dialogController;
 	
 	@Autowired 
 	PluginDAO pluginRepository;
@@ -92,6 +97,7 @@ public class PluginsController {
 			public void handle(ActionEvent e) {
 				mainController.setLeftDrawerFXML("/fxml/NewRepositoryMenu.fxml");
 				mainController.getLeftDrawer().open();
+			
 			};
 		});	
 		
