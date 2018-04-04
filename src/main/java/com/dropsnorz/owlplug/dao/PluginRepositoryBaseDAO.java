@@ -4,11 +4,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.dropsnorz.owlplug.model.Plugin;
-import com.dropsnorz.owlplug.model.Repository;
+import com.dropsnorz.owlplug.model.PluginRepository;
 
 @NoRepositoryBean
-public interface RepositoryBaseDAO<T extends Repository> extends CrudRepository<T, Long> {
+public interface PluginRepositoryBaseDAO<T extends PluginRepository> extends CrudRepository<T, Long> {
 	
-    Repository findByName(String name);
+    PluginRepository findByName(String name);
 
 }

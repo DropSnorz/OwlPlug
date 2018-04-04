@@ -12,12 +12,12 @@ import com.dropsnorz.owlplug.components.FilterableTreeItem;
 import com.dropsnorz.owlplug.components.TreeItemPredicate;
 import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.dao.PluginDAO;
-import com.dropsnorz.owlplug.dao.RepositoryDAO;
+import com.dropsnorz.owlplug.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.model.FileSystemRepository;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
-import com.dropsnorz.owlplug.model.Repository;
+import com.dropsnorz.owlplug.model.PluginRepository;
 import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.services.TaskManager;
@@ -60,7 +60,7 @@ public class PluginsController {
 	NodeInfoController nodeInfoController;
 	
 	@Autowired
-	RepositoryDAO repositoryDAO;
+	PluginRepositoryDAO repositoryDAO;
 	
 	
 	@FXML
@@ -199,9 +199,9 @@ public class PluginsController {
 		treeRepositoryRootNode.setExpanded(true);
 		treeRepositoryRootNode.getInternalChildren().clear();
 
-		Iterable<Repository> repositories = repositoryDAO.findAll();
+		Iterable<PluginRepository> repositories = repositoryDAO.findAll();
 		
-		for(Repository repository : repositories) {
+		for(PluginRepository repository : repositories) {
 			TreeItem<Object> item = new FilterableTreeItem<Object>(repository);
 			treeRepositoryRootNode.getInternalChildren().add(item);
 		}

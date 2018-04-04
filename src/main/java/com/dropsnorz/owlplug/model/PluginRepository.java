@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 
 @Entity
 @Inheritance
-public abstract class Repository {
+public abstract class PluginRepository {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,11 +17,11 @@ public abstract class Repository {
 	protected String name;
 	protected String localPath;
 	
-	Repository(String name){
+	PluginRepository(String name){
 		this.name = name;
 	}
 	
-	Repository(){
+	PluginRepository(){
 		
 	}
 	

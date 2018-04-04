@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.model.FileSystemRepository;
-import com.dropsnorz.owlplug.services.RepositoryService;
+import com.dropsnorz.owlplug.services.PluginRepositoryService;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTextField;
@@ -18,7 +18,7 @@ import javafx.scene.Node;
 public class FileSystemRepositoryController extends DialogFrame {
 	
 	@Autowired
-	RepositoryService pluginRepositoryService;
+	PluginRepositoryService pluginRepositoryService;
 	
 	@FXML
 	JFXButton closeButton;

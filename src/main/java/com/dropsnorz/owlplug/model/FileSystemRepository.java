@@ -3,7 +3,7 @@ package com.dropsnorz.owlplug.model;
 import javax.persistence.Entity;
 
 @Entity
-public class FileSystemRepository extends Repository {
+public class FileSystemRepository extends PluginRepository {
 
 	protected String remotePath;
 	
