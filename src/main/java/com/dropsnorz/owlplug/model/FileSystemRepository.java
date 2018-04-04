@@ -5,8 +5,16 @@ import javax.persistence.Entity;
 @Entity
 public class FileSystemRepository extends Repository {
 
-	public FileSystemRepository(String name) {
+	protected String remotePath;
+	
+	public FileSystemRepository() {
+		
+	}
+	
+	public FileSystemRepository(String name, String remotePath) {
 		super(name);
+		
+		this.remotePath = remotePath;
 		
 	}
 }

@@ -12,6 +12,7 @@ import com.dropsnorz.owlplug.components.FilterableTreeItem;
 import com.dropsnorz.owlplug.components.TreeItemPredicate;
 import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.dao.PluginDAO;
+import com.dropsnorz.owlplug.dao.RepositoryDAO;
 import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.model.FileSystemRepository;
 import com.dropsnorz.owlplug.model.Plugin;
@@ -57,6 +58,10 @@ public class PluginsController {
 
 	@Autowired
 	NodeInfoController nodeInfoController;
+	
+	@Autowired
+	RepositoryDAO repositoryDAO;
+	
 	
 	@FXML
 	JFXButton syncButton;
@@ -194,9 +199,8 @@ public class PluginsController {
 		treeRepositoryRootNode.setExpanded(true);
 		treeRepositoryRootNode.getInternalChildren().clear();
 
-		ArrayList<Repository> repositories = new ArrayList<Repository>();
-		repositories.add(new FileSystemRepository("Demo Repository"));
-
+		Iterable<Repository> repositories = repositoryDAO.findAll();
+		
 		for(Repository repository : repositories) {
 			TreeItem<Object> item = new FilterableTreeItem<Object>(repository);
 			treeRepositoryRootNode.getInternalChildren().add(item);
