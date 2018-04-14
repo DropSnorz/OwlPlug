@@ -1,11 +1,15 @@
 package com.dropsnorz.owlplug.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 @Entity
 @Inheritance
@@ -15,7 +19,9 @@ public abstract class PluginRepository {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	protected Long id;
 	protected String name;
-	protected String localPath;
+	
+	@Transient
+	protected List<Plugin> pluginList;
 	
 	PluginRepository(String name){
 		this.name = name;
@@ -50,17 +56,13 @@ public abstract class PluginRepository {
 	}
 
 
-
-	public String getLocalPath() {
-		return localPath;
+	public List<Plugin> getPluginList() {
+		return pluginList;
 	}
 
-
-
-	public void setLocalPath(String localPath) {
-		this.localPath = localPath;
+	public void setPluginList(List<Plugin> pluginList) {
+		this.pluginList = pluginList;
 	}
-
 
 	@Override
 	public String toString() {

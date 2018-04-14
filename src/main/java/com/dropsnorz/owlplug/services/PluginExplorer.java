@@ -40,34 +40,39 @@ public class PluginExplorer{
 		ArrayList<Plugin> discoveredPlugins = new ArrayList<Plugin>();
 
 
-		if(prefs.getBoolean("VST2_DISCOVERY_ENABLED", false)) {
-			
-			List<File> vst2files = new ArrayList<File>();
+		try {
+			if(prefs.getBoolean("VST2_DISCOVERY_ENABLED", false)) {
+				
+				List<File> vst2files = new ArrayList<File>();
 
 
-			String vst2path = prefs.get("VST2_DIRECTORY", "");
-			NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST2);
-			vst2files = collector.collect(vst2path);
+				String vst2path = prefs.get("VST2_DIRECTORY", "");
+				NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST2);
+				vst2files = collector.collect(vst2path);
 
-			NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(platform, PluginType.VST2);
+				NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(platform, PluginType.VST2);
 
-			for(File file: vst2files){
+				for(File file: vst2files){
 
-				discoveredPlugins.add(builder.build(file));
+					discoveredPlugins.add(builder.build(file));
 
-				/*
-					AEffect a;
+					/*
+						AEffect a;
 
-					a = VST.load(file.getAbsolutePath());
-					System.out.println(a.getEffectName());
-					System.out.println(a.getProgramName());
-					System.out.println(a.getVersion());
+						a = VST.load(file.getAbsolutePath());
+						System.out.println(a.getEffectName());
+						System.out.println(a.getProgramName());
+						System.out.println(a.getVersion());
 
-				 */
+					 */
+
+				}
+
 
 			}
-
-
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 

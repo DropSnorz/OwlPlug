@@ -33,10 +33,9 @@
             <HBox alignment="CENTER_LEFT">
                <children>
                   <JFXButton fx:id="newRepositoryButton" alignment="BASELINE_CENTER" buttonType="RAISED" text="New repository" />
-            		<HBox alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="311.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
+            		<HBox alignment="CENTER_RIGHT" prefHeight="40.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
             			<children>
-            				<JFXTextField fx:id="searchTextField" />
-            				<JFXButton text="Search" />
+            				<JFXTextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" />
             			</children>
             			<padding>
             				<Insets bottom="10.0" left="5.0" top="5.0" />

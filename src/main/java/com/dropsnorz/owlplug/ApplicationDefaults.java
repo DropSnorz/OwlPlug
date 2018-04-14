@@ -10,6 +10,9 @@ public class ApplicationDefaults {
 	
 	private OSType platform;
 	
+	public static String REPOSITORY_FOLDER_NAME = "repositories";
+	
+	
 	public ApplicationDefaults() {
 		if(OSValidator.isWindows()) {
 			this.platform = OSType.WIN;

@@ -1,26 +1,28 @@
 package com.dropsnorz.owlplug.controllers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import javafx.beans.binding.Bindings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.components.FilterableTreeItem;
 import com.dropsnorz.owlplug.components.TreeItemPredicate;
 import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.dao.PluginDAO;
 import com.dropsnorz.owlplug.dao.PluginRepositoryDAO;
-import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
-import com.dropsnorz.owlplug.model.FileSystemRepository;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
 import com.dropsnorz.owlplug.model.PluginRepository;
 import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.services.TaskManager;
+import com.dropsnorz.owlplug.utils.FileUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
@@ -43,26 +45,29 @@ import javafx.scene.control.TreeItem;
 
 @Controller
 public class PluginsController {
-	
+
 	@Autowired
 	TaskFactory taskFactory;
 
 	@Autowired
 	MainController mainController;
-	
+
 	@Autowired
 	DialogController dialogController;
-	
+
 	@Autowired 
-	PluginDAO pluginRepository;
+	PluginDAO pluginDAO;
 
 	@Autowired
 	NodeInfoController nodeInfoController;
-	
+
 	@Autowired
 	PluginRepositoryDAO repositoryDAO;
-	
-	
+
+	@Autowired
+	protected Preferences prefs;
+
+
 	@FXML
 	JFXButton syncButton;
 
@@ -71,13 +76,13 @@ public class PluginsController {
 
 	@FXML
 	JFXTabPane treeViewTabPane;
-	
+
 	@FXML
 	JFXTextField searchTextField;
-	
+
 	@FXML
 	JFXButton newRepositoryButton;
-	
+
 
 	Iterable<Plugin> pluginList;
 
@@ -86,7 +91,7 @@ public class PluginsController {
 	FilterableTreeItem<Object> treeRootNode;
 
 	FilterableTreeItem<Object> treeFileRootNode; 
-	
+
 	FilterableTreeItem<Object> treeRepositoryRootNode; 
 
 
@@ -96,24 +101,24 @@ public class PluginsController {
 
 	@FXML
 	public void initialize() {  
-		
-		
+
+
 		newRepositoryButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				mainController.setLeftDrawerFXML("/fxml/NewRepositoryMenu.fxml");
 				mainController.getLeftDrawer().open();
-			
+
 			};
 		});	
-		
+
 		treeRootNode = 
 				new FilterableTreeItem<Object>("(all)");
-		
+
 		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
-		
+
 		treeRepositoryRootNode = new FilterableTreeItem<Object>("Repositories");
 
-		
+
 		treeView.setRoot(treeRootNode);
 		refreshPlugins();
 
@@ -150,34 +155,34 @@ public class PluginsController {
 					}
 				}
 				);
-		
-		
+
+
 		treeRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-            if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
-                return null;
-            return TreeItemPredicate.create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
+			if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
+				return null;
+			return TreeItemPredicate.create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
 		}, searchTextField.textProperty()));
-		
-		
+
+
 		treeFileRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-            if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
-                return null;
-            return TreeItemPredicate.create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
+			if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
+				return null;
+			return TreeItemPredicate.create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
 		}, searchTextField.textProperty()));
-		
-		
+
+
 		syncButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				taskFactory.run(taskFactory.createSyncPluginTask());
 			};
 		});	
 	}
-	
+
 	public void refreshPlugins() {
-		
+
 		treeRootNode.getInternalChildren().clear();
 
-		Iterable<Plugin> pluginList = pluginRepository.findAll();
+		Iterable<Plugin> pluginList = pluginDAO.findAll();
 		this.pluginList = pluginList;
 
 		for(Plugin plugin : pluginList){
@@ -185,27 +190,32 @@ public class PluginsController {
 			TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
 			item.setGraphic(new ImageView(brickImage));
 			treeRootNode.getInternalChildren().add(item);
-			
+
 
 		}
 
 		treeRootNode.setExpanded(true);
-		
-		treeFileRootNode.getInternalChildren().clear();
-		generatePluginTree();
-		buildChildren(pluginTree, treeFileRootNode);
-		
-		
-		treeRepositoryRootNode.setExpanded(true);
-		treeRepositoryRootNode.getInternalChildren().clear();
 
-		Iterable<PluginRepository> repositories = repositoryDAO.findAll();
-		
-		for(PluginRepository repository : repositories) {
+		treeFileRootNode.getInternalChildren().clear();
+
+		Iterable<PluginRepository> pluginRepositories = repositoryDAO.findAll();
+
+		for(PluginRepository repository : pluginRepositories) {
 			TreeItem<Object> item = new FilterableTreeItem<Object>(repository);
 			treeRepositoryRootNode.getInternalChildren().add(item);
 		}
+
+		generatePluginTree();
+		buildChildren(pluginTree, treeFileRootNode);
+
+
+		treeRepositoryRootNode.setExpanded(true);
+		treeRepositoryRootNode.getInternalChildren().clear();
+
+		buildPluginRepositoryChildren(pluginTree, treeRepositoryRootNode, pluginRepositories);
 		
+
+
 	}
 
 	public void generatePluginTree(){
@@ -223,30 +233,44 @@ public class PluginsController {
 				FileTree ft = new FileTree();
 
 				if(node.get(segment) == null){
+					//Node is a plugin (End of branch)
 					if(i == subDirs.length - 1){
 						ft.setNodeValue(plug);
 					}
+
+					//Node is a directory or a repository)
 					else{
 
-						PluginDirectory directory = new PluginDirectory();
-						directory.setName(segment);
-						directory.setPath(currentPath);
-						
 						//Should be optimized
 						List<Plugin> localPluginList = new ArrayList<Plugin>();
-						
+
 						for(Plugin p : pluginList){
 							if(p.getPath().startsWith(currentPath)){
 								localPluginList.add(p);
 							}
 						}
-						
-						directory.setPluginList(localPluginList);
-						ft.setNodeValue(directory);
-						
+
+						// Remove ending separator before getting the path
+						PluginRepository repository = repositoryDAO.findByName(subDirs[i]);
+
+						if(repository != null) {
+							repository.setPluginList(localPluginList);
+							ft.setNodeValue(repository);
+
+						}
+						else {
+
+							PluginDirectory directory = new PluginDirectory();
+							directory.setName(segment);
+							directory.setPath(currentPath);
+
+							directory.setPluginList(localPluginList);
+							ft.setNodeValue(directory);
+
+						}
 					}
 					node.put(segment, ft);
-					
+
 				}
 				node = node.get(segment);
 			}
@@ -279,6 +303,63 @@ public class PluginsController {
 			}
 
 		}
+
+
+	}
+
+	public void buildPluginRepositoryChildren(FileTree pluginTree, FilterableTreeItem<Object> node, Iterable<PluginRepository> repositories) {
+		node.setGraphic(new ImageView(folderImage));
+		node.setExpanded(true);
+
+		FileTree treeHead = pluginTree;
+
+		String[] directories = getPluginRepositoryPath().split("/");
+
+		for(String dir : directories) {
+			treeHead = treeHead.get(dir);
+		}
+		
+		//Searching for missing or empty repositories
+		for(PluginRepository repository : repositories) {
+			if(!treeHead.containsKey(repository.getName())) {
+				FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(repository);
+				item.setGraphic(new ImageView(folderImage));
+				node.getInternalChildren().add(item);
+			}
+		}
+
+
+		for(String dir : treeHead.keySet()){
+
+
+			if(treeHead.get(dir).values().size() == 0){
+
+				FilterableTreeItem<Object> plug = new FilterableTreeItem<Object>(treeHead.get(dir).getNodeValue());
+				plug.setGraphic(new ImageView(brickImage));
+
+
+				node.getInternalChildren().add(plug);
+
+			}
+			else{
+
+				FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(treeHead.get(dir).getNodeValue());
+				node.getInternalChildren().add(item);
+
+				buildChildren(treeHead.get(dir), item);
+
+			}
+
+		}
+
+	}
+
+	private String getPluginRepositoryPath() {
+
+		String path =prefs.get("VST2_DIRECTORY", null);
+		if(path == null) return null;
+		return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME);
+
 
 
 	}
