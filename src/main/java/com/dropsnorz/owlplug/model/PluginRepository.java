@@ -13,7 +13,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Inheritance
-public abstract class PluginRepository {
+public abstract class PluginRepository implements IDirectory {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,6 +22,8 @@ public abstract class PluginRepository {
 	
 	@Transient
 	protected List<Plugin> pluginList;
+	@Transient
+	protected String displayName;
 	
 	PluginRepository(String name){
 		this.name = name;
@@ -63,9 +65,18 @@ public abstract class PluginRepository {
 	public void setPluginList(List<Plugin> pluginList) {
 		this.pluginList = pluginList;
 	}
+	
+	public String getDisplayName() {
+		return displayName;
+	}
+	
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
 
 	@Override
 	public String toString() {
+		if (displayName != null) return displayName;
 		return name;
 	}
 

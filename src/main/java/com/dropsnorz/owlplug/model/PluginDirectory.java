@@ -2,9 +2,10 @@ package com.dropsnorz.owlplug.model;
 
 import java.util.List;
 
-public class PluginDirectory {
+public class PluginDirectory implements IDirectory {
 	
 	protected String name;
+	protected String displayName;
 	protected String path;
 	protected List<Plugin> pluginList;
 	
@@ -23,6 +24,13 @@ public class PluginDirectory {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getDisplayName() {
+		return displayName;
+	}
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
 	public String getPath() {
 		return path;
 	}
@@ -37,7 +45,10 @@ public class PluginDirectory {
 	}
 	@Override
 	public String toString() {
+		if(displayName != null) return displayName;
 		return name;
+			
+		
 	}
 	
 	

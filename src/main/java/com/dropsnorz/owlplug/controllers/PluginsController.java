@@ -16,6 +16,7 @@ import com.dropsnorz.owlplug.components.TreeItemPredicate;
 import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.dao.PluginDAO;
 import com.dropsnorz.owlplug.dao.PluginRepositoryDAO;
+import com.dropsnorz.owlplug.model.IDirectory;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
 import com.dropsnorz.owlplug.model.PluginRepository;
@@ -206,13 +207,13 @@ public class PluginsController {
 		}
 
 		generatePluginTree();
-		buildChildren(pluginTree, treeFileRootNode);
+		buildDirectoryTree(pluginTree, treeFileRootNode, null);
 
 
 		treeRepositoryRootNode.setExpanded(true);
 		treeRepositoryRootNode.getInternalChildren().clear();
 
-		buildPluginRepositoryChildren(pluginTree, treeRepositoryRootNode, pluginRepositories);
+		buildRepositoryTree(pluginTree, treeRepositoryRootNode, pluginRepositories);
 		
 
 
@@ -241,7 +242,7 @@ public class PluginsController {
 					//Node is a directory or a repository)
 					else{
 
-						//Should be optimized
+						//TODO Should be optimized for large plugin set
 						List<Plugin> localPluginList = new ArrayList<Plugin>();
 
 						for(Plugin p : pluginList){
@@ -279,27 +280,52 @@ public class PluginsController {
 
 	}
 
-	public void buildChildren(FileTree pluginTree, FilterableTreeItem<Object> node){
+	public void buildDirectoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent){
 
 		node.setGraphic(new ImageView(folderImage));
 		node.setExpanded(true);
+		
+		if(mergedParent == null) {
+			mergedParent = "";
+		}
 
 		for(String dir : pluginTree.keySet()){
+			
+			FileTree child = pluginTree.get(dir);
 
-			if(pluginTree.get(dir).values().size() == 0){
-				FilterableTreeItem<Object> plug = new FilterableTreeItem<Object>(pluginTree.get(dir).getNodeValue());
+			// If child is empty then we have reached a plugin and we can't go deeper
+			if(child.values().size() == 0){
+				FilterableTreeItem<Object> plug = new FilterableTreeItem<Object>(child.getNodeValue());
 				plug.setGraphic(new ImageView(brickImage));
-
 
 				node.getInternalChildren().add(plug);
 
 			}
 			else{
-				FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(pluginTree.get(dir).getNodeValue());
-				node.getInternalChildren().add(item);
+				
+				IDirectory directory;
+								
+				//If child node contains only one directory we can merge it with this directory
+				if(child.size() == 1 && ( (FileTree)child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory) {
+										
+					directory = (IDirectory) child.getNodeValue();
+					mergedParent = mergedParent + directory.getName() + "/" ;
 
-				buildChildren(pluginTree.get(dir), item);
+					buildDirectoryTree(child, node, mergedParent);
+					mergedParent = "";
 
+				}
+				else {					
+					directory = (IDirectory) child.getNodeValue();
+					directory.setDisplayName(mergedParent + directory.getName());
+
+					mergedParent = "";
+					FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(directory);
+					node.getInternalChildren().add(item);
+					buildDirectoryTree(child, item, mergedParent);
+
+				}
+				
 			}
 
 		}
@@ -307,7 +333,7 @@ public class PluginsController {
 
 	}
 
-	public void buildPluginRepositoryChildren(FileTree pluginTree, FilterableTreeItem<Object> node, Iterable<PluginRepository> repositories) {
+	public void buildRepositoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, Iterable<PluginRepository> repositories) {
 		node.setGraphic(new ImageView(folderImage));
 		node.setExpanded(true);
 
@@ -346,7 +372,7 @@ public class PluginsController {
 				FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(treeHead.get(dir).getNodeValue());
 				node.getInternalChildren().add(item);
 
-				buildChildren(treeHead.get(dir), item);
+				buildDirectoryTree(treeHead.get(dir), item, null);
 
 			}
 
