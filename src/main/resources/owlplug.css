@@ -32,6 +32,9 @@ Label{
 Text{ 
  	-fx-fill: white;
 }
+.text-disabled{
+	-fx-fill: rgb(160,160,160);
+}
 JFXTextField{
 	-fx-text-fill:white;
 }

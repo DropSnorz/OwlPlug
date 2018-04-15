@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.components.CustomTreeCell;
 import com.dropsnorz.owlplug.components.FilterableTreeItem;
 import com.dropsnorz.owlplug.components.TreeItemPredicate;
 import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
@@ -29,6 +30,7 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTreeCell;
 import com.jfoenix.controls.JFXTreeView;
 
 import javafx.beans.value.ChangeListener;
@@ -38,10 +40,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TreeCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import javafx.util.Callback;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 
 @Controller
 public class PluginsController {
@@ -118,7 +122,15 @@ public class PluginsController {
 		treeRepositoryRootNode = new FilterableTreeItem<Object>("Repositories");
 
 
+		treeView.setCellFactory(new Callback<TreeView<Object>,TreeCell<Object>>(){
+            @Override
+            public TreeCell<Object> call(TreeView<Object> p) {
+                return new CustomTreeCell();
+            }
+        });
 		treeView.setRoot(treeRootNode);
+
+ 
 		refreshPlugins();
 
 		treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
