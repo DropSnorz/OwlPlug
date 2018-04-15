@@ -17,8 +17,6 @@ import javafx.event.EventHandler;
 public class TaskFactory {
 	
 	@Autowired
-	PluginExplorer pluginExplorer;
-	@Autowired
 	PluginService pluginService;
 	@Autowired
 	TaskManager taskManager;
@@ -35,7 +33,7 @@ public class TaskFactory {
 	
 	public SyncPluginTask createSyncPluginTask() {
 		
-		SyncPluginTask task = new SyncPluginTask(pluginExplorer, pluginRepository);
+		SyncPluginTask task = new SyncPluginTask(pluginService, pluginRepository);
 		
 		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
 			@Override

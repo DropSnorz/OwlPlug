@@ -20,7 +20,6 @@ import com.dropsnorz.owlplug.model.IDirectory;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
 import com.dropsnorz.owlplug.model.PluginRepository;
-import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.services.TaskManager;
 import com.dropsnorz.owlplug.utils.FileUtils;

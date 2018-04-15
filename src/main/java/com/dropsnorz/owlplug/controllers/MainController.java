@@ -10,7 +10,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.model.Plugin;
-import com.dropsnorz.owlplug.services.PluginExplorer;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTreeView;
@@ -90,10 +89,6 @@ public class MainController {
          
          return null;
     }
-    
-   
-    
-   
     
 
 }
