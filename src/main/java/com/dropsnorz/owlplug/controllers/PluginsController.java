@@ -67,6 +67,9 @@ public class PluginsController {
 
 	@Autowired
 	protected Preferences prefs;
+	
+	@Autowired
+	protected ApplicationDefaults applicationDefaults;
 
 
 	@FXML
@@ -95,10 +98,6 @@ public class PluginsController {
 
 	FilterableTreeItem<Object> treeRepositoryRootNode; 
 
-
-
-	private Image folderImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
-	private Image brickImage  = new Image(getClass().getResourceAsStream("/icons/soundwave-blue-16.png"));;
 
 	@FXML
 	public void initialize() {  
@@ -189,7 +188,7 @@ public class PluginsController {
 		for(Plugin plugin : pluginList){
 
 			TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
-			item.setGraphic(new ImageView(brickImage));
+			item.setGraphic(new ImageView(applicationDefaults.vst2Image));
 			treeRootNode.getInternalChildren().add(item);
 
 
@@ -282,7 +281,7 @@ public class PluginsController {
 
 	public void buildDirectoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent){
 
-		node.setGraphic(new ImageView(folderImage));
+		node.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		node.setExpanded(true);
 		
 		if(mergedParent == null) {
@@ -296,7 +295,7 @@ public class PluginsController {
 			// If child is empty then we have reached a plugin and we can't go deeper
 			if(child.values().size() == 0){
 				FilterableTreeItem<Object> plug = new FilterableTreeItem<Object>(child.getNodeValue());
-				plug.setGraphic(new ImageView(brickImage));
+				plug.setGraphic(new ImageView(applicationDefaults.vst2Image));
 
 				node.getInternalChildren().add(plug);
 
@@ -334,7 +333,7 @@ public class PluginsController {
 	}
 
 	public void buildRepositoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, Iterable<PluginRepository> repositories) {
-		node.setGraphic(new ImageView(folderImage));
+		node.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		node.setExpanded(true);
 
 		FileTree treeHead = pluginTree;
@@ -349,7 +348,7 @@ public class PluginsController {
 		for(PluginRepository repository : repositories) {
 			if(!treeHead.containsKey(repository.getName())) {
 				FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(repository);
-				item.setGraphic(new ImageView(folderImage));
+				item.setGraphic(new ImageView(applicationDefaults.directoryImage));
 				node.getInternalChildren().add(item);
 			}
 		}
@@ -361,7 +360,7 @@ public class PluginsController {
 			if(treeHead.get(dir).values().size() == 0){
 
 				FilterableTreeItem<Object> plug = new FilterableTreeItem<Object>(treeHead.get(dir).getNodeValue());
-				plug.setGraphic(new ImageView(brickImage));
+				plug.setGraphic(new ImageView(applicationDefaults.vst2Image));
 
 
 				node.getInternalChildren().add(plug);

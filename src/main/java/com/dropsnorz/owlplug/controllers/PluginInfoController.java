@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.services.TaskFactory;
@@ -31,6 +32,9 @@ public class PluginInfoController {
 	@Autowired
 	private TaskFactory taskFactory;
 	
+	@Autowired
+	private ApplicationDefaults applicationDefaults;
+	
 	@FXML
 	private ImageView pluginTypeIcon;
 	@FXML
@@ -53,15 +57,12 @@ public class PluginInfoController {
 	@FXML
 	private JFXButton uninstallButton;
 
-	private Image brickImage  = new Image(getClass().getResourceAsStream("/icons/soundwave-blue-16.png"));;
-	private Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
-
 	private Plugin currentPlugin = null;
 	
 	@FXML
 	public void initialize() { 
 
-		openDirectoryButton.setGraphic(new ImageView(directoryImage));
+		openDirectoryButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		openDirectoryButton.setText("");
 		openDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -110,7 +111,7 @@ public class PluginInfoController {
 
 	public void setPlugin(Plugin plugin){
 		this.currentPlugin = plugin;
-		pluginTypeIcon.setImage(brickImage);
+		pluginTypeIcon.setImage(applicationDefaults.vst2Image);
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());
 		pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse(""));
