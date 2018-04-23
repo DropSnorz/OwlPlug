@@ -50,19 +50,16 @@ public class CustomTreeCell extends JFXTreeCell<Object>{
 				textFlow.getChildren().add(name);
 
 				Node icon = getTreeItem().getGraphic();
-
 				hbox = new HBox(5);
 				hbox.getChildren().add(icon);
 				hbox.getChildren().add(textFlow);
 
 				setGraphic(hbox);
-
 			}
 			else {
 				setText(item.toString());
 				setGraphic(getTreeItem().getGraphic());
 			}
-
 		}
 	}
 

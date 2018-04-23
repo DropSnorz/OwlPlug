@@ -20,8 +20,9 @@
                   </ImageView>
                </graphic>
             </Label>
-            <HBox alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="460.0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="460.0" spacing="10.0">
                <children>
+                  <JFXButton fx:id="pullButton" text="Pull" />
                   <JFXButton fx:id="openRepositoryButton" text="Open folder" />
                </children></HBox>
             <JFXListView fx:id="pluginRepositoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="440.0" VBox.vgrow="ALWAYS">

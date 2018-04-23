@@ -96,7 +96,7 @@ public class PluginInfoController {
 				removeButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent e) {
 						dialog.close();
-						taskFactory.run(taskFactory.createpluginRemoveTask(currentPlugin));
+						taskFactory.run(taskFactory.createPluginRemoveTask(currentPlugin));
 					};
 				});	
 				removeButton.getStyleClass().add("button-danger");

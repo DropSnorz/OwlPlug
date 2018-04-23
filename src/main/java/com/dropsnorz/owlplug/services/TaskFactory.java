@@ -46,7 +46,7 @@ public class TaskFactory {
 		return task;
 	}
 	
-    public PluginRemoveTask createpluginRemoveTask(Plugin plugin) {
+    public PluginRemoveTask createPluginRemoveTask(Plugin plugin) {
 		
     	PluginRemoveTask task = new PluginRemoveTask(plugin, pluginService);
 		
@@ -61,5 +61,6 @@ public class TaskFactory {
 		
 		return task;
 	}
+    
 
 }

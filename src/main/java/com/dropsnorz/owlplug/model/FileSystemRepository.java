@@ -17,4 +17,14 @@ public class FileSystemRepository extends PluginRepository {
 		this.remotePath = remotePath;
 		
 	}
+
+	public String getRemotePath() {
+		return remotePath;
+	}
+
+	public void setRemotePath(String remotePath) {
+		this.remotePath = remotePath;
+	}
+	
+	
 }
