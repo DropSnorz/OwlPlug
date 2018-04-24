@@ -22,9 +22,19 @@
             <Label text="Repository Name" />
             <JFXTextField fx:id="repositoryNameTextField" GridPane.columnIndex="1" />
             <Label text="Repository Path" GridPane.rowIndex="1" />
-            <JFXTextField fx:id="repositoryPathTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <JFXTextField fx:id="repositoryPathTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" HBox.hgrow="ALWAYS" />
+                  <JFXButton fx:id="browseDirectoryButton" text="..." />
+               </children>
+            </HBox>
          </children>
       </GridPane>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="messageLabel" styleClass="label-danger" />
+         </children>
+      </HBox>
       <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
             <JFXButton fx:id="addButton" text="Add" />

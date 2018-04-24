@@ -29,6 +29,10 @@ JFXDialog Label{
 Label{ 
  	-fx-text-fill: white;
 }
+.label-danger{
+	-fx-text-fill:#d9534f;
+}
+
 Text{ 
  	-fx-fill: white;
 }

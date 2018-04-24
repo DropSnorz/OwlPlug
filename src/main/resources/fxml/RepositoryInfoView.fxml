@@ -15,7 +15,7 @@
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/folder-grey-16.png" />
+                        <Image url="@../icons/box-yellow-16.png" />
                      </image>
                   </ImageView>
                </graphic>

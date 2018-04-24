@@ -16,7 +16,7 @@ public class ApplicationDefaults {
 	
 	public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
 	public final Image vst2Image  = new Image(getClass().getResourceAsStream("/icons/soundwave-blue-16.png"));
-	
+	public final Image repositoryImage  = new Image(getClass().getResourceAsStream("/icons/box-yellow-16.png"));
 	
 	public ApplicationDefaults() {
 		if(OSValidator.isWindows()) {

@@ -292,7 +292,12 @@ public class PluginsController {
 
 	public void buildDirectoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent){
 
-		node.setGraphic(new ImageView(applicationDefaults.directoryImage));
+		if(node.getValue() instanceof PluginRepository) {
+			node.setGraphic(new ImageView(applicationDefaults.repositoryImage));
+		}
+		else {
+			node.setGraphic(new ImageView(applicationDefaults.directoryImage));
+		}
 		node.setExpanded(true);
 		
 		if(mergedParent == null) {
@@ -344,6 +349,8 @@ public class PluginsController {
 	}
 
 	public void buildRepositoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, Iterable<PluginRepository> repositories) {
+		
+		
 		node.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		node.setExpanded(true);
 
@@ -359,7 +366,7 @@ public class PluginsController {
 		for(PluginRepository repository : repositories) {
 			if(!treeHead.containsKey(repository.getName())) {
 				FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(repository);
-				item.setGraphic(new ImageView(applicationDefaults.directoryImage));
+				item.setGraphic(new ImageView(applicationDefaults.repositoryImage));
 				node.getInternalChildren().add(item);
 			}
 		}
