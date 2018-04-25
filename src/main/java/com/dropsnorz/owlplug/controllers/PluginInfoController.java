@@ -81,7 +81,7 @@ public class PluginInfoController {
 				
 				layout.setHeading(new Label("Remove plugin"));
 				layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName() 
-				+ " ? This will this will permanently delete the file from your hard drive."));
+				+ " ? This will permanently delete the file from your hard drive."));
 				
 				JFXButton cancelButton = new JFXButton("Cancel");
 				

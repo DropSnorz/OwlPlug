@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
+import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 
@@ -28,6 +32,12 @@ public class DirectoryInfoController {
 	@Autowired
 	ApplicationDefaults applicationDefaults;
 	
+	@Autowired
+	DialogController dialogController;
+	
+	@Autowired
+	TaskFactory taskFactory;
+	
 	@FXML
 	Label directoryPathLabel;
 	
@@ -36,6 +46,11 @@ public class DirectoryInfoController {
 	
 	@FXML 
 	JFXButton openDirectoryButton;
+	
+	@FXML 
+	JFXButton deleteDirectoryButton;
+	
+	private PluginDirectory pluginDirectory;
 
 	
 	@FXML
@@ -44,7 +59,7 @@ public class DirectoryInfoController {
 		openDirectoryButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		openDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				PlatformUtils.openDirectoryExplorer(directoryPathLabel.getText());
+				PlatformUtils.openDirectoryExplorer(pluginDirectory.getPath());
 			};
 		});
 		
@@ -63,12 +78,49 @@ public class DirectoryInfoController {
                 }
             }
         });
+		
+		deleteDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				
+				JFXDialog dialog = dialogController.newDialog();
+				
+				JFXDialogLayout layout = new JFXDialogLayout();
+				
+				layout.setHeading(new Label("Remove directory"));
+				layout.setBody(new Label("Do you really want to remove " + pluginDirectory.getName()
+				+ " and all of its content ? This will permanently delete the file from your hard drive."));
+				
+				JFXButton cancelButton = new JFXButton("Cancel");
+				
+				cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent e) {
+						dialog.close();
+					};
+				});	
+				
+				JFXButton removeButton = new JFXButton("Remove");
+				
+				removeButton.setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent e) {
+						dialog.close();
+						taskFactory.run(taskFactory.createDirectoryRemoveTask(pluginDirectory));
+					};
+				});	
+				removeButton.getStyleClass().add("button-danger");
+				
+				layout.setActions(removeButton, cancelButton);
+				dialog.setContent(layout);
+				dialog.show();
+				
+			};
+		});
 
 	}
 	
 	
 	public void setPluginDirectory(PluginDirectory pluginDirectory){
 		
+		this.pluginDirectory = pluginDirectory;
 		directoryPathLabel.setText(pluginDirectory.getPath());
 		pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());
 	}
