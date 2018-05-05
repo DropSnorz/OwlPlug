@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.model.Plugin;
+import com.dropsnorz.owlplug.services.PluginService;
 import com.dropsnorz.owlplug.services.TaskFactory;
 import com.dropsnorz.owlplug.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
@@ -30,7 +31,7 @@ public class PluginInfoController {
 	private DialogController dialogController;
 	
 	@Autowired
-	private TaskFactory taskFactory;
+	private PluginService pluginService;
 	
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
@@ -96,7 +97,7 @@ public class PluginInfoController {
 				removeButton.setOnAction(new EventHandler<ActionEvent>() {
 					public void handle(ActionEvent e) {
 						dialog.close();
-						taskFactory.run(taskFactory.createPluginRemoveTask(currentPlugin));
+						pluginService.removePlugin(currentPlugin);
 					};
 				});	
 				removeButton.getStyleClass().add("button-danger");

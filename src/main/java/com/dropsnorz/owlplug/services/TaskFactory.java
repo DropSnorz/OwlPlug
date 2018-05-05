@@ -26,7 +26,7 @@ public class TaskFactory {
 	@Autowired
 	TaskManager taskManager;
 	@Autowired
-	PluginDAO pluginRepository;
+	PluginDAO pluginDAO;
 	@Autowired 
 	PluginRepositoryDAO pluginRepositoryDAO;
 
@@ -41,7 +41,7 @@ public class TaskFactory {
 
 	public SyncPluginTask createSyncPluginTask() {
 
-		SyncPluginTask task = new SyncPluginTask(pluginService, pluginRepository);
+		SyncPluginTask task = new SyncPluginTask(pluginService, pluginDAO);
 
 		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
 			@Override
@@ -56,7 +56,7 @@ public class TaskFactory {
 
 	public PluginRemoveTask createPluginRemoveTask(Plugin plugin) {
 
-		PluginRemoveTask task = new PluginRemoveTask(plugin, pluginService);
+		PluginRemoveTask task = new PluginRemoveTask(plugin, pluginDAO);
 
 		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
 			@Override

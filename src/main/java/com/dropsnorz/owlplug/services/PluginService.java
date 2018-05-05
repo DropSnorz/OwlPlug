@@ -31,15 +31,12 @@ public class PluginService {
 	@Autowired
 	protected PluginDAO pluginDAO;
 	
-	public boolean removePlugin(Plugin plugin) {
+	@Autowired
+	protected TaskFactory taskFactory;
 	
-		File pluginFile = new File(plugin.getPath());
-		if(pluginFile.delete()) {
-			pluginDAO.delete(plugin);
-			return true;
-		}
+	public void removePlugin(Plugin plugin) {
 		
-		return false;
+		taskFactory.run(taskFactory.createPluginRemoveTask(plugin));
 		
 	}
 	
