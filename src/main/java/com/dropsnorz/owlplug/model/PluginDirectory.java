@@ -12,6 +12,9 @@ public class PluginDirectory implements IDirectory {
 	public PluginDirectory(){
 		
 	}
+	public PluginDirectory(String path) {
+		this.path = path;
+	}
 	public PluginDirectory(String name, String path, List<Plugin> pluginList) {
 		super();
 		this.name = name;

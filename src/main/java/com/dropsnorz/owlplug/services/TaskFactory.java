@@ -5,11 +5,14 @@ import org.springframework.stereotype.Service;
 
 import com.dropsnorz.owlplug.controllers.PluginsController;
 import com.dropsnorz.owlplug.dao.PluginDAO;
+import com.dropsnorz.owlplug.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.engine.tasks.DirectoryRemoveTask;
 import com.dropsnorz.owlplug.engine.tasks.PluginRemoveTask;
+import com.dropsnorz.owlplug.engine.tasks.RepositoryRemoveTask;
 import com.dropsnorz.owlplug.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginDirectory;
+import com.dropsnorz.owlplug.model.PluginRepository;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -24,6 +27,9 @@ public class TaskFactory {
 	TaskManager taskManager;
 	@Autowired
 	PluginDAO pluginRepository;
+	@Autowired 
+	PluginRepositoryDAO pluginRepositoryDAO;
+
 
 
 	@Autowired
@@ -78,6 +84,22 @@ public class TaskFactory {
 		});
 
 		return task;
+	}
+
+	public RepositoryRemoveTask createRepositoryRemoveTask(PluginRepository repository, String path) {
+
+		RepositoryRemoveTask task = new RepositoryRemoveTask(pluginRepositoryDAO, repository, path);
+		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+			@Override
+			public void handle(WorkerStateEvent event) {
+
+				taskManager.addTask(createSyncPluginTask());
+
+			}
+		});
+		return task;
+
+
 	}
 
 

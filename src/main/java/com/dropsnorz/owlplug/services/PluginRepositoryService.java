@@ -13,6 +13,7 @@ import com.dropsnorz.owlplug.engine.repositories.IRepositoryStrategy;
 import com.dropsnorz.owlplug.engine.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.engine.repositories.RepositoryStrategyParameters.RepositoryAction;
 import com.dropsnorz.owlplug.engine.repositories.RepositoryStrategyResolver;
+import com.dropsnorz.owlplug.engine.tasks.RepositoryRemoveTask;
 import com.dropsnorz.owlplug.engine.tasks.RepositoryTask;
 import com.dropsnorz.owlplug.model.FileSystemRepository;
 import com.dropsnorz.owlplug.model.PluginRepository;
@@ -29,6 +30,8 @@ public class PluginRepositoryService {
 	protected RepositoryStrategyResolver repositoryStrategyResolver;
 	@Autowired
 	protected TaskManager taskManager;
+	@Autowired
+	protected TaskFactory taskFactory;
 
 	public boolean createRepository(PluginRepository repository){
 
@@ -63,6 +66,15 @@ public class PluginRepositoryService {
 				return null;
 			}
 		});
+	}
+	
+	public void delete(PluginRepository repository) {
+		
+		String localPath = getLocalRepositoryPath(repository);
+		RepositoryRemoveTask task = taskFactory.createRepositoryRemoveTask(repository, localPath);
+		
+		taskManager.addTask(task);
+		
 	}
 
 	public String getLocalRepositoryPath(PluginRepository repository) {
