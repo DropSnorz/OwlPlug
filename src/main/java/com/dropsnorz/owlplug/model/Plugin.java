@@ -4,9 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
 
 @Entity
-public class Plugin {
+@Inheritance
+public abstract class Plugin {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -59,14 +61,12 @@ public class Plugin {
 		this.version = version;
 	}
 
-	
-	
-
 	@Override
 	public String toString() {
 		return name;
 	}
 	
+	public abstract PluginType getType();
 	
 	
 	

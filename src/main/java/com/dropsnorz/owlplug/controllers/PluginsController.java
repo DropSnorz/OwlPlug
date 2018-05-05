@@ -199,7 +199,7 @@ public class PluginsController {
 		for(Plugin plugin : pluginList){
 
 			TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
-			item.setGraphic(new ImageView(applicationDefaults.vst2Image));
+			item.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
 			treeRootNode.getInternalChildren().add(item);
 
 
@@ -310,10 +310,11 @@ public class PluginsController {
 
 			// If child is empty then we have reached a plugin and we can't go deeper
 			if(child.values().size() == 0){
-				FilterableTreeItem<Object> plug = new FilterableTreeItem<Object>(child.getNodeValue());
-				plug.setGraphic(new ImageView(applicationDefaults.vst2Image));
+				Plugin plugin = (Plugin) child.getNodeValue();
+				FilterableTreeItem<Object> plugItem = new FilterableTreeItem<Object>(plugin);
+				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
 
-				node.getInternalChildren().add(plug);
+				node.getInternalChildren().add(plugItem);
 
 			}
 			else{
@@ -355,11 +356,19 @@ public class PluginsController {
 		node.setExpanded(true);
 
 		FileTree treeHead = pluginTree;
+		
+		
 
 		String[] directories = getPluginRepositoryPath().split("/");
 
+		
 		for(String dir : directories) {
+			
 			treeHead = treeHead.get(dir);
+			
+			if(treeHead == null) {
+				return;
+			}
 		}
 		
 		//Searching for missing or empty repositories
@@ -376,12 +385,14 @@ public class PluginsController {
 
 
 			if(treeHead.get(dir).values().size() == 0){
+				
+				Plugin plugin =  (Plugin) treeHead.get(dir).getNodeValue();
 
-				FilterableTreeItem<Object> plug = new FilterableTreeItem<Object>(treeHead.get(dir).getNodeValue());
-				plug.setGraphic(new ImageView(applicationDefaults.vst2Image));
+				FilterableTreeItem<Object> plugItem = new FilterableTreeItem<Object>(plugin);
+				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
 
 
-				node.getInternalChildren().add(plug);
+				node.getInternalChildren().add(plugItem);
 
 			}
 			else{

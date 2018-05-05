@@ -15,6 +15,8 @@ import com.dd.plist.PropertyListFormatException;
 import com.dd.plist.PropertyListParser;
 import com.dropsnorz.owlplug.model.Plugin;
 import com.dropsnorz.owlplug.model.PluginType;
+import com.dropsnorz.owlplug.model.VST2Plugin;
+import com.dropsnorz.owlplug.model.VST3Plugin;
 
 public class OSXPluginBuilder extends NativePluginBuilder {
 
@@ -37,18 +39,27 @@ public class OSXPluginBuilder extends NativePluginBuilder {
 		String pluginName = FilenameUtils.removeExtension(pluginFile.getName());
 		String pluginPath = pluginFile.getAbsolutePath().replace("\\", "/");
 		
-		Plugin plugin = new Plugin(pluginName, pluginPath);
+		Plugin plugin = new VST2Plugin(pluginName, pluginPath);
 		
 		File pList = new File(pluginFile.getAbsolutePath() + "/Contents/Info.plist");
 		if(pList.exists()) {
-			buildPluginFromPlist(plugin, pList);
+			buildPluginFromVST2Plist(plugin, pList);
 		}
 
 
 		return plugin;
 	}
+	
+	private Plugin buildVST3Plugin(File pluginFile) {
+		String pluginName = FilenameUtils.removeExtension(pluginFile.getName());
+		String pluginPath = pluginFile.getAbsolutePath().replace("\\", "/");
+		
+		Plugin plugin = new VST3Plugin(pluginName, pluginPath);
+		
+		return plugin;
+	}
 
-	private void buildPluginFromPlist(Plugin plugin, File pList) {
+	private void buildPluginFromVST2Plist(Plugin plugin, File pList) {
 
 		try {
 			NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(pList);

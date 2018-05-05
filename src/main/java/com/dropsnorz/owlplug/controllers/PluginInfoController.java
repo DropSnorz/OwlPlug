@@ -112,7 +112,7 @@ public class PluginInfoController {
 
 	public void setPlugin(Plugin plugin){
 		this.currentPlugin = plugin;
-		pluginTypeIcon.setImage(applicationDefaults.vst2Image);
+		pluginTypeIcon.setImage(applicationDefaults.getPluginIcon(plugin));
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());
 		pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse(""));

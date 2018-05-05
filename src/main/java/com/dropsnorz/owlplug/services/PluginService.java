@@ -21,25 +21,25 @@ import com.dropsnorz.owlplug.model.PluginType;
 
 @Service
 public class PluginService {
-	
+
 	@Autowired
 	protected ApplicationDefaults applicationDefaults;
 
 	@Autowired
 	protected Preferences prefs;
-	
+
 	@Autowired
 	protected PluginDAO pluginDAO;
-	
+
 	@Autowired
 	protected TaskFactory taskFactory;
-	
+
 	public void removePlugin(Plugin plugin) {
-		
+
 		taskFactory.run(taskFactory.createPluginRemoveTask(plugin));
-		
+
 	}
-	
+
 	public List<Plugin> explore(){
 
 		OSType platform = applicationDefaults.getPlatform();
@@ -48,7 +48,7 @@ public class PluginService {
 
 		try {
 			if(prefs.getBoolean("VST2_DISCOVERY_ENABLED", false)) {
-				
+
 				List<File> vst2files = new ArrayList<File>();
 
 				String vst2path = prefs.get("VST2_DIRECTORY", "");
@@ -64,6 +64,23 @@ public class PluginService {
 				}
 
 			}
+			if(prefs.getBoolean("VST3_DISCOVERY_ENABLED", false)) {
+
+				List<File> vst3files = new ArrayList<File>();
+
+				String vst3path = prefs.get("VST2_DIRECTORY", "");
+				NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST3);
+				vst3files = collector.collect(vst3path);
+
+				NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(platform, PluginType.VST3);
+
+				for(File file: vst3files){
+
+					discoveredPlugins.add(builder.build(file));
+
+				}
+
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,7 +89,7 @@ public class PluginService {
 		return discoveredPlugins;
 
 	}
-	
-	
+
+
 
 }
