@@ -1,3 +1,10 @@
+.root{
+	solid-pane-color: rgb(66,66,66);
+	solid-pane-hover-color:rgb(96,96,96);
+	disabled-color: rgb(160,160,160);
+	danger-color: #d9534f;
+}
+
 #mainPane{
 	-fx-background-color:linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);
 }
@@ -22,7 +29,7 @@ JFXDialog Label{
 }
 
 .jfx-dialog-overlay-pane > StackPane {
-    -fx-background-color: rgb(66,66,66);
+    -fx-background-color: solid-pane-color;
     
 }
 
@@ -30,14 +37,14 @@ Label{
  	-fx-text-fill: white;
 }
 .label-danger{
-	-fx-text-fill:#d9534f;
+	-fx-text-fill:danger-color;
 }
 
 Text{ 
  	-fx-fill: white;
 }
 .text-disabled{
-	-fx-fill: rgb(160,160,160);
+	-fx-fill: disabled-color;
 }
 JFXTextField{
 	-fx-text-fill:white;
@@ -48,7 +55,7 @@ JFXButton{
 }
 
 .button-danger{
-	-fx-background-color:#d9534f;
+	-fx-background-color:danger-color;
 	
 }
 .button-danger:hover{
@@ -66,7 +73,7 @@ JFXToggleButton{
 }
 
 JFXTreeView{
-	-fx-background-color:rgb(66,66,66);
+	-fx-background-color:solid-pane-color;
 	-fx-text-fill:white;
 	-fx-border-color: transparent;
 	-fx-focus-color: transparent;
@@ -82,7 +89,7 @@ JFXTreeView:focused{
 }
 
 .tree-view, .tree-cell {
-    -fx-background-color: rgb(66,66,66) ;
+    -fx-background-color: solid-pane-color;
     -fx-text-fill: white ;
 }
 
@@ -91,7 +98,7 @@ JFXTreeView:focused{
 }
 
 .jfx-tab-pane *.tab-header-background{
-	-fx-background-color:rgb(66,66,66);
+	-fx-background-color:solid-pane-color;
 }
 
 .no-header-tab-pane {
@@ -102,11 +109,11 @@ JFXTreeView:focused{
 }
 
 .jfx-drawer-side-pane {
-    -fx-background-color: rgb(66,66,66);
+    -fx-background-color: solid-pane-color;
 }
 
 .menu-item:hover{
-	-fx-background-color: rgb(96,96,96);
+	-fx-background-color: solid-pane-hover-color;
 }
 
 .small-tree-view *.tab *.tab-label{
@@ -131,7 +138,7 @@ JFXListView{
 }
 
 .panel-dark{
-	-fx-background-color: rgb(66,66,66);
+	-fx-background-color: solid-pane-color;
 	-fx-padding:10,10,10,10;
 }
 
