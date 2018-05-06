@@ -79,7 +79,7 @@ public class PluginRepositoryService {
 
 	public String getLocalRepositoryPath(PluginRepository repository) {
 
-		String path =prefs.get("VST2_DIRECTORY", null);
+		String path =prefs.get("PLUGIN_DIRECOTRY", null);
 		if(path == null) return null;
 		return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME + File.separator + repository.getName());
 

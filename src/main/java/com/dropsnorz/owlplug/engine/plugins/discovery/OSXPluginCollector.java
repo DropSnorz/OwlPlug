@@ -13,7 +13,7 @@ public class OSXPluginCollector implements NativePluginCollector {
 
 	PluginType pluginType;
 	ArrayList<File> fileList = new ArrayList<File>();
-	
+
 	public OSXPluginCollector(PluginType type) {
 		this.pluginType = type;
 	}
@@ -24,8 +24,9 @@ public class OSXPluginCollector implements NativePluginCollector {
 		File dir = new File(path);
 		List<File> baseFiles = (List<File>) FileUtils.listFilesAndDirs(dir,  TrueFileFilter.TRUE,  TrueFileFilter.TRUE);
 
-		for(File file: baseFiles){
-			
+		if(dir.isDirectory()) {
+
+			for(File file: baseFiles){
 
 				if(pluginType == PluginType.VST2){
 					if (file.getAbsolutePath().endsWith(".vst")) fileList.add(file);
@@ -35,8 +36,12 @@ public class OSXPluginCollector implements NativePluginCollector {
 
 				}
 
-		}
+			}
 
+		}
+		else {
+			//TODO log.error Plugin root is not a directory
+		}
 		return fileList;
 	}
 

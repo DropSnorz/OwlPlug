@@ -47,11 +47,11 @@ public class PluginService {
 
 
 		try {
-			if(prefs.getBoolean("VST2_DISCOVERY_ENABLED", false)) {
+			if(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
 
 				List<File> vst2files = new ArrayList<File>();
 
-				String vst2path = prefs.get("VST2_DIRECTORY", "");
+				String vst2path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
 				NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST2);
 				vst2files = collector.collect(vst2path);
 
@@ -64,11 +64,11 @@ public class PluginService {
 				}
 
 			}
-			if(prefs.getBoolean("VST3_DISCOVERY_ENABLED", false)) {
+			if(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
 
 				List<File> vst3files = new ArrayList<File>();
 
-				String vst3path = prefs.get("VST2_DIRECTORY", "");
+				String vst3path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
 				NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST3);
 				vst3files = collector.collect(vst3path);
 
