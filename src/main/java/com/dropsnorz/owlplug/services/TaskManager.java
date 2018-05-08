@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
@@ -22,6 +24,8 @@ import javafx.concurrent.Task;
 @Service
 public class TaskManager {
 	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	TaskBarController taskBarController;
 	
@@ -36,7 +40,7 @@ public class TaskManager {
     
     public void addTask(Task task) {
     	
-    	
+    	log.debug("Task submited to queue - " + currentTask.getClass().getCanonicalName());
     	pendingTasks.add(task);
     	refresh(false);
     	
@@ -45,6 +49,7 @@ public class TaskManager {
     private synchronized void refresh(boolean deleteCurrentTask) {
     	    	
     	if(deleteCurrentTask) {
+    		log.debug("Remove task from queue -  " + currentTask.getClass().getCanonicalName());
     		pendingTasks.remove(currentTask);
     		currentTask = null;
     		taskBarController.taskProgressBar.progressProperty().unbind();
@@ -55,6 +60,7 @@ public class TaskManager {
     	if(pendingTasks.size() > 0 && currentTask == null) {
     		this.currentTask = pendingTasks.get(0);
     		
+    		log.debug("Task submitted to executor - " + currentTask.getClass().getCanonicalName());
     		ListenableFuture future = exec.submitListenable(currentTask);
     		taskBarController.taskProgressBar.progressProperty().bind(currentTask.progressProperty());
     		taskBarController.taskLabel.textProperty().bind(currentTask.messageProperty());
