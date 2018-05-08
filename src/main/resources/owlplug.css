@@ -3,6 +3,8 @@
 	solid-pane-hover-color:rgb(96,96,96);
 	disabled-color: rgb(160,160,160);
 	danger-color: #d9534f;
+	
+	theme-secondary-color: rgb(250,250,250);
 }
 
 #mainPane{
@@ -39,6 +41,9 @@ Label{
 .label-danger{
 	-fx-text-fill:danger-color;
 }
+.label-dark{
+	-fx-text-fill:rgb(40,40,40);
+}
 
 Text{ 
  	-fx-fill: white;
@@ -48,7 +53,9 @@ Text{
 }
 JFXTextField{
 	-fx-text-fill:white;
+	-jfx-focus-color: theme-secondary-color;
 }
+
 JFXButton{
 	-fx-text-fill:white;
 	-fx-background-color:rgba(0,0,0,0.1);
