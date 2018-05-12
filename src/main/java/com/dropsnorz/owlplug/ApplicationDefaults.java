@@ -2,9 +2,9 @@ package com.dropsnorz.owlplug;
 
 import org.springframework.stereotype.Component;
 
-import com.dropsnorz.owlplug.model.OSType;
-import com.dropsnorz.owlplug.model.Plugin;
-import com.dropsnorz.owlplug.utils.OSValidator;
+import com.dropsnorz.owlplug.core.model.OSType;
+import com.dropsnorz.owlplug.core.model.Plugin;
+import com.dropsnorz.owlplug.core.utils.OSValidator;
 
 import javafx.scene.image.Image;
 
