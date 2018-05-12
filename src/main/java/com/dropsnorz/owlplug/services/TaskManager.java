@@ -40,7 +40,7 @@ public class TaskManager {
     
     public void addTask(Task task) {
     	
-    	log.debug("Task submited to queue - " + currentTask.getClass().getCanonicalName());
+    	log.debug("Task submited to queue - " + task.getClass().getCanonicalName());
     	pendingTasks.add(task);
     	refresh(false);
     	

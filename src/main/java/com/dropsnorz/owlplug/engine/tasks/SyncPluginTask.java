@@ -30,7 +30,7 @@ public class SyncPluginTask extends Task<Void>{
 		this.updateProgress(1, 2);
 
 		pluginDAO.deleteAll();
-		pluginDAO.save(plugins);
+		pluginDAO.saveAll(plugins);
 		
 		this.updateProgress(2, 2);
 

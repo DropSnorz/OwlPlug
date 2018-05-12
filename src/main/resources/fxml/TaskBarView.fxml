@@ -12,7 +12,7 @@
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="600.0" spacing="2.0" styleClass="panel-dark" HBox.hgrow="ALWAYS">
          <children>
             <Label text=" All clear" fx:id="taskLabel"/>
-            <JFXProgressBar fx:id="taskProgressBar" maxWidth="1.7976931348623157E308" prefWidth="200.0" progress="0.0" />
+            <ProgressBar fx:id="taskProgressBar" maxWidth="1.7976931348623157E308" prefWidth="200.0" progress="0.0" />
          </children>
          <HBox.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" />

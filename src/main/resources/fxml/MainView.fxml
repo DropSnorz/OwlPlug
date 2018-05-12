@@ -10,19 +10,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.controllers.MainController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXTabPane fx:id="tabPaneHeader" VBox.vgrow="NEVER">
-               <tabs>
-                  <Tab disable="true" text="OwlPlug" />
-                  <Tab text="Plugins" />
-                  <Tab text="Store" />
-                  <Tab text="Options" />
-               </tabs>
-            </JFXTabPane>
+            <HBox>
+               <children>
+                  <JFXTabPane fx:id="tabPaneHeader" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
+                     <tabs>
+                        <Tab disable="true" text="OwlPlug" />
+                        <Tab text="Plugins" />
+                        <Tab text="Store" />
+                        <Tab text="Options" />
+                     </tabs>
+                  </JFXTabPane>
+                  <JFXComboBox fx:id="accountComboBox" prefHeight="35.0" prefWidth="190.0" styleClass="menu-combobox" />
+               </children>
+            </HBox>
             <JFXDrawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <content>
             		<BorderPane fx:id="mainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0">

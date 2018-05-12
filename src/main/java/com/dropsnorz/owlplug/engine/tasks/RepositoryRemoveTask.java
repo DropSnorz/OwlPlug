@@ -25,7 +25,7 @@ public class RepositoryRemoveTask  extends Task<Void> {
 		this.updateProgress(0, 2);
 		this.updateMessage("Deleting repository " + repository.getName() + " ...");
 		
-		if(repositoryDAO.exists(repository.getId())) {
+		if(repositoryDAO.existsById(repository.getId())) {
 			repositoryDAO.delete(repository);
 			
 			this.updateProgress(1, 2);
