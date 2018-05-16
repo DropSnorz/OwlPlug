@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dropsnorz.owlplug.auth.JPADataStoreFactory;
 import com.dropsnorz.owlplug.auth.components.OwlPlugCredentials;
+import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -18,6 +20,7 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
@@ -28,6 +31,9 @@ public class AuthentificationService {
 
 	@Autowired
 	private OwlPlugCredentials owlPlugCredentials;
+	
+	@Autowired
+	private GoogleCredentialDAO googleCredentialDAO;
 	
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private static final String  APPLICATION_NAME = "OwlPlug";
@@ -42,19 +48,21 @@ public class AuthentificationService {
 		
 		scopes.add("https://www.googleapis.com/auth/drive");
 		
-		
 		try {
 			NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-			//dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
-			// authorization
 			
-			GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientId, clientSecret, scopes).build();
+			DataStoreFactory dataStore = new JPADataStoreFactory(googleCredentialDAO);
+			
+			GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientId, clientSecret, scopes)
+					.setDataStoreFactory(dataStore)
+					.setAccessType("offline").setApprovalPrompt("force")
+					.build();
 			// authorize
 			Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 			
 			plus = new Plus.Builder(httpTransport, JSON_FACTORY, credential).setApplicationName(
 			        APPLICATION_NAME).build();
-			
+						
 
 		} catch (GeneralSecurityException | IOException e) {
 			// TODO Auto-generated catch block

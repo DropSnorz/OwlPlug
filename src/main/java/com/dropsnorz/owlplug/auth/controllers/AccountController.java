@@ -2,6 +2,8 @@ package com.dropsnorz.owlplug.auth.controllers;
 
 import java.util.concurrent.ExecutorService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -18,6 +20,8 @@ import javafx.scene.control.ProgressIndicator;
 @Controller
 public class AccountController {
 	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private AuthentificationService authentificationService;
 	@FXML
@@ -35,7 +39,11 @@ public class AccountController {
 				Task<Void> task = new Task<Void>() {
 					@Override
 					protected Void call() throws Exception {
+						
+						log.debug("Google auth task started");
 						authentificationService.startAuth();
+						
+						this.updateProgress(1, 1);
 						return null;
 					}
 					
@@ -45,6 +53,7 @@ public class AccountController {
 					@Override
 					public void handle(WorkerStateEvent event) {
 						
+						log.debug("Google auth task complete");
 						authProgressIndicator.setVisible(false);
 					}
 				});
