@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import com.dropsnorz.owlplug.auth.JPADataStoreFactory;
 import com.dropsnorz.owlplug.auth.components.OwlPlugCredentials;
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
+import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
+import com.dropsnorz.owlplug.auth.model.UserAccountProvider;
+import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -35,12 +38,18 @@ public class AuthentificationService {
 	@Autowired
 	private GoogleCredentialDAO googleCredentialDAO;
 	
+	@Autowired
+	private UserAccountDAO userAccountDAO;
+	
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private static final String  APPLICATION_NAME = "OwlPlug";
 	private static Plus plus;
+	
+	
+	private LocalServerReceiver receiver = null;
 
 	
-	public void startAuth() {
+	public void createAccountAndAuth() {
 		
 		String clientId = owlPlugCredentials.GOOGLE_APP_ID;
 		String clientSecret = owlPlugCredentials.GOOGLE_SECRET;
@@ -57,9 +66,17 @@ public class AuthentificationService {
 					.setDataStoreFactory(dataStore)
 					.setAccessType("offline").setApprovalPrompt("force")
 					.build();
-			// authorize
-			Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 			
+			UserAccount userAccount = new UserAccount(UserAccountProvider.GOOGLE);
+			userAccountDAO.save(userAccount);
+			
+			receiver = new LocalServerReceiver();
+			
+			
+			AuthorizationCodeInstalledApp authCodeAccess = new AuthorizationCodeInstalledApp(flow, receiver);
+
+			Credential credential = authCodeAccess.authorize(userAccount.getKey());
+						
 			plus = new Plus.Builder(httpTransport, JSON_FACTORY, credential).setApplicationName(
 			        APPLICATION_NAME).build();
 						
@@ -69,8 +86,15 @@ public class AuthentificationService {
 			e.printStackTrace();
 		}
 		
-		
-		
+	}
+	
+	public void stopAuthReceiver() {
+		try {
+			if (receiver!= null) receiver.stop();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

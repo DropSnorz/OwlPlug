@@ -6,13 +6,25 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.auth.controllers.AccountController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.auth.controllers.AccountController">
    <children>
-      <HBox spacing="20.0" />
-      <JFXButton fx:id="googleButton" text="Google Drive" />
+      <HBox fx:id="buttonPane" alignment="CENTER" spacing="20.0">
+         <children>
+            <JFXButton fx:id="googleButton" text="Google" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin></HBox>
       <ProgressIndicator fx:id="authProgressIndicator" visible="false" />
+      <Label fx:id="messageLabel" />
+      <HBox alignment="CENTER_RIGHT" spacing="2.0">
+         <children>
+            <JFXButton fx:id="cancelButton" text="Cancel" />
+            <JFXButton fx:id="closeButton" text="Close" />
+         </children>
+      </HBox>
    </children>
    <padding>
-      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
 </VBox>

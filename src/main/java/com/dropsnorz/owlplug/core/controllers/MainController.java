@@ -71,7 +71,7 @@ public class MainController {
 			
 			if(newValue != null) {
 				Parent node = loadFxml("/fxml/dialogs/NewAccount.fxml");
-				JFXDialog dialog = dialogController.newBigDialog(node);
+				JFXDialog dialog = dialogController.newDialog(node);
 				dialog.show();
 				
 				// Delay comboBox selector change
