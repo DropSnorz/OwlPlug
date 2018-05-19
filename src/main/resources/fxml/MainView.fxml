@@ -16,7 +16,7 @@
          <children>
             <HBox>
                <children>
-                  <JFXTabPane fx:id="tabPaneHeader" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
+                  <JFXTabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
                      <tabs>
                         <Tab disable="true" text="OwlPlug" />
                         <Tab text="Plugins" />
@@ -24,7 +24,7 @@
                         <Tab text="Options" />
                      </tabs>
                   </JFXTabPane>
-                  <JFXComboBox fx:id="accountComboBox" prefHeight="35.0" prefWidth="190.0" styleClass="menu-combobox" />
+                  <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" styleClass="menu-combobox" />
                </children>
             </HBox>
             <JFXDrawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">

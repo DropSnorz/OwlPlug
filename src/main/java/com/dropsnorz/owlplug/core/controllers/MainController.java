@@ -1,6 +1,7 @@
 package com.dropsnorz.owlplug.core.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,6 +10,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
+import com.dropsnorz.owlplug.auth.model.UserAccount;
+import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
+import com.dropsnorz.owlplug.auth.ui.AccountItem;
+import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.jfoenix.controls.JFXComboBox;
@@ -36,6 +42,8 @@ public class MainController {
 	private ApplicationContext context;
 	@Autowired
 	private DialogController dialogController;
+	@Autowired
+	private UserAccountDAO userAccountDAO;
 	@FXML 
 	StackPane rootPane;
 	@FXML
@@ -47,7 +55,7 @@ public class MainController {
 	@FXML
 	JFXDrawer leftDrawer;
 	@FXML
-	JFXComboBox accountComboBox;
+	JFXComboBox<AccountItem> accountComboBox;
 
 	@FXML
 	public void initialize() {  
@@ -64,23 +72,47 @@ public class MainController {
 
 		});
 
-		accountComboBox.getItems().add("Create new account");
 
 		accountComboBox.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
-			
-			
-			if(newValue != null) {
+
+
+			if(newValue != null && newValue instanceof AccountMenuItem) {
 				Parent node = loadFxml("/fxml/dialogs/NewAccount.fxml");
 				JFXDialog dialog = dialogController.newDialog(node);
 				dialog.show();
-				
+
 				// Delay comboBox selector change
 				Platform.runLater(() -> accountComboBox.setValue(oldValue));
-				
+
 			}
-					
-			
+
+
 		}); 
+
+		AccountCellFactory cellFactory = new AccountCellFactory();
+
+		accountComboBox.setButtonCell(cellFactory.call(null));
+		accountComboBox.setCellFactory(cellFactory);
+
+
+		refreshAccounts();
+
+
+
+	}
+
+	public void refreshAccounts() {
+
+		ArrayList<UserAccount> accounts = new ArrayList<UserAccount>();
+
+		for(UserAccount account : userAccountDAO.findAll()) {
+			accounts.add(account);
+		}
+
+		accountComboBox.getItems().setAll(accounts);
+		accountComboBox.getItems().add(new AccountMenuItem(" + New Account"));
+
+
 
 	}
 

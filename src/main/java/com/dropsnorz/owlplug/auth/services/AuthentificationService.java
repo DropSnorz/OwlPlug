@@ -24,6 +24,9 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
+import com.google.api.services.oauth2.Oauth2;
+import com.google.api.services.oauth2.Oauth2.Userinfo;
+import com.google.api.services.oauth2.model.Userinfoplus;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
 
@@ -56,6 +59,7 @@ public class AuthentificationService {
 		ArrayList<String>scopes = new ArrayList<String>();
 		
 		scopes.add("https://www.googleapis.com/auth/drive");
+		scopes.add("https://www.googleapis.com/auth/userinfo.profile");
 		
 		try {
 			NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -77,8 +81,14 @@ public class AuthentificationService {
 
 			Credential credential = authCodeAccess.authorize(userAccount.getKey());
 						
-			plus = new Plus.Builder(httpTransport, JSON_FACTORY, credential).setApplicationName(
-			        APPLICATION_NAME).build();
+			 Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
+			          "Oauth2").build();
+			 Userinfoplus userinfo = oauth2.userinfo().get().execute();
+			
+			 userAccount.setName(userinfo.getName());
+			 userAccount.setIconUrl(userinfo.getPicture());
+			 
+			 userAccountDAO.save(userAccount);
 						
 
 		} catch (GeneralSecurityException | IOException e) {

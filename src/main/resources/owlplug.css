@@ -95,6 +95,10 @@ JFXToggleButton{
     -fx-background-color: solid-pane-hover-color ;
 }
 
+.combo-box .list-cell{
+	-fx-text-fill: white ;
+}
+
 JFXTreeView{
 	-fx-background-color:solid-pane-color;
 	-fx-text-fill:white;

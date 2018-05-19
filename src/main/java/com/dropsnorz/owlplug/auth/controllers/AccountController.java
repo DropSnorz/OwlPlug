@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.auth.services.AuthentificationService;
+import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogFrame;
 import com.jfoenix.controls.JFXButton;
 
@@ -27,6 +28,10 @@ public class AccountController extends DialogFrame {
 
 	@Autowired
 	private AuthentificationService authentificationService;
+	
+	@Autowired 
+	private MainController mainController;
+	
 	@FXML
 	private HBox buttonPane;
 	@FXML
@@ -79,8 +84,9 @@ public class AccountController extends DialogFrame {
 						closeButton.setVisible(true);
 						currentAuthTask = null;
 						messageLabel.setText("Your account has been successfully added");
-						
 						cancelFlag = false;
+						
+						mainController.refreshAccounts();
 					}
 				});
 				
