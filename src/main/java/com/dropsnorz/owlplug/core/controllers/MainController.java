@@ -15,6 +15,7 @@ import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
+import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.jfoenix.controls.JFXComboBox;
@@ -39,7 +40,7 @@ public class MainController {
 
 
 	@Autowired
-	private ApplicationContext context;
+	private LazyViewRegistry viewRegistry;
 	@Autowired
 	private DialogController dialogController;
 	@Autowired
@@ -59,6 +60,8 @@ public class MainController {
 
 	@FXML
 	public void initialize() {  
+		
+		viewRegistry.preload();
 
 
 		this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -77,7 +80,7 @@ public class MainController {
 
 
 			if(newValue != null && newValue instanceof AccountMenuItem) {
-				Parent node = loadFxml("/fxml/dialogs/NewAccount.fxml");
+				Parent node = viewRegistry.get(LazyViewRegistry.NEW_ACCOUNT_VIEW);
 				JFXDialog dialog = dialogController.newDialog(node);
 				dialog.show();
 
@@ -124,27 +127,13 @@ public class MainController {
 		return leftDrawer;
 	}
 
-	public void setLeftDrawerFXML(String ressource) {
+	public void setLeftDrawer(Parent node) {
 
-		Parent node = loadFxml(ressource);
 		if(node != null) {
 			leftDrawer.setSidePane(node);
 		}
 	}
 
-	public Parent loadFxml(String ressource) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(ressource));
-		loader.setControllerFactory(context::getBean);
-		try {
-			Parent node = loader.load();
-			return node;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
-	}
 
 
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
@@ -58,6 +59,9 @@ public class PluginsController {
 
 	@Autowired
 	DialogController dialogController;
+	
+	@Autowired
+	LazyViewRegistry viewRegistry;
 
 	@Autowired 
 	PluginDAO pluginDAO;
@@ -108,7 +112,7 @@ public class PluginsController {
 
 		newRepositoryButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				mainController.setLeftDrawerFXML("/fxml/NewRepositoryMenu.fxml");
+				mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.NEW_REPOSITORY_MENU_VIEW));
 				mainController.getLeftDrawer().open();
 
 			};
