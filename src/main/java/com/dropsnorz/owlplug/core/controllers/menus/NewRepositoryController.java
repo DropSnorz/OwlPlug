@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
+import com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController;
 import com.jfoenix.controls.JFXDialog;
 
 import javafx.event.EventHandler;
@@ -21,7 +22,7 @@ public class NewRepositoryController {
 	MainController mainController;
 	
 	@Autowired
-	DialogController dialogController;
+	FileSystemRepositoryController fileSystemRepositoryController;
 	
 	@Autowired
 	LazyViewRegistry viewRegistry;
@@ -36,9 +37,7 @@ public class NewRepositoryController {
 			@Override
 			public void handle(MouseEvent arg0) {
 				
-				JFXDialog dialog = dialogController.newBigDialog(viewRegistry.getAsNode(LazyViewRegistry.NEW_FILESYSTEM_REPOSITORY_VIEW));
-				dialog.show();
-				
+				fileSystemRepositoryController.show();
 				mainController.getLeftDrawer().close();
 				
 			}

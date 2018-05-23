@@ -1,15 +1,14 @@
 package com.dropsnorz.owlplug.auth.controllers;
 
-import java.util.concurrent.ExecutorService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.auth.services.AuthentificationService;
+import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.MainController;
-import com.dropsnorz.owlplug.core.controllers.dialogs.DialogFrame;
+import com.dropsnorz.owlplug.core.controllers.dialogs.AbstractDialog;
 import com.jfoenix.controls.JFXButton;
 
 import javafx.concurrent.Task;
@@ -17,12 +16,13 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
 
 @Controller
-public class AccountController extends DialogFrame {
+public class AccountController extends AbstractDialog {
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -31,6 +31,9 @@ public class AccountController extends DialogFrame {
 	
 	@Autowired 
 	private MainController mainController;
+	
+	@Autowired 
+	private LazyViewRegistry viewRegistry;
 	
 	@FXML
 	private HBox buttonPane;
@@ -50,10 +53,6 @@ public class AccountController extends DialogFrame {
 	private boolean cancelFlag = false;
 	
 	public void initialize() {
-		
-		buttonPane.setVisible(true);
-		cancelButton.setVisible(false);
-		closeButton.setVisible(true);
 		
 		googleButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -132,12 +131,22 @@ public class AccountController extends DialogFrame {
 				close();
 				
 			}
-				
 		});
+	}
+	
+	@Override
+	protected void onDialogShow() {
 		
+		buttonPane.setVisible(true);
+		cancelButton.setVisible(false);
+		closeButton.setVisible(true);
 		
-		
-		
+	}
+
+
+	@Override
+	protected Node getNode() {
+		return viewRegistry.get(LazyViewRegistry.NEW_ACCOUNT_VIEW);
 	}
 
 }

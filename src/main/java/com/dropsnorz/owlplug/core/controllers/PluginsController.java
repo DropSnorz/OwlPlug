@@ -58,9 +58,6 @@ public class PluginsController {
 	MainController mainController;
 
 	@Autowired
-	DialogController dialogController;
-	
-	@Autowired
 	LazyViewRegistry viewRegistry;
 
 	@Autowired 

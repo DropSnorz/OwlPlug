@@ -5,6 +5,7 @@ import java.io.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.model.FileSystemRepository;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
@@ -14,15 +15,19 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 
 @Controller
-public class FileSystemRepositoryController extends DialogFrame {
+public class FileSystemRepositoryController extends AbstractDialog {
 
 	@Autowired
 	PluginRepositoryService pluginRepositoryService;
+	
+	@Autowired
+	LazyViewRegistry viewRegistry;
 	
 	@FXML
 	JFXButton closeButton;
@@ -44,8 +49,6 @@ public class FileSystemRepositoryController extends DialogFrame {
 
 
 	public void initialize() {
-
-		setOverlayClose(false);
 
 		closeButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -96,6 +99,12 @@ public class FileSystemRepositoryController extends DialogFrame {
 			}
 		});
 
+	}
+
+
+	@Override
+	protected Node getNode() {
+		return viewRegistry.getAsNode(LazyViewRegistry.NEW_FILESYSTEM_REPOSITORY_VIEW);
 	}
 
 

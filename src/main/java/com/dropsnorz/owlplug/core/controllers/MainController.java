@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.auth.controllers.AccountController;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
@@ -42,7 +43,7 @@ public class MainController {
 	@Autowired
 	private LazyViewRegistry viewRegistry;
 	@Autowired
-	private DialogController dialogController;
+	private AccountController accountController;
 	@Autowired
 	private UserAccountDAO userAccountDAO;
 	@FXML 
@@ -80,9 +81,8 @@ public class MainController {
 
 
 			if(newValue != null && newValue instanceof AccountMenuItem) {
-				Parent node = viewRegistry.get(LazyViewRegistry.NEW_ACCOUNT_VIEW);
-				JFXDialog dialog = dialogController.newDialog(node);
-				dialog.show();
+				
+				accountController.show();
 
 				// Delay comboBox selector change
 				Platform.runLater(() -> accountComboBox.setValue(oldValue));
