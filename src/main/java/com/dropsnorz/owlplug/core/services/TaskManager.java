@@ -1,15 +1,14 @@
 package com.dropsnorz.owlplug.core.services;
 
-import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
@@ -30,7 +29,7 @@ public class TaskManager {
 	
 	AsyncListenableTaskExecutor  exec = new SimpleAsyncTaskExecutor();
 	    
-    private ArrayList<Task> pendingTasks = new ArrayList<Task>();
+    private CopyOnWriteArrayList<Task> pendingTasks = new CopyOnWriteArrayList<Task>();
     private Task currentTask= null;
     
     TaskManager(){
@@ -76,7 +75,6 @@ public class TaskManager {
 						}
 						
 					});
-
 				}
 
 				@Override
@@ -91,7 +89,9 @@ public class TaskManager {
     	}
     }
     
+    public List<Task> getPendingTasks() {
+    	return Collections.unmodifiableList(pendingTasks);
+    }
     
-	
 
 }
