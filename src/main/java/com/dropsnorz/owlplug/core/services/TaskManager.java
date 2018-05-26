@@ -53,7 +53,6 @@ public class TaskManager {
     		currentTask = null;
     		taskBarController.taskProgressBar.progressProperty().unbind();
     		taskBarController.taskLabel.textProperty().unbind();
-    		taskBarController.taskLabel.setText("Done !");
     	}
 
     	if(pendingTasks.size() > 0 && currentTask == null) {

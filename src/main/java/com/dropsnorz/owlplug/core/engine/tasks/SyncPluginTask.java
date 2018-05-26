@@ -33,6 +33,7 @@ public class SyncPluginTask extends Task<Void>{
 		pluginDAO.saveAll(plugins);
 		
 		this.updateProgress(2, 2);
+		this.updateMessage("Plugins synchronized");
 
 		return null;
 	}

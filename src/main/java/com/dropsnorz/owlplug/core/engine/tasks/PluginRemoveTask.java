@@ -31,6 +31,7 @@ public class PluginRemoveTask extends Task {
 		
 		
 		this.updateProgress(1, 1);
+		this.updateMessage("Plugin successfully deleted");
 				
 		return null;
 	}

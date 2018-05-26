@@ -37,6 +37,7 @@ public class RepositoryRemoveTask  extends Task<Void> {
 			directoryRemoveTask.call();
 			
 			this.updateProgress(2, 2);
+			this.updateMessage("Repository successfully deleted");
 		}
 		
 		

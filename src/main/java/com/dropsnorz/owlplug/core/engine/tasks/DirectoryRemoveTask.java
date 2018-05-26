@@ -29,8 +29,8 @@ public class DirectoryRemoveTask extends Task {
 		FileUtils.deleteDirectory(directoryFile);
 		directoryFile.delete();
 
-
 		this.updateProgress(1, 1);
+		this.updateMessage("Directory successfully deleted");
 
 		return null;
 	}
