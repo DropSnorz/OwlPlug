@@ -4,6 +4,7 @@
 	disabled-color: rgb(160,160,160);
 	danger-color: #d9534f;
 	
+	theme-primary-color: rgb(250,250,250);
 	theme-secondary-color: rgb(250,250,250);
 }
 
@@ -124,6 +125,10 @@ JFXTreeView:focused{
     -fx-background-color: white;
 }
 
+.tree-cell .selection-bar {
+    -fx-background-color: theme-primary-color;
+}
+
 .jfx-tab-pane *.tab-header-background{
 	-fx-background-color:solid-pane-color;
 }
@@ -172,6 +177,11 @@ JFXListView{
 .panel-dark Label{
 	-fx-text-fill:white;
 }
+
+.jfx-rippler {
+    -jfx-rippler-fill: theme-secondary-color;
+}
+
 
 
 /****************************************************************
