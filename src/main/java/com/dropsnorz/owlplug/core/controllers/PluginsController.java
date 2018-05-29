@@ -6,13 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.prefs.Preferences;
 
-import javafx.beans.binding.Bindings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
-import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.model.IDirectory;
@@ -20,33 +18,27 @@ import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.services.TaskFactory;
-import com.dropsnorz.owlplug.core.services.TaskManager;
 import com.dropsnorz.owlplug.core.ui.CustomTreeCell;
 import com.dropsnorz.owlplug.core.ui.FilterableTreeItem;
 import com.dropsnorz.owlplug.core.ui.TreeItemPredicate;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeCell;
 import com.jfoenix.controls.JFXTreeView;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeCell;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.util.Callback;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
+import javafx.util.Callback;
 
 @Controller
 public class PluginsController {
@@ -106,7 +98,6 @@ public class PluginsController {
 	@FXML
 	public void initialize() {  
 
-
 		newRepositoryButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.NEW_REPOSITORY_MENU_VIEW));
@@ -122,7 +113,6 @@ public class PluginsController {
 
 		treeRepositoryRootNode = new FilterableTreeItem<Object>("Repositories");
 
-
 		treeView.setCellFactory(new Callback<TreeView<Object>,TreeCell<Object>>(){
             @Override
             public TreeCell<Object> call(TreeView<Object> p) {
@@ -131,11 +121,9 @@ public class PluginsController {
         });
 		treeView.setRoot(treeRootNode);
 
- 
 		refreshPlugins();
 
 		treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
-
 			@Override
 			public void changed(ObservableValue observable, Object oldValue,
 					Object newValue){
@@ -148,8 +136,6 @@ public class PluginsController {
 			}
 
 		});
-
-
 
 		treeViewTabPane.getSelectionModel().selectedItemProperty().addListener(
 				new ChangeListener<Tab>() {
@@ -167,7 +153,6 @@ public class PluginsController {
 					}
 				}
 				);
-
 
 		treeRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
 			if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
@@ -202,8 +187,6 @@ public class PluginsController {
 			TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
 			item.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
 			treeRootNode.getInternalChildren().add(item);
-
-
 		}
 
 		treeRootNode.setExpanded(true);
@@ -220,13 +203,10 @@ public class PluginsController {
 		generatePluginTree();
 		buildDirectoryTree(pluginTree, treeFileRootNode, null);
 
-
 		treeRepositoryRootNode.setExpanded(true);
 		treeRepositoryRootNode.getInternalChildren().clear();
 
 		buildRepositoryTree(pluginTree, treeRepositoryRootNode, pluginRepositories);
-		
-
 
 	}
 
@@ -249,10 +229,8 @@ public class PluginsController {
 					if(i == subDirs.length - 1){
 						ft.setNodeValue(plug);
 					}
-
 					//Node is a directory or a repository)
 					else{
-
 						//TODO Should be optimized for large plugin set
 						List<Plugin> localPluginList = new ArrayList<Plugin>();
 
@@ -261,7 +239,6 @@ public class PluginsController {
 								localPluginList.add(p);
 							}
 						}
-
 						// Remove ending separator before getting the path
 						PluginRepository repository = repositoryDAO.findByName(subDirs[i]);
 
@@ -275,20 +252,15 @@ public class PluginsController {
 							PluginDirectory directory = new PluginDirectory();
 							directory.setName(segment);
 							directory.setPath(currentPath);
-
 							directory.setPluginList(localPluginList);
 							ft.setNodeValue(directory);
-
 						}
 					}
 					node.put(segment, ft);
-
 				}
 				node = node.get(segment);
 			}
 		}
-
-
 	}
 
 	public void buildDirectoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent){
@@ -330,7 +302,6 @@ public class PluginsController {
 
 					buildDirectoryTree(child, node, mergedParent);
 					mergedParent = "";
-
 				}
 				else {					
 					directory = (IDirectory) child.getNodeValue();
@@ -340,14 +311,9 @@ public class PluginsController {
 					FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(directory);
 					node.getInternalChildren().add(item);
 					buildDirectoryTree(child, item, mergedParent);
-
 				}
-				
 			}
-
 		}
-
-
 	}
 
 	public void buildRepositoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, Iterable<PluginRepository> repositories) {
@@ -381,17 +347,13 @@ public class PluginsController {
 			}
 		}
 
-
 		for(String dir : treeHead.keySet()){
-
 
 			if(treeHead.get(dir).values().size() == 0){
 				
 				Plugin plugin =  (Plugin) treeHead.get(dir).getNodeValue();
-
 				FilterableTreeItem<Object> plugItem = new FilterableTreeItem<Object>(plugin);
 				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
-
 
 				node.getInternalChildren().add(plugItem);
 
@@ -404,18 +366,14 @@ public class PluginsController {
 				buildDirectoryTree(treeHead.get(dir), item, null);
 
 			}
-
 		}
-
 	}
 
 	private String getPluginRepositoryPath() {
 
-		String path =prefs.get("VST2_DIRECTORY", null);
+		String path =prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null);
 		if(path == null) return null;
 		return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME);
-
-
 
 	}
 

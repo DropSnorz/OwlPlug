@@ -31,6 +31,10 @@ public class GoogleCredential {
     private Instant createdAt;
     @LastModifiedDate
     private Instant updatedAt;
+    
+    public GoogleCredential() {
+    	
+    }
 
     public GoogleCredential(String key, StoredCredential credential) {
         this.key = key;

@@ -14,6 +14,7 @@ public class ApplicationDefaults {
 	private OSType platform;
 
 	public final static String REPOSITORY_FOLDER_NAME = "repositories";
+	public final static String DEFAULT_REPOSITORY_DIRECTORY = "C:/VST";
 
 	public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
 	public final Image vst2Image  = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));

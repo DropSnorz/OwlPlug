@@ -19,6 +19,7 @@ import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
+import com.dropsnorz.owlplug.core.services.OptionsService;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDrawer;
@@ -64,7 +65,6 @@ public class MainController {
 		
 		viewRegistry.preload();
 
-
 		this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 
 			@Override
@@ -78,18 +78,12 @@ public class MainController {
 
 
 		accountComboBox.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
-
-
 			if(newValue != null && newValue instanceof AccountMenuItem) {
-				
 				accountController.show();
-
 				// Delay comboBox selector change
 				Platform.runLater(() -> accountComboBox.setValue(oldValue));
 
 			}
-
-
 		}); 
 
 		AccountCellFactory cellFactory = new AccountCellFactory();
