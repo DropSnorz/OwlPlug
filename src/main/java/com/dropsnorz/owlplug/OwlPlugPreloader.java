@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
@@ -41,5 +43,22 @@ public class OwlPlugPreloader extends Preloader {
 		if (stateChangeNotification.getType() == Type.BEFORE_START) {
 			preloaderStage.hide();
 		}
+		
 	}
+	
+	 @Override
+	    public void handleApplicationNotification(PreloaderNotification pn) {
+	        if (pn instanceof PreloaderProgressMessage) {
+	        	
+	        	PreloaderProgressMessage ppm = (PreloaderProgressMessage) pn;
+	        	
+	        	if(ppm.getType().equals("error")) {
+	                Alert alert = new Alert(AlertType.ERROR);
+	                alert.setTitle("Error");
+	                alert.setHeaderText("Error");
+	                alert.setContentText(ppm.getMessage());
+	                alert.showAndWait();
+	        	}
+	        }
+	    }  
 }

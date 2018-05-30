@@ -2,27 +2,21 @@ package com.dropsnorz.owlplug;
 
 import java.util.prefs.Preferences;
 
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-/**
- * Hello world!
- *
- */
+
 @SpringBootApplication
 public class App extends Application
 {
@@ -30,16 +24,31 @@ public class App extends Application
 	private ConfigurableApplicationContext context;
 	private Parent rootNode;
 
-
 	@Override
 	public void init() throws Exception {
-		SpringApplicationBuilder builder = new SpringApplicationBuilder(App.class);
-		builder.headless(false);
-		context = builder.run(getParameters().getRaw().toArray(new String[0]));
+		
+		try {
+			SpringApplicationBuilder builder = new SpringApplicationBuilder(App.class);
+			builder.headless(false);
+			context = builder.run(getParameters().getRaw().toArray(new String[0]));
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
-		loader.setControllerFactory(context::getBean);
-		rootNode = loader.load();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+			loader.setControllerFactory(context::getBean);
+			rootNode = loader.load();
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+			if(e instanceof BeanCreationException) {
+				notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug is already running"));
+
+			}
+			else {
+				notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug could not be started"));
+			}
+			
+			throw e;
+		}
 	}
 
 	@Override
@@ -58,7 +67,8 @@ public class App extends Application
 		primaryStage.setMinWidth(width);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
-
+		
+		
 	}
 
 	@Bean
@@ -80,5 +90,6 @@ public class App extends Application
 	public static void main(String[] args) {
 		System.setProperty("javafx.preloader", "com.dropsnorz.owlplug.OwlPlugPreloader");
 		launch(App.class, args);
+		
 	}
 }
