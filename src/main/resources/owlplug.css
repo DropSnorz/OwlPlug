@@ -182,6 +182,9 @@ JFXListView{
     -jfx-rippler-fill: theme-secondary-color;
 }
 
+ProgressIndicator{
+	-fx-progress-color: theme-primary-color;
+}
 
 
 /****************************************************************

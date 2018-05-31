@@ -71,7 +71,7 @@ public class AuthentificationService {
 					.setAccessType("offline").setApprovalPrompt("force")
 					.build();
 			
-			UserAccount userAccount = new UserAccount(UserAccountProvider.GOOGLE);
+			UserAccount userAccount = new UserAccount();
 			userAccountDAO.save(userAccount);
 			
 			receiver = new LocalServerReceiver();
@@ -87,6 +87,7 @@ public class AuthentificationService {
 			
 			 userAccount.setName(userinfo.getName());
 			 userAccount.setIconUrl(userinfo.getPicture());
+			 userAccount.setAccountProvider(UserAccountProvider.GOOGLE);
 			 
 			 userAccountDAO.save(userAccount);
 						
@@ -100,6 +101,7 @@ public class AuthentificationService {
 	
 	public void stopAuthReceiver() {
 		try {
+			userAccountDAO.deleteInvalidAccounts();
 			if (receiver!= null) receiver.stop();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -10,7 +11,14 @@
    <children>
       <HBox fx:id="buttonPane" alignment="CENTER" spacing="20.0">
          <children>
-            <JFXButton fx:id="googleButton" text="Google" />
+            <JFXButton fx:id="googleButton" contentDisplay="TOP" text="Google Plus Account">
+               <graphic>
+                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/gplus-grey-64.png" />
+                     </image>
+                  </ImageView>
+               </graphic></JFXButton>
          </children>
          <VBox.margin>
             <Insets />

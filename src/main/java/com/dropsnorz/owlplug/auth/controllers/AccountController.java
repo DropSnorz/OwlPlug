@@ -57,13 +57,17 @@ public class AccountController extends AbstractDialog {
 		googleButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				
+				buttonPane.setVisible(false);
 				authProgressIndicator.setVisible(true);
+				messageLabel.setText("Your default browser is opening... Proceed to sign in and come back here.");
+				messageLabel.setVisible(true);
 				
 				Task<Void> task = new Task<Void>() {
 					@Override
 					protected Void call() throws Exception {
 						
 						log.debug("Google auth task started");
+
 						authentificationService.createAccountAndAuth();
 						
 						this.updateProgress(1, 1);
@@ -83,6 +87,8 @@ public class AccountController extends AbstractDialog {
 						closeButton.setVisible(true);
 						currentAuthTask = null;
 						messageLabel.setText("Your account has been successfully added");
+						messageLabel.setVisible(true);
+
 						cancelFlag = false;
 						
 						mainController.refreshAccounts();
@@ -101,7 +107,14 @@ public class AccountController extends AbstractDialog {
 						closeButton.setVisible(true);
 						currentAuthTask = null;
 						
-						if(!cancelFlag) messageLabel.setText("En error occured during authentification");
+						messageLabel.setVisible(false);
+
+						if(!cancelFlag) {
+							messageLabel.setText("En error occured during authentification");
+							messageLabel.setVisible(true);
+						}
+						
+
 						cancelFlag = false;
 					}
 				});
@@ -140,6 +153,7 @@ public class AccountController extends AbstractDialog {
 		buttonPane.setVisible(true);
 		cancelButton.setVisible(false);
 		closeButton.setVisible(true);
+		messageLabel.setVisible(false);
 		
 	}
 

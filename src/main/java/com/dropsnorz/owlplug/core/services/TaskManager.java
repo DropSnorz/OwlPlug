@@ -38,7 +38,7 @@ public class TaskManager {
     
     public void addTask(Task task) {
     	
-    	log.debug("Task submited to queue - " + task.getClass().getCanonicalName());
+    	log.debug("Task submited to queue - " + task.getClass().getName());
     	pendingTasks.add(task);
     	refresh(false);
     	
@@ -47,7 +47,7 @@ public class TaskManager {
     private synchronized void refresh(boolean deleteCurrentTask) {
     	    	
     	if(deleteCurrentTask) {
-    		log.debug("Remove task from queue -  " + currentTask.getClass().getCanonicalName());
+    		log.debug("Remove task from queue -  " + currentTask.getClass().getName());
     		pendingTasks.remove(currentTask);
     		currentTask = null;
     		taskBarController.taskProgressBar.progressProperty().unbind();
@@ -57,7 +57,7 @@ public class TaskManager {
     	if(pendingTasks.size() > 0 && currentTask == null) {
     		this.currentTask = pendingTasks.get(0);
     		
-    		log.debug("Task submitted to executor - " + currentTask.getClass().getCanonicalName());
+    		log.debug("Task submitted to executor - " + currentTask.getClass().getName());
     		ListenableFuture future = exec.submitListenable(currentTask);
     		taskBarController.taskProgressBar.progressProperty().bind(currentTask.progressProperty());
     		taskBarController.taskLabel.textProperty().bind(currentTask.messageProperty());

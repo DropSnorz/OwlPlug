@@ -60,6 +60,7 @@ public class PluginRepositoryService {
 			@Override
 			protected Void call() throws Exception {
 
+				this.updateProgress(0, 1);
 				strategy.execute(repository, parameters);
 				this.updateProgress(1, 1);
 

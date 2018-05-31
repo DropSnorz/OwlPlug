@@ -16,7 +16,6 @@ public class UserAccount implements AccountItem {
 	
 	private String name;
 	private String iconUrl;
-	
 	private UserAccountProvider accountProvider;
 	
 	public UserAccount() {
@@ -64,6 +63,7 @@ public class UserAccount implements AccountItem {
 	public void setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
 	}
+	
 	
 	
 
