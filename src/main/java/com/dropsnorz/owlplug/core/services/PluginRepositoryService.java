@@ -45,6 +45,10 @@ public class PluginRepositoryService {
 		return false;
 
 	}
+	
+	public void save(PluginRepository repository) {
+		 fileSystemRepositoryDAO.save((FileSystemRepository)repository);
+	}
 
 
 	public void pull(PluginRepository repository) {

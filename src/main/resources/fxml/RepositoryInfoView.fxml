@@ -30,6 +30,7 @@
                   <HBox alignment="CENTER_RIGHT" prefHeight="37.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
                         <JFXButton fx:id="pullButton" text="Pull" />
+                        <JFXButton fx:id="editButton" text="Edit" />
                         <JFXButton fx:id="openRepositoryButton" text="Open folder" />
                      </children>
                   </HBox>

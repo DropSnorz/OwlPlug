@@ -38,6 +38,7 @@ public class NewRepositoryController {
 			public void handle(MouseEvent arg0) {
 				
 				fileSystemRepositoryController.show();
+				fileSystemRepositoryController.startCreateSequence();
 				mainController.getLeftDrawer().close();
 				
 			}

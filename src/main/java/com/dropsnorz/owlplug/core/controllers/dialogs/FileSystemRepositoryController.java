@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
+import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
+import com.dropsnorz.owlplug.core.dao.FileSystemRepositoryDAO;
 import com.dropsnorz.owlplug.core.model.FileSystemRepository;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
@@ -21,7 +23,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 
 @Controller
-public class FileSystemRepositoryController extends AbstractDialog {
+public class FileSystemRepositoryController extends AbstractDialog implements IEntityCreateOrUpdate<FileSystemRepository> {
 
 	@Autowired
 	PluginRepositoryService pluginRepositoryService;
@@ -46,6 +48,8 @@ public class FileSystemRepositoryController extends AbstractDialog {
 	
 	@FXML
 	Label messageLabel;
+	
+	private FileSystemRepository currentFileSystemRepository = null;
 
 
 	public void initialize() {
@@ -59,27 +63,16 @@ public class FileSystemRepositoryController extends AbstractDialog {
 
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-
-				String name = repositoryNameTextField.getText();
-				String path = repositoryPathTextField.getText();
-
-				FileSystemRepository repository = new FileSystemRepository(name, path);
-
 				
-				if(FileUtils.isFilenameValid(name)) {
-					if (pluginRepositoryService.createRepository(repository)) {
-						close();
-					}
-					else {
-						messageLabel.setText("A repository named " + name + " already exists");
-					}
-
+				
+				if(currentFileSystemRepository != null) {
+					updateRepository();
 				}
 				else {
-					messageLabel.setText("Repository name contains illegal characters");
+					createRepository();
 				}
-
 			};
+
 		});
 
 		browseDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -91,9 +84,7 @@ public class FileSystemRepositoryController extends AbstractDialog {
 				File selectedDirectory = 
 						directoryChooser.showDialog(mainWindow);
 
-				if(selectedDirectory == null){
-					repositoryPathTextField.setText("");
-				}else{
+				if(selectedDirectory != null){
 					repositoryPathTextField.setText(selectedDirectory.getAbsolutePath());
 				}
 			}
@@ -101,12 +92,69 @@ public class FileSystemRepositoryController extends AbstractDialog {
 
 	}
 
+	
+	@Override
+	public void startCreateSequence() {
+		
+		this.currentFileSystemRepository = null; 
+		
+		addButton.setText("Add");
+		repositoryNameTextField.setText("");
+		repositoryNameTextField.setDisable(false);
+		repositoryPathTextField.setText("");
+	}
+
+
+	@Override
+	public void startUpdateSequence(FileSystemRepository entity) {
+		
+		this.currentFileSystemRepository = entity;
+		
+		addButton.setText("Edit");
+		repositoryNameTextField.setText(entity.getName());
+		repositoryNameTextField.setDisable(true);
+		repositoryPathTextField.setText(entity.getRemotePath());
+	}
+	
+	
+	private void createRepository() {
+		
+		String name = repositoryNameTextField.getText();
+		String path = repositoryPathTextField.getText();
+
+		FileSystemRepository repository = new FileSystemRepository(name, path);
+
+		
+		if(FileUtils.isFilenameValid(name)) {
+			if (pluginRepositoryService.createRepository(repository)) {
+				close();
+			}
+			else {
+				messageLabel.setText("A repository named " + name + " already exists");
+			}
+
+		}
+		else {
+			messageLabel.setText("Repository name contains illegal characters");
+		}
+
+	}
+	
+	private void updateRepository() {
+		
+		String path = repositoryPathTextField.getText();
+		currentFileSystemRepository.setRemotePath(path);
+		pluginRepositoryService.save(currentFileSystemRepository);
+		
+		close();
+	}
+
+	
 
 	@Override
 	protected Node getNode() {
 		return viewRegistry.getAsNode(LazyViewRegistry.NEW_FILESYSTEM_REPOSITORY_VIEW);
 	}
-
 
 
 }

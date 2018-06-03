@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
+import com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController;
+import com.dropsnorz.owlplug.core.model.FileSystemRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.services.TaskFactory;
@@ -24,6 +26,8 @@ public class RepositoryInfoController {
 	@Autowired
 	PluginRepositoryService repositoryService;
 	@Autowired
+	FileSystemRepositoryController fileSystemRepositoryController;
+	@Autowired
 	DialogController dialogController;
 	@FXML
 	Label repositoryNameLabel;
@@ -33,6 +37,8 @@ public class RepositoryInfoController {
 	JFXButton pullButton;
 	@FXML
 	JFXButton deleteButton;
+	@FXML
+	private JFXButton editButton;
 
 	private PluginRepository repository;
 
@@ -49,6 +55,16 @@ public class RepositoryInfoController {
 				PlatformUtils.openDirectoryExplorer(repositoryService.getLocalRepositoryPath(repository));
 			};
 		});
+		
+		editButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				if(repository instanceof FileSystemRepository) {
+					fileSystemRepositoryController.show();
+					fileSystemRepositoryController.startUpdateSequence((FileSystemRepository) repository);
+				}
+			};
+		});
+		
 		deleteButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 

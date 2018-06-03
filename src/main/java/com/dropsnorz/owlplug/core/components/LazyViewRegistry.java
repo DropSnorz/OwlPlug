@@ -35,7 +35,7 @@ public class LazyViewRegistry {
 	 * Must be called after spring components setup to allow fxml bindings on controllers
 	 */
 	public void preload() {
-		preloadFxml(NEW_FILESYSTEM_REPOSITORY_VIEW,"/fxml/dialogs/NewFileSystemRepository.fxml");
+		preloadFxml(NEW_FILESYSTEM_REPOSITORY_VIEW,"/fxml/dialogs/FileSystemRepositoryView.fxml");
 		preloadFxml(NEW_REPOSITORY_MENU_VIEW,"/fxml/NewRepositoryMenu.fxml");
 		preloadFxml(NEW_ACCOUNT_VIEW,"/fxml/dialogs/NewAccount.fxml");
 	}
