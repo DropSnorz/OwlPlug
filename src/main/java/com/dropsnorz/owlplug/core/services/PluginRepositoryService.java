@@ -4,11 +4,14 @@ import java.io.File;
 import java.util.prefs.Preferences;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.support.Repositories;
 import org.springframework.stereotype.Service;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.dao.FileSystemRepositoryDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryBaseDAO;
+import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
 import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyResolver;
@@ -27,17 +30,21 @@ public class PluginRepositoryService {
 	@Autowired
 	protected FileSystemRepositoryDAO fileSystemRepositoryDAO;
 	@Autowired
+	protected PluginRepositoryDAO pluginRepositoryDAO;
+	@Autowired
 	protected RepositoryStrategyResolver repositoryStrategyResolver;
 	@Autowired
 	protected TaskManager taskManager;
 	@Autowired
 	protected TaskFactory taskFactory;
+	@Autowired
+	protected ApplicationDefaults applicationDefaults;
 
 	public boolean createRepository(PluginRepository repository){
+		
+		if(pluginRepositoryDAO.findByName(repository.getName()) == null) {
 
-		if(fileSystemRepositoryDAO.findByName(repository.getName()) == null) {
-
-			fileSystemRepositoryDAO.save((FileSystemRepository)repository);
+			pluginRepositoryDAO.save(repository);
 			return true;
 
 		}
@@ -47,7 +54,7 @@ public class PluginRepositoryService {
 	}
 	
 	public void save(PluginRepository repository) {
-		 fileSystemRepositoryDAO.save((FileSystemRepository)repository);
+		 pluginRepositoryDAO.save(repository);
 	}
 
 

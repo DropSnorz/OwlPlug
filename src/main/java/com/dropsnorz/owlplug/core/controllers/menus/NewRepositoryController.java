@@ -7,6 +7,7 @@ import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController;
+import com.dropsnorz.owlplug.core.controllers.dialogs.GoogleDriveRepositoryController;
 import com.jfoenix.controls.JFXDialog;
 
 import javafx.event.EventHandler;
@@ -25,24 +26,35 @@ public class NewRepositoryController {
 	FileSystemRepositoryController fileSystemRepositoryController;
 	
 	@Autowired
+	GoogleDriveRepositoryController googleDriveRepositoryController;
+	
+	@Autowired
 	LazyViewRegistry viewRegistry;
 	
 	@FXML
 	HBox fileSystemMenuItem;
 	
+	@FXML
+	HBox googleDriveMenuItem;
+	
 	public void initialize() {
 		
 		fileSystemMenuItem.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
 			@Override
 			public void handle(MouseEvent arg0) {
-				
 				fileSystemRepositoryController.show();
 				fileSystemRepositoryController.startCreateSequence();
 				mainController.getLeftDrawer().close();
-				
 			}
-			
+		});
+		
+		googleDriveMenuItem.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				googleDriveRepositoryController.show();
+				googleDriveRepositoryController.startCreateSequence();
+				mainController.getLeftDrawer().close();
+			}
 		});
 		
 	}

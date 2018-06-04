@@ -21,7 +21,7 @@
                   <Label text="File System Repository" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item">
+            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item" fx:id="googleDriveMenuItem">
                <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>

@@ -195,11 +195,6 @@ public class PluginsController {
 
 		Iterable<PluginRepository> pluginRepositories = repositoryDAO.findAll();
 
-		for(PluginRepository repository : pluginRepositories) {
-			TreeItem<Object> item = new FilterableTreeItem<Object>(repository);
-			treeRepositoryRootNode.getInternalChildren().add(item);
-		}
-
 		generatePluginTree();
 		buildDirectoryTree(pluginTree, treeFileRootNode, null);
 
@@ -371,7 +366,7 @@ public class PluginsController {
 
 	private String getPluginRepositoryPath() {
 
-		String path =prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null);
+		String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null);
 		if(path == null) return null;
 		return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME);
 

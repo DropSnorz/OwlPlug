@@ -17,6 +17,7 @@ public class LazyViewRegistry {
 	public static String NEW_FILESYSTEM_REPOSITORY_VIEW = "NEW_FILESYSTEM_REPOSITORY_VIEW";
 	public static String NEW_REPOSITORY_MENU_VIEW = "NEW_REPOSITORY_MENU_VIEW";
 	public static String NEW_ACCOUNT_VIEW = "NEW_ACCOUNT_VIEW";
+	public static String NEW_GOOGLE_DRIVE_REPOSITORY = "NEW_GOOGLE_DRIVE_REPOSITORY";
 
 	
 	@Autowired
@@ -38,6 +39,8 @@ public class LazyViewRegistry {
 		preloadFxml(NEW_FILESYSTEM_REPOSITORY_VIEW,"/fxml/dialogs/FileSystemRepositoryView.fxml");
 		preloadFxml(NEW_REPOSITORY_MENU_VIEW,"/fxml/NewRepositoryMenu.fxml");
 		preloadFxml(NEW_ACCOUNT_VIEW,"/fxml/dialogs/NewAccount.fxml");
+		preloadFxml(NEW_GOOGLE_DRIVE_REPOSITORY,"/fxml/dialogs/GoogleDriveRepositoryView.fxml");
+
 	}
 	
 	public Parent get(String key) {
