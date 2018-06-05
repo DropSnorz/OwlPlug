@@ -9,6 +9,19 @@ public abstract class AbstractDialog {
 	@Autowired
 	DialogController dialogController;
 	
+	private double sizeX = -1;
+	private double sizeY = -1;
+	
+	public AbstractDialog() {
+		
+	}
+	
+	public AbstractDialog(double sizeX, double sizeY) {
+		
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+	}
+	
 	
 	protected abstract Node getNode();
 	
@@ -16,8 +29,14 @@ public abstract class AbstractDialog {
 	public void show() {
 		
 		onDialogShow();
+		
+		if(sizeX != -1 && sizeY != -1) {
+			dialogController.newDialog(sizeX, sizeY, this.getNode());
+		}
+		
 		dialogController.newDialog(this.getNode());
 		dialogController.getDialog().show();
+
 		
 	}
 		

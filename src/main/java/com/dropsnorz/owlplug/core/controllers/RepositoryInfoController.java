@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController;
+import com.dropsnorz.owlplug.core.controllers.dialogs.GoogleDriveRepositoryController;
 import com.dropsnorz.owlplug.core.model.FileSystemRepository;
+import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.services.TaskFactory;
@@ -27,6 +29,8 @@ public class RepositoryInfoController {
 	PluginRepositoryService repositoryService;
 	@Autowired
 	FileSystemRepositoryController fileSystemRepositoryController;
+	@Autowired
+	GoogleDriveRepositoryController googleDriveRepositoryController;
 	@Autowired
 	DialogController dialogController;
 	@FXML
@@ -61,6 +65,10 @@ public class RepositoryInfoController {
 				if(repository instanceof FileSystemRepository) {
 					fileSystemRepositoryController.show();
 					fileSystemRepositoryController.startUpdateSequence((FileSystemRepository) repository);
+				}
+				if(repository instanceof GoogleDriveRepository) {
+					googleDriveRepositoryController.show();
+					googleDriveRepositoryController.startUpdateSequence((GoogleDriveRepository) repository);
 				}
 			};
 		});

@@ -44,4 +44,5 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 			}
 		} ;
 	}
+	
 }

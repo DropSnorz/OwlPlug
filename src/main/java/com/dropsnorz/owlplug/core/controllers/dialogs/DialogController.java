@@ -39,11 +39,11 @@ public class DialogController {
 		
 	}
 	
-	public JFXDialog newBigDialog(Node node) {
+	public JFXDialog newDialog(double sizeX, double sizeY, Node node) {
 		
 		JFXDialogLayout layout = new JFXDialogLayout();
-		layout.setMaxSize(500, 300);
-		layout.setPrefSize(500, 300);
+		layout.setMaxSize(sizeX, sizeY);
+		layout.setPrefSize(sizeX, sizeY);
 		layout.setBody(node);
 		
 		return newDialog(layout);

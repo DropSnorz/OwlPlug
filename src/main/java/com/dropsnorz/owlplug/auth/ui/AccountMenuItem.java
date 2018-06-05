@@ -16,6 +16,12 @@ public class AccountMenuItem implements AccountItem{
 	public void setText(String text) {
 		this.text = text;
 	}
+
+	@Override
+	public Long getId() {
+		// TODO Auto-generated method stub
+		return (long) -1;
+	}
 	
 	
 	
