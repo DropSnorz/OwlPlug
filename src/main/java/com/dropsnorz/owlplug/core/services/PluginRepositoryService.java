@@ -31,8 +31,6 @@ public class PluginRepositoryService {
 	@Autowired
 	protected PluginRepositoryDAO pluginRepositoryDAO;
 	@Autowired
-	protected RepositoryStrategyResolver repositoryStrategyResolver;
-	@Autowired
 	protected AuthentificationService authentificationService;
 	@Autowired
 	protected TaskManager taskManager;
@@ -71,26 +69,7 @@ public class PluginRepositoryService {
 
 		}
 
-		IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
-
-
-		taskManager.addTask(new RepositoryTask() {
-
-			@Override
-			protected Void call() throws Exception {
-
-				this.updateProgress(0, 1);
-				try {
-					strategy.execute(repository, parameters);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				this.updateProgress(1, 1);
-
-				return null;
-			}
-		});
+		taskManager.addTask(taskFactory.createRepositoryTask(repository, parameters));
 	}
 	
 	public void delete(PluginRepository repository) {

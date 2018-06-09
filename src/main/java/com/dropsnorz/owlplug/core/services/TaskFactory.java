@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 import com.dropsnorz.owlplug.core.controllers.PluginsController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
+import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
+import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
+import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyResolver;
 import com.dropsnorz.owlplug.core.engine.tasks.DirectoryRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.PluginRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryRemoveTask;
+import com.dropsnorz.owlplug.core.engine.tasks.RepositoryTask;
 import com.dropsnorz.owlplug.core.engine.tasks.SyncPluginTask;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
@@ -29,6 +33,8 @@ public class TaskFactory {
 	PluginDAO pluginDAO;
 	@Autowired 
 	PluginRepositoryDAO pluginRepositoryDAO;
+	@Autowired
+	protected RepositoryStrategyResolver repositoryStrategyResolver;
 
 
 
@@ -102,5 +108,39 @@ public class TaskFactory {
 
 	}
 
+
+	public RepositoryTask createRepositoryTask(PluginRepository repository, RepositoryStrategyParameters parameters) {
+
+		IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
+
+		RepositoryTask task = new RepositoryTask() {
+			@Override
+			protected Void call() throws Exception {
+
+				this.updateProgress(0, 1);
+				try {
+					strategy.execute(repository, parameters);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				this.updateProgress(1, 1);
+
+				return null;
+			}
+		};
+
+		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+			@Override
+			public void handle(WorkerStateEvent event) {
+
+				pluginsController.refreshPlugins();
+
+			}
+		});
+		
+		return task;
+
+	}
 
 }

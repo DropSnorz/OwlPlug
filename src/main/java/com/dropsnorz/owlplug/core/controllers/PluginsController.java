@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.prefs.Preferences;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -42,6 +44,8 @@ import javafx.util.Callback;
 
 @Controller
 public class PluginsController {
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	TaskFactory taskFactory;
@@ -106,11 +110,8 @@ public class PluginsController {
 			};
 		});	
 
-		treeRootNode = 
-				new FilterableTreeItem<Object>("(all)");
-
+		treeRootNode = new FilterableTreeItem<Object>("(all)");
 		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
-
 		treeRepositoryRootNode = new FilterableTreeItem<Object>("Repositories");
 
 		treeView.setCellFactory(new Callback<TreeView<Object>,TreeCell<Object>>(){
@@ -320,7 +321,6 @@ public class PluginsController {
 		FileTree treeHead = pluginTree;
 		
 		
-
 		String[] directories = getPluginRepositoryPath().split("/");
 
 		
@@ -328,18 +328,20 @@ public class PluginsController {
 			
 			treeHead = treeHead.get(dir);
 			
-			if(treeHead == null) {
-				return;
-			}
 		}
 		
 		//Searching for missing or empty repositories
 		for(PluginRepository repository : repositories) {
-			if(!treeHead.containsKey(repository.getName())) {
+			if(treeHead == null || !treeHead.containsKey(repository.getName())) {
 				FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(repository);
 				item.setGraphic(new ImageView(applicationDefaults.repositoryImage));
 				node.getInternalChildren().add(item);
 			}
+		}
+		
+		//Break search if tree is not setup (no plugin registered)
+		if(treeHead == null) {
+			return;
 		}
 
 		for(String dir : treeHead.keySet()){
