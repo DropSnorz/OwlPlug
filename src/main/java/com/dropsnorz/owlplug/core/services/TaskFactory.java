@@ -133,9 +133,7 @@ public class TaskFactory {
 		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
 			@Override
 			public void handle(WorkerStateEvent event) {
-
-				pluginsController.refreshPlugins();
-
+				taskManager.addTask(createSyncPluginTask());
 			}
 		});
 		

@@ -3,19 +3,23 @@ package com.dropsnorz.owlplug.core.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.GoogleDriveRepositoryController;
 import com.dropsnorz.owlplug.core.model.FileSystemRepository;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
+import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.services.TaskFactory;
 import com.dropsnorz.owlplug.core.services.TaskManager;
+import com.dropsnorz.owlplug.core.ui.PluginListCellFactory;
 import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXListView;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,6 +29,8 @@ import javafx.scene.control.Label;
 @Controller
 public class RepositoryInfoController {
 
+	@Autowired
+	ApplicationDefaults applicationDefaults;
 	@Autowired
 	PluginRepositoryService repositoryService;
 	@Autowired
@@ -43,10 +49,14 @@ public class RepositoryInfoController {
 	JFXButton deleteButton;
 	@FXML
 	private JFXButton editButton;
+	@FXML
+	private JFXListView<Plugin> pluginRepositoryListView;
 
 	private PluginRepository repository;
 
 	public void initialize() {
+		
+		pluginRepositoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
 
 		pullButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
@@ -116,9 +126,8 @@ public class RepositoryInfoController {
 	public void setPluginRepository(PluginRepository repository) {
 
 		repositoryNameLabel.setText(repository.getName());
+		pluginRepositoryListView.getItems().setAll(repository.getPluginList());
 		this.repository = repository;
-
-
 
 	}
 

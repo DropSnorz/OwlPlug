@@ -10,6 +10,7 @@ import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.services.TaskFactory;
+import com.dropsnorz.owlplug.core.ui.PluginListCellFactory;
 import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -63,21 +64,7 @@ public class DirectoryInfoController {
 			};
 		});
 		
-		pluginDirectoryListView.setCellFactory(param -> new JFXListCell<Plugin>() {
-            private ImageView imageView = new ImageView();
-            @Override
-            public void updateItem(Plugin plug, boolean empty) {
-                super.updateItem(plug, empty);
-                if (empty) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    imageView.setImage(applicationDefaults.vst2Image);
-                    setText(plug.getName());
-                    setGraphic(imageView);
-                }
-            }
-        });
+		pluginDirectoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
 		
 		deleteDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {

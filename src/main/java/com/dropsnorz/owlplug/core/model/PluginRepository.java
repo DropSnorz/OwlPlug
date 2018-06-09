@@ -26,11 +26,12 @@ public abstract class PluginRepository implements IDirectory {
 	protected String displayName;
 	
 	PluginRepository(String name){
+		this();
 		this.name = name;
 	}
 	
 	PluginRepository(){
-		
+		pluginList = new ArrayList<Plugin>();
 	}
 	
 	
