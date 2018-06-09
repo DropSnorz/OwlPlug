@@ -56,6 +56,10 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 	private Label messageLabel;
 
 	private GoogleDriveRepository currentRepository;
+	
+	GoogleDriveRepositoryController(){
+		super(600,300);
+	}
 
 
 	public void initialize() {

@@ -21,6 +21,7 @@ public class ApplicationDefaults {
 	public final Image vst2Image  = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
 	public final Image vst3Image  = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
 	public final Image repositoryImage  = new Image(getClass().getResourceAsStream("/icons/box-yellow-16.png"));
+	public final Image pluginPlaceholder = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));
 
 	public ApplicationDefaults() {
 		if(OSValidator.isWindows()) {

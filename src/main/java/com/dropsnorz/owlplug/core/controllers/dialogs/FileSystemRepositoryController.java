@@ -50,6 +50,10 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 	Label messageLabel;
 	
 	private FileSystemRepository currentFileSystemRepository = null;
+	
+	FileSystemRepositoryController(){
+		super(600,300);
+	}
 
 
 	public void initialize() {

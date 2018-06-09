@@ -136,6 +136,9 @@ JFXTreeView:focused{
 .jfx-tab-pane *.tab-header-background{
 	-fx-background-color:solid-pane-color;
 }
+.jfx-tab-pane .tab-selected-line {
+    -fx-background-color: theme-primary-color;
+}
 
 .no-header-tab-pane {
     -fx-tab-max-height: 0 ;

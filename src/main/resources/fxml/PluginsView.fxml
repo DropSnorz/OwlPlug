@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.geometry.*?>
@@ -32,7 +33,14 @@
       	<top>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <JFXButton fx:id="newRepositoryButton" alignment="BASELINE_CENTER" buttonType="RAISED" text="New repository" />
+                  <JFXButton fx:id="newRepositoryButton" alignment="BASELINE_CENTER" buttonType="RAISED" text="New repository">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/box-white-32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
             		<HBox alignment="CENTER_RIGHT" prefHeight="40.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
             			<children>
             				<JFXTextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
@@ -51,7 +59,14 @@
          <children>
             <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0" VBox.vgrow="NEVER">
                <children>
-                  <JFXButton fx:id="syncButton" buttonType="RAISED" text="Sync" />
+                  <JFXButton fx:id="syncButton" buttonType="RAISED" text="Sync">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/refresh-white-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
                </children>
             </HBox>
             <AnchorPane VBox.vgrow="ALWAYS">

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import com.jfoenix.controls.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -12,13 +13,23 @@
    <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" spacing="15.0">
          <children>
-            <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="panel-transparent">
+            <VBox styleClass="panel-transparent">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/picture-grey-240.png" />
-                     </image>
-                  </ImageView>
+                  <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../media/plugin-placeholder.png" />
+                           </image>
+                           <effect>
+                              <Reflection fraction="0.45" />
+                           </effect>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets bottom="50.0" top="10.0" />
+                     </padding>
+                  </VBox>
                </children>
             </VBox>
             <VBox styleClass="panel-transparent">
@@ -35,7 +46,14 @@
                   <HBox alignment="TOP_RIGHT" prefHeight="38.0" prefWidth="460.0" spacing="5.0">
                      <children>
                         <JFXButton text="Update" />
-                        <JFXButton fx:id="uninstallButton" buttonType="RAISED" text="Uninstall" />
+                        <JFXButton fx:id="uninstallButton" buttonType="RAISED" styleClass="button-danger" text="Uninstall">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/trash-white-16.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></JFXButton>
                      </children>
                   </HBox>
                </children>
@@ -75,7 +93,7 @@
                         <Label fx:id="pluginIdLabel" text="UNKNOW" />
                      </children>
                   </TextFlow>
-                  <HBox alignment="BASELINE_LEFT" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+                  <HBox alignment="BASELINE_LEFT" spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                      <children>
                         <TextFlow GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                            <children>
@@ -84,7 +102,6 @@
                            </children>
                         </TextFlow>
                         <JFXButton fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" text="Open folder">
-                           
                         </JFXButton>
                      </children>
                   </HBox>

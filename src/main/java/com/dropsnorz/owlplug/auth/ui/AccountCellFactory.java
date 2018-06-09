@@ -2,6 +2,7 @@ package com.dropsnorz.owlplug.auth.ui;
 
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -41,6 +42,7 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 					setGraphic(null);
 					setText(accountMenuItem.getText());
 				}
+				
 			}
 		} ;
 	}

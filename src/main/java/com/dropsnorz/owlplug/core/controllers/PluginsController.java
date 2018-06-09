@@ -326,7 +326,9 @@ public class PluginsController {
 		
 		for(String dir : directories) {
 			
-			treeHead = treeHead.get(dir);
+			if(treeHead != null) {
+				treeHead = treeHead.get(dir);
+			}
 			
 		}
 		

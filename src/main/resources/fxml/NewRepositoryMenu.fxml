@@ -6,12 +6,22 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.menus.NewRepositoryController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.menus.NewRepositoryController">
    <children>
-      <Label text="Add repository" />
+      <HBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/box-white-32.png" />
+               </image>
+            </ImageView>
+            <Label text="New repository" />
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" />
       <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="NEVER">
          <children>
-            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item" fx:id="fileSystemMenuItem">
+            <HBox fx:id="fileSystemMenuItem" alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item">
                <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" scaleX="0.75" scaleY="0.75">
                      <image>
@@ -21,7 +31,7 @@
                   <Label text="File System Repository" />
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item" fx:id="googleDriveMenuItem">
+            <HBox fx:id="googleDriveMenuItem" alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item">
                <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>

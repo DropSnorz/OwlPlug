@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.RepositoryInfoController">
    <children>
-      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="panel-transparent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" styleClass="panel-transparent" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
          <children>
             <Label fx:id="repositoryNameLabel" text="RepositoryName">
                <graphic>
@@ -24,14 +24,42 @@
                <children>
                   <HBox alignment="CENTER_LEFT" HBox.hgrow="NEVER">
                      <children>
-                        <JFXButton fx:id="deleteButton" styleClass="button-danger" text="Delete" />
+                        <JFXButton fx:id="deleteButton" styleClass="button-danger" text="Delete">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/trash-white-16.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></JFXButton>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="37.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton fx:id="pullButton" text="Pull" />
-                        <JFXButton fx:id="editButton" text="Edit" />
-                        <JFXButton fx:id="openRepositoryButton" text="Open folder" />
+                        <JFXButton fx:id="pullButton" text="Pull">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/arrow-down-grey-16.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></JFXButton>
+                        <JFXButton fx:id="editButton" text="Edit">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/pen-grey-16.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></JFXButton>
+                        <JFXButton fx:id="openRepositoryButton" text="Open folder">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/folder-grey-16.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></JFXButton>
                      </children>
                   </HBox>
                </children>

@@ -33,8 +33,9 @@ public abstract class AbstractDialog {
 		if(sizeX != -1 && sizeY != -1) {
 			dialogController.newDialog(sizeX, sizeY, this.getNode());
 		}
-		
-		dialogController.newDialog(this.getNode());
+		else {
+			dialogController.newDialog(this.getNode());
+		}
 		dialogController.getDialog().show();
 
 		

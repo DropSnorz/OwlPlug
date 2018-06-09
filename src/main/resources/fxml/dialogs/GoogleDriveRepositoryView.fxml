@@ -10,7 +10,7 @@
    <children>
       <GridPane hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="40.0" VBox.vgrow="ALWAYS">
         <columnConstraints>
-          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="99.0" />
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="223.0" />
         </columnConstraints>
         <rowConstraints>
@@ -22,7 +22,7 @@
             <JFXComboBox fx:id="accountComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Select an Account..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
             <Label text="Repository Name" />
             <JFXTextField fx:id="repositoryNameTextField" GridPane.columnIndex="1" />
-            <Label text="Google directory URL" GridPane.rowIndex="2" />
+            <Label text="Google folder Id" GridPane.rowIndex="2" />
             <JFXTextField fx:id="googleDirectoryURLTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" HBox.hgrow="ALWAYS" />
             <Label text="Account" GridPane.rowIndex="1" />
          </children>
