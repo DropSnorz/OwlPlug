@@ -19,6 +19,7 @@ import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -82,7 +83,7 @@ public class AuthentificationService {
 			Credential credential = authCodeAccess.authorize(userAccount.getKey());
 						
 			 Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
-			          "Oauth2").build();
+			          "OwlPlug").build();
 			 Userinfoplus userinfo = oauth2.userinfo().get().execute();
 			
 			 userAccount.setName(userinfo.getName());
@@ -98,6 +99,23 @@ public class AuthentificationService {
 		}
 		
 	}
+	
+	public GoogleCredential getGoogleCredential(String key){
+		
+		String clientId = owlPlugCredentials.GOOGLE_APP_ID;
+		String clientSecret = owlPlugCredentials.GOOGLE_SECRET;
+		
+		com.dropsnorz.owlplug.auth.model.GoogleCredential gc = googleCredentialDAO.findByKey(key);
+		
+		 return new GoogleCredential.Builder().setTransport(new NetHttpTransport())
+	        .setJsonFactory(new JacksonFactory())
+	        .setClientSecrets(clientId, clientSecret)
+	        .build()
+	        .setRefreshToken(gc.getRefreshToken());
+		
+		
+	}
+	
 	
 	public void stopAuthReceiver() {
 		try {

@@ -80,6 +80,10 @@ JFXToggleButton{
 	-fx-text-fill:white;
 }
 
+JFXComboBox{
+	-jfx-focus-color: theme-secondary-color;
+}
+
 .menu-combobox{
 	-fx-background-color:solid-pane-color;
 	-fx-background-radius: 0;

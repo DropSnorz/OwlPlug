@@ -13,6 +13,7 @@ public class ApplicationDefaults {
 
 	private OSType platform;
 
+	public final static String APPLICATION_NAME = "OwlPlug";
 	public final static String REPOSITORY_FOLDER_NAME = "repositories";
 	public final static String DEFAULT_REPOSITORY_DIRECTORY = "C:/VST";
 
