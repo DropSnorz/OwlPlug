@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.auth.model;
 
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

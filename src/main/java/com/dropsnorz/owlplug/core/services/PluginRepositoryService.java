@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.services.AuthentificationService;
 import com.dropsnorz.owlplug.core.dao.FileSystemRepositoryDAO;
+import com.dropsnorz.owlplug.core.dao.GoogleDriveRepositoryDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
 import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
@@ -31,6 +33,8 @@ public class PluginRepositoryService {
 	@Autowired
 	protected PluginRepositoryDAO pluginRepositoryDAO;
 	@Autowired
+	protected GoogleDriveRepositoryDAO googleDriveRepositoryDAO;
+	@Autowired
 	protected AuthentificationService authentificationService;
 	@Autowired
 	protected TaskManager taskManager;
@@ -40,7 +44,7 @@ public class PluginRepositoryService {
 	protected ApplicationDefaults applicationDefaults;
 
 	public boolean createRepository(PluginRepository repository){
-		
+
 		if(pluginRepositoryDAO.findByName(repository.getName()) == null) {
 
 			pluginRepositoryDAO.save(repository);
@@ -51,34 +55,58 @@ public class PluginRepositoryService {
 		return false;
 
 	}
-	
+
 	public void save(PluginRepository repository) {
-		 pluginRepositoryDAO.save(repository);
+		pluginRepositoryDAO.save(repository);
 	}
 
 
 	public void pull(PluginRepository repository) {
 		RepositoryStrategyParameters parameters = new RepositoryStrategyParameters();
 		parameters.setRepositoryAction(RepositoryAction.PULL);
-		
+
 		parameters.put("target-dir", getLocalRepositoryPath(repository));
-		
+
 		if(repository instanceof GoogleDriveRepository) {
-			GoogleCredential credential = authentificationService.getGoogleCredential(((GoogleDriveRepository) repository).getUserAccount().getKey());
-			parameters.putObject("google-credential", credential);
+
+
+			if(((GoogleDriveRepository) repository).getUserAccount() != null) {
+				GoogleCredential credential = authentificationService.getGoogleCredential(((GoogleDriveRepository) repository).getUserAccount().getKey());
+				parameters.putObject("google-credential", credential);
+
+				taskManager.addTask(taskFactory.createRepositoryTask(repository, parameters));
+			}
+
+
+		}
+		else {
+			taskManager.addTask(taskFactory.createRepositoryTask(repository, parameters));
 
 		}
 
-		taskManager.addTask(taskFactory.createRepositoryTask(repository, parameters));
 	}
-	
+
 	public void delete(PluginRepository repository) {
-		
+
 		String localPath = getLocalRepositoryPath(repository);
 		RepositoryRemoveTask task = taskFactory.createRepositoryRemoveTask(repository, localPath);
-		
+
 		taskManager.addTask(task);
+
+	}
+	
+	public void removeAccountReferences(UserAccount account) {
 		
+		Iterable<GoogleDriveRepository> repositories = googleDriveRepositoryDAO.findAll();
+		
+		for(GoogleDriveRepository repository : repositories) {
+			
+			if(repository.getUserAccount() != null 
+					&& repository.getUserAccount().getId().equals(account.getId())) {
+				repository.setUserAccount(null);
+				googleDriveRepositoryDAO.save(repository);
+			}
+		}
 	}
 
 	public String getLocalRepositoryPath(PluginRepository repository) {

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import com.dropsnorz.owlplug.auth.components.OwlPlugCredentials;
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccountProvider;
+import com.dropsnorz.owlplug.core.controllers.MainController;
+import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -45,11 +49,13 @@ public class AuthentificationService {
 	@Autowired
 	private UserAccountDAO userAccountDAO;
 	
+	@Autowired
+	private MainController mainController;
+	
+	@Autowired
+	private PluginRepositoryService pluginRepositoryService;
+	
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
-	private static final String  APPLICATION_NAME = "OwlPlug";
-	private static Plus plus;
-	
-	
 	private LocalServerReceiver receiver = null;
 
 	
@@ -64,9 +70,7 @@ public class AuthentificationService {
 		
 		try {
 			NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-			
 			DataStoreFactory dataStore = new JPADataStoreFactory(googleCredentialDAO);
-			
 			GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientId, clientSecret, scopes)
 					.setDataStoreFactory(dataStore)
 					.setAccessType("offline").setApprovalPrompt("force")
@@ -79,7 +83,6 @@ public class AuthentificationService {
 			
 			
 			AuthorizationCodeInstalledApp authCodeAccess = new AuthorizationCodeInstalledApp(flow, receiver);
-
 			Credential credential = authCodeAccess.authorize(userAccount.getKey());
 						
 			 Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
@@ -112,8 +115,17 @@ public class AuthentificationService {
 	        .setClientSecrets(clientId, clientSecret)
 	        .build()
 	        .setRefreshToken(gc.getRefreshToken());
+	}
+	
+	@Transactional
+	public void deleteAccount(UserAccount userAccount) {
 		
+		pluginRepositoryService.removeAccountReferences(userAccount);
 		
+		googleCredentialDAO.deleteByKey(userAccount.getKey());
+		userAccountDAO.delete(userAccount);
+		
+		mainController.refreshAccounts();
 	}
 	
 	

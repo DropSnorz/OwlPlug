@@ -1,16 +1,35 @@
 package com.dropsnorz.owlplug.auth.ui;
 
 import com.dropsnorz.owlplug.auth.model.UserAccount;
+import com.dropsnorz.owlplug.auth.services.AuthentificationService;
+import com.jfoenix.controls.JFXButton;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.util.Callback;
 
 public class AccountCellFactory implements Callback<ListView<AccountItem>, ListCell<AccountItem>> {
 
+	private boolean showDeleteButton = false;
+	private AuthentificationService authentificationService = null;
+	
+	public AccountCellFactory() {
+		
+	}
+	public AccountCellFactory(AuthentificationService authentificationService, boolean showDeleteButton){
+		
+		this.showDeleteButton = showDeleteButton;
+		this.authentificationService = authentificationService;
+	}
 
 	@Override
 	public ListCell<AccountItem> call(ListView<AccountItem> l) {
@@ -23,26 +42,47 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 					
 					UserAccount account = (UserAccount) item;
 					
+					HBox hBox= new HBox();
+					hBox.setSpacing(5);
+					hBox.setAlignment(Pos.CENTER_LEFT);
+					
 					if (account.getIconUrl() != null) {
 						Image image = new Image(account.getIconUrl(), 32, 32, false, false, true);
 						ImageView imageView = new ImageView(image);
-						setGraphic(imageView);
-					}
-					else {
-						setGraphic(null);
+						//setGraphic(imageView);
+						hBox.getChildren().add(imageView);
 					}
 					
-					setText(account.getName());
+					Label label = new Label(account.getName());
+					hBox.getChildren().add(label);
+					
+					if(showDeleteButton) {
+						Region growingArea = new Region();
+						HBox.setHgrow(growingArea, Priority.ALWAYS);
+						hBox.getChildren().add(growingArea);
+						Hyperlink deleteButton = new Hyperlink("X");
+						deleteButton.setVisited(true);
+						hBox.getChildren().add(deleteButton);
+						
+						deleteButton.setOnAction(e -> {
+							System.out.println("Hello !");
+							authentificationService.deleteAccount(account);
+						});
+					}
+					
+					setGraphic(hBox);
+                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 					return;
 					
 				}
 				
 				if(item instanceof AccountMenuItem) {
+
 					AccountMenuItem accountMenuItem = (AccountMenuItem)item;
 					setGraphic(null);
 					setText(accountMenuItem.getText());
 				}
-				
+								
 			}
 		} ;
 	}

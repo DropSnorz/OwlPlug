@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import com.dropsnorz.owlplug.auth.controllers.AccountController;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
+import com.dropsnorz.owlplug.auth.services.AuthentificationService;
 import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
@@ -25,6 +26,8 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTreeView;
+import com.jfoenix.skins.JFXComboBoxListViewSkin;
+import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -47,6 +50,8 @@ public class MainController {
 	private AccountController accountController;
 	@Autowired
 	private UserAccountDAO userAccountDAO;
+	@Autowired
+	private AuthentificationService authentificationService;
 	@FXML 
 	StackPane rootPane;
 	@FXML
@@ -86,10 +91,15 @@ public class MainController {
 			}
 		}); 
 
-		AccountCellFactory cellFactory = new AccountCellFactory();
-
-		accountComboBox.setButtonCell(cellFactory.call(null));
-		accountComboBox.setCellFactory(cellFactory);
+		accountComboBox.setButtonCell(new AccountCellFactory().call(null));
+		accountComboBox.setCellFactory(new AccountCellFactory(authentificationService,true));
+		
+		accountComboBox.setSkin(new JFXComboBoxListViewSkin<AccountItem>(accountComboBox) {
+	        @Override
+	        protected boolean isHideOnClickEnabled() {
+	            return false;
+	        }
+	    });
 
 
 		refreshAccounts();

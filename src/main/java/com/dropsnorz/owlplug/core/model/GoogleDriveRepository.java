@@ -1,6 +1,8 @@
 package com.dropsnorz.owlplug.core.model;
 
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.dropsnorz.owlplug.auth.model.UserAccount;
@@ -10,6 +12,7 @@ public class GoogleDriveRepository extends PluginRepository {
 	
 	private String remoteRessourceId;
 	@ManyToOne
+	@JoinColumn(nullable=true)
 	private UserAccount userAccount;
 	
 	public GoogleDriveRepository() {}
