@@ -65,13 +65,12 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 						hBox.getChildren().add(deleteButton);
 						
 						deleteButton.setOnAction(e -> {
-							System.out.println("Hello !");
 							authentificationService.deleteAccount(account);
 						});
 					}
 					
 					setGraphic(hBox);
-                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    setText(null);
 					return;
 					
 				}

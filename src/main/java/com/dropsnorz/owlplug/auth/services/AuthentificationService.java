@@ -3,6 +3,7 @@ package com.dropsnorz.owlplug.auth.services;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.prefs.Preferences;
 
 import javax.transaction.Transactional;
 
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.auth.JPADataStoreFactory;
 import com.dropsnorz.owlplug.auth.components.OwlPlugCredentials;
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
@@ -55,6 +57,9 @@ public class AuthentificationService {
 	@Autowired
 	private PluginRepositoryService pluginRepositoryService;
 	
+	@Autowired
+	Preferences prefs;
+	
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private LocalServerReceiver receiver = null;
 
@@ -80,21 +85,21 @@ public class AuthentificationService {
 			userAccountDAO.save(userAccount);
 			
 			receiver = new LocalServerReceiver();
-			
-			
+		
 			AuthorizationCodeInstalledApp authCodeAccess = new AuthorizationCodeInstalledApp(flow, receiver);
 			Credential credential = authCodeAccess.authorize(userAccount.getKey());
 						
 			 Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
 			          "OwlPlug").build();
 			 Userinfoplus userinfo = oauth2.userinfo().get().execute();
-			
+			 
 			 userAccount.setName(userinfo.getName());
 			 userAccount.setIconUrl(userinfo.getPicture());
 			 userAccount.setAccountProvider(UserAccountProvider.GOOGLE);
+			 userAccount.setCredential(googleCredentialDAO.findByKey(userAccount.getKey()));
 			 
 			 userAccountDAO.save(userAccount);
-						
+			 prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
 		} catch (GeneralSecurityException | IOException e) {
 			// TODO Auto-generated catch block

@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.auth.controllers.AccountController;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
@@ -52,6 +54,8 @@ public class MainController {
 	private UserAccountDAO userAccountDAO;
 	@Autowired
 	private AuthentificationService authentificationService;
+	@Autowired
+	private Preferences prefs;
 	@FXML 
 	StackPane rootPane;
 	@FXML
@@ -81,7 +85,6 @@ public class MainController {
 
 		});
 
-
 		accountComboBox.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
 			if(newValue != null && newValue instanceof AccountMenuItem) {
 				accountController.show();
@@ -93,7 +96,6 @@ public class MainController {
 
 		accountComboBox.setButtonCell(new AccountCellFactory().call(null));
 		accountComboBox.setCellFactory(new AccountCellFactory(authentificationService,true));
-		
 		accountComboBox.setSkin(new JFXComboBoxListViewSkin<AccountItem>(accountComboBox) {
 	        @Override
 	        protected boolean isHideOnClickEnabled() {
@@ -101,26 +103,38 @@ public class MainController {
 	        }
 	    });
 
-
 		refreshAccounts();
-
-
 
 	}
 
 	public void refreshAccounts() {
 
 		ArrayList<UserAccount> accounts = new ArrayList<UserAccount>();
-
+		
 		for(UserAccount account : userAccountDAO.findAll()) {
 			accounts.add(account);
 		}
-
+		
+		accountComboBox.hide();
+		accountComboBox.getItems().clear();
 		accountComboBox.getItems().setAll(accounts);
 		accountComboBox.getItems().add(new AccountMenuItem(" + New Account"));
+		
+		long selectedAccountId = prefs.getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
+		if(selectedAccountId != -1) {
+			UserAccount selectedAccount = userAccountDAO.findById(selectedAccountId).get();
+			
+			//Bug workaround. The only way way to pre-select the account is to find it's index in the list
+			// If not, the selected cell is not rendered correctly
+			accountComboBox.getItems().stream()
+			.filter(account -> account.getId().equals(selectedAccount.getId()))
+			.findAny()
+			.ifPresent(accountComboBox.getSelectionModel()::select);
+		}
+		else {
+			accountComboBox.setValue(null);
 
-
-
+		}
 	}
 
 	public StackPane getRootPane() {

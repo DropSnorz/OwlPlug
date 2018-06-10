@@ -2,11 +2,13 @@ package com.dropsnorz.owlplug.core.controllers.dialogs;
 
 import java.util.ArrayList;
 import java.util.OptionalInt;
+import java.util.prefs.Preferences;
 import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
@@ -38,6 +40,8 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 
 	@Autowired
 	GoogleDriveRepositoryDAO googleDriveRepositoryDAO;
+	@Autowired
+	Preferences prefs;
 
 	@FXML
 	JFXComboBox<AccountItem> accountComboBox;
@@ -56,7 +60,7 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 	private Label messageLabel;
 
 	private GoogleDriveRepository currentRepository;
-	
+
 	GoogleDriveRepositoryController(){
 		super(600,300);
 	}
@@ -96,8 +100,24 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		this.messageLabel.setText("");
 		this.repositoryNameTextField.setText("");
 		this.repositoryNameTextField.setDisable(false);
-		this.accountComboBox.setValue(null);
 		this.googleDirectoryURLTextField.setText("");
+		
+		long selectedAccountId = prefs.getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
+		if(selectedAccountId != -1) {
+			UserAccount selectedAccount = userAccountDAO.findById(selectedAccountId).get();
+			
+			//Bug workaround. The only way way to pre-select the account is to find it's index in the list
+			// If not, the selected cell is not rendered correctly
+			accountComboBox.getItems().stream()
+			.filter(account -> account.getId().equals(selectedAccount.getId()))
+			.findAny()
+			.ifPresent(accountComboBox.getSelectionModel()::select);
+		}
+		else {
+			accountComboBox.setValue(null);
+
+		}
+
 	}
 
 	@Override
@@ -109,14 +129,16 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		this.repositoryNameTextField.setText(currentRepository.getName());
 		this.repositoryNameTextField.setDisable(true);
 		this.googleDirectoryURLTextField.setText(currentRepository.getRemoteRessourceId());
-		
+
 		//Bug workaround. The only way way to pre-select the account is to find it's index in the list
 		// If not, the selected cell is not rendered correctly
-		accountComboBox.getItems().stream()
-	    .filter(account -> account.getId().equals(currentRepository.getUserAccount().getId()))
-	    .findAny()
-	    .ifPresent(accountComboBox.getSelectionModel()::select);
-		
+		if(currentRepository.getUserAccount() != null) {
+			accountComboBox.getItems().stream()
+			.filter(account -> account.getId().equals(currentRepository.getUserAccount().getId()))
+			.findAny()
+			.ifPresent(accountComboBox.getSelectionModel()::select);
+		}
+
 	}
 
 	private void refresh() {
@@ -184,7 +206,7 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		currentRepository.setUserAccount(account);
 
 		pluginRepositoryService.save(currentRepository);
-		
+
 		close();
 
 	}

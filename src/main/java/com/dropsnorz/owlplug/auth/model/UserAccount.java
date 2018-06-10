@@ -1,10 +1,11 @@
 package com.dropsnorz.owlplug.auth.model;
 
-import javax.annotation.Nullable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
 
@@ -18,6 +19,8 @@ public class UserAccount implements AccountItem {
 	private String name;
 	private String iconUrl;
 	private UserAccountProvider accountProvider;
+	@OneToOne(cascade=CascadeType.REMOVE, optional=true)
+	private GoogleCredential credential;
 	
 	public UserAccount() {
 		
@@ -64,7 +67,14 @@ public class UserAccount implements AccountItem {
 	public void setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
 	}
-	
+
+	public GoogleCredential getCredential() {
+		return credential;
+	}
+
+	public void setCredential(GoogleCredential credential) {
+		this.credential = credential;
+	}
 	
 	
 
