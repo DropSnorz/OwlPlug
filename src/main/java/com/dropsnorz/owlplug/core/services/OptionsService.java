@@ -46,6 +46,9 @@ public class OptionsService {
 		if(prefs.get(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, null) == null) {
 			prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, Boolean.FALSE);
 		}
+		if(prefs.get(ApplicationDefaults.SELECTED_ACCOUNT_KEY, null) == null) {
+			prefs.putBoolean(ApplicationDefaults.SELECTED_ACCOUNT_KEY, Boolean.FALSE);
+		}
 	}
 
 

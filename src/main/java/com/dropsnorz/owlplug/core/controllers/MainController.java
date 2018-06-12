@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.prefs.Preferences;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,6 +25,8 @@ import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.services.OptionsService;
+import com.dropsnorz.owlplug.core.services.TaskFactory;
+import com.dropsnorz.owlplug.core.services.TaskManager;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDrawer;
@@ -37,6 +41,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
@@ -45,6 +50,7 @@ import javafx.scene.layout.StackPane;
 @Controller
 public class MainController {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private LazyViewRegistry viewRegistry;
@@ -56,6 +62,10 @@ public class MainController {
 	private AuthentificationService authentificationService;
 	@Autowired
 	private Preferences prefs;
+	@Autowired
+	private TaskManager taskManager;
+	@Autowired
+	private TaskFactory taskFactory;
 	@FXML 
 	StackPane rootPane;
 	@FXML
@@ -75,14 +85,11 @@ public class MainController {
 		viewRegistry.preload();
 
 		this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				tabPaneContent.getSelectionModel().select(newValue.intValue());
 				leftDrawer.close();
-
 			}
-
 		});
 
 		accountComboBox.getSelectionModel().selectedItemProperty().addListener( (options, oldValue, newValue) -> {
@@ -94,7 +101,7 @@ public class MainController {
 			}
 		}); 
 
-		accountComboBox.setButtonCell(new AccountCellFactory().call(null));
+		accountComboBox.setButtonCell(new AccountCellFactory(Pos.CENTER_RIGHT).call(null));
 		accountComboBox.setCellFactory(new AccountCellFactory(authentificationService,true));
 		accountComboBox.setSkin(new JFXComboBoxListViewSkin<AccountItem>(accountComboBox) {
 	        @Override
@@ -105,6 +112,14 @@ public class MainController {
 
 		refreshAccounts();
 
+	}
+	
+	public void dispatchPostInitialize() {
+		if(prefs.getBoolean(ApplicationDefaults.SCAN_PLUGINS_STARTUP_KEY, false)) {
+			log.info("Starting auto plugin sync");
+			
+			taskFactory.run(taskFactory.createSyncPluginTask());
+		}
 	}
 
 	public void refreshAccounts() {
@@ -119,6 +134,7 @@ public class MainController {
 		accountComboBox.getItems().clear();
 		accountComboBox.getItems().setAll(accounts);
 		accountComboBox.getItems().add(new AccountMenuItem(" + New Account"));
+		accountComboBox.setVisibleRowCount(accountComboBox.getItems().size() + 1); // set new visibleRowCount value
 		
 		long selectedAccountId = prefs.getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
 		if(selectedAccountId != -1) {

@@ -29,6 +29,7 @@ import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -174,6 +175,7 @@ public class PluginsController {
 				taskFactory.run(taskFactory.createSyncPluginTask());
 			};
 		});	
+		
 	}
 
 	public void refreshPlugins() {

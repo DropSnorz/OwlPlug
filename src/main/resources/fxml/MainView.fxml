@@ -24,7 +24,7 @@
                         <Tab text="Options" />
                      </tabs>
                   </JFXTabPane>
-                  <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" promptText="Accounts Manager   " styleClass="menu-combobox" />
+                  <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts Manager   " styleClass="menu-combobox" />
                </children>
             </HBox>
             <JFXDrawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">

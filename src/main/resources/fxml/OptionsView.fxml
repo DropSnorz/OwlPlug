@@ -58,7 +58,18 @@
                         <Label styleClass="heading-1" text="Preferences" />
                         <VBox VBox.vgrow="ALWAYS">
                            <children>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Label styleClass="heading-2" text="General" />
+                                    <HBox>
+                                       <children>
+                                          <JFXCheckBox fx:id="scanPluginsCheckBox" text="Scan plugins on startup" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="5.0" top="5.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children></VBox>
                               <VBox VBox.vgrow="NEVER">
                                  <children>
                                     <Label styleClass="heading-2" text="Danger Zone" />

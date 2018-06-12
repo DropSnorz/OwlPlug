@@ -21,9 +21,13 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 
 	private boolean showDeleteButton = false;
 	private AuthentificationService authentificationService = null;
+	private Pos align = Pos.CENTER_LEFT;
 	
 	public AccountCellFactory() {
 		
+	}
+	public AccountCellFactory(Pos align) {
+		this.align = align;
 	}
 	public AccountCellFactory(AuthentificationService authentificationService, boolean showDeleteButton){
 		
@@ -37,6 +41,8 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 			@Override
 			protected void updateItem(AccountItem item, boolean empty) {
 				super.updateItem(item, empty);
+				
+				setAlignment(align);
 
 				if(item instanceof UserAccount) {
 					
@@ -44,7 +50,7 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 					
 					HBox hBox= new HBox();
 					hBox.setSpacing(5);
-					hBox.setAlignment(Pos.CENTER_LEFT);
+					hBox.setAlignment(align);
 					
 					if (account.getIconUrl() != null) {
 						Image image = new Image(account.getIconUrl(), 32, 32, false, false, true);

@@ -10,6 +10,8 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import com.dropsnorz.owlplug.core.controllers.MainController;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,6 +37,9 @@ public class App extends Application
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
 			loader.setControllerFactory(context::getBean);
 			rootNode = loader.load();
+			
+			MainController mainController = context.getBean(MainController.class);
+			mainController.dispatchPostInitialize();
 		} catch (Exception e) {
 			
 			e.printStackTrace();

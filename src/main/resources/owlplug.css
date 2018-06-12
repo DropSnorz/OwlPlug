@@ -4,12 +4,12 @@
 	disabled-color: rgb(160,160,160);
 	danger-color: #d9534f;
 	
-	theme-primary-color: rgb(250,250,250);
-	theme-secondary-color: rgb(250,250,250);
+	theme-primary-color: #FFF58E;
+	theme-secondary-color: #C0BFF9;
 }
 
 #mainPane{
-	-fx-background-color:linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);
+	-fx-background-color: linear-gradient(to top, #c79081 0%, #dfa579 100%);
 }
 
 .heading-1{
@@ -104,6 +104,17 @@ JFXComboBox{
 	-fx-text-fill: white ;
 }
 
+JFXCheckBox {
+     -fx-text-fill: white; 
+}
+JFXCheckBox .box {
+     -fx-border-color: white;
+}
+
+JFXCheckBox:selected .box{
+	-fx-border-color: transparent;
+}
+ 
 JFXTreeView{
 	-fx-background-color:solid-pane-color;
 	-fx-text-fill:white;

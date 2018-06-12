@@ -10,6 +10,7 @@ import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.services.OptionsService;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
@@ -44,7 +45,8 @@ public class OptionsController {
 	JFXButton pluginDirectoryButton;
 	@FXML
 	JFXToggleButton vst3ToggleButton;
-
+	@FXML
+	JFXCheckBox scanPluginsCheckBox;
 	@FXML
 	JFXButton removeDataButton;
 
@@ -92,12 +94,12 @@ public class OptionsController {
 			}
 		});
 
-
-
-
-
 		pluginDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
+		});
+		
+		scanPluginsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			prefs.putBoolean(ApplicationDefaults.SCAN_PLUGINS_STARTUP_KEY, newValue);
 		});
 
 
@@ -145,6 +147,7 @@ public class OptionsController {
 		pluginDirectoryTextField.setText(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
 		vst2ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
 		vst3ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+		scanPluginsCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.SCAN_PLUGINS_STARTUP_KEY, false));
 
 	}
 
