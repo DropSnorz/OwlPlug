@@ -63,7 +63,7 @@
                                     <Label styleClass="heading-2" text="General" />
                                     <HBox>
                                        <children>
-                                          <JFXCheckBox fx:id="scanPluginsCheckBox" text="Scan plugins on startup" />
+                                          <JFXCheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="5.0" top="5.0" />

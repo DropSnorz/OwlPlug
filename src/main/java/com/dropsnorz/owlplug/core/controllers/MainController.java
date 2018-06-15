@@ -115,7 +115,7 @@ public class MainController {
 	}
 	
 	public void dispatchPostInitialize() {
-		if(prefs.getBoolean(ApplicationDefaults.SCAN_PLUGINS_STARTUP_KEY, false)) {
+		if(prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
 			log.info("Starting auto plugin sync");
 			
 			taskFactory.run(taskFactory.createSyncPluginTask());

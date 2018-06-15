@@ -19,6 +19,7 @@ import com.dropsnorz.owlplug.core.model.IDirectory;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
+import com.dropsnorz.owlplug.core.services.PluginService;
 import com.dropsnorz.owlplug.core.services.TaskFactory;
 import com.dropsnorz.owlplug.core.ui.CustomTreeCell;
 import com.dropsnorz.owlplug.core.ui.FilterableTreeItem;
@@ -49,7 +50,7 @@ public class PluginsController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	TaskFactory taskFactory;
+	PluginService pluginService;
 
 	@Autowired
 	MainController mainController;
@@ -172,7 +173,7 @@ public class PluginsController {
 
 		syncButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				taskFactory.run(taskFactory.createSyncPluginTask());
+				pluginService.syncPlugins();
 			};
 		});	
 		

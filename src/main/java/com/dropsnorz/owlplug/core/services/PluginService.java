@@ -33,11 +33,13 @@ public class PluginService {
 
 	@Autowired
 	protected TaskFactory taskFactory;
+	
+	public void syncPlugins() {
+		taskFactory.run(taskFactory.createSyncPluginTask());
+	}
 
 	public void removePlugin(Plugin plugin) {
-
 		taskFactory.run(taskFactory.createPluginRemoveTask(plugin));
-
 	}
 
 	public List<Plugin> explore(){

@@ -46,7 +46,7 @@ public class OptionsController {
 	@FXML
 	JFXToggleButton vst3ToggleButton;
 	@FXML
-	JFXCheckBox scanPluginsCheckBox;
+	JFXCheckBox syncPluginsCheckBox;
 	@FXML
 	JFXButton removeDataButton;
 
@@ -98,8 +98,8 @@ public class OptionsController {
 			prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
 		});
 		
-		scanPluginsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			prefs.putBoolean(ApplicationDefaults.SCAN_PLUGINS_STARTUP_KEY, newValue);
+		syncPluginsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			prefs.putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, newValue);
 		});
 
 
@@ -147,7 +147,7 @@ public class OptionsController {
 		pluginDirectoryTextField.setText(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
 		vst2ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
 		vst3ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
-		scanPluginsCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.SCAN_PLUGINS_STARTUP_KEY, false));
+		syncPluginsCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
 
 	}
 

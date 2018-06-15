@@ -53,6 +53,6 @@ public class ApplicationDefaults {
 	public static String VST2_DISCOVERY_ENABLED_KEY = "VST2_DISCOVERY_ENABLED";
 	public static String VST3_DISCOVERY_ENABLED_KEY = "VST3_DISCOVERY_ENABLED";
 	public static String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";
-	public static String SCAN_PLUGINS_STARTUP_KEY = "SCAN_PLUGINS_STARTUP_KEY";
+	public static String SYNC_PLUGINS_STARTUP_KEY = "SYNC_PLUGINS_STARTUP_KEY";
 
 }
