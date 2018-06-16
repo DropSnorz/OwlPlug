@@ -28,7 +28,7 @@ public class App extends Application
 
 	@Override
 	public void init() throws Exception {
-		
+
 		try {
 			SpringApplicationBuilder builder = new SpringApplicationBuilder(App.class);
 			builder.headless(false);
@@ -37,21 +37,15 @@ public class App extends Application
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
 			loader.setControllerFactory(context::getBean);
 			rootNode = loader.load();
-			
+
 			MainController mainController = context.getBean(MainController.class);
 			mainController.dispatchPostInitialize();
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			
-			if(e instanceof BeanCreationException) {
-				notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug is already running"));
-
-			}
-			else {
-				notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug could not be started"));
-			}
-			
+		} catch (BeanCreationException e){
+			notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug is already running"));
+			throw e;
+		}
+		catch (Exception e) {
+			notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug could not be started"));
 			throw e;
 		}
 	}
@@ -72,8 +66,8 @@ public class App extends Application
 		primaryStage.setMinWidth(width);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
-		
-		
+
+
 	}
 
 	@Bean
@@ -95,6 +89,6 @@ public class App extends Application
 	public static void main(String[] args) {
 		System.setProperty("javafx.preloader", "com.dropsnorz.owlplug.OwlPlugPreloader");
 		launch(App.class, args);
-		
+
 	}
 }

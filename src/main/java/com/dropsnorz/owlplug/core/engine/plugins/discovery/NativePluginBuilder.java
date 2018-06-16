@@ -2,7 +2,6 @@ package com.dropsnorz.owlplug.core.engine.plugins.discovery;
 
 import java.io.File;
 
-import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginType;
 

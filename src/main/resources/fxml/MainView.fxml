@@ -31,7 +31,7 @@
                <content>
             		<BorderPane fx:id="mainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0">
             			<center>
-                        <VBox>
+                        <VBox fx:id="contentPanePlaceholder">
                            <children>
             						<JFXTabPane fx:id="tabPaneContent" prefHeight="100.0" prefWidth="441.0" styleClass="no-header-tab-pane" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
             							<tabs>

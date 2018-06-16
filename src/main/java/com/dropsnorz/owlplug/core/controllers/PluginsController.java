@@ -20,7 +20,6 @@ import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.services.PluginService;
-import com.dropsnorz.owlplug.core.services.TaskFactory;
 import com.dropsnorz.owlplug.core.ui.CustomTreeCell;
 import com.dropsnorz.owlplug.core.ui.FilterableTreeItem;
 import com.dropsnorz.owlplug.core.ui.TreeItemPredicate;
@@ -30,14 +29,8 @@ import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -46,70 +39,56 @@ import javafx.util.Callback;
 
 @Controller
 public class PluginsController {
-	
+
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	PluginService pluginService;
-
+	private PluginService pluginService;
 	@Autowired
-	MainController mainController;
-
+	private MainController mainController;
 	@Autowired
-	LazyViewRegistry viewRegistry;
-
+	private LazyViewRegistry viewRegistry;
 	@Autowired 
-	PluginDAO pluginDAO;
-
+	private PluginDAO pluginDAO;
 	@Autowired
-	NodeInfoController nodeInfoController;
-
+	private NodeInfoController nodeInfoController;
 	@Autowired
-	PluginRepositoryDAO repositoryDAO;
-
+	private PluginRepositoryDAO repositoryDAO;
 	@Autowired
 	protected Preferences prefs;
-	
 	@Autowired
 	protected ApplicationDefaults applicationDefaults;
 
 
 	@FXML
-	JFXButton syncButton;
-
+	private JFXButton syncButton;
 	@FXML
-	JFXTreeView<Object> treeView;
-
+	private JFXTreeView<Object> treeView;
 	@FXML
-	JFXTabPane treeViewTabPane;
-
+	private JFXTabPane treeViewTabPane;
 	@FXML
-	JFXTextField searchTextField;
-
+	private JFXTextField searchTextField;
 	@FXML
-	JFXButton newRepositoryButton;
+	private JFXButton newRepositoryButton;
 
+	private Iterable<Plugin> pluginList;
 
-	Iterable<Plugin> pluginList;
+	private FileTree pluginTree;
 
-	FileTree pluginTree;
+	private FilterableTreeItem<Object> treeRootNode;
 
-	FilterableTreeItem<Object> treeRootNode;
+	private FilterableTreeItem<Object> treeFileRootNode; 
 
-	FilterableTreeItem<Object> treeFileRootNode; 
-
-	FilterableTreeItem<Object> treeRepositoryRootNode; 
+	private FilterableTreeItem<Object> treeRepositoryRootNode; 
 
 
 	@FXML
 	public void initialize() {  
 
-		newRepositoryButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.NEW_REPOSITORY_MENU_VIEW));
-				mainController.getLeftDrawer().open();
+		newRepositoryButton.setOnAction(e ->{
+			mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.NEW_REPOSITORY_MENU_VIEW));
+			mainController.getLeftDrawer().open();
 
-			};
 		});	
 
 		treeRootNode = new FilterableTreeItem<Object>("(all)");
@@ -117,45 +96,35 @@ public class PluginsController {
 		treeRepositoryRootNode = new FilterableTreeItem<Object>("Repositories");
 
 		treeView.setCellFactory(new Callback<TreeView<Object>,TreeCell<Object>>(){
-            @Override
-            public TreeCell<Object> call(TreeView<Object> p) {
-                return new CustomTreeCell();
-            }
-        });
+			@Override
+			public TreeCell<Object> call(TreeView<Object> p) {
+				return new CustomTreeCell();
+			}
+		});
 		treeView.setRoot(treeRootNode);
 
 		refreshPlugins();
 
-		treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
-			@Override
-			public void changed(ObservableValue observable, Object oldValue,
-					Object newValue){
+		treeView.getSelectionModel().selectedItemProperty().addListener((observable, newValue, oldValue) -> {
 
-				if(newValue != null){
-					TreeItem<Object> selectedItem = (TreeItem<Object>) newValue;
-					nodeInfoController.setNode(selectedItem.getValue());
-				}
-
+			if(newValue != null){
+				TreeItem<Object> selectedItem = newValue;
+				nodeInfoController.setNode(selectedItem.getValue());
 			}
-
 		});
 
 		treeViewTabPane.getSelectionModel().selectedItemProperty().addListener(
-				new ChangeListener<Tab>() {
-					@Override
-					public void changed(ObservableValue<? extends Tab> ov, Tab oldTab, Tab newTab) {
-						if(newTab.getId().equals("treeTabAll")){
-							treeView.setRoot(treeRootNode);
-						}
-						else if (newTab.getId().equals("treeTabRepositories")) {
-							treeView.setRoot(treeRepositoryRootNode);
-						}
-						else{
-							treeView.setRoot(treeFileRootNode);
-						}
+				(observable, oldTab, newTab) -> {
+					if(newTab.getId().equals("treeTabAll")){
+						treeView.setRoot(treeRootNode);
 					}
-				}
-				);
+					else if (newTab.getId().equals("treeTabRepositories")) {
+						treeView.setRoot(treeRepositoryRootNode);
+					}
+					else{
+						treeView.setRoot(treeFileRootNode);
+					}
+				});
 
 		treeRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
 			if (searchTextField.getText() == null || searchTextField.getText().isEmpty())
@@ -171,12 +140,10 @@ public class PluginsController {
 		}, searchTextField.textProperty()));
 
 
-		syncButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				pluginService.syncPlugins();
-			};
+		syncButton.setOnAction(e -> {
+			pluginService.syncPlugins();
 		});	
-		
+
 	}
 
 	public void refreshPlugins() {
@@ -271,13 +238,13 @@ public class PluginsController {
 			node.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		}
 		node.setExpanded(true);
-		
+
 		if(mergedParent == null) {
 			mergedParent = "";
 		}
 
 		for(String dir : pluginTree.keySet()){
-			
+
 			FileTree child = pluginTree.get(dir);
 
 			// If child is empty then we have reached a plugin and we can't go deeper
@@ -290,12 +257,12 @@ public class PluginsController {
 
 			}
 			else{
-				
+
 				IDirectory directory;
-								
+
 				//If child node contains only one directory we can merge it with this directory
 				if(child.size() == 1 && ( (FileTree)child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory) {
-										
+
 					directory = (IDirectory) child.getNodeValue();
 					mergedParent = mergedParent + directory.getName() + "/" ;
 
@@ -316,25 +283,25 @@ public class PluginsController {
 	}
 
 	public void buildRepositoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, Iterable<PluginRepository> repositories) {
-		
-		
+
+
 		node.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		node.setExpanded(true);
 
 		FileTree treeHead = pluginTree;
-		
-		
+
+
 		String[] directories = getPluginRepositoryPath().split("/");
 
-		
+
 		for(String dir : directories) {
-			
+
 			if(treeHead != null) {
 				treeHead = treeHead.get(dir);
 			}
-			
+
 		}
-		
+
 		//Searching for missing or empty repositories
 		for(PluginRepository repository : repositories) {
 			if(treeHead == null || !treeHead.containsKey(repository.getName())) {
@@ -343,7 +310,7 @@ public class PluginsController {
 				node.getInternalChildren().add(item);
 			}
 		}
-		
+
 		//Break search if tree is not setup (no plugin registered)
 		if(treeHead == null) {
 			return;
@@ -352,7 +319,7 @@ public class PluginsController {
 		for(String dir : treeHead.keySet()){
 
 			if(treeHead.get(dir).values().size() == 0){
-				
+
 				Plugin plugin =  (Plugin) treeHead.get(dir).getNodeValue();
 				FilterableTreeItem<Object> plugItem = new FilterableTreeItem<Object>(plugin);
 				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));

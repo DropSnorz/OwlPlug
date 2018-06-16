@@ -204,6 +204,16 @@ ProgressIndicator{
 	-fx-progress-color: theme-primary-color;
 }
 
+.jfx-snackbar-content {
+    -fx-background-color: solid-pane-color;
+}
+.jfx-snackbar-toast {
+    -fx-text-fill: WHITE;   
+}
+.jfx-snackbar-action {
+    -fx-text-fill: #ff4081; 
+}
+
 
 /****************************************************************
  

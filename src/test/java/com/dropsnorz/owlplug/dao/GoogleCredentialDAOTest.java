@@ -50,7 +50,7 @@ public class GoogleCredentialDAOTest {
         Set<String> keys = googleCredentialDAO.findAllKeys();
         
         assertNotNull(keys);
-        assertEquals(keys.size(), 2);
+        assertEquals(2, keys.size());
         assertThat(keys, containsInAnyOrder("TEST-KEY-1", "TEST-KEY-2"));
      
     }
@@ -60,7 +60,7 @@ public class GoogleCredentialDAOTest {
     	
         Stream<GoogleCredential> stream = googleCredentialDAO.findAllCredentialAsStream();
         assertNotNull(stream);
-        assertEquals(stream.count(), 2);
+        assertEquals(2, stream.count());
         
         stream = googleCredentialDAO.findAllCredentialAsStream();
         assertThat((Iterable<GoogleCredential>)stream::iterator, contains(

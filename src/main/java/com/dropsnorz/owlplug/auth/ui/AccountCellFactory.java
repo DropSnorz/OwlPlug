@@ -2,10 +2,8 @@ package com.dropsnorz.owlplug.auth.ui;
 
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.services.AuthentificationService;
-import com.jfoenix.controls.JFXButton;
 
 import javafx.geometry.Pos;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -55,7 +53,6 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 					if (account.getIconUrl() != null) {
 						Image image = new Image(account.getIconUrl(), 32, 32, false, false, true);
 						ImageView imageView = new ImageView(image);
-						//setGraphic(imageView);
 						hBox.getChildren().add(imageView);
 					}
 					

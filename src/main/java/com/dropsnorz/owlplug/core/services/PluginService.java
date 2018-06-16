@@ -24,15 +24,13 @@ public class PluginService {
 
 	@Autowired
 	protected ApplicationDefaults applicationDefaults;
-
 	@Autowired
 	protected Preferences prefs;
-
 	@Autowired
 	protected PluginDAO pluginDAO;
-
 	@Autowired
 	protected TaskFactory taskFactory;
+	
 	
 	public void syncPlugins() {
 		taskFactory.run(taskFactory.createSyncPluginTask());

@@ -7,6 +7,8 @@ import java.text.ParseException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import com.dd.plist.NSDictionary;
@@ -19,6 +21,8 @@ import com.dropsnorz.owlplug.core.model.VST2Plugin;
 import com.dropsnorz.owlplug.core.model.VST3Plugin;
 
 public class OSXPluginBuilder extends NativePluginBuilder {
+
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	OSXPluginBuilder(PluginType pluginType) {
 		super(pluginType);
@@ -35,12 +39,12 @@ public class OSXPluginBuilder extends NativePluginBuilder {
 	}
 
 	private Plugin buildVst2Plugin(File pluginFile) {
-		
+
 		String pluginName = FilenameUtils.removeExtension(pluginFile.getName());
 		String pluginPath = pluginFile.getAbsolutePath().replace("\\", "/");
-		
+
 		Plugin plugin = new VST2Plugin(pluginName, pluginPath);
-		
+
 		File pList = new File(pluginFile.getAbsolutePath() + "/Contents/Info.plist");
 		if(pList.exists()) {
 			buildPluginFromVST2Plist(plugin, pList);
@@ -49,39 +53,37 @@ public class OSXPluginBuilder extends NativePluginBuilder {
 
 		return plugin;
 	}
-	
+
 	private Plugin buildVST3Plugin(File pluginFile) {
 		String pluginName = FilenameUtils.removeExtension(pluginFile.getName());
 		String pluginPath = pluginFile.getAbsolutePath().replace("\\", "/");
-		
-		Plugin plugin = new VST3Plugin(pluginName, pluginPath);
-		
-		return plugin;
+
+		return new VST3Plugin(pluginName, pluginPath);
 	}
 
 	private void buildPluginFromVST2Plist(Plugin plugin, File pList) {
 
 		try {
 			NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(pList);
-			NSObject NSBundleId = rootDict.objectForKey("CFBundleIdentifier");
-			NSObject NSBundleVersion = rootDict.objectForKey("CFBundleShortVersionString");
-			
-			if(NSBundleVersion == null) {
-				NSBundleVersion = rootDict.objectForKey("CFBundleVersion");
+			NSObject nSBundleId = rootDict.objectForKey("CFBundleIdentifier");
+			NSObject nSBundleVersion = rootDict.objectForKey("CFBundleShortVersionString");
+
+			if(nSBundleVersion == null) {
+				nSBundleVersion = rootDict.objectForKey("CFBundleVersion");
 			}
-			
-			if(NSBundleId != null) {
-				plugin.setBundleId(NSBundleId.toString());
+
+			if(nSBundleId != null) {
+				plugin.setBundleId(nSBundleId.toString());
 			}
-			
-			if(NSBundleVersion != null) {
-				plugin.setVersion(NSBundleVersion.toString());
+
+			if(nSBundleVersion != null) {
+				plugin.setVersion(nSBundleVersion.toString());
 			}
-			
-			
+
+
 		} catch (IOException | PropertyListFormatException | ParseException | ParserConfigurationException
 				| SAXException e) {
-			e.printStackTrace();
+			log.error("Error while building plugin from Plistfile", e);
 
 		}	
 

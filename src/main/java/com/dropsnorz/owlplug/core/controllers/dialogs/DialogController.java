@@ -8,18 +8,14 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 
 @Controller
 public class DialogController {
 	
 	@Autowired
-	MainController mainController;
+	private MainController mainController;
 	
 	private JFXDialog dialog;
 	
@@ -35,8 +31,6 @@ public class DialogController {
 		JFXDialogLayout layout = new JFXDialogLayout();
 		layout.setBody(node);
 		return newDialog(layout);
-
-		
 	}
 	
 	public JFXDialog newDialog(double sizeX, double sizeY, Node node) {
@@ -71,14 +65,11 @@ public class DialogController {
 		
 		JFXButton button = new JFXButton("Close");
 		
-		button.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
+		button.setOnAction(e -> {
 				dialog.close();
-			};
 		});	
 		
 		layout.setActions(button);
-		
 		return newDialog(layout);
 
 	}

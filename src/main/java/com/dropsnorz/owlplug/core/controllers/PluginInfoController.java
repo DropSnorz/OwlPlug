@@ -10,32 +10,25 @@ import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.services.PluginService;
-import com.dropsnorz.owlplug.core.services.TaskFactory;
 import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
 
 @Controller
 public class PluginInfoController {
 
 	@Autowired
 	private DialogController dialogController;
-	
 	@Autowired
 	private PluginService pluginService;
-	
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
-	
+
 	@FXML
 	private ImageView pluginTypeIcon;
 	@FXML
@@ -51,62 +44,51 @@ public class PluginInfoController {
 
 	@FXML
 	private Label pluginPathLabel;
-
 	@FXML
 	private JFXButton openDirectoryButton;
-
 	@FXML
 	private JFXButton uninstallButton;
 
 	private Plugin currentPlugin = null;
-	
+
 	@FXML
 	public void initialize() { 
 
 		openDirectoryButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		openDirectoryButton.setText("");
-		openDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				File pluginFile = new File(pluginPathLabel.getText());
-				PlatformUtils.openDirectoryExplorer(pluginFile.getParentFile());
-			};
+		openDirectoryButton.setOnAction(e -> {
+			File pluginFile = new File(pluginPathLabel.getText());
+			PlatformUtils.openDirectoryExplorer(pluginFile.getParentFile());
 		});
 
-		uninstallButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				
-				
-				JFXDialog dialog = dialogController.newDialog();
-				
-				JFXDialogLayout layout = new JFXDialogLayout();
-				
-				layout.setHeading(new Label("Remove plugin"));
-				layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName() 
-				+ " ? This will permanently delete the file from your hard drive."));
-				
-				JFXButton cancelButton = new JFXButton("Cancel");
-				
-				cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent e) {
-						dialog.close();
-					};
-				});	
-				
-				JFXButton removeButton = new JFXButton("Remove");
-				
-				removeButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent e) {
-						dialog.close();
-						pluginService.removePlugin(currentPlugin);
-					};
-				});	
-				removeButton.getStyleClass().add("button-danger");
-				
-				layout.setActions(removeButton, cancelButton);
-				dialog.setContent(layout);
-				dialog.show();
-				
-			};
+		uninstallButton.setOnAction(e -> {
+
+			JFXDialog dialog = dialogController.newDialog();
+
+			JFXDialogLayout layout = new JFXDialogLayout();
+
+			layout.setHeading(new Label("Remove plugin"));
+			layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName() 
+			+ " ? This will permanently delete the file from your hard drive."));
+
+			JFXButton cancelButton = new JFXButton("Cancel");
+
+			cancelButton.setOnAction( cancelEvent -> {
+				dialog.close();
+			});	
+
+			JFXButton removeButton = new JFXButton("Remove");
+
+			removeButton.setOnAction( removeEvent -> {
+				dialog.close();
+				pluginService.removePlugin(currentPlugin);
+			});	
+			removeButton.getStyleClass().add("button-danger");
+
+			layout.setActions(removeButton, cancelButton);
+			dialog.setContent(layout);
+			dialog.show();
+
 		});		
 	}
 

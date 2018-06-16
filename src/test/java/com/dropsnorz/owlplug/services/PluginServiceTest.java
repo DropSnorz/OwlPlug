@@ -25,20 +25,18 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.dropsnorz.owlplug.App;
+import com.dropsnorz.owlplug.AppTestContext;
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.services.PluginService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = App.class)
-public class PluginServiceTest {
+public class PluginServiceTest extends AppTestContext {
 
 	@Autowired
 	private PluginService pluginService;
 
-	@MockBean
-	private Preferences preferences;
-	
 	
 	@TestConfiguration
     static class EmployeeServiceImplTestContextConfiguration {
@@ -49,51 +47,9 @@ public class PluginServiceTest {
         }
     }
 
-	@Before
-	public void setUp() {
-						
-		ClassLoader classLoader = getClass().getClassLoader();
-		File file = new File(classLoader.getResource("test-data").getFile());
-		String vstDirectoryTestPath = file.getAbsolutePath();
-		
-
-		Mockito.when(preferences.getBoolean(Mockito.any(String.class), Mockito.any(Boolean.class)))
-		.thenAnswer(new Answer() {
-			public Object answer(InvocationOnMock invocation) {
-				Object[] args = invocation.getArguments();
-				Object mock = invocation.getMock();
-
-				if(((String) args[0]).equals(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY)) {
-					return true;
-				}
-				if(((String) args[0]).equals(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY)) {
-					return true;
-				}
-				if(((String) args[0]).equals(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY)) {
-					return false;
-				}
-				return false;
-			}
-		});
-		
-		Mockito.when(preferences.get(Mockito.any(String.class), Mockito.any(String.class)))
-		.thenAnswer(new Answer() {
-			public Object answer(InvocationOnMock invocation) {
-				Object[] args = invocation.getArguments();
-				Object mock = invocation.getMock();
-
-				if(((String) args[0]).equals(ApplicationDefaults.VST_DIRECTORY_KEY)) {
-					return vstDirectoryTestPath;
-				}
-				
-				return null;
-			}
-		});
-	}
-
-
+	
 	@Test
-	public void test(){
+	public void testPluginExploring(){
 
 		List<Plugin> plugins = pluginService.explore();
 		

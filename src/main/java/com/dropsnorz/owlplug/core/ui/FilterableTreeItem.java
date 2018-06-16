@@ -15,7 +15,7 @@ import javafx.scene.control.TreeItem;
 
 public class FilterableTreeItem<T> extends TreeItem<T> {
 
-    final private ObservableList<TreeItem<T>> sourceList;
+    private final ObservableList<TreeItem<T>> sourceList;
     private FilteredList<TreeItem<T>> filteredList;
     private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
 

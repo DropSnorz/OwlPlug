@@ -19,20 +19,18 @@ import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 
 @Service
 public class TaskFactory {
 
 	@Autowired
-	PluginService pluginService;
+	private PluginService pluginService;
 	@Autowired
-	TaskManager taskManager;
+	private TaskManager taskManager;
 	@Autowired
-	PluginDAO pluginDAO;
+	private PluginDAO pluginDAO;
 	@Autowired 
-	PluginRepositoryDAO pluginRepositoryDAO;
+	private PluginRepositoryDAO pluginRepositoryDAO;
 	@Autowired
 	protected RepositoryStrategyResolver repositoryStrategyResolver;
 
@@ -48,29 +46,18 @@ public class TaskFactory {
 	public SyncPluginTask createSyncPluginTask() {
 
 		SyncPluginTask task = new SyncPluginTask(pluginService, pluginDAO);
-
-		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
-			@Override
-			public void handle(WorkerStateEvent event) {
-
-				pluginsController.refreshPlugins();
-
-			}
+		task.setOnSucceeded(e -> {
+			pluginsController.refreshPlugins();
 		});
+
 		return task;
 	}
 
 	public PluginRemoveTask createPluginRemoveTask(Plugin plugin) {
 
 		PluginRemoveTask task = new PluginRemoveTask(plugin, pluginDAO);
-
-		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
-			@Override
-			public void handle(WorkerStateEvent event) {
-
-				pluginsController.refreshPlugins();
-
-			}
+		task.setOnSucceeded(e -> {
+			pluginsController.refreshPlugins();
 		});
 
 		return task;
@@ -79,14 +66,8 @@ public class TaskFactory {
 	public DirectoryRemoveTask createDirectoryRemoveTask(PluginDirectory pluginDirectory) {
 
 		DirectoryRemoveTask task = new DirectoryRemoveTask(pluginDirectory);
-
-		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
-			@Override
-			public void handle(WorkerStateEvent event) {
-
-				taskManager.addTask(createSyncPluginTask());
-
-			}
+		task.setOnSucceeded(e -> {
+			taskManager.addTask(createSyncPluginTask());
 		});
 
 		return task;
@@ -95,17 +76,11 @@ public class TaskFactory {
 	public RepositoryRemoveTask createRepositoryRemoveTask(PluginRepository repository, String path) {
 
 		RepositoryRemoveTask task = new RepositoryRemoveTask(pluginRepositoryDAO, repository, path);
-		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
-			@Override
-			public void handle(WorkerStateEvent event) {
-
-				taskManager.addTask(createSyncPluginTask());
-
-			}
+		task.setOnSucceeded(e -> {
+			taskManager.addTask(createSyncPluginTask());
 		});
+
 		return task;
-
-
 	}
 
 
@@ -118,27 +93,25 @@ public class TaskFactory {
 			protected Void call() throws Exception {
 
 				this.updateProgress(0, 1);
-				try {
-					strategy.execute(repository, parameters);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				strategy.execute(repository, parameters);
 				this.updateProgress(1, 1);
 
 				return null;
 			}
 		};
-
-		task.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
-			@Override
-			public void handle(WorkerStateEvent event) {
-				taskManager.addTask(createSyncPluginTask());
-			}
+		task.setOnSucceeded(e -> {
+			taskManager.addTask(createSyncPluginTask());
 		});
-		
+
 		return task;
 
+	}
+
+	private void bindOnFailHandler(Task task) {
+
+		task.setOnFailed(e -> {
+
+		});
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.dropsnorz.owlplug.core.model;
 
-import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;

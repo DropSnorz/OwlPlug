@@ -51,17 +51,17 @@ public class GoogleDrivePullingStrategy implements IRepositoryStrategy {
 	//Recursive call to Google drive API, not really cool but Drive do not support folder/batch downloading.
 	private void downloadFolder(Drive drive, String parentPath, String folderId) throws IOException {
 		
-		log.debug("Exporing Google Drive folderId: " +folderId);
+		log.debug("Exporing Google Drive folderId: " + folderId);
 		new File(parentPath).mkdirs();
 		
 		FileList result = drive.files().list()   
-				.setQ("'" + folderId +"' in parents and trashed = false")   //TODO sanitize folderId
+				.setQ("'" + folderId +"' in parents and trashed = false")
 				.setSpaces("drive")
 				.setFields("nextPageToken, files(id, name, parents, mimeType)")
 				.execute();
 
 		List<com.google.api.services.drive.model.File> files = result.getFiles();
-		if (files == null || files.size() == 0) {
+		if (files == null || files.isEmpty()) {
 			log.debug("No files found in remote folder");
 		} else {
 			for (com.google.api.services.drive.model.File file : files) {				

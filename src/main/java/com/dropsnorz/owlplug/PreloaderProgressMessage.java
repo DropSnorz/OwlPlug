@@ -17,6 +17,7 @@ public class PreloaderProgressMessage implements PreloaderNotification
 
     public PreloaderProgressMessage(String type, String message, double progress)
     {
+    	this.type = type;
         this.progress = progress;
         this.message = message;
         this.done = false;

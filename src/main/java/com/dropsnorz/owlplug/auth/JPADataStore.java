@@ -2,19 +2,14 @@ package com.dropsnorz.owlplug.auth;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
 import com.dropsnorz.owlplug.auth.model.GoogleCredential;
 import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.util.store.AbstractDataStore;
 import com.google.api.client.util.store.DataStore;
-import com.google.api.client.util.store.DataStoreFactory;
-import com.google.common.base.Optional;
 
 public class JPADataStore extends AbstractDataStore<StoredCredential> {
 

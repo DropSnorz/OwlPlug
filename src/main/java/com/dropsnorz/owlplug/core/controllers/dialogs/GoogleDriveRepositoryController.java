@@ -1,9 +1,8 @@
 package com.dropsnorz.owlplug.core.controllers.dialogs;
 
 import java.util.ArrayList;
-import java.util.OptionalInt;
+import java.util.Optional;
 import java.util.prefs.Preferences;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
-import com.dropsnorz.owlplug.core.dao.GoogleDriveRepositoryDAO;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
@@ -23,8 +21,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -32,26 +28,20 @@ import javafx.scene.control.Label;
 public class GoogleDriveRepositoryController extends AbstractDialog implements IEntityCreateOrUpdate<GoogleDriveRepository> {
 
 	@Autowired
-	LazyViewRegistry viewRegistry;
+	private LazyViewRegistry viewRegistry;
 	@Autowired
-	PluginRepositoryService pluginRepositoryService;
+	private PluginRepositoryService pluginRepositoryService;
 	@Autowired
-	UserAccountDAO userAccountDAO;
-
+	private UserAccountDAO userAccountDAO;
 	@Autowired
-	GoogleDriveRepositoryDAO googleDriveRepositoryDAO;
-	@Autowired
-	Preferences prefs;
-
+	private Preferences prefs;
+	
 	@FXML
-	JFXComboBox<AccountItem> accountComboBox;
-
+	private JFXComboBox<AccountItem> accountComboBox;
 	@FXML
-	JFXButton addButton;
-
+	private JFXButton addButton;
 	@FXML
-	JFXButton closeButton;
-
+	private JFXButton closeButton;
 	@FXML
 	private JFXTextField repositoryNameTextField;
 	@FXML
@@ -68,22 +58,17 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 
 	public void initialize() {
 
-		closeButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
+		closeButton.setOnAction(e -> {
 				close();
-			};
 		});
 
-
-		addButton.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
+		addButton.setOnAction(e -> {
 				if(currentRepository != null) {
 					updateRepository();
 				}
 				else {
 					createRepository();
 				}
-			};
 		});
 
 		AccountCellFactory cellFactory = new AccountCellFactory();
@@ -104,18 +89,23 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		
 		long selectedAccountId = prefs.getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
 		if(selectedAccountId != -1) {
-			UserAccount selectedAccount = userAccountDAO.findById(selectedAccountId).get();
+			Optional<UserAccount> selectedAccount = userAccountDAO.findById(selectedAccountId);
 			
-			//Bug workaround. The only way way to pre-select the account is to find it's index in the list
-			// If not, the selected cell is not rendered correctly
-			accountComboBox.getItems().stream()
-			.filter(account -> account.getId().equals(selectedAccount.getId()))
-			.findAny()
-			.ifPresent(accountComboBox.getSelectionModel()::select);
+			if(selectedAccount.isPresent()) {
+				//Bug workaround. The only way way to pre-select the account is to find it's index in the list
+				// If not, the selected cell is not rendered correctly
+				accountComboBox.getItems().stream()
+				.filter(account -> account.getId().equals(selectedAccount.get().getId()))
+				.findAny()
+				.ifPresent(accountComboBox.getSelectionModel()::select);
+			}
+			else {
+				accountComboBox.setValue(null);
+			}
+			
 		}
 		else {
 			accountComboBox.setValue(null);
-
 		}
 
 	}
@@ -144,7 +134,6 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 	private void refresh() {
 
 		this.accountComboBox.setValue(null);
-
 		ArrayList<UserAccount> accounts = new ArrayList<UserAccount>();
 
 		for(UserAccount account : userAccountDAO.findAll()) {
@@ -152,7 +141,6 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		}
 
 		accountComboBox.getItems().setAll(accounts);
-
 		AccountCellFactory cellFactory = new AccountCellFactory();
 		accountComboBox.setButtonCell(cellFactory.call(null));
 
@@ -164,8 +152,6 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		String name = repositoryNameTextField.getText();
 		String id = googleDirectoryURLTextField.getText();
 
-
-
 		if(!FileUtils.isFilenameValid(name)) {
 			messageLabel.setText("Repository name contains illegal characters");
 			return;
@@ -174,7 +160,6 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		if(accountComboBox.getSelectionModel().getSelectedItem() == null) {
 			messageLabel.setText("Select a valid Google Account");
 			return;
-
 		}
 
 		UserAccount account = (UserAccount) accountComboBox.getSelectionModel().getSelectedItem();
@@ -187,7 +172,6 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 
 		// Repository successfully created, dialog can be closed
 		close();
-
 	}
 
 

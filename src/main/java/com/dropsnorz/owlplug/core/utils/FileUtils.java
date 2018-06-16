@@ -1,6 +1,8 @@
 package com.dropsnorz.owlplug.core.utils;
 
 public class FileUtils {
+	
+	private FileUtils() {}
 
 	public static String convertPath(String path) {
 		return path.replace("\\", "/");

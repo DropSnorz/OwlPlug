@@ -16,8 +16,6 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,26 +27,24 @@ import javafx.stage.Window;
 public class OptionsController {
 
 	@Autowired
-	Preferences prefs;
-
+	private Preferences prefs;
 	@Autowired
-	OptionsService optionsService;
-	
+	private OptionsService optionsService;
 	@Autowired
-	DialogController dialogController;
+	private DialogController dialogController;
 
 	@FXML
-	JFXToggleButton vst2ToggleButton;
+	private JFXToggleButton vst2ToggleButton;
 	@FXML
-	JFXTextField pluginDirectoryTextField;
+	private JFXTextField pluginDirectoryTextField;
 	@FXML
-	JFXButton pluginDirectoryButton;
+	private JFXButton pluginDirectoryButton;
 	@FXML
-	JFXToggleButton vst3ToggleButton;
+	private JFXToggleButton vst3ToggleButton;
 	@FXML
-	JFXCheckBox syncPluginsCheckBox;
+	private JFXCheckBox syncPluginsCheckBox;
 	@FXML
-	JFXButton removeDataButton;
+	private JFXButton removeDataButton;
 
 
 	@FXML
@@ -57,29 +53,17 @@ public class OptionsController {
 		pluginDirectoryTextField.setDisable(false);
 		pluginDirectoryButton.setDisable(false);
 
-		vst2ToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>(){
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		vst2ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
 
 				prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
-			}
-
 		});
 
-		vst3ToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>(){
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+		vst3ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) ->{
 
 				prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, newValue);
-			}
-
 		});
 
-		pluginDirectoryButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
+		pluginDirectoryButton.setOnAction(e -> {
 				DirectoryChooser directoryChooser = new DirectoryChooser();
 				Window mainWindow = pluginDirectoryButton.getScene().getWindow();
 
@@ -91,7 +75,6 @@ public class OptionsController {
 				}else{
 					pluginDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
 				}
-			}
 		});
 
 		pluginDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -103,9 +86,7 @@ public class OptionsController {
 		});
 
 
-		removeDataButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
+		removeDataButton.setOnAction(e -> {
 
 				JFXDialog dialog = dialogController.newDialog();
 
@@ -116,30 +97,24 @@ public class OptionsController {
 
 				JFXButton cancelButton = new JFXButton("Cancel");
 
-				cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent e) {
+				cancelButton.setOnAction(cancelEvent -> {
 						dialog.close();
-					};
 				});	
 
 				JFXButton removeButton = new JFXButton("Clear");
 
-				removeButton.setOnAction(new EventHandler<ActionEvent>() {
-					public void handle(ActionEvent e) {
+				removeButton.setOnAction(removeEvent -> {
 						dialog.close();
 						optionsService.clearAllUserData();
-					};
 				});	
 				removeButton.getStyleClass().add("button-danger");
 
 				layout.setActions(removeButton, cancelButton);
 				dialog.setContent(layout);
 				dialog.show();
-			}
 		});
 
 		refreshView();
-
 	}
 
 	public void refreshView() {

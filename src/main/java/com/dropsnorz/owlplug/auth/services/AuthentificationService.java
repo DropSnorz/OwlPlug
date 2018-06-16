@@ -17,10 +17,11 @@ import com.dropsnorz.owlplug.auth.JPADataStoreFactory;
 import com.dropsnorz.owlplug.auth.components.OwlPlugCredentials;
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
+import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.model.UserAccountProvider;
+import com.dropsnorz.owlplug.auth.utils.AuthentificationException;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
-import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -32,10 +33,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.services.oauth2.Oauth2;
-import com.google.api.services.oauth2.Oauth2.Userinfo;
 import com.google.api.services.oauth2.model.Userinfoplus;
-import com.google.api.services.plus.Plus;
-import com.google.api.services.plus.model.Person;
 
 @Service
 public class AuthentificationService {
@@ -58,13 +56,13 @@ public class AuthentificationService {
 	private PluginRepositoryService pluginRepositoryService;
 	
 	@Autowired
-	Preferences prefs;
+	private Preferences prefs;
 	
 	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
 	private LocalServerReceiver receiver = null;
 
 	
-	public void createAccountAndAuth() {
+	public void createAccountAndAuth() throws AuthentificationException {
 		
 		String clientId = owlPlugCredentials.GOOGLE_APP_ID;
 		String clientSecret = owlPlugCredentials.GOOGLE_SECRET;
@@ -102,8 +100,9 @@ public class AuthentificationService {
 			 prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
 		} catch (GeneralSecurityException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			log.error("Error during authentification", e);
+			throw new AuthentificationException(e);
 		}
 		
 	}
@@ -129,7 +128,6 @@ public class AuthentificationService {
 		
 		googleCredentialDAO.deleteByKey(userAccount.getKey());
 		userAccountDAO.delete(userAccount);
-		
 		mainController.refreshAccounts();
 	}
 	
@@ -139,8 +137,7 @@ public class AuthentificationService {
 			userAccountDAO.deleteInvalidAccounts();
 			if (receiver!= null) receiver.stop();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error while stopping local authentification receiver", e);
 		}
 	}
 
