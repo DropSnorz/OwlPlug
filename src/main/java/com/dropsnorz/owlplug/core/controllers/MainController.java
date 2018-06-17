@@ -18,7 +18,7 @@ import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
-import com.dropsnorz.owlplug.core.services.TaskFactory;
+import com.dropsnorz.owlplug.core.services.PluginService;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
@@ -48,7 +48,7 @@ public class MainController {
 	@Autowired
 	private Preferences prefs;
 	@Autowired
-	private TaskFactory taskFactory;
+	private PluginService pluginService;
 	@FXML 
 	private StackPane rootPane;
 	@FXML
@@ -106,7 +106,7 @@ public class MainController {
 	public void dispatchPostInitialize() {
 		if(prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
 			log.info("Starting auto plugin sync");
-			taskFactory.run(taskFactory.createSyncPluginTask());
+			pluginService.syncPlugins();
 		}
 	}
 
@@ -122,7 +122,6 @@ public class MainController {
 		accountComboBox.getItems().clear();
 		accountComboBox.getItems().setAll(accounts);
 		accountComboBox.getItems().add(new AccountMenuItem(" + New Account"));
-		accountComboBox.setVisibleRowCount(accountComboBox.getItems().size() + 1); // set new visibleRowCount value
 
 		long selectedAccountId = prefs.getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
 		if(selectedAccountId != -1) {

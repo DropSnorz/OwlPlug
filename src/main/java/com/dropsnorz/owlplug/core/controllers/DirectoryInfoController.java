@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
-import com.dropsnorz.owlplug.core.services.TaskFactory;
 import com.dropsnorz.owlplug.core.ui.PluginListCellFactory;
 import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
@@ -75,7 +75,7 @@ public class DirectoryInfoController {
 				JFXButton removeButton = new JFXButton("Remove");
 				removeButton.setOnAction(removeEvent -> {
 						dialog.close();
-						taskFactory.run(taskFactory.createDirectoryRemoveTask(pluginDirectory));
+						taskFactory.createDirectoryRemoveTask(pluginDirectory).run();
 				});	
 				removeButton.getStyleClass().add("button-danger");
 				

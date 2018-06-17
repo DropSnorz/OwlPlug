@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service;
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.services.AuthentificationService;
+import com.dropsnorz.owlplug.core.components.TaskFactory;
+import com.dropsnorz.owlplug.core.components.TaskRunner;
 import com.dropsnorz.owlplug.core.dao.FileSystemRepositoryDAO;
 import com.dropsnorz.owlplug.core.dao.GoogleDriveRepositoryDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters.RepositoryAction;
-import com.dropsnorz.owlplug.core.engine.tasks.RepositoryRemoveTask;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
@@ -33,8 +34,6 @@ public class PluginRepositoryService {
 	protected GoogleDriveRepositoryDAO googleDriveRepositoryDAO;
 	@Autowired
 	protected AuthentificationService authentificationService;
-	@Autowired
-	protected TaskManager taskManager;
 	@Autowired
 	protected TaskFactory taskFactory;
 	@Autowired
@@ -71,13 +70,13 @@ public class PluginRepositoryService {
 				GoogleCredential credential = authentificationService.getGoogleCredential(((GoogleDriveRepository) repository).getUserAccount().getKey());
 				parameters.putObject("google-credential", credential);
 
-				taskManager.addTask(taskFactory.createRepositoryTask(repository, parameters));
+				taskFactory.createRepositoryTask(repository, parameters).run();
 			}
 
 
 		}
 		else {
-			taskManager.addTask(taskFactory.createRepositoryTask(repository, parameters));
+			taskFactory.createRepositoryTask(repository, parameters).run();
 
 		}
 
@@ -86,10 +85,7 @@ public class PluginRepositoryService {
 	public void delete(PluginRepository repository) {
 
 		String localPath = getLocalRepositoryPath(repository);
-		RepositoryRemoveTask task = taskFactory.createRepositoryRemoveTask(repository, localPath);
-
-		taskManager.addTask(task);
-
+		taskFactory.createRepositoryRemoveTask(repository, localPath).run();
 	}
 
 	public void removeAccountReferences(UserAccount account) {

@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.core.services;
+package com.dropsnorz.owlplug.core.components;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +17,12 @@ import com.dropsnorz.owlplug.core.engine.tasks.PluginRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryTask;
 import com.dropsnorz.owlplug.core.engine.tasks.SyncPluginTask;
+import com.dropsnorz.owlplug.core.engine.tasks.TaskExecutionContext;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
+import com.dropsnorz.owlplug.core.services.PluginService;
 
 import javafx.concurrent.Task;
 
@@ -32,22 +34,18 @@ public class TaskFactory {
 	@Autowired
 	private PluginService pluginService;
 	@Autowired
-	private TaskManager taskManager;
+	private TaskRunner taskManager;
 	@Autowired
 	private PluginDAO pluginDAO;
 	@Autowired 
 	private PluginRepositoryDAO pluginRepositoryDAO;
 	@Autowired
-	protected RepositoryStrategyResolver repositoryStrategyResolver;
+	private RepositoryStrategyResolver repositoryStrategyResolver;
 	@Autowired
-	PluginsController pluginsController;
+	private PluginsController pluginsController;
 
-	
-	public void run(AbstractTask task) {
-		taskManager.addTask(task);
-	}
 
-	public SyncPluginTask createSyncPluginTask() {
+	public TaskExecutionContext createSyncPluginTask() {
 
 		SyncPluginTask task = new SyncPluginTask(pluginService, pluginDAO);
 		task.setOnSucceeded(e -> {
@@ -55,41 +53,41 @@ public class TaskFactory {
 		});
 		bindOnFailHandler(task);
 
-		return task;
+		return buildContext(task);
 	}
 
-	public PluginRemoveTask createPluginRemoveTask(Plugin plugin) {
+	public TaskExecutionContext createPluginRemoveTask(Plugin plugin) {
 
 		PluginRemoveTask task = new PluginRemoveTask(plugin, pluginDAO);
 		task.setOnSucceeded(e -> {
 			pluginsController.refreshPlugins();
 		});
 
-		return task;
+		return buildContext(task);
 	}
 
-	public DirectoryRemoveTask createDirectoryRemoveTask(PluginDirectory pluginDirectory) {
+	public TaskExecutionContext createDirectoryRemoveTask(PluginDirectory pluginDirectory) {
 
 		DirectoryRemoveTask task = new DirectoryRemoveTask(pluginDirectory);
 		task.setOnSucceeded(e -> {
-			taskManager.addTask(createSyncPluginTask());
+			createSyncPluginTask().run();
 		});
 
-		return task;
+		return buildContext(task);
 	}
 
-	public RepositoryRemoveTask createRepositoryRemoveTask(PluginRepository repository, String path) {
+	public TaskExecutionContext createRepositoryRemoveTask(PluginRepository repository, String path) {
 
 		RepositoryRemoveTask task = new RepositoryRemoveTask(pluginRepositoryDAO, repository, path);
 		task.setOnSucceeded(e -> {
-			taskManager.addTask(createSyncPluginTask());
+			createSyncPluginTask().run();
 		});
 
-		return task;
+		return buildContext(task);
 	}
 
 
-	public RepositoryTask createRepositoryTask(PluginRepository repository, RepositoryStrategyParameters parameters) {
+	public TaskExecutionContext createRepositoryTask(PluginRepository repository, RepositoryStrategyParameters parameters) {
 
 		IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
 
@@ -105,18 +103,22 @@ public class TaskFactory {
 			}
 		};
 		task.setOnSucceeded(e -> {
-			taskManager.addTask(createSyncPluginTask());
+			createSyncPluginTask().run();
 		});
 
-		return task;
+		return buildContext(task);
 
 	}
 
 	private void bindOnFailHandler(Task task) {
-
 		task.setOnFailed(e -> {
 			taskManager.triggerOnError();
 		});
+	}
+	
+	private TaskExecutionContext buildContext(AbstractTask task) {
+		
+		return new TaskExecutionContext(task, taskManager );
 	}
 
 }

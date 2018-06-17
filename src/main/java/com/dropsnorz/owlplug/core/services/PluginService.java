@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.engine.plugins.discovery.NativePluginBuilder;
 import com.dropsnorz.owlplug.core.engine.plugins.discovery.NativePluginBuilderFactory;
@@ -33,11 +34,11 @@ public class PluginService {
 
 
 	public void syncPlugins() {
-		taskFactory.run(taskFactory.createSyncPluginTask());
+		taskFactory.createSyncPluginTask().run();
 	}
 
 	public void removePlugin(Plugin plugin) {
-		taskFactory.run(taskFactory.createPluginRemoveTask(plugin));
+		taskFactory.createPluginRemoveTask(plugin).run();
 	}
 
 	public List<Plugin> explore(){
