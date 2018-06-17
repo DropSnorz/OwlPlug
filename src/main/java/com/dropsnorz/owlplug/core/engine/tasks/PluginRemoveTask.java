@@ -7,7 +7,7 @@ import com.dropsnorz.owlplug.core.model.Plugin;
 
 import javafx.concurrent.Task;
 
-public class PluginRemoveTask extends Task {
+public class PluginRemoveTask extends AbstractTask {
 
 	protected Plugin plugin;
 	protected PluginDAO pluginDAO;
@@ -19,7 +19,7 @@ public class PluginRemoveTask extends Task {
 	}
 	
 	@Override
-	protected Object call() throws Exception {
+	protected TaskResult call() throws Exception {
 		
 		this.updateProgress(0, 1);
 		this.updateMessage("Deleting plugin " + plugin.getName() + " ...");
@@ -27,13 +27,18 @@ public class PluginRemoveTask extends Task {
 		File pluginFile = new File(plugin.getPath());
 		if(pluginFile.delete()) {
 			pluginDAO.delete(plugin);
+			
+			this.updateProgress(1, 1);
+			this.updateMessage("Plugin successfully deleted");
+			
+			return null;
+		}
+		else {
+			this.updateMessage("Error during plugin removal");
+			throw new TaskException("Error during plugin removal");
+			
 		}
 		
-		
-		this.updateProgress(1, 1);
-		this.updateMessage("Plugin successfully deleted");
-				
-		return null;
 	}
 
 }

@@ -5,7 +5,7 @@
 	danger-color: #d9534f;
 	
 	theme-primary-color: #FFF58E;
-	theme-secondary-color: #C0BFF9;
+	theme-secondary-color: #FFF0D4;
 }
 
 #mainPane{
@@ -74,6 +74,19 @@ JFXButton{
 .button-danger:pressed{
 	-fx-background-color:#ac2925;
 	
+}
+
+.hyperlink-button{
+	-fx-underline: false;
+	-fx-text-fill: white;
+}
+.hyperlink-button:hover{
+	-fx-underline: false;
+	-fx-text-fill: white;
+}
+.hyperlink-button:visited{
+	-fx-underline: false;
+	-fx-text-fill: white;
 }
 
 JFXToggleButton{
@@ -198,6 +211,10 @@ JFXListView{
 
 .jfx-rippler {
     -jfx-rippler-fill: theme-secondary-color;
+}
+
+.progress-bar-error > .bar {
+    -fx-background-color: red;
 }
 
 ProgressIndicator{

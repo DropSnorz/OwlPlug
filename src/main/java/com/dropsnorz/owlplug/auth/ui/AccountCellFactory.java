@@ -64,7 +64,7 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 						HBox.setHgrow(growingArea, Priority.ALWAYS);
 						hBox.getChildren().add(growingArea);
 						Hyperlink deleteButton = new Hyperlink("X");
-						deleteButton.setVisited(true);
+						deleteButton.getStyleClass().add("hyperlink-button");
 						hBox.getChildren().add(deleteButton);
 						
 						deleteButton.setOnAction(e -> {

@@ -6,9 +6,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 
-import javafx.concurrent.Task;
-
-public class DirectoryRemoveTask extends Task {
+public class DirectoryRemoveTask extends AbstractTask {
 
 	protected PluginDirectory pluginDirectory;
 
@@ -18,7 +16,7 @@ public class DirectoryRemoveTask extends Task {
 	}
 
 	@Override
-	protected Object call() throws Exception {
+	protected TaskResult call() throws Exception {
 
 		this.updateProgress(0, 1);
 		this.updateMessage("Deleting directory " + pluginDirectory.getName() + " ...");

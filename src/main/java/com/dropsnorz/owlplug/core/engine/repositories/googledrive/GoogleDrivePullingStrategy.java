@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
+import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyException;
 import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
@@ -28,7 +29,7 @@ public class GoogleDrivePullingStrategy implements IRepositoryStrategy {
 
 	
 	@Override
-	public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) throws IOException {
+	public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) throws RepositoryStrategyException {
 
 		log.debug("Start pulling reposiroty " + repository.getId());
 		
@@ -40,11 +41,15 @@ public class GoogleDrivePullingStrategy implements IRepositoryStrategy {
 		File targetDir = new File(parameters.get("target-dir"));
 
 		if (!targetDir.exists() && !targetDir.mkdirs()) {
-			throw new IOException("Unable to create parent directory");
+			throw new RepositoryStrategyException("Unable to create parent directory");
 		}
 		
 		String safeFolderId = parameters.get("target-dir").replaceAll("/[^A-Za-z0-9]/", "");
-		downloadFolder(drive, safeFolderId, googleDriveRepository.getRemoteRessourceId());
+		try {
+			downloadFolder(drive, safeFolderId, googleDriveRepository.getRemoteRessourceId());
+		} catch (IOException e) {
+			throw new RepositoryStrategyException("Can't download Google drive remote folder");
+		}
 
 	}
 	

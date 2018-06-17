@@ -30,8 +30,8 @@ public class PluginService {
 	protected PluginDAO pluginDAO;
 	@Autowired
 	protected TaskFactory taskFactory;
-	
-	
+
+
 	public void syncPlugins() {
 		taskFactory.run(taskFactory.createSyncPluginTask());
 	}
@@ -46,44 +46,39 @@ public class PluginService {
 		ArrayList<Plugin> discoveredPlugins = new ArrayList<Plugin>();
 
 
-		try {
-			if(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
+		if(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
 
-				List<File> vst2files = new ArrayList<File>();
+			List<File> vst2files = new ArrayList<File>();
 
-				String vst2path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-				NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST2);
-				vst2files = collector.collect(vst2path);
+			String vst2path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+			NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST2);
+			vst2files = collector.collect(vst2path);
 
-				NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(platform, PluginType.VST2);
+			NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(platform, PluginType.VST2);
 
-				for(File file: vst2files){
+			for(File file: vst2files){
 
-					discoveredPlugins.add(builder.build(file));
-
-				}
+				discoveredPlugins.add(builder.build(file));
 
 			}
-			if(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
 
-				List<File> vst3files = new ArrayList<File>();
+		}
+		if(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
 
-				String vst3path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-				NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST3);
-				vst3files = collector.collect(vst3path);
+			List<File> vst3files = new ArrayList<File>();
 
-				NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(platform, PluginType.VST3);
+			String vst3path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+			NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(platform, PluginType.VST3);
+			vst3files = collector.collect(vst3path);
 
-				for(File file: vst3files){
+			NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(platform, PluginType.VST3);
 
-					discoveredPlugins.add(builder.build(file));
+			for(File file: vst3files){
 
-				}
+				discoveredPlugins.add(builder.build(file));
 
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
 		}
 
 		return discoveredPlugins;

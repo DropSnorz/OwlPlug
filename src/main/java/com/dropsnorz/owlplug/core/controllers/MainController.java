@@ -81,6 +81,12 @@ public class MainController {
 				Platform.runLater(() -> accountComboBox.setValue(oldValue));
 
 			}
+			
+			if(newValue instanceof UserAccount) {
+				UserAccount userAccount = (UserAccount) newValue;
+				prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
+
+			}
 		}); 
 
 		accountComboBox.setButtonCell(new AccountCellFactory(Pos.CENTER_RIGHT).call(null));

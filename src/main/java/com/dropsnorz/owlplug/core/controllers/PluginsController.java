@@ -19,11 +19,11 @@ import com.dropsnorz.owlplug.core.model.IDirectory;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
+import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.services.PluginService;
 import com.dropsnorz.owlplug.core.ui.CustomTreeCell;
 import com.dropsnorz.owlplug.core.ui.FilterableTreeItem;
 import com.dropsnorz.owlplug.core.ui.TreeItemPredicate;
-import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
@@ -44,6 +44,8 @@ public class PluginsController {
 
 	@Autowired
 	private PluginService pluginService;
+	@Autowired
+	private PluginRepositoryService pluginRepositoryService;
 	@Autowired
 	private MainController mainController;
 	@Autowired
@@ -105,7 +107,7 @@ public class PluginsController {
 
 		refreshPlugins();
 
-		treeView.getSelectionModel().selectedItemProperty().addListener((observable, newValue, oldValue) -> {
+		treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
 			if(newValue != null){
 				TreeItem<Object> selectedItem = newValue;
@@ -149,9 +151,7 @@ public class PluginsController {
 	public void refreshPlugins() {
 
 		treeRootNode.getInternalChildren().clear();
-
-		Iterable<Plugin> pluginList = pluginDAO.findAll();
-		this.pluginList = pluginList;
+		this.pluginList = pluginDAO.findAll();;
 
 		for(Plugin plugin : pluginList){
 
@@ -291,7 +291,9 @@ public class PluginsController {
 		FileTree treeHead = pluginTree;
 
 
-		String[] directories = getPluginRepositoryPath().split("/");
+		String repositoryPath =  pluginRepositoryService.getLocalRepositoryDirectory();
+		if(repositoryPath == null) return;
+		String[] directories = repositoryPath.split("/");
 
 
 		for(String dir : directories) {
@@ -337,15 +339,7 @@ public class PluginsController {
 			}
 		}
 	}
-
-	private String getPluginRepositoryPath() {
-
-		String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null);
-		if(path == null) return null;
-		return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME);
-
-	}
-
+	
 	class FileTree extends HashMap<String, FileTree>{
 
 		Object nodeValue;

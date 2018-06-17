@@ -16,21 +16,21 @@ import com.dropsnorz.owlplug.core.model.PluginRepository;
 
 @Component
 public class RepositoryStrategyResolver {
-	
+
 	HashMap<Class, HashMap<RepositoryAction, IRepositoryStrategy>> strategyBindings;
-	
-	
+
+
 	public RepositoryStrategyResolver() {
-		
+
 		strategyBindings = new HashMap<Class, HashMap<RepositoryAction, IRepositoryStrategy>>();
-		
+
 		// FileSystemRepository bindings
 		HashMap<RepositoryAction, IRepositoryStrategy> fileSystemBindings = new HashMap<RepositoryAction, IRepositoryStrategy>();
 		fileSystemBindings.put(RepositoryAction.PULL, new FileSystemRepositoryPullingStrategy());
 		fileSystemBindings.put(RepositoryAction.PUSH, new FileSystemRepositoryPushingStrategy());
 
 		strategyBindings.put(FileSystemRepository.class, fileSystemBindings);
-		
+
 		// GoogleDrive Bindings
 		HashMap<RepositoryAction, IRepositoryStrategy> googleDriveBindings = new HashMap<RepositoryAction, IRepositoryStrategy>();
 		googleDriveBindings.put(RepositoryAction.PULL, new GoogleDrivePullingStrategy());
@@ -38,23 +38,17 @@ public class RepositoryStrategyResolver {
 
 		strategyBindings.put(GoogleDriveRepository.class, googleDriveBindings);
 	}
-	
+
 	public IRepositoryStrategy getStrategy(PluginRepository repository, RepositoryStrategyParameters parameters) {
-		
+
 		return strategyBindings.get(repository.getClass()).get(parameters.getRepositoryAction());
-	
+
 	}
-	
-	
-	public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) {
-		
-		 try {
-			strategyBindings.get(repository.getClass()).get(parameters.getRepositoryAction()).execute(repository, parameters);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
-	
+
+
+	public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) throws RepositoryStrategyException {
+
+		strategyBindings.get(repository.getClass()).get(parameters.getRepositoryAction()).execute(repository, parameters);
 	}
 
 }

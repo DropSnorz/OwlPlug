@@ -14,7 +14,6 @@ public class VST3Plugin extends Plugin {
 	
 	@Override
 	public PluginType getType() {
-		// TODO Auto-generated method stub
 		return PluginType.VST3;
 	}
 	

@@ -91,13 +91,13 @@ public class PluginRepositoryService {
 		taskManager.addTask(task);
 
 	}
-	
+
 	public void removeAccountReferences(UserAccount account) {
-		
+
 		Iterable<GoogleDriveRepository> repositories = googleDriveRepositoryDAO.findAll();
-		
+
 		for(GoogleDriveRepository repository : repositories) {
-			
+
 			if(repository.getUserAccount() != null 
 					&& repository.getUserAccount().getId().equals(account.getId())) {
 				repository.setUserAccount(null);
@@ -106,11 +106,18 @@ public class PluginRepositoryService {
 		}
 	}
 
+	public String getLocalRepositoryDirectory() {
+		String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null);
+		if(path == null) return null;
+		return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME);
+	}
+
 	public String getLocalRepositoryPath(PluginRepository repository) {
 
-		String path =prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null);
+		String path = getLocalRepositoryDirectory();
 		if(path == null) return null;
-		return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME + File.separator + repository.getName());
+
+		return FileUtils.convertPath(path  + File.separator + repository.getName());
 
 	}
 

@@ -15,7 +15,6 @@ public class VST2Plugin extends Plugin {
 
 	@Override
 	public PluginType getType() {
-		// TODO Auto-generated method stub
 		return PluginType.VST2;
 	}
 	

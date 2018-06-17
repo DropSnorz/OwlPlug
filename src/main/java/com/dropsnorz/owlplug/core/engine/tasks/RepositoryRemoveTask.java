@@ -6,7 +6,7 @@ import com.dropsnorz.owlplug.core.model.PluginRepository;
 
 import javafx.concurrent.Task;
 
-public class RepositoryRemoveTask  extends Task<Void> {
+public class RepositoryRemoveTask  extends AbstractTask {
 
 	protected PluginRepositoryDAO repositoryDAO;
 	protected PluginRepository repository;
@@ -20,7 +20,7 @@ public class RepositoryRemoveTask  extends Task<Void> {
 	}
 	
 	@Override
-	protected Void call() throws Exception{
+	protected TaskResult call() throws Exception{
 		
 		this.updateProgress(0, 2);
 		this.updateMessage("Deleting repository " + repository.getName() + " ...");
@@ -42,6 +42,6 @@ public class RepositoryRemoveTask  extends Task<Void> {
 		
 		
 		return null;
-	};
+	}
 
 }

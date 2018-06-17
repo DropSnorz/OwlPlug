@@ -5,6 +5,8 @@ import java.util.prefs.Preferences;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +18,17 @@ import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 
 @Service
 public class OptionsService {
-
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private Preferences prefs;
-
 	@Autowired
 	private PluginRepositoryDAO pluginRepositoryDAO;
-
 	@Autowired
 	private PluginDAO pluginDAO;
-
 	@Autowired
 	private UserAccountDAO userAccountDAO;
-
 	@Autowired
 	private GoogleCredentialDAO googleCredentialDAO;
 
@@ -52,7 +52,7 @@ public class OptionsService {
 	}
 
 
-	public void clearAllUserData() {
+	public boolean clearAllUserData() {
 
 		try {
 			prefs.clear();
@@ -61,11 +61,13 @@ public class OptionsService {
 
 			googleCredentialDAO.deleteAll();
 			userAccountDAO.deleteAll();
+			
+			return true;
 
 
 		} catch (BackingStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Preferences cannot be updated", e);
+			return false;
 		}
 	}
 
