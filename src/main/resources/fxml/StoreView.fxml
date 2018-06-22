@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.StoreController">
+   <children>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox styleClass="panel-transparent">
+               <children>
+                  <Label text="Stores is a WIP feature" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="100.0" prefViewportWidth="200.0" HBox.hgrow="ALWAYS">
+                     <content>
+                        <JFXMasonryPane fx:id="masonryPane" HBox.hgrow="ALWAYS" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="20.0" right="20.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

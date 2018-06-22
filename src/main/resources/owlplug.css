@@ -231,6 +231,17 @@ ProgressIndicator{
     -fx-text-fill: #ff4081; 
 }
 
+.store-product-bloc{
+	-fx-background-color: rgba(66,66,66, 0.7);
+}
+
+.scroll-pane{
+ -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
 
 /****************************************************************
  
