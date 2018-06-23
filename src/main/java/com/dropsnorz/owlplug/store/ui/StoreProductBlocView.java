@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 
 public class StoreProductBlocView extends VBox {
 	
-	public StoreProductBlocView(StoreProduct storeProduct) {
+	public StoreProductBlocView(StoreProduct storeProduct, Image image) {
 		super();
 		
 		VBox header = new VBox();
@@ -36,12 +36,13 @@ public class StoreProductBlocView extends VBox {
 		this.setPrefHeight(getRandomSize() );
 		this.setPrefWidth(getRandomSize() );
 		
+		System.out.println(this.getPrefHeight());
+		System.out.println(this.getPrefWidth());
+
 		this.getChildren().add(new Pane());
 		
 		//this.getStyleClass().add("store-product-bloc");
-		
-		Image image = new Image(storeProduct.getIconUrl(), 400, 400, true, true, true);
-		
+				
 		BackgroundImage bgImg = new BackgroundImage(image, 
 			    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
 			    BackgroundPosition.CENTER, 
@@ -56,7 +57,7 @@ public class StoreProductBlocView extends VBox {
 	private int getRandomSize() {
 		
 		Random r = new Random();
-		return (r.nextInt(((210 - 150) + 150)) / 10) * 10;
+		return ((r.nextInt(180 - 140) + 140) / 10) * 10;
 	}
 
 }

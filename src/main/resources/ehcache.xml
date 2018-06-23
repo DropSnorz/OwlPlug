@@ -13,7 +13,7 @@
 		timeToIdleSeconds="300" timeToLiveSeconds="600"
 		memoryStoreEvictionPolicy="LFU" 
 		transactionalMode="off">
-		<persistence strategy="localRestartable" />
+		<persistence strategy="localTempSwap" />
 	</cache>
 
 </ehcache>

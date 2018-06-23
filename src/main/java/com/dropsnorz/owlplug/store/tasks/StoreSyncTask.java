@@ -58,7 +58,6 @@ public class StoreSyncTask extends AbstractTask {
 					PluginStoreTO pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreTO.class);
 					log.debug(pluginStoreTO.toString());
 					for(ProductTO productTO : pluginStoreTO.getProducts()) {
-						log.debug("Binding product {}", productTO.getName());
 						StaticStoreProduct product = StoreModelConverter.fromTO(productTO);
 						product.setStore(store);
 						storeProductDAO.save(product);
