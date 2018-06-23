@@ -17,6 +17,7 @@ import com.dropsnorz.owlplug.auth.services.AuthentificationService;
 import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
+import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.services.PluginService;
 import com.jfoenix.controls.JFXComboBox;
@@ -49,6 +50,8 @@ public class MainController {
 	private Preferences prefs;
 	@Autowired
 	private PluginService pluginService;
+	@Autowired 
+	private ImageCache imageCache;
 	@FXML 
 	private StackPane rootPane;
 	@FXML
@@ -89,8 +92,8 @@ public class MainController {
 			}
 		}); 
 
-		accountComboBox.setButtonCell(new AccountCellFactory(Pos.CENTER_RIGHT).call(null));
-		accountComboBox.setCellFactory(new AccountCellFactory(authentificationService,true));
+		accountComboBox.setButtonCell(new AccountCellFactory(imageCache, Pos.CENTER_RIGHT).call(null));
+		accountComboBox.setCellFactory(new AccountCellFactory(authentificationService,imageCache, true));
 		accountComboBox.setSkin(new JFXComboBoxListViewSkin<AccountItem>(accountComboBox) {
 			@Override
 			protected boolean isHideOnClickEnabled() {
