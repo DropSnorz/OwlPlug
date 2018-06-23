@@ -2,6 +2,7 @@ package com.dropsnorz.owlplug.auth.ui;
 
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.services.AuthentificationService;
+import com.dropsnorz.owlplug.core.components.ImageCache;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Hyperlink;
@@ -19,18 +20,24 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 
 	private boolean showDeleteButton = false;
 	private AuthentificationService authentificationService = null;
+	private ImageCache imageCache;
 	private Pos align = Pos.CENTER_LEFT;
 	
-	public AccountCellFactory() {
+	public AccountCellFactory(ImageCache imageCache){
+		this.imageCache = imageCache;
 		
 	}
-	public AccountCellFactory(Pos align) {
+	
+	public AccountCellFactory(ImageCache imageCache, Pos align){
+		this.imageCache = imageCache;
 		this.align = align;
+		
 	}
-	public AccountCellFactory(AuthentificationService authentificationService, boolean showDeleteButton){
+	public AccountCellFactory(AuthentificationService authentificationService, ImageCache imageCache, boolean showDeleteButton){
 		
 		this.showDeleteButton = showDeleteButton;
 		this.authentificationService = authentificationService;
+		this.imageCache = imageCache;
 	}
 
 	@Override
@@ -51,8 +58,10 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 					hBox.setAlignment(align);
 					
 					if (account.getIconUrl() != null) {
-						Image image = new Image(account.getIconUrl(), 32, 32, false, false, true);
+						Image image = imageCache.get(account.getIconUrl());
 						ImageView imageView = new ImageView(image);
+						imageView.setFitWidth(32);
+						imageView.setFitHeight(32);
 						hBox.getChildren().add(imageView);
 					}
 					

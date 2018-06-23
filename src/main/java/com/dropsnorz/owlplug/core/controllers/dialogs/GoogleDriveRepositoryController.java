@@ -12,6 +12,7 @@ import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
+import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
@@ -35,6 +36,8 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 	private UserAccountDAO userAccountDAO;
 	@Autowired
 	private Preferences prefs;
+	@Autowired
+	private ImageCache imageCache;
 	
 	@FXML
 	private JFXComboBox<AccountItem> accountComboBox;
@@ -71,7 +74,7 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 				}
 		});
 
-		AccountCellFactory cellFactory = new AccountCellFactory();
+		AccountCellFactory cellFactory = new AccountCellFactory(imageCache);
 
 		accountComboBox.setButtonCell(cellFactory.call(null));
 		accountComboBox.setCellFactory(cellFactory);
@@ -141,7 +144,7 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		}
 
 		accountComboBox.getItems().setAll(accounts);
-		AccountCellFactory cellFactory = new AccountCellFactory();
+		AccountCellFactory cellFactory = new AccountCellFactory(imageCache);
 		accountComboBox.setButtonCell(cellFactory.call(null));
 
 

@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import net.sf.ehcache.CacheManager;
 
 
 @SpringBootApplication
@@ -80,6 +81,12 @@ public class App extends Application
 	ServletWebServerFactory servletWebServerFactory(){
 		return new TomcatServletWebServerFactory();
 	}
+	
+	@Bean 
+	CacheManager getCacheManager(){
+		return new CacheManager();
+	}
+
 
 	@Override
 	public void stop() throws Exception {
