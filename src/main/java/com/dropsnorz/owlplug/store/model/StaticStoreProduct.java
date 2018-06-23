@@ -27,4 +27,26 @@ public class StaticStoreProduct extends StoreProduct {
 		this.store = store;
 	}
 
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public PluginStore getStore() {
+		return store;
+	}
+
+
+	public void setStore(PluginStore store) {
+		this.store = store;
+	}
+	
+	
+
 }

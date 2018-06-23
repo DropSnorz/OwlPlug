@@ -23,6 +23,9 @@ import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.services.PluginService;
+import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
+import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
+import com.dropsnorz.owlplug.store.tasks.StoreSyncTask;
 
 import javafx.concurrent.Task;
 
@@ -43,7 +46,10 @@ public class TaskFactory {
 	private RepositoryStrategyResolver repositoryStrategyResolver;
 	@Autowired
 	private PluginsController pluginsController;
-
+	@Autowired
+	private PluginStoreDAO pluginStoreDAO;
+	@Autowired
+	private StoreProductDAO storeProductDAO;
 
 	public TaskExecutionContext createSyncPluginTask() {
 
@@ -110,6 +116,14 @@ public class TaskFactory {
 
 	}
 
+	
+	public TaskExecutionContext createStoreSyncTask() {
+		
+		StoreSyncTask task = new StoreSyncTask(pluginStoreDAO, storeProductDAO);
+		
+		return buildContext(task);
+		
+	}
 	private void bindOnFailHandler(Task task) {
 		task.setOnFailed(e -> {
 			taskManager.triggerOnError();

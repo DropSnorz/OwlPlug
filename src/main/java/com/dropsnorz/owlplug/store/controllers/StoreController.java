@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocView;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
 
@@ -22,9 +23,21 @@ public class StoreController {
 	private StoreService storeService;
 	
 	@FXML
+	private JFXButton syncStoreButton;
+	@FXML
 	private JFXMasonryPane masonryPane;
 	
 	public void initialize() {
+		
+		syncStoreButton.setOnAction(e -> {
+			storeService.syncStores();
+		});
+		
+		refreshView();
+		
+	}
+	
+	public void refreshView() {
 		
 		for(StaticStoreProduct product : storeService.getStoreProducts()) {
 			log.debug("Init bloc view");
@@ -33,7 +46,6 @@ public class StoreController {
 			masonryPane.getChildren().add(rippler);
 
 		}
-		
 	}
 
 }
