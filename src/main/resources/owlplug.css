@@ -179,7 +179,8 @@ JFXTreeView:focused{
 	-fx-background-color: solid-pane-hover-color;
 }
 
-.small-tree-view *.tab *.tab-label{
+.small-tab-pane .tab-label{
+	-fx-font-weight:normal;
 	-fx-font-size: 15px;
 }
 
@@ -196,6 +197,12 @@ JFXListView{
 	-fx-background-color: rgba(66,66,66, 0.7);
 	-fx-padding:10,10,10,10;
 }
+
+.panel-transparent-dark{
+	-fx-background-color: rgba(0,0,0, 0.8);
+	-fx-padding:10,10,10,10;
+}
+
 .panel-transparent Label{
 	-fx-text-fill:white;
 }

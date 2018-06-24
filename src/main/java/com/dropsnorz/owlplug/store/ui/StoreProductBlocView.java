@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXRippler;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -18,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class StoreProductBlocView extends VBox {
 	
@@ -25,7 +27,7 @@ public class StoreProductBlocView extends VBox {
 		super();
 		
 		VBox header = new VBox();
-		header.getStyleClass().add("panel-transparent");
+		header.getStyleClass().add("panel-transparent-dark");
 		header.getChildren().add(new Label(storeProduct.getName()));
 		header.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 		header.setAlignment(Pos.BOTTOM_LEFT);
@@ -35,21 +37,16 @@ public class StoreProductBlocView extends VBox {
 		this.setAlignment(Pos.BOTTOM_LEFT);
 		this.setPrefHeight(getRandomSize() );
 		this.setPrefWidth(getRandomSize() );
-		
-		System.out.println(this.getPrefHeight());
-		System.out.println(this.getPrefWidth());
 
 		this.getChildren().add(new Pane());
-		
-		//this.getStyleClass().add("store-product-bloc");
-				
+						
 		BackgroundImage bgImg = new BackgroundImage(image, 
 			    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
 			    BackgroundPosition.CENTER, 
 			    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
 		
-		
 		this.setBackground(new Background(bgImg));
+		this.setEffect(new InnerShadow(11, Color.BLACK));
 		
 	}
 	

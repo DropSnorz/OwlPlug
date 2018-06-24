@@ -18,7 +18,7 @@
 		</JFXTreeView>
       	</center>
       	<left>
-      		<JFXTabPane fx:id="treeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tree-view" BorderPane.alignment="CENTER">
+      		<JFXTabPane fx:id="treeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
       			<tabs>
       				<Tab fx:id="treeTabAll" text="All" />
       				<Tab fx:id="treeTabDirecctories" text="Directories">

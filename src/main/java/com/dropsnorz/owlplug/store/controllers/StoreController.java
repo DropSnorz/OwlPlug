@@ -13,13 +13,16 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXMasonryPane.LayoutMode;
 import com.jfoenix.controls.JFXRippler;
+import com.jfoenix.controls.JFXScrollPane;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 
 @Controller
 public class StoreController {
-	
+
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
@@ -30,27 +33,35 @@ public class StoreController {
 	private JFXButton syncStoreButton;
 	@FXML
 	private JFXMasonryPane masonryPane;
-	
+	@FXML
+	private ScrollPane scrollPane;
+
 	public void initialize() {
-		
+
 		syncStoreButton.setOnAction(e -> {
 			storeService.syncStores();
 		});
-				
-		refreshView();
-				
-	}
-	
-	public void refreshView() {
-		
-		this.masonryPane.getChildren().clear();
-		
-		for(StaticStoreProduct product : storeService.getStoreProducts()) {
-			Image image = imageCache.get(product.getIconUrl());
-			JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image));			
-			masonryPane.getChildren().add(rippler);
 
-		}
+		refreshView();
+
+	}
+
+	public void refreshView() {
+		this.masonryPane.getChildren().clear();
+
+		//Force the pane to recompute layout for new nodes. Should be replaced by clear clearLayout()
+		// in the next JFoenix releases
+		this.masonryPane.setLayoutMode(LayoutMode.MASONRY);
+
+		Platform.runLater(() ->{
+			for(StaticStoreProduct product : storeService.getStoreProducts()) {
+				Image image = imageCache.get(product.getIconUrl());
+				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image));			
+				masonryPane.getChildren().add(rippler);
+			}
+			Platform.runLater(() ->scrollPane.requestLayout());
+		});
+
 	}
 
 }

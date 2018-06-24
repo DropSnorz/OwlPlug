@@ -18,9 +18,9 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="100.0" prefViewportWidth="200.0" HBox.hgrow="ALWAYS">
+                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" pannable="true" HBox.hgrow="ALWAYS"  vbarPolicy="ALWAYS">
                      <content>
-                        <JFXMasonryPane fx:id="masonryPane" HBox.hgrow="ALWAYS" />
+                        <JFXMasonryPane fx:id="masonryPane" />
                      </content>
                   </ScrollPane>
                </children>
