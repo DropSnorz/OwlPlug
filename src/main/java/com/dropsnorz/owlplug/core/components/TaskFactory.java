@@ -16,7 +16,7 @@ import com.dropsnorz.owlplug.core.engine.tasks.DirectoryRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.PluginRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryTask;
-import com.dropsnorz.owlplug.core.engine.tasks.SyncPluginTask;
+import com.dropsnorz.owlplug.core.engine.tasks.PluginSyncTask;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskExecutionContext;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.model.Plugin;
@@ -45,9 +45,9 @@ public class TaskFactory {
 	private PluginsController pluginsController;
 
 
-	public TaskExecutionContext createSyncPluginTask() {
+	public TaskExecutionContext createPluginSyncTask() {
 
-		SyncPluginTask task = new SyncPluginTask(pluginService, pluginDAO);
+		PluginSyncTask task = new PluginSyncTask(pluginService, pluginDAO);
 		task.setOnSucceeded(e -> {
 			pluginsController.refreshPlugins();
 		});
@@ -70,7 +70,7 @@ public class TaskFactory {
 
 		DirectoryRemoveTask task = new DirectoryRemoveTask(pluginDirectory);
 		task.setOnSucceeded(e -> {
-			createSyncPluginTask().run();
+			createPluginSyncTask().run();
 		});
 
 		return buildContext(task);
@@ -80,7 +80,7 @@ public class TaskFactory {
 
 		RepositoryRemoveTask task = new RepositoryRemoveTask(pluginRepositoryDAO, repository, path);
 		task.setOnSucceeded(e -> {
-			createSyncPluginTask().run();
+			createPluginSyncTask().run();
 		});
 
 		return buildContext(task);
@@ -103,7 +103,7 @@ public class TaskFactory {
 			}
 		};
 		task.setOnSucceeded(e -> {
-			createSyncPluginTask().run();
+			createPluginSyncTask().run();
 		});
 
 		return buildContext(task);
