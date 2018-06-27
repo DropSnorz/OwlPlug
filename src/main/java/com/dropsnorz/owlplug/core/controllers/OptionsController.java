@@ -27,6 +27,8 @@ public class OptionsController {
 	@Autowired
 	private Preferences prefs;
 	@Autowired
+	private ApplicationDefaults applicationDefaults;
+	@Autowired
 	private OptionsService optionsService;
 	@Autowired
 	private DialogController dialogController;
@@ -43,6 +45,8 @@ public class OptionsController {
 	private JFXCheckBox syncPluginsCheckBox;
 	@FXML
 	private JFXButton removeDataButton;
+	@FXML
+	private Label versionLabel;
 
 
 	@FXML
@@ -111,6 +115,8 @@ public class OptionsController {
 				dialog.setContent(layout);
 				dialog.show();
 		});
+		
+		versionLabel.setText("OwlPlug - V" + applicationDefaults.getVersion());
 
 		refreshView();
 	}

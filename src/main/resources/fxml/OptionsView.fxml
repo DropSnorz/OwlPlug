@@ -58,7 +58,7 @@
                         <Label styleClass="heading-1" text="Preferences" />
                         <VBox VBox.vgrow="ALWAYS">
                            <children>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Label styleClass="heading-2" text="General" />
                                     <HBox>
@@ -70,13 +70,29 @@
                                        </VBox.margin>
                                     </HBox>
                                  </children></VBox>
-                              <VBox VBox.vgrow="NEVER">
+                              <VBox VBox.vgrow="ALWAYS">
                                  <children>
                                     <Label styleClass="heading-2" text="Danger Zone" />
                                     <HBox spacing="5.0">
                                        <children>
                                           <JFXButton fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" text="Clear user data" HBox.hgrow="SOMETIMES" />
                                           <Label text="Remove all user data including accounts, repositories and custom settings" wrapText="true" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox layoutX="10.0" layoutY="145.0">
+                                 <children>
+                                    <Label styleClass="heading-2" text="About" />
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Label fx:id="versionLabel" text="Remove all user data including accounts, repositories and custom settings" wrapText="true" HBox.hgrow="ALWAYS" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="10.0" />
