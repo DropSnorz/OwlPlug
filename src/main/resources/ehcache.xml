@@ -3,7 +3,7 @@
 	monitoring="autodetect" dynamicConfig="true">
 
 	<!-- By default, Ehcache stored the cached files in temp folder. -->
-	<!-- <diskStore path="java.io.tmpdir" /> -->
+	<diskStore path="user.home/.owlplug/cache" />
 
 	<cache name="image-cache" 
 		maxEntriesLocalHeap="75"
