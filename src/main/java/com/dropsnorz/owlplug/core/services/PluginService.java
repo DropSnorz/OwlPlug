@@ -34,7 +34,7 @@ public class PluginService {
 
 
 	public void syncPlugins() {
-		taskFactory.createSyncPluginTask().run();
+		taskFactory.createPluginSyncTask().run();
 	}
 
 	public void removePlugin(Plugin plugin) {

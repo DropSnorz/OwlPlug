@@ -115,6 +115,12 @@ public class AccountController extends AbstractDialog {
 		closeButton.setOnAction(event -> {
 				close();
 		});
+		
+		// Do not compute layout for invisible nodes
+		buttonPane.managedProperty().bind(buttonPane.visibleProperty());
+		authProgressIndicator.managedProperty().bind(authProgressIndicator.visibleProperty());
+		messageLabel.managedProperty().bind(messageLabel.visibleProperty());
+
 	}
 	
 	@Override

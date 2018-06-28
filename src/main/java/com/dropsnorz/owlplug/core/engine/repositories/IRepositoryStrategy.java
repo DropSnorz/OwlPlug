@@ -1,7 +1,5 @@
 package com.dropsnorz.owlplug.core.engine.repositories;
 
-import java.io.IOException;
-
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 
 public interface IRepositoryStrategy {

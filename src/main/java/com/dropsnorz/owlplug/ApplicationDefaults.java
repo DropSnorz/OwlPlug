@@ -1,5 +1,9 @@
 package com.dropsnorz.owlplug;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.dropsnorz.owlplug.core.model.OSType;
@@ -10,6 +14,9 @@ import javafx.scene.image.Image;
 
 @Component
 public class ApplicationDefaults {
+	
+	@Autowired
+	private Environment env;
 
 	private OSType platform;
 
@@ -47,6 +54,10 @@ public class ApplicationDefaults {
 		case VST3: return vst3Image;
 		default: return vst2Image;
 		}
+	}
+	
+	public String getVersion() {
+		return env.getProperty("owlplug.version");
 	}
 	
 	public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";

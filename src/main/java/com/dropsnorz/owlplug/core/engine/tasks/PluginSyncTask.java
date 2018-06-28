@@ -7,12 +7,12 @@ import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.services.PluginService;
 
 
-public class SyncPluginTask extends AbstractTask{
+public class PluginSyncTask extends AbstractTask{
 
 	protected PluginService pluginService;
 	protected PluginDAO pluginDAO;
 
-	public SyncPluginTask(PluginService pluginService, PluginDAO pluginDAO) {
+	public PluginSyncTask(PluginService pluginService, PluginDAO pluginDAO) {
 		this.pluginService = pluginService;
 		this.pluginDAO = pluginDAO;
 	}
