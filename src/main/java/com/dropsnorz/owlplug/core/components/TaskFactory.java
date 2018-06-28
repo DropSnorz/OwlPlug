@@ -9,6 +9,7 @@ import com.dropsnorz.owlplug.core.controllers.PluginsController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
+import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyException;
 import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyResolver;
 import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
@@ -16,6 +17,7 @@ import com.dropsnorz.owlplug.core.engine.tasks.DirectoryRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.PluginRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryTask;
+import com.dropsnorz.owlplug.core.engine.tasks.TaskException;
 import com.dropsnorz.owlplug.core.engine.tasks.PluginSyncTask;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskExecutionContext;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
@@ -62,6 +64,7 @@ public class TaskFactory {
 		task.setOnSucceeded(e -> {
 			pluginsController.refreshPlugins();
 		});
+		bindOnFailHandler(task);
 
 		return buildContext(task);
 	}
@@ -72,6 +75,7 @@ public class TaskFactory {
 		task.setOnSucceeded(e -> {
 			createPluginSyncTask().run();
 		});
+		bindOnFailHandler(task);
 
 		return buildContext(task);
 	}
@@ -82,7 +86,7 @@ public class TaskFactory {
 		task.setOnSucceeded(e -> {
 			createPluginSyncTask().run();
 		});
-
+		bindOnFailHandler(task);
 		return buildContext(task);
 	}
 
@@ -96,16 +100,24 @@ public class TaskFactory {
 			protected TaskResult call() throws Exception {
 
 				this.updateProgress(0, 1);
-				strategy.execute(repository, parameters);
-				this.updateProgress(1, 1);
+				
+				try {
+					strategy.execute(repository, parameters);
+					this.updateProgress(1, 1);
 
-				return null;
+				} catch (RepositoryStrategyException e) {
+					
+					this.updateMessage(e.getMessage());
+					this.updateProgress(1, 1);
+					throw new TaskException(e);
+				}
+				return success();
 			}
 		};
 		task.setOnSucceeded(e -> {
 			createPluginSyncTask().run();
 		});
-
+		bindOnFailHandler(task);
 		return buildContext(task);
 
 	}
