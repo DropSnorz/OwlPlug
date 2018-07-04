@@ -2,11 +2,14 @@ package com.dropsnorz.owlplug.store.ui;
 
 import java.util.Random;
 
+import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.jfoenix.controls.JFXRippler;
 
 import javafx.geometry.Pos;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -23,8 +26,12 @@ import javafx.scene.paint.Color;
 
 public class StoreProductBlocView extends VBox {
 	
-	public StoreProductBlocView(StoreProduct storeProduct, Image image) {
+	private StoreController parentController;
+	
+	public StoreProductBlocView(StoreProduct storeProduct, Image image, StoreController parentController) {
 		super();
+		
+		this.parentController = parentController;
 		
 		VBox header = new VBox();
 		header.getStyleClass().add("panel-transparent-dark");
@@ -47,6 +54,22 @@ public class StoreProductBlocView extends VBox {
 		
 		this.setBackground(new Background(bgImg));
 		this.setEffect(new InnerShadow(11, Color.BLACK));
+		
+		// Create ContextMenu
+        ContextMenu contextMenu = new ContextMenu();
+ 
+        MenuItem menuItem = new MenuItem("Install...");
+        menuItem.setOnAction(e -> {
+        	parentController.installProduct(storeProduct);
+        });
+        
+        
+        contextMenu.getItems().add(menuItem);
+        this.setOnContextMenuRequested(e -> {
+ 
+                contextMenu.show(this, e.getScreenX(), e.getScreenY());
+        });
+        
 		
 	}
 	

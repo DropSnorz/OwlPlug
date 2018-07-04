@@ -1,5 +1,7 @@
 package com.dropsnorz.owlplug.store.controllers;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
+import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocView;
 import com.jfoenix.controls.JFXButton;
@@ -19,6 +22,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
 
 @Controller
 public class StoreController {
@@ -56,12 +61,26 @@ public class StoreController {
 		Platform.runLater(() ->{
 			for(StaticStoreProduct product : storeService.getStoreProducts()) {
 				Image image = imageCache.get(product.getIconUrl());
-				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image));			
+				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
 				masonryPane.getChildren().add(rippler);
 			}
 			Platform.runLater(() ->scrollPane.requestLayout());
 		});
 
+	}
+	
+	public void installProduct(StoreProduct product) {
+		
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		Window mainWindow = masonryPane.getScene().getWindow();
+
+		File selectedDirectory = directoryChooser.showDialog(mainWindow);
+
+		if(selectedDirectory != null){
+			storeService.install(product, selectedDirectory);
+
+		}
+		
 	}
 
 }

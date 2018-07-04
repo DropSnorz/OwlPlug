@@ -1,5 +1,7 @@
 package com.dropsnorz.owlplug;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.Plugin;
+import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.core.utils.OSValidator;
 
 import javafx.scene.image.Image;
@@ -58,6 +61,11 @@ public class ApplicationDefaults {
 	
 	public String getVersion() {
 		return env.getProperty("owlplug.version");
+	}
+	
+	public String getUserDataDirectory() {
+		return FileUtils.convertPath(System.getProperty("user.home") + File.separator + ".owlplug");
+		
 	}
 	
 	public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
