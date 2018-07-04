@@ -15,8 +15,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FileUtils {
 	
+	private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
+
 	private FileUtils() {}
 
 	public static String convertPath(String path) {
@@ -48,7 +53,7 @@ public class FileUtils {
                 //If directory then create a new directory in uncompressed folder
                 if (entry.isDirectory())
                 {
-                    System.out.println("Creating Directory:" + uncompressedDirectory + File.separator + entry.getName());
+                    log.debug("Creating Directory:" + uncompressedDirectory + File.separator + entry.getName());
                     Files.createDirectories(fileSystem.getPath(uncompressedDirectory + File.separator + entry.getName()));
                 }
                 //Else create the file

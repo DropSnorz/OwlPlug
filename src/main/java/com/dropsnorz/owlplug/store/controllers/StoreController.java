@@ -1,12 +1,14 @@
 package com.dropsnorz.owlplug.store.controllers;
 
 import java.io.File;
+import java.util.prefs.Preferences;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
@@ -30,6 +32,8 @@ public class StoreController {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	private Preferences prefs;
 	@Autowired
 	private StoreService storeService;
 	@Autowired
@@ -71,7 +75,12 @@ public class StoreController {
 	
 	public void installProduct(StoreProduct product) {
 		
-		DirectoryChooser directoryChooser = new DirectoryChooser();
+		DirectoryChooser directoryChooser = new DirectoryChooser();;
+		
+		if(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
+			directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
+		}
+		
 		Window mainWindow = masonryPane.getScene().getWindow();
 
 		File selectedDirectory = directoryChooser.showDialog(mainWindow);

@@ -1,10 +1,13 @@
 package com.dropsnorz.owlplug.core.components;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.PluginsController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
@@ -27,6 +30,8 @@ import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.services.PluginService;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
+import com.dropsnorz.owlplug.store.model.StoreProduct;
+import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
 import com.dropsnorz.owlplug.store.tasks.StoreSyncTask;
 
 import javafx.concurrent.Task;
@@ -36,6 +41,8 @@ public class TaskFactory {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	private ApplicationDefaults applicationDefaults;
 	@Autowired
 	private PluginService pluginService;
 	@Autowired
@@ -132,11 +139,20 @@ public class TaskFactory {
 	public TaskExecutionContext createStoreSyncTask() {
 		
 		StoreSyncTask task = new StoreSyncTask(pluginStoreDAO, storeProductDAO);
-		
 		return buildContext(task);
 		
 	}
-	private void bindOnFailHandler(Task task) {
+	
+	
+	public TaskExecutionContext createProductInstallTask(StoreProduct product, File targetDirectory) {
+		
+		ProductInstallTask task = new ProductInstallTask(product, targetDirectory, applicationDefaults);
+		return buildContext(task);
+		
+	}
+	
+	
+	private void bindOnFailHandler(AbstractTask task) {
 		task.setOnFailed(e -> {
 			taskManager.triggerOnError();
 		});

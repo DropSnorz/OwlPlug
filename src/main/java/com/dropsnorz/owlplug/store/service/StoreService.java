@@ -13,7 +13,6 @@ import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
-import com.dropsnorz.owlplug.store.engine.StoreProductInstaller;
 import com.dropsnorz.owlplug.store.model.PluginStore;
 import com.dropsnorz.owlplug.store.model.StaticPluginStore;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
@@ -30,8 +29,6 @@ public class StoreService {
 	private StoreProductDAO storeProductDAO;
 	@Autowired
 	private StoreController storeController;
-	@Autowired
-	private StoreProductInstaller productInstaller;
 
 	StoreService(){
 
@@ -65,7 +62,7 @@ public class StoreService {
 	
 	public void install(StoreProduct product, File targetDirectory) {
 		
-		productInstaller.install(product, targetDirectory);
+		taskFactory.createProductInstallTask(product, targetDirectory).run();
 	}
 
 
