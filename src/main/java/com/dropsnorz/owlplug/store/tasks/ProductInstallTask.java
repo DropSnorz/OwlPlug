@@ -80,6 +80,8 @@ public class ProductInstallTask extends AbstractTask {
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			FileOutputStream fos = new FileOutputStream(outputFile);
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			
+			fos.close();
 
 			return outputFile;
 
@@ -99,8 +101,43 @@ public class ProductInstallTask extends AbstractTask {
 
 	private void installToPluginDirectory(File source, File target) throws IOException {
 
-		FileUtils.copyDirectory(source, target);
+		OwlPackStructureType structure = getStructureType(source);
+		
+		File newSource = null;
+		
+		switch(structure) {
+		case NESTED: newSource = source.listFiles()[0]; break;
+		case NESTED_ENV: newSource = getSubfileByName(source.listFiles()[0], applicationDefaults.getPlatform().getCode()); break;
+		default: break;
+		}
+		
+		if(newSource != null) {
+			FileUtils.copyDirectory(newSource, target);
 
+		}else {
+			FileUtils.copyDirectory(source, target);
+		}
+
+	}
+	
+	
+	private OwlPackStructureType getStructureType(File directory) {
+		
+		OwlPackStructureType structure = OwlPackStructureType.DIRECT;
+		
+		if(directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory()) {
+			structure = OwlPackStructureType.NESTED;
+			
+			for(File f : directory.listFiles()[0].listFiles()) {
+				if(f.getName().equals("win") || f.getName().equals("osx")) {
+					structure = OwlPackStructureType.NESTED_ENV;
+				}
+			}
+			
+		}
+		
+		
+		return structure;
 	}
 
 	private File getSubfileByName(File parent, String filename) {
@@ -111,6 +148,12 @@ public class ProductInstallTask extends AbstractTask {
 		}
 
 		return null;
+	}
+	
+	private enum OwlPackStructureType {
+		DIRECT,
+		NESTED,
+		NESTED_ENV,
 	}
 	
 }
