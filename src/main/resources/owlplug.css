@@ -242,6 +242,22 @@ ProgressIndicator{
 	-fx-background-color: rgba(66,66,66, 0.7);
 }
 
+
+.context-menu {
+  -fx-background-color: solid-pane-color;
+  -fx-text-fill: white;
+}
+
+.context-menu .menu-item:focused {
+  -fx-background-color: solid-pane-hover-color;
+}
+
+.context-menu .menu-item .label {
+  -fx-text-fill: white;
+}
+
+
+
 .scroll-pane{
  -fx-background-color: transparent;
 }
