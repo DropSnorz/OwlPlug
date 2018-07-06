@@ -56,8 +56,8 @@ public class StoreService {
 		return storeProductDAO.findAll();
 	}
 
-	public List<StoreProduct> getStoreProducts(String query) {
-		return new ArrayList<StoreProduct>();
+	public Iterable<StaticStoreProduct> getStoreProducts(String query) {
+		return storeProductDAO.findByNameContainingIgnoreCase(query);
 	}
 	
 	public void install(StoreProduct product, File targetDirectory) {

@@ -6,5 +6,7 @@ import com.dropsnorz.owlplug.store.model.PluginStore;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 
 public interface StoreProductDAO extends CrudRepository<StaticStoreProduct, Long> {
+	
+    public Iterable<StaticStoreProduct> findByNameContainingIgnoreCase(String name);
 
 }

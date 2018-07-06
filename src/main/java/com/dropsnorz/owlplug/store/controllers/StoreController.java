@@ -19,6 +19,7 @@ import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXMasonryPane.LayoutMode;
 import com.jfoenix.controls.JFXRippler;
 import com.jfoenix.controls.JFXScrollPane;
+import com.jfoenix.controls.JFXTextField;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -39,6 +40,8 @@ public class StoreController {
 	@Autowired
 	private ImageCache imageCache;
 	@FXML
+	private JFXTextField storeSearchTextField;
+	@FXML
 	private JFXButton syncStoreButton;
 	@FXML
 	private JFXMasonryPane masonryPane;
@@ -50,12 +53,17 @@ public class StoreController {
 		syncStoreButton.setOnAction(e -> {
 			storeService.syncStores();
 		});
+		
+		
+		storeSearchTextField.textProperty().addListener((obs, oldValue, newValue)->{
+			refreshView();
+		});
 
 		refreshView();
 
 	}
 
-	public void refreshView() {
+	public synchronized void refreshView() {
 		this.masonryPane.getChildren().clear();
 
 		//Force the pane to recompute layout for new nodes. Should be replaced by clear clearLayout()
@@ -63,12 +71,15 @@ public class StoreController {
 		this.masonryPane.setLayoutMode(LayoutMode.MASONRY);
 
 		Platform.runLater(() ->{
-			for(StaticStoreProduct product : storeService.getStoreProducts()) {
+			for(StaticStoreProduct product : storeService.getStoreProducts(storeSearchTextField.getText())) {
 				Image image = imageCache.get(product.getIconUrl());
 				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
 				masonryPane.getChildren().add(rippler);
 			}
-			Platform.runLater(() ->scrollPane.requestLayout());
+			
+			this.masonryPane.setLayoutMode(LayoutMode.MASONRY);
+
+			Platform.runLater(() -> {masonryPane.requestLayout(); scrollPane.requestLayout();});
 		});
 
 	}

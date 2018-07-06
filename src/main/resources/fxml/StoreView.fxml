@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import com.jfoenix.controls.*?>
@@ -10,15 +11,33 @@
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox spacing="20.0" styleClass="panel-transparent">
+            <HBox alignment="BASELINE_LEFT" spacing="10.0">
                <children>
-                  <Label text="Stores is a WIP feature" />
-                  <JFXButton fx:id="syncStoreButton" text="Sync" />
+                  <JFXButton fx:id="storesButton" buttonType="RAISED" text="Stores">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/bag-white-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <JFXTextField fx:id="storeSearchTextField" prefHeight="25.0" prefWidth="300.0" promptText="Search" />
+                  <HBox prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Label text="Stores are a WIP feature" />
+                  <JFXButton fx:id="syncStoreButton" buttonType="RAISED" text="Sync">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/refresh-white-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" pannable="true" HBox.hgrow="ALWAYS"  vbarPolicy="ALWAYS">
+                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" pannable="true" vbarPolicy="ALWAYS" HBox.hgrow="ALWAYS">
                      <content>
                         <JFXMasonryPane fx:id="masonryPane" />
                      </content>
