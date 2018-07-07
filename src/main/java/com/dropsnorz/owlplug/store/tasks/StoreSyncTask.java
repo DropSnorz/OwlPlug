@@ -37,7 +37,6 @@ public class StoreSyncTask extends AbstractTask {
 	}
 
 
-
 	@Override
 	protected TaskResult call() throws Exception {
 
@@ -74,6 +73,11 @@ public class StoreSyncTask extends AbstractTask {
 					response.close();
 				}
 			}
+
+		}
+		catch(Exception e) {
+			log.error("Error accessing store. Check your network connectivity");
+			throw new TaskException(e);
 
 		}
 

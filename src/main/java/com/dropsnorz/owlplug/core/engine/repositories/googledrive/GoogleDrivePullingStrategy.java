@@ -41,14 +41,15 @@ public class GoogleDrivePullingStrategy implements IRepositoryStrategy {
 		File targetDir = new File(parameters.get("target-dir"));
 
 		if (!targetDir.exists() && !targetDir.mkdirs()) {
-			throw new RepositoryStrategyException("Unable to create parent directory");
+			throw new RepositoryStrategyException("Pulling repository " + repository.getName()+ " - Unable to create parent directory");
 		}
 		
 		String safeFolderId = parameters.get("target-dir").replaceAll("/[^A-Za-z0-9]/", "");
 		try {
 			downloadFolder(drive, safeFolderId, googleDriveRepository.getRemoteRessourceId());
 		} catch (IOException e) {
-			throw new RepositoryStrategyException("Can't download Google drive remote folder");
+			throw new RepositoryStrategyException("Repository " + repository.getName()+ " - Unable to acces google drive folder. Check you network connectivity or access rights.");
+
 		}
 
 	}

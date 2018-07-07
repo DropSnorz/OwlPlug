@@ -15,6 +15,7 @@ import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
+import com.dropsnorz.owlplug.core.controllers.PluginsController;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
@@ -34,6 +35,8 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 	private PluginRepositoryService pluginRepositoryService;
 	@Autowired
 	private UserAccountDAO userAccountDAO;
+	@Autowired
+	private PluginsController pluginController;
 	@Autowired
 	private Preferences prefs;
 	@Autowired
@@ -72,6 +75,8 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 				else {
 					createRepository();
 				}
+				pluginController.refreshPlugins();
+
 		});
 
 		AccountCellFactory cellFactory = new AccountCellFactory(imageCache);

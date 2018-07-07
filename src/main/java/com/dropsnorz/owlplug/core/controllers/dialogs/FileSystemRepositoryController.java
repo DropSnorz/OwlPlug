@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
+import com.dropsnorz.owlplug.core.controllers.PluginsController;
 import com.dropsnorz.owlplug.core.model.FileSystemRepository;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
@@ -24,7 +25,8 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 
 	@Autowired
 	private PluginRepositoryService pluginRepositoryService;
-
+	@Autowired
+	private PluginsController pluginController;
 	@Autowired
 	private LazyViewRegistry viewRegistry;
 
@@ -67,6 +69,7 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 			else {
 				createRepository();
 			}
+			pluginController.refreshPlugins();
 		});
 
 		browseDirectoryButton.setOnAction(e -> {

@@ -29,7 +29,7 @@ public class FileSystemRepositoryPullingStrategy implements IRepositoryStrategy 
 			FileUtils.copyDirectory(sourceDir, targetDir);
 		} catch (IOException e) {
 			
-			throw new RepositoryStrategyException("Error during file pulling for reposotry " +  fileSystemRepository.getName(), e);
+			throw new RepositoryStrategyException("Pulling repository " + fileSystemRepository.getName() + " - Error during file pulling", e);
 		}
 		
 	}
