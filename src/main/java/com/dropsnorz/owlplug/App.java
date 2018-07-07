@@ -29,9 +29,6 @@ public class App extends Application
 	private ConfigurableApplicationContext context;
 	private Parent rootNode;
 	
-	@Autowired
-	private ApplicationDefaults applicationDefaults;
-	
 
 	@Override
 	public void init() throws Exception {

@@ -15,6 +15,8 @@ public class PluginSyncTask extends AbstractTask{
 	public PluginSyncTask(PluginService pluginService, PluginDAO pluginDAO) {
 		this.pluginService = pluginService;
 		this.pluginDAO = pluginDAO;
+		
+		setName("Sync Plugins");
 	}
 
 

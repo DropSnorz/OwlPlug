@@ -16,6 +16,8 @@ public class PluginRemoveTask extends AbstractTask {
 		
 		this.plugin = plugin;
 		this.pluginDAO = pluginDAO;
+		
+		setName("Remove Plugin - " + plugin.getName());
 	}
 	
 	@Override

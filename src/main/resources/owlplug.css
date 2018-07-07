@@ -213,6 +213,11 @@ JFXListView{
     -jfx-rippler-fill: theme-secondary-color;
 }
 
+.jfx-popup,
+.jfx-popup .jfx-popup-container,
+.jfx-popup .jfx-list-view{
+    -fx-background-color:solid-pane-color;
+}
 .progress-bar-error > .bar {
     -fx-background-color: red;
 }

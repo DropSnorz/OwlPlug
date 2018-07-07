@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.core.components;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -32,16 +33,19 @@ public class TaskRunner {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	TaskBarController taskBarController;
+	private TaskBarController taskBarController;
 	
-	AsyncListenableTaskExecutor  exec;
+	private AsyncListenableTaskExecutor  exec;
 	private CopyOnWriteArrayList<AbstractTask> pendingTasks;
 	private AbstractTask currentTask= null;
+	
+	private ArrayList<AbstractTask> taskHistory;
 
 	TaskRunner(){
 		
 		exec = new SimpleAsyncTaskExecutor();
 		pendingTasks = new CopyOnWriteArrayList<AbstractTask>();
+		taskHistory = new ArrayList<AbstractTask>();
 		
 	}
 
@@ -49,6 +53,7 @@ public class TaskRunner {
 
 		log.debug("Task submited to queue - {} ", task.getClass().getName());
 		pendingTasks.add(task);
+		addInTaskHistory(task);
 		refresh(false);
 		
 	}
@@ -97,11 +102,22 @@ public class TaskRunner {
 				}});
 		}
 	}
+	
+	private void addInTaskHistory(AbstractTask task) {
+		if(taskHistory.size() >= 10) {
+			taskHistory.remove(0);
+		}
+		taskHistory.add(task);
+	}
 
 	public List<AbstractTask> getPendingTasks() {
 		return Collections.unmodifiableList(pendingTasks);
 	}
 	
+	public List<AbstractTask> getTaskHistory() {
+		return Collections.unmodifiableList(taskHistory);
+	}
+
 	public void triggerOnError() {
 		taskBarController.taskProgressBar.getStyleClass().add("progress-bar-error");
 
