@@ -24,6 +24,7 @@ public class ApplicationDefaults {
 	public static final String REPOSITORY_FOLDER_NAME = "repositories";
 	public static final String DEFAULT_REPOSITORY_DIRECTORY = "C:/VST";
 
+	public static final Image owlplugLogo = new Image(ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo.png"));
 	public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
 	public final Image vst2Image  = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
 	public final Image vst3Image  = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
