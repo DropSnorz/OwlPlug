@@ -179,8 +179,9 @@ JFXTreeView:focused{
 	-fx-background-color: solid-pane-hover-color;
 }
 
-.small-tree-view *.tab *.tab-label{
+.small-tab-pane *.tab *.tab-label{
 	-fx-font-size: 15px;
+	-fx-font-weight: normal;
 }
 
 JFXListView{
