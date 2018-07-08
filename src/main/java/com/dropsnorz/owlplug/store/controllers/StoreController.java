@@ -65,22 +65,16 @@ public class StoreController {
 
 	public synchronized void refreshView() {
 		this.masonryPane.getChildren().clear();
+		this.masonryPane.clearLayout();
 
-		//Force the pane to recompute layout for new nodes. Should be replaced by clear clearLayout()
-		// in the next JFoenix releases
-		this.masonryPane.setLayoutMode(LayoutMode.MASONRY);
-
-		Platform.runLater(() ->{
 			for(StaticStoreProduct product : storeService.getStoreProducts(storeSearchTextField.getText())) {
 				Image image = imageCache.get(product.getIconUrl());
 				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
 				masonryPane.getChildren().add(rippler);
 			}
 			
-			this.masonryPane.setLayoutMode(LayoutMode.MASONRY);
-
-			Platform.runLater(() -> {masonryPane.requestLayout(); scrollPane.requestLayout();});
-		});
+			
+			Platform.runLater(() -> {scrollPane.requestLayout();});
 
 	}
 	
@@ -93,7 +87,6 @@ public class StoreController {
 		}
 		
 		Window mainWindow = masonryPane.getScene().getWindow();
-
 		File selectedDirectory = directoryChooser.showDialog(mainWindow);
 
 		if(selectedDirectory != null){

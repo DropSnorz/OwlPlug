@@ -28,6 +28,7 @@ import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.services.PluginService;
+import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
@@ -59,6 +60,8 @@ public class TaskFactory {
 	private PluginStoreDAO pluginStoreDAO;
 	@Autowired
 	private StoreProductDAO storeProductDAO;
+	@Autowired 
+	private StoreController storeController;
 
 	public TaskExecutionContext createPluginSyncTask() {
 
@@ -140,6 +143,9 @@ public class TaskFactory {
 	public TaskExecutionContext createStoreSyncTask() {
 		
 		StoreSyncTask task = new StoreSyncTask(pluginStoreDAO, storeProductDAO);
+		task.setOnSucceeded(e ->{
+			storeController.refreshView();
+		});
 		return buildContext(task);
 		
 	}

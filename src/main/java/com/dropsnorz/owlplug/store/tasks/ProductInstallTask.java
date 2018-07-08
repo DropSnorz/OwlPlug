@@ -29,6 +29,7 @@ public class ProductInstallTask extends AbstractTask {
 		this.product = product;
 		this.targetDirectory = targetDirectory;
 		this.applicationDefaults = applicationDefaults;
+		setName("Install plugin - " + product.getName());
 	}
 	
 	
@@ -37,20 +38,20 @@ public class ProductInstallTask extends AbstractTask {
 		
 		try {
 			this.updateProgress(1, 5);
-			this.updateMessage("Installing plugin " + product.getName() + ": Downloading files...");
+			this.updateMessage("Installing plugin " + product.getName() + " - Downloading files...");
 			File tempFile = downloadInTempDirectory(product);
 			
 			this.updateProgress(2, 5);
-			this.updateMessage("Installing plugin " + product.getName() + ": Extracting files...");
+			this.updateMessage("Installing plugin " + product.getName() + " - Extracting files...");
 			File tempFolder = new File(applicationDefaults.getUserDataDirectory() + "/" + "temp-" + tempFile.getName().replace(".owlpack", ""));
 			FileUtils.unzip(tempFile.getAbsolutePath(),  tempFolder.getAbsolutePath());
 
 			this.updateProgress(3, 5);
-			this.updateMessage("Installing plugin " + product.getName() + ": Moving files...");
+			this.updateMessage("Installing plugin " + product.getName() + " - Moving files...");
 			installToPluginDirectory(tempFolder, targetDirectory);
 			
 			this.updateProgress(4, 5);
-			this.updateMessage("Installing plugin " + product.getName() + ": Cleaning files...");
+			this.updateMessage("Installing plugin " + product.getName() + " - Cleaning files...");
 			tempFile.delete();
 			tempFolder.delete();
 			

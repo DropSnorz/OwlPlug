@@ -37,7 +37,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" pannable="true" vbarPolicy="ALWAYS" HBox.hgrow="ALWAYS">
+                  <ScrollPane fx:id="scrollPane" fitToHeight="false" fitToWidth="true" pannable="true" HBox.hgrow="ALWAYS">
                      <content>
                         <JFXMasonryPane fx:id="masonryPane" />
                      </content>

@@ -30,25 +30,24 @@ public class StoreService {
 	@Autowired
 	private StoreController storeController;
 
-	StoreService(){
-
-	}
 
 	@PostConstruct
 	private void init() {
-		storeProductDAO.deleteAll();
-		pluginStoreDAO.deleteAll();
-		PluginStore store = new StaticPluginStore();
-		store.setName("OwlPlug Central");
-		store.setUrl("http://owlplug.dropsnorz.com/store/store.json");
-		pluginStoreDAO.save(store);
+		
+		if(pluginStoreDAO.findByName("OwlPlug Central") == null) {
+			
+			PluginStore store = new StaticPluginStore();
+			store.setName("OwlPlug Central");
+			store.setUrl("http://owlplug.dropsnorz.com/store/store.json");
+			pluginStoreDAO.save(store);
+			
+		}	
 
 	}
 
 	public void syncStores() {
 
-		taskFactory.createStoreSyncTask().getTask().run();
-		storeController.refreshView();
+		taskFactory.createStoreSyncTask().run();
 
 	}
 

@@ -34,13 +34,19 @@ public class StoreSyncTask extends AbstractTask {
 		super();
 		this.pluginStoreDAO = pluginStoreDAO;
 		this.storeProductDAO = storeProductDAO;
+		setName("Sync plugin stores");
 	}
 
 
 	@Override
 	protected TaskResult call() throws Exception {
+		
+		this.updateProgress(0, 2);
+		this.updateMessage("Sync plugins stores");
 
 		storeProductDAO.deleteAll();
+		
+		this.updateProgress(1, 2);
 
 		try(CloseableHttpClient httpclient = HttpClients.createDefault()){
 
@@ -73,9 +79,16 @@ public class StoreSyncTask extends AbstractTask {
 					response.close();
 				}
 			}
+			
+			this.updateProgress(2, 2);
+			this.updateMessage("Plugin stores synced.");
+
+
 
 		}
 		catch(Exception e) {
+			this.updateProgress(1, 2);
+			this.updateMessage("Error accessing store. Check your network connectivity");
 			log.error("Error accessing store. Check your network connectivity");
 			throw new TaskException(e);
 
