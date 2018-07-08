@@ -8,12 +8,12 @@
 	<cache name="image-cache" 
 		maxEntriesLocalHeap="75"
 		maxEntriesLocalDisk="300" 
-		eternal="false" 
+		eternal="true" 
 		diskSpoolBufferSizeMB="20"
 		timeToIdleSeconds="300" timeToLiveSeconds="600"
 		memoryStoreEvictionPolicy="LFU" 
-		transactionalMode="off">
-		<persistence strategy="localTempSwap" />
+		transactionalMode="off"
+		diskPersistent="true">
 	</cache>
 
 </ehcache>

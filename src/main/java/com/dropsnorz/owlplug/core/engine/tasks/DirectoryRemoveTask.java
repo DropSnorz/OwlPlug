@@ -13,6 +13,7 @@ public class DirectoryRemoveTask extends AbstractTask {
 	public DirectoryRemoveTask(PluginDirectory pluginDirectory){
 
 		this.pluginDirectory = pluginDirectory;
+		setName("Remove directory");
 	}
 
 	@Override

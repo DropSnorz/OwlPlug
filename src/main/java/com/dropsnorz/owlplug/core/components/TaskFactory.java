@@ -131,6 +131,7 @@ public class TaskFactory {
 			createPluginSyncTask().run();
 		});
 		bindOnFailHandler(task);
+		task.setName(parameters.get("task-name"));
 		return buildContext(task);
 
 	}

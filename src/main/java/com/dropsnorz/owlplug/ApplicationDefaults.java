@@ -27,11 +27,18 @@ public class ApplicationDefaults {
 	public static final String REPOSITORY_FOLDER_NAME = "repositories";
 	public static final String DEFAULT_REPOSITORY_DIRECTORY = "C:/VST";
 
+	public static final Image owlplugLogo = new Image(ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo.png"));
 	public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
 	public final Image vst2Image  = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
 	public final Image vst3Image  = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
 	public final Image repositoryImage  = new Image(getClass().getResourceAsStream("/icons/box-yellow-16.png"));
+	public final Image taskPendingImage = new Image(getClass().getResourceAsStream("/icons/loading-grey-16.png"));
+	public final Image taskSuccessImage = new Image(getClass().getResourceAsStream("/icons/check-green-16.png"));
+	public final Image taskFailImage = new Image(getClass().getResourceAsStream("/icons/cross-red-16.png"));
+	public final Image taskRunningImage = new Image(getClass().getResourceAsStream("/icons/play-green-16.png"));
+
 	public final Image pluginPlaceholder = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));
+
 
 	public ApplicationDefaults() {
 		if(OSValidator.isWindows()) {

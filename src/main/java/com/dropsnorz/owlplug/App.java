@@ -3,6 +3,7 @@ package com.dropsnorz.owlplug;
 import java.util.prefs.Preferences;
 
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -16,6 +17,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import net.sf.ehcache.CacheManager;
 
@@ -26,6 +28,7 @@ public class App extends Application
 
 	private ConfigurableApplicationContext context;
 	private Parent rootNode;
+	
 
 	@Override
 	public void init() throws Exception {
@@ -59,6 +62,9 @@ public class App extends Application
 		Scene scene = new Scene(rootNode, width, height);
 		String css = App.class.getResource("/owlplug.css").toExternalForm();
 		scene.getStylesheets().add(css);
+		
+		primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
+		primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
 
 		primaryStage.setScene(scene);
 		primaryStage.setHeight(height);
@@ -66,6 +72,8 @@ public class App extends Application
 		primaryStage.setMinHeight(height);
 		primaryStage.setMinWidth(width);
 		primaryStage.centerOnScreen();
+		
+
 		primaryStage.show();
 
 

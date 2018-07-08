@@ -47,7 +47,6 @@ public class PluginRepositoryService {
 			return true;
 
 		}
-
 		return false;
 
 	}
@@ -62,6 +61,7 @@ public class PluginRepositoryService {
 		parameters.setRepositoryAction(RepositoryAction.PULL);
 
 		parameters.put("target-dir", getLocalRepositoryPath(repository));
+		parameters.put("task-name", "Pull repository - " + repository.getName());
 
 		if(repository instanceof GoogleDriveRepository) {
 

@@ -17,6 +17,8 @@ public class RepositoryRemoveTask  extends AbstractTask {
 		this.repositoryDAO = repositoryDAO;
 		this.repository = repository;
 		this.localPath = localPath;
+		
+		setName("Remove repository - " + repository.getName());
 	}
 	
 	@Override

@@ -179,9 +179,9 @@ JFXTreeView:focused{
 	-fx-background-color: solid-pane-hover-color;
 }
 
-.small-tab-pane .tab-label{
-	-fx-font-weight:normal;
+.small-tab-pane *.tab *.tab-label{
 	-fx-font-size: 15px;
+	-fx-font-weight: normal;
 }
 
 JFXListView{
@@ -220,6 +220,11 @@ JFXListView{
     -jfx-rippler-fill: theme-secondary-color;
 }
 
+.jfx-popup,
+.jfx-popup .jfx-popup-container,
+.jfx-popup .jfx-list-view{
+    -fx-background-color:solid-pane-color;
+}
 .progress-bar-error > .bar {
     -fx-background-color: red;
 }
