@@ -134,7 +134,7 @@ public class AccountController extends AbstractDialog {
 	}
 
 	@Override
-	protected Node getNode() {
+	protected Node getBody() {
 		return viewRegistry.get(LazyViewRegistry.NEW_ACCOUNT_VIEW);
 	}
 
