@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Component;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
@@ -37,6 +40,11 @@ public class ImageCache {
 	}
 
 	public Image get(String url, String type){
+		return get(url, type, true);
+	}
+
+
+	public Image get(String url, String type, boolean asyncFetch){
 
 		Cache cache = cacheManager.getCache("image-cache");
 		Element cachedElement =  cache.get(url);
@@ -55,7 +63,7 @@ public class ImageCache {
 		}
 
 		// Load image and add it to the cache once it's done
-		Image cachedImage = new Image(url, true);
+		Image cachedImage = new Image(url, asyncFetch);
 		cachedImage.progressProperty().addListener((observable, oldValue,  progress) -> {
 			if ((Double) progress == 1.0 && ! cachedImage.isError()) {
 				try {
@@ -74,8 +82,34 @@ public class ImageCache {
 
 		return cachedImage;
 	}
-	
 
+
+	public void loadAsync(String url, ImageView imageView) {
+
+		Task<Image> task = new Task<Image>() {
+			public Image call() {
+				return ImageCache.this.get(url ,"png", false);
+			}
+		};
+
+		task.setOnSucceeded((e) -> {
+			Image image = task.getValue();
+			if (!image.isError()) {
+				Platform.runLater(() -> {
+					imageView.setImage(task.getValue());
+				});
+			}
+		});
+		new Thread(task).start();
+
+	}
+	
+	public boolean contains(String key) {
+		Cache cache = cacheManager.getCache("image-cache");
+		return cache.isKeyInCache(key);
+
+	}
+	
 	public void clear() {
 		Cache cache = cacheManager.getCache("image-cache");
 		cache.removeAll();
