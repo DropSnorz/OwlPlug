@@ -5,6 +5,7 @@ import java.io.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.dropsnorz.owlplug.core.controllers.PluginsController;
@@ -17,6 +18,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 
@@ -29,22 +31,19 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 	private PluginsController pluginController;
 	@Autowired
 	private LazyViewRegistry viewRegistry;
+	@Autowired
+	ApplicationDefaults applicationDefaults;
 
 	@FXML
 	private JFXButton closeButton;
-
 	@FXML
 	private JFXButton addButton;
-
 	@FXML
 	private JFXTextField repositoryNameTextField;
-
 	@FXML
 	private JFXTextField repositoryPathTextField;
-
 	@FXML
 	private JFXButton browseDirectoryButton;
-
 	@FXML
 	private Label messageLabel;
 
@@ -142,9 +141,22 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 
 
 	@Override
-	protected Node getNode() {
+	protected Node getBody() {
 		return viewRegistry.getAsNode(LazyViewRegistry.NEW_FILESYSTEM_REPOSITORY_VIEW);
 	}
+	
+	@Override
+	protected Node getHeading() {
+		Label title = new Label("FileSystem Repository");
+		title.getStyleClass().add("heading-3");
+		
+		ImageView iv = new ImageView(applicationDefaults.fileSystemRepositoryImage);
+		iv.setFitHeight(20);
+		iv.setFitWidth(20);
+		title.setGraphic(iv);
+		return title;
+	}
+
 
 
 }

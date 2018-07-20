@@ -36,9 +36,11 @@ public class ApplicationDefaults {
 	public final Image taskSuccessImage = new Image(getClass().getResourceAsStream("/icons/check-green-16.png"));
 	public final Image taskFailImage = new Image(getClass().getResourceAsStream("/icons/cross-red-16.png"));
 	public final Image taskRunningImage = new Image(getClass().getResourceAsStream("/icons/play-green-16.png"));
-
-	public final Image pluginPlaceholder = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));
-
+	public final Image fileSystemRepositoryImage = new Image(getClass().getResourceAsStream("/icons/filesystem-grey-48.png"));
+	public final Image googleDriveRepositoryImage = new Image(getClass().getResourceAsStream("/icons/gdrive-grey-64.png"));
+	
+	
+	public final Image pluginPlaceholderImage = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));
 
 	public ApplicationDefaults() {
 		if(OSValidator.isWindows()) {

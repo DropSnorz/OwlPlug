@@ -10,12 +10,12 @@ import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.AbstractDialog;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSpinner;
 
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
 
 @Controller
@@ -37,7 +37,7 @@ public class AccountController extends AbstractDialog {
 	@FXML
 	private JFXButton googleButton;
 	@FXML
-	private ProgressIndicator authProgressIndicator;
+	private JFXSpinner authProgressIndicator;
 	@FXML
 	private Label messageLabel;
 	@FXML
@@ -134,7 +134,7 @@ public class AccountController extends AbstractDialog {
 	}
 
 	@Override
-	protected Node getNode() {
+	protected Node getBody() {
 		return viewRegistry.get(LazyViewRegistry.NEW_ACCOUNT_VIEW);
 	}
 

@@ -11,23 +11,26 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.PluginInfoController">
    <children>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" spacing="15.0">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" spacing="15.0">
          <children>
             <VBox styleClass="panel-transparent">
                <children>
-                  <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="170.0">
                      <children>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="pluginScreenshot" fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../media/plugin-placeholder.png" />
                            </image>
                            <effect>
-                              <Reflection fraction="0.45" />
+                              <Reflection bottomOpacity="0.06" fraction="0.16" topOffset="2.0" topOpacity="0.29" />
                            </effect>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </ImageView>
                      </children>
                      <padding>
-                        <Insets bottom="50.0" top="10.0" />
+                        <Insets bottom="10.0" />
                      </padding>
                   </VBox>
                </children>
@@ -69,25 +72,25 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextFlow prefHeight="200.0" prefWidth="200.0">
+                  <TextFlow prefWidth="200.0">
                      <children>
                         <Label text="Plugin Name: " />
                         <Label fx:id="pluginNameLabel" text="UNKNOW" />
                      </children>
                   </TextFlow>
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                  <TextFlow prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
                         <Label text="Plugin Version: " />
                         <Label fx:id="pluginVersionLabel" text="UNKNOW" />
                      </children>
                   </TextFlow>
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
                         <Label text="Bundle Id: " />
                         <Label fx:id="pluginBundleIdLabel" text="UNKNOW" />
                      </children>
                   </TextFlow>
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                  <TextFlow prefWidth="200.0" GridPane.rowIndex="1">
                      <children>
                         <Label text="Id: " />
                         <Label fx:id="pluginIdLabel" text="UNKNOW" />
@@ -107,8 +110,6 @@
                   </HBox>
                </children>
             </GridPane>
-            <HBox alignment="CENTER" prefHeight="20.0" prefWidth="460.0" />
-            <HBox prefHeight="20.0" prefWidth="460.0" />
          </children>
       </VBox>
    </children>

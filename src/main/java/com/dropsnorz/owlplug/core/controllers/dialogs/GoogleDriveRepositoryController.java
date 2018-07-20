@@ -26,6 +26,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 @Controller
 public class GoogleDriveRepositoryController extends AbstractDialog implements IEntityCreateOrUpdate<GoogleDriveRepository> {
 
@@ -37,6 +38,8 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 	private UserAccountDAO userAccountDAO;
 	@Autowired
 	private PluginsController pluginController;
+	@Autowired
+	ApplicationDefaults applicationDefaults;
 	@Autowired
 	private Preferences prefs;
 	@Autowired
@@ -204,9 +207,22 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 	}
 
 	@Override
-	protected Node getNode() {
+	protected Node getBody() {
 		return viewRegistry.getAsNode(LazyViewRegistry.NEW_GOOGLE_DRIVE_REPOSITORY);
 
 	}
+	
+	@Override
+	protected Node getHeading() {
+		Label title = new Label("Google Drive Repository");
+		title.getStyleClass().add("heading-3");
+		
+		ImageView iv = new ImageView(applicationDefaults.googleDriveRepositoryImage);
+		iv.setFitHeight(20);
+		iv.setFitWidth(20);
+		title.setGraphic(iv);
+		return title;
+	}
+
 
 }

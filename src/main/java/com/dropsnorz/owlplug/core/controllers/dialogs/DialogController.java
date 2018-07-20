@@ -33,12 +33,25 @@ public class DialogController {
 		return newDialog(layout);
 	}
 	
-	public JFXDialog newDialog(double sizeX, double sizeY, Node node) {
+	public JFXDialog newDialog(double sizeX, double sizeY, Node body) {
 		
 		JFXDialogLayout layout = new JFXDialogLayout();
 		layout.setMaxSize(sizeX, sizeY);
 		layout.setPrefSize(sizeX, sizeY);
-		layout.setBody(node);
+		layout.setBody(body);
+		
+		return newDialog(layout);
+
+		
+	}
+	
+	public JFXDialog newDialog(double sizeX, double sizeY, Node body, Node heading) {
+		
+		JFXDialogLayout layout = new JFXDialogLayout();
+		layout.setMaxSize(sizeX, sizeY);
+		layout.setPrefSize(sizeX, sizeY);
+		layout.setBody(body);
+		layout.setHeading(heading);
 		
 		return newDialog(layout);
 

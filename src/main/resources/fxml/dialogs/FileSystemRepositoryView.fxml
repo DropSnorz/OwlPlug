@@ -6,9 +6,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="113.0" prefWidth="472.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController">
+<VBox prefHeight="113.0" prefWidth="472.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController">
    <children>
-      <GridPane hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="30.0" VBox.vgrow="ALWAYS">
+      <GridPane hgap="10.0" vgap="30.0" VBox.vgrow="ALWAYS">
         <columnConstraints>
           <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="156.0" minWidth="10.0" prefWidth="99.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="223.0" />
@@ -30,11 +30,6 @@
             </HBox>
          </children>
       </GridPane>
-      <HBox prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label fx:id="messageLabel" styleClass="label-danger" />
-         </children>
-      </HBox>
       <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
             <JFXButton fx:id="addButton" text="Add" />

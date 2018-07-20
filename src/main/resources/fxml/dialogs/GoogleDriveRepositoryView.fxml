@@ -23,7 +23,7 @@
             <Label text="Repository Name" />
             <JFXTextField fx:id="repositoryNameTextField" GridPane.columnIndex="1" />
             <Label text="Google folder Id" GridPane.rowIndex="2" />
-            <JFXTextField fx:id="googleDirectoryURLTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" HBox.hgrow="ALWAYS" />
+            <JFXTextField fx:id="googleDirectoryURLTextField" text="FileId from Drive file URL" GridPane.columnIndex="1" GridPane.rowIndex="2" HBox.hgrow="ALWAYS" />
             <Label text="Account" GridPane.rowIndex="1" />
          </children>
       </GridPane>

@@ -23,7 +23,7 @@ public abstract class AbstractDialog {
 	}
 	
 	
-	protected abstract Node getNode();
+	protected abstract Node getBody();
 	
 	
 	public void show() {
@@ -31,10 +31,15 @@ public abstract class AbstractDialog {
 		onDialogShow();
 		
 		if(sizeX != -1 && sizeY != -1) {
-			dialogController.newDialog(sizeX, sizeY, this.getNode());
+			if(this.getHeading() != null) {
+				dialogController.newDialog(sizeX, sizeY, this.getBody(), this.getHeading());
+			}
+			else {
+				dialogController.newDialog(sizeX, sizeY, this.getBody());
+			}
 		}
 		else {
-			dialogController.newDialog(this.getNode());
+			dialogController.newDialog(this.getBody());
 		}
 		dialogController.getDialog().show();
 
@@ -60,6 +65,10 @@ public abstract class AbstractDialog {
 	
 	protected void onDialogClose() {
 		
+	}
+	
+	protected Node getHeading() {
+		return null;
 	}
 	
 	
