@@ -227,6 +227,11 @@ ProgressIndicator{
 	-fx-progress-color: theme-primary-color;
 }
 
+.jfx-spinner .arc {
+    -fx-stroke: theme-primary-color;
+}
+
+
 .jfx-snackbar-content {
     -fx-background-color: solid-pane-color;
 }

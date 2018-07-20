@@ -23,7 +23,7 @@
          <VBox.margin>
             <Insets />
          </VBox.margin></HBox>
-      <ProgressIndicator fx:id="authProgressIndicator" visible="false" />
+      <JFXSpinner fx:id="authProgressIndicator" visible="false" />
       <Label fx:id="messageLabel" />
       <HBox alignment="CENTER_RIGHT" spacing="2.0">
          <children>

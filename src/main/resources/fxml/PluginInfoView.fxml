@@ -17,12 +17,12 @@
                <children>
                   <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="170.0">
                      <children>
-                        <ImageView fx:id="pluginScreenshot" fitHeight="120.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="pluginScreenshot" fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../media/plugin-placeholder.png" />
                            </image>
                            <effect>
-                              <Reflection bottomOpacity="0.04" fraction="0.28" topOffset="2.0" topOpacity="0.17" />
+                              <Reflection bottomOpacity="0.06" fraction="0.16" topOffset="2.0" topOpacity="0.29" />
                            </effect>
                            <VBox.margin>
                               <Insets />
@@ -30,7 +30,7 @@
                         </ImageView>
                      </children>
                      <padding>
-                        <Insets bottom="40.0" top="10.0" />
+                        <Insets bottom="10.0" />
                      </padding>
                   </VBox>
                </children>
