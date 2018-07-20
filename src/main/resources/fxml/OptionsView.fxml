@@ -58,7 +58,7 @@
                         <Label styleClass="heading-1" text="Preferences" />
                         <VBox VBox.vgrow="ALWAYS">
                            <children>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Label styleClass="heading-2" text="General" />
                                     <HBox>
@@ -69,6 +69,23 @@
                                           <Insets left="5.0" top="5.0" />
                                        </VBox.margin>
                                     </HBox>
+                                    <VBox>
+                                       <children>
+                                          <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save dowloaded plugins from store in directory" />
+                                          <HBox alignment="BASELINE_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                             <VBox.margin>
+                                                <Insets left="5.0" />
+                                             </VBox.margin>
+                                             <children>
+                                                <JFXTextField fx:id="storeDirectoryTextField" HBox.hgrow="ALWAYS" />
+                                                <JFXButton fx:id="storeDirectoryButton" text="..." />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                       <padding>
+                                          <Insets left="5.0" />
+                                       </padding>
+                                    </VBox>
                                  </children></VBox>
                               <VBox VBox.vgrow="ALWAYS">
                                  <children>

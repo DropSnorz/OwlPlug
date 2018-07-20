@@ -39,6 +39,7 @@ public class StoreController {
 	private StoreService storeService;
 	@Autowired
 	private ImageCache imageCache;
+	
 	@FXML
 	private JFXTextField storeSearchTextField;
 	@FXML
@@ -53,47 +54,55 @@ public class StoreController {
 		syncStoreButton.setOnAction(e -> {
 			storeService.syncStores();
 		});
-		
-		
+
 		storeSearchTextField.textProperty().addListener((obs, oldValue, newValue)->{
 			refreshView();
 		});
 
 		refreshView();
-
 	}
 
 	public synchronized void refreshView() {
 		this.masonryPane.getChildren().clear();
 		this.masonryPane.clearLayout();
 
-			for(StaticStoreProduct product : storeService.getStoreProducts(storeSearchTextField.getText())) {
-				Image image = imageCache.get(product.getIconUrl());
-				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
-				masonryPane.getChildren().add(rippler);
-			}
-			
-			
-			Platform.runLater(() -> {scrollPane.requestLayout();});
-
-	}
-	
-	public void installProduct(StoreProduct product) {
-		
-		DirectoryChooser directoryChooser = new DirectoryChooser();;
-		
-		if(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
-			directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
+		for(StaticStoreProduct product : storeService.getStoreProducts(storeSearchTextField.getText())) {
+			Image image = imageCache.get(product.getIconUrl());
+			JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
+			masonryPane.getChildren().add(rippler);
 		}
-		
-		Window mainWindow = masonryPane.getScene().getWindow();
-		File selectedDirectory = directoryChooser.showDialog(mainWindow);
+		Platform.runLater(() -> {scrollPane.requestLayout();});
+	}
 
-		if(selectedDirectory != null){
+	public void installProduct(StoreProduct product) {
+
+		File selectedDirectory = null;
+
+		if (prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
+			
+			String storeDirectoryPath = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,"");
+			if (!storeDirectoryPath.equals("")) {
+				selectedDirectory = new File(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,""));
+			}
+
+		}
+		else {
+
+			DirectoryChooser directoryChooser = new DirectoryChooser();;
+			if(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
+				directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
+			}
+
+			Window mainWindow = masonryPane.getScene().getWindow();
+			selectedDirectory = directoryChooser.showDialog(mainWindow);
+		}
+
+		if(selectedDirectory != null && selectedDirectory.isDirectory()){
 			storeService.install(product, selectedDirectory);
 
 		}
-		
+		else {
+			log.error("Error: Specified install directory don't exists.");
+		}
 	}
-
 }
