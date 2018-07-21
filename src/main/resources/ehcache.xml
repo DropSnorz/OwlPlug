@@ -8,9 +8,8 @@
 	<cache name="image-cache" 
 		maxEntriesLocalHeap="75"
 		maxEntriesLocalDisk="300" 
-		eternal="true" 
 		diskSpoolBufferSizeMB="20"
-		timeToIdleSeconds="300" timeToLiveSeconds="600"
+		timeToIdleSeconds="604800" timeToLiveSeconds="604800"
 		memoryStoreEvictionPolicy="LFU" 
 		transactionalMode="off"
 		diskPersistent="true">
