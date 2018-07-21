@@ -1,8 +1,6 @@
 package com.dropsnorz.owlplug.store.service;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dropsnorz.owlplug.core.components.TaskFactory;
-import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.PluginStore;
@@ -27,21 +24,21 @@ public class StoreService {
 	private PluginStoreDAO pluginStoreDAO;
 	@Autowired
 	private StoreProductDAO storeProductDAO;
-	@Autowired
-	private StoreController storeController;
 
 
 	@PostConstruct
 	private void init() {
+
+		PluginStore store = pluginStoreDAO.findByName("OwlPlug Central");
 		
-		if(pluginStoreDAO.findByName("OwlPlug Central") == null) {
-			
-			PluginStore store = new StaticPluginStore();
+		if(store == null) {
+			store = new StaticPluginStore();
 			store.setName("OwlPlug Central");
-			store.setUrl("http://owlplug.dropsnorz.com/store/store.json");
-			pluginStoreDAO.save(store);
-			
 		}	
+		
+		store.setUrl("http://owlplug.dropsnorz.com/store.json");
+		pluginStoreDAO.save(store);
+
 
 	}
 
@@ -58,9 +55,9 @@ public class StoreService {
 	public Iterable<StaticStoreProduct> getStoreProducts(String query) {
 		return storeProductDAO.findByNameContainingIgnoreCase(query);
 	}
-	
+
 	public void install(StoreProduct product, File targetDirectory) {
-		
+
 		taskFactory.createProductInstallTask(product, targetDirectory).run();
 	}
 

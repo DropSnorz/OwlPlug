@@ -77,6 +77,10 @@ public class ApplicationDefaults {
 		
 	}
 	
+	public String getTempDowloadDirectory() {
+		return getUserDataDirectory() + "/temp";
+	}
+	
 	public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
 	public static final String VST2_DISCOVERY_ENABLED_KEY = "VST2_DISCOVERY_ENABLED";
 	public static final String VST3_DISCOVERY_ENABLED_KEY = "VST3_DISCOVERY_ENABLED";

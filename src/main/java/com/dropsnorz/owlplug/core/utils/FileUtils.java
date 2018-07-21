@@ -89,4 +89,8 @@ public class FileUtils {
 	public static void copyDirectory(File source, File target) throws IOException {
 		org.apache.commons.io.FileUtils.copyDirectory(source, target);
 	}
+	
+	public static void deleteDirectory(File source) throws IOException {
+		org.apache.commons.io.FileUtils.deleteDirectory(source);
+	}
 }

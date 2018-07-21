@@ -154,6 +154,7 @@ public class TaskFactory {
 	public TaskExecutionContext createProductInstallTask(StoreProduct product, File targetDirectory) {
 		
 		ProductInstallTask task = new ProductInstallTask(product, targetDirectory, applicationDefaults);
+		bindOnFailHandler(task);
 		return buildContext(task);
 		
 	}

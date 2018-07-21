@@ -11,6 +11,9 @@ import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskException;
@@ -19,6 +22,8 @@ import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 
 public class ProductInstallTask extends AbstractTask {
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	private StoreProduct product;
 	private File targetDirectory;
@@ -39,21 +44,21 @@ public class ProductInstallTask extends AbstractTask {
 		try {
 			this.updateProgress(1, 5);
 			this.updateMessage("Installing plugin " + product.getName() + " - Downloading files...");
-			File tempFile = downloadInTempDirectory(product);
+			File archiveFile = downloadInTempDirectory(product);
 			
 			this.updateProgress(2, 5);
 			this.updateMessage("Installing plugin " + product.getName() + " - Extracting files...");
-			File tempFolder = new File(applicationDefaults.getUserDataDirectory() + "/" + "temp-" + tempFile.getName().replace(".owlpack", ""));
-			FileUtils.unzip(tempFile.getAbsolutePath(),  tempFolder.getAbsolutePath());
+			File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" + "temp-" + archiveFile.getName().replace(".owlpack", ""));
+			FileUtils.unzip(archiveFile.getAbsolutePath(),  extractedArchiveFolder.getAbsolutePath());
 
 			this.updateProgress(3, 5);
 			this.updateMessage("Installing plugin " + product.getName() + " - Moving files...");
-			installToPluginDirectory(tempFolder, targetDirectory);
+			installToPluginDirectory(extractedArchiveFolder, targetDirectory);
 			
 			this.updateProgress(4, 5);
 			this.updateMessage("Installing plugin " + product.getName() + " - Cleaning files...");
-			tempFile.delete();
-			tempFolder.delete();
+			archiveFile.delete();
+			FileUtils.deleteDirectory(extractedArchiveFolder);
 			
 			this.updateProgress(5, 5);
 			this.updateMessage("Plugin " + product.getName() + " successfully Installed");
@@ -72,11 +77,12 @@ public class ProductInstallTask extends AbstractTask {
 
 		try {
 			URL website = new URL(product.getDownloadUrl());
-
 			SimpleDateFormat horodateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
+			
+			new File(applicationDefaults.getTempDowloadDirectory()).mkdirs();
 
 			String outPutFileName =  horodateFormat.format(new Date()) + ".owlpack";
-			String outputFilePath = applicationDefaults.getUserDataDirectory() + File.separator + outPutFileName;
+			String outputFilePath = applicationDefaults.getTempDowloadDirectory() + File.separator + outPutFileName;
 			File outputFile = new File(outputFilePath);
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			FileOutputStream fos = new FileOutputStream(outputFile);
@@ -134,13 +140,11 @@ public class ProductInstallTask extends AbstractTask {
 					structure = OwlPackStructureType.NESTED_ENV;
 				}
 			}
-			
 		}
-		
-		
 		return structure;
 	}
 
+	
 	private File getSubfileByName(File parent, String filename) {
 		for(File f : parent.listFiles()) {
 			if(f.getName().equals(filename)) {
