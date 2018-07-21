@@ -78,9 +78,7 @@ public class OptionsController {
 			File selectedDirectory = 
 					directoryChooser.showDialog(mainWindow);
 
-			if(selectedDirectory == null){
-				pluginDirectoryTextField.setText("");
-			}else{
+			if(selectedDirectory != null) {
 				pluginDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
 			}
 		});
@@ -138,9 +136,7 @@ public class OptionsController {
 			File selectedDirectory = 
 					directoryChooser.showDialog(mainWindow);
 
-			if(selectedDirectory == null){
-				storeDirectoryTextField.setText("");
-			}else{
+			if(selectedDirectory != null){
 				storeDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
 			}
 		});
