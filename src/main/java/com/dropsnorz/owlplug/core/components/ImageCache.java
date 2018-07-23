@@ -29,7 +29,7 @@ public class ImageCache {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	CacheManager cacheManager;
+	private CacheManager cacheManager;
 
 	ImageCache(){
 
@@ -62,23 +62,19 @@ public class ImageCache {
 			}
 		}
 
-		// Load image and add it to the cache once it's done
+		// Load image
 		Image cachedImage = new Image(url, asyncFetch);
+		// In case of async fetch, persist to the cache on complete
 		cachedImage.progressProperty().addListener((observable, oldValue,  progress) -> {
 			if ((Double) progress == 1.0 && ! cachedImage.isError()) {
-				try {
-					log.debug("Persisting image {} into cache", url);
-					BufferedImage bImage = SwingFXUtils.fromFXImage(cachedImage, null);
-					ByteArrayOutputStream s = new ByteArrayOutputStream();
-					ImageIO.write(bImage, type, s);
-					byte[] res  = s.toByteArray();
-					s.close(); //especially if you are using a different output stream.
-					cache.put(new Element(url, res));
-				} catch (IllegalArgumentException | IllegalStateException | CacheException | IOException e) {
-					log.error("Error caching image", e);
-				}
+				persistImageIntoCache(cache, url, cachedImage, type);
 			}
 		});
+		// In case of sync fetch, persist image in cache immediately
+		if(!asyncFetch && !cachedImage.isError()) {
+			persistImageIntoCache(cache, url, cachedImage, type);
+
+		}
 
 		return cachedImage;
 	}
@@ -115,6 +111,20 @@ public class ImageCache {
 		cache.removeAll();
 
 
+	}
+	
+	private void persistImageIntoCache(Cache cache, String key, Image image, String type) {
+		try {
+			log.debug("Persisting image {} into cache", key);
+			BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+			ByteArrayOutputStream s = new ByteArrayOutputStream();
+			ImageIO.write(bImage, type, s);
+			byte[] res  = s.toByteArray();
+			s.close(); //especially if you are using a different output stream.
+			cache.put(new Element(key, res));
+		} catch (IllegalArgumentException | IllegalStateException | CacheException | IOException e) {
+			log.error("Error caching image", e);
+		}
 	}
 
 }
