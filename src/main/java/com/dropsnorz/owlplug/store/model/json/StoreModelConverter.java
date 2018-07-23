@@ -1,13 +1,13 @@
 package com.dropsnorz.owlplug.store.model.json;
 
-import com.dropsnorz.owlplug.store.model.StaticPluginStore;
+import com.dropsnorz.owlplug.store.model.PluginStore;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 
 public class StoreModelConverter {
 	
-	public static StaticPluginStore fromTO(PluginStoreTO storeTO){
+	public static PluginStore fromTO(PluginStoreTO storeTO){
 	
-		StaticPluginStore store = new StaticPluginStore();
+		PluginStore store = new PluginStore();
 		store.setName(storeTO.getName());
 		store.setUrl(storeTO.getUrl());
 		

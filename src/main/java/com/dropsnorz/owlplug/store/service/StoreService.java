@@ -11,7 +11,6 @@ import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.PluginStore;
-import com.dropsnorz.owlplug.store.model.StaticPluginStore;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 
@@ -32,7 +31,7 @@ public class StoreService {
 		PluginStore store = pluginStoreDAO.findByName("OwlPlug Central");
 		
 		if(store == null) {
-			store = new StaticPluginStore();
+			store = new PluginStore();
 			store.setName("OwlPlug Central");
 		}	
 		
