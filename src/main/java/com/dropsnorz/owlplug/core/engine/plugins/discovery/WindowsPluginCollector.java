@@ -6,13 +6,18 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.dropsnorz.owlplug.core.model.PluginType;
 
 public class WindowsPluginCollector implements NativePluginCollector {
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	PluginType pluginType;
-	ArrayList<File> fileList = new ArrayList<File>();
+	ArrayList<File> fileList = new ArrayList<>();
 
 	public WindowsPluginCollector(PluginType type) {
 
@@ -41,7 +46,7 @@ public class WindowsPluginCollector implements NativePluginCollector {
 			}
 		}
 		else {
-			//TODO log.error Plugin root is not a directory.
+			log.error("Plugin root is not a directory");
 		}
 
 		return fileList;

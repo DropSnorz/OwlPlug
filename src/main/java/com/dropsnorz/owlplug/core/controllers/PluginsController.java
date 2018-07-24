@@ -1,6 +1,5 @@
 package com.dropsnorz.owlplug.core.controllers;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,9 +92,9 @@ public class PluginsController {
 
 		});	
 
-		treeRootNode = new FilterableTreeItem<Object>("(all)");
-		treeFileRootNode = new FilterableTreeItem<Object>("(all)");
-		treeRepositoryRootNode = new FilterableTreeItem<Object>("Repositories");
+		treeRootNode = new FilterableTreeItem<>("(all)");
+		treeFileRootNode = new FilterableTreeItem<>("(all)");
+		treeRepositoryRootNode = new FilterableTreeItem<>("Repositories");
 
 		treeView.setCellFactory(new Callback<TreeView<Object>,TreeCell<Object>>(){
 			@Override
@@ -151,7 +150,7 @@ public class PluginsController {
 	public void refreshPlugins() {
 
 		treeRootNode.getInternalChildren().clear();
-		this.pluginList = pluginDAO.findAll();;
+		this.pluginList = pluginDAO.findAll();
 
 		for(Plugin plugin : pluginList){
 
@@ -248,7 +247,7 @@ public class PluginsController {
 			FileTree child = pluginTree.get(dir);
 
 			// If child is empty then we have reached a plugin and we can't go deeper
-			if(child.values().size() == 0){
+			if(child.values().isEmpty()){
 				Plugin plugin = (Plugin) child.getNodeValue();
 				FilterableTreeItem<Object> plugItem = new FilterableTreeItem<Object>(plugin);
 				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
@@ -320,7 +319,7 @@ public class PluginsController {
 
 		for(String dir : treeHead.keySet()){
 
-			if(treeHead.get(dir).values().size() == 0){
+			if(treeHead.get(dir).values().isEmpty()){
 
 				Plugin plugin =  (Plugin) treeHead.get(dir).getNodeValue();
 				FilterableTreeItem<Object> plugItem = new FilterableTreeItem<Object>(plugin);

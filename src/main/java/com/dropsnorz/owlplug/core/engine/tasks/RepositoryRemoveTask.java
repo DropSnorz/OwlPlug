@@ -4,8 +4,6 @@ import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 
-import javafx.concurrent.Task;
-
 public class RepositoryRemoveTask  extends AbstractTask {
 
 	protected PluginRepositoryDAO repositoryDAO;

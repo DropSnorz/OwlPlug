@@ -18,10 +18,10 @@ import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyResolver
 import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.engine.tasks.DirectoryRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.PluginRemoveTask;
+import com.dropsnorz.owlplug.core.engine.tasks.PluginSyncTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryRemoveTask;
 import com.dropsnorz.owlplug.core.engine.tasks.RepositoryTask;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskException;
-import com.dropsnorz.owlplug.core.engine.tasks.PluginSyncTask;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskExecutionContext;
 import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.model.Plugin;
@@ -34,8 +34,6 @@ import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
 import com.dropsnorz.owlplug.store.tasks.StoreSyncTask;
-
-import javafx.concurrent.Task;
 
 @Service
 public class TaskFactory {

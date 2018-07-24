@@ -1,6 +1,5 @@
 package com.dropsnorz.owlplug.core.engine.repositories;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.springframework.stereotype.Component;
@@ -17,22 +16,22 @@ import com.dropsnorz.owlplug.core.model.PluginRepository;
 @Component
 public class RepositoryStrategyResolver {
 
-	HashMap<Class, HashMap<RepositoryAction, IRepositoryStrategy>> strategyBindings;
+	private HashMap<Class, HashMap<RepositoryAction, IRepositoryStrategy>> strategyBindings;
 
 
 	public RepositoryStrategyResolver() {
 
-		strategyBindings = new HashMap<Class, HashMap<RepositoryAction, IRepositoryStrategy>>();
+		strategyBindings = new HashMap<>();
 
 		// FileSystemRepository bindings
-		HashMap<RepositoryAction, IRepositoryStrategy> fileSystemBindings = new HashMap<RepositoryAction, IRepositoryStrategy>();
+		HashMap<RepositoryAction, IRepositoryStrategy> fileSystemBindings = new HashMap<>();
 		fileSystemBindings.put(RepositoryAction.PULL, new FileSystemRepositoryPullingStrategy());
 		fileSystemBindings.put(RepositoryAction.PUSH, new FileSystemRepositoryPushingStrategy());
 
 		strategyBindings.put(FileSystemRepository.class, fileSystemBindings);
 
 		// GoogleDrive Bindings
-		HashMap<RepositoryAction, IRepositoryStrategy> googleDriveBindings = new HashMap<RepositoryAction, IRepositoryStrategy>();
+		HashMap<RepositoryAction, IRepositoryStrategy> googleDriveBindings = new HashMap<>();
 		googleDriveBindings.put(RepositoryAction.PULL, new GoogleDrivePullingStrategy());
 		googleDriveBindings.put(RepositoryAction.PUSH, new GoogleDrivePushingStrategy());
 

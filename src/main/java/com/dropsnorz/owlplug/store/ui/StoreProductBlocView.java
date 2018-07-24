@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
-import com.jfoenix.controls.JFXRippler;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.ContextMenu;
@@ -17,10 +16,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -60,7 +56,7 @@ public class StoreProductBlocView extends VBox {
  
         MenuItem menuItem = new MenuItem("Install...");
         menuItem.setOnAction(e -> {
-        	parentController.installProduct(storeProduct);
+        	this.parentController.installProduct(storeProduct);
         });
         
         

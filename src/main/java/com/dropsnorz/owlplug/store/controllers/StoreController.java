@@ -16,9 +16,7 @@ import com.dropsnorz.owlplug.store.service.StoreService;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocView;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
-import com.jfoenix.controls.JFXMasonryPane.LayoutMode;
 import com.jfoenix.controls.JFXRippler;
-import com.jfoenix.controls.JFXScrollPane;
 import com.jfoenix.controls.JFXTextField;
 
 import javafx.application.Platform;
@@ -88,7 +86,7 @@ public class StoreController {
 		}
 		else {
 
-			DirectoryChooser directoryChooser = new DirectoryChooser();;
+			DirectoryChooser directoryChooser = new DirectoryChooser();
 			if(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
 				directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
 			}
