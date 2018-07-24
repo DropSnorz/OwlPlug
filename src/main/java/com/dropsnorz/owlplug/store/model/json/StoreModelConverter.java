@@ -19,6 +19,7 @@ public class StoreModelConverter {
 		
 		StaticStoreProduct product = new StaticStoreProduct();
 		product.setName(productTO.getName());
+		product.setPageUrl(productTO.getPageUrl());
 		product.setDownloadUrl(productTO.getDownloadUrl());
 		product.setIconUrl(productTO.getIconUrl());
 		product.setDescription(productTO.getDescription());

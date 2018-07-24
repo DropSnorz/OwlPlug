@@ -2,6 +2,7 @@ package com.dropsnorz.owlplug.store.ui;
 
 import java.util.Random;
 
+import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 
@@ -54,13 +55,20 @@ public class StoreProductBlocView extends VBox {
 		// Create ContextMenu
         ContextMenu contextMenu = new ContextMenu();
  
-        MenuItem menuItem = new MenuItem("Install...");
-        menuItem.setOnAction(e -> {
+        MenuItem installMenuItem = new MenuItem("Install");
+        installMenuItem.setOnAction(e -> {
         	this.parentController.installProduct(storeProduct);
         });
         
+        MenuItem pluginPageMenuItem = new MenuItem("Browse plugin page...");
+        pluginPageMenuItem.setOnAction(e -> {
+        	PlatformUtils.openDefaultBrowser(storeProduct.getPageUrl());
+        });
         
-        contextMenu.getItems().add(menuItem);
+        
+        contextMenu.getItems().add(installMenuItem);
+        contextMenu.getItems().add(pluginPageMenuItem);
+
         this.setOnContextMenuRequested(e -> {
  
                 contextMenu.show(this, e.getScreenX(), e.getScreenY());

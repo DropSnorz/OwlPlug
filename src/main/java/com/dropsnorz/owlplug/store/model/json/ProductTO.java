@@ -3,6 +3,7 @@ package com.dropsnorz.owlplug.store.model.json;
 public class ProductTO {
 	
 	private String name;
+	private String pageUrl;
 	private String downloadUrl;
 	private String iconUrl;
 	private String description;
@@ -13,6 +14,12 @@ public class ProductTO {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getPageUrl() {
+		return pageUrl;
+	}
+	public void setPageUrl(String pageUrl) {
+		this.pageUrl = pageUrl;
 	}
 	public String getDownloadUrl() {
 		return downloadUrl;
