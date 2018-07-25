@@ -38,7 +38,7 @@ public class OptionsService {
 
 		//Init default options
 		if(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) == null) {
-			prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.DEFAULT_REPOSITORY_DIRECTORY);
+			prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.DEFAULT_VST_DIRECTORY);
 		}
 		if(prefs.get(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, null) == null) {
 			prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, Boolean.TRUE);

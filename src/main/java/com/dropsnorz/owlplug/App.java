@@ -92,7 +92,7 @@ public class App extends Application
 	
 	@Bean 
 	CacheManager getCacheManager(){
-		return new CacheManager();
+		return CacheManager.create();
 	}
 
 

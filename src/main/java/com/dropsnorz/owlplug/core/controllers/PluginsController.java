@@ -204,8 +204,11 @@ public class PluginsController {
 								localPluginList.add(p);
 							}
 						}
-						// Remove ending separator before getting the path
-						PluginRepository repository = repositoryDAO.findByName(subDirs[i]);
+						PluginRepository repository = null;
+						
+						if(currentPath.endsWith(pluginRepositoryService.getLocalRepositoryDirectory() + "/" + subDirs[i] + "/")) {
+							repository = repositoryDAO.findByName(subDirs[i]);
+						}
 
 						if(repository != null) {
 							repository.setPluginList(localPluginList);
@@ -260,7 +263,8 @@ public class PluginsController {
 				IDirectory directory;
 
 				//If child node contains only one directory we can merge it with this directory
-				if(child.size() == 1 && ( (FileTree)child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory) {
+				if(child.size() == 1 && ( (FileTree)child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory && 
+						!(child.getNodeValue() instanceof PluginRepository)) {
 
 					directory = (IDirectory) child.getNodeValue();
 					mergedParent = mergedParent + directory.getName() + "/" ;
