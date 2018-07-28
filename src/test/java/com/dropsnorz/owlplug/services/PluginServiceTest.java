@@ -38,16 +38,6 @@ public class PluginServiceTest extends AppTestContext {
 	private PluginService pluginService;
 
 	
-	@TestConfiguration
-    static class EmployeeServiceImplTestContextConfiguration {
-  
-        @Bean
-        public PluginService employeeService() {
-            return new PluginService();
-        }
-    }
-
-	
 	@Test
 	public void testPluginExploring(){
 
