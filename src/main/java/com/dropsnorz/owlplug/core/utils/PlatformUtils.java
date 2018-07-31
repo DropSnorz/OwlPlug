@@ -16,11 +16,7 @@ public class PlatformUtils {
 	private static final Logger log = LoggerFactory.getLogger(PlatformUtils.class);
 
 	public static void openDirectoryExplorer(String path){
-		try {
-			Desktop.getDesktop().open(new File(path));
-		} catch (IOException e) {
-			log.error("Application for the given file fails to be launched",e);
-		}
+		openDirectoryExplorer(new File(path));
 	}
 
 	public static void openDirectoryExplorer(File file){
