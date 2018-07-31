@@ -5,6 +5,8 @@
 
 OwlPlug is a small audio plugin manager. It provides a complete view of your plugin setup and simple tools to manage them.
 
+![owlplug-demo](doc/demo.gif)
+
 **Owlplug is currently in alpha stage. It's higly recommended to backup your files before using it.**
 
 ## Plugins
