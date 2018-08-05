@@ -39,19 +39,30 @@ public class ApplicationDefaults {
 	public final Image fileSystemRepositoryImage = new Image(getClass().getResourceAsStream("/icons/filesystem-grey-48.png"));
 	public final Image googleDriveRepositoryImage = new Image(getClass().getResourceAsStream("/icons/gdrive-grey-64.png"));
 	
-	
 	public final Image pluginPlaceholderImage = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));
+	
+	
+	public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
+	public static final String VST2_DISCOVERY_ENABLED_KEY = "VST2_DISCOVERY_ENABLED";
+	public static final String VST3_DISCOVERY_ENABLED_KEY = "VST3_DISCOVERY_ENABLED";
+	public static final String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";
+	public static final String SYNC_PLUGINS_STARTUP_KEY = "SYNC_PLUGINS_STARTUP_KEY";
+	public static final String STORE_DIRECTORY_ENABLED_KEY = "STORE_DIRECTORY_ENABLED_KEY";
+	public static final String STORE_DIRECTORY_KEY = "STORE_DIRECTORY_KEY";
+
 
 	public ApplicationDefaults() {
-		if(OSValidator.isWindows()) {
+		
+		if (OSValidator.isWindows()) {
 			this.platform = OSType.WIN;
 		}
-		else if(OSValidator.isMac()){
+		else if (OSValidator.isMac()){
 			this.platform = OSType.MAC;
 		}
 		else {
 			this.platform = OSType.UNDEFINED;
 		}
+		
 	}
 
 	public OSType getPlatform() {
@@ -62,8 +73,8 @@ public class ApplicationDefaults {
 	public Image getPluginIcon(Plugin plugin) {
 
 		switch (plugin.getType()) {
-		case VST2: return vst2Image;
-		case VST3: return vst3Image;
+			case VST2: return vst2Image;
+			case VST3: return vst3Image;
 		default: return vst2Image;
 		}
 	}
@@ -80,14 +91,5 @@ public class ApplicationDefaults {
 	public String getTempDowloadDirectory() {
 		return getUserDataDirectory() + "/temp";
 	}
-	
-	public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
-	public static final String VST2_DISCOVERY_ENABLED_KEY = "VST2_DISCOVERY_ENABLED";
-	public static final String VST3_DISCOVERY_ENABLED_KEY = "VST3_DISCOVERY_ENABLED";
-	public static final String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";
-	public static final String SYNC_PLUGINS_STARTUP_KEY = "SYNC_PLUGINS_STARTUP_KEY";
-	public static final String STORE_DIRECTORY_ENABLED_KEY = "STORE_DIRECTORY_ENABLED_KEY";
-	public static final String STORE_DIRECTORY_KEY = "STORE_DIRECTORY_KEY";
-
 
 }

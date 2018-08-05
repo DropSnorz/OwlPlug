@@ -1,13 +1,12 @@
 package com.dropsnorz.owlplug.core.controllers.dialogs;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import javafx.scene.Node;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractDialog {
 	
 	@Autowired
-	DialogController dialogController;
+	private DialogController dialogController;
 	
 	private double sizeX = -1;
 	private double sizeY = -1;
@@ -30,8 +29,8 @@ public abstract class AbstractDialog {
 		
 		onDialogShow();
 		
-		if(sizeX != -1 && sizeY != -1) {
-			if(this.getHeading() != null) {
+		if (sizeX != -1 && sizeY != -1) {
+			if (this.getHeading() != null) {
 				dialogController.newDialog(sizeX, sizeY, this.getBody(), this.getHeading());
 			}
 			else {
@@ -60,11 +59,11 @@ public abstract class AbstractDialog {
 	}
 	
 	protected void onDialogShow() {
-		
+		return;
 	}
 	
 	protected void onDialogClose() {
-		
+		return;
 	}
 	
 	protected Node getHeading() {

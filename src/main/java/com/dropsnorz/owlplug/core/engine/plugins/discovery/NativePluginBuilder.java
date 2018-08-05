@@ -1,13 +1,12 @@
 package com.dropsnorz.owlplug.core.engine.plugins.discovery;
 
-import java.io.File;
-
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginType;
+import java.io.File;
 
 public abstract class NativePluginBuilder {
 	
-	PluginType pluginType;
+	protected PluginType pluginType;
 	
 	NativePluginBuilder(PluginType pluginType){
 		

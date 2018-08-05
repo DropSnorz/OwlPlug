@@ -166,7 +166,7 @@ public class TaskFactory {
 	
 	private TaskExecutionContext buildContext(AbstractTask task) {
 		
-		return new TaskExecutionContext(task, taskManager );
+		return new TaskExecutionContext(task, taskManager);
 	}
 
 }

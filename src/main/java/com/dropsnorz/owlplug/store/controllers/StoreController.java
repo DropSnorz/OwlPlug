@@ -1,13 +1,5 @@
 package com.dropsnorz.owlplug.store.controllers;
 
-import java.io.File;
-import java.util.prefs.Preferences;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
@@ -18,13 +10,18 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
 import com.jfoenix.controls.JFXTextField;
-
+import java.io.File;
+import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 @Controller
 public class StoreController {
@@ -37,7 +34,7 @@ public class StoreController {
 	private StoreService storeService;
 	@Autowired
 	private ImageCache imageCache;
-	
+
 	@FXML
 	private JFXTextField storeSearchTextField;
 	@FXML
@@ -52,7 +49,6 @@ public class StoreController {
 		syncStoreButton.setOnAction(e -> {
 			storeService.syncStores();
 		});
-
 		storeSearchTextField.textProperty().addListener((obs, oldValue, newValue)->{
 			refreshView();
 		});
@@ -64,12 +60,14 @@ public class StoreController {
 		this.masonryPane.getChildren().clear();
 		this.masonryPane.clearLayout();
 
-		for(StaticStoreProduct product : storeService.getStoreProducts(storeSearchTextField.getText())) {
+		for (StaticStoreProduct product : storeService.getStoreProducts(storeSearchTextField.getText())) {
 			Image image = imageCache.get(product.getIconUrl());
 			JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
 			masonryPane.getChildren().add(rippler);
 		}
-		Platform.runLater(() -> {scrollPane.requestLayout();});
+		Platform.runLater(() -> { 
+			scrollPane.requestLayout();
+		});
 	}
 
 	public void installProduct(StoreProduct product) {
@@ -77,17 +75,13 @@ public class StoreController {
 		File selectedDirectory = null;
 
 		if (prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
-			
 			String storeDirectoryPath = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,"");
-			if (!storeDirectoryPath.equals("")) {
+			if (!"".equals(storeDirectoryPath)) {
 				selectedDirectory = new File(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,""));
 			}
-
-		}
-		else {
-
+		} else {
 			DirectoryChooser directoryChooser = new DirectoryChooser();
-			if(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
+			if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
 				directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
 			}
 
@@ -95,9 +89,8 @@ public class StoreController {
 			selectedDirectory = directoryChooser.showDialog(mainWindow);
 		}
 
-		if(selectedDirectory != null && selectedDirectory.isDirectory()){
+		if (selectedDirectory != null && selectedDirectory.isDirectory()) {
 			storeService.install(product, selectedDirectory);
-
 		}
 		else {
 			log.error("Error: Specified install directory don't exists.");

@@ -1,59 +1,57 @@
 package com.dropsnorz.owlplug.core.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
-
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 @Controller
 public class NodeInfoController {
-	
+
 	@Autowired
-	PluginInfoController pluginInfoController;
-	
+	private PluginInfoController pluginInfoController;
+
 	@Autowired
-	DirectoryInfoController directoryInfoController;
-	
+	private DirectoryInfoController directoryInfoController;
+
 	@Autowired
-	RepositoryInfoController repositoryInfoController;
-	
+	private RepositoryInfoController repositoryInfoController;
+
 	@FXML
-	Node pluginInfoView;
+	private Node pluginInfoView;
 	@FXML
-	Node directoryInfoView;
+	private Node directoryInfoView;
 	@FXML
-	Node repositoryInfoView;
-	
+	private Node repositoryInfoView;
+
 	@FXML
 	public void initialize() { 
-		
+
 		pluginInfoView.setVisible(false);
 		directoryInfoView.setVisible(false);
 		repositoryInfoView.setVisible(false);
 	}
-	
-	public void setNode(Object node){
-		
+
+	public void setNode(Object node) {
+
 		pluginInfoView.setVisible(false);
 		directoryInfoView.setVisible(false);
 		repositoryInfoView.setVisible(false);
 
-		
-		if(node instanceof Plugin){
+
+		if (node instanceof Plugin) {
 			pluginInfoController.setPlugin((Plugin)node);
 			pluginInfoView.setVisible(true);
 		}
-		if(node instanceof PluginDirectory){
+		if (node instanceof PluginDirectory) {
 			directoryInfoController.setPluginDirectory((PluginDirectory)node);
 			directoryInfoView.setVisible(true);
 		}
-		if(node instanceof PluginRepository){
-			
+		if (node instanceof PluginRepository) {
+
 			repositoryInfoController.setPluginRepository((PluginRepository) node);
 			repositoryInfoView.setVisible(true);
 		}

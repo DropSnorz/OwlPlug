@@ -1,9 +1,14 @@
 package com.dropsnorz.owlplug;
 
+import com.dropsnorz.owlplug.core.controllers.MainController;
 import java.util.prefs.Preferences;
-
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import net.sf.ehcache.CacheManager;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -11,20 +16,9 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import com.dropsnorz.owlplug.core.controllers.MainController;
-
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-import net.sf.ehcache.CacheManager;
-
 
 @SpringBootApplication
-public class App extends Application
-{
+public class App extends Application {
 
 	private ConfigurableApplicationContext context;
 	private Parent rootNode;
@@ -44,11 +38,10 @@ public class App extends Application
 
 			MainController mainController = context.getBean(MainController.class);
 			mainController.dispatchPostInitialize();
-		} catch (BeanCreationException e){
+		} catch (BeanCreationException e) {
 			notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug is already running"));
 			throw e;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug could not be started"));
 			throw e;
 		}
@@ -72,10 +65,8 @@ public class App extends Application
 		primaryStage.setMinHeight(height);
 		primaryStage.setMinWidth(width);
 		primaryStage.centerOnScreen();
-		
 
 		primaryStage.show();
-
 
 	}
 
@@ -86,12 +77,12 @@ public class App extends Application
 	}
 
 	@Bean 
-	ServletWebServerFactory servletWebServerFactory(){
+	private ServletWebServerFactory servletWebServerFactory() {
 		return new TomcatServletWebServerFactory();
 	}
 	
 	@Bean 
-	CacheManager getCacheManager(){
+	private CacheManager getCacheManager() {
 		return CacheManager.create();
 	}
 
