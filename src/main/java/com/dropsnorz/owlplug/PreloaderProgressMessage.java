@@ -4,8 +4,7 @@ import java.util.Objects;
 
 import javafx.application.Preloader.PreloaderNotification;
 
-public class PreloaderProgressMessage implements PreloaderNotification
-{
+public class PreloaderProgressMessage implements PreloaderNotification {
 	public static final PreloaderProgressMessage SUCCESSFULLY_DONE = new PreloaderProgressMessage(true, false);
 	public static final PreloaderProgressMessage FAILED = new PreloaderProgressMessage(false, true);
 
@@ -15,7 +14,7 @@ public class PreloaderProgressMessage implements PreloaderNotification
 	private boolean done;
 	private boolean failed;
 
-	public PreloaderProgressMessage(String type, String message, double progress){
+	public PreloaderProgressMessage(String type, String message, double progress) {
 		this.type = type;
 		this.progress = progress;
 		this.message = message;
@@ -23,28 +22,40 @@ public class PreloaderProgressMessage implements PreloaderNotification
 		this.failed = false;
 	}
 
-	public PreloaderProgressMessage(String type, String message){
+	public PreloaderProgressMessage(String type, String message) {
 		this.type = type;
 		this.message = message;
 		this.done = false;
 		this.failed = false;
 	}
 
-	private PreloaderProgressMessage(boolean done, boolean failed)
-	{
+	private PreloaderProgressMessage(boolean done, boolean failed){
 		this.done = done;
 		this.failed = failed;
 	}
 
-	public double getProgress(){return progress;}
-	public String getType() {return type;}
-	public String getMessage(){return message;}
-	public boolean isDone(){return done;}
-	public boolean isFailed(){return failed;}
+	public double getProgress() {
+		return progress;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+	
+	public boolean isDone() {
+		return done;
+	}
+	
+	public boolean isFailed() {
+		return failed;
+	}
 
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (this == o) {
 			return true; 
 		}
@@ -58,15 +69,13 @@ public class PreloaderProgressMessage implements PreloaderNotification
 	}
 
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		return Objects.hash(progress, message, done, failed);
 	}
 
 	@Override
-	public String toString()
-	{
-		return "ProgressMessage{" + "progress=" + progress + ", message='" +
-				message + '\'' + ", done=" + done + ", failed=" + failed + '}';
+	public String toString() {
+		return "ProgressMessage{" + "progress=" + progress + ", message='"
+				+ message + '\'' + ", done=" + done + ", failed=" + failed + '}';
 	}
 }

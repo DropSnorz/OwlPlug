@@ -1,16 +1,5 @@
 package com.dropsnorz.owlplug.core.engine.plugins.discovery;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
-
 import com.dd.plist.NSDictionary;
 import com.dd.plist.NSObject;
 import com.dd.plist.PropertyListFormatException;
@@ -19,6 +8,14 @@ import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginType;
 import com.dropsnorz.owlplug.core.model.VST2Plugin;
 import com.dropsnorz.owlplug.core.model.VST3Plugin;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import javax.xml.parsers.ParserConfigurationException;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 public class OSXPluginBuilder extends NativePluginBuilder {
 
@@ -31,10 +28,9 @@ public class OSXPluginBuilder extends NativePluginBuilder {
 	@Override
 	public Plugin build(File pluginFile) {
 
-		if(pluginType == PluginType.VST2){
+		if (pluginType == PluginType.VST2) {
 			return buildVst2Plugin(pluginFile);
 		}
-
 		return null;
 	}
 
@@ -45,12 +41,10 @@ public class OSXPluginBuilder extends NativePluginBuilder {
 
 		Plugin plugin = new VST2Plugin(pluginName, pluginPath);
 
-		File pList = new File(pluginFile.getAbsolutePath() + "/Contents/Info.plist");
-		if(pList.exists()) {
-			buildPluginFromVST2Plist(plugin, pList);
+		File plist = new File(pluginFile.getAbsolutePath() + "/Contents/Info.plist");
+		if (plist.exists()) {
+			buildPluginFromVST2Plist(plugin, plist);
 		}
-
-
 		return plugin;
 	}
 
@@ -61,32 +55,26 @@ public class OSXPluginBuilder extends NativePluginBuilder {
 		return new VST3Plugin(pluginName, pluginPath);
 	}
 
-	private void buildPluginFromVST2Plist(Plugin plugin, File pList) {
+	private void buildPluginFromVST2Plist(Plugin plugin, File plist) {
 
 		try {
-			NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(pList);
-			NSObject nSBundleId = rootDict.objectForKey("CFBundleIdentifier");
-			NSObject nSBundleVersion = rootDict.objectForKey("CFBundleShortVersionString");
+			NSDictionary rootDict = (NSDictionary)PropertyListParser.parse(plist);
+			NSObject nsBundleId = rootDict.objectForKey("CFBundleIdentifier");
+			NSObject nsBundleVersion = rootDict.objectForKey("CFBun"
+					+ "dleShortVersionString");
 
-			if(nSBundleVersion == null) {
-				nSBundleVersion = rootDict.objectForKey("CFBundleVersion");
+			if (nsBundleVersion == null) {
+				nsBundleVersion = rootDict.objectForKey("CFBundleVersion");
 			}
-
-			if(nSBundleId != null) {
-				plugin.setBundleId(nSBundleId.toString());
+			if (nsBundleId != null) {
+				plugin.setBundleId(nsBundleId.toString());
 			}
-
-			if(nSBundleVersion != null) {
-				plugin.setVersion(nSBundleVersion.toString());
+			if (nsBundleVersion != null) {
+				plugin.setVersion(nsBundleVersion.toString());
 			}
-
-
 		} catch (IOException | PropertyListFormatException | ParseException | ParserConfigurationException
 				| SAXException e) {
 			log.error("Error while building plugin from Plistfile", e);
-
 		}	
-
 	}
-
 }

@@ -24,70 +24,62 @@ public class DirectoryInfoController {
 
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
-	
 	@Autowired
 	private DialogController dialogController;
-	
 	@Autowired
 	private TaskFactory taskFactory;
-	
+
 	@FXML
 	private Label directoryPathLabel;
-	
 	@FXML
 	private JFXListView<Plugin> pluginDirectoryListView;
-	
 	@FXML 
 	private JFXButton openDirectoryButton;
-	
 	@FXML 
 	private JFXButton deleteDirectoryButton;
-	
+
 	private PluginDirectory pluginDirectory;
 
-	
+
 	@FXML
 	public void initialize() { 
-		
+
 		openDirectoryButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		openDirectoryButton.setOnAction(e -> {
-				PlatformUtils.openDirectoryExplorer(pluginDirectory.getPath());
+			PlatformUtils.openDirectoryExplorer(pluginDirectory.getPath());
 		});
-		
+
 		pluginDirectoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
-		
+
 		deleteDirectoryButton.setOnAction(e ->  {
-				
-				JFXDialog dialog = dialogController.newDialog();
-				
-				JFXDialogLayout layout = new JFXDialogLayout();
-				
-				layout.setHeading(new Label("Remove directory"));
-				layout.setBody(new Label("Do you really want to remove " + pluginDirectory.getName()
-				+ " and all of its content ? This will permanently delete the file from your hard drive."));
-				
-				JFXButton cancelButton = new JFXButton("Cancel");
-				
-				cancelButton.setOnAction(cancelEvent -> {
-						dialog.close();
-				});	
-				
-				JFXButton removeButton = new JFXButton("Remove");
-				removeButton.setOnAction(removeEvent -> {
-						dialog.close();
-						taskFactory.createDirectoryRemoveTask(pluginDirectory).run();
-				});	
-				removeButton.getStyleClass().add("button-danger");
-				
-				layout.setActions(removeButton, cancelButton);
-				dialog.setContent(layout);
-				dialog.show();
+			JFXDialog dialog = dialogController.newDialog();
+			JFXDialogLayout layout = new JFXDialogLayout();
+
+			layout.setHeading(new Label("Remove directory"));
+			layout.setBody(new Label("Do you really want to remove " + pluginDirectory.getName()
+					+ " and all of its content ? This will permanently delete the file from your hard drive."));
+
+			JFXButton cancelButton = new JFXButton("Cancel");
+
+			cancelButton.setOnAction(cancelEvent -> {
+				dialog.close();
+			});	
+
+			JFXButton removeButton = new JFXButton("Remove");
+			removeButton.setOnAction(removeEvent -> {
+				dialog.close();
+				taskFactory.createDirectoryRemoveTask(pluginDirectory).run();
+			});	
+			removeButton.getStyleClass().add("button-danger");
+
+			layout.setActions(removeButton, cancelButton);
+			dialog.setContent(layout);
+			dialog.show();
 		});
 	}
-	
-	
+
+
 	public void setPluginDirectory(PluginDirectory pluginDirectory){
-		
 		this.pluginDirectory = pluginDirectory;
 		directoryPathLabel.setText(pluginDirectory.getPath());
 		pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());

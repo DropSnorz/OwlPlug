@@ -1,5 +1,11 @@
 package com.dropsnorz.owlplug.store.tasks;
 
+import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
+import com.dropsnorz.owlplug.core.engine.tasks.TaskException;
+import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
+import com.dropsnorz.owlplug.core.utils.FileUtils;
+import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,16 +16,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.dropsnorz.owlplug.ApplicationDefaults;
-import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskException;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
-import com.dropsnorz.owlplug.core.utils.FileUtils;
-import com.dropsnorz.owlplug.store.model.StoreProduct;
 
 public class ProductInstallTask extends AbstractTask {
 	
@@ -48,7 +46,8 @@ public class ProductInstallTask extends AbstractTask {
 			
 			this.updateProgress(2, 5);
 			this.updateMessage("Installing plugin " + product.getName() + " - Extracting files...");
-			File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" + "temp-" + archiveFile.getName().replace(".owlpack", ""));
+			File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" 
+					+ "temp-" + archiveFile.getName().replace(".owlpack", ""));
 			FileUtils.unzip(archiveFile.getAbsolutePath(),  extractedArchiveFolder.getAbsolutePath());
 
 			this.updateProgress(3, 5);
@@ -68,10 +67,8 @@ public class ProductInstallTask extends AbstractTask {
 		}
 		
 		return success();
-
 	}
-	
-	
+
 	
 	private File downloadInTempDirectory(StoreProduct product) throws TaskException {
 
@@ -89,7 +86,6 @@ public class ProductInstallTask extends AbstractTask {
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 			
 			fos.close();
-
 			return outputFile;
 
 		} catch (MalformedURLException e) {
@@ -109,22 +105,21 @@ public class ProductInstallTask extends AbstractTask {
 	private void installToPluginDirectory(File source, File target) throws IOException {
 
 		OwlPackStructureType structure = getStructureType(source);
-		
 		File newSource = null;
-		
-		switch(structure) {
-		case NESTED: newSource = source.listFiles()[0]; break;
-		case NESTED_ENV: newSource = getSubfileByName(source.listFiles()[0], applicationDefaults.getPlatform().getCode()); break;
-		default: break;
+		switch (structure) {
+			case NESTED: newSource = source.listFiles()[0]; 
+				break;
+			case NESTED_ENV: newSource = getSubfileByName(
+					source.listFiles()[0], applicationDefaults.getPlatform().getCode()); 
+				break;
+			default: break;
 		}
-		
-		if(newSource != null) {
+		if (newSource != null) {
 			FileUtils.copyDirectory(newSource, target);
 
-		}else {
+		} else {
 			FileUtils.copyDirectory(source, target);
 		}
-
 	}
 	
 	
@@ -132,11 +127,10 @@ public class ProductInstallTask extends AbstractTask {
 		
 		OwlPackStructureType structure = OwlPackStructureType.DIRECT;
 		
-		if(directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory()) {
+		if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory()) {
 			structure = OwlPackStructureType.NESTED;
-			
-			for(File f : directory.listFiles()[0].listFiles()) {
-				if(f.getName().equals("win") || f.getName().equals("osx")) {
+			for (File f : directory.listFiles()[0].listFiles()) {
+				if (f.getName().equals("win") || f.getName().equals("osx")) {
 					structure = OwlPackStructureType.NESTED_ENV;
 				}
 			}
@@ -146,12 +140,11 @@ public class ProductInstallTask extends AbstractTask {
 
 	
 	private File getSubfileByName(File parent, String filename) {
-		for(File f : parent.listFiles()) {
-			if(f.getName().equals(filename)) {
+		for (File f : parent.listFiles()) {
+			if (f.getName().equals(filename)) {
 				return f;
 			}
 		}
-
 		return null;
 	}
 	

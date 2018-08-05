@@ -1,8 +1,5 @@
 package com.dropsnorz.owlplug.core.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController;
@@ -18,9 +15,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 @Controller
 public class RepositoryInfoController {
@@ -51,6 +49,9 @@ public class RepositoryInfoController {
 
 	private PluginRepository repository;
 
+	/**
+	 * FXML initialize method.
+	 */
 	public void initialize() {
 
 		pluginRepositoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
@@ -64,11 +65,11 @@ public class RepositoryInfoController {
 		});
 
 		editButton.setOnAction(e ->  {
-			if(repository instanceof FileSystemRepository) {
+			if (repository instanceof FileSystemRepository) {
 				fileSystemRepositoryController.show();
 				fileSystemRepositoryController.startUpdateSequence((FileSystemRepository) repository);
 			}
-			if(repository instanceof GoogleDriveRepository) {
+			if (repository instanceof GoogleDriveRepository) {
 				googleDriveRepositoryController.show();
 				googleDriveRepositoryController.startUpdateSequence((GoogleDriveRepository) repository);
 			}
@@ -81,7 +82,7 @@ public class RepositoryInfoController {
 
 			layout.setHeading(new Label("Remove directory"));
 			layout.setBody(new Label("Do you really want to remove repository " + repository.getName()
-			+ " and all of its content ? This will permanently delete the files from your hard drive."));
+					+ " and all of its content ? This will permanently delete the files from your hard drive."));
 
 			JFXButton cancelButton = new JFXButton("Cancel");
 			cancelButton.setOnAction(cancelEvent -> {

@@ -1,11 +1,5 @@
 package com.dropsnorz.owlplug.core.controllers;
 
-import java.io.File;
-import java.util.prefs.Preferences;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.services.OptionsService;
@@ -15,11 +9,14 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
-
+import java.io.File;
+import java.util.prefs.Preferences;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 @Controller
 public class OptionsController {
@@ -55,6 +52,9 @@ public class OptionsController {
 	private JFXButton storeDirectoryButton;
 
 
+	/**
+	 * FXML initialize method.
+	 */
 	@FXML
 	public void initialize() {
 
@@ -66,7 +66,7 @@ public class OptionsController {
 			prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
 		});
 
-		vst3ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) ->{
+		vst3ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
 
 			prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, newValue);
 		});
@@ -78,7 +78,7 @@ public class OptionsController {
 			File selectedDirectory = 
 					directoryChooser.showDialog(mainWindow);
 
-			if(selectedDirectory != null) {
+			if (selectedDirectory != null) {
 				pluginDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
 			}
 		});
@@ -99,16 +99,15 @@ public class OptionsController {
 			JFXDialogLayout layout = new JFXDialogLayout();
 
 			layout.setHeading(new Label("Remove plugin"));
-			layout.setBody(new Label("Do you really want to remove all user data including accounts, repositories and custom settings ?"));
+			layout.setBody(new Label("Do you really want to remove all user data including accounts, "
+						+ "repositories and custom settings ?"));
 
 			JFXButton cancelButton = new JFXButton("Cancel");
-
 			cancelButton.setOnAction(cancelEvent -> {
 				dialog.close();
 			});	
 
 			JFXButton removeButton = new JFXButton("Clear");
-
 			removeButton.setOnAction(removeEvent -> {
 				dialog.close();
 				optionsService.clearAllUserData();
@@ -136,7 +135,7 @@ public class OptionsController {
 			File selectedDirectory = 
 					directoryChooser.showDialog(mainWindow);
 
-			if(selectedDirectory != null){
+			if (selectedDirectory != null) {
 				storeDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
 			}
 		});
@@ -158,7 +157,7 @@ public class OptionsController {
 		storeDirectoryCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
 		storeDirectoryTextField.setText(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
 		
-		if(!storeDirectoryCheckBox.isSelected()) {
+		if (!storeDirectoryCheckBox.isSelected()) {
 			storeDirectoryTextField.setDisable(true);
 			storeDirectoryButton.setDisable(false);
 		}

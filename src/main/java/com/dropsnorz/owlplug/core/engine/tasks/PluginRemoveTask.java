@@ -1,11 +1,8 @@
 package com.dropsnorz.owlplug.core.engine.tasks;
 
-import java.io.File;
-
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;
-
-import javafx.concurrent.Task;
+import java.io.File;
 
 public class PluginRemoveTask extends AbstractTask {
 
@@ -27,15 +24,14 @@ public class PluginRemoveTask extends AbstractTask {
 		this.updateMessage("Deleting plugin " + plugin.getName() + " ...");
 		
 		File pluginFile = new File(plugin.getPath());
-		if(pluginFile.delete()) {
+		if (pluginFile.delete()) {
 			pluginDAO.delete(plugin);
 			
 			this.updateProgress(1, 1);
 			this.updateMessage("Plugin successfully deleted");
 			
 			return null;
-		}
-		else {
+		} else {
 			this.updateMessage("Error during plugin removal");
 			throw new TaskException("Error during plugin removal");
 			

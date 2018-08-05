@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 @PropertySource("classpath:credentials.properties")
 public class OwlPlugCredentials {
-	
+
 	@Value("${owlplug.credentials.google.appId}")
 	public String GOOGLE_APP_ID;
-	
+
 	@Value("${owlplug.credentials.google.secret}")
 	public String GOOGLE_SECRET;
-	
-	
-	
+
+
+
 
 }

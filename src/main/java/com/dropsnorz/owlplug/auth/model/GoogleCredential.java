@@ -1,54 +1,51 @@
 package com.dropsnorz.owlplug.auth.model;
 
+import com.google.api.client.auth.oauth2.StoredCredential;
 import java.time.Instant;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import com.google.api.client.auth.oauth2.StoredCredential;
-
 @Entity
 public class GoogleCredential {
-    
+
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(unique = true)
-    private String key;
-    private String accessToken;
-    private Long expirationTimeMilliseconds;
-    private String refreshToken;
+	private String key;
+	private String accessToken;
+	private Long expirationTimeMilliseconds;
+	private String refreshToken;
 
-    @CreatedDate
-    private Instant createdAt;
-    @LastModifiedDate
-    private Instant updatedAt;
-    
-    public GoogleCredential() {
-    	
-    }
+	@CreatedDate
+	private Instant createdAt;
+	@LastModifiedDate
+	private Instant updatedAt;
 
-    public GoogleCredential(String key, StoredCredential credential) {
-        this.key = key;
-        this.accessToken = credential.getAccessToken();
-        this.expirationTimeMilliseconds = credential.getExpirationTimeMilliseconds();
-        this.refreshToken = credential.getRefreshToken();
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
-    }
+	public GoogleCredential() {
 
-    public void apply(StoredCredential credential) {
-        this.accessToken = credential.getAccessToken();
-        this.expirationTimeMilliseconds = credential.getExpirationTimeMilliseconds();
-        this.refreshToken = credential.getRefreshToken();
-        this.updatedAt = Instant.now();
-    }
+	}
+
+	public GoogleCredential(String key, StoredCredential credential) {
+		this.key = key;
+		this.accessToken = credential.getAccessToken();
+		this.expirationTimeMilliseconds = credential.getExpirationTimeMilliseconds();
+		this.refreshToken = credential.getRefreshToken();
+		this.createdAt = Instant.now();
+		this.updatedAt = Instant.now();
+	}
+
+	public void apply(StoredCredential credential) {
+		this.accessToken = credential.getAccessToken();
+		this.expirationTimeMilliseconds = credential.getExpirationTimeMilliseconds();
+		this.refreshToken = credential.getRefreshToken();
+		this.updatedAt = Instant.now();
+	}
 
 	public String getKey() {
 		return key;
@@ -97,6 +94,6 @@ public class GoogleCredential {
 	public void setUpdatedAt(Instant updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-    
-    
+
+
 }
