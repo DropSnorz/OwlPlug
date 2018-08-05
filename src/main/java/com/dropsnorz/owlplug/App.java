@@ -71,18 +71,18 @@ public class App extends Application {
 	}
 
 	@Bean
-	Preferences getPreference() {
+	public Preferences getPreference() {
 		return 	Preferences.userRoot().node("com.dropsnorz.owlplug.user");
 
 	}
 
 	@Bean 
-	private ServletWebServerFactory servletWebServerFactory() {
+	public ServletWebServerFactory servletWebServerFactory() {
 		return new TomcatServletWebServerFactory();
 	}
 	
 	@Bean 
-	private CacheManager getCacheManager() {
+	public CacheManager getCacheManager() {
 		return CacheManager.create();
 	}
 
