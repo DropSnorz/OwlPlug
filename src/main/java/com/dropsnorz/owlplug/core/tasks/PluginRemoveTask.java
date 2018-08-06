@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.core.engine.tasks;
+package com.dropsnorz.owlplug.core.tasks;
 
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;

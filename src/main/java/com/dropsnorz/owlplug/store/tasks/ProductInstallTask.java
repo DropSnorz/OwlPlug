@@ -1,9 +1,9 @@
 package com.dropsnorz.owlplug.store.tasks;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
-import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskException;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
+import com.dropsnorz.owlplug.core.tasks.AbstractTask;
+import com.dropsnorz.owlplug.core.tasks.TaskException;
+import com.dropsnorz.owlplug.core.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.io.File;

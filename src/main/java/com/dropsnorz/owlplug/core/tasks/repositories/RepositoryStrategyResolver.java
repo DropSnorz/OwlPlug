@@ -1,13 +1,13 @@
-package com.dropsnorz.owlplug.core.engine.repositories;
+package com.dropsnorz.owlplug.core.tasks.repositories;
 
-import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters.RepositoryAction;
-import com.dropsnorz.owlplug.core.engine.repositories.filesystem.FileSystemRepositoryPullingStrategy;
-import com.dropsnorz.owlplug.core.engine.repositories.filesystem.FileSystemRepositoryPushingStrategy;
-import com.dropsnorz.owlplug.core.engine.repositories.googledrive.GoogleDrivePullingStrategy;
-import com.dropsnorz.owlplug.core.engine.repositories.googledrive.GoogleDrivePushingStrategy;
 import com.dropsnorz.owlplug.core.model.FileSystemRepository;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters.RepositoryAction;
+import com.dropsnorz.owlplug.core.tasks.repositories.filesystem.FileSystemRepositoryPullingStrategy;
+import com.dropsnorz.owlplug.core.tasks.repositories.filesystem.FileSystemRepositoryPushingStrategy;
+import com.dropsnorz.owlplug.core.tasks.repositories.googledrive.GoogleDrivePullingStrategy;
+import com.dropsnorz.owlplug.core.tasks.repositories.googledrive.GoogleDrivePushingStrategy;
 import java.util.HashMap;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.core.engine.tasks;
+package com.dropsnorz.owlplug.core.tasks;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;

@@ -1,8 +1,8 @@
 package com.dropsnorz.owlplug.core.components;
 
 import com.dropsnorz.owlplug.core.controllers.TaskBarController;
-import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
+import com.dropsnorz.owlplug.core.tasks.AbstractTask;
+import com.dropsnorz.owlplug.core.tasks.TaskResult;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

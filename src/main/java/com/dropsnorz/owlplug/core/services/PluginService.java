@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
-import com.dropsnorz.owlplug.core.engine.plugins.discovery.NativePluginBuilder;
-import com.dropsnorz.owlplug.core.engine.plugins.discovery.NativePluginBuilderFactory;
-import com.dropsnorz.owlplug.core.engine.plugins.discovery.NativePluginCollector;
-import com.dropsnorz.owlplug.core.engine.plugins.discovery.NativePluginCollectorFactory;
 import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginType;
+import com.dropsnorz.owlplug.core.tasks.plugins.discovery.NativePluginBuilder;
+import com.dropsnorz.owlplug.core.tasks.plugins.discovery.NativePluginBuilderFactory;
+import com.dropsnorz.owlplug.core.tasks.plugins.discovery.NativePluginCollector;
+import com.dropsnorz.owlplug.core.tasks.plugins.discovery.NativePluginCollectorFactory;
 
 @Service
 public class PluginService {

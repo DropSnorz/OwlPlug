@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.core.engine.plugins.discovery;
+package com.dropsnorz.owlplug.core.tasks.plugins.discovery;
 
 import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.PluginType;

@@ -1,8 +1,8 @@
 package com.dropsnorz.owlplug.store.tasks;
 
-import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskException;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
+import com.dropsnorz.owlplug.core.tasks.AbstractTask;
+import com.dropsnorz.owlplug.core.tasks.TaskException;
+import com.dropsnorz.owlplug.core.tasks.TaskResult;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.PluginStore;

@@ -2,7 +2,7 @@ package com.dropsnorz.owlplug.core.controllers;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskRunner;
-import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
+import com.dropsnorz.owlplug.core.tasks.AbstractTask;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;

@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.core.engine.repositories;
+package com.dropsnorz.owlplug.core.tasks.repositories;
 
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 

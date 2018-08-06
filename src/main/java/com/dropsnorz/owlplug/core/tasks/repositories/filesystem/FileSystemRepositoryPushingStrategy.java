@@ -1,14 +1,13 @@
-package com.dropsnorz.owlplug.core.engine.repositories.filesystem;
+package com.dropsnorz.owlplug.core.tasks.repositories.filesystem;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-
-import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
-import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.model.FileSystemRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
+import com.dropsnorz.owlplug.core.tasks.repositories.IRepositoryStrategy;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
 
 public class FileSystemRepositoryPushingStrategy implements IRepositoryStrategy {
 

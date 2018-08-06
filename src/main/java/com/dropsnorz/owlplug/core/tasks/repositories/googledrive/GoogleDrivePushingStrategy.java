@@ -1,8 +1,8 @@
-package com.dropsnorz.owlplug.core.engine.repositories.googledrive;
+package com.dropsnorz.owlplug.core.tasks.repositories.googledrive;
 
-import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
-import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
+import com.dropsnorz.owlplug.core.tasks.repositories.IRepositoryStrategy;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
 
 public class GoogleDrivePushingStrategy implements IRepositoryStrategy {
 

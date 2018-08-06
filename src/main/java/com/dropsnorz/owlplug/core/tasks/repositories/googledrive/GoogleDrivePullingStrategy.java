@@ -1,11 +1,11 @@
-package com.dropsnorz.owlplug.core.engine.repositories.googledrive;
+package com.dropsnorz.owlplug.core.tasks.repositories.googledrive;
 
 import com.dropsnorz.owlplug.ApplicationDefaults;
-import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
-import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyException;
-import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
+import com.dropsnorz.owlplug.core.tasks.repositories.IRepositoryStrategy;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyException;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;

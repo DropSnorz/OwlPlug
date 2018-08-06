@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.core.engine.plugins.discovery;
+package com.dropsnorz.owlplug.core.tasks.plugins.discovery;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.NSObject;

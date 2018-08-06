@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug.core.engine.plugins.discovery;
+package com.dropsnorz.owlplug.core.tasks.plugins.discovery;
 
 import java.io.File;
 import java.util.List;
