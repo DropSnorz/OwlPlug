@@ -1,11 +1,10 @@
 package com.dropsnorz.owlplug.core.tasks;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 
 public abstract class AbstractTask extends Task<TaskResult> {
 	
-	private String name = "OwlPlug task" ;
+	private String name = "OwlPlug task";
 	
 	protected TaskResult success() {
 		return new TaskResult();
@@ -24,15 +23,16 @@ public abstract class AbstractTask extends Task<TaskResult> {
 	@Override
 	public String toString() {
 		String prefix = "W";
-		
-		if (this.isRunning()) prefix = "R";
-		if (this.isDone()) prefix = "D";
-		if (this.getState().equals(State.FAILED)) prefix = "F";
+		if (this.isRunning()) {
+			prefix = "R";
+		}
+		if (this.isDone()) {
+			prefix = "D";
+		}
+		if (this.getState().equals(State.FAILED)) {
+			prefix = "F";
+		}
 		return prefix + " - " + this.getName();
-		
 
 	}
-	
-	
-
 }

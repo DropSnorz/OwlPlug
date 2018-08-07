@@ -7,7 +7,6 @@ import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
-import com.dropsnorz.owlplug.core.services.PluginService;
 import com.dropsnorz.owlplug.core.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.tasks.DirectoryRemoveTask;
 import com.dropsnorz.owlplug.core.tasks.PluginRemoveTask;
@@ -17,6 +16,7 @@ import com.dropsnorz.owlplug.core.tasks.RepositoryTask;
 import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.core.tasks.TaskExecutionContext;
 import com.dropsnorz.owlplug.core.tasks.TaskResult;
+import com.dropsnorz.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.dropsnorz.owlplug.core.tasks.repositories.IRepositoryStrategy;
 import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyException;
 import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
@@ -28,6 +28,7 @@ import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
 import com.dropsnorz.owlplug.store.tasks.StoreSyncTask;
 import java.io.File;
+import java.util.prefs.Preferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class TaskFactory {
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
 	@Autowired
-	private PluginService pluginService;
+	private Preferences prefs;
 	@Autowired
 	private TaskRunner taskManager;
 	@Autowired
@@ -60,8 +61,14 @@ public class TaskFactory {
 	private StoreController storeController;
 
 	public TaskExecutionContext createPluginSyncTask() {
+		
+		PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
+		parameters.setPlatform(applicationDefaults.getPlatform());
+		parameters.setPluginDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+		parameters.setFindVST2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+		parameters.setFindVST3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
 
-		PluginSyncTask task = new PluginSyncTask(pluginService, pluginDAO);
+		PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO);
 		task.setOnSucceeded(e -> {
 			pluginsController.refreshPlugins();
 		});
