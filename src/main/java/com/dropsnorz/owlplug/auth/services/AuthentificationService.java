@@ -61,8 +61,8 @@ public class AuthentificationService {
 
 	public void createAccountAndAuth() throws AuthentificationException {
 
-		String clientId = owlPlugCredentials.GOOGLE_APP_ID;
-		String clientSecret = owlPlugCredentials.GOOGLE_SECRET;
+		String clientId = owlPlugCredentials.getGoogleAppId();
+		String clientSecret = owlPlugCredentials.getGoogleSecret();
 		ArrayList<String> scopes = new ArrayList<>();
 
 		scopes.add("https://www.googleapis.com/auth/drive");
@@ -107,8 +107,8 @@ public class AuthentificationService {
 
 	public GoogleCredential getGoogleCredential(String key){
 
-		String clientId = owlPlugCredentials.GOOGLE_APP_ID;
-		String clientSecret = owlPlugCredentials.GOOGLE_SECRET;
+		String clientId = owlPlugCredentials.getGoogleAppId();
+		String clientSecret = owlPlugCredentials.getGoogleSecret();
 
 		com.dropsnorz.owlplug.auth.model.GoogleCredential gc = googleCredentialDAO.findByKey(key);
 

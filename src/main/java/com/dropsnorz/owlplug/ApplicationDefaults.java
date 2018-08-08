@@ -1,19 +1,14 @@
 package com.dropsnorz.owlplug;
 
-import java.io.File;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
-
 import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.core.utils.OSValidator;
-
+import java.io.File;
 import javafx.scene.image.Image;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ApplicationDefaults {
@@ -27,6 +22,7 @@ public class ApplicationDefaults {
 	public static final String REPOSITORY_FOLDER_NAME = "repositories";
 	public static final String DEFAULT_VST_DIRECTORY = "C:/VST";
 
+	//CHECKSTYLE:OFF
 	public static final Image owlplugLogo = new Image(ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo.png"));
 	public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
 	public final Image vst2Image  = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
@@ -40,7 +36,7 @@ public class ApplicationDefaults {
 	public final Image googleDriveRepositoryImage = new Image(getClass().getResourceAsStream("/icons/gdrive-grey-64.png"));
 	
 	public final Image pluginPlaceholderImage = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));
-	
+	//CHECKSTYLE:ON
 	
 	public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
 	public static final String VST2_DISCOVERY_ENABLED_KEY = "VST2_DISCOVERY_ENABLED";
@@ -55,11 +51,9 @@ public class ApplicationDefaults {
 		
 		if (OSValidator.isWindows()) {
 			this.platform = OSType.WIN;
-		}
-		else if (OSValidator.isMac()){
+		} else if (OSValidator.isMac()) {
 			this.platform = OSType.MAC;
-		}
-		else {
+		} else {
 			this.platform = OSType.UNDEFINED;
 		}
 		
@@ -75,7 +69,8 @@ public class ApplicationDefaults {
 		switch (plugin.getType()) {
 			case VST2: return vst2Image;
 			case VST3: return vst3Image;
-		default: return vst2Image;
+			default: 
+				return vst2Image;
 		}
 	}
 	

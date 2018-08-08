@@ -1,15 +1,13 @@
 package com.dropsnorz.owlplug.core.controllers.dialogs;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-
 import javafx.scene.Node;
 import javafx.scene.text.Text;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 @Controller
 public class DialogController {
@@ -79,7 +77,7 @@ public class DialogController {
 		JFXButton button = new JFXButton("Close");
 		
 		button.setOnAction(e -> {
-				dialog.close();
+			dialog.close();
 		});	
 		
 		layout.setActions(button);

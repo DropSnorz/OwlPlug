@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class CustomTreeCell extends JFXTreeCell<Object>{
+public class CustomTreeCell extends JFXTreeCell<Object> {
 
 	protected HBox hbox;
 	protected TextFlow textFlow;
@@ -23,27 +23,25 @@ public class CustomTreeCell extends JFXTreeCell<Object>{
 			setGraphic(null);
 		} else {
 
-			if(item instanceof Plugin) {
+			if (item instanceof Plugin) {
 				setText(item.toString());
 				setGraphic(getTreeItem().getGraphic());
-			}
-			else if (item instanceof IDirectory){
+			} else if (item instanceof IDirectory) {
 				setText(null);
 				textFlow = new TextFlow();
 
 				IDirectory dir = (IDirectory) item;
 				Text name;
 
-				if(dir.getDisplayName() != null && !dir.getName().equals(dir.getDisplayName())) {
+				if (dir.getDisplayName() != null && !dir.getName().equals(dir.getDisplayName())) {
 
-					String preText = dir.getDisplayName().replaceAll( "/" + dir.getName() + "$","");
+					String preText = dir.getDisplayName().replaceAll("/" + dir.getName() + "$","");
 					Text pre = new Text(preText);
 					pre.getStyleClass().add("text-disabled");
 					textFlow.getChildren().add(pre);
 					name = new Text("/" + dir.getName());
 
-				}
-				else {
+				} else {
 					name = new Text(dir.getName());
 				}
 
@@ -55,8 +53,7 @@ public class CustomTreeCell extends JFXTreeCell<Object>{
 				hbox.getChildren().add(textFlow);
 
 				setGraphic(hbox);
-			}
-			else {
+			} else {
 				setText(item.toString());
 				setGraphic(getTreeItem().getGraphic());
 			}

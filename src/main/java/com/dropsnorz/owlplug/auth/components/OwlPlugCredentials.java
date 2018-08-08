@@ -9,12 +9,17 @@ import org.springframework.stereotype.Component;
 public class OwlPlugCredentials {
 
 	@Value("${owlplug.credentials.google.appId}")
-	public String GOOGLE_APP_ID;
+	private String googleAppId;
 
 	@Value("${owlplug.credentials.google.secret}")
-	public String GOOGLE_SECRET;
+	private String googleSecret;
 
+	public String getGoogleAppId() {
+		return googleAppId;
+	}
 
-
-
+	public String getGoogleSecret() {
+		return googleSecret;
+	}
+	
 }

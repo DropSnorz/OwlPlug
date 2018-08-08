@@ -34,8 +34,7 @@ public class FileUtils {
 	public static void unzip(String source, String dest) throws IOException {
 
 		//Open the file
-		try(ZipFile file = new ZipFile(source))
-		{
+		try (ZipFile file = new ZipFile(source)) {
 			FileSystem fileSystem = FileSystems.getDefault();
 			//Get file entries
 			Enumeration<? extends ZipEntry> entries = file.entries();
@@ -45,18 +44,15 @@ public class FileUtils {
 			Files.createDirectory(fileSystem.getPath(uncompressedDirectory));
 
 			//Iterate over entries
-			while (entries.hasMoreElements())
-			{
+			while (entries.hasMoreElements()) {
 				ZipEntry entry = entries.nextElement();
 				//If directory then create a new directory in uncompressed folder
-				if (entry.isDirectory())
-				{
+				if (entry.isDirectory()) {
 					log.debug("Creating Directory:" + uncompressedDirectory + File.separator + entry.getName());
 					Files.createDirectories(fileSystem.getPath(uncompressedDirectory + File.separator + entry.getName()));
-				}
-				//Else create the file
-				else
-				{
+					
+					//Else create the file
+				} else {
 					InputStream is = file.getInputStream(entry);
 					BufferedInputStream bis = new BufferedInputStream(is);
 					String uncompressedFileName = uncompressedDirectory + File.separator + entry.getName();
@@ -70,7 +66,7 @@ public class FileUtils {
 
 					byte[] buffer = new byte[2048]; 
 					int read = 0;
-					while( ( read = bis.read( buffer ) ) > 0 ){
+					while ((read = bis.read(buffer)) > 0) {
 						fileOutput.write(buffer, 0, read);
 					}
 
@@ -78,9 +74,7 @@ public class FileUtils {
 					log.debug("Written :" + entry.getName());
 				}
 			}
-		}
-		catch(IOException e)
-		{
+		} catch (IOException e) {
 			throw e;
 		}
 	}

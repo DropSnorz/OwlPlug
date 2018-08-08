@@ -15,6 +15,7 @@ Checkstyle inspired by configuration from Google coding conventions https://goog
   <property name="fileExtensions" value="java, properties, xml"/>
   <module name="TreeWalker">
     <property name="tabWidth" value="2"/>
+    <module name="SuppressionCommentFilter"/>
     <module name="OuterTypeFilename"/>
     <module name="IllegalTokenText">
       <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>

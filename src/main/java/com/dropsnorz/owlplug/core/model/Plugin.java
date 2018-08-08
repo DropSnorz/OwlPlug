@@ -10,21 +10,21 @@ import javax.persistence.Inheritance;
 @Inheritance
 public abstract class Plugin {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
-    
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
 	protected String name;
 	protected String path;
 	protected String bundleId;
 	protected String version;
-	
-	
+
+
 	public Plugin(){
-		
+
 	}
-	
-	public Plugin(String name, String path){
+
+	public Plugin(String name, String path) {
 		this.name = name;
 		this.path = path;
 	}
@@ -44,7 +44,7 @@ public abstract class Plugin {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
+
 	public String getBundleId() {
 		return bundleId;
 	}
@@ -65,10 +65,8 @@ public abstract class Plugin {
 	public String toString() {
 		return name;
 	}
-	
+
 	public abstract PluginType getType();
-	
-	
-	
+
 
 }

@@ -1,15 +1,14 @@
 package com.dropsnorz.owlplug.auth;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
 import com.dropsnorz.owlplug.auth.model.GoogleCredential;
 import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.util.store.AbstractDataStore;
 import com.google.api.client.util.store.DataStore;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JPADataStore extends AbstractDataStore<StoredCredential> {
 
@@ -17,6 +16,7 @@ public class JPADataStore extends AbstractDataStore<StoredCredential> {
 	private JPADataStoreFactory jpaDataStoreFactory;
 
 	/**
+	 * Creates a new JPA Datastore.
 	 * @param dataStoreFactory data store factory
 	 * @param id               data store ID
 	 */
@@ -85,7 +85,7 @@ public class JPADataStore extends AbstractDataStore<StoredCredential> {
 	public DataStore<StoredCredential> set(String key, StoredCredential value) throws IOException {
 		GoogleCredential googleCredential = repository.findByKey(key);
 
-		if(googleCredential == null) {
+		if (googleCredential == null) {
 			googleCredential = new GoogleCredential(key, value);
 		}
 

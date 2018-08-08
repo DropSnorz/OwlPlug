@@ -17,14 +17,15 @@ public class AppTest extends TestCase {
 		super(testName);
 	}
 
-	/**
-	 * @return the suite of tests being tested
+	/** Test case step2.
+	 * 	 * @return the suite of tests being tested
 	 */
 	public static Test suite() {
 		return new TestSuite(AppTest.class);
 	}
 
 	/**
+	 * Empty test.
 	 * Rigourous Test :-)
 	 */
 	public void testApp() {
