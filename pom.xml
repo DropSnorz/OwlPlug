@@ -16,17 +16,6 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-
-	<repositories>
-		<repository>
-			<name>data</name>
-			<id>local-maven-repo</id>
-			<url>file:${project.basedir}/repo</url>
-		</repository>
-
-
-	</repositories>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
@@ -178,12 +167,6 @@
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.boris</groupId>
-			<artifactId>jvst</artifactId>
-			<version>0.0.1</version>
 		</dependency>
 
 	</dependencies>
