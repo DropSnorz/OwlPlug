@@ -149,6 +149,7 @@ public class TaskFactory {
 		task.setOnSucceeded(e ->{
 			storeController.refreshView();
 		});
+		bindOnFailHandler(task);
 		return buildContext(task);
 		
 	}
