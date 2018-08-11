@@ -31,15 +31,33 @@ public class ImageCache {
 
 	}
 
+	/**
+	 * Retrieve or persist asynchronously an image in cache from url.
+	 * @param url Image url
+	 * @return The created image
+	 */
 	public Image get(String url) {
 		return get(url, "png");
 	}
 
-	public Image get(String url, String type){
+	/**
+	 * Retrieve or persist asynchronously an image in cache from url.
+	 * @param url Image url
+	 * @param type Image type. Must be png or jpeg.
+	 * @return The created image
+	 */
+	public Image get(String url, String type) {
 		return get(url, type, true);
 	}
 
 
+	/**
+	 * Retrieve or persist image in cache from url.
+	 * @param url Image url
+	 * @param type Image type. Must be png or jpeg.
+	 * @param asyncFetch true indicates whether the image is being loaded in the background
+	 * @return The created image
+	 */
 	public Image get(String url, String type, boolean asyncFetch) {
 
 		Cache cache = cacheManager.getCache("image-cache");
@@ -51,8 +69,8 @@ public class ImageCache {
 				log.debug("Retrieving image {} from cache", url);
 				byte[] content = (byte[]) cachedElement.getObjectValue();
 				ByteArrayInputStream s = new ByteArrayInputStream(content);
-				BufferedImage bImage = ImageIO.read(s);
-				return SwingFXUtils.toFXImage(bImage, null);
+				BufferedImage bufImage = ImageIO.read(s);
+				return SwingFXUtils.toFXImage(bufImage, null);
 			} catch (IOException e) {
 				log.error("Error retrieving image from cache", e);
 			}
@@ -75,11 +93,17 @@ public class ImageCache {
 		return cachedImage;
 	}
 
+	/**
+	 * Load asynchronously an Image from cache on the given ImageView.
+	 * If image don't exists in cache, it will be created retrieving the image from url.
+	 * @param url Image url
+	 * @param imageView Target image view
+	 */
 	public void loadAsync(String url, ImageView imageView) {
 
 		Task<Image> task = new Task<Image>() {
 			public Image call() {
-				return ImageCache.this.get(url ,"png", false);
+				return ImageCache.this.get(url,"png", false);
 			}
 		};
 
@@ -95,12 +119,20 @@ public class ImageCache {
 
 	}
 	
+	/**
+	 * Returns true if cache contains data for the given key.
+	 * @param key to look for
+	 * @return true if cache contains key
+	 */
 	public boolean contains(String key) {
 		Cache cache = cacheManager.getCache("image-cache");
 		return cache.isKeyInCache(key);
 
 	}
 	
+	/**
+	 * Clear image cache contents.
+	 */
 	public void clear() {
 		Cache cache = cacheManager.getCache("image-cache");
 		cache.removeAll();

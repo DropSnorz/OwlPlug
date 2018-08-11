@@ -123,7 +123,12 @@
                                     <Label styleClass="heading-2" text="About" />
                                     <HBox spacing="5.0">
                                        <children>
-                                          <Label fx:id="versionLabel" text="Remove all user data including accounts, repositories and custom settings" wrapText="true" HBox.hgrow="ALWAYS" />
+                                          <Label fx:id="versionLabel" text="OwlPlug V ?.?.?" wrapText="true" HBox.hgrow="ALWAYS" />
+                                          <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <JFXButton fx:id="clearCacheButton" text="Clear cache" />
+                                             </children>
+                                          </HBox>
                                        </children>
                                        <VBox.margin>
                                           <Insets top="10.0" />

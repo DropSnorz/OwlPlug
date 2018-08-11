@@ -45,6 +45,8 @@ public class OptionsController {
 	@FXML
 	private Label versionLabel;
 	@FXML
+	private JFXButton clearCacheButton;
+	@FXML
 	private JFXCheckBox storeDirectoryCheckBox;
 	@FXML
 	private JFXTextField storeDirectoryTextField;
@@ -142,6 +144,10 @@ public class OptionsController {
 
 		storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
 			prefs.put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
+		});
+		
+		clearCacheButton.setOnAction(e -> {
+			optionsService.clearCache();
 		});
 
 

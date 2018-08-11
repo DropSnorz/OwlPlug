@@ -8,6 +8,7 @@ import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.annotation.PostConstruct;
+import net.sf.ehcache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,12 @@ public class OptionsService {
 	private UserAccountDAO userAccountDAO;
 	@Autowired
 	private GoogleCredentialDAO googleCredentialDAO;
+	@Autowired
+	private CacheManager cacheManager;
 
 
 	@PostConstruct
-	public void initialize() {
+	private void initialize() {
 
 		//Init default options
 		if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) == null) {
@@ -49,6 +52,10 @@ public class OptionsService {
 	}
 
 
+	/**
+	 * Clear all user data including Options, Configured repositories and cache.
+	 * @return true if data has been successfully cleared, false otherwise
+	 */
 	public boolean clearAllUserData() {
 
 		try {
@@ -59,12 +66,22 @@ public class OptionsService {
 			googleCredentialDAO.deleteAll();
 			userAccountDAO.deleteAll();
 			
+			clearCache();
+			
 			return true;
 			
 		} catch (BackingStoreException e) {
 			log.error("Preferences cannot be updated", e);
 			return false;
 		}
+	}
+	
+	
+	/**
+	 * Clear data from all application caches.
+	 */
+	public void clearCache() {
+		cacheManager.clearAll();
 	}
 
 }
