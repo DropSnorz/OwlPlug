@@ -44,18 +44,24 @@ public class StoreController {
 	@FXML
 	private ScrollPane scrollPane;
 
+	/**
+	 * FXML initialize.
+	 */
 	public void initialize() {
 
 		syncStoreButton.setOnAction(e -> {
 			storeService.syncStores();
 		});
-		storeSearchTextField.textProperty().addListener((obs, oldValue, newValue)->{
+		storeSearchTextField.textProperty().addListener((obs, oldValue, newValue) -> {
 			refreshView();
 		});
 
 		refreshView();
 	}
 
+	/**
+	 * Refresh Store View.
+	 */
 	public synchronized void refreshView() {
 		this.masonryPane.getChildren().clear();
 		this.masonryPane.clearLayout();
@@ -70,30 +76,37 @@ public class StoreController {
 		});
 	}
 
+	/**
+	 * Trigger product installation.
+	 * @param product Product to install
+	 */
 	public void installProduct(StoreProduct product) {
 
 		File selectedDirectory = null;
 
 		if (prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
-			String storeDirectoryPath = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,"");
-			if (!"".equals(storeDirectoryPath)) {
+			String storeDirectoryPath = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,null);
+			if (storeDirectoryPath != null) {
 				selectedDirectory = new File(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,""));
 			}
 		} else {
 			DirectoryChooser directoryChooser = new DirectoryChooser();
 			if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
-				directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
+				File initialDirectory = new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+				if (initialDirectory.isDirectory()) {
+					directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
+				}
 			}
 
 			Window mainWindow = masonryPane.getScene().getWindow();
 			selectedDirectory = directoryChooser.showDialog(mainWindow);
 		}
-
-		if (selectedDirectory != null && selectedDirectory.isDirectory()) {
+		
+		if (selectedDirectory != null) {
 			storeService.install(product, selectedDirectory);
+		} else {
+			log.error("Invalid product installation directory");
 		}
-		else {
-			log.error("Error: Specified install directory don't exists.");
-		}
+
 	}
 }
