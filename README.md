@@ -66,8 +66,6 @@ In the next realeases, Owlplug may support multiple store sources. Everybody wil
 
 OwlPlug central is the default Store source. If you wan't to include your plugin in OwlPlug Central, create an issue in this repository with a link to download your plugin.
 Owlplug Central backend is a quick prototype/POC for the Store feature integration in Owlplug.
-- Mirror: Binairies are stored in OwlPlug central server.
-- Bridge: You keep plugin binairies on your server by providing only a file access URL to OwlPlug central. I don't like this option for security reasons, but it still usefull for testing purpose.
 
 
 # Development
@@ -76,6 +74,7 @@ Owlplug Central backend is a quick prototype/POC for the Store feature integrati
 * Spring boot
 * JavaFx & JFoenix
 * Hibernate & H2
+* Maven
 
 
 ## Development Setup
@@ -84,13 +83,13 @@ Owlplug Central backend is a quick prototype/POC for the Store feature integrati
 2. Run following commands
 ```sh
 # Install dependecies
-mvn clean install
+mvn clean install spring-boot:repackage
 # Run owlplug
-mvn exec:java
+mvn spring-boot:run
 ```
-In order to use GoogleDrive repositories, you have to fill OAuth2 client id and secret in `credentials.properties`. Check Prerequisites from [Google OAuth2 Documentation](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
+The first command will generate an executable binary `/target/owlplug-*.jar`. In order to use GoogleDrive repositories, you have to fill OAuth2 client id and secret in `credentials.properties`. Check Prerequisites from [Google OAuth2 Documentation](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
 
-# Possible incoming Major features
+# Possible incoming major features
 
 - Plugins Organization (Move plugins between folders)
 - Better plugin discovery
