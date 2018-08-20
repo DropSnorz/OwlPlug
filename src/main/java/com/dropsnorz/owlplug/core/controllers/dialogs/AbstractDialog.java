@@ -8,52 +8,67 @@ public abstract class AbstractDialog {
 	@Autowired
 	private DialogController dialogController;
 	
-	private double sizeX = -1;
-	private double sizeY = -1;
+	private double width = -1;
+	private double height = -1;
+	private boolean overlayClose = true;
 	
 	public AbstractDialog() {
 		
 	}
 	
-	public AbstractDialog(double sizeX, double sizeY) {
+	/**
+	 * Creates a new Dialog with fixed size.
+	 * @param width dialog width
+	 * @param height dialog height
+	 */
+	public AbstractDialog(double width, double height) {
 		
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
+		this.width = width;
+		this.height = height;
 	}
 	
 	
 	protected abstract Node getBody();
 	
+	protected abstract Node getHeading();
 	
+	
+	/**
+	 * Open and display dialog frame.
+	 */
 	public void show() {
 		
 		onDialogShow();
 		
-		if (sizeX != -1 && sizeY != -1) {
+		if (width != -1 && height != -1) {
 			if (this.getHeading() != null) {
-				dialogController.newDialog(sizeX, sizeY, this.getBody(), this.getHeading());
+				dialogController.newDialog(width, height, this.getBody(), this.getHeading());
 			} else {
-				dialogController.newDialog(sizeX, sizeY, this.getBody());
+				dialogController.newDialog(width, height, this.getBody());
 			}
 		} else {
-			dialogController.newDialog(this.getBody());
+			if (this.getHeading() != null) {
+				dialogController.newDialog(this.getBody(), this.getHeading());
+			} else {
+				dialogController.newDialog(this.getBody());
+			}
 		}
+		dialogController.getDialog().setOverlayClose(overlayClose);
 		dialogController.getDialog().show();
 
-		
 	}
 		
-	
+	/**
+	 * Close dialog frame.
+	 */
 	public void close() {
-		
 		onDialogClose();
 		dialogController.getDialog().close();
 		
 	}
 	
 	protected void setOverlayClose(boolean overlayClose) {
-		
-		dialogController.getDialog().setOverlayClose(overlayClose);
+		this.overlayClose = overlayClose;
 	}
 	
 	protected void onDialogShow() {
@@ -64,9 +79,6 @@ public abstract class AbstractDialog {
 
 	}
 	
-	protected Node getHeading() {
-		return null;
-	}
 	
 	
 }

@@ -10,6 +10,7 @@ import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
+import com.dropsnorz.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.dropsnorz.owlplug.core.services.PluginService;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
@@ -39,6 +40,10 @@ public class MainController {
 	private LazyViewRegistry viewRegistry;
 	@Autowired
 	private AccountController accountController;
+	@Autowired
+	private WelcomeDialogController welcomeDialogController;
+	@Autowired
+	private OptionsController optionsController;
 	@Autowired
 	private UserAccountDAO userAccountDAO;
 	@Autowired
@@ -106,13 +111,28 @@ public class MainController {
 
 	}
 
+	/**
+	 * Notify the MainController that Application is fully loaded.
+	 */
 	public void dispatchPostInitialize() {
+		
+		if (prefs.getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
+			welcomeDialogController.show();
+		}
+		prefs.putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
+		optionsController.refreshView();
+		
 		if (prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
 			log.info("Starting auto plugin sync");
 			pluginService.syncPlugins();
 		}
+		
+				
 	}
 
+	/**
+	 * Refresh Account comboBox.
+	 */
 	public void refreshAccounts() {
 
 		ArrayList<UserAccount> accounts = new ArrayList<UserAccount>();
@@ -154,6 +174,10 @@ public class MainController {
 		return leftDrawer;
 	}
 
+	/**
+	 * Set the left drawer content.
+	 * @param node the content
+	 */
 	public void setLeftDrawer(Parent node) {
 
 		if (node != null) {

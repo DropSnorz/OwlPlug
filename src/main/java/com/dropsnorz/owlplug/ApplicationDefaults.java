@@ -34,6 +34,8 @@ public class ApplicationDefaults {
 	public final Image taskRunningImage = new Image(getClass().getResourceAsStream("/icons/play-green-16.png"));
 	public final Image fileSystemRepositoryImage = new Image(getClass().getResourceAsStream("/icons/filesystem-grey-48.png"));
 	public final Image googleDriveRepositoryImage = new Image(getClass().getResourceAsStream("/icons/gdrive-grey-64.png"));
+	public final Image rocketImage = new Image(getClass().getResourceAsStream("/icons/rocket-white-64.png"));
+
 	
 	public final Image pluginPlaceholderImage = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));
 	//CHECKSTYLE:ON
@@ -45,8 +47,12 @@ public class ApplicationDefaults {
 	public static final String SYNC_PLUGINS_STARTUP_KEY = "SYNC_PLUGINS_STARTUP_KEY";
 	public static final String STORE_DIRECTORY_ENABLED_KEY = "STORE_DIRECTORY_ENABLED_KEY";
 	public static final String STORE_DIRECTORY_KEY = "STORE_DIRECTORY_KEY";
+	public static final String FIRST_LAUNCH_KEY = "FIRST_LAUNCH_KEY";
 
 
+	/**
+	 * Creates a new ApplicationDefaults.
+	 */
 	public ApplicationDefaults() {
 		
 		if (OSValidator.isWindows()) {
@@ -60,10 +66,14 @@ public class ApplicationDefaults {
 	}
 
 	public OSType getPlatform() {
-
 		return platform;
 	}
 
+	/**
+	 * Returns plugin icon based on plugin type.
+	 * @param plugin - plugin
+	 * @return Associated icon
+	 */
 	public Image getPluginIcon(Plugin plugin) {
 
 		switch (plugin.getType()) {

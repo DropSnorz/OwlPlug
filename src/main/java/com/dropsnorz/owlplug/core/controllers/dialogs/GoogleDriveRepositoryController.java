@@ -26,7 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class GoogleDriveRepositoryController extends AbstractDialog implements IEntityCreateOrUpdate<GoogleDriveRepository> {
+public class GoogleDriveRepositoryController extends AbstractDialog 
+		implements IEntityCreateOrUpdate<GoogleDriveRepository> {
 
 	@Autowired
 	private LazyViewRegistry viewRegistry;
@@ -58,11 +59,14 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 
 	private GoogleDriveRepository currentRepository;
 
-	GoogleDriveRepositoryController(){
+	GoogleDriveRepositoryController() {
 		super(600,300);
 	}
 
 
+	/**
+	 * FXML initialize.
+	 */
 	public void initialize() {
 
 		closeButton.setOnAction(e -> {
@@ -80,7 +84,6 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		});
 
 		AccountCellFactory cellFactory = new AccountCellFactory(imageCache);
-
 		accountComboBox.setButtonCell(cellFactory.call(null));
 		accountComboBox.setCellFactory(cellFactory);
 	}
@@ -112,7 +115,6 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		} else {
 			accountComboBox.setValue(null);
 		}
-
 	}
 
 	@Override
@@ -133,13 +135,12 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 			.findAny()
 			.ifPresent(accountComboBox.getSelectionModel()::select);
 		}
-
 	}
 
 	private void refresh() {
 
 		this.accountComboBox.setValue(null);
-		ArrayList<UserAccount> accounts = new ArrayList<UserAccount>();
+		ArrayList<UserAccount> accounts = new ArrayList<>();
 
 		for (UserAccount account : userAccountDAO.findAll()) {
 			accounts.add(account);
@@ -148,7 +149,6 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		accountComboBox.getItems().setAll(accounts);
 		AccountCellFactory cellFactory = new AccountCellFactory(imageCache);
 		accountComboBox.setButtonCell(cellFactory.call(null));
-
 
 	}
 
@@ -184,13 +184,11 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		if (accountComboBox.getSelectionModel().getSelectedItem() == null) {
 			messageLabel.setText("Select a valid Google Account");
 			return;
-
 		}
-
+		
 		UserAccount account = (UserAccount) accountComboBox.getSelectionModel().getSelectedItem();
 		currentRepository.setRemoteRessourceId(id);
 		currentRepository.setUserAccount(account);
-
 		pluginRepositoryService.save(currentRepository);
 
 		close();
@@ -214,6 +212,5 @@ public class GoogleDriveRepositoryController extends AbstractDialog implements I
 		title.setGraphic(iv);
 		return title;
 	}
-
 
 }
