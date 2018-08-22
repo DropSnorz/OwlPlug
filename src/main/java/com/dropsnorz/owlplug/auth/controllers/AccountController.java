@@ -3,7 +3,7 @@ package com.dropsnorz.owlplug.auth.controllers;
 import com.dropsnorz.owlplug.auth.services.AuthentificationService;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.MainController;
-import com.dropsnorz.owlplug.core.controllers.dialogs.AbstractDialog;
+import com.dropsnorz.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import javafx.concurrent.Task;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class AccountController extends AbstractDialog {
+public class AccountController extends AbstractDialogController {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 

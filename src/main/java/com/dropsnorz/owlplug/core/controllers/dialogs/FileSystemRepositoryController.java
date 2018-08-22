@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class FileSystemRepositoryController extends AbstractDialog implements IEntityCreateOrUpdate<FileSystemRepository> {
+public class FileSystemRepositoryController extends AbstractDialogController implements IEntityCreateOrUpdate<FileSystemRepository> {
 
 	@Autowired
 	private PluginRepositoryService pluginRepositoryService;

@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class WelcomeDialogController extends AbstractDialog {
+public class WelcomeDialogController extends AbstractDialogController {
 	
 	@Autowired
 	private LazyViewRegistry lazyViewRegistry;

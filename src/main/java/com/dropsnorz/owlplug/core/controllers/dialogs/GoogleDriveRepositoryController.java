@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class GoogleDriveRepositoryController extends AbstractDialog 
+public class GoogleDriveRepositoryController extends AbstractDialogController 
 		implements IEntityCreateOrUpdate<GoogleDriveRepository> {
 
 	@Autowired

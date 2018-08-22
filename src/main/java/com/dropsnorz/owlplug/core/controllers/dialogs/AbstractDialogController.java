@@ -3,7 +3,7 @@ package com.dropsnorz.owlplug.core.controllers.dialogs;
 import javafx.scene.Node;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractDialog {
+public abstract class AbstractDialogController {
 	
 	@Autowired
 	private DialogController dialogController;
@@ -12,7 +12,7 @@ public abstract class AbstractDialog {
 	private double height = -1;
 	private boolean overlayClose = true;
 	
-	public AbstractDialog() {
+	public AbstractDialogController() {
 		
 	}
 	
@@ -21,7 +21,7 @@ public abstract class AbstractDialog {
 	 * @param width dialog width
 	 * @param height dialog height
 	 */
-	public AbstractDialog(double width, double height) {
+	public AbstractDialogController(double width, double height) {
 		
 		this.width = width;
 		this.height = height;
