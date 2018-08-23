@@ -30,7 +30,7 @@ For now, no binaries are provided. To run OwlPlug, you should check the [Develop
 
 ## Plugins
 
-OwlPlug is compatible with your plugin setup as they are all in a specific root directory. For example `C:/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW.
+OwlPlug is compatible with your installed plugins as they are all in a specific root directory. For example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW.
 OwlPlug can discover VST2 and VST3 Plugins.
 
 
