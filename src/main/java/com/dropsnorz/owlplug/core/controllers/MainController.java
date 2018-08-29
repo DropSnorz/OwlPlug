@@ -112,7 +112,8 @@ public class MainController {
 	}
 
 	/**
-	 * Notify the MainController that Application is fully loaded.
+	 * Used to notify the MainController that Application is fully loaded.
+	 * Must be called once in the application lifecycle.
 	 */
 	public void dispatchPostInitialize() {
 		

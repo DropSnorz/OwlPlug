@@ -19,17 +19,21 @@ import org.springframework.context.annotation.Bean;
 
 
 @SpringBootApplication
-public class App extends Application {
+public class OwlPlug extends Application {
 
 	private ConfigurableApplicationContext context;
 	private Parent rootNode;
 	
 
+	/**
+	 * JavaFX Application initialization method.
+	 * It boostraps Spring boot application context and binds it to FXMLLoader controller factory.
+	 */
 	@Override
 	public void init() throws Exception {
 
 		try {
-			SpringApplicationBuilder builder = new SpringApplicationBuilder(App.class);
+			SpringApplicationBuilder builder = new SpringApplicationBuilder(OwlPlug.class);
 			builder.headless(false);
 			context = builder.run(getParameters().getRaw().toArray(new String[0]));
 
@@ -48,13 +52,17 @@ public class App extends Application {
 		}
 	}
 
+	/**
+	 * The main JavaFX applications entry point. 
+	 * The start method is called after the {@link #init} method method has returned
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		double width = 1000;
 		double height = 620;
 
 		Scene scene = new Scene(rootNode, width, height);
-		String css = App.class.getResource("/owlplug.css").toExternalForm();
+		String css = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
@@ -71,31 +79,53 @@ public class App extends Application {
 
 	}
 
+	/**
+	 * Initialize Application preferences.
+	 * @return
+	 */
 	@Bean
 	public Preferences getPreference() {
 		return 	Preferences.userRoot().node("com.dropsnorz.owlplug.user");
 
 	}
 
+	/**
+	 * Initialize spring boot embedded Tomcat server.
+	 * Used to catch loopback requests from google drive OAuth API.
+	 * @return 
+	 */
 	@Bean 
 	public ServletWebServerFactory servletWebServerFactory() {
 		return new TomcatServletWebServerFactory();
 	}
 	
+	/**
+	 * Initialize EhCache CacheManager instance {@see CacheManager}.
+	 * @return The ChacheManager instance
+	 */
 	@Bean 
 	public CacheManager getCacheManager() {
 		return CacheManager.create();
 	}
 
-
+	/**
+	 * Called by JavaFx platform on closure request.
+	 * Post execution cleaning operation should be operated here.
+	 */
 	@Override
 	public void stop() throws Exception {
 		context.close();
 	}
 
+	/**
+     * Main method called on JAR execution.
+     * It bootstraps JavaFx Application and it's preloader {@see com.dropsnorz.owlplug.OwlPlugPreloader}
+     *
+     * @param args The command line arguments given on JAR execution. Usually empty.
+     */
 	public static void main(String[] args) {
 		System.setProperty("javafx.preloader", "com.dropsnorz.owlplug.OwlPlugPreloader");
-		launch(App.class, args);
+		launch(OwlPlug.class, args);
 
 	}
 }

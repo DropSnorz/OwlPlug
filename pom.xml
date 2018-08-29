@@ -184,7 +184,7 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<configuration>
-						<mainClass>com.dropsnorz.owlplug.App</mainClass>
+						<mainClass>com.dropsnorz.owlplug.OwlPlug</mainClass>
 						<layout>JAR</layout>
 					</configuration>
 					<executions>
