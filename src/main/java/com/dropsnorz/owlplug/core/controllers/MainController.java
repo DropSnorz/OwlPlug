@@ -1,6 +1,5 @@
 package com.dropsnorz.owlplug.core.controllers;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.auth.controllers.AccountController;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
@@ -8,6 +7,7 @@ import com.dropsnorz.owlplug.auth.services.AuthentificationService;
 import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.dialogs.WelcomeDialogController;

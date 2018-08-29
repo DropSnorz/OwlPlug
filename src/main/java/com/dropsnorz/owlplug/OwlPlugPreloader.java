@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug;
 
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import javafx.application.Preloader;
 import javafx.application.Preloader.StateChangeNotification.Type;
 import javafx.fxml.FXMLLoader;

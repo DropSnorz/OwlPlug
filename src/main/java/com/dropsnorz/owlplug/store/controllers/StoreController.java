@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.store.controllers;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.StoreProduct;

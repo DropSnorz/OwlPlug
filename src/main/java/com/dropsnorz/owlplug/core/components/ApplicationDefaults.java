@@ -1,4 +1,4 @@
-package com.dropsnorz.owlplug;
+package com.dropsnorz.owlplug.core.components;
 
 import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.Plugin;

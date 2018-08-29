@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.services;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;

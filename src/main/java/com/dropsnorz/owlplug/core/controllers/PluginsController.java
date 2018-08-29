@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.controllers;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;

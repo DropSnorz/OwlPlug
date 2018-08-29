@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.tasks.repositories.googledrive;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.tasks.repositories.IRepositoryStrategy;

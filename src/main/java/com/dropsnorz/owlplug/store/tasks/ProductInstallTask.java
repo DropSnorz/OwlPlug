@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.store.tasks;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.core.tasks.TaskResult;

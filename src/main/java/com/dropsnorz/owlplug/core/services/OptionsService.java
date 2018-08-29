@@ -1,8 +1,8 @@
 package com.dropsnorz.owlplug.core.services;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import java.util.prefs.BackingStoreException;

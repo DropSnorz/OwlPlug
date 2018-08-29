@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.ui;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.jfoenix.controls.JFXListCell;
 import javafx.scene.control.ListCell;

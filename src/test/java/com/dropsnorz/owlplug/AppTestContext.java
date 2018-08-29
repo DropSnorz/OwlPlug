@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug;
 
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import java.io.File;
 import java.util.prefs.Preferences;
 

@@ -1,6 +1,5 @@
 package com.dropsnorz.owlplug.core.components;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.PluginsController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;

@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.controllers.dialogs;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.jfoenix.controls.JFXButton;

@@ -1,6 +1,5 @@
 package com.dropsnorz.owlplug.auth.services;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.auth.JPADataStoreFactory;
 import com.dropsnorz.owlplug.auth.components.OwlPlugCredentials;
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
@@ -8,6 +7,7 @@ import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
 import com.dropsnorz.owlplug.auth.model.UserAccountProvider;
 import com.dropsnorz.owlplug.auth.utils.AuthentificationException;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.google.api.client.auth.oauth2.Credential;

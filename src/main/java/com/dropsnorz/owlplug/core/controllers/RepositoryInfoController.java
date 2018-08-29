@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.controllers;
 
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.GoogleDriveRepositoryController;
