@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.auth.model;
 
+import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,39 +8,39 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import com.dropsnorz.owlplug.auth.ui.AccountItem;
-
+/**
+ * OwlPlug JPA Entity class to handle users accounts informations.
+ */
 @Entity
 public class UserAccount implements AccountItem {
-	
+
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private String name;
 	private String iconUrl;
 	private UserAccountProvider accountProvider;
-	@OneToOne(cascade=CascadeType.REMOVE, optional=true)
+	@OneToOne(cascade = CascadeType.REMOVE, optional = true)
 	private GoogleCredential credential;
-	
+
 	public UserAccount() {
-		
+
 	}
-	
+
 	public UserAccount(UserAccountProvider accountProvider) {
-		
 		this.accountProvider = accountProvider;
-		
+
 	}
 
 	public Long getId() {
 		return this.id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getKey() {
 		return Long.toString(id);
 	}
@@ -75,7 +76,7 @@ public class UserAccount implements AccountItem {
 	public void setCredential(GoogleCredential credential) {
 		this.credential = credential;
 	}
-	
-	
+
+
 
 }

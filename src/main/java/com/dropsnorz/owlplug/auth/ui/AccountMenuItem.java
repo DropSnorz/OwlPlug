@@ -1,6 +1,10 @@
 package com.dropsnorz.owlplug.auth.ui;
 
-public class AccountMenuItem implements AccountItem{
+/**
+ * Account menu objects.
+ *
+ */
+public class AccountMenuItem implements AccountItem {
 	
 	private String text;
 

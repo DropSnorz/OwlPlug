@@ -3,7 +3,7 @@ package com.dropsnorz.owlplug.core.controllers;
 import com.dropsnorz.owlplug.auth.controllers.AccountController;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.auth.model.UserAccount;
-import com.dropsnorz.owlplug.auth.services.AuthentificationService;
+import com.dropsnorz.owlplug.auth.services.AuthenticationService;
 import com.dropsnorz.owlplug.auth.ui.AccountCellFactory;
 import com.dropsnorz.owlplug.auth.ui.AccountItem;
 import com.dropsnorz.owlplug.auth.ui.AccountMenuItem;
@@ -47,7 +47,7 @@ public class MainController {
 	@Autowired
 	private UserAccountDAO userAccountDAO;
 	@Autowired
-	private AuthentificationService authentificationService;
+	private AuthenticationService authentificationService;
 	@Autowired
 	private Preferences prefs;
 	@Autowired
