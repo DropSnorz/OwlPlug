@@ -5,7 +5,7 @@ import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 
 public class StoreModelConverter {
 	
-	public static PluginStore fromTO(PluginStoreTO storeTO){
+	public static PluginStore fromTO(PluginStoreTO storeTO) {
 	
 		PluginStore store = new PluginStore();
 		store.setName(storeTO.getName());
@@ -15,7 +15,7 @@ public class StoreModelConverter {
 		
 	}
 	
-	public static StaticStoreProduct fromTO(ProductTO productTO){
+	public static StaticStoreProduct fromTO(ProductTO productTO) {
 		
 		StaticStoreProduct product = new StaticStoreProduct();
 		product.setName(productTO.getName());

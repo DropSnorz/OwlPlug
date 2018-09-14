@@ -4,7 +4,7 @@
 
 	<groupId>com.dropsnorz</groupId>
 	<artifactId>owlplug</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>owlplug</name>
@@ -15,17 +15,6 @@
 		<version>2.0.2.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-
-
-	<repositories>
-		<repository>
-			<name>data</name>
-			<id>local-maven-repo</id>
-			<url>file:${project.basedir}/repo</url>
-		</repository>
-
-
-	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -180,12 +169,6 @@
 			<artifactId>ehcache</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.boris</groupId>
-			<artifactId>jvst</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -200,6 +183,17 @@
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
+					<configuration>
+						<mainClass>com.dropsnorz.owlplug.OwlPlug</mainClass>
+						<layout>JAR</layout>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>repackage</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

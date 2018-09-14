@@ -1,11 +1,10 @@
 package com.dropsnorz.owlplug.store.dao;
 
+import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import org.springframework.data.repository.CrudRepository;
 
-import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
-
 public interface StoreProductDAO extends CrudRepository<StaticStoreProduct, Long> {
-	
-    public Iterable<StaticStoreProduct> findByNameContainingIgnoreCase(String name);
+
+	public Iterable<StaticStoreProduct> findByNameContainingIgnoreCase(String name);
 
 }

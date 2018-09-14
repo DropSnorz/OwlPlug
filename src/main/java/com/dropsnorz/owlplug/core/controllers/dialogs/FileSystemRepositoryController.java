@@ -1,11 +1,6 @@
 package com.dropsnorz.owlplug.core.controllers.dialogs;
 
-import java.io.File;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.dropsnorz.owlplug.core.controllers.PluginsController;
@@ -14,16 +9,18 @@ import com.dropsnorz.owlplug.core.services.PluginRepositoryService;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-
+import java.io.File;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 @Controller
-public class FileSystemRepositoryController extends AbstractDialog implements IEntityCreateOrUpdate<FileSystemRepository> {
+public class FileSystemRepositoryController extends AbstractDialogController implements IEntityCreateOrUpdate<FileSystemRepository> {
 
 	@Autowired
 	private PluginRepositoryService pluginRepositoryService;
@@ -32,7 +29,7 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 	@Autowired
 	private LazyViewRegistry viewRegistry;
 	@Autowired
-	ApplicationDefaults applicationDefaults;
+	private ApplicationDefaults applicationDefaults;
 
 	@FXML
 	private JFXButton closeButton;
@@ -62,10 +59,9 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 
 
 		addButton.setOnAction(e -> {
-			if(currentFileSystemRepository != null) {
+			if (currentFileSystemRepository != null) {
 				updateRepository();
-			}
-			else {
+			} else {
 				createRepository();
 			}
 			pluginController.refreshPlugins();
@@ -77,7 +73,7 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 
 			File selectedDirectory = directoryChooser.showDialog(mainWindow);
 
-			if(selectedDirectory != null){
+			if (selectedDirectory != null) {
 				repositoryPathTextField.setText(selectedDirectory.getAbsolutePath());
 			}
 		});
@@ -116,19 +112,16 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 
 		FileSystemRepository repository = new FileSystemRepository(name, path);
 
-		if(FileUtils.isFilenameValid(name)) {
+		if (FileUtils.isFilenameValid(name)) {
 			if (pluginRepositoryService.createRepository(repository)) {
 				close();
-			}
-			else {
+			} else {
 				messageLabel.setText("A repository named " + name + " already exists");
 			}
-		}
-		else {
+		} else {
 			messageLabel.setText("Repository name contains illegal characters");
 		}
 	}
-
 
 	private void updateRepository() {
 
@@ -144,19 +137,16 @@ public class FileSystemRepositoryController extends AbstractDialog implements IE
 	protected Node getBody() {
 		return viewRegistry.getAsNode(LazyViewRegistry.NEW_FILESYSTEM_REPOSITORY_VIEW);
 	}
-	
+
 	@Override
 	protected Node getHeading() {
 		Label title = new Label("FileSystem Repository");
 		title.getStyleClass().add("heading-3");
-		
+
 		ImageView iv = new ImageView(applicationDefaults.fileSystemRepositoryImage);
 		iv.setFitHeight(20);
 		iv.setFitWidth(20);
 		title.setGraphic(iv);
 		return title;
 	}
-
-
-
 }

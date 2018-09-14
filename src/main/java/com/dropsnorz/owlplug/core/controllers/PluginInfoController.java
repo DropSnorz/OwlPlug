@@ -1,15 +1,6 @@
 package com.dropsnorz.owlplug.core.controllers;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
-import com.dropsnorz.owlplug.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
@@ -19,10 +10,16 @@ import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 @Controller
 public class PluginInfoController {
@@ -65,6 +62,9 @@ public class PluginInfoController {
 	private Plugin currentPlugin = null;
 	private ArrayList<String> knownPluginImages = new ArrayList<>();
 
+	/**
+	 * FXML initialize method.
+	 */
 	@FXML
 	public void initialize() { 
 
@@ -83,17 +83,15 @@ public class PluginInfoController {
 
 			layout.setHeading(new Label("Remove plugin"));
 			layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName() 
-			+ " ? This will permanently delete the file from your hard drive."));
+					+ " ? This will permanently delete the file from your hard drive."));
 
 			JFXButton cancelButton = new JFXButton("Cancel");
-
-			cancelButton.setOnAction( cancelEvent -> {
+			cancelButton.setOnAction(cancelEvent -> {
 				dialog.close();
 			});	
 
 			JFXButton removeButton = new JFXButton("Remove");
-
-			removeButton.setOnAction( removeEvent -> {
+			removeButton.setOnAction(removeEvent -> {
 				dialog.close();
 				pluginService.removePlugin(currentPlugin);
 			});	
@@ -102,7 +100,6 @@ public class PluginInfoController {
 			layout.setActions(removeButton, cancelButton);
 			dialog.setContent(layout);
 			dialog.show();
-
 		});		
 	}
 
@@ -122,10 +119,10 @@ public class PluginInfoController {
 	
 	private void setPluginImage() {
 		String url = owlplugCentralService.getPluginImageUrl(this.currentPlugin.getName());
-		if(knownPluginImages.contains(url) && !imageCache.contains(url)) {
+		if (knownPluginImages.contains(url) && !imageCache.contains(url)) {
 			pluginScreenshot.setImage(applicationDefaults.pluginPlaceholderImage);
 			
-		}else {
+		} else {
 			this.knownPluginImages.add(url);
 			imageCache.loadAsync(url, pluginScreenshot);
 		}

@@ -1,18 +1,15 @@
 package com.dropsnorz.owlplug.store.service;
 
-import java.io.File;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.PluginStore;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
+import java.io.File;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class StoreService {
@@ -42,9 +39,7 @@ public class StoreService {
 	}
 
 	public void syncStores() {
-
 		taskFactory.createStoreSyncTask().run();
-
 	}
 
 	public Iterable<StaticStoreProduct> getStoreProducts() {
@@ -59,6 +54,5 @@ public class StoreService {
 
 		taskFactory.createProductInstallTask(product, targetDirectory).run();
 	}
-
 
 }

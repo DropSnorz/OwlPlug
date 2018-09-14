@@ -1,20 +1,36 @@
-![owlplug](doc/owlplug-logo.png)
+ 
+<p align="center">
+<img src="doc/owlplug-logo.png">
+</p>
+<p align="center">
+<sup>
+<b>OwlPlug is a small audio plugin manager. It provides a complete view of your plugin setup and simple tools to manage it.</b>
+</sup>
+</p>
 
-<br />
+---
 
 [ ![Codeship Status for DropSnorz/OwlPlug](https://app.codeship.com/projects/29447280-727d-0136-a8a6-3675cf281030/status?branch=master)](https://app.codeship.com/projects/299436)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e6b8ee875daa4f74b5bf1cc8fee6df63)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DropSnorz/OwlPlug&amp;utm_campaign=Badge_Grade_Dashboard)
+![Stage Badge](https://img.shields.io/badge/stage-alpha-blue.svg)
 
-## Overview
 
-OwlPlug is a small audio plugin manager. It provides a complete view of your plugin setup and simple tools to manage them.
+# Overview
 
 ![owlplug-demo](http://dropsnorz.com/projects/owlplug/owlplug.gif)
 
+
+# Installation
+
 **Owlplug is currently in alpha stage. It's higly recommended to backup your files before using it.**
+
+For now, no binaries are provided. To run OwlPlug, you should check the [Development Setup](#development-setup) section.
+
+# Features
 
 ## Plugins
 
-OwlPlug is compatible with your plugin setup as they are all in a specific root directory. For example `C:/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW.
+OwlPlug is compatible with your installed plugins as they are all in a specific root directory. For example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW.
 OwlPlug can discover VST2 and VST3 Plugins.
 
 
@@ -50,12 +66,30 @@ In the next realeases, Owlplug may support multiple store sources. Everybody wil
 
 OwlPlug central is the default Store source. If you wan't to include your plugin in OwlPlug Central, create an issue in this repository with a link to download your plugin.
 Owlplug Central backend is a quick prototype/POC for the Store feature integration in Owlplug.
-- Mirror: Binairies are stored in OwlPlug central server.
-- Bridge: You keep plugin binairies on your server by providing only a file access URL to OwlPlug central. I don't like this option for security reasons, but it still usefull for testing purpose.
 
 
+# Development
 
-## Possible next Major features
+## Stack
+* Spring boot
+* JavaFx & JFoenix
+* Hibernate & H2
+* Maven
+
+
+## Development Setup
+
+1. Clone or download project sources
+2. Run following commands
+```sh
+# Install dependecies
+mvn clean install spring-boot:repackage
+# Run owlplug
+mvn spring-boot:run
+```
+The first command will generate an executable binary `/target/owlplug-*.jar`. In order to use GoogleDrive repositories, you have to fill OAuth2 client id and secret in `credentials.properties`. Check Prerequisites from [Google OAuth2 Documentation](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
+
+# Possible incoming major features
 
 - Plugins Organization (Move plugins between folders)
 - Better plugin discovery

@@ -4,24 +4,20 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Component;
-
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javax.imageio.ImageIO;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ImageCache {
@@ -35,28 +31,46 @@ public class ImageCache {
 
 	}
 
+	/**
+	 * Retrieve or persist asynchronously an image in cache from url.
+	 * @param url Image url
+	 * @return The created image
+	 */
 	public Image get(String url) {
 		return get(url, "png");
 	}
 
-	public Image get(String url, String type){
+	/**
+	 * Retrieve or persist asynchronously an image in cache from url.
+	 * @param url Image url
+	 * @param type Image type. Must be png or jpeg.
+	 * @return The created image
+	 */
+	public Image get(String url, String type) {
 		return get(url, type, true);
 	}
 
 
-	public Image get(String url, String type, boolean asyncFetch){
+	/**
+	 * Retrieve or persist image in cache from url.
+	 * @param url Image url
+	 * @param type Image type. Must be png or jpeg.
+	 * @param asyncFetch true indicates whether the image is being loaded in the background
+	 * @return The created image
+	 */
+	public Image get(String url, String type, boolean asyncFetch) {
 
 		Cache cache = cacheManager.getCache("image-cache");
 		Element cachedElement =  cache.get(url);
 
 		//Retrieve image from cache
-		if(cachedElement != null) {
+		if (cachedElement != null) {
 			try {
 				log.debug("Retrieving image {} from cache", url);
 				byte[] content = (byte[]) cachedElement.getObjectValue();
 				ByteArrayInputStream s = new ByteArrayInputStream(content);
-				BufferedImage bImage = ImageIO.read(s);
-				return SwingFXUtils.toFXImage(bImage, null);
+				BufferedImage bufImage = ImageIO.read(s);
+				return SwingFXUtils.toFXImage(bufImage, null);
 			} catch (IOException e) {
 				log.error("Error retrieving image from cache", e);
 			}
@@ -71,7 +85,7 @@ public class ImageCache {
 			}
 		});
 		// In case of sync fetch, persist image in cache immediately
-		if(!asyncFetch && !cachedImage.isError()) {
+		if (!asyncFetch && !cachedImage.isError()) {
 			persistImageIntoCache(cache, url, cachedImage, type);
 
 		}
@@ -79,12 +93,17 @@ public class ImageCache {
 		return cachedImage;
 	}
 
-
+	/**
+	 * Load asynchronously an Image from cache on the given ImageView.
+	 * If image don't exists in cache, it will be created retrieving the image from url.
+	 * @param url Image url
+	 * @param imageView Target image view
+	 */
 	public void loadAsync(String url, ImageView imageView) {
 
 		Task<Image> task = new Task<Image>() {
 			public Image call() {
-				return ImageCache.this.get(url ,"png", false);
+				return ImageCache.this.get(url,"png", false);
 			}
 		};
 
@@ -100,12 +119,20 @@ public class ImageCache {
 
 	}
 	
+	/**
+	 * Returns true if cache contains data for the given key.
+	 * @param key to look for
+	 * @return true if cache contains key
+	 */
 	public boolean contains(String key) {
 		Cache cache = cacheManager.getCache("image-cache");
 		return cache.isKeyInCache(key);
 
 	}
 	
+	/**
+	 * Clear image cache contents.
+	 */
 	public void clear() {
 		Cache cache = cacheManager.getCache("image-cache");
 		cache.removeAll();
@@ -116,9 +143,9 @@ public class ImageCache {
 	private void persistImageIntoCache(Cache cache, String key, Image image, String type) {
 		try {
 			log.debug("Persisting image {} into cache", key);
-			BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+			BufferedImage buffImage = SwingFXUtils.fromFXImage(image, null);
 			ByteArrayOutputStream s = new ByteArrayOutputStream();
-			ImageIO.write(bImage, type, s);
+			ImageIO.write(buffImage, type, s);
 			byte[] res  = s.toByteArray();
 			s.close(); //especially if you are using a different output stream.
 			cache.put(new Element(key, res));

@@ -2,17 +2,14 @@ package com.dropsnorz.owlplug.core.components;
 
 import java.io.IOException;
 import java.util.HashMap;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 
 @Component
 public class LazyViewRegistry {
@@ -23,6 +20,7 @@ public class LazyViewRegistry {
 	public static final String NEW_REPOSITORY_MENU_VIEW = "NEW_REPOSITORY_MENU_VIEW";
 	public static final String NEW_ACCOUNT_VIEW = "NEW_ACCOUNT_VIEW";
 	public static final String NEW_GOOGLE_DRIVE_REPOSITORY = "NEW_GOOGLE_DRIVE_REPOSITORY";
+	public static final String WELCOME_VIEW = "WELCOME_VIEW";
 
 	
 	@Autowired
@@ -30,10 +28,8 @@ public class LazyViewRegistry {
 	
 	private HashMap<String, Parent> viewRegistry;
 	
-	LazyViewRegistry(){
-		
-		viewRegistry = new HashMap<String, Parent>();
-		
+	LazyViewRegistry() {
+		viewRegistry = new HashMap<>();
 	}
 	
 	/**
@@ -45,6 +41,7 @@ public class LazyViewRegistry {
 		preloadFxml(NEW_REPOSITORY_MENU_VIEW,"/fxml/NewRepositoryMenu.fxml");
 		preloadFxml(NEW_ACCOUNT_VIEW,"/fxml/dialogs/NewAccount.fxml");
 		preloadFxml(NEW_GOOGLE_DRIVE_REPOSITORY,"/fxml/dialogs/GoogleDriveRepositoryView.fxml");
+		preloadFxml(WELCOME_VIEW, "/fxml/dialogs/WelcomeView.fxml");
 
 	}
 	

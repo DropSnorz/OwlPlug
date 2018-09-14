@@ -11,15 +11,15 @@ import org.slf4j.LoggerFactory;
 
 public class PlatformUtils {
 
-	private PlatformUtils() {}
-
 	private static final Logger log = LoggerFactory.getLogger(PlatformUtils.class);
 
-	public static void openDirectoryExplorer(String path){
+	private PlatformUtils() {}
+
+	public static void openDirectoryExplorer(String path) {
 		openDirectoryExplorer(new File(path));
 	}
 
-	public static void openDirectoryExplorer(File file){
+	public static void openDirectoryExplorer(File file) {
 		try {
 			Desktop.getDesktop().open(file);
 		} catch (IOException e) {

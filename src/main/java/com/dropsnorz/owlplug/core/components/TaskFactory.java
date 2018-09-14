@@ -1,39 +1,37 @@
 package com.dropsnorz.owlplug.core.components;
 
-import java.io.File;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.dropsnorz.owlplug.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.PluginsController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
-import com.dropsnorz.owlplug.core.engine.repositories.IRepositoryStrategy;
-import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyException;
-import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyParameters;
-import com.dropsnorz.owlplug.core.engine.repositories.RepositoryStrategyResolver;
-import com.dropsnorz.owlplug.core.engine.tasks.AbstractTask;
-import com.dropsnorz.owlplug.core.engine.tasks.DirectoryRemoveTask;
-import com.dropsnorz.owlplug.core.engine.tasks.PluginRemoveTask;
-import com.dropsnorz.owlplug.core.engine.tasks.PluginSyncTask;
-import com.dropsnorz.owlplug.core.engine.tasks.RepositoryRemoveTask;
-import com.dropsnorz.owlplug.core.engine.tasks.RepositoryTask;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskException;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskExecutionContext;
-import com.dropsnorz.owlplug.core.engine.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
-import com.dropsnorz.owlplug.core.services.PluginService;
+import com.dropsnorz.owlplug.core.tasks.AbstractTask;
+import com.dropsnorz.owlplug.core.tasks.DirectoryRemoveTask;
+import com.dropsnorz.owlplug.core.tasks.PluginRemoveTask;
+import com.dropsnorz.owlplug.core.tasks.PluginSyncTask;
+import com.dropsnorz.owlplug.core.tasks.RepositoryRemoveTask;
+import com.dropsnorz.owlplug.core.tasks.RepositoryTask;
+import com.dropsnorz.owlplug.core.tasks.TaskException;
+import com.dropsnorz.owlplug.core.tasks.TaskExecutionContext;
+import com.dropsnorz.owlplug.core.tasks.TaskResult;
+import com.dropsnorz.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
+import com.dropsnorz.owlplug.core.tasks.repositories.IRepositoryStrategy;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyException;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyResolver;
 import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
 import com.dropsnorz.owlplug.store.tasks.StoreSyncTask;
+import java.io.File;
+import java.util.prefs.Preferences;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TaskFactory {
@@ -43,7 +41,7 @@ public class TaskFactory {
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
 	@Autowired
-	private PluginService pluginService;
+	private Preferences prefs;
 	@Autowired
 	private TaskRunner taskManager;
 	@Autowired
@@ -62,8 +60,14 @@ public class TaskFactory {
 	private StoreController storeController;
 
 	public TaskExecutionContext createPluginSyncTask() {
+		
+		PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
+		parameters.setPlatform(applicationDefaults.getPlatform());
+		parameters.setPluginDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+		parameters.setFindVST2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+		parameters.setFindVST3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
 
-		PluginSyncTask task = new PluginSyncTask(pluginService, pluginDAO);
+		PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO);
 		task.setOnSucceeded(e -> {
 			pluginsController.refreshPlugins();
 		});
@@ -144,6 +148,7 @@ public class TaskFactory {
 		task.setOnSucceeded(e ->{
 			storeController.refreshView();
 		});
+		bindOnFailHandler(task);
 		return buildContext(task);
 		
 	}
@@ -166,7 +171,7 @@ public class TaskFactory {
 	
 	private TaskExecutionContext buildContext(AbstractTask task) {
 		
-		return new TaskExecutionContext(task, taskManager );
+		return new TaskExecutionContext(task, taskManager);
 	}
 
 }
