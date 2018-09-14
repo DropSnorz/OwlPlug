@@ -12,7 +12,7 @@
          <children>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/box-white-32.png" />
+                  <Image url="@../../icons/box-white-32.png" />
                </image>
             </ImageView>
             <Label text="New repository" />
@@ -25,7 +25,7 @@
                <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" scaleX="0.75" scaleY="0.75">
                      <image>
-                        <Image url="@../icons/filesystem-grey-48.png" />
+                        <Image url="@../../icons/filesystem-grey-48.png" />
                      </image>
                   </ImageView>
                   <Label text="File System Repository" />
@@ -35,7 +35,7 @@
                <children>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icons/gdrive-grey-64.png" />
+                        <Image url="@../../icons/gdrive-grey-64.png" />
                      </image>
                   </ImageView>
                   <Label text="Google Drive Repository" />

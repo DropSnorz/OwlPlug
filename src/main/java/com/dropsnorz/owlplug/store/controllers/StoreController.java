@@ -2,6 +2,8 @@ package com.dropsnorz.owlplug.store.controllers;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
+import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
+import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
@@ -34,7 +36,13 @@ public class StoreController {
 	private StoreService storeService;
 	@Autowired
 	private ImageCache imageCache;
+	@Autowired
+	private LazyViewRegistry viewRegistry;
+	@Autowired
+	private MainController mainController;
 
+	@FXML
+	private JFXButton storesButton;
 	@FXML
 	private JFXTextField storeSearchTextField;
 	@FXML
@@ -48,6 +56,12 @@ public class StoreController {
 	 * FXML initialize.
 	 */
 	public void initialize() {
+		
+		storesButton.setOnAction(e -> {
+			mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.STORE_MENU_VIEW));
+			mainController.getLeftDrawer().open();
+
+		});	
 
 		syncStoreButton.setOnAction(e -> {
 			storeService.syncStores();
