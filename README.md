@@ -1,11 +1,14 @@
 ![owlplug](doc/owlplug-logo.png)
 
+<br />
+
+[ ![Codeship Status for DropSnorz/OwlPlug](https://app.codeship.com/projects/29447280-727d-0136-a8a6-3675cf281030/status?branch=master)](https://app.codeship.com/projects/299436)
 
 ## Overview
 
 OwlPlug is a small audio plugin manager. It provides a complete view of your plugin setup and simple tools to manage them.
 
-![owlplug-demo](doc/demo.gif)
+![owlplug-demo](http://dropsnorz.com/projects/owlplug/owlplug.gif)
 
 **Owlplug is currently in alpha stage. It's higly recommended to backup your files before using it.**
 
@@ -56,6 +59,6 @@ Owlplug Central backend is a quick prototype/POC for the Store feature integrati
 
 - Plugins Organization (Move plugins between folders)
 - Better plugin discovery
-- HTTP Repository
-- Plugin sUpdate from store
+- HTTP Repositories
+- Plugins update from store
 - Plugins backup
