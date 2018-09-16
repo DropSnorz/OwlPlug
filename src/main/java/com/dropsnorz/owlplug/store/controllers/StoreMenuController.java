@@ -68,7 +68,14 @@ public class StoreMenuController {
 			Label iconLabel = new Label(iconChar);
 			iconLabel.setFont(Font.font(iconLabel.getFont().getFamily(), FontWeight.BOLD, 32));
 			this.getChildren().add(iconLabel);
-			this.getChildren().add(new Label(pluginStore.getName()));
+			
+			VBox namePane = new VBox();
+			namePane.setAlignment(Pos.CENTER_LEFT);
+			namePane.getChildren().add(new Label(pluginStore.getName()));
+			Label url = new Label(pluginStore.getUrl());
+			url.getStyleClass().add("label-disabled");
+			namePane.getChildren().add(url);
+			this.getChildren().add(namePane);
 			
 			HBox emptySpace = new HBox();
 			HBox.setHgrow(emptySpace, Priority.ALWAYS);

@@ -42,6 +42,9 @@ Label{
 .label-danger{
 	-fx-text-fill:danger-color;
 }
+.label-disabled{
+	-fx-text-fill:disabled-color;
+}
 .label-dark{
 	-fx-text-fill:rgb(40,40,40);
 }
