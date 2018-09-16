@@ -35,6 +35,7 @@ public class ApplicationDefaults {
 	public final Image fileSystemRepositoryImage = new Image(getClass().getResourceAsStream("/icons/filesystem-grey-48.png"));
 	public final Image googleDriveRepositoryImage = new Image(getClass().getResourceAsStream("/icons/gdrive-grey-64.png"));
 	public final Image rocketImage = new Image(getClass().getResourceAsStream("/icons/rocket-white-64.png"));
+	public final Image storeImage = new Image(getClass().getResourceAsStream("/icons/bag-white-16.png"));
 
 	
 	public final Image pluginPlaceholderImage = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));

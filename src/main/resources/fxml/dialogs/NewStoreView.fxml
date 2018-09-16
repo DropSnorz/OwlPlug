@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.NewStoreDialogController">
+   <children>
+      <VBox>
+         <children>
+            <Label text="Fill the plugin store url" wrapText="true" />
+         </children>
+      </VBox>
+      <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+         <children>
+            <JFXTextField fx:id="storeUrlTextField" HBox.hgrow="ALWAYS" />
+            <JFXSpinner fx:id="progressSpinner" prefHeight="25.0" prefWidth="25.0" />
+         </children>
+      </HBox>
+      <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Invalid store response" />
+      <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <JFXButton fx:id="okButton" text="Ok" />
+            <JFXButton fx:id="cancelButton" text="Later" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -19,8 +19,8 @@
          </children>
       </HBox>
       <Separator prefWidth="200.0" />
-      <VBox fx:id="storeListHolder" alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="NEVER" />
-      <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="NEVER">
+      <VBox fx:id="storeListHolder" alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER" />
+      <VBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
          <children>
             <HBox fx:id="newStoreMenuItem" alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item">
                <children>
