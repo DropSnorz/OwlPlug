@@ -2,7 +2,9 @@ package com.dropsnorz.owlplug.store.controllers;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
+import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.dropsnorz.owlplug.core.controllers.dialogs.AbstractDialogController;
+import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.model.PluginStore;
 import com.dropsnorz.owlplug.store.service.StoreService;
@@ -19,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class NewStoreDialogController extends AbstractDialogController {
+public class NewStoreDialogController extends AbstractDialogController implements IEntityCreateOrUpdate<PluginStore> {
 	
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
@@ -31,6 +33,8 @@ public class NewStoreDialogController extends AbstractDialogController {
 	private PluginStoreDAO pluginStoreDAO;
 	@Autowired
 	private StoreMenuController storeMenuController;
+	@Autowired
+	private DialogController dialogController;
 	
 	@FXML
 	private JFXTextField storeUrlTextField;
@@ -66,6 +70,20 @@ public class NewStoreDialogController extends AbstractDialogController {
 		
 	}
 	
+	@Override
+	public void startCreateSequence() {
+		storeUrlTextField.setText("");
+		progressSpinner.setVisible(false);
+		errorLabel.setVisible(false);
+		
+	}
+
+	@Override
+	public void startUpdateSequence(PluginStore entity) {
+		throw new UnsupportedOperationException();
+		
+	}
+	
 	private void getPluginStore() {
 		
 		progressSpinner.setVisible(true);
@@ -87,6 +105,9 @@ public class NewStoreDialogController extends AbstractDialogController {
 					pluginStoreDAO.save(pluginStore);
 					storeMenuController.refreshView();
 					close();
+					dialogController.newSimpleInfoDialog("Success", 
+							"The plugin store " + pluginStore.getName() + " has been sucessfully added !"
+							).show();
 				} else {
 					errorLabel.setVisible(true);
 				}

@@ -39,6 +39,7 @@ public class StoreMenuController {
 		
 		newStoreMenuItem.setOnMouseClicked(e -> {
 			newStoreDialogController.show();
+			newStoreDialogController.startCreateSequence();
 			mainController.getLeftDrawer().close();
 		});
 		
