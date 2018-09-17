@@ -9,13 +9,24 @@ public class StoreProduct {
 	private String pageUrl;
 	private String downloadUrl;
 	private String iconUrl;
+	private String creator;
 	private String description;
 	
 	public StoreProduct() {
 		
 	}
 	
-	public StoreProduct(String name, String downloadUrl, String iconUrl, String description) {
+
+	/**
+	 * Creates a new instance.
+	 * @param name the product name
+	 * @param downloadUrl the product download url
+	 * @param iconUrl the product icon/screenshot url
+	 * @param creator product creator
+	 * @param description product description
+	 */
+	public StoreProduct(String name, String downloadUrl, String iconUrl, 
+			String creator, String description) {
 		super();
 		this.name = name;
 		this.downloadUrl = downloadUrl;
@@ -55,6 +66,14 @@ public class StoreProduct {
 		this.iconUrl = iconUrl;
 	}
 	
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
 	public String getDescription() {
 		return description;
 	}

@@ -6,6 +6,7 @@ public class ProductTO {
 	private String pageUrl;
 	private String downloadUrl;
 	private String iconUrl;
+	private String creator;
 	private String description;
 	
 	
@@ -41,6 +42,14 @@ public class ProductTO {
 		this.iconUrl = iconUrl;
 	}
 	
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
 	public String getDescription() {
 		return description;
 	}

@@ -22,6 +22,7 @@ public class StoreModelConverter {
 		product.setPageUrl(productTO.getPageUrl());
 		product.setDownloadUrl(productTO.getDownloadUrl());
 		product.setIconUrl(productTO.getIconUrl());
+		product.setCreator(productTO.getCreator());
 		product.setDescription(productTO.getDescription());
 		
 		return product;

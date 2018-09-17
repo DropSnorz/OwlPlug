@@ -10,6 +10,7 @@ import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.json.PluginStoreTO;
 import com.dropsnorz.owlplug.store.model.json.ProductTO;
 import com.dropsnorz.owlplug.store.model.json.StoreModelConverter;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -27,7 +28,11 @@ public class StoreSyncTask extends AbstractTask {
 	private PluginStoreDAO pluginStoreDAO;
 	private StoreProductDAO storeProductDAO;
 	
-	
+	/**
+	 * Creates a new StoreSync tasks.
+	 * @param pluginStoreDAO pluginStore DAO
+	 * @param storeProductDAO storeProduct DAO
+	 */
 	public StoreSyncTask(PluginStoreDAO pluginStoreDAO, StoreProductDAO storeProductDAO) {
 		super();
 		this.pluginStoreDAO = pluginStoreDAO;
@@ -54,7 +59,8 @@ public class StoreSyncTask extends AbstractTask {
 				CloseableHttpResponse response = httpclient.execute(httpGet);
 
 				HttpEntity entity = response.getEntity();
-				ObjectMapper objectMapper = new ObjectMapper();
+				ObjectMapper objectMapper = new ObjectMapper()
+						.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				try {
 					PluginStoreTO pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreTO.class);
 					log.debug(pluginStoreTO.toString());

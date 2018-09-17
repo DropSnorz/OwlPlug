@@ -9,6 +9,7 @@ import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.model.json.PluginStoreTO;
 import com.dropsnorz.owlplug.store.model.json.StoreModelConverter;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import javax.annotation.PostConstruct;
@@ -81,7 +82,8 @@ public class StoreService {
 			CloseableHttpResponse response = httpclient.execute(httpGet);
 
 			HttpEntity entity = response.getEntity();
-			ObjectMapper objectMapper = new ObjectMapper();
+			ObjectMapper objectMapper = new ObjectMapper()
+					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);;
 			try {
 				PluginStoreTO pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreTO.class);
 				EntityUtils.consume(entity);

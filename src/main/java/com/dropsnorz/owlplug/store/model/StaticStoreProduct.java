@@ -11,7 +11,7 @@ public class StaticStoreProduct extends StoreProduct {
 	
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@ManyToOne
 	private PluginStore store;
@@ -22,26 +22,23 @@ public class StaticStoreProduct extends StoreProduct {
 	}
 	
 	
-	public StaticStoreProduct(String name, String downloadUrl, String iconUrl, String description, PluginStore store) {
-		super(name, downloadUrl, iconUrl, description);
+	public StaticStoreProduct(String name, String downloadUrl, String iconUrl, String creator, 
+			String description, PluginStore store) {
+		super(name, downloadUrl, iconUrl, creator, description);
 		this.store = store;
 	}
-
 
 	public Long getId() {
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
 	public PluginStore getStore() {
 		return store;
 	}
-
 
 	public void setStore(PluginStore store) {
 		this.store = store;
