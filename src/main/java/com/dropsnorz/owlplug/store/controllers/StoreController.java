@@ -8,13 +8,17 @@ import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocView;
+import com.google.common.collect.Iterables;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
 import com.jfoenix.controls.JFXTextField;
 import java.io.File;
+import java.util.List;
 import java.util.prefs.Preferences;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -29,6 +33,8 @@ import org.springframework.stereotype.Controller;
 public class StoreController {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+	private static final int PARTITION_SIZE = 20;
 
 	@Autowired
 	private Preferences prefs;
@@ -53,10 +59,21 @@ public class StoreController {
 	private ScrollPane scrollPane;
 
 	/**
+	 * Loaded products from store are displayed by partitions (like pagination).
+	 * When the user scrolls the entire partition, the next one is appended in the UI.
+	 */
+	private Iterable<List<StaticStoreProduct>> loadedProductPartitions;
+	
+	/**
+	 * Counter of loaded partitions on UI.
+	 */
+	private int displayedPartitions = 0;
+
+	/**
 	 * FXML initialize.
 	 */
 	public void initialize() {
-		
+
 		storesButton.setOnAction(e -> {
 			mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.STORE_MENU_VIEW));
 			mainController.getLeftDrawer().open();
@@ -70,7 +87,17 @@ public class StoreController {
 			refreshView();
 		});
 
+		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				if (newValue.doubleValue() == 1) {
+					displayNewProductPartition();
+				}
+			}
+		});
+		
 		refreshView();
+
 	}
 
 	/**
@@ -80,14 +107,28 @@ public class StoreController {
 		this.masonryPane.getChildren().clear();
 		this.masonryPane.clearLayout();
 
-		for (StaticStoreProduct product : storeService.getStoreProducts(storeSearchTextField.getText())) {
-			Image image = imageCache.get(product.getIconUrl());
-			JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
-			masonryPane.getChildren().add(rippler);
+		displayedPartitions = 0;
+		loadedProductPartitions = Iterables.partition(
+				storeService.getStoreProducts(storeSearchTextField.getText()), PARTITION_SIZE);		
+
+		displayNewProductPartition();
+	}
+
+	private void displayNewProductPartition() {
+
+		if (Iterables.size(loadedProductPartitions) > displayedPartitions) {
+
+			for (StaticStoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
+				Image image = imageCache.get(product.getIconUrl());
+				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
+				masonryPane.getChildren().add(rippler);
+			}
+			displayedPartitions += 1;
+			Platform.runLater(() -> { 
+				scrollPane.requestLayout();
+			});
 		}
-		Platform.runLater(() -> { 
-			scrollPane.requestLayout();
-		});
+
 	}
 
 	/**
@@ -115,7 +156,7 @@ public class StoreController {
 			Window mainWindow = masonryPane.getScene().getWindow();
 			selectedDirectory = directoryChooser.showDialog(mainWindow);
 		}
-		
+
 		if (selectedDirectory != null) {
 			storeService.install(product, selectedDirectory);
 		} else {
