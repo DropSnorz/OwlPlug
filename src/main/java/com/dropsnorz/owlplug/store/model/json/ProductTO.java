@@ -1,5 +1,7 @@
 package com.dropsnorz.owlplug.store.model.json;
 
+import java.util.List;
+
 public class ProductTO {
 	
 	private String name;
@@ -8,6 +10,7 @@ public class ProductTO {
 	private String iconUrl;
 	private String creator;
 	private String description;
+	private List<String> platforms;
 	
 	
 	public String getName() {
@@ -57,8 +60,14 @@ public class ProductTO {
 	public void setDescription(String version) {
 		this.description = version;
 	}
-	
-	
+
+	public List<String> getPlatforms() {
+		return platforms;
+	}
+
+	public void setPlatforms(List<String> platforms) {
+		this.platforms = platforms;
+	}
 	
 
 }

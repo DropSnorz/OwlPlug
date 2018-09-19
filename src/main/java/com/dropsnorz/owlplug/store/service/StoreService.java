@@ -1,6 +1,8 @@
 package com.dropsnorz.owlplug.store.service;
 
+import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
+import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
@@ -11,7 +13,9 @@ import com.dropsnorz.owlplug.store.model.json.PluginStoreTO;
 import com.dropsnorz.owlplug.store.model.json.StoreModelConverter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Iterables;
 import java.io.File;
+import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -28,6 +32,8 @@ import org.springframework.stereotype.Service;
 public class StoreService {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+	@Autowired
+	private ApplicationDefaults applicationDefaults;
 	@Autowired
 	private TaskFactory taskFactory;
 	@Autowired
@@ -57,11 +63,24 @@ public class StoreService {
 	}
 
 	public Iterable<StaticStoreProduct> getStoreProducts() {
-		return storeProductDAO.findAll();
+		OSType osType = applicationDefaults.getPlatform();
+		String platformTag = osType.getCode();
+
+		ArrayList<StaticStoreProduct> result = new ArrayList<>();
+		Iterables.addAll(result, storeProductDAO.findByPlatform(platformTag));
+		Iterables.addAll(result, storeProductDAO.findProductWithoutPlatformAssignment(""));
+		return result;
 	}
 
+
 	public Iterable<StaticStoreProduct> getStoreProducts(String query) {
-		return storeProductDAO.findByNameContainingIgnoreCase(query);
+		OSType osType = applicationDefaults.getPlatform();
+		String platformTag = osType.getCode();
+
+		ArrayList<StaticStoreProduct> result = new ArrayList<>();
+		Iterables.addAll(result, storeProductDAO.findByPlatformAndName(platformTag,query));
+		Iterables.addAll(result, storeProductDAO.findProductWithoutPlatformAssignment(query));
+		return result;
 	}
 
 	public void install(StoreProduct product, File targetDirectory) {
@@ -84,17 +103,17 @@ public class StoreService {
 			HttpEntity entity = response.getEntity();
 			ObjectMapper objectMapper = new ObjectMapper()
 					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);;
-			try {
-				PluginStoreTO pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreTO.class);
-				EntityUtils.consume(entity);
-				return StoreModelConverter.fromTO(pluginStoreTO);
+					try {
+						PluginStoreTO pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreTO.class);
+						EntityUtils.consume(entity);
+						return StoreModelConverter.fromTO(pluginStoreTO);
 
-			} catch (Exception e) {
-				log.error("Error parsing store response: " + url, e);
-				throw new TaskException(e);
-			} finally {
-				response.close();
-			}
+					} catch (Exception e) {
+						log.error("Error parsing store response: " + url, e);
+						throw new TaskException(e);
+					} finally {
+						response.close();
+					}
 
 		} catch (Exception e) {
 			return null;
