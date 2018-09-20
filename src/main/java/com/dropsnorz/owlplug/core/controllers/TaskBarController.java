@@ -38,46 +38,50 @@ public class TaskBarController {
 	private JFXButton taskHistoryButton;
 
 
-	@FXML
+	/**
+	 * FXML initialize.
+	 */
 	public void initialize() {
 
 		taskHistoryButton.setOnAction(e -> openTaskHistory());
 	}
 
-	public void openTaskHistory() {
+	private void openTaskHistory() {
 
-		JFXListView<AbstractTask> list = new JFXListView<>();
-		list.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-		list.getItems().addAll(taskRunner.getTaskHistory());
+		if (!taskRunner.getTaskHistory().isEmpty()) {
+			JFXListView<AbstractTask> list = new JFXListView<>();
+			list.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+			list.getItems().addAll(taskRunner.getTaskHistory());
 
-		list.setCellFactory(new Callback<ListView<AbstractTask>, ListCell<AbstractTask>>() {
-			@Override
-			public ListCell<AbstractTask> call(ListView<AbstractTask> param) {
-				return new JFXListCell<AbstractTask>(){
-					@Override
-					public void updateItem(AbstractTask item, boolean empty) {
-						super.updateItem(item, empty);
-						if (item != null && !empty) {
-							Image icon = applicationDefaults.taskPendingImage;
-							if (item.isRunning()) {
-								icon = applicationDefaults.taskRunningImage;
-							} else if (item.isDone()) {
-								icon = applicationDefaults.taskSuccessImage;
+			list.setCellFactory(new Callback<ListView<AbstractTask>, ListCell<AbstractTask>>() {
+				@Override
+				public ListCell<AbstractTask> call(ListView<AbstractTask> param) {
+					return new JFXListCell<AbstractTask>() {
+						@Override
+						public void updateItem(AbstractTask item, boolean empty) {
+							super.updateItem(item, empty);
+							if (item != null && !empty) {
+								Image icon = applicationDefaults.taskPendingImage;
+								if (item.isRunning()) {
+									icon = applicationDefaults.taskRunningImage;
+								} else if (item.isDone()) {
+									icon = applicationDefaults.taskSuccessImage;
+								}
+								if (item.getState().equals(State.FAILED)) {
+									icon = applicationDefaults.taskFailImage;
+								}
+								ImageView imageView = new ImageView(icon);
+								setGraphic(imageView);
+								setText(item.getName());
 							}
-							if (item.getState().equals(State.FAILED)) {
-								icon = applicationDefaults.taskFailImage;
-							}
-							ImageView imageView = new ImageView(icon);
-							setGraphic(imageView);
-							setText(item.getName());
 						}
-					}
-				};
-			}
-		});
+					};
+				}
+			});
 
-		JFXPopup popup = new JFXPopup(list);
-		popup.show(taskHistoryButton, PopupVPosition.BOTTOM, PopupHPosition.RIGHT);
+			JFXPopup popup = new JFXPopup(list);
+			popup.show(taskHistoryButton, PopupVPosition.BOTTOM, PopupHPosition.RIGHT);
+		}
 
 	}
 
