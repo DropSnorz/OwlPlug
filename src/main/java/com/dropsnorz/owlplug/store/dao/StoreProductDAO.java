@@ -20,4 +20,7 @@ public interface StoreProductDAO extends CrudRepository<StaticStoreProduct, Long
 	@Query("FROM StaticStoreProduct product WHERE product.platforms IS EMPTY "
 			+ "AND lower(product.name) LIKE lower(concat('%', :name,'%'))")
 	public Iterable<StaticStoreProduct> findProductWithoutPlatformAssignment(@Param("name")String name);
+	
+	public Iterable<StaticStoreProduct> findByNameContainingIgnoreCase(String name);
+
 }

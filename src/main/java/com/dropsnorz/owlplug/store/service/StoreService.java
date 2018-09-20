@@ -62,6 +62,7 @@ public class StoreService {
 		taskFactory.createStoreSyncTask().run();
 	}
 
+
 	public Iterable<StaticStoreProduct> getStoreProducts() {
 		OSType osType = applicationDefaults.getPlatform();
 		String platformTag = osType.getCode();
@@ -83,8 +84,11 @@ public class StoreService {
 		return result;
 	}
 
-	public void install(StoreProduct product, File targetDirectory) {
+	public Iterable<StaticStoreProduct> getProductsByName(String name) {
+		return storeProductDAO.findByNameContainingIgnoreCase(name);
+	}
 
+	public void install(StoreProduct product, File targetDirectory) {
 		taskFactory.createProductInstallTask(product, targetDirectory).run();
 	}
 
@@ -102,18 +106,18 @@ public class StoreService {
 
 			HttpEntity entity = response.getEntity();
 			ObjectMapper objectMapper = new ObjectMapper()
-					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);;
-					try {
-						PluginStoreTO pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreTO.class);
-						EntityUtils.consume(entity);
-						return StoreModelConverter.fromTO(pluginStoreTO);
+					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			try {
+				PluginStoreTO pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreTO.class);
+				EntityUtils.consume(entity);
+				return StoreModelConverter.fromTO(pluginStoreTO);
 
-					} catch (Exception e) {
-						log.error("Error parsing store response: " + url, e);
-						throw new TaskException(e);
-					} finally {
-						response.close();
-					}
+			} catch (Exception e) {
+				log.error("Error parsing store response: " + url, e);
+				throw new TaskException(e);
+			} finally {
+				response.close();
+			}
 
 		} catch (Exception e) {
 			return null;
