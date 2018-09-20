@@ -1,9 +1,20 @@
 package com.dropsnorz.owlplug.store.model;
 
-import javax.persistence.MappedSuperclass;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-@MappedSuperclass
+@Entity
 public class StoreProduct {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	
 	private String name;
 	private String pageUrl;
@@ -12,36 +23,50 @@ public class StoreProduct {
 	private String creator;
 	private String description;
 	
-	public StoreProduct() {
-		
-	}
-	
+	@ManyToOne
+	private PluginStore store;
 
-	/**
-	 * Creates a new instance.
-	 * @param name the product name
-	 * @param downloadUrl the product download url
-	 * @param iconUrl the product icon/screenshot url
-	 * @param creator product creator
-	 * @param description product description
-	 */
-	public StoreProduct(String name, String downloadUrl, String iconUrl, 
-			String creator, String description) {
+	@OneToMany(mappedBy = "product", orphanRemoval = true, 
+			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
+	private List<ProductPlatform> platforms;
+
+
+	public StoreProduct() {
 		super();
+	}
+
+
+	public StoreProduct(Long id, String name, String pageUrl, String downloadUrl, String iconUrl, String creator,
+			String description, PluginStore store) {
+		super();
+		this.id = id;
 		this.name = name;
+		this.pageUrl = pageUrl;
 		this.downloadUrl = downloadUrl;
 		this.iconUrl = iconUrl;
+		this.creator = creator;
 		this.description = description;
+		this.store = store;
 	}
-	
+
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getPageUrl() {
 		return pageUrl;
 	}
@@ -53,19 +78,19 @@ public class StoreProduct {
 	public String getDownloadUrl() {
 		return downloadUrl;
 	}
-	
+
 	public void setDownloadUrl(String downloadUrl) {
 		this.downloadUrl = downloadUrl;
 	}
-	
+
 	public String getIconUrl() {
 		return iconUrl;
 	}
-	
+
 	public void setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
 	}
-	
+
 	public String getCreator() {
 		return creator;
 	}
@@ -77,9 +102,25 @@ public class StoreProduct {
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	public PluginStore getStore() {
+		return store;
+	}
+
+	public void setStore(PluginStore store) {
+		this.store = store;
+	}
+
+	public List<ProductPlatform> getPlatforms() {
+		return platforms;
+	}
+
+	public void setPlatforms(List<ProductPlatform> platforms) {
+		this.platforms = platforms;
+	}
+	
 }

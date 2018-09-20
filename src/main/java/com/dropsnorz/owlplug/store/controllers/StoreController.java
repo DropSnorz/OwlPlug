@@ -4,7 +4,6 @@ import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.MainController;
-import com.dropsnorz.owlplug.store.model.StaticStoreProduct;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocView;
@@ -62,7 +61,7 @@ public class StoreController {
 	 * Loaded products from store are displayed by partitions (like pagination).
 	 * When the user scrolls the entire partition, the next one is appended in the UI.
 	 */
-	private Iterable<List<StaticStoreProduct>> loadedProductPartitions;
+	private Iterable<List<StoreProduct>> loadedProductPartitions;
 	
 	/**
 	 * Counter of loaded partitions on UI.
@@ -118,7 +117,7 @@ public class StoreController {
 
 		if (Iterables.size(loadedProductPartitions) > displayedPartitions) {
 
-			for (StaticStoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
+			for (StoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
 				Image image = imageCache.get(product.getIconUrl());
 				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
 				masonryPane.getChildren().add(rippler);

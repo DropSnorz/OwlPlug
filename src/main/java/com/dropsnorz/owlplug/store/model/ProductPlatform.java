@@ -16,13 +16,13 @@ public class ProductPlatform {
 	@Column
 	private String platformTag;
 	@ManyToOne
-	private StaticStoreProduct product;
+	private StoreProduct product;
 	
 	public ProductPlatform() {
 		
 	}
 	
-	public ProductPlatform(String platformTag, StaticStoreProduct product) {
+	public ProductPlatform(String platformTag, StoreProduct product) {
 		this.platformTag = platformTag;
 		this.product = product;
 	}
@@ -43,11 +43,11 @@ public class ProductPlatform {
 		this.platformTag = platformTag;
 	}
 
-	public StaticStoreProduct getProduct() {
+	public StoreProduct getProduct() {
 		return product;
 	}
 
-	public void setProduct(StaticStoreProduct product) {
+	public void setProduct(StoreProduct product) {
 		this.product = product;
 	}
 	

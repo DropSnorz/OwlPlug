@@ -16,7 +16,7 @@ public class PluginStore {
 	private String name;
 	private String url;
 	@OneToMany(mappedBy = "store", orphanRemoval = true)
-	private List<StaticStoreProduct> products;
+	private List<StoreProduct> products;
 	
 	
 	public String getName() {

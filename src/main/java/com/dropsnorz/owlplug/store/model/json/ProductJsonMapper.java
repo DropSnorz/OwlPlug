@@ -2,7 +2,7 @@ package com.dropsnorz.owlplug.store.model.json;
 
 import java.util.List;
 
-public class ProductTO {
+public class ProductJsonMapper {
 	
 	private String name;
 	private String pageUrl;
