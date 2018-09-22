@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.model;
 
-public enum PluginType {
+public enum PluginFormat {
 	VST2,
 	VST3
 

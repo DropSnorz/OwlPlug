@@ -14,8 +14,8 @@ public class VST2Plugin extends Plugin {
 	
 
 	@Override
-	public PluginType getType() {
-		return PluginType.VST2;
+	public PluginFormat getFormat() {
+		return PluginFormat.VST2;
 	}
 	
 }

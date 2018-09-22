@@ -77,7 +77,7 @@ public class ApplicationDefaults {
 	 */
 	public Image getPluginIcon(Plugin plugin) {
 
-		switch (plugin.getType()) {
+		switch (plugin.getFormat()) {
 			case VST2: return vst2Image;
 			case VST3: return vst3Image;
 			default: 

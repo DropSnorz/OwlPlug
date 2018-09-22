@@ -75,7 +75,7 @@ public abstract class Plugin {
 		return name;
 	}
 
-	public abstract PluginType getType();
+	public abstract PluginFormat getFormat();
 
 
 }

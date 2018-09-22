@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.tasks.plugins.discovery;
 
-import com.dropsnorz.owlplug.core.model.PluginType;
+import com.dropsnorz.owlplug.core.model.PluginFormat;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 
 public class OSXPluginCollector implements NativePluginCollector {
 
-	private PluginType pluginType;
+	private PluginFormat pluginFormat;
 
-	public OSXPluginCollector(PluginType type) {
-		this.pluginType = type;
+	public OSXPluginCollector(PluginFormat pluginFormat) {
+		this.pluginFormat = pluginFormat;
 	}
 
 	@Override
@@ -22,23 +22,21 @@ public class OSXPluginCollector implements NativePluginCollector {
 		File dir = new File(path);
 
 		if (dir.isDirectory()) {
-			
 			List<File> baseFiles = (List<File>) FileUtils.listFilesAndDirs(dir,  TrueFileFilter.TRUE,  TrueFileFilter.TRUE);
 
 			for (File file: baseFiles) {
 
-				if (pluginType == PluginType.VST2) {
+				if (pluginFormat == PluginFormat.VST2) {
 					if (file.getAbsolutePath().endsWith(".vst")) {
 						fileList.add(file);
 					}
-				} else if (pluginType == PluginType.VST3) {
+				} else if (pluginFormat == PluginFormat.VST3) {
 					if (file.getAbsolutePath().endsWith(".vst3")) {
 						fileList.add(file);
 					}
 				}
 			}
-		}
-		else {
+		} else {
 			//TODO log.error Plugin root is not a directory
 		}
 		return fileList;

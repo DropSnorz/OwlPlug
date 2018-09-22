@@ -13,8 +13,8 @@ public class VST3Plugin extends Plugin {
 	}
 	
 	@Override
-	public PluginType getType() {
-		return PluginType.VST3;
+	public PluginFormat getFormat() {
+		return PluginFormat.VST3;
 	}
 	
 }
