@@ -38,6 +38,8 @@ public class StoreController {
 	@Autowired
 	private Preferences prefs;
 	@Autowired
+	private ApplicationDefaults applicationDefaults;
+	@Autowired
 	private StoreService storeService;
 	@Autowired
 	private ImageCache imageCache;
@@ -119,7 +121,7 @@ public class StoreController {
 
 			for (StoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
 				Image image = imageCache.get(product.getIconUrl());
-				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(product, image, this));			
+				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(applicationDefaults, product, image, this));			
 				masonryPane.getChildren().add(rippler);
 			}
 			displayedPartitions += 1;

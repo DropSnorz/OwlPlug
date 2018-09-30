@@ -1,5 +1,7 @@
 package com.dropsnorz.owlplug.store.model;
 
+import com.dropsnorz.owlplug.core.model.PluginFormat;
+import com.dropsnorz.owlplug.core.model.PluginType;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -22,6 +24,7 @@ public class StoreProduct {
 	private String iconUrl;
 	private String creator;
 	private String description;
+	private PluginType type;
 	
 	@ManyToOne
 	private PluginStore store;
@@ -37,7 +40,7 @@ public class StoreProduct {
 
 
 	public StoreProduct(Long id, String name, String pageUrl, String downloadUrl, String iconUrl, String creator,
-			String description, PluginStore store) {
+			String description, PluginType type, PluginStore store) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -46,6 +49,7 @@ public class StoreProduct {
 		this.iconUrl = iconUrl;
 		this.creator = creator;
 		this.description = description;
+		this.type = type;
 		this.store = store;
 	}
 
@@ -106,6 +110,15 @@ public class StoreProduct {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public PluginType getType() {
+		return type;
+	}
+
+	public void setType(PluginType type) {
+		this.type = type;
+	}
+
 
 	public PluginStore getStore() {
 		return store;

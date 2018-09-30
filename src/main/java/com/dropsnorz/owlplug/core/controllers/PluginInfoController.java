@@ -106,7 +106,7 @@ public class PluginInfoController {
 
 	public void setPlugin(Plugin plugin){
 		this.currentPlugin = plugin;
-		pluginTypeIcon.setImage(applicationDefaults.getPluginIcon(plugin));
+		pluginTypeIcon.setImage(applicationDefaults.getPluginFormatIcon(plugin));
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());
 		pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse(""));

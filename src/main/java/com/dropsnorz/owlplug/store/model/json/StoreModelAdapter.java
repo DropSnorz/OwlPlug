@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.store.model.json;
 
+import com.dropsnorz.owlplug.core.model.PluginType;
 import com.dropsnorz.owlplug.store.model.PluginStore;
 import com.dropsnorz.owlplug.store.model.ProductPlatform;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
@@ -40,6 +41,10 @@ public class StoreModelAdapter {
 		product.setIconUrl(productJsonMapper.getIconUrl());
 		product.setCreator(productJsonMapper.getCreator());
 		product.setDescription(productJsonMapper.getDescription());
+		
+		if (productJsonMapper.getType() != null) {
+			product.setType(PluginType.fromString(productJsonMapper.getType()));
+		}
 
 		ArrayList<ProductPlatform> platforms = new ArrayList<>();
 		if (productJsonMapper.getPlatforms() != null) {

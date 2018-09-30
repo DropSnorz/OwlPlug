@@ -10,6 +10,7 @@ public class ProductJsonMapper {
 	private String iconUrl;
 	private String creator;
 	private String description;
+	private String type;
 	private List<String> platforms;
 	
 	
@@ -57,6 +58,14 @@ public class ProductJsonMapper {
 		return description;
 	}
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public void setDescription(String version) {
 		this.description = version;
 	}

@@ -158,7 +158,7 @@ public class PluginsController {
 		for (Plugin plugin : pluginList) {
 
 			TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
-			item.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
+			item.setGraphic(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
 			treePluginNode.getInternalChildren().add(item);
 		}
 
@@ -265,7 +265,7 @@ public class PluginsController {
 			if (child.values().isEmpty()) {
 				Plugin plugin = (Plugin) child.getNodeValue();
 				FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
-				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
+				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
 				node.getInternalChildren().add(plugItem);
 			//If not we are exploring a directory
 			} else {
@@ -339,7 +339,7 @@ public class PluginsController {
 			if (treeHead.get(dir).values().isEmpty()) {
 				Plugin plugin =  (Plugin) treeHead.get(dir).getNodeValue();
 				FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
-				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginIcon(plugin)));
+				plugItem.setGraphic(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
 
 				node.getInternalChildren().add(plugItem);
 			} else {
