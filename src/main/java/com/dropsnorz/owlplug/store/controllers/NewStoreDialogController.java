@@ -11,7 +11,6 @@ import com.dropsnorz.owlplug.store.service.StoreService;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

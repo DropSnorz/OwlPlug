@@ -6,8 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OSXPluginCollector implements NativePluginCollector {
+
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private PluginFormat pluginFormat;
 
@@ -37,7 +41,7 @@ public class OSXPluginCollector implements NativePluginCollector {
 				}
 			}
 		} else {
-			//TODO log.error Plugin root is not a directory
+			log.error("Plugin root is not a directory");
 		}
 		return fileList;
 	}

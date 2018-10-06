@@ -5,12 +5,8 @@ import com.dropsnorz.owlplug.store.model.PluginStore;
 import com.dropsnorz.owlplug.store.model.ProductPlatform;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StoreModelAdapter {
-
-	private static final Logger log = LoggerFactory.getLogger(StoreModelAdapter.class);
 
 
 	/**

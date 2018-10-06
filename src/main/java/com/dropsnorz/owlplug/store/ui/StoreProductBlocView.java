@@ -26,6 +26,13 @@ public class StoreProductBlocView extends VBox {
 
 	private StoreController parentController;
 
+	/**
+	 * Creates a new store product bloc view instance.
+	 * @param applicationDefaults - OwlPlug application defaults
+	 * @param storeProduct - related store product
+	 * @param image - product image
+	 * @param parentController - parent store controller
+	 */
 	public StoreProductBlocView(ApplicationDefaults applicationDefaults, StoreProduct storeProduct, 
 			Image image, StoreController parentController) {
 		super();

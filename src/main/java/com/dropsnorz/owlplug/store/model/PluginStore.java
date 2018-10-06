@@ -34,5 +34,10 @@ public class PluginStore {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
+	public List<StoreProduct> getProducts() {
+		return products;
+	}
+	
 	
 }

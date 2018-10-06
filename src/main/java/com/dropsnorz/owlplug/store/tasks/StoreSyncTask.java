@@ -62,7 +62,8 @@ public class StoreSyncTask extends AbstractTask {
 				ObjectMapper objectMapper = new ObjectMapper()
 						.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				try {
-					PluginStoreJsonMapper pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreJsonMapper.class);
+					PluginStoreJsonMapper pluginStoreTO = objectMapper
+							.readValue(entity.getContent(), PluginStoreJsonMapper.class);
 					log.debug(pluginStoreTO.toString());
 					for (ProductJsonMapper productTO : pluginStoreTO.getProducts()) {
 						StoreProduct product = StoreModelAdapter.jsonMapperToEntity(productTO);

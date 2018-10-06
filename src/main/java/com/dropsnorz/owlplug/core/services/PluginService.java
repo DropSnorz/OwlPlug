@@ -4,7 +4,6 @@ import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;
-import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.google.common.collect.Iterables;

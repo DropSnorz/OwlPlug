@@ -1,6 +1,5 @@
 package com.dropsnorz.owlplug.store.model;
 
-import com.dropsnorz.owlplug.core.model.PluginFormat;
 import com.dropsnorz.owlplug.core.model.PluginType;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -17,7 +16,7 @@ public class StoreProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private String name;
 	private String pageUrl;
 	private String downloadUrl;
@@ -25,7 +24,7 @@ public class StoreProduct {
 	private String creator;
 	private String description;
 	private PluginType type;
-	
+
 	@ManyToOne
 	private PluginStore store;
 
@@ -37,23 +36,6 @@ public class StoreProduct {
 	public StoreProduct() {
 		super();
 	}
-
-
-	public StoreProduct(Long id, String name, String pageUrl, String downloadUrl, String iconUrl, String creator,
-			String description, PluginType type, PluginStore store) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.pageUrl = pageUrl;
-		this.downloadUrl = downloadUrl;
-		this.iconUrl = iconUrl;
-		this.creator = creator;
-		this.description = description;
-		this.type = type;
-		this.store = store;
-	}
-
-
 
 	public Long getId() {
 		return id;
@@ -135,5 +117,5 @@ public class StoreProduct {
 	public void setPlatforms(List<ProductPlatform> platforms) {
 		this.platforms = platforms;
 	}
-	
+
 }
