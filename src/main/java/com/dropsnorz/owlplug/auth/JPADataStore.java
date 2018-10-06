@@ -10,6 +10,10 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Google JPA Datastore.
+ * Persists {@link StoredCredential} using JPA providers 
+ */
 public class JPADataStore extends AbstractDataStore<StoredCredential> {
 
 	private GoogleCredentialDAO repository;

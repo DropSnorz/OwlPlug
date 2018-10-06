@@ -4,6 +4,7 @@ import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.core.utils.OSValidator;
+import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.io.File;
 import javafx.scene.image.Image;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,10 @@ public class ApplicationDefaults {
 	public final Image fileSystemRepositoryImage = new Image(getClass().getResourceAsStream("/icons/filesystem-grey-48.png"));
 	public final Image googleDriveRepositoryImage = new Image(getClass().getResourceAsStream("/icons/gdrive-grey-64.png"));
 	public final Image rocketImage = new Image(getClass().getResourceAsStream("/icons/rocket-white-64.png"));
+	public final Image storeImage = new Image(getClass().getResourceAsStream("/icons/bag-white-16.png"));
+	public final Image synthImage = new Image(getClass().getResourceAsStream("/icons/synth-white-16.png"));
+	public final Image effectImage = new Image(getClass().getResourceAsStream("/icons/effect-white-16.png"));
+
 
 	
 	public final Image pluginPlaceholderImage = new Image(getClass().getResourceAsStream("/media/plugin-placeholder.png"));
@@ -70,17 +75,32 @@ public class ApplicationDefaults {
 	}
 
 	/**
-	 * Returns plugin icon based on plugin type.
+	 * Returns plugin icon based on plugin format.
 	 * @param plugin - plugin
 	 * @return Associated icon
 	 */
-	public Image getPluginIcon(Plugin plugin) {
+	public Image getPluginFormatIcon(Plugin plugin) {
 
-		switch (plugin.getType()) {
+		switch (plugin.getFormat()) {
 			case VST2: return vst2Image;
 			case VST3: return vst3Image;
 			default: 
 				return vst2Image;
+		}
+	}
+	
+	/**
+	 * Returns plugin icon based on plugin format.
+	 * @param product - product
+	 * @return Associated icon
+	 */
+	public Image getProductTypeIcon(StoreProduct product) {
+
+		switch (product.getType()) {
+			case SYNTH: return synthImage;
+			case EFFECT: return effectImage;
+			default: 
+				return null;
 		}
 	}
 	

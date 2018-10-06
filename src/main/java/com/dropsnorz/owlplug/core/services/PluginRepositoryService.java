@@ -1,7 +1,7 @@
 package com.dropsnorz.owlplug.core.services;
 
 import com.dropsnorz.owlplug.auth.model.UserAccount;
-import com.dropsnorz.owlplug.auth.services.AuthentificationService;
+import com.dropsnorz.owlplug.auth.services.AuthenticationService;
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.dao.FileSystemRepositoryDAO;
@@ -30,7 +30,7 @@ public class PluginRepositoryService {
 	@Autowired
 	protected GoogleDriveRepositoryDAO googleDriveRepositoryDAO;
 	@Autowired
-	protected AuthentificationService authentificationService;
+	protected AuthenticationService authentificationService;
 	@Autowired
 	protected TaskFactory taskFactory;
 	@Autowired

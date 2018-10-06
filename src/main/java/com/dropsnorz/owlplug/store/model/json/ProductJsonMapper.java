@@ -1,12 +1,17 @@
 package com.dropsnorz.owlplug.store.model.json;
 
-public class ProductTO {
+import java.util.List;
+
+public class ProductJsonMapper {
 	
 	private String name;
 	private String pageUrl;
 	private String downloadUrl;
 	private String iconUrl;
+	private String creator;
 	private String description;
+	private String type;
+	private List<String> platforms;
 	
 	
 	public String getName() {
@@ -41,15 +46,37 @@ public class ProductTO {
 		this.iconUrl = iconUrl;
 	}
 	
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
 	public String getDescription() {
 		return description;
 	}
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public void setDescription(String version) {
 		this.description = version;
 	}
-	
-	
+
+	public List<String> getPlatforms() {
+		return platforms;
+	}
+
+	public void setPlatforms(List<String> platforms) {
+		this.platforms = platforms;
+	}
 	
 
 }

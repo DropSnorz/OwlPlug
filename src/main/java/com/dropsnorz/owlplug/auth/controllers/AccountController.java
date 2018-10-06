@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.auth.controllers;
 
-import com.dropsnorz.owlplug.auth.services.AuthentificationService;
+import com.dropsnorz.owlplug.auth.services.AuthenticationService;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.AbstractDialogController;
@@ -22,7 +22,7 @@ public class AccountController extends AbstractDialogController {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private AuthentificationService authentificationService;
+	private AuthenticationService authentificationService;
 	@Autowired 
 	private MainController mainController;
 	@Autowired 
@@ -41,6 +41,7 @@ public class AccountController extends AbstractDialogController {
 	@FXML
 	private JFXButton closeButton;
 
+	/** Indicates if the user has pressed the cancel button. */
 	private boolean cancelFlag = false;
 
 	/**

@@ -2,14 +2,14 @@ package com.dropsnorz.owlplug.store.model.json;
 
 import java.util.List;
 
-public class PluginStoreTO{
+public class PluginStoreJsonMapper {
 	
 	private String name;
 	private String url;
 	private String type;
 	private String version;
 	
-	private List<ProductTO> products;
+	private List<ProductJsonMapper> products;
 	
 
 	public String getName() {
@@ -44,11 +44,11 @@ public class PluginStoreTO{
 		this.version = version;
 	}
 
-	public List<ProductTO> getProducts() {
+	public List<ProductJsonMapper> getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<ProductTO> products) {
+	public void setProducts(List<ProductJsonMapper> products) {
 		this.products = products;
 	}
 

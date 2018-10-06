@@ -2,7 +2,7 @@ package com.dropsnorz.owlplug.core.tasks;
 
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;
-import com.dropsnorz.owlplug.core.model.PluginType;
+import com.dropsnorz.owlplug.core.model.PluginFormat;
 import com.dropsnorz.owlplug.core.tasks.plugins.discovery.NativePluginBuilder;
 import com.dropsnorz.owlplug.core.tasks.plugins.discovery.NativePluginBuilderFactory;
 import com.dropsnorz.owlplug.core.tasks.plugins.discovery.NativePluginCollector;
@@ -44,10 +44,10 @@ public class PluginSyncTask extends AbstractTask {
 
 				List<File> vst2files = new ArrayList<>();
 				NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(
-						parameters.getPlatform(), PluginType.VST2);
+						parameters.getPlatform(), PluginFormat.VST2);
 				vst2files = collector.collect(parameters.getPluginDirectory());
 				NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(
-						parameters.getPlatform(), PluginType.VST2);
+						parameters.getPlatform(), PluginFormat.VST2);
 
 				for (File file: vst2files) {
 					discoveredPlugins.add(builder.build(file));
@@ -60,10 +60,10 @@ public class PluginSyncTask extends AbstractTask {
 
 				List<File> vst3files = new ArrayList<>();
 				NativePluginCollector collector = NativePluginCollectorFactory
-						.getPluginFinder(parameters.getPlatform(), PluginType.VST3);
+						.getPluginFinder(parameters.getPlatform(), PluginFormat.VST3);
 				vst3files = collector.collect(parameters.getPluginDirectory());
 				NativePluginBuilder builder = NativePluginBuilderFactory
-						.createPluginBuilder(parameters.getPlatform(), PluginType.VST3);
+						.createPluginBuilder(parameters.getPlatform(), PluginFormat.VST3);
 
 				for (File file: vst3files) {
 					discoveredPlugins.add(builder.build(file));

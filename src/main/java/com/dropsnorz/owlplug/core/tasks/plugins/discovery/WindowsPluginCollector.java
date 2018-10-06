@@ -1,6 +1,6 @@
 package com.dropsnorz.owlplug.core.tasks.plugins.discovery;
 
-import com.dropsnorz.owlplug.core.model.PluginType;
+import com.dropsnorz.owlplug.core.model.PluginFormat;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
 public class WindowsPluginCollector implements NativePluginCollector {
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	private PluginType pluginType;
+	private PluginFormat pluginFormat;
 	
 
-	public WindowsPluginCollector(PluginType type) {
-		this.pluginType  = type;
+	public WindowsPluginCollector(PluginFormat pluginFormat) {
+		this.pluginFormat  = pluginFormat;
 	}
 
 	@Override
@@ -26,24 +26,22 @@ public class WindowsPluginCollector implements NativePluginCollector {
 		File dir = new File(path);
 		
 		if (dir.isDirectory()) {
-			
 			List<File> baseFiles = (List<File>) FileUtils.listFiles(dir,  TrueFileFilter.TRUE,  TrueFileFilter.TRUE);
 
 			for (File file: baseFiles) {
 
-				if (pluginType == PluginType.VST2) {
+				if (pluginFormat == PluginFormat.VST2) {
 					if (file.getAbsolutePath().endsWith(".dll") && file.isFile()) {
 						fileList.add(file);
 					}
-				} else if (pluginType == PluginType.VST3) {
+				} else if (pluginFormat == PluginFormat.VST3) {
 					if (file.getAbsolutePath().endsWith(".vst3")) {
 						fileList.add(file);
 					}
 
 				}
 			}
-		}
-		else {
+		} else {
 			log.error("Plugin root is not a directory");
 		}
 

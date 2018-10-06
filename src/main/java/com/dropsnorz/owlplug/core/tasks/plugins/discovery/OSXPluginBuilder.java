@@ -5,7 +5,7 @@ import com.dd.plist.NSObject;
 import com.dd.plist.PropertyListFormatException;
 import com.dd.plist.PropertyListParser;
 import com.dropsnorz.owlplug.core.model.Plugin;
-import com.dropsnorz.owlplug.core.model.PluginType;
+import com.dropsnorz.owlplug.core.model.PluginFormat;
 import com.dropsnorz.owlplug.core.model.VST2Plugin;
 import com.dropsnorz.owlplug.core.model.VST3Plugin;
 import java.io.File;
@@ -21,14 +21,14 @@ public class OSXPluginBuilder extends NativePluginBuilder {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	OSXPluginBuilder(PluginType pluginType) {
-		super(pluginType);
+	OSXPluginBuilder(PluginFormat pluginFormat) {
+		super(pluginFormat);
 	}
 
 	@Override
 	public Plugin build(File pluginFile) {
 
-		if (pluginType == PluginType.VST2) {
+		if (pluginFormat == PluginFormat.VST2) {
 			return buildVst2Plugin(pluginFile);
 		}
 		return null;

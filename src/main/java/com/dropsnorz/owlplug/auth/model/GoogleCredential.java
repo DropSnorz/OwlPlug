@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+/**
+ * Owlplug JPA entity to handle google credentials.
+ *
+ */
 @Entity
 public class GoogleCredential {
 
@@ -31,6 +35,11 @@ public class GoogleCredential {
 
 	}
 
+	/**
+	 * Creates a new GoogleCredential from the given {@link StoredCredential} properties.
+	 * @param key unique credential key
+	 * @param credential original credential
+	 */
 	public GoogleCredential(String key, StoredCredential credential) {
 		this.key = key;
 		this.accessToken = credential.getAccessToken();
@@ -40,6 +49,10 @@ public class GoogleCredential {
 		this.updatedAt = Instant.now();
 	}
 
+	/**
+	 * Apply properties of the given {@link StoredCredential }.
+	 * @param credential original credential
+	 */
 	public void apply(StoredCredential credential) {
 		this.accessToken = credential.getAccessToken();
 		this.expirationTimeMilliseconds = credential.getExpirationTimeMilliseconds();

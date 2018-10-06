@@ -32,26 +32,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * OAuth Authentication service.
+ * Authenticates users from known providers using IP Loopback and requests API call permissions for OwlPlug.
+ * This service stores users access tokens for next calls.
+ * Only one Authentication flow must be performed at time as this class is not thread safe and maintain 
+ * states during Authentication. 
+ *
+ */
 @Service
-public class AuthentificationService {
+public class AuthenticationService {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private OwlPlugCredentials owlPlugCredentials;
-
 	@Autowired
 	private GoogleCredentialDAO googleCredentialDAO;
-
 	@Autowired
 	private UserAccountDAO userAccountDAO;
-
 	@Autowired
 	private MainController mainController;
-
 	@Autowired
 	private PluginRepositoryService pluginRepositoryService;
-
 	@Autowired
 	private Preferences prefs;
 
@@ -59,6 +62,10 @@ public class AuthentificationService {
 	private LocalServerReceiver receiver = null;
 
 
+	/**
+	 * Creates a new account by starting the Authentication flow.
+	 * @throws AuthentificationException if an error occurs during Authentication flow.
+	 */
 	public void createAccountAndAuth() throws AuthentificationException {
 
 		String clientId = owlPlugCredentials.getGoogleAppId();
@@ -105,7 +112,12 @@ public class AuthentificationService {
 
 	}
 
-	public GoogleCredential getGoogleCredential(String key){
+	/**
+	 * Retrieve Google Credentials from key.
+	 * @param key Google credential unique key
+	 * @return
+	 */
+	public GoogleCredential getGoogleCredential(String key) {
 
 		String clientId = owlPlugCredentials.getGoogleAppId();
 		String clientSecret = owlPlugCredentials.getGoogleSecret();
@@ -119,17 +131,24 @@ public class AuthentificationService {
 				.setRefreshToken(gc.getRefreshToken());
 	}
 
+	/**
+	 * Deletes a user account.
+	 * @param userAccount user account to delete
+	 */
 	@Transactional
 	public void deleteAccount(UserAccount userAccount) {
 
 		pluginRepositoryService.removeAccountReferences(userAccount);
-
 		googleCredentialDAO.deleteByKey(userAccount.getKey());
 		userAccountDAO.delete(userAccount);
 		mainController.refreshAccounts();
 	}
 
 
+	/**
+	 * Force the Authentication flow authReceiver to stop.
+	 * Called when the user cancels authentication.
+	 */
 	public void stopAuthReceiver() {
 		try {
 			userAccountDAO.deleteInvalidAccounts();

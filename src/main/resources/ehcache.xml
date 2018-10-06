@@ -6,8 +6,8 @@
 	<diskStore path="user.home/.owlplug/cache" />
 
 	<cache name="image-cache" 
-		maxEntriesLocalHeap="75"
-		maxEntriesLocalDisk="300" 
+		maxBytesLocalHeap="300M"
+		maxBytesLocalDisk="4G" 
 		diskSpoolBufferSizeMB="20"
 		timeToIdleSeconds="604800" timeToLiveSeconds="604800"
 		memoryStoreEvictionPolicy="LFU" 

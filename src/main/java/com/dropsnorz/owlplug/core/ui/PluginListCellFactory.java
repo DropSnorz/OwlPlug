@@ -28,7 +28,7 @@ public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCel
 					setText(null);
 					setGraphic(null);
 				} else {
-					imageView.setImage(applicationDefaults.getPluginIcon(plugin));
+					imageView.setImage(applicationDefaults.getPluginFormatIcon(plugin));
 					setText(plugin.getName());
 					setGraphic(imageView);
 				}

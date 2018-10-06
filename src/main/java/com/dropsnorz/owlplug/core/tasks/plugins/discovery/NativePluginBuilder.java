@@ -1,16 +1,16 @@
 package com.dropsnorz.owlplug.core.tasks.plugins.discovery;
 
 import com.dropsnorz.owlplug.core.model.Plugin;
-import com.dropsnorz.owlplug.core.model.PluginType;
+import com.dropsnorz.owlplug.core.model.PluginFormat;
 import java.io.File;
 
 public abstract class NativePluginBuilder {
 	
-	protected PluginType pluginType;
+	protected PluginFormat pluginFormat;
 	
-	NativePluginBuilder(PluginType pluginType){
+	NativePluginBuilder(PluginFormat pluginFormat) {
 		
-		this.pluginType = pluginType;
+		this.pluginFormat = pluginFormat;
 	}
 	
 	public abstract Plugin build(File file);

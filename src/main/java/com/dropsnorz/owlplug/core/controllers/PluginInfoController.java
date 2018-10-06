@@ -3,6 +3,7 @@ package com.dropsnorz.owlplug.core.controllers;
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
+import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.services.OwlPlugCentralService;
 import com.dropsnorz.owlplug.core.services.PluginService;
@@ -31,7 +32,7 @@ public class PluginInfoController {
 	@Autowired
 	private PluginService pluginService;
 	@Autowired
-	private OwlPlugCentralService owlplugCentralService;
+	private PluginDAO pluginDAO;
 	@Autowired
 	private ImageCache imageCache;
 	@Autowired
@@ -105,7 +106,7 @@ public class PluginInfoController {
 
 	public void setPlugin(Plugin plugin){
 		this.currentPlugin = plugin;
-		pluginTypeIcon.setImage(applicationDefaults.getPluginIcon(plugin));
+		pluginTypeIcon.setImage(applicationDefaults.getPluginFormatIcon(plugin));
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());
 		pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse(""));
@@ -118,7 +119,13 @@ public class PluginInfoController {
 	
 	
 	private void setPluginImage() {
-		String url = owlplugCentralService.getPluginImageUrl(this.currentPlugin.getName());
+		if (currentPlugin.getIconUrl() == null || currentPlugin.getIconUrl().isEmpty()) {
+			String url = pluginService.resolveImageUrl(currentPlugin);
+			currentPlugin.setIconUrl(url);
+			pluginDAO.save(currentPlugin);
+		}
+		
+		String url = currentPlugin.getIconUrl();
 		if (knownPluginImages.contains(url) && !imageCache.contains(url)) {
 			pluginScreenshot.setImage(applicationDefaults.pluginPlaceholderImage);
 			

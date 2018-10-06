@@ -18,6 +18,9 @@ public abstract class Plugin {
 	protected String path;
 	protected String bundleId;
 	protected String version;
+	protected String iconUrl;
+	
+	protected PluginType type;
 
 
 	public Plugin(){
@@ -61,12 +64,28 @@ public abstract class Plugin {
 		this.version = version;
 	}
 
+	public String getIconUrl() {
+		return iconUrl;
+	}
+
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
+	}
+
+	public PluginType getType() {
+		return type;
+	}
+
+	public void setType(PluginType type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		return name;
 	}
 
-	public abstract PluginType getType();
+	public abstract PluginFormat getFormat();
 
 
 }
