@@ -7,6 +7,7 @@ import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocView;
+import com.dropsnorz.owlplug.store.ui.StoreProductBlocViewBuilder;
 import com.google.common.collect.Iterables;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
@@ -59,6 +60,8 @@ public class StoreController {
 	private JFXMasonryPane masonryPane;
 	@FXML
 	private ScrollPane scrollPane;
+	
+	private StoreProductBlocViewBuilder storeProductBlocViewBuilder = null;
 
 	/**
 	 * Loaded products from store are displayed by partitions (like pagination).
@@ -77,6 +80,9 @@ public class StoreController {
 	 * FXML initialize.
 	 */
 	public void initialize() {
+		
+		storeProductBlocViewBuilder =
+				new StoreProductBlocViewBuilder(applicationDefaults, imageCache, this);
 
 		storesButton.setOnAction(e -> {
 			mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.STORE_MENU_VIEW));
@@ -127,8 +133,7 @@ public class StoreController {
 		if (Iterables.size(loadedProductPartitions) > displayedPartitions) {
 
 			for (StoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
-				Image image = imageCache.get(product.getIconUrl());
-				JFXRippler rippler = new JFXRippler(new StoreProductBlocView(applicationDefaults, product, image, this));			
+				JFXRippler rippler = new JFXRippler(storeProductBlocViewBuilder.build(product));			
 				masonryPane.getChildren().add(rippler);
 			}
 			displayedPartitions += 1;
