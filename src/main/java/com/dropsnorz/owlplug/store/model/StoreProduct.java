@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.store.model;
 
+import com.dropsnorz.owlplug.core.model.PluginStage;
 import com.dropsnorz.owlplug.core.model.PluginType;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -24,6 +25,7 @@ public class StoreProduct {
 	private String creator;
 	private String description;
 	private PluginType type;
+	private PluginStage stage;
 
 	@ManyToOne
 	private PluginStore store;
@@ -100,7 +102,14 @@ public class StoreProduct {
 	public void setType(PluginType type) {
 		this.type = type;
 	}
+	
+	public PluginStage getStage() {
+		return stage;
+	}
 
+	public void setStage(PluginStage stage) {
+		this.stage = stage;
+	}
 
 	public PluginStore getStore() {
 		return store;
