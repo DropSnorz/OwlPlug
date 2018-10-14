@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.effect.InnerShadow;
@@ -26,6 +27,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 public class StoreProductBlocView extends AnchorPane {
 
@@ -72,7 +75,6 @@ public class StoreProductBlocView extends AnchorPane {
 		this.setPrefWidth(getRandomSize());
 
 		if (storeProduct.getStage() != null && storeProduct.getStage() != PluginStage.RELEASE) {
-			System.out.println("Here");
 			this.getChildren().add(createPluginStageFlag(storeProduct));
 		}
 
@@ -82,11 +84,14 @@ public class StoreProductBlocView extends AnchorPane {
 				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
 
 		this.setBackground(new Background(bgImg));
-		this.setEffect(new InnerShadow(11, Color.BLACK));
-
-		// Create ContextMenu
-		ContextMenu contextMenu = new ContextMenu();
-		MenuItem installMenuItem = new MenuItem("Install");
+		this.setEffect(new InnerShadow(11, Color.BLACK));	
+		
+		TextFlow textFlow = new TextFlow();
+		textFlow.getChildren().add(new Label("Install"));
+		Text storeSourceText = new Text(" (" + storeProduct.getStore().getName() + ")");
+		storeSourceText.getStyleClass().add("text-disabled");
+		textFlow.getChildren().add(storeSourceText);
+		CustomMenuItem installMenuItem = new CustomMenuItem(textFlow);
 		installMenuItem.setOnAction(e -> {
 			this.parentController.installProduct(storeProduct);
 		});
@@ -95,6 +100,7 @@ public class StoreProductBlocView extends AnchorPane {
 			PlatformUtils.openDefaultBrowser(storeProduct.getPageUrl());
 		});
 
+		ContextMenu contextMenu = new ContextMenu();
 		contextMenu.getItems().add(installMenuItem);
 		contextMenu.getItems().add(pluginPageMenuItem);
 		this.setOnContextMenuRequested(e -> {

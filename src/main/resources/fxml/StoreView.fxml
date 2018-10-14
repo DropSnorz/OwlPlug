@@ -22,9 +22,9 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXTextField fx:id="storeSearchTextField" prefHeight="25.0" prefWidth="300.0" promptText="Search" />
+                  <JFXTextField fx:id="storeSearchTextField" prefHeight="25.0" prefWidth="300.0" promptText="Search" styleClass="label-dark" />
                   <HBox prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Label text="Stores are a WIP feature" />
+                  <Label text="Store is a WIP feature" />
                   <JFXButton fx:id="syncStoreButton" buttonType="RAISED" text="Sync">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -49,5 +49,11 @@
             <Insets left="20.0" right="20.0" top="10.0" />
          </padding>
       </VBox>
+      <JFXButton fx:id="resultsParameterButton" text="\%" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
+         <styleClass>
+            <String fx:value="animated-option-button" />
+            <String fx:value="animated-option-sub-button" />
+         </styleClass>
+      </JFXButton>
    </children>
 </AnchorPane>

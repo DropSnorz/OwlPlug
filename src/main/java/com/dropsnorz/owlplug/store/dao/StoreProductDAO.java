@@ -1,25 +1,38 @@
 package com.dropsnorz.owlplug.store.dao;
 
 import com.dropsnorz.owlplug.store.model.StoreProduct;
-import org.springframework.data.jpa.repository.Query;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
-public interface StoreProductDAO extends CrudRepository<StoreProduct, Long> {
-	
-	@Query("SELECT product FROM ProductPlatform platform JOIN platform.product product "
-			+ "WHERE platform.platformTag=:platformTag")
-	public Iterable<StoreProduct> findByPlatform(@Param("platformTag")String platformTag);
 
-	@Query("SELECT product FROM ProductPlatform platform JOIN platform.product product "
-			+ "WHERE platform.platformTag=:platformTag "
-			+ "AND lower(product.name) LIKE lower(concat('%', :name,'%'))")
-	public Iterable<StoreProduct> findByPlatformAndName(
-			@Param("platformTag")String platformTag, @Param("name")String name);
+public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, JpaSpecificationExecutor<StoreProduct> {
 	
-	@Query("FROM StoreProduct product WHERE product.platforms IS EMPTY "
-			+ "AND lower(product.name) LIKE lower(concat('%', :name,'%'))")
-	public Iterable<StoreProduct> findProductWithoutPlatformAssignment(@Param("name")String name);
+	
+	/**
+	 * Name filtering JPA Specification.
+	 * @param name - The product name
+	 * @return The JPA specification
+	 */
+	static Specification<StoreProduct> nameContains(String name) {
+		return (product, cq, cb) -> cb.like(cb.lower(product.get("name")), "%" + name.toLowerCase() + "%");
+	}
+	
+	/**
+	 * Platform filtering JPA Specification
+	 * Filter products matching the given platformTag or products without platform assignment. 
+	 * @param platformTag - The platformTag to find
+	 * @return The JPA Specification
+	 */
+	static Specification<StoreProduct> hasPlatformTag(String platformTag) {
+		return (product, cq, cb) -> {
+			Join<Object, Object> groupPath = product.join("platforms", JoinType.LEFT);
+			return cb.or(cb.isEmpty(product.get("platforms")), cb.equal(groupPath.get("platformTag"), platformTag));
+		};
+	}
+	
 	
 	public Iterable<StoreProduct> findByNameContainingIgnoreCase(String name);
 
