@@ -26,11 +26,12 @@
 
 For now, no binaries are provided. To run OwlPlug, you should check the [Development Setup](#development-setup) section.
 
+
 # Features
 
 ## Plugins
 
-OwlPlug is compatible with your installed plugins as they are all in a specific root directory. For example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW.
+OwlPlug is compatible with your installed plugins as they are all in a specific root directory. For example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW. 
 OwlPlug can discover VST2 and VST3 Plugins.
 
 
@@ -56,21 +57,30 @@ Create a folder in your Google Drive space. Add a new Google Drive repository in
 
 ## Stores 
 
-Owlplug is shipped with a plugin store to automate plugin downloads and installations.
-For now, as it's **a fully WIP feature**, only plugins delivered by OwlPlug central are included. 
-
-In the next realeases, Owlplug may support multiple store sources. Everybody will be able to setup and host a store and let OwlPlug deals with it.
+Owlplug is shipped with a plugin store to automate plugin downloads and installations. For now, it's **a fully WIP feature**. Plugins delivered by OwlPlug Central are included by default. You can configure OwlPlug to use any compatible third party store.
 
 
 ### OwlPlug central
 
-OwlPlug central is the default Store source. If you wan't to include your plugin in OwlPlug Central, create an issue in this repository with a link to download your plugin.
-Owlplug Central backend is a quick prototype/POC for the Store feature integration in Owlplug.
+OwlPlug central is the default Store source. If you wan't to include your plugin in OwlPlug Central, create an issue in the [OwlPlug central repository](http://github.com/dropsnorz/owlplug-central-static). OwlPlug Central is a quick prototype/POC for the Store feature integration in OwlPlug. 
+
+* OwlPlug central: `http://owlplug.dropsnorz.com/store `
+
+### Third party (Central mirror)
+
+Third party store adapter provided by OwlPlug Central. (For testing purposes)
+
+```Empty section```
+
+### Third party
+
+```Empty section```
 
 
 # Development
 
 ## Stack
+
 * Spring boot
 * JavaFx & JFoenix
 * Hibernate & H2
@@ -88,6 +98,14 @@ mvn clean install spring-boot:repackage
 mvn spring-boot:run
 ```
 The first command will generate an executable binary `/target/owlplug-*.jar`. In order to use GoogleDrive repositories, you have to fill OAuth2 client id and secret in `credentials.properties`. Check Prerequisites from [Google OAuth2 Documentation](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
+
+
+# Roadmap
+
+- November 2018 - Open beta & Available binairies
+- February 2019 - Store improvements
+- Spring 2019 - Plugin discovery update
+
 
 # Possible incoming major features
 
