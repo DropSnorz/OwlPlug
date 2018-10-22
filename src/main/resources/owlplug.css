@@ -92,6 +92,11 @@ JFXButton{
 	-fx-text-fill: white;
 }
 
+.hyperlink-dark{
+	-fx-text-fill: rgb(40,40,40);
+}
+
+
 JFXToggleButton{
 	-fx-text-fill:white;
 }

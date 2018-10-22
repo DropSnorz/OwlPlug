@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXMasonryPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.StoreController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.StoreController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -39,7 +45,16 @@
                <children>
                   <ScrollPane fx:id="scrollPane" fitToHeight="false" fitToWidth="true" pannable="true" HBox.hgrow="ALWAYS">
                      <content>
-                        <JFXMasonryPane fx:id="masonryPane" />
+                        <VBox fx:id="masonryWrapper">
+                           <children>
+                              <JFXMasonryPane fx:id="masonryPane" VBox.vgrow="ALWAYS" />
+                              <HBox fx:id="lazyLoadBar" alignment="CENTER" prefHeight="74.0" prefWidth="783.0" spacing="5.0">
+                                 <children>
+                                    <Hyperlink fx:id="lazyLoadLink" styleClass="hyperlink-dark" text="Load more..." />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </content>
                   </ScrollPane>
                </children>
@@ -49,11 +64,5 @@
             <Insets left="20.0" right="20.0" top="10.0" />
          </padding>
       </VBox>
-      <JFXButton fx:id="resultsParameterButton" text="\%" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
-         <styleClass>
-            <String fx:value="animated-option-button" />
-            <String fx:value="animated-option-sub-button" />
-         </styleClass>
-      </JFXButton>
    </children>
 </AnchorPane>

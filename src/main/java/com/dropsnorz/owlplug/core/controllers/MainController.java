@@ -12,6 +12,7 @@ import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.dropsnorz.owlplug.core.services.PluginService;
+import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
@@ -44,6 +45,8 @@ public class MainController {
 	private WelcomeDialogController welcomeDialogController;
 	@Autowired
 	private OptionsController optionsController;
+	@Autowired
+	private StoreController storeController;
 	@Autowired
 	private UserAccountDAO userAccountDAO;
 	@Autowired
@@ -80,6 +83,11 @@ public class MainController {
 		this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener((options, oldValue, newValue) -> {
 			tabPaneContent.getSelectionModel().select(newValue.intValue());
 			leftDrawer.close();
+			
+			// Force the store masonry pane to render correctly when the user select the store tab.
+			if (newValue.intValue() == 2) {
+				storeController.requestLayout();
+			}
 		});
 
 		accountComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
@@ -105,7 +113,6 @@ public class MainController {
 				return false;
 			}
 		});
-
 
 		refreshAccounts();
 

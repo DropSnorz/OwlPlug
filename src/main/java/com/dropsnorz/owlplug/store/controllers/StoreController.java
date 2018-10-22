@@ -20,7 +20,10 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import org.slf4j.Logger;
@@ -55,9 +58,16 @@ public class StoreController {
 	@FXML
 	private JFXButton syncStoreButton;
 	@FXML
+	private VBox masonryWrapper;
+	@FXML
 	private JFXMasonryPane masonryPane;
 	@FXML
 	private ScrollPane scrollPane;
+	@FXML
+	private HBox lazyLoadBar;
+	@FXML
+	private Hyperlink lazyLoadLink;
+	
 	
 	private StoreProductBlocViewBuilder storeProductBlocViewBuilder = null;
 
@@ -103,7 +113,11 @@ public class StoreController {
 				}
 			}
 		});
-
+		
+		lazyLoadLink.setOnAction(e -> {
+			displayNewProductPartition();
+		});
+		
 		refreshView();
 
 	}
@@ -129,13 +143,22 @@ public class StoreController {
 	private void displayNewProductPartition() {
 
 		if (Iterables.size(loadedProductPartitions) > displayedPartitions) {
-
+			
 			for (StoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
 				JFXRippler rippler = new JFXRippler(storeProductBlocViewBuilder.build(product));			
 				masonryPane.getChildren().add(rippler);
 			}
 			displayedPartitions += 1;
+			
+			if (Iterables.size(loadedProductPartitions) == displayedPartitions) {
+				lazyLoadBar.setVisible(false);
+			} else {
+				lazyLoadBar.setVisible(true);
+				
+			}
+			
 			Platform.runLater(() -> { 
+				masonryPane.requestLayout();
 				scrollPane.requestLayout();
 			});
 		}
@@ -195,4 +218,13 @@ public class StoreController {
 		}
 
 	}
+	
+	/**
+	 * Requests masonry and scroll pane layout.
+	 */
+	public void requestLayout() {
+		masonryPane.requestLayout();
+		scrollPane.requestLayout();
+	}
+	
 }
