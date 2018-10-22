@@ -19,6 +19,7 @@ import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
@@ -67,8 +68,8 @@ public class StoreController {
 	private HBox lazyLoadBar;
 	@FXML
 	private Hyperlink lazyLoadLink;
-	
-	
+
+
 	private StoreProductBlocViewBuilder storeProductBlocViewBuilder = null;
 
 	/**
@@ -76,7 +77,7 @@ public class StoreController {
 	 * When the user scrolls the entire partition, the next one is appended in the UI.
 	 */
 	private Iterable<List<StoreProduct>> loadedProductPartitions;
-	
+
 	private Iterable<StoreProduct> loadedStoreProducts = new ArrayList<>();
 
 	/**
@@ -88,7 +89,7 @@ public class StoreController {
 	 * FXML initialize.
 	 */
 	public void initialize() {
-		
+
 		storeProductBlocViewBuilder =
 				new StoreProductBlocViewBuilder(applicationDefaults, imageCache, this);
 
@@ -102,7 +103,18 @@ public class StoreController {
 			storeService.syncStores();
 		});
 		storeSearchTextField.textProperty().addListener((obs, oldValue, newValue) -> {
-			refreshView();
+
+			final String query = storeSearchTextField.getText();
+			Task<Iterable<StoreProduct>> task = new Task<Iterable<StoreProduct>>() {
+				@Override
+				protected Iterable<StoreProduct> call() throws Exception {
+					return storeService.getStoreProducts(query);
+				}
+			};
+			task.setOnSucceeded(e -> {
+				refreshView(task.getValue());
+			});
+			new Thread(task).start();
 		});
 
 		scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
@@ -113,11 +125,11 @@ public class StoreController {
 				}
 			}
 		});
-		
+
 		lazyLoadLink.setOnAction(e -> {
 			displayNewProductPartition();
 		});
-		
+
 		refreshView();
 
 	}
@@ -127,6 +139,15 @@ public class StoreController {
 	 */
 	public synchronized void refreshView() {
 		Iterable<StoreProduct> newProducts = storeService.getStoreProducts(storeSearchTextField.getText());
+		refreshView(newProducts);
+
+	}
+
+	/**
+	 * Display store products list.
+	 * @param newProducts - Store product list
+	 */
+	public synchronized void refreshView(Iterable<StoreProduct> newProducts) {
 
 		if (shouldRefreshProducts(newProducts)) {
 			this.masonryPane.getChildren().clear();
@@ -137,26 +158,25 @@ public class StoreController {
 			displayedPartitions = 0;
 			displayNewProductPartition();
 		}
-
 	}
 
 	private void displayNewProductPartition() {
 
 		if (Iterables.size(loadedProductPartitions) > displayedPartitions) {
-			
+
 			for (StoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
 				JFXRippler rippler = new JFXRippler(storeProductBlocViewBuilder.build(product));			
 				masonryPane.getChildren().add(rippler);
 			}
 			displayedPartitions += 1;
-			
+
 			if (Iterables.size(loadedProductPartitions) == displayedPartitions) {
 				lazyLoadBar.setVisible(false);
 			} else {
 				lazyLoadBar.setVisible(true);
-				
+
 			}
-			
+
 			Platform.runLater(() -> { 
 				masonryPane.requestLayout();
 				scrollPane.requestLayout();
@@ -171,17 +191,17 @@ public class StoreController {
 	 * @return
 	 */
 	private boolean shouldRefreshProducts(Iterable<StoreProduct> newProducts) {
-		
+
 		if (Iterables.size(newProducts) != Iterables.size(loadedStoreProducts)) {
 			return true;
 		}
-		
+
 		for (int i = 0; i < Iterables.size(newProducts); i++) {
 			if (!Iterables.get(newProducts, i).getId().equals(Iterables.get(loadedStoreProducts, i).getId())) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -218,7 +238,7 @@ public class StoreController {
 		}
 
 	}
-	
+
 	/**
 	 * Requests masonry and scroll pane layout.
 	 */
@@ -226,5 +246,5 @@ public class StoreController {
 		masonryPane.requestLayout();
 		scrollPane.requestLayout();
 	}
-	
+
 }
