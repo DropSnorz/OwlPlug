@@ -5,7 +5,7 @@ import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
-import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
+import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 
 import java.util.prefs.BackingStoreException;
@@ -33,7 +33,7 @@ public class OptionsService {
 	@Autowired
 	private GoogleCredentialDAO googleCredentialDAO;
 	@Autowired
-	private PluginStoreDAO storeDAO;
+	private StoreDAO storeDAO;
 	@Autowired
 	private StoreProductDAO productDAO;
 	@Autowired

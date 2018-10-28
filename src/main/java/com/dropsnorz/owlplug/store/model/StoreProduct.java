@@ -30,7 +30,7 @@ public class StoreProduct {
 	private PluginStage stage;
 
 	@ManyToOne
-	private PluginStore store;
+	private Store store;
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
@@ -114,11 +114,11 @@ public class StoreProduct {
 		this.stage = stage;
 	}
 
-	public PluginStore getStore() {
+	public Store getStore() {
 		return store;
 	}
 
-	public void setStore(PluginStore store) {
+	public void setStore(Store store) {
 		this.store = store;
 	}
 

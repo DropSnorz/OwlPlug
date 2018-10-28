@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class PluginStore {
+public class Store {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

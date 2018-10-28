@@ -3,11 +3,11 @@ package com.dropsnorz.owlplug.store.tasks;
 import com.dropsnorz.owlplug.core.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.core.tasks.TaskResult;
-import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
+import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
-import com.dropsnorz.owlplug.store.model.PluginStore;
+import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
-import com.dropsnorz.owlplug.store.model.json.PluginStoreJsonMapper;
+import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
 import com.dropsnorz.owlplug.store.model.json.ProductJsonMapper;
 import com.dropsnorz.owlplug.store.model.json.StoreModelAdapter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -25,7 +25,7 @@ public class StoreSyncTask extends AbstractTask {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private PluginStoreDAO pluginStoreDAO;
+	private StoreDAO pluginStoreDAO;
 	private StoreProductDAO storeProductDAO;
 	
 	/**
@@ -33,7 +33,7 @@ public class StoreSyncTask extends AbstractTask {
 	 * @param pluginStoreDAO pluginStore DAO
 	 * @param storeProductDAO storeProduct DAO
 	 */
-	public StoreSyncTask(PluginStoreDAO pluginStoreDAO, StoreProductDAO storeProductDAO) {
+	public StoreSyncTask(StoreDAO pluginStoreDAO, StoreProductDAO storeProductDAO) {
 		super();
 		this.pluginStoreDAO = pluginStoreDAO;
 		this.storeProductDAO = storeProductDAO;
@@ -53,7 +53,7 @@ public class StoreSyncTask extends AbstractTask {
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 
-			for (PluginStore store : pluginStoreDAO.findAll()) {
+			for (Store store : pluginStoreDAO.findAll()) {
 				log.debug("Exploring store {}", store.getName());
 				HttpGet httpGet = new HttpGet(store.getUrl());
 				CloseableHttpResponse response = httpclient.execute(httpGet);
@@ -62,8 +62,8 @@ public class StoreSyncTask extends AbstractTask {
 				ObjectMapper objectMapper = new ObjectMapper()
 						.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				try {
-					PluginStoreJsonMapper pluginStoreTO = objectMapper
-							.readValue(entity.getContent(), PluginStoreJsonMapper.class);
+					StoreJsonMapper pluginStoreTO = objectMapper
+							.readValue(entity.getContent(), StoreJsonMapper.class);
 					log.debug(pluginStoreTO.toString());
 					for (ProductJsonMapper productTO : pluginStoreTO.getProducts()) {
 						StoreProduct product = StoreModelAdapter.jsonMapperToEntity(productTO);
