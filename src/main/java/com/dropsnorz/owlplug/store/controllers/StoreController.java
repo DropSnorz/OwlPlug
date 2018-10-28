@@ -129,6 +129,7 @@ public class StoreController {
 		lazyLoadLink.setOnAction(e -> {
 			displayNewProductPartition();
 		});
+		lazyLoadBar.setVisible(false);
 
 		refreshView();
 
