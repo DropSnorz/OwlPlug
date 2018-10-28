@@ -4,17 +4,15 @@ import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.tasks.TaskException;
-import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
+import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
-import com.dropsnorz.owlplug.store.model.PluginStore;
+import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
-import com.dropsnorz.owlplug.store.model.json.PluginStoreJsonMapper;
+import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
 import com.dropsnorz.owlplug.store.model.json.StoreModelAdapter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterables;
 import java.io.File;
-import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -36,7 +34,7 @@ public class StoreService {
 	@Autowired
 	private TaskFactory taskFactory;
 	@Autowired
-	private PluginStoreDAO pluginStoreDAO;
+	private StoreDAO pluginStoreDAO;
 	@Autowired
 	private StoreProductDAO storeProductDAO;
 
@@ -44,10 +42,10 @@ public class StoreService {
 	@PostConstruct
 	private void init() {
 
-		PluginStore store = pluginStoreDAO.findByName("OwlPlug Central");
+		Store store = pluginStoreDAO.findByName("OwlPlug Central");
 
 		if (store == null) {
-			store = new PluginStore();
+			store = new Store();
 			store.setName("OwlPlug Central");
 		}	
 
@@ -70,10 +68,7 @@ public class StoreService {
 		OSType osType = applicationDefaults.getPlatform();
 		String platformTag = osType.getCode();
 
-		ArrayList<StoreProduct> result = new ArrayList<>();
-		Iterables.addAll(result, storeProductDAO.findByPlatform(platformTag));
-		Iterables.addAll(result, storeProductDAO.findProductWithoutPlatformAssignment(""));
-		return result;
+		return storeProductDAO.findAll(StoreProductDAO.hasPlatformTag(platformTag));
 	}
 
 	/**
@@ -85,11 +80,10 @@ public class StoreService {
 	public Iterable<StoreProduct> getStoreProducts(String name) {
 		OSType osType = applicationDefaults.getPlatform();
 		String platformTag = osType.getCode();
-
-		ArrayList<StoreProduct> result = new ArrayList<>();
-		Iterables.addAll(result, storeProductDAO.findByPlatformAndName(platformTag,name));
-		Iterables.addAll(result, storeProductDAO.findProductWithoutPlatformAssignment(name));
-		return result;
+		
+		return storeProductDAO.findAll(
+				StoreProductDAO.nameContains(name).and(
+						StoreProductDAO.hasPlatformTag(platformTag)));
 	}
 
 	public Iterable<StoreProduct> getProductsByName(String name) {
@@ -105,7 +99,7 @@ public class StoreService {
 	 * @param url Store endpoint url
 	 * @return created pluginstore instance, null if an error occurs
 	 */
-	public PluginStore getPluginStoreFromUrl(String url) {
+	public Store getPluginStoreFromUrl(String url) {
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 
@@ -116,7 +110,7 @@ public class StoreService {
 			ObjectMapper objectMapper = new ObjectMapper()
 					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			try {
-				PluginStoreJsonMapper pluginStoreTO = objectMapper.readValue(entity.getContent(), PluginStoreJsonMapper.class);
+				StoreJsonMapper pluginStoreTO = objectMapper.readValue(entity.getContent(), StoreJsonMapper.class);
 				EntityUtils.consume(entity);
 				return StoreModelAdapter.jsonMapperToEntity(pluginStoreTO);
 

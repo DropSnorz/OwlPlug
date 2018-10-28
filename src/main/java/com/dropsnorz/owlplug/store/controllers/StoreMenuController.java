@@ -1,8 +1,8 @@
 package com.dropsnorz.owlplug.store.controllers;
 
 import com.dropsnorz.owlplug.core.controllers.MainController;
-import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
-import com.dropsnorz.owlplug.store.model.PluginStore;
+import com.dropsnorz.owlplug.store.dao.StoreDAO;
+import com.dropsnorz.owlplug.store.model.Store;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Hyperlink;
@@ -24,7 +24,7 @@ public class StoreMenuController {
 	@Autowired
 	private NewStoreDialogController newStoreDialogController;
 	@Autowired
-	private PluginStoreDAO pluginStoreDAO;
+	private StoreDAO pluginStoreDAO;
 	
 	@FXML
 	private VBox storeListHolder;
@@ -50,7 +50,7 @@ public class StoreMenuController {
 	 */
 	public void refreshView() {
 		storeListHolder.getChildren().clear();
-		for (PluginStore pluginStore : pluginStoreDAO.findAll()) {
+		for (Store pluginStore : pluginStoreDAO.findAll()) {
 			storeListHolder.getChildren().add(new StoreMenuItem(pluginStore));
 		}
 	}
@@ -58,7 +58,7 @@ public class StoreMenuController {
 	
 	private class StoreMenuItem extends HBox {
 		
-		StoreMenuItem(PluginStore pluginStore) {
+		StoreMenuItem(Store pluginStore) {
 			this.getStyleClass().add("menu-item");
 			this.setAlignment(Pos.CENTER_LEFT);
 			String iconChar = "?";

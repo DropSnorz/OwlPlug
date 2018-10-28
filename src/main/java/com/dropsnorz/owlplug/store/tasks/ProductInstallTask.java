@@ -167,6 +167,32 @@ public class ProductInstallTask extends AbstractTask {
 		return null;
 	}
 
+	/**
+	 * Compatible product archive structues
+	 * --------------
+	 *	DIRECT
+	 *	plugin.zip/
+	 *	├── plugin.dll
+	 *	└── (other required files...)
+	 *	--------------
+	 *	NESTED
+	 *	plugin.zip/
+	 *	└── plugin
+	 *		├── plugin.dll
+	 *		└── (other required files...)
+	 * --------------
+	 *	NESTED_ENV
+	 *	plugin.zip/
+	 *	└── plugin
+	 *		├── x86
+	 *		│	├── plugin.dll
+	 *		│	└── (other required files...)
+	 *		└── x64
+	 *			├── plugin.dll
+	 *			└── (other required files...)
+ 	 *
+	 *
+	 */
 	private enum OwlPackStructureType {
 		DIRECT,
 		NESTED,

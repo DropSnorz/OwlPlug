@@ -21,7 +21,7 @@ import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyException
 import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyResolver;
 import com.dropsnorz.owlplug.store.controllers.StoreController;
-import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
+import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
@@ -53,7 +53,7 @@ public class TaskFactory {
 	@Autowired
 	private PluginsController pluginsController;
 	@Autowired
-	private PluginStoreDAO pluginStoreDAO;
+	private StoreDAO pluginStoreDAO;
 	@Autowired
 	private StoreProductDAO storeProductDAO;
 	@Autowired 

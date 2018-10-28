@@ -9,12 +9,12 @@
    <children>
       <VBox>
          <children>
-            <Label text="Fill the plugin store url" wrapText="true" />
+            <Label text="Plugin store url" wrapText="true" />
          </children>
       </VBox>
       <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
          <children>
-            <JFXTextField fx:id="storeUrlTextField" HBox.hgrow="ALWAYS" />
+            <JFXTextField fx:id="storeUrlTextField" promptText="http://example.com/store" HBox.hgrow="ALWAYS" />
             <JFXSpinner fx:id="progressSpinner" prefHeight="25.0" prefWidth="25.0" />
          </children>
       </HBox>

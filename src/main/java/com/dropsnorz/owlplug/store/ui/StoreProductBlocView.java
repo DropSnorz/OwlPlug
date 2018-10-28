@@ -1,28 +1,36 @@
 package com.dropsnorz.owlplug.store.ui;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.model.PluginStage;
 import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.util.Random;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
-public class StoreProductBlocView extends VBox {
+public class StoreProductBlocView extends AnchorPane {
 
 	private StoreController parentController;
 
@@ -37,6 +45,13 @@ public class StoreProductBlocView extends VBox {
 			Image image, StoreController parentController) {
 		super();
 		this.parentController = parentController;
+
+		VBox content = new VBox();
+		this.getChildren().add(content);
+		AnchorPane.setBottomAnchor(content, 0.0);
+		AnchorPane.setTopAnchor(content, 0.0);
+		AnchorPane.setLeftAnchor(content, 0.0);
+		AnchorPane.setRightAnchor(content, 0.0);
 
 		HBox header = new HBox();
 		header.setSpacing(5);
@@ -53,12 +68,15 @@ public class StoreProductBlocView extends VBox {
 		header.getChildren().add(new Label(storeProduct.getName()));
 		header.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
 		header.setAlignment(Pos.BOTTOM_LEFT);
-		this.getChildren().add(header);
+		content.getChildren().add(header);
 
-		this.setAlignment(Pos.BOTTOM_LEFT);
+		content.setAlignment(Pos.BOTTOM_LEFT);
 		this.setPrefHeight(getRandomSize());
 		this.setPrefWidth(getRandomSize());
-		this.getChildren().add(new Pane());
+
+		if (storeProduct.getStage() != null && storeProduct.getStage() != PluginStage.RELEASE) {
+			this.getChildren().add(createPluginStageFlag(storeProduct));
+		}
 
 		BackgroundImage bgImg = new BackgroundImage(image, 
 				BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
@@ -66,11 +84,14 @@ public class StoreProductBlocView extends VBox {
 				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
 
 		this.setBackground(new Background(bgImg));
-		this.setEffect(new InnerShadow(11, Color.BLACK));
-
-		// Create ContextMenu
-		ContextMenu contextMenu = new ContextMenu();
-		MenuItem installMenuItem = new MenuItem("Install");
+		this.setEffect(new InnerShadow(11, Color.BLACK));	
+		
+		TextFlow textFlow = new TextFlow();
+		textFlow.getChildren().add(new Label("Install"));
+		Text storeSourceText = new Text(" (" + storeProduct.getStore().getName() + ")");
+		storeSourceText.getStyleClass().add("text-disabled");
+		textFlow.getChildren().add(storeSourceText);
+		CustomMenuItem installMenuItem = new CustomMenuItem(textFlow);
 		installMenuItem.setOnAction(e -> {
 			this.parentController.installProduct(storeProduct);
 		});
@@ -79,6 +100,7 @@ public class StoreProductBlocView extends VBox {
 			PlatformUtils.openDefaultBrowser(storeProduct.getPageUrl());
 		});
 
+		ContextMenu contextMenu = new ContextMenu();
 		contextMenu.getItems().add(installMenuItem);
 		contextMenu.getItems().add(pluginPageMenuItem);
 		this.setOnContextMenuRequested(e -> {
@@ -86,10 +108,43 @@ public class StoreProductBlocView extends VBox {
 		});
 	}
 
-
 	private int getRandomSize() {
 		Random r = new Random();
 		return ((r.nextInt(180 - 140) + 140) / 10) * 10;
+	}
+
+
+	private Node createPluginStageFlag(StoreProduct storeProduct) {
+		
+		Polygon polygonFlag = new Polygon();
+		polygonFlag.getPoints().addAll(new Double[]{
+				0.0, 0.0,
+				40.0, 0.0,
+				0.0, 40.0 });
+		
+		Label iconLabel = new Label("");
+		iconLabel.setStyle("-fx-font-weight: bold;");
+		iconLabel.setPadding(new Insets(5,0,0,7));
+		
+		switch (storeProduct.getStage()) {
+			case BETA: 
+				polygonFlag.setFill(Color.rgb(231, 76, 60));
+				iconLabel.setText("B");
+				break;
+			case DEMO:
+				polygonFlag.setFill(Color.rgb(155, 89, 182));
+				iconLabel.setText("D");
+				break;
+			default:
+				polygonFlag.setFill(Color.TRANSPARENT);
+				iconLabel.setText("");
+		}
+		
+		Group group = new Group();
+		group.getChildren().add(polygonFlag);
+		group.getChildren().add(iconLabel);
+		
+		return group;
 	}
 
 }

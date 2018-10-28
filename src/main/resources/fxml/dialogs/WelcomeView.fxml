@@ -22,7 +22,7 @@
       <Label fx:id="errorLabel" styleClass="label-danger" text="Selected directory is not valid" />
       <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <JFXButton fx:id="okButton" text="Ok" />
+            <JFXButton fx:id="okButton" text="Continue" />
             <JFXButton fx:id="cancelButton" text="Later" />
          </children>
       </HBox>

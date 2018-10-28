@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXMasonryPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.StoreController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.StoreController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -22,9 +28,9 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXTextField fx:id="storeSearchTextField" prefHeight="25.0" prefWidth="300.0" promptText="Search" />
+                  <JFXTextField fx:id="storeSearchTextField" prefHeight="25.0" prefWidth="300.0" promptText="Search" styleClass="label-dark" />
                   <HBox prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Label text="Stores are a WIP feature" />
+                  <Label text="Store is a WIP feature" />
                   <JFXButton fx:id="syncStoreButton" buttonType="RAISED" text="Sync">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -39,7 +45,16 @@
                <children>
                   <ScrollPane fx:id="scrollPane" fitToHeight="false" fitToWidth="true" pannable="true" HBox.hgrow="ALWAYS">
                      <content>
-                        <JFXMasonryPane fx:id="masonryPane" />
+                        <VBox fx:id="masonryWrapper">
+                           <children>
+                              <JFXMasonryPane fx:id="masonryPane" VBox.vgrow="ALWAYS" />
+                              <HBox fx:id="lazyLoadBar" alignment="CENTER" prefHeight="74.0" prefWidth="783.0" spacing="5.0">
+                                 <children>
+                                    <Hyperlink fx:id="lazyLoadLink" styleClass="hyperlink-dark" text="Load more..." />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </content>
                   </ScrollPane>
                </children>

@@ -12,6 +12,7 @@ public class ProductJsonMapper {
 	private String description;
 	private String type;
 	private List<String> platforms;
+	private String stage;
 	
 	
 	public String getName() {
@@ -76,6 +77,14 @@ public class ProductJsonMapper {
 
 	public void setPlatforms(List<String> platforms) {
 		this.platforms = platforms;
+	}
+
+	public String getStage() {
+		return stage;
+	}
+
+	public void setStage(String stage) {
+		this.stage = stage;
 	}
 	
 

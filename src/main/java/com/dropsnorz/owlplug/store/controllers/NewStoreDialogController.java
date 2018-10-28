@@ -5,8 +5,8 @@ import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.dropsnorz.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
-import com.dropsnorz.owlplug.store.dao.PluginStoreDAO;
-import com.dropsnorz.owlplug.store.model.PluginStore;
+import com.dropsnorz.owlplug.store.dao.StoreDAO;
+import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class NewStoreDialogController extends AbstractDialogController implements IEntityCreateOrUpdate<PluginStore> {
+public class NewStoreDialogController extends AbstractDialogController implements IEntityCreateOrUpdate<Store> {
 	
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
@@ -29,7 +29,7 @@ public class NewStoreDialogController extends AbstractDialogController implement
 	@Autowired
 	private StoreService pluginStoreService;
 	@Autowired
-	private PluginStoreDAO pluginStoreDAO;
+	private StoreDAO pluginStoreDAO;
 	@Autowired
 	private StoreMenuController storeMenuController;
 	@Autowired
@@ -78,7 +78,7 @@ public class NewStoreDialogController extends AbstractDialogController implement
 	}
 
 	@Override
-	public void startUpdateSequence(PluginStore entity) {
+	public void startUpdateSequence(Store entity) {
 		throw new UnsupportedOperationException();
 		
 	}
@@ -89,15 +89,15 @@ public class NewStoreDialogController extends AbstractDialogController implement
 		String storeUrl = storeUrlTextField.getText();
 		
 		if (storeUrl != null && !storeUrl.isEmpty()) {
-			Task<PluginStore> task = new Task<PluginStore>() {
+			Task<Store> task = new Task<Store>() {
 				@Override
-				protected PluginStore call() throws Exception {
+				protected Store call() throws Exception {
 					return pluginStoreService.getPluginStoreFromUrl(storeUrl);
 				}
 			};
 			
 			task.setOnSucceeded(e -> {
-				PluginStore pluginStore = task.getValue();
+				Store pluginStore = task.getValue();
 				progressSpinner.setVisible(false);
 				if (pluginStore != null) {
 					errorLabel.setVisible(false);

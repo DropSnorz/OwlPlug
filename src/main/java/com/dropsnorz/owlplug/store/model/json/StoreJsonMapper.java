@@ -2,7 +2,7 @@ package com.dropsnorz.owlplug.store.model.json;
 
 import java.util.List;
 
-public class PluginStoreJsonMapper {
+public class StoreJsonMapper {
 	
 	private String name;
 	private String url;
