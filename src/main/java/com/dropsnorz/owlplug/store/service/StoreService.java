@@ -10,6 +10,7 @@ import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
 import com.dropsnorz.owlplug.store.model.json.StoreModelAdapter;
+import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -90,8 +91,9 @@ public class StoreService {
 		return storeProductDAO.findByNameContainingIgnoreCase(name);
 	}
 
-	public void install(StoreProduct product, File targetDirectory) {
-		taskFactory.createProductInstallTask(product, targetDirectory).run();
+	public void install(StoreProduct product, File targetDirectory) {		
+		taskFactory.create(new ProductInstallTask(product, targetDirectory, applicationDefaults))
+		.run();
 	}
 
 	/**

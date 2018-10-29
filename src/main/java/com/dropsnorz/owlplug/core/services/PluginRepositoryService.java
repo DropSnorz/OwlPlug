@@ -9,12 +9,18 @@ import com.dropsnorz.owlplug.core.dao.GoogleDriveRepositoryDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.model.GoogleDriveRepository;
 import com.dropsnorz.owlplug.core.model.PluginRepository;
+import com.dropsnorz.owlplug.core.tasks.RepositoryRemoveTask;
+import com.dropsnorz.owlplug.core.tasks.RepositoryTask;
+import com.dropsnorz.owlplug.core.tasks.repositories.IRepositoryStrategy;
 import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
 import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters.RepositoryAction;
+import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyResolver;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+
 import java.io.File;
 import java.util.prefs.Preferences;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +41,15 @@ public class PluginRepositoryService {
 	protected TaskFactory taskFactory;
 	@Autowired
 	protected ApplicationDefaults applicationDefaults;
+	@Autowired
+	private RepositoryStrategyResolver repositoryStrategyResolver;
 
-	public boolean createRepository(PluginRepository repository){
+	/**
+	 * Creates and store a new repository instance.
+	 * @param repository - the new repository
+	 * @return true if repository has been created, false otherwise
+	 */
+	public boolean createRepository(PluginRepository repository) {
 
 		if (pluginRepositoryDAO.findByName(repository.getName()) == null) {
 			pluginRepositoryDAO.save(repository);
@@ -64,28 +77,40 @@ public class PluginRepositoryService {
 						((GoogleDriveRepository) repository).getUserAccount().getKey());
 				parameters.putObject("google-credential", credential);
 
-				taskFactory.createRepositoryTask(repository, parameters).run();
 			}
-
-		} else {
-			taskFactory.createRepositoryTask(repository, parameters).run();
-
 		}
+
+		IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
+		taskFactory.create(new RepositoryTask(strategy, parameters, repository))
+			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().run())
+			.run();
+
 
 	}
 
+	/**
+	 * Deletes the given repository.
+	 * @param repository - the repository to delete
+	 */
 	public void delete(PluginRepository repository) {
 
 		String localPath = getLocalRepositoryPath(repository);
-		taskFactory.createRepositoryRemoveTask(repository, localPath).run();
+		taskFactory.create(new RepositoryRemoveTask(pluginRepositoryDAO, repository, localPath))
+			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().run())
+			.run();
 	}
 
+	
+	/**
+	 * Clears all userAccount fields matching the given UserAccount. This is usefull where an account is deleted
+	 * but associated repositories are still managed by owlplug.
+	 * @param account - UserAccount to clear
+	 */
 	public void removeAccountReferences(UserAccount account) {
 
 		Iterable<GoogleDriveRepository> repositories = googleDriveRepositoryDAO.findAll();
 
 		for (GoogleDriveRepository repository : repositories) {
-
 			if (repository.getUserAccount() != null 
 					&& repository.getUserAccount().getId().equals(account.getId())) {
 				repository.setUserAccount(null);

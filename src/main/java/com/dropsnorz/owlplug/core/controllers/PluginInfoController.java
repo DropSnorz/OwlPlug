@@ -2,21 +2,25 @@ package com.dropsnorz.owlplug.core.controllers;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
+import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;
-import com.dropsnorz.owlplug.core.services.OwlPlugCentralService;
 import com.dropsnorz.owlplug.core.services.PluginService;
+import com.dropsnorz.owlplug.core.tasks.PluginRemoveTask;
 import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,8 @@ public class PluginInfoController {
 	@Autowired
 	private DialogController dialogController;
 	@Autowired
+	private PluginsController pluginsController;
+	@Autowired
 	private PluginService pluginService;
 	@Autowired
 	private PluginDAO pluginDAO;
@@ -37,6 +43,8 @@ public class PluginInfoController {
 	private ImageCache imageCache;
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
+	@Autowired
+	private TaskFactory taskFactory;
 
 	@FXML
 	private ImageView pluginScreenshot;
@@ -94,7 +102,9 @@ public class PluginInfoController {
 			JFXButton removeButton = new JFXButton("Remove");
 			removeButton.setOnAction(removeEvent -> {
 				dialog.close();
-				pluginService.removePlugin(currentPlugin);
+				taskFactory.create(new PluginRemoveTask(currentPlugin, pluginDAO))
+					.setOnSucceeded(x -> pluginsController.refreshPlugins())
+					.run();
 			});	
 			removeButton.getStyleClass().add("button-danger");
 

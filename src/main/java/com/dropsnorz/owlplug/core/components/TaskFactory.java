@@ -1,33 +1,19 @@
 package com.dropsnorz.owlplug.core.components;
 
-import com.dropsnorz.owlplug.core.controllers.PluginsController;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
-import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
-import com.dropsnorz.owlplug.core.model.Plugin;
-import com.dropsnorz.owlplug.core.model.PluginDirectory;
-import com.dropsnorz.owlplug.core.model.PluginRepository;
 import com.dropsnorz.owlplug.core.tasks.AbstractTask;
-import com.dropsnorz.owlplug.core.tasks.DirectoryRemoveTask;
-import com.dropsnorz.owlplug.core.tasks.PluginRemoveTask;
 import com.dropsnorz.owlplug.core.tasks.PluginSyncTask;
-import com.dropsnorz.owlplug.core.tasks.RepositoryRemoveTask;
-import com.dropsnorz.owlplug.core.tasks.RepositoryTask;
-import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.core.tasks.TaskExecutionContext;
-import com.dropsnorz.owlplug.core.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
-import com.dropsnorz.owlplug.core.tasks.repositories.IRepositoryStrategy;
-import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyException;
-import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
-import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyResolver;
-import com.dropsnorz.owlplug.store.controllers.StoreController;
+import com.dropsnorz.owlplug.core.utils.SimpleEventListener;
 import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
-import com.dropsnorz.owlplug.store.model.StoreProduct;
-import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
 import com.dropsnorz.owlplug.store.tasks.StoreSyncTask;
-import java.io.File;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.Preferences;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,19 +32,18 @@ public class TaskFactory {
 	private TaskRunner taskManager;
 	@Autowired
 	private PluginDAO pluginDAO;
-	@Autowired 
-	private PluginRepositoryDAO pluginRepositoryDAO;
-	@Autowired
-	private RepositoryStrategyResolver repositoryStrategyResolver;
-	@Autowired
-	private PluginsController pluginsController;
 	@Autowired
 	private StoreDAO pluginStoreDAO;
 	@Autowired
 	private StoreProductDAO storeProductDAO;
-	@Autowired 
-	private StoreController storeController;
+	
+	private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
+	private ArrayList<SimpleEventListener> syncStoresListeners = new ArrayList<>();
 
+	/**
+	 * Creates a {@link PluginSyncTask} and binds listeners to the success callback.
+	 * @return
+	 */
 	public TaskExecutionContext createPluginSyncTask() {
 		
 		PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
@@ -69,97 +54,29 @@ public class TaskFactory {
 
 		PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO);
 		task.setOnSucceeded(e -> {
-			pluginsController.refreshPlugins();
+			notifyListeners(syncPluginsListeners);
 		});
-		bindOnFailHandler(task);
-
-		return buildContext(task);
-	}
-
-	public TaskExecutionContext createPluginRemoveTask(Plugin plugin) {
-
-		PluginRemoveTask task = new PluginRemoveTask(plugin, pluginDAO);
-		task.setOnSucceeded(e -> {
-			pluginsController.refreshPlugins();
-		});
-		bindOnFailHandler(task);
-
-		return buildContext(task);
-	}
-
-	public TaskExecutionContext createDirectoryRemoveTask(PluginDirectory pluginDirectory) {
-
-		DirectoryRemoveTask task = new DirectoryRemoveTask(pluginDirectory);
-		task.setOnSucceeded(e -> {
-			createPluginSyncTask().run();
-		});
-		bindOnFailHandler(task);
-
-		return buildContext(task);
-	}
-
-	public TaskExecutionContext createRepositoryRemoveTask(PluginRepository repository, String path) {
-
-		RepositoryRemoveTask task = new RepositoryRemoveTask(pluginRepositoryDAO, repository, path);
-		task.setOnSucceeded(e -> {
-			createPluginSyncTask().run();
-		});
-		bindOnFailHandler(task);
-		return buildContext(task);
-	}
-
-
-	public TaskExecutionContext createRepositoryTask(PluginRepository repository, RepositoryStrategyParameters parameters) {
-
-		IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
-
-		RepositoryTask task = new RepositoryTask() {
-			@Override
-			protected TaskResult call() throws Exception {
-
-				this.updateProgress(0, 1);
-				
-				try {
-					strategy.execute(repository, parameters);
-					this.updateProgress(1, 1);
-
-				} catch (RepositoryStrategyException e) {
-					
-					this.updateMessage(e.getMessage());
-					this.updateProgress(1, 1);
-					throw new TaskException(e);
-				}
-				return success();
-			}
-		};
-		task.setOnSucceeded(e -> {
-			createPluginSyncTask().run();
-		});
-		bindOnFailHandler(task);
-		task.setName(parameters.get("task-name"));
-		return buildContext(task);
-
+		return create(task);
 	}
 
 	
+	/**
+	 * Creates a {@link StoreSyncTask} and binds listeners to the success callback.
+	 * @return
+	 */
 	public TaskExecutionContext createStoreSyncTask() {
 		
 		StoreSyncTask task = new StoreSyncTask(pluginStoreDAO, storeProductDAO);
-		task.setOnSucceeded(e ->{
-			storeController.refreshView();
+		task.setOnSucceeded(e -> {
+			notifyListeners(syncStoresListeners);
 		});
-		bindOnFailHandler(task);
-		return buildContext(task);
-		
+		return create(task);
 	}
 	
 	
-	public TaskExecutionContext createProductInstallTask(StoreProduct product, File targetDirectory) {
-		
-		ProductInstallTask task = new ProductInstallTask(product, targetDirectory, applicationDefaults);
+	public TaskExecutionContext create(AbstractTask task) {
 		bindOnFailHandler(task);
 		return buildContext(task);
-		
 	}
 	
 	
@@ -169,9 +86,31 @@ public class TaskFactory {
 		});
 	}
 	
+	private void notifyListeners(List<SimpleEventListener> listeners) {
+		for (SimpleEventListener listener : listeners) {
+			listener.onAction();
+		}
+	}
+	
 	private TaskExecutionContext buildContext(AbstractTask task) {
-		
 		return new TaskExecutionContext(task, taskManager);
 	}
+	
+	public void addSyncPluginsListener(SimpleEventListener eventListener) {
+		syncPluginsListeners.add(eventListener);
+	}
+	
+	public void removeSyncPluginsListener(SimpleEventListener eventListener) {
+		syncPluginsListeners.remove(eventListener);
+	}
+	
+	public void addSyncStoresListener(SimpleEventListener eventListener) {
+		syncStoresListeners.add(eventListener);
+	}
+	
+	public void removeSyncStoresListener(SimpleEventListener eventListener) {
+		syncStoresListeners.remove(eventListener);
+	}
+		
 
 }

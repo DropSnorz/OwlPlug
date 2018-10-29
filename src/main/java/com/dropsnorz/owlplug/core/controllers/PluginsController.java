@@ -2,6 +2,7 @@ package com.dropsnorz.owlplug.core.controllers;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
+import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.core.model.IDirectory;
@@ -52,6 +53,8 @@ public class PluginsController {
 	private NodeInfoController nodeInfoController;
 	@Autowired
 	private PluginRepositoryDAO repositoryDAO;
+	@Autowired
+	protected TaskFactory taskFactory;
 	@Autowired
 	protected Preferences prefs;
 	@Autowired
@@ -144,6 +147,8 @@ public class PluginsController {
 		syncButton.setOnAction(e -> {
 			pluginService.syncPlugins();
 		});	
+		
+		taskFactory.addSyncPluginsListener(() -> refreshPlugins());
 
 	}
 

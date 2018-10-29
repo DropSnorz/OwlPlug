@@ -3,6 +3,7 @@ package com.dropsnorz.owlplug.store.controllers;
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
+import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
@@ -51,6 +52,8 @@ public class StoreController {
 	private LazyViewRegistry viewRegistry;
 	@Autowired
 	private MainController mainController;
+	@Autowired
+	private TaskFactory taskFactory;
 
 	@FXML
 	private JFXButton storesButton;
@@ -130,7 +133,8 @@ public class StoreController {
 			displayNewProductPartition();
 		});
 		lazyLoadBar.setVisible(false);
-
+		
+		taskFactory.addSyncStoresListener(() -> refreshView());
 		refreshView();
 
 	}
