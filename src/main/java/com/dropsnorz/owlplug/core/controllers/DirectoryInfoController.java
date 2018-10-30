@@ -5,17 +5,21 @@ import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
 import com.dropsnorz.owlplug.core.model.Plugin;
 import com.dropsnorz.owlplug.core.model.PluginDirectory;
+import com.dropsnorz.owlplug.core.tasks.DirectoryRemoveTask;
 import com.dropsnorz.owlplug.core.ui.PluginListCellFactory;
 import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 
 @Controller
 public class DirectoryInfoController {
@@ -65,8 +69,10 @@ public class DirectoryInfoController {
 
 			JFXButton removeButton = new JFXButton("Remove");
 			removeButton.setOnAction(removeEvent -> {
-				dialog.close();
-				taskFactory.createDirectoryRemoveTask(pluginDirectory).run();
+				dialog.close(); 
+				taskFactory.create(new DirectoryRemoveTask(pluginDirectory))
+						.setOnSucceeded(x -> taskFactory.createPluginSyncTask().run())
+						.run();
 			});	
 			removeButton.getStyleClass().add("button-danger");
 

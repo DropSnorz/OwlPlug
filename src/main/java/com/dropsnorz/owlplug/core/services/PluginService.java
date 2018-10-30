@@ -32,9 +32,6 @@ public class PluginService {
 		taskFactory.createPluginSyncTask().run();
 	}
 
-	public void removePlugin(Plugin plugin) {
-		taskFactory.createPluginRemoveTask(plugin).run();
-	}
 	
 	/**
 	 * Returns an url to retrieve plugin screenshots.
