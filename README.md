@@ -57,7 +57,7 @@ Create a folder in your Google Drive space. Add a new Google Drive repository in
 
 ## Stores 
 
-Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of available plugins you can install locally. For now, it's **a fully WIP feature**. Plugins delivered by OwlPlug Central are included by default. You can configure OwlPlug to use any compatible third party store.
+Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of available plugins you can install locally. For now, it's **a fully WIP feature**. Plugins delivered by OwlPlug Central are included by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
 
 
 ### OwlPlug central
@@ -68,11 +68,11 @@ OwlPlug central is the default Store source. If you wan't to include your plugin
 
 ### Third party (Central mirror)
 
-Third party store adapter provided by OwlPlug Central. (For testing purposes)
+Third party store adapter provided by OwlPlug Central but hosted by original authors. (For testing purposes)
 
 * Krakli plugins (By [Shane Dunne](http://getdunne.com/)): `http://owlplug.dropsnorz.com/mirrors/krakli`
 * GyL Synths (By [Shane Dunne](http://getdunne.com/)): `http://owlplug.dropsnorz.com/mirrors/gyl`
-
+* AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://owlplug.dropsnorz.com/mirrors/amvst`
 
 ### Third party
 
