@@ -14,9 +14,12 @@ import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
 import com.jfoenix.controls.JFXTextField;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.prefs.Preferences;
+import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -25,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
@@ -157,6 +161,9 @@ public class StoreController {
 		if (shouldRefreshProducts(newProducts)) {
 			this.masonryPane.getChildren().clear();
 			this.masonryPane.clearLayout();
+			
+			//Tempoprary fix for issue #2 Memory leaks in StoreView MasonryPane
+			clearMasonryPaneAnimationMap(masonryPane);
 
 			loadedStoreProducts = newProducts;
 			loadedProductPartitions = Iterables.partition(loadedStoreProducts, PARTITION_SIZE);	
@@ -250,6 +257,25 @@ public class StoreController {
 	public void requestLayout() {
 		masonryPane.requestLayout();
 		scrollPane.requestLayout();
+	}
+	
+	/**
+	 * Clear the masonryPane animation map.
+	 * Temporary fix for issue #2 Memory leaks in StoreView MasonryPane.
+	 */
+	private void clearMasonryPaneAnimationMap(JFXMasonryPane masonryPane) {
+		
+		try {
+			Field f = masonryPane.getClass().getDeclaredField("animationMap");
+			f.setAccessible(true);
+			HashMap<Region, Transition> animationMap = (HashMap<Region, Transition>) f.get(masonryPane);
+			if (animationMap != null) {
+				animationMap.clear();
+			}
+		} catch (Exception e) {
+			log.error("An error occured while clearing the masonryPane animation map", e);
+		}
+		
 	}
 
 }
