@@ -13,12 +13,25 @@ public class Store {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	private String apiUrl;
 	private String name;
 	private String url;
 	@OneToMany(mappedBy = "store", orphanRemoval = true)
 	private List<StoreProduct> products;
 	
 	
+	public String getApiUrl() {
+		return apiUrl;
+	}
+
+	public void setApiUrl(String apiUrl) {
+		this.apiUrl = apiUrl;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
 	public String getName() {
 		return name;
 	}

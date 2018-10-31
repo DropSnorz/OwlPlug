@@ -7,11 +7,12 @@ import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
-import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
 import com.dropsnorz.owlplug.store.model.json.ProductJsonMapper;
+import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
 import com.dropsnorz.owlplug.store.model.json.StoreModelAdapter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -27,7 +28,7 @@ public class StoreSyncTask extends AbstractTask {
 
 	private StoreDAO pluginStoreDAO;
 	private StoreProductDAO storeProductDAO;
-	
+
 	/**
 	 * Creates a new StoreSync tasks.
 	 * @param pluginStoreDAO pluginStore DAO
@@ -42,52 +43,66 @@ public class StoreSyncTask extends AbstractTask {
 
 
 	@Override
-	protected TaskResult call() throws Exception {
-		
+	protected TaskResult call() throws TaskException {
+
 		this.updateProgress(0, 2);
 		this.updateMessage("Sync plugins stores");
 
 		storeProductDAO.deleteAll();
-		
+
 		this.updateProgress(1, 2);
+		CloseableHttpResponse response = null;
 
-		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-
-			for (Store store : pluginStoreDAO.findAll()) {
+		for (Store store : pluginStoreDAO.findAll()) {
+			try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 				log.debug("Exploring store {}", store.getName());
-				HttpGet httpGet = new HttpGet(store.getUrl());
-				CloseableHttpResponse response = httpclient.execute(httpGet);
-
+				HttpGet httpGet = new HttpGet(store.getApiUrl());
+				response = httpclient.execute(httpGet);
 				HttpEntity entity = response.getEntity();
-				ObjectMapper objectMapper = new ObjectMapper()
-						.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+				processStore(entity, store);
+				EntityUtils.consume(entity);
+
+			} catch (IOException e) {
+				this.updateProgress(1, 2);
+				this.updateMessage("Error accessing store. Check your network connectivity");
+				log.error("Error accessing store. Check your network connectivity", e);
+				throw new TaskException(e);
+
+			} finally {
 				try {
-					StoreJsonMapper pluginStoreTO = objectMapper
-							.readValue(entity.getContent(), StoreJsonMapper.class);
-					log.debug(pluginStoreTO.toString());
-					for (ProductJsonMapper productTO : pluginStoreTO.getProducts()) {
-						StoreProduct product = StoreModelAdapter.jsonMapperToEntity(productTO);
-						product.setStore(store);
-						storeProductDAO.save(product);
+					if (response != null) {
+						response.close();
 					}
-					EntityUtils.consume(entity);
-				} catch (Exception e) {
-					log.error("Error parsing store response", e);
-					throw new TaskException(e);
-				} finally {
-					response.close();
+				} catch (IOException e) {
+					log.error("Error closing response", e);
 				}
 			}
-			this.updateProgress(2, 2);
-			this.updateMessage("Plugin stores synced.");
-
-		} catch (Exception e) {
-			this.updateProgress(1, 2);
-			this.updateMessage("Error accessing store. Check your network connectivity");
-			log.error("Error accessing store. Check your network connectivity");
-			throw new TaskException(e);
-
 		}
+
+		this.updateProgress(2, 2);
+		this.updateMessage("Plugin stores synced.");
+
 		return success();
+	}
+
+	private void processStore(HttpEntity entity, Store store) throws TaskException {
+
+		ObjectMapper objectMapper = new ObjectMapper()
+				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+		try {
+			StoreJsonMapper pluginStoreTO = objectMapper
+					.readValue(entity.getContent(), StoreJsonMapper.class);
+			for (ProductJsonMapper productTO : pluginStoreTO.getProducts()) {
+				StoreProduct product = StoreModelAdapter.jsonMapperToEntity(productTO);
+				product.setStore(store);
+				storeProductDAO.save(product);
+			}
+		} catch (Exception e) {
+			log.error("Error parsing store response", e);
+			this.updateMessage("Error parsing store response");
+			throw new TaskException(e);
+		}
 	}
 }

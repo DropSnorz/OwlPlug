@@ -14,8 +14,10 @@ import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
+import java.io.IOException;
 import javax.annotation.PostConstruct;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -49,8 +51,9 @@ public class StoreService {
 			store = new Store();
 			store.setName("OwlPlug Central");
 		}	
-
+		store.setApiUrl("http://owlplug.dropsnorz.com/store.json");
 		store.setUrl("http://owlplug.dropsnorz.com/store.json");
+
 		pluginStoreDAO.save(store);
 
 
@@ -114,18 +117,20 @@ public class StoreService {
 			try {
 				StoreJsonMapper pluginStoreTO = objectMapper.readValue(entity.getContent(), StoreJsonMapper.class);
 				EntityUtils.consume(entity);
-				return StoreModelAdapter.jsonMapperToEntity(pluginStoreTO);
-
+				Store store = StoreModelAdapter.jsonMapperToEntity(pluginStoreTO);
+				store.setApiUrl(url);
+				return store;
 			} catch (Exception e) {
 				log.error("Error parsing store response: " + url, e);
-				throw new TaskException(e);
+				return null;
+				
 			} finally {
 				response.close();
 			}
 
-		} catch (Exception e) {
+		} catch (IOException e) {
+			log.error("Error accessing store: Check your network connectivity", e);
 			return null;
-
 		}
 
 	}
