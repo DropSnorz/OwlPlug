@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +25,25 @@ import org.slf4j.LoggerFactory;
 public class GoogleDrivePullingStrategy implements IRepositoryStrategy {
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
+	String[] rejectMimeTypes = { "application/vnd.google-apps.audio", 
+			"application/vnd.google-apps.document",
+			"application/vnd.google-apps.drawing",
+			"application/vnd.google-apps.form",
+			"application/vnd.google-apps.fusiontable",
+			"application/vnd.google-apps.map",
+			"application/vnd.google-apps.photo",
+			"application/vnd.google-apps.presentation",
+			"application/vnd.google-apps.script",
+			"application/vnd.google-apps.site",
+			"application/vnd.google-apps.spreadsheet",
+			"application/vnd.google-apps.video",
+			"application/vnd.google-apps.drive-sdk"};
 
 	
 	@Override
-	public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) throws RepositoryStrategyException {
+	public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) 
+			throws RepositoryStrategyException {
 
 		log.debug("Start pulling reposiroty " + repository.getId());
 		
@@ -69,8 +85,10 @@ public class GoogleDrivePullingStrategy implements IRepositoryStrategy {
 		if (files == null || files.isEmpty()) {
 			log.debug("No files found in remote folder");
 		} else {
-			for (com.google.api.services.drive.model.File file : files) {				
-				if (file.getMimeType().equals("application/vnd.google-apps.folder")) {
+			for (com.google.api.services.drive.model.File file : files) {
+				if (Arrays.stream(rejectMimeTypes).anyMatch(file.getMimeType()::equals)) {
+					log.debug("File " + file.getName() + " ignored due to it's MIME Type " + file.getMimeType());
+				} else if (file.getMimeType().equals("application/vnd.google-apps.folder")) {
 					downloadFolder(drive, parentPath + File.separator + file.getName(), file.getId());
 				} else {
 					log.debug("Downloading file " + file.getName());

@@ -9,6 +9,12 @@ public abstract class AbstractTask extends Task<TaskResult> {
 	private double maxProgress = 1;
 	private double commitedProgress = 0;
 	
+	public AbstractTask() {}
+	
+	public AbstractTask(String name) {
+		this.name = name;
+	}
+	
 	
 	protected void commitProgress(double progress) {
 		commitedProgress = commitedProgress + progress;
@@ -38,7 +44,6 @@ public abstract class AbstractTask extends Task<TaskResult> {
 		updateProgress(commitedProgress + progress, maxProgress);
 	}
 	
-
 	protected TaskResult success() {
 		return new TaskResult();
 	}

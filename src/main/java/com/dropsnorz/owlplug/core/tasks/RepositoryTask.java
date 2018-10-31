@@ -19,23 +19,27 @@ public class RepositoryTask extends AbstractTask {
 	 */
 	public RepositoryTask(IRepositoryStrategy strategy, RepositoryStrategyParameters parameters, 
 			PluginRepository repository) {
+		super("Repository Update");
 		this.strategy = strategy;
 		this.parameters = parameters;
 		this.repository = repository;
+		
 	}
 	
 	@Override
 	protected TaskResult call() throws Exception {
 		
-		this.updateProgress(0, 1);
+		this.updateProgress(0, 10);
 		try {
+			this.updateMessage("Updating repository " + repository.getName());
+			this.updateProgress(2, 10);
 			strategy.execute(repository, parameters);
-			this.updateProgress(1, 1);
+			this.updateProgress(10, 10);
 
 		} catch (RepositoryStrategyException e) {
 			
 			this.updateMessage(e.getMessage());
-			this.updateProgress(1, 1);
+			this.updateProgress(5, 10);
 			throw new TaskException(e);
 		}
 		return success();

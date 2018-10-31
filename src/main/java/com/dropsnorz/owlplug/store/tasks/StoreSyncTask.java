@@ -35,10 +35,9 @@ public class StoreSyncTask extends AbstractTask {
 	 * @param storeProductDAO storeProduct DAO
 	 */
 	public StoreSyncTask(StoreDAO pluginStoreDAO, StoreProductDAO storeProductDAO) {
-		super();
+		super("Sync plugin stores");
 		this.pluginStoreDAO = pluginStoreDAO;
 		this.storeProductDAO = storeProductDAO;
-		setName("Sync plugin stores");
 	}
 
 
