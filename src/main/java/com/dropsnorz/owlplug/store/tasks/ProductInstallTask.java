@@ -5,15 +5,16 @@ import com.dropsnorz.owlplug.core.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.core.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
+import com.dropsnorz.owlplug.core.utils.nio.CallbackByteChannel;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ public class ProductInstallTask extends AbstractTask {
 	private StoreProduct product;
 	private File targetDirectory;
 	private ApplicationDefaults applicationDefaults;
+	
 
 	/**
 	 * Creates a new Product Installation task.
@@ -39,6 +41,7 @@ public class ProductInstallTask extends AbstractTask {
 		this.targetDirectory = targetDirectory;
 		this.applicationDefaults = applicationDefaults;
 		setName("Install plugin - " + product.getName());
+		setMaxProgress(150);
 	}
 
 
@@ -46,7 +49,6 @@ public class ProductInstallTask extends AbstractTask {
 	protected TaskResult call() throws Exception {
 
 		try {
-			this.updateProgress(1, 5);
 			if (targetDirectory == null || !targetDirectory.isDirectory()) {
 				this.updateMessage("Installing plugin " + product.getName() + " - Invalid installation target directory");
 				log.error("Invalid plugin installation target directory");
@@ -55,22 +57,24 @@ public class ProductInstallTask extends AbstractTask {
 			this.updateMessage("Installing plugin " + product.getName() + " - Downloading files...");
 			File archiveFile = downloadInTempDirectory(product);
 
-			this.updateProgress(2, 5);
+			this.commitProgress(100);
 			this.updateMessage("Installing plugin " + product.getName() + " - Extracting files...");
 			File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" 
 					+ "temp-" + archiveFile.getName().replace(".owlpack", ""));
 			FileUtils.unzip(archiveFile.getAbsolutePath(),  extractedArchiveFolder.getAbsolutePath());
 
-			this.updateProgress(3, 5);
+			this.commitProgress(30);
+
 			this.updateMessage("Installing plugin " + product.getName() + " - Moving files...");
 			installToPluginDirectory(extractedArchiveFolder, targetDirectory);
 
-			this.updateProgress(4, 5);
+			this.commitProgress(20);
+
 			this.updateMessage("Installing plugin " + product.getName() + " - Cleaning files...");
 			archiveFile.delete();
 			FileUtils.deleteDirectory(extractedArchiveFolder);
 
-			this.updateProgress(5, 5);
+			this.commitProgress(10);
 			this.updateMessage("Plugin " + product.getName() + " successfully Installed");
 
 		} catch (IOException e) {
@@ -100,10 +104,16 @@ public class ProductInstallTask extends AbstractTask {
 		File outputFile = new File(outputFilePath);
 
 		try (
-				ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+				CallbackByteChannel rbc = new CallbackByteChannel(
+						Channels.newChannel(website.openStream()), 
+						contentLength(website));
 				FileOutputStream fos = new FileOutputStream(outputFile)
-		) {
+				) {
 
+			rbc.setCallback(p ->  { 
+				log.debug(String.valueOf(p));
+				computeTotalProgress(p);
+			}); 
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 			return outputFile;
 
@@ -157,6 +167,18 @@ public class ProductInstallTask extends AbstractTask {
 		return structure;
 	}
 
+	private int contentLength(URL url) {
+		HttpURLConnection connection;
+		int contentLength = -1;
+		try {
+			connection = (HttpURLConnection) url.openConnection();
+			contentLength = connection.getContentLength();
+		} catch (Exception e) {
+			return 1;
+		}
+		return contentLength;
+	}
+
 
 	private File getSubfileByName(File parent, String filename) {
 		for (File f : parent.listFiles()) {
@@ -190,7 +212,7 @@ public class ProductInstallTask extends AbstractTask {
 	 *		└── x64
 	 *			├── plugin.dll
 	 *			└── (other required files...)
- 	 *
+	 *
 	 *
 	 */
 	private enum OwlPackStructureType {
