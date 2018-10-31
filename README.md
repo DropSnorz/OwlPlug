@@ -70,13 +70,14 @@ OwlPlug central is the default Store source. If you wan't to include your plugin
 
 Third party store adapter provided by OwlPlug Central but hosted by original authors. (For testing purposes)
 
-* Krakli plugins (By [Shane Dunne](http://getdunne.com/)): `http://owlplug.dropsnorz.com/mirrors/krakli`
-* GyL Synths (By [Shane Dunne](http://getdunne.com/)): `http://owlplug.dropsnorz.com/mirrors/gyl`
+* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/krakli`
+* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/gyl`
 * AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://owlplug.dropsnorz.com/mirrors/amvst`
 
 ### Third party
 
-```Empty section```
+* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/GyL/owl.php`
+* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/Krakli/owl.php`
 
 
 # Development
