@@ -9,6 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.sf.ehcache.CacheManager;
+import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -20,11 +23,13 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class OwlPlug extends Application {
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	private ConfigurableApplicationContext context;
 	private Parent rootNode;
 	
-
 	/**
 	 * JavaFX Application initialization method.
 	 * It boostraps Spring boot application context and binds it to FXMLLoader controller factory.
@@ -44,9 +49,17 @@ public class OwlPlug extends Application {
 			MainController mainController = context.getBean(MainController.class);
 			mainController.dispatchPostInitialize();
 		} catch (BeanCreationException e) {
-			notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug is already running"));
+			if (e.getRootCause() instanceof HibernateException) {
+				log.error("OwlPlug is maybe already running", e);
+				notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug is maybe already running"));
+			} else {
+				log.error("Error during application context initialization", e);
+				notifyPreloader(new PreloaderProgressMessage("error", "Error during application context initialization"));
+			}
+
 			throw e;
 		} catch (Exception e) {
+			log.error("OwlPlug could not be started", e);
 			notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug could not be started"));
 			throw e;
 		}
