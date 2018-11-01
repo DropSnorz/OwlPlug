@@ -8,7 +8,6 @@
 	<cache name="image-cache" 
 		maxBytesLocalHeap="300M"
 		maxBytesLocalDisk="4G" 
-		diskSpoolBufferSizeMB="20"
 		timeToIdleSeconds="604800" timeToLiveSeconds="604800"
 		memoryStoreEvictionPolicy="LFU" 
 		transactionalMode="off"

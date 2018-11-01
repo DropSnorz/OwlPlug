@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.core.tasks;
 
+import java.util.ArrayList;
 import javafx.concurrent.Task;
 
 public abstract class AbstractTask extends Task<TaskResult> {
@@ -8,6 +9,8 @@ public abstract class AbstractTask extends Task<TaskResult> {
 	
 	private double maxProgress = 1;
 	private double commitedProgress = 0;
+	
+	private ArrayList<String> warnings = new ArrayList<>();
 	
 	public AbstractTask() {}
 	
@@ -47,7 +50,6 @@ public abstract class AbstractTask extends Task<TaskResult> {
 	protected TaskResult success() {
 		return new TaskResult();
 	}
-	
 
 	public String getName() {
 		return name;
@@ -57,6 +59,11 @@ public abstract class AbstractTask extends Task<TaskResult> {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	protected ArrayList<String> getWarnings() {
+		return warnings;
+	}
+	
 
 	@Override
 	public String toString() {

@@ -63,11 +63,15 @@ public class StoreSyncTask extends AbstractTask {
 				EntityUtils.consume(entity);
 
 			} catch (IOException e) {
-				this.updateProgress(1, 2);
-				this.updateMessage("Error accessing store. Check your network connectivity");
-				log.error("Error accessing store. Check your network connectivity", e);
-				throw new TaskException(e);
+				this.getWarnings().add(store.getName());
+				this.updateMessage("Error accessing store " + store.getName() + ". Check your network connectivity");
+				log.error("Error accessing store " + store.getName() + ". Check your network connectivity", e);
 
+			} catch (StoreParsingException e) {
+				this.getWarnings().add(store.getName());
+				this.updateMessage("Error parsing store response");
+				log.error("Error parsing store response", e);
+				
 			} finally {
 				try {
 					if (response != null) {
@@ -80,12 +84,18 @@ public class StoreSyncTask extends AbstractTask {
 		}
 
 		this.updateProgress(2, 2);
-		this.updateMessage("Plugin stores synced.");
+		
+		if (this.getWarnings().isEmpty()) {
+			this.updateMessage("Plugin stores synced.");
+
+		} else {
+			this.updateMessage("Plugin stores synced. Error accessing stores " + String.join(",", this.getWarnings()));
+		}
 
 		return success();
 	}
 
-	private void processStore(HttpEntity entity, Store store) throws TaskException {
+	private void processStore(HttpEntity entity, Store store) throws StoreParsingException {
 
 		ObjectMapper objectMapper = new ObjectMapper()
 				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -99,9 +109,13 @@ public class StoreSyncTask extends AbstractTask {
 				storeProductDAO.save(product);
 			}
 		} catch (Exception e) {
-			log.error("Error parsing store response", e);
-			this.updateMessage("Error parsing store response");
-			throw new TaskException(e);
+			throw new StoreParsingException(e);
+		}
+	}
+	
+	private class StoreParsingException extends Exception {
+		StoreParsingException(Exception e) { 
+			super(e); 
 		}
 	}
 }
