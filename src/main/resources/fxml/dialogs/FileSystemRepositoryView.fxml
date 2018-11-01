@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import com.jfoenix.controls.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="113.0" prefWidth="472.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController">
+<VBox prefHeight="113.0" prefWidth="472.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.dialogs.FileSystemRepositoryController">
    <children>
       <GridPane hgap="10.0" vgap="30.0" VBox.vgrow="ALWAYS">
         <columnConstraints>
@@ -20,7 +24,7 @@
         </rowConstraints>
          <children>
             <Label text="Repository Name" />
-            <JFXTextField fx:id="repositoryNameTextField" GridPane.columnIndex="1" />
+            <JFXTextField fx:id="repositoryNameTextField" promptText="choose-a-name" GridPane.columnIndex="1" />
             <Label text="Repository Path" GridPane.rowIndex="1" />
             <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>

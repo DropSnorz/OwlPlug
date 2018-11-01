@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import com.jfoenix.controls.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="113.0" prefWidth="472.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.dialogs.GoogleDriveRepositoryController">
+<VBox prefHeight="113.0" prefWidth="472.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.core.controllers.dialogs.GoogleDriveRepositoryController">
    <children>
       <GridPane hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="40.0" VBox.vgrow="ALWAYS">
         <columnConstraints>
@@ -21,9 +26,9 @@
          <children>
             <JFXComboBox fx:id="accountComboBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Select an Account..." GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
             <Label text="Repository Name" />
-            <JFXTextField fx:id="repositoryNameTextField" GridPane.columnIndex="1" />
+            <JFXTextField fx:id="repositoryNameTextField" promptText="choose-a-name" GridPane.columnIndex="1" />
             <Label text="Google folder Id" GridPane.rowIndex="2" />
-            <JFXTextField fx:id="googleDirectoryURLTextField" text="FileId from Drive file URL" GridPane.columnIndex="1" GridPane.rowIndex="2" HBox.hgrow="ALWAYS" />
+            <JFXTextField fx:id="googleDirectoryURLTextField" promptText="FileId from Drive folder URL" GridPane.columnIndex="1" GridPane.rowIndex="2" HBox.hgrow="ALWAYS" />
             <Label text="Account" GridPane.rowIndex="1" />
          </children>
       </GridPane>
