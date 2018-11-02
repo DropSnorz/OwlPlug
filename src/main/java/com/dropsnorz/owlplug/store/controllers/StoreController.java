@@ -160,7 +160,7 @@ public class StoreController {
 
 		if (shouldRefreshProducts(newProducts)) {
 			this.masonryPane.getChildren().clear();
-			this.masonryPane.clearLayout();
+			this.masonryPane.requestLayout();
 			
 			//Tempoprary fix for issue #2 Memory leaks in StoreView MasonryPane
 			clearMasonryPaneAnimationMap(masonryPane);

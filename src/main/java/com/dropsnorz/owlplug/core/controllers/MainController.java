@@ -107,12 +107,6 @@ public class MainController {
 
 		accountComboBox.setButtonCell(new AccountCellFactory(imageCache, Pos.CENTER_RIGHT).call(null));
 		accountComboBox.setCellFactory(new AccountCellFactory(authentificationService,imageCache, true));
-		accountComboBox.setSkin(new JFXComboBoxListViewSkin<AccountItem>(accountComboBox) {
-			@Override
-			protected boolean isHideOnClickEnabled() {
-				return false;
-			}
-		});
 
 		refreshAccounts();
 

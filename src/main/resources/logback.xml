@@ -27,7 +27,7 @@
 			<pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>DEBUG</level>
+			<level>INFO</level>
 		</filter>
 	</appender>
 
