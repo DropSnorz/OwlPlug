@@ -1,7 +1,7 @@
 package com.dropsnorz.owlplug.core.model;
 
 public enum PluginType {
-	SYNTH("synth"),
+	INSTRUMENT("instrument"),
 	EFFECT("effect");
 
 	private String text;

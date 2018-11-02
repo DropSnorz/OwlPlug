@@ -48,7 +48,6 @@
                   </HBox>
                   <HBox alignment="TOP_RIGHT" prefHeight="38.0" prefWidth="460.0" spacing="5.0">
                      <children>
-                        <JFXButton text="Update" />
                         <JFXButton fx:id="uninstallButton" buttonType="RAISED" styleClass="button-danger" text="Uninstall">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">

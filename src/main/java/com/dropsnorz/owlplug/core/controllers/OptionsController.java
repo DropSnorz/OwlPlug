@@ -121,7 +121,7 @@ public class OptionsController {
 			dialog.show();
 		});
 
-		versionLabel.setText("OwlPlug - V" + applicationDefaults.getVersion());
+		versionLabel.setText("V " + applicationDefaults.getVersion());
 
 		storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			prefs.putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);

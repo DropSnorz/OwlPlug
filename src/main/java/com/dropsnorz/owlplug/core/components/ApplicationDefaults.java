@@ -97,7 +97,7 @@ public class ApplicationDefaults {
 	public Image getProductTypeIcon(StoreProduct product) {
 
 		switch (product.getType()) {
-			case SYNTH: return synthImage;
+			case INSTRUMENT: return synthImage;
 			case EFFECT: return effectImage;
 			default: 
 				return null;
