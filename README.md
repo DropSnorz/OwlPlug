@@ -26,17 +26,18 @@
 
 For now, no binaries are provided. To run OwlPlug, you should check the [Development Setup](#development-setup) section.
 
+
 # Features
 
 ## Plugins
 
-OwlPlug is compatible with your installed plugins as they are all in a specific root directory. For example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW.
+OwlPlug is compatible with your installed plugins as they are all in a specific root directory. For example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW. 
 OwlPlug can discover VST2 and VST3 Plugins.
 
 
 ## Repositories
 
-You can setup repositories to keep your local plugin collection synced with a master source (Local network, google drive, ...). This is basically a file-pulling system from a remote folder to your local plugin folder. It's really usefull when you have to collaborate and share effects or even if you manage different plugin stages (live, studio, and test plugin sets). All repositories files are stored in your plugin directory in a specific folder called `.repositories`. Some plugins protected by DRMs can't be easily included in repositories as they often require extra authorization flow to work. 
+You can set up repositories to keep your local plugin collection synced with a master source (Local network, google drive, ...). This is basically a file-pulling system from a remote folder to your local plugin folder. It's really useful when you have to collaborate and share effects or even if you manage different plugin stages (live, studio, and test plugin sets). All repository's files are stored in your plugin directory in a specific folder called `.repositories`. Some plugins protected by DRMs can't be easily included in repositories as they often require extra authorization flow to work. 
 
 Multiple repositories types are supported:
 * Local network repositories
@@ -56,21 +57,33 @@ Create a folder in your Google Drive space. Add a new Google Drive repository in
 
 ## Stores 
 
-Owlplug is shipped with a plugin store to automate plugin downloads and installations.
-For now, as it's **a fully WIP feature**, only plugins delivered by OwlPlug central are included. 
-
-In the next realeases, Owlplug may support multiple store sources. Everybody will be able to setup and host a store and let OwlPlug deals with it.
+Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of available plugins you can install locally. For now, it's **a fully WIP feature**. Plugins delivered by OwlPlug Central are included by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
 
 
 ### OwlPlug central
 
-OwlPlug central is the default Store source. If you wan't to include your plugin in OwlPlug Central, create an issue in this repository with a link to download your plugin.
-Owlplug Central backend is a quick prototype/POC for the Store feature integration in Owlplug.
+OwlPlug central is the default Store source. If you wan't to include your plugin in OwlPlug Central, create an issue in the [OwlPlug central github repo](http://github.com/dropsnorz/owlplug-central-static). OwlPlug Central is a quick prototype/POC for the Store feature integration in OwlPlug. 
+
+* OwlPlug central: `http://owlplug.dropsnorz.com/store `
+
+### Third party (Central mirror)
+
+Third party store adapter provided by OwlPlug Central but hosted by original authors. (For testing purposes)
+
+* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/krakli`
+* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/gyl`
+* AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://owlplug.dropsnorz.com/mirrors/amvst`
+
+### Third party
+
+* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/GyL/owl.php`
+* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/Krakli/owl.php`
 
 
 # Development
 
 ## Stack
+
 * Spring boot
 * JavaFx & JFoenix
 * Hibernate & H2
@@ -88,6 +101,14 @@ mvn clean install spring-boot:repackage
 mvn spring-boot:run
 ```
 The first command will generate an executable binary `/target/owlplug-*.jar`. In order to use GoogleDrive repositories, you have to fill OAuth2 client id and secret in `credentials.properties`. Check Prerequisites from [Google OAuth2 Documentation](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
+
+
+# Roadmap
+
+- November 2018 - Open beta & Available binairies
+- February 2019 - Store improvements
+- Spring 2019 - Plugin discovery update
+
 
 # Possible incoming major features
 
