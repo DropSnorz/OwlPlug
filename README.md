@@ -19,13 +19,34 @@
 
 ![owlplug-demo](http://dropsnorz.com/projects/owlplug/owlplug.gif)
 
+# Join OwlPlug Beta  :rocket:
 
-# Installation
 
-**Owlplug is currently in alpha stage. It's higly recommended to backup your files before using it.**
+**Why i have created OwlPlug ?** 
 
-For now, no binaries are provided. To run OwlPlug, you should check the [Development Setup](#development-setup) section.
+OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple thats looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, i've discovered dozens of cool plugins just by using my own tool. So i realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
 
+I've generated OwlPlug binaries, but I've only tested them in my environment, `Win 10 - Java 9, Java 10`. I'm looking for any kind of feedbacks, even under the same configuration ! And as it's a beta phase, it's highly recommended to **backup your files before using OwlPlug**.
+
+## Requirements
+
+* Java 9+ or Java 10+
+
+As JavaFx as been decoupled from JDK 11, a compatible version is maitained on `java-11` branch.
+
+
+## How to help
+
+[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, try to configure it, download plugins, etc... And feel free to report any kind of problems, questions, suggestions by opening an issue in this repository. This is a non exhaustive list of interesting things to report and fix.
+
+* Major issues, bugs, crashes
+* Typo errors and improvements. (also in this README)
+* Suggestions and things you wanted to see in OwlPlug: new features, UI/UX improvements, docs needed, ...
+
+
+## How to contribute
+
+I'm maintaining OwlPlug during my free time, so any help will be really appreciated. Check the [Development Setup](#development-setup) section for technical informations.
 
 # Features
 
