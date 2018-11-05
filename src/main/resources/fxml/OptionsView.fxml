@@ -131,7 +131,7 @@
                                        <children>
                                           <TextFlow prefHeight="200.0" prefWidth="200.0">
                                              <children>
-                                                <Label text="OwlPlug (Beta) -" />
+                                                <Label text="OwlPlug -" />
                                                 <Label fx:id="versionLabel" text="V ?.?.?" wrapText="true" />
                                              </children>
                                           </TextFlow>
