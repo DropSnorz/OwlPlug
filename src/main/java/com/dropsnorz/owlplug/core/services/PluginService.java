@@ -4,6 +4,7 @@ import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.model.Plugin;
+import com.dropsnorz.owlplug.core.utils.PluginUtils;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.google.common.collect.Iterables;
@@ -43,12 +44,14 @@ public class PluginService {
 	public String resolveImageUrl(Plugin plugin) {
 		
 		String url = "";
-		Iterable<StoreProduct> products = pluginStoreService.getProductsByName(plugin.getName());
+		
+		String absoluteName = PluginUtils.absoluteName(plugin.getName());
+		Iterable<StoreProduct> products = pluginStoreService.getProductsByName(absoluteName);
 		
 		if (!Iterables.isEmpty(products)) {
 			url = Iterables.get(products, 0).getIconUrl();
 		} else {
-			url = owlplugCentralService.getPluginImageUrl(plugin.getName());		
+			url = owlplugCentralService.getPluginImageUrl(absoluteName);		
 		}
 		
 		return url;
