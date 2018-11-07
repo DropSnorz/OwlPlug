@@ -4,10 +4,10 @@ import com.dropsnorz.owlplug.core.controllers.TaskBarController;
 import com.dropsnorz.owlplug.core.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.tasks.TaskResult;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingDeque;
 import javafx.application.Platform;
+import javafx.concurrent.Worker.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,25 +33,37 @@ public class TaskRunner {
 	private TaskBarController taskBarController;
 
 	private AsyncListenableTaskExecutor  exec;
-	private CopyOnWriteArrayList<AbstractTask> pendingTasks;
-	private AbstractTask currentTask= null;
+	private LinkedBlockingDeque<AbstractTask> taskQueue;
+	private AbstractTask currentTask = null;
 
 	private ArrayList<AbstractTask> taskHistory;
 
 	private TaskRunner() {
-
 		exec = new SimpleAsyncTaskExecutor();
-		pendingTasks = new CopyOnWriteArrayList<AbstractTask>();
+		taskQueue = new LinkedBlockingDeque<AbstractTask>();
 		taskHistory = new ArrayList<AbstractTask>();
 
 	}
 
+	/**
+	 * Submit a task at the end of executor queue.
+	 * @param task - the task to submit
+	 */
 	public void submitTask(AbstractTask task) {
+		log.debug("Task submited to queue - {} ", task.getClass().getName());		
+		taskQueue.addLast(task);
+		scheduleNext();
 
+	}
+
+	/**
+	 * Submit a task in front of the executor queue.
+	 * @param task - the task to submit
+	 */
+	public void submitTaskOnQueueHead(AbstractTask task) {
 		log.debug("Task submited to queue - {} ", task.getClass().getName());
-		pendingTasks.add(task);
-		addInTaskHistory(task);
-		refresh(false);
+		taskQueue.addFirst(task);
+		scheduleNext();
 
 	}
 
@@ -59,46 +71,54 @@ public class TaskRunner {
 	 * Refresh the task runner by submitting the next pending task for execution.
 	 * @param deleteCurrentTask true if the current running task should be deleted
 	 */
-	private synchronized void refresh(boolean deleteCurrentTask) {
+	private synchronized void scheduleNext() {
 
-		if (deleteCurrentTask) {
-			log.debug("Remove task from queue - {}", currentTask.getClass().getName());
-			pendingTasks.remove(currentTask);
-			currentTask = null;
-			//Unbind progress indicators
-			taskBarController.taskProgressBar.progressProperty().unbind();
-			taskBarController.taskLabel.textProperty().unbind();
-		}
-
-		if (!pendingTasks.isEmpty() && currentTask == null) {
+		if (!taskQueue.isEmpty() && currentTask == null) {
 			disableError();
 			//Get the next pending task
-			this.currentTask = pendingTasks.get(0);
+			AbstractTask polledTask = taskQueue.pollFirst();
+			setCurrentTask(polledTask);
+			addInTaskHistory(currentTask);
 			log.debug("Task submitted to executor - {} ", currentTask.getClass().getName());
-			//Bind progress indicators
-			taskBarController.taskProgressBar.progressProperty().bind(currentTask.progressProperty());
-			taskBarController.taskLabel.textProperty().bind(currentTask.messageProperty());
-
 			ListenableFuture<TaskResult> future = (ListenableFuture<TaskResult>) exec.submitListenable(currentTask);
 
 			future.addCallback(new ListenableFutureCallback<TaskResult>() {
-
 				@Override
 				public void onSuccess(TaskResult result) {
 					Platform.runLater(() -> {
-						refresh(true);
+						if (currentTask.getState().equals(State.FAILED)) {
+							triggerOnError();
+						}
+						removeCurrentTask();
+						scheduleNext();
 					});
 				}
 
 				@Override
 				public void onFailure(Throwable ex) {
 					Platform.runLater(() -> {
-						refresh(true);
+						removeCurrentTask();
+						scheduleNext();
 					});
-
 				}
 			});
 		}
+	}
+
+	private void setCurrentTask(AbstractTask task) {
+		this.currentTask = task;
+		//Bind progress indicators
+		taskBarController.taskProgressBar.progressProperty().bind(currentTask.progressProperty());
+		taskBarController.taskLabel.textProperty().bind(currentTask.messageProperty());
+	}
+
+	private void removeCurrentTask() {
+		//Unbind progress indicators
+		taskBarController.taskProgressBar.progressProperty().unbind();
+		taskBarController.taskLabel.textProperty().unbind();
+		
+		currentTask = null;
+
 	}
 
 	private void addInTaskHistory(AbstractTask task) {
@@ -109,14 +129,14 @@ public class TaskRunner {
 	}
 
 	public List<AbstractTask> getPendingTasks() {
-		return Collections.unmodifiableList(pendingTasks);
+		return new ArrayList<AbstractTask>(taskQueue);
 	}
 
 	public List<AbstractTask> getTaskHistory() {
-		return Collections.unmodifiableList(taskHistory);
+		return new ArrayList<AbstractTask>(taskHistory);
 	}
 
-	public void triggerOnError() {
+	private void triggerOnError() {
 		taskBarController.taskProgressBar.getStyleClass().add("progress-bar-error");
 
 	}

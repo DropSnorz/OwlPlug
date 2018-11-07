@@ -70,7 +70,7 @@ public class WelcomeDialogController extends AbstractDialogController {
 			if (isDirectoryPathValid()) {
 				this.close();
 				prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, directoryTextField.getText());
-				taskFactory.createPluginSyncTask().run();
+				taskFactory.createPluginSyncTask().schedule();
 			} else {
 				errorLabel.setVisible(true);
 			}

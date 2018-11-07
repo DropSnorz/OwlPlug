@@ -1,9 +1,9 @@
 package com.dropsnorz.owlplug.core.services;
 
 
+import com.dropsnorz.owlplug.core.utils.UrlUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriUtils;
 
 @Service
 public class OwlPlugCentralService {
@@ -14,7 +14,7 @@ public class OwlPlugCentralService {
 
 	public String getPluginImageUrl(String name) {
 
-		return owlplugCentralUrl + "/image-registry?name=" +  UriUtils.encode(name, "UTF-8");
+		return owlplugCentralUrl + "/image-registry?name=" +  UrlUtils.encodeQuery(name);
 
 	}
 

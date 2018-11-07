@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXPopup.PopupHPosition;
 import com.jfoenix.controls.JFXPopup.PopupVPosition;
+import java.util.ArrayList;
 import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -51,7 +52,10 @@ public class TaskBarController {
 		if (!taskRunner.getTaskHistory().isEmpty()) {
 			JFXListView<AbstractTask> list = new JFXListView<>();
 			list.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-			list.getItems().addAll(taskRunner.getTaskHistory());
+			
+			ArrayList<AbstractTask> tasks = new ArrayList<>(taskRunner.getTaskHistory());
+			tasks.addAll(taskRunner.getPendingTasks());
+			list.getItems().addAll(tasks);
 
 			list.setCellFactory(new Callback<ListView<AbstractTask>, ListCell<AbstractTask>>() {
 				@Override

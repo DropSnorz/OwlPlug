@@ -20,8 +20,12 @@ public class TaskExecutionContext {
 		return task;
 	}
 	
-	public void run() {
+	public void schedule() {
 		taskRunner.submitTask(task);
+	}
+	
+	public void scheduleNow() {
+		taskRunner.submitTaskOnQueueHead(task);
 	}
 	
 	public TaskExecutionContext setOnSucceeded(EventHandler<WorkerStateEvent> value) {

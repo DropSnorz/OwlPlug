@@ -82,8 +82,8 @@ public class PluginRepositoryService {
 
 		IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
 		taskFactory.create(new RepositoryTask(strategy, parameters, repository))
-			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().run())
-			.run();
+			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().schedule())
+			.schedule();
 
 
 	}
@@ -96,8 +96,8 @@ public class PluginRepositoryService {
 
 		String localPath = getLocalRepositoryPath(repository);
 		taskFactory.create(new RepositoryRemoveTask(pluginRepositoryDAO, repository, localPath))
-			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().run())
-			.run();
+			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow())
+			.schedule();
 	}
 
 	

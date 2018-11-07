@@ -97,16 +97,20 @@ public class MainController {
 				Platform.runLater(() -> accountComboBox.setValue(oldValue));
 
 			}
-
 			if (newValue instanceof UserAccount) {
 				UserAccount userAccount = (UserAccount) newValue;
 				prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
 			}
+			accountComboBox.hide();
 		}); 
 
 		accountComboBox.setButtonCell(new AccountCellFactory(imageCache, Pos.CENTER_RIGHT).call(null));
 		accountComboBox.setCellFactory(new AccountCellFactory(authentificationService,imageCache, true));
+		
+		JFXComboBoxListViewSkin<AccountItem> accountCBSkin = new JFXComboBoxListViewSkin<AccountItem>(accountComboBox);
+		accountCBSkin.setHideOnClick(false);
+		accountComboBox.setSkin(accountCBSkin);
 
 		refreshAccounts();
 
@@ -166,6 +170,7 @@ public class MainController {
 			accountComboBox.setValue(null);
 
 		}
+		
 	}
 
 	public StackPane getRootPane() {

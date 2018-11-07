@@ -104,7 +104,7 @@ public class PluginInfoController {
 				dialog.close();
 				taskFactory.create(new PluginRemoveTask(currentPlugin, pluginDAO))
 					.setOnSucceeded(x -> pluginsController.refreshPlugins())
-					.run();
+					.schedule();
 			});	
 			removeButton.getStyleClass().add("button-danger");
 
