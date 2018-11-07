@@ -45,6 +45,10 @@ public class TaskRunner {
 
 	}
 
+	/**
+	 * Submit a task at the end of executor queue.
+	 * @param task - the task to submit
+	 */
 	public void submitTask(AbstractTask task) {
 		log.debug("Task submited to queue - {} ", task.getClass().getName());		
 		taskQueue.addLast(task);
@@ -52,6 +56,10 @@ public class TaskRunner {
 
 	}
 
+	/**
+	 * Submit a task in front of the executor queue.
+	 * @param task - the task to submit
+	 */
 	public void submitTaskOnQueueHead(AbstractTask task) {
 		log.debug("Task submited to queue - {} ", task.getClass().getName());
 		taskQueue.addFirst(task);

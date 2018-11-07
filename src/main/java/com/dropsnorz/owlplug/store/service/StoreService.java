@@ -3,7 +3,6 @@ package com.dropsnorz.owlplug.store.service;
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.model.OSType;
-import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.Store;
@@ -17,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -60,7 +58,7 @@ public class StoreService {
 	}
 
 	public void syncStores() {
-		taskFactory.createStoreSyncTask().run();
+		taskFactory.createStoreSyncTask().schedule();
 	}
 
 
@@ -94,9 +92,15 @@ public class StoreService {
 		return storeProductDAO.findByNameContainingIgnoreCase(name);
 	}
 
+	/**
+	 * Downloads and installs a store product in a directory.
+	 * @param product - store product to retrieve
+	 * @param targetDirectory - directory where the product will be installed
+	 */
 	public void install(StoreProduct product, File targetDirectory) {		
 		taskFactory.create(new ProductInstallTask(product, targetDirectory, applicationDefaults))
-		.run();
+			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow())
+			.schedule();
 	}
 
 	/**

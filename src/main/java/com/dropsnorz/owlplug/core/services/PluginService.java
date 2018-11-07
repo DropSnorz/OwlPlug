@@ -30,7 +30,7 @@ public class PluginService {
 
 
 	public void syncPlugins() {
-		taskFactory.createPluginSyncTask().run();
+		taskFactory.createPluginSyncTask().schedule();
 	}
 
 	
