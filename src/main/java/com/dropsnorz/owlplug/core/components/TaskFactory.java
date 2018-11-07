@@ -73,17 +73,8 @@ public class TaskFactory {
 		return create(task);
 	}
 	
-	
 	public TaskExecutionContext create(AbstractTask task) {
-		bindOnFailHandler(task);
 		return buildContext(task);
-	}
-	
-	
-	private void bindOnFailHandler(AbstractTask task) {
-		task.setOnFailed(e -> {
-			taskManager.triggerOnError();
-		});
 	}
 	
 	private void notifyListeners(List<SimpleEventListener> listeners) {
