@@ -34,7 +34,6 @@ public class StoreProduct {
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
-	@Fetch(FetchMode.JOIN)
 	private List<ProductPlatform> platforms;
 
 
