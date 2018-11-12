@@ -35,7 +35,7 @@ public class StoreService {
 	@Autowired
 	private TaskFactory taskFactory;
 	@Autowired
-	private StoreDAO pluginStoreDAO;
+	private StoreDAO storeDAO;
 	@Autowired
 	private StoreProductDAO storeProductDAO;
 
@@ -43,7 +43,7 @@ public class StoreService {
 	@PostConstruct
 	private void init() {
 
-		Store store = pluginStoreDAO.findByName("OwlPlug Central");
+		Store store = storeDAO.findByName("OwlPlug Central");
 
 		if (store == null) {
 			store = new Store();
@@ -52,7 +52,7 @@ public class StoreService {
 		store.setApiUrl("http://owlplug.dropsnorz.com/store.json");
 		store.setUrl("http://owlplug.dropsnorz.com/store.json");
 
-		pluginStoreDAO.save(store);
+		storeDAO.save(store);
 
 
 	}
@@ -84,8 +84,10 @@ public class StoreService {
 		String platformTag = osType.getCode();
 		
 		return storeProductDAO.findAll(
-				StoreProductDAO.nameContains(name).and(
-						StoreProductDAO.hasPlatformTag(platformTag)));
+				StoreProductDAO.storeEnabled().and(
+						StoreProductDAO.nameContains(name).and(
+								StoreProductDAO.hasPlatformTag(platformTag))));
+		
 	}
 
 	public Iterable<StoreProduct> getProductsByName(String name) {
@@ -138,5 +140,9 @@ public class StoreService {
 		}
 
 	}
-
+	
+	public void enableStore(Store store, boolean enabled) {
+		store.setEnabled(enabled);
+		storeDAO.save(store);
+	}
 }

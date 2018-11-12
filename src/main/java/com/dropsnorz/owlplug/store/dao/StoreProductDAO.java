@@ -12,6 +12,14 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	
 	
 	/**
+	 * Store enabled filtering JPA Specification.
+	 * @return The JPA specification
+	 */
+	static Specification<StoreProduct> storeEnabled() {
+		return (product, cq, cb) -> cb.equal(product.get("store").get("enabled"), true);
+	}
+	
+	/**
 	 * Name filtering JPA Specification.
 	 * @param name - The product name
 	 * @return The JPA specification

@@ -16,6 +16,7 @@ public class Store {
 	private String apiUrl;
 	private String name;
 	private String url;
+	private boolean enabled = true;
 	@OneToMany(mappedBy = "store", orphanRemoval = true)
 	private List<StoreProduct> products;
 	
@@ -46,6 +47,14 @@ public class Store {
 	
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	public List<StoreProduct> getProducts() {
