@@ -1,13 +1,13 @@
 package com.dropsnorz.owlplug.store.model.json;
 
-import java.util.ArrayList;
-
 import com.dropsnorz.owlplug.core.model.PluginStage;
 import com.dropsnorz.owlplug.core.model.PluginType;
 import com.dropsnorz.owlplug.core.utils.UrlUtils;
 import com.dropsnorz.owlplug.store.model.ProductPlatform;
+import com.dropsnorz.owlplug.store.model.ProductTag;
 import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
+import java.util.HashSet;
 
 public class StoreModelAdapter {
 
@@ -50,14 +50,22 @@ public class StoreModelAdapter {
 			product.setStage(PluginStage.fromString(productJsonMapper.getStage()));
 		}
 
-		ArrayList<ProductPlatform> platforms = new ArrayList<>();
+		HashSet<ProductPlatform> platforms = new HashSet<>();
 		if (productJsonMapper.getPlatforms() != null) {
 			for (String platformTag : productJsonMapper.getPlatforms()) {
 				platforms.add(new ProductPlatform(platformTag, product));
 			}
 		}
-
 		product.setPlatforms(platforms);
+		
+		HashSet<ProductTag> tags = new HashSet<>();
+		if (productJsonMapper.getTags() != null) {
+			for (String tag : productJsonMapper.getTags()) {
+				tags.add(new ProductTag(tag, product));
+			}
+		}
+		product.setTags(tags);
+		
 		return product;
 	}
 

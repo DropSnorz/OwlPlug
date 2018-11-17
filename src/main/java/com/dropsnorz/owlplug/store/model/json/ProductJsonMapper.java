@@ -13,6 +13,7 @@ public class ProductJsonMapper {
 	private String type;
 	private List<String> platforms;
 	private String stage;
+	private List<String> tags;
 	
 	
 	public String getName() {
@@ -86,6 +87,13 @@ public class ProductJsonMapper {
 	public void setStage(String stage) {
 		this.stage = stage;
 	}
-	
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
 
 }

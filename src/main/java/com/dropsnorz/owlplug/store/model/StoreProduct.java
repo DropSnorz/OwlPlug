@@ -2,16 +2,19 @@ package com.dropsnorz.owlplug.store.model;
 
 import com.dropsnorz.owlplug.core.model.PluginStage;
 import com.dropsnorz.owlplug.core.model.PluginType;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class StoreProduct {
@@ -34,7 +37,11 @@ public class StoreProduct {
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
-	private List<ProductPlatform> platforms;
+	private Set<ProductPlatform> platforms = new HashSet<>();
+
+	@OneToMany(mappedBy = "product", orphanRemoval = true, 
+			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
+	private Set<ProductTag> tags = new HashSet<>();
 
 
 	public StoreProduct() {
@@ -104,7 +111,7 @@ public class StoreProduct {
 	public void setType(PluginType type) {
 		this.type = type;
 	}
-	
+
 	public PluginStage getStage() {
 		return stage;
 	}
@@ -121,12 +128,20 @@ public class StoreProduct {
 		this.store = store;
 	}
 
-	public List<ProductPlatform> getPlatforms() {
+	public Set<ProductPlatform> getPlatforms() {
 		return platforms;
 	}
 
-	public void setPlatforms(List<ProductPlatform> platforms) {
+	public void setPlatforms(Set<ProductPlatform> platforms) {
 		this.platforms = platforms;
+	}
+
+	public Set<ProductTag> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<ProductTag> tags) {
+		this.tags = tags;
 	}
 
 }
