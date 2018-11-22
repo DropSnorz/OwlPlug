@@ -11,13 +11,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.StoreController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="BASELINE_LEFT" spacing="10.0">
+            <HBox alignment="TOP_LEFT" spacing="10.0">
                <children>
                   <JFXButton fx:id="storesButton" buttonType="RAISED" text="Stores">
                      <graphic>
@@ -28,8 +29,9 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXTextField fx:id="storeSearchTextField" prefHeight="25.0" prefWidth="300.0" promptText="Search" styleClass="label-dark" />
-                  <HBox prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <JFXTextField fx:id="storeSearchTextField" prefHeight="25.0" prefWidth="100.0" promptText="Search" styleClass="label-dark" />
+                  <StackPane fx:id="storeChipViewContainer" minHeight="32.0" HBox.hgrow="ALWAYS">
+                  </StackPane>
                   <Label text="Store is a WIP feature" />
                   <JFXButton fx:id="syncStoreButton" buttonType="RAISED" text="Sync">
                      <graphic>

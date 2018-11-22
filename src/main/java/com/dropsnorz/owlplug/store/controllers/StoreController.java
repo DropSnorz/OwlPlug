@@ -7,6 +7,7 @@ import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.service.StoreService;
+import com.dropsnorz.owlplug.store.ui.StoreChipView;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocViewBuilder;
 import com.google.common.collect.Iterables;
 import com.jfoenix.controls.JFXButton;
@@ -28,6 +29,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -75,6 +77,8 @@ public class StoreController {
 	private HBox lazyLoadBar;
 	@FXML
 	private Hyperlink lazyLoadLink;
+	@FXML
+	private Pane storeChipViewContainer;
 
 
 	private StoreProductBlocViewBuilder storeProductBlocViewBuilder = null;
@@ -109,6 +113,9 @@ public class StoreController {
 		syncStoreButton.setOnAction(e -> {
 			storeService.syncStores();
 		});
+		
+		StoreChipView storeChipView = new StoreChipView();
+		storeChipViewContainer.getChildren().add(new StoreChipView());
 		storeSearchTextField.textProperty().addListener((obs, oldValue, newValue) -> {
 
 			final String query = storeSearchTextField.getText();

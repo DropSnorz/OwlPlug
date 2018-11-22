@@ -60,6 +60,33 @@ JFXTextField{
 	-jfx-focus-color: theme-secondary-color;
 }
 
+#storeChipViewContainer {
+	-fx-max-height: 32px; /* Temporary fix */
+}
+
+.jfx-chip-view {
+	-fx-max-height: 32px; /* Temporary fix */
+
+}
+
+.jfx-chip-view .chips-pane {
+	-fx-width: infinity;
+	-fx-pref-width: infinity;
+	-fx-max-height: 32px; /* Temporary fix */
+}
+
+
+.jfx-chip-view .chips-pane .text-area {
+	-fx-pref-height: 32px;
+	-fx-height: 32px;
+	-fx-max-height: 32px;
+}
+
+
+.jfx-chip-view .jfx-chip Label {
+    -fx-text-fill: black;
+}
+
 JFXButton{
 	-fx-text-fill:white;
 	-fx-background-color:rgba(0,0,0,0.1);
