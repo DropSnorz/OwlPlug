@@ -1,11 +1,12 @@
 package com.dropsnorz.owlplug.store.ui;
 
-import com.dropsnorz.owlplug.store.ui.StoreFilter.StoreFilterType;
+import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
+import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteriaType;
 import com.jfoenix.controls.JFXChipView;
 import java.util.HashMap;
 import javafx.util.StringConverter;
 
-public class StoreChipView extends JFXChipView<StoreFilter> {
+public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 
 	public StoreChipView() {
 		super();
@@ -14,26 +15,26 @@ public class StoreChipView extends JFXChipView<StoreFilter> {
 
 	public void init() {
 
-		HashMap<String, StoreFilter> suggestions = new HashMap<>();
-		suggestions.put("Analog", new StoreFilter("Analog", StoreFilterType.TAG));
-		suggestions.put("Compressor", new StoreFilter("Compressor", StoreFilterType.TAG));
-		suggestions.put("Filter", new StoreFilter("Filter", StoreFilterType.TAG));
-		suggestions.put("Reverb", new StoreFilter("Reverb", StoreFilterType.TAG));
-		suggestions.put("Delay", new StoreFilter("Delay", StoreFilterType.TAG));
+		HashMap<String, StoreFilterCriteria> suggestions = new HashMap<>();
+		suggestions.put("Analog", new StoreFilterCriteria("Analog", StoreFilterCriteriaType.TAG));
+		suggestions.put("Compressor", new StoreFilterCriteria("Compressor", StoreFilterCriteriaType.TAG));
+		suggestions.put("Filter", new StoreFilterCriteria("Filter", StoreFilterCriteriaType.TAG));
+		suggestions.put("Reverb", new StoreFilterCriteria("Reverb", StoreFilterCriteriaType.TAG));
+		suggestions.put("Delay", new StoreFilterCriteria("Delay", StoreFilterCriteriaType.TAG));
 		
-		suggestions.put("Effect", new StoreFilter("Effect", StoreFilterType.TYPE));
-		suggestions.put("Instrument", new StoreFilter("Instrument", StoreFilterType.TYPE));
+		suggestions.put("Effect", new StoreFilterCriteria("Effect", StoreFilterCriteriaType.TYPE));
+		suggestions.put("Instrument", new StoreFilterCriteria("Instrument", StoreFilterCriteriaType.TYPE));
 
-		this.setConverter(new StringConverter<StoreFilter>() {
+		this.setConverter(new StringConverter<StoreFilterCriteria>() {
 			@Override
-			public String toString(StoreFilter object) {
+			public String toString(StoreFilterCriteria object) {
 				return object.toString();
 			}
 
 			@Override
-			public StoreFilter fromString(String string) {
-				StoreFilter found = suggestions.get(string);
-				return found == null ? new StoreFilter(string) : found;
+			public StoreFilterCriteria fromString(String string) {
+				StoreFilterCriteria found = suggestions.get(string);
+				return found == null ? new StoreFilterCriteria(string) : found;
 			}
 		});
 
