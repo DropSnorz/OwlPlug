@@ -3,6 +3,7 @@
 	solid-pane-hover-color:rgb(96,96,96);
 	disabled-color: rgb(160,160,160);
 	danger-color: #d9534f;
+	prompt-text-color:#4D4D4D;
 	
 	theme-primary-color: #FFF58E;
 	theme-secondary-color: #FFF0D4;
@@ -77,6 +78,7 @@ JFXTextField{
 
 
 .jfx-chip-view .chips-pane .text-area {
+	-fx-prompt-text-fill: prompt-text-color;
 	-fx-pref-height: 32px;
 	-fx-height: 32px;
 	-fx-max-height: 32px;

@@ -6,6 +6,7 @@ import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.controllers.MainController;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
+import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
 import com.dropsnorz.owlplug.store.service.StoreService;
 import com.dropsnorz.owlplug.store.ui.StoreChipView;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocViewBuilder;
@@ -24,6 +25,7 @@ import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -64,8 +66,6 @@ public class StoreController {
 	@FXML
 	private JFXButton storesButton;
 	@FXML
-	private JFXTextField storeSearchTextField;
-	@FXML
 	private JFXButton syncStoreButton;
 	@FXML
 	private VBox masonryWrapper;
@@ -79,8 +79,8 @@ public class StoreController {
 	private Hyperlink lazyLoadLink;
 	@FXML
 	private Pane storeChipViewContainer;
-
-
+	
+	private StoreChipView storeChipView;
 	private StoreProductBlocViewBuilder storeProductBlocViewBuilder = null;
 
 	/**
@@ -88,7 +88,6 @@ public class StoreController {
 	 * When the user scrolls the entire partition, the next one is appended in the UI.
 	 */
 	private Iterable<List<StoreProduct>> loadedProductPartitions;
-
 	private Iterable<StoreProduct> loadedStoreProducts = new ArrayList<>();
 
 	/**
@@ -114,15 +113,17 @@ public class StoreController {
 			storeService.syncStores();
 		});
 		
-		StoreChipView storeChipView = new StoreChipView();
-		storeChipViewContainer.getChildren().add(new StoreChipView());
-		storeSearchTextField.textProperty().addListener((obs, oldValue, newValue) -> {
-
-			final String query = storeSearchTextField.getText();
+		storeChipView = new StoreChipView();
+		storeChipViewContainer.getChildren().add(storeChipView);
+		
+		storeChipView.getChips().addListener((ListChangeListener) change -> {
+			final List<StoreFilterCriteria> criteriaList = storeChipView.getChips();
+			log.debug("Hi there");
+			
 			Task<Iterable<StoreProduct>> task = new Task<Iterable<StoreProduct>>() {
 				@Override
 				protected Iterable<StoreProduct> call() throws Exception {
-					return storeService.getStoreProducts(query);
+					return storeService.getStoreProducts(criteriaList);
 				}
 			};
 			task.setOnSucceeded(e -> {
@@ -154,7 +155,7 @@ public class StoreController {
 	 * Refresh Store View.
 	 */
 	public synchronized void refreshView() {
-		Iterable<StoreProduct> newProducts = storeService.getStoreProducts(storeSearchTextField.getText());
+		Iterable<StoreProduct> newProducts = storeService.getStoreProducts(storeChipView.getChips());
 		refreshView(newProducts);
 
 	}

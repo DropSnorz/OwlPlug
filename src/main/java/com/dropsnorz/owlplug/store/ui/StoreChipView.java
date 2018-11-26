@@ -4,6 +4,9 @@ import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
 import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteriaType;
 import com.jfoenix.controls.JFXChipView;
 import java.util.HashMap;
+import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
+import javafx.scene.control.TextArea;
 import javafx.util.StringConverter;
 
 public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
@@ -14,6 +17,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 	}
 
 	public void init() {
+		
 
 		HashMap<String, StoreFilterCriteria> suggestions = new HashMap<>();
 		suggestions.put("Analog", new StoreFilterCriteria("Analog", StoreFilterCriteriaType.TAG));
@@ -33,13 +37,40 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 
 			@Override
 			public StoreFilterCriteria fromString(String string) {
-				StoreFilterCriteria found = suggestions.get(string);
-				return found == null ? new StoreFilterCriteria(string) : found;
+				String filter = string.trim();
+				StoreFilterCriteria found = suggestions.get(filter);
+				return found == null ? new StoreFilterCriteria(filter) : found;
 			}
 		});
 
 		this.getSuggestions().addAll(suggestions.values());
-
+		
+		this.getChips().addListener((ListChangeListener) change -> {
+			//Only display prompt text if any chips is selected
+			if (getChips().size() == 0) {
+				displayPromptText();
+			} else {
+				hidePromptText();
+			}
+		});
+		
+		displayPromptText();
+	}
+	
+	private void displayPromptText() {
+		Node textAreaNode = this.lookup(".text-area");
+		if (textAreaNode instanceof TextArea) {
+			TextArea textArea = (TextArea)textAreaNode;
+			textArea.setPromptText("Search");
+		}
+	}
+	
+	private void hidePromptText() {
+		Node textAreaNode = this.lookup(".text-area");
+		if (textAreaNode instanceof TextArea) {
+			TextArea textArea = (TextArea)textAreaNode;
+			textArea.setPromptText("");
+		}
 	}
 
 }

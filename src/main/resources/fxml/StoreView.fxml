@@ -29,7 +29,6 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
-                  <JFXTextField fx:id="storeSearchTextField" prefHeight="25.0" prefWidth="100.0" promptText="Search" styleClass="label-dark" />
                   <StackPane fx:id="storeChipViewContainer" minHeight="32.0" HBox.hgrow="ALWAYS">
                   </StackPane>
                   <Label text="Store is a WIP feature" />

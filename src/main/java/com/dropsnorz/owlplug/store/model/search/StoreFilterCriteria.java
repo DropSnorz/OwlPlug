@@ -4,27 +4,27 @@ import java.util.Objects;
 
 public class StoreFilterCriteria {
 
-	private String name;
+	private String value;
 	private StoreFilterCriteriaType filterType;
 
-	public StoreFilterCriteria(String name) {
+	public StoreFilterCriteria(String value) {
 		super();
-		this.name = name;
+		this.value = value;
 		filterType = StoreFilterCriteriaType.NAME;
 	}
 
-	public StoreFilterCriteria(String name, StoreFilterCriteriaType filterType) {
+	public StoreFilterCriteria(String value, StoreFilterCriteriaType filterType) {
 		super();
-		this.name = name;
+		this.value = value;
 		this.filterType = filterType;
 	}
 
-	public String getName() {
-		return name;
+	public String getValue() {
+		return value;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	public StoreFilterCriteriaType getFilterType() {
@@ -37,7 +37,7 @@ public class StoreFilterCriteria {
 
 	@Override
 	public String toString() {
-		return name;
+		return value;
 	}
 
 	@Override
@@ -49,12 +49,12 @@ public class StoreFilterCriteria {
 			return false;
 		}
 		StoreFilterCriteria criteria = (StoreFilterCriteria) o;
-		return Objects.equals(name, criteria.getName());
+		return Objects.equals(value, criteria.getValue());
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		return Objects.hash(value);
 	}
 }
 

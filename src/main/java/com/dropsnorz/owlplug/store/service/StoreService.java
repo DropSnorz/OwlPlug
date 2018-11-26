@@ -9,11 +9,14 @@ import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
 import com.dropsnorz.owlplug.store.model.json.StoreModelAdapter;
+import com.dropsnorz.owlplug.store.model.search.StoreCriteriaAdapter;
+import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
 import com.dropsnorz.owlplug.store.tasks.ProductInstallTask;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -24,6 +27,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -53,8 +57,6 @@ public class StoreService {
 		store.setUrl("http://owlplug.dropsnorz.com/store.json");
 
 		storeDAO.save(store);
-
-
 	}
 
 	public void syncStores() {
@@ -89,7 +91,24 @@ public class StoreService {
 								StoreProductDAO.hasPlatformTag(platformTag))));
 		
 	}
-
+	
+	/**
+	 * Retrieves products from store with name matching the given criterias and 
+	 * compatible with the current platform.
+	 * @param criteriaList criteria list
+	 * @return list of store products
+	 */
+	public Iterable<StoreProduct> getStoreProducts(List<StoreFilterCriteria> criteriaList) {
+		OSType osType = applicationDefaults.getPlatform();
+		String platformTag = osType.getCode();
+		
+		Specification<StoreProduct> spec = StoreProductDAO.storeEnabled()
+				.and(StoreProductDAO.hasPlatformTag(platformTag));
+		spec = spec.and(StoreCriteriaAdapter.toSpecification(criteriaList));
+		
+		return storeProductDAO.findAll(spec);
+	}
+	
 	public Iterable<StoreProduct> getProductsByName(String name) {
 		return storeProductDAO.findByNameContainingIgnoreCase(name);
 	}
