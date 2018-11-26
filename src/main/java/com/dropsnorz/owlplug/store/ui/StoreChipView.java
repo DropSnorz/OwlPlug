@@ -3,6 +3,7 @@ package com.dropsnorz.owlplug.store.ui;
 import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
 import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteriaType;
 import com.jfoenix.controls.JFXChipView;
+import com.jfoenix.controls.JFXDefaultChip;
 import java.util.HashMap;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
@@ -17,7 +18,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 	}
 
 	public void init() {
-		
+
 
 		HashMap<String, StoreFilterCriteria> suggestions = new HashMap<>();
 		suggestions.put("Analog", new StoreFilterCriteria("Analog", StoreFilterCriteriaType.TAG));
@@ -25,9 +26,10 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 		suggestions.put("Filter", new StoreFilterCriteria("Filter", StoreFilterCriteriaType.TAG));
 		suggestions.put("Reverb", new StoreFilterCriteria("Reverb", StoreFilterCriteriaType.TAG));
 		suggestions.put("Delay", new StoreFilterCriteria("Delay", StoreFilterCriteriaType.TAG));
-		
+
 		suggestions.put("Effect", new StoreFilterCriteria("Effect", StoreFilterCriteriaType.TYPE));
 		suggestions.put("Instrument", new StoreFilterCriteria("Instrument", StoreFilterCriteriaType.TYPE));
+		this.getSuggestions().addAll(suggestions.values());
 
 		this.setConverter(new StringConverter<StoreFilterCriteria>() {
 			@Override
@@ -43,8 +45,18 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 			}
 		});
 
-		this.getSuggestions().addAll(suggestions.values());
-		
+
+		this.setChipFactory((chipView, criteria) -> new JFXDefaultChip<StoreFilterCriteria>(chipView, criteria) {
+			{
+				if (getItem().getFilterType() == StoreFilterCriteriaType.TYPE) {
+					root.getStyleClass().add("chip-blue");
+				}
+				if (getItem().getFilterType() == StoreFilterCriteriaType.TAG) {
+					root.getStyleClass().add("chip-red");
+				}
+			}
+		});
+
 		this.getChips().addListener((ListChangeListener) change -> {
 			//Only display prompt text if any chips is selected
 			if (getChips().size() == 0) {
@@ -53,10 +65,10 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 				hidePromptText();
 			}
 		});
-		
+
 		displayPromptText();
 	}
-	
+
 	private void displayPromptText() {
 		Node textAreaNode = this.lookup(".text-area");
 		if (textAreaNode instanceof TextArea) {
@@ -64,7 +76,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 			textArea.setPromptText("Search");
 		}
 	}
-	
+
 	private void hidePromptText() {
 		Node textAreaNode = this.lookup(".text-area");
 		if (textAreaNode instanceof TextArea) {

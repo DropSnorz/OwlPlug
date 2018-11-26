@@ -84,6 +84,17 @@ JFXTextField{
 	-fx-max-height: 32px;
 }
 
+.chip-blue {
+	-fx-background-color: #64B5F6;
+}
+.chip-red {
+	-fx-background-color: #F06292;
+}
+.chip-green {
+	-fx-background-color: #81C784;
+}
+
+
 
 .jfx-chip-view .jfx-chip Label {
     -fx-text-fill: black;
