@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.store.ui;
 
+import com.dropsnorz.owlplug.core.model.PluginType;
 import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
 import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteriaType;
 import com.jfoenix.controls.JFXChipView;
@@ -18,25 +19,26 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 	}
 
 	public void init() {
-
-
+		
 		HashMap<String, StoreFilterCriteria> suggestions = new HashMap<>();
 		suggestions.put("Analog", new StoreFilterCriteria("Analog", StoreFilterCriteriaType.TAG));
 		suggestions.put("Compressor", new StoreFilterCriteria("Compressor", StoreFilterCriteriaType.TAG));
 		suggestions.put("Filter", new StoreFilterCriteria("Filter", StoreFilterCriteriaType.TAG));
+		suggestions.put("LFO", new StoreFilterCriteria("LFO", StoreFilterCriteriaType.TAG));
 		suggestions.put("Reverb", new StoreFilterCriteria("Reverb", StoreFilterCriteriaType.TAG));
 		suggestions.put("Delay", new StoreFilterCriteria("Delay", StoreFilterCriteriaType.TAG));
+		suggestions.put("Synthetizer", new StoreFilterCriteria("Synthetizer", StoreFilterCriteriaType.TAG));
 
-		suggestions.put("Effect", new StoreFilterCriteria("Effect", StoreFilterCriteriaType.TYPE));
-		suggestions.put("Instrument", new StoreFilterCriteria("Instrument", StoreFilterCriteriaType.TYPE));
+		suggestions.put("Effect", new StoreFilterCriteria(PluginType.EFFECT, "Effect", StoreFilterCriteriaType.TYPE));
+		suggestions.put("Instrument", new StoreFilterCriteria(
+				PluginType.INSTRUMENT, "Instrument", StoreFilterCriteriaType.TYPE));
+		
 		this.getSuggestions().addAll(suggestions.values());
-
 		this.setConverter(new StringConverter<StoreFilterCriteria>() {
 			@Override
 			public String toString(StoreFilterCriteria object) {
 				return object.toString();
 			}
-
 			@Override
 			public StoreFilterCriteria fromString(String string) {
 				String filter = string.trim();
@@ -44,7 +46,6 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 				return found == null ? new StoreFilterCriteria(filter) : found;
 			}
 		});
-
 
 		this.setChipFactory((chipView, criteria) -> new JFXDefaultChip<StoreFilterCriteria>(chipView, criteria) {
 			{

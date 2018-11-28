@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.store.model.search;
 
+import com.dropsnorz.owlplug.core.model.PluginType;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.util.List;
@@ -20,7 +21,13 @@ public class StoreCriteriaAdapter {
 	public static Specification<StoreProduct> toSpecification(StoreFilterCriteria criteria) {
 
 		if (criteria.getFilterType().equals(StoreFilterCriteriaType.NAME)) {
-			return StoreProductDAO.nameContains(criteria.getValue());
+			return StoreProductDAO.nameContains(String.valueOf(criteria.getValue()));
+		}
+		if (criteria.getFilterType().equals(StoreFilterCriteriaType.TAG)) {
+			return StoreProductDAO.hasTag(String.valueOf(criteria.getValue()));
+		}
+		if (criteria.getFilterType().equals(StoreFilterCriteriaType.TYPE)) {
+			return StoreProductDAO.isTyped((PluginType) criteria.getValue());
 		}
 		return Specification.where(null);
 

@@ -1,8 +1,11 @@
 package com.dropsnorz.owlplug.store.dao;
 
+import com.dropsnorz.owlplug.core.model.PluginType;
+import com.dropsnorz.owlplug.store.model.ProductTag;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -38,6 +41,34 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 		return (product, cq, cb) -> {
 			Join<Object, Object> groupPath = product.join("platforms", JoinType.LEFT);
 			return cb.or(cb.isEmpty(product.get("platforms")), cb.equal(groupPath.get("platformTag"), platformTag));
+		};
+	}
+	
+	
+	/**
+	 * Product tag filtering specification
+	 * Filter products matching the given tags
+	 * @param tag - The tag to find
+	 * @return The JPA Specification
+	 */
+	static Specification<StoreProduct> hasTag(String tag) {
+		return (product, cq, cb) -> {
+			Join<Object, Object> groupPath = product.join("tags", JoinType.INNER);
+			return cb.equal(cb.lower(groupPath.get("name")), tag.toLowerCase());
+			
+		};
+	}
+	
+	/**
+	 * Product tag filtering specification
+	 * Filter products matching the given tags
+	 * @param tag - The tag to find
+	 * @return The JPA Specification
+	 */
+	static Specification<StoreProduct> isTyped(PluginType type) {
+		return (product, cq, cb) -> {
+			return cb.equal(product.get("type"), type);
+			
 		};
 	}
 	

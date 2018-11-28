@@ -4,26 +4,34 @@ import java.util.Objects;
 
 public class StoreFilterCriteria {
 
-	private String value;
+	private Object value;
+	private String textValue;
 	private StoreFilterCriteriaType filterType;
 
-	public StoreFilterCriteria(String value) {
+	public StoreFilterCriteria(Object value) {
 		super();
 		this.value = value;
 		filterType = StoreFilterCriteriaType.NAME;
 	}
 
-	public StoreFilterCriteria(String value, StoreFilterCriteriaType filterType) {
+	public StoreFilterCriteria(Object value, StoreFilterCriteriaType filterType) {
 		super();
 		this.value = value;
 		this.filterType = filterType;
 	}
+	
+	public StoreFilterCriteria(Object value, String textValue, StoreFilterCriteriaType filterType) {
+		super();
+		this.value = value;
+		this.filterType = filterType;
+		this.textValue = textValue;
+	}
 
-	public String getValue() {
+	public Object getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 
@@ -37,7 +45,10 @@ public class StoreFilterCriteria {
 
 	@Override
 	public String toString() {
-		return value;
+		if (textValue != null) {
+			return textValue;
+		}
+		return value.toString();
 	}
 
 	@Override
