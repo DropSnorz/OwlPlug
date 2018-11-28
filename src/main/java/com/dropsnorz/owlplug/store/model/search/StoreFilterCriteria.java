@@ -1,18 +1,14 @@
 package com.dropsnorz.owlplug.store.model.search;
 
 import java.util.Objects;
+import javafx.scene.image.Image;
 
 public class StoreFilterCriteria {
 
 	private Object value;
 	private String textValue;
 	private StoreFilterCriteriaType filterType;
-
-	public StoreFilterCriteria(Object value) {
-		super();
-		this.value = value;
-		filterType = StoreFilterCriteriaType.NAME;
-	}
+	private Image icon;
 
 	public StoreFilterCriteria(Object value, StoreFilterCriteriaType filterType) {
 		super();
@@ -20,9 +16,17 @@ public class StoreFilterCriteria {
 		this.filterType = filterType;
 	}
 	
-	public StoreFilterCriteria(Object value, String textValue, StoreFilterCriteriaType filterType) {
+	public StoreFilterCriteria(Object value, StoreFilterCriteriaType filterType, Image icon) {
 		super();
 		this.value = value;
+		this.filterType = filterType;
+		this.icon = icon;
+	}
+	
+	public StoreFilterCriteria(Object value, StoreFilterCriteriaType filterType, Image icon, String textValue) {
+		super();
+		this.value = value;
+		this.icon = icon;
 		this.filterType = filterType;
 		this.textValue = textValue;
 	}
@@ -41,6 +45,14 @@ public class StoreFilterCriteria {
 
 	public void setFilterType(StoreFilterCriteriaType filterType) {
 		this.filterType = filterType;
+	}
+
+	public Image getIcon() {
+		return icon;
+	}
+
+	public void setIcon(Image icon) {
+		this.icon = icon;
 	}
 
 	@Override

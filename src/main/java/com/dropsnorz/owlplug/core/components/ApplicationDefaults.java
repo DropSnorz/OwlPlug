@@ -37,8 +37,9 @@ public class ApplicationDefaults {
 	public final Image googleDriveRepositoryImage = new Image(getClass().getResourceAsStream("/icons/gdrive-grey-64.png"));
 	public final Image rocketImage = new Image(getClass().getResourceAsStream("/icons/rocket-white-64.png"));
 	public final Image storeImage = new Image(getClass().getResourceAsStream("/icons/bag-white-16.png"));
-	public final Image synthImage = new Image(getClass().getResourceAsStream("/icons/synth-white-16.png"));
+	public final Image instrumentImage = new Image(getClass().getResourceAsStream("/icons/synth-white-16.png"));
 	public final Image effectImage = new Image(getClass().getResourceAsStream("/icons/effect-white-16.png"));
+	public final Image tagImage = new Image(getClass().getResourceAsStream("/icons/tag-white-16.png"));
 
 
 	
@@ -97,7 +98,7 @@ public class ApplicationDefaults {
 	public Image getProductTypeIcon(StoreProduct product) {
 
 		switch (product.getType()) {
-			case INSTRUMENT: return synthImage;
+			case INSTRUMENT: return instrumentImage;
 			case EFFECT: return effectImage;
 			default: 
 				return null;

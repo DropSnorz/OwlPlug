@@ -241,6 +241,15 @@ JFXListView{
 	-fx-background-color: rgba(66,66,66, 0.5);
 	-fx-text-fill:white;
 }
+
+.autocomplete-list {
+	-fx-background-color:solid-pane-color;
+}
+.autocomplete-list .list-cell{
+	-fx-background-color: solid-pane-color;
+	-fx-text-fill:white;
+}
+
 .panel-transparent{
 	-fx-background-color: rgba(66,66,66, 0.7);
 	-fx-padding:10,10,10,10;

@@ -113,7 +113,7 @@ public class StoreController {
 			storeService.syncStores();
 		});
 		
-		storeChipView = new StoreChipView();
+		storeChipView = new StoreChipView(applicationDefaults);
 		storeChipViewContainer.getChildren().add(storeChipView);
 		
 		storeChipView.getChips().addListener((ListChangeListener) change -> {
