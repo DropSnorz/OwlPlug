@@ -54,6 +54,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 			public String toString(StoreFilterCriteria object) {
 				return object.toString();
 			}
+			
 			@Override
 			public StoreFilterCriteria fromString(String string) {
 				String filter = string.trim();
@@ -103,7 +104,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 		Node textAreaNode = this.lookup(".text-area");
 		if (textAreaNode instanceof TextArea) {
 			TextArea textArea = (TextArea)textAreaNode;
-			textArea.setPromptText("Search");
+			textArea.setPromptText("Enter your search query");
 		}
 	}
 

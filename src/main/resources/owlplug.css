@@ -82,16 +82,17 @@ JFXTextField{
 	-fx-pref-height: 32px;
 	-fx-height: 32px;
 	-fx-max-height: 32px;
+	-fx-padding: 6 0 0 0;
 }
 
 .chip-blue {
-	-fx-background-color: #64B5F6;
+	-fx-background-color: #80CBC4;
 }
 .chip-red {
-	-fx-background-color: #F06292;
+	-fx-background-color: #A1887F;
 }
 .chip-green {
-	-fx-background-color: #81C784;
+	-fx-background-color: #C5E1A5;
 }
 
 
