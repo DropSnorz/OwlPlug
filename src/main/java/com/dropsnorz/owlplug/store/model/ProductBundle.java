@@ -1,6 +1,7 @@
 package com.dropsnorz.owlplug.store.model;
 
-import javax.persistence.Column;
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,24 +9,18 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ProductPlatform {
-
+public class ProductBundle {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Column
-	private String platformTag;
+	private String name;
+	private String downloadUrl;
+	@ElementCollection
+	private List<String> targets;
+	
 	@ManyToOne
 	private StoreProduct product;
-	
-	public ProductPlatform() {
-		
-	}
-	
-	public ProductPlatform(String platformTag, StoreProduct product) {
-		this.platformTag = platformTag;
-		this.product = product;
-	}
 
 	public Long getId() {
 		return id;
@@ -35,12 +30,28 @@ public class ProductPlatform {
 		this.id = id;
 	}
 
-	public String getPlatformTag() {
-		return platformTag;
+	public String getName() {
+		return name;
 	}
 
-	public void setPlatformTag(String platformTag) {
-		this.platformTag = platformTag;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
+	}
+
+	public List<String> getTargets() {
+		return targets;
+	}
+
+	public void setTargets(List<String> targets) {
+		this.targets = targets;
 	}
 
 	public StoreProduct getProduct() {
@@ -50,6 +61,7 @@ public class ProductPlatform {
 	public void setProduct(StoreProduct product) {
 		this.product = product;
 	}
+	
 	
 	
 

@@ -33,7 +33,7 @@ public class StoreProduct {
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
-	private Set<ProductPlatform> platforms = new HashSet<>();
+	private Set<ProductBundle> bundles = new HashSet<>();
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
@@ -124,12 +124,12 @@ public class StoreProduct {
 		this.store = store;
 	}
 
-	public Set<ProductPlatform> getPlatforms() {
-		return platforms;
+	public Set<ProductBundle> getBundles() {
+		return bundles;
 	}
 
-	public void setPlatforms(Set<ProductPlatform> platforms) {
-		this.platforms = platforms;
+	public void setBundles(Set<ProductBundle> bundles) {
+		this.bundles = bundles;
 	}
 
 	public Set<ProductTag> getTags() {

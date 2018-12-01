@@ -3,7 +3,7 @@ package com.dropsnorz.owlplug.store.model.json;
 import com.dropsnorz.owlplug.core.model.PluginStage;
 import com.dropsnorz.owlplug.core.model.PluginType;
 import com.dropsnorz.owlplug.core.utils.UrlUtils;
-import com.dropsnorz.owlplug.store.model.ProductPlatform;
+import com.dropsnorz.owlplug.store.model.ProductBundle;
 import com.dropsnorz.owlplug.store.model.ProductTag;
 import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
@@ -50,13 +50,15 @@ public class StoreModelAdapter {
 			product.setStage(PluginStage.fromString(productJsonMapper.getStage()));
 		}
 
-		HashSet<ProductPlatform> platforms = new HashSet<>();
-		if (productJsonMapper.getPlatforms() != null) {
-			for (String platformTag : productJsonMapper.getPlatforms()) {
-				platforms.add(new ProductPlatform(platformTag, product));
+		HashSet<ProductBundle> bundles = new HashSet<>();
+		if (productJsonMapper.getBundles() != null) {
+			for (BundleJsonMapper bundleMapper : productJsonMapper.getBundles()) {
+				ProductBundle bundle = jsonMapperToEntity(bundleMapper);
+				bundle.setProduct(product);
+				bundles.add(bundle);
 			}
 		}
-		product.setPlatforms(platforms);
+		product.setBundles(bundles);
 		
 		HashSet<ProductTag> tags = new HashSet<>();
 		if (productJsonMapper.getTags() != null) {
@@ -67,6 +69,21 @@ public class StoreModelAdapter {
 		product.setTags(tags);
 		
 		return product;
+	}
+	
+	/**
+	 * Creates a {@link ProductBundle} entity from a {@link BundleJsonMapper}.
+	 * @param mapper bundle json mapper
+	 * @return bundle entity
+	 */
+	public static ProductBundle jsonMapperToEntity(BundleJsonMapper mapper) {
+		
+		ProductBundle productBundle = new ProductBundle();
+		productBundle.setName(mapper.getName());
+		productBundle.setDownloadUrl(mapper.getDownloadUrl());
+		productBundle.setTargets(mapper.getTargets());
+		
+		return productBundle;
 	}
 
 }

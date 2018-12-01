@@ -39,8 +39,8 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	 */
 	static Specification<StoreProduct> hasPlatformTag(String platformTag) {
 		return (product, cq, cb) -> {
-			Join<Object, Object> groupPath = product.join("platforms", JoinType.LEFT);
-			return cb.or(cb.isEmpty(product.get("platforms")), cb.equal(groupPath.get("platformTag"), platformTag));
+			Join<Object, Object> groupPath = product.join("bundles", JoinType.INNER);
+			return cb.isMember(platformTag, groupPath.get("targets"));
 		};
 	}
 	

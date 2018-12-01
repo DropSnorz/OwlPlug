@@ -11,7 +11,7 @@ public class ProductJsonMapper {
 	private String creator;
 	private String description;
 	private String type;
-	private List<String> platforms;
+	private List<BundleJsonMapper> bundles;
 	private String stage;
 	private List<String> tags;
 	
@@ -72,12 +72,12 @@ public class ProductJsonMapper {
 		this.description = version;
 	}
 
-	public List<String> getPlatforms() {
-		return platforms;
+	public List<BundleJsonMapper> getBundles() {
+		return bundles;
 	}
 
-	public void setPlatforms(List<String> platforms) {
-		this.platforms = platforms;
+	public void setBundles(List<BundleJsonMapper> bundles) {
+		this.bundles = bundles;
 	}
 
 	public String getStage() {
