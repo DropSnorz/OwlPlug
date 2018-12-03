@@ -5,6 +5,7 @@ import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
+import com.dropsnorz.owlplug.store.model.ProductBundle;
 import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
@@ -115,14 +116,32 @@ public class StoreService {
 
 	/**
 	 * Downloads and installs a store product in a directory.
-	 * @param product - store product to retrieve
+	 * @param bundle - store bundle to retrieve
 	 * @param targetDirectory - directory where the product will be installed
 	 */
-	public void install(StoreProduct product, File targetDirectory) {		
-		taskFactory.create(new ProductInstallTask(product, targetDirectory, applicationDefaults))
+	public void install(ProductBundle bundle, File targetDirectory) {		
+		taskFactory.create(new ProductInstallTask(bundle, targetDirectory, applicationDefaults))
 			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow())
 			.schedule();
 	}
+	
+	
+	/**
+	 * Find the best bundle from a prpduct based on the user current platform.
+	 * @param product - The store product
+	 */
+	public ProductBundle findBestBundle(StoreProduct product) {	
+		
+		for (ProductBundle bundle : product.getBundles()) {
+			for (String platform : bundle.getTargets()) {
+				if (platform.equalsIgnoreCase(applicationDefaults.getPlatform().getCode())) {
+					return bundle;
+				}
+			}
+		}
+		return null;
+	}
+
 
 	/**
 	 * Creates a PluginStore instance requesting a store url endpoint.

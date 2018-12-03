@@ -3,6 +3,7 @@ package com.dropsnorz.owlplug.store.model;
 import java.util.List;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +17,7 @@ public class ProductBundle {
 	private Long id;
 	private String name;
 	private String downloadUrl;
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> targets;
 	
 	@ManyToOne

@@ -3,6 +3,7 @@ package com.dropsnorz.owlplug.store.dao;
 import com.dropsnorz.owlplug.core.model.PluginType;
 import com.dropsnorz.owlplug.store.model.ProductTag;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
+import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
@@ -39,14 +40,14 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	 */
 	static Specification<StoreProduct> hasPlatformTag(String platformTag) {
 		return (product, cq, cb) -> {
-			Join<Object, Object> groupPath = product.join("bundles", JoinType.INNER);
-			return cb.isMember(platformTag, groupPath.get("targets"));
+			Join<Object, Object> bundles = (Join<Object, Object>) product.fetch("bundles");
+			return cb.isMember(platformTag, bundles.get("targets"));
 		};
 	}
 	
 	
 	/**
-	 * Product tag filtering specification
+	 * Product tag filtering specification.
 	 * Filter products matching the given tags
 	 * @param tag - The tag to find
 	 * @return The JPA Specification
@@ -60,9 +61,9 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	}
 	
 	/**
-	 * Product tag filtering specification
+	 * Product tag filtering specification.
 	 * Filter products matching the given tags
-	 * @param tag - The tag to find
+	 * @param type - The type to find
 	 * @return The JPA Specification
 	 */
 	static Specification<StoreProduct> isTyped(PluginType type) {

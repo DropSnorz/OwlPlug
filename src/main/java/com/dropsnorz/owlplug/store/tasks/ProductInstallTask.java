@@ -6,7 +6,7 @@ import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.core.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.core.utils.nio.CallbackByteChannel;
-import com.dropsnorz.owlplug.store.model.StoreProduct;
+import com.dropsnorz.owlplug.store.model.ProductBundle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -24,58 +24,58 @@ public class ProductInstallTask extends AbstractTask {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private StoreProduct product;
+	private ProductBundle bundle;
 	private File targetDirectory;
 	private ApplicationDefaults applicationDefaults;
 	
 
 	/**
 	 * Creates a new Product Installation task.
-	 * @param product Product to download
+	 * @param bundle Bundle to download
 	 * @param targetDirectory Target directory where downloaded product is stored
 	 * @param applicationDefaults Ownplug ApplicationDefaults
 	 */
-	public ProductInstallTask(StoreProduct product, File targetDirectory, ApplicationDefaults applicationDefaults) {
+	public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults) {
 
-		this.product = product;
+		this.bundle = bundle;
 		this.targetDirectory = targetDirectory;
 		this.applicationDefaults = applicationDefaults;
-		setName("Install plugin - " + product.getName());
+		setName("Install plugin - " + bundle.getProduct().getName());
 		setMaxProgress(150);
 	}
-
-
+	
+	
 	@Override
 	protected TaskResult call() throws Exception {
 
 		try {
 			if (targetDirectory == null || !targetDirectory.isDirectory()) {
-				this.updateMessage("Installing plugin " + product.getName() + " - Invalid installation target directory");
+				this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Invalid installation directory");
 				log.error("Invalid plugin installation target directory");
 				throw new TaskException("Invalid plugin installation target directory");
 			}
-			this.updateMessage("Installing plugin " + product.getName() + " - Downloading files...");
-			File archiveFile = downloadInTempDirectory(product);
+			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Downloading files...");
+			File archiveFile = downloadInTempDirectory(bundle);
 
 			this.commitProgress(100);
-			this.updateMessage("Installing plugin " + product.getName() + " - Extracting files...");
+			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Extracting files...");
 			File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" 
 					+ "temp-" + archiveFile.getName().replace(".owlpack", ""));
 			FileUtils.unzip(archiveFile.getAbsolutePath(),  extractedArchiveFolder.getAbsolutePath());
 
 			this.commitProgress(30);
 
-			this.updateMessage("Installing plugin " + product.getName() + " - Moving files...");
+			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Moving files...");
 			installToPluginDirectory(extractedArchiveFolder, targetDirectory);
 
 			this.commitProgress(20);
 
-			this.updateMessage("Installing plugin " + product.getName() + " - Cleaning files...");
+			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Cleaning files...");
 			archiveFile.delete();
 			FileUtils.deleteDirectory(extractedArchiveFolder);
 
 			this.commitProgress(10);
-			this.updateMessage("Plugin " + product.getName() + " successfully Installed");
+			this.updateMessage("Plugin " + bundle.getProduct().getName() + " successfully Installed");
 
 		} catch (IOException e) {
 			throw new TaskException(e);
@@ -85,14 +85,14 @@ public class ProductInstallTask extends AbstractTask {
 	}
 
 
-	private File downloadInTempDirectory(StoreProduct product) throws TaskException {
+	private File downloadInTempDirectory(ProductBundle bundle) throws TaskException {
 
 
 		URL website;
 		try {
-			website = new URL(product.getDownloadUrl());
+			website = new URL(bundle.getDownloadUrl());
 		} catch (MalformedURLException e) {
-			this.updateMessage("Installation of " + product.getName() + " canceled: Can't download plugin files");
+			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't download plugin files");
 			throw new TaskException(e);
 
 		}
@@ -118,13 +118,13 @@ public class ProductInstallTask extends AbstractTask {
 			return outputFile;
 
 		} catch (MalformedURLException e) {
-			this.updateMessage("Installation of " + product.getName() + " canceled: Can't download plugin files");
+			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't download plugin files");
 			throw new TaskException(e);
 		} catch (FileNotFoundException e) {
-			this.updateMessage("Installation of " + product.getName() + " canceled: File not found");
+			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: File not found");
 			throw new TaskException(e);
 		} catch (IOException e) {
-			this.updateMessage("Installation of " + product.getName() + " canceled: Can't write file on disk");
+			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't write file on disk");
 			throw new TaskException(e);
 		} 
 
@@ -188,6 +188,7 @@ public class ProductInstallTask extends AbstractTask {
 		}
 		return null;
 	}
+	
 
 	/**
 	 * Compatible product archive structues
