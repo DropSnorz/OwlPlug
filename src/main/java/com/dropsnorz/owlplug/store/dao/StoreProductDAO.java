@@ -1,20 +1,20 @@
 package com.dropsnorz.owlplug.store.dao;
 
 import com.dropsnorz.owlplug.core.model.PluginType;
-import com.dropsnorz.owlplug.store.model.ProductTag;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
-import javax.persistence.criteria.Fetch;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 
 public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, JpaSpecificationExecutor<StoreProduct> {
-	
-	
+
+
 	/**
 	 * Store enabled filtering JPA Specification.
 	 * @return The JPA specification
@@ -22,7 +22,7 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	static Specification<StoreProduct> storeEnabled() {
 		return (product, cq, cb) -> cb.equal(product.get("store").get("enabled"), true);
 	}
-	
+
 	/**
 	 * Name filtering JPA Specification.
 	 * @param name - The product name
@@ -31,7 +31,7 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	static Specification<StoreProduct> nameContains(String name) {
 		return (product, cq, cb) -> cb.like(cb.lower(product.get("name")), "%" + name.toLowerCase() + "%");
 	}
-	
+
 	/**
 	 * Platform filtering JPA Specification
 	 * Filter products matching the given platformTag or products without platform assignment. 
@@ -44,8 +44,30 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 			return cb.isMember(platformTag, bundles.get("targets"));
 		};
 	}
-	
-	
+
+	/**
+	 * Platform filtering JPA Specification
+	 * Filter products matching the given platformTag or products without platform assignment. 
+	 * @param platformTagList - The compatible platformTagList to find
+	 * @return The JPA Specification
+	 */
+	static Specification<StoreProduct> hasPlatformTag(List<String> platformTagList) {
+		return (product, cq, cb) -> {
+			Join<Object, Object> bundles = (Join<Object, Object>) product.fetch("bundles");
+
+			List<Predicate> predicates = new ArrayList<>();
+			for (String platformTag : platformTagList) {
+				predicates.add(
+						cb.or(
+							cb.isMember(platformTag, bundles.get("targets"))
+						)
+				);
+			}
+			return cb.or(predicates.toArray(new Predicate[predicates.size()]));
+		};
+	}
+
+
 	/**
 	 * Product tag filtering specification.
 	 * Filter products matching the given tags
@@ -56,10 +78,10 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 		return (product, cq, cb) -> {
 			Join<Object, Object> groupPath = product.join("tags", JoinType.INNER);
 			return cb.equal(cb.lower(groupPath.get("name")), tag.toLowerCase());
-			
+
 		};
 	}
-	
+
 	/**
 	 * Product tag filtering specification.
 	 * Filter products matching the given tags
@@ -69,11 +91,11 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	static Specification<StoreProduct> isTyped(PluginType type) {
 		return (product, cq, cb) -> {
 			return cb.equal(product.get("type"), type);
-			
+
 		};
 	}
-	
-	
+
+
 	public Iterable<StoreProduct> findByNameContainingIgnoreCase(String name);
 
 }

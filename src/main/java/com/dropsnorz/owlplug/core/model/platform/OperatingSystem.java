@@ -1,20 +1,20 @@
-package com.dropsnorz.owlplug.core.model;
+package com.dropsnorz.owlplug.core.model.platform;
 
-public enum OSType {
+public enum OperatingSystem {
 	WIN("win"),
 	MAC("osx"),
 	UNIX("unix"),
 	UNDEFINED("undefined");
 	
-	private String code;
+	private String code;	
 	
-	OSType(String code) {
+	OperatingSystem(String code) {
 		this.code = code;
 	}
-	
 	
 	public String getCode(){
 		return code;
 	}
+
 
 }

@@ -47,7 +47,7 @@ public class TaskFactory {
 	public TaskExecutionContext createPluginSyncTask() {
 		
 		PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
-		parameters.setPlatform(applicationDefaults.getPlatform());
+		parameters.setPlatform(applicationDefaults.getRuntimePlatform().getOperatingSystem());
 		parameters.setPluginDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
 		parameters.setFindVST2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
 		parameters.setFindVST3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));

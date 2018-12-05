@@ -1,12 +1,14 @@
 package com.dropsnorz.owlplug.core.components;
 
-import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.Plugin;
+import com.dropsnorz.owlplug.core.model.platform.RuntimePlatform;
+import com.dropsnorz.owlplug.core.model.platform.RuntimePlatformResolver;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
-import com.dropsnorz.owlplug.core.utils.OSValidator;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.io.File;
 import javafx.scene.image.Image;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationDefaults {
 	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private Environment env;
 
-	private OSType platform;
+	private RuntimePlatform runtimePlatform;
 
 	public static final String APPLICATION_NAME = "OwlPlug";
 	public static final String REPOSITORY_FOLDER_NAME = "repositories";
@@ -61,18 +65,14 @@ public class ApplicationDefaults {
 	 */
 	public ApplicationDefaults() {
 		
-		if (OSValidator.isWindows()) {
-			this.platform = OSType.WIN;
-		} else if (OSValidator.isMac()) {
-			this.platform = OSType.MAC;
-		} else {
-			this.platform = OSType.UNDEFINED;
-		}
+		RuntimePlatformResolver platformResolver = new RuntimePlatformResolver();
+		runtimePlatform = platformResolver.resolve();
+		log.info("Runtime Platform Resolved: " + runtimePlatform.toString());
 		
 	}
 
-	public OSType getPlatform() {
-		return platform;
+	public RuntimePlatform getRuntimePlatform() {
+		return runtimePlatform;
 	}
 
 	/**

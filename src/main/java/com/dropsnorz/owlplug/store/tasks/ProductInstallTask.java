@@ -78,6 +78,7 @@ public class ProductInstallTask extends AbstractTask {
 			this.updateMessage("Plugin " + bundle.getProduct().getName() + " successfully Installed");
 
 		} catch (IOException e) {
+			this.updateProgress(1, 1);
 			throw new TaskException(e);
 		}
 
@@ -139,7 +140,7 @@ public class ProductInstallTask extends AbstractTask {
 			case NESTED: newSource = source.listFiles()[0]; 
 				break;
 			case NESTED_ENV: newSource = getSubfileByName(
-				source.listFiles()[0], applicationDefaults.getPlatform().getCode()); 
+				source.listFiles()[0], applicationDefaults.getRuntimePlatform().getOperatingSystem().getCode()); 
 				break;
 			default: break;
 		}

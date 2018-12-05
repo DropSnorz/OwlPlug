@@ -5,6 +5,7 @@ import com.dropsnorz.owlplug.core.model.PluginType;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,7 @@ public class StoreProduct {
 	private String downloadUrl;
 	private String iconUrl;
 	private String creator;
+	@Column(columnDefinition = "text")
 	private String description;
 	private PluginType type;
 	private PluginStage stage;

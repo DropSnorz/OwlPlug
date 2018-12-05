@@ -1,19 +1,19 @@
 package com.dropsnorz.owlplug.core.tasks.plugins.discovery;
 
-import com.dropsnorz.owlplug.core.model.OSType;
+import com.dropsnorz.owlplug.core.model.platform.OperatingSystem;
 
 public class PluginSyncTaskParameters {
 	
-	private OSType platform;
+	private OperatingSystem platform;
 	private String pluginDirectory;
 	private boolean findVST2;
 	private boolean findVST3;
 	
-	public OSType getPlatform() {
+	public OperatingSystem getPlatform() {
 		return platform;
 	}
 	
-	public void setPlatform(OSType platform) {
+	public void setPlatform(OperatingSystem platform) {
 		this.platform = platform;
 	}
 	
