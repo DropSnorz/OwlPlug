@@ -1,12 +1,13 @@
 package com.dropsnorz.owlplug.store.tasks;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.model.platform.RuntimePlatform;
 import com.dropsnorz.owlplug.core.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.core.tasks.TaskResult;
 import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.core.utils.nio.CallbackByteChannel;
-import com.dropsnorz.owlplug.store.model.StoreProduct;
+import com.dropsnorz.owlplug.store.model.ProductBundle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -24,23 +25,23 @@ public class ProductInstallTask extends AbstractTask {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private StoreProduct product;
+	private ProductBundle bundle;
 	private File targetDirectory;
 	private ApplicationDefaults applicationDefaults;
-	
+
 
 	/**
 	 * Creates a new Product Installation task.
-	 * @param product Product to download
+	 * @param bundle Bundle to download
 	 * @param targetDirectory Target directory where downloaded product is stored
 	 * @param applicationDefaults Ownplug ApplicationDefaults
 	 */
-	public ProductInstallTask(StoreProduct product, File targetDirectory, ApplicationDefaults applicationDefaults) {
+	public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults) {
 
-		this.product = product;
+		this.bundle = bundle;
 		this.targetDirectory = targetDirectory;
 		this.applicationDefaults = applicationDefaults;
-		setName("Install plugin - " + product.getName());
+		setName("Install plugin - " + bundle.getProduct().getName());
 		setMaxProgress(150);
 	}
 
@@ -50,34 +51,35 @@ public class ProductInstallTask extends AbstractTask {
 
 		try {
 			if (targetDirectory == null || !targetDirectory.isDirectory()) {
-				this.updateMessage("Installing plugin " + product.getName() + " - Invalid installation target directory");
+				this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Invalid installation directory");
 				log.error("Invalid plugin installation target directory");
 				throw new TaskException("Invalid plugin installation target directory");
 			}
-			this.updateMessage("Installing plugin " + product.getName() + " - Downloading files...");
-			File archiveFile = downloadInTempDirectory(product);
+			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Downloading files...");
+			File archiveFile = downloadInTempDirectory(bundle);
 
 			this.commitProgress(100);
-			this.updateMessage("Installing plugin " + product.getName() + " - Extracting files...");
+			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Extracting files...");
 			File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" 
 					+ "temp-" + archiveFile.getName().replace(".owlpack", ""));
 			FileUtils.unzip(archiveFile.getAbsolutePath(),  extractedArchiveFolder.getAbsolutePath());
 
 			this.commitProgress(30);
 
-			this.updateMessage("Installing plugin " + product.getName() + " - Moving files...");
+			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Moving files...");
 			installToPluginDirectory(extractedArchiveFolder, targetDirectory);
 
 			this.commitProgress(20);
 
-			this.updateMessage("Installing plugin " + product.getName() + " - Cleaning files...");
+			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Cleaning files...");
 			archiveFile.delete();
 			FileUtils.deleteDirectory(extractedArchiveFolder);
 
 			this.commitProgress(10);
-			this.updateMessage("Plugin " + product.getName() + " successfully Installed");
+			this.updateMessage("Plugin " + bundle.getProduct().getName() + " successfully Installed");
 
 		} catch (IOException e) {
+			this.updateProgress(1, 1);
 			throw new TaskException(e);
 		}
 
@@ -85,14 +87,14 @@ public class ProductInstallTask extends AbstractTask {
 	}
 
 
-	private File downloadInTempDirectory(StoreProduct product) throws TaskException {
+	private File downloadInTempDirectory(ProductBundle bundle) throws TaskException {
 
 
 		URL website;
 		try {
-			website = new URL(product.getDownloadUrl());
+			website = new URL(bundle.getDownloadUrl());
 		} catch (MalformedURLException e) {
-			this.updateMessage("Installation of " + product.getName() + " canceled: Can't download plugin files");
+			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't download plugin files");
 			throw new TaskException(e);
 
 		}
@@ -118,13 +120,13 @@ public class ProductInstallTask extends AbstractTask {
 			return outputFile;
 
 		} catch (MalformedURLException e) {
-			this.updateMessage("Installation of " + product.getName() + " canceled: Can't download plugin files");
+			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't download plugin files");
 			throw new TaskException(e);
 		} catch (FileNotFoundException e) {
-			this.updateMessage("Installation of " + product.getName() + " canceled: File not found");
+			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: File not found");
 			throw new TaskException(e);
 		} catch (IOException e) {
-			this.updateMessage("Installation of " + product.getName() + " canceled: Can't write file on disk");
+			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't write file on disk");
 			throw new TaskException(e);
 		} 
 
@@ -134,33 +136,39 @@ public class ProductInstallTask extends AbstractTask {
 	private void installToPluginDirectory(File source, File target) throws IOException {
 
 		OwlPackStructureType structure = getStructureType(source);
-		File newSource = null;
+		File newSource = source;
 		switch (structure) {
 			case NESTED: newSource = source.listFiles()[0]; 
 				break;
-			case NESTED_ENV: newSource = getSubfileByName(
-				source.listFiles()[0], applicationDefaults.getPlatform().getCode()); 
+			case ENV: newSource = getSubfileByPlatformTag(source); 
+				break;
+			case NESTED_ENV: newSource = getSubfileByPlatformTag(source.listFiles()[0]); 
 				break;
 			default: break;
 		}
-		if (newSource != null) {
-			FileUtils.copyDirectory(newSource, target);
 
-		} else {
-			FileUtils.copyDirectory(source, target);
-		}
+		FileUtils.copyDirectory(newSource, target);		
 	}
 
 
 	private OwlPackStructureType getStructureType(File directory) {
 
+		RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
 		OwlPackStructureType structure = OwlPackStructureType.DIRECT;
 
-		if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory()) {
+		if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory() 
+				&& !runtimePlatform.getCompatiblePlatformsTags().contains(directory.listFiles()[0].getName())) {
 			structure = OwlPackStructureType.NESTED;
 			for (File f : directory.listFiles()[0].listFiles()) {
-				if (f.getName().equals("win") || f.getName().equals("osx")) {
+				if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
 					structure = OwlPackStructureType.NESTED_ENV;
+				}
+			}
+		} else if (directory.listFiles().length >= 1) {
+			// if the directory describes an environement related bundle
+			for (File f : directory.listFiles()) {
+				if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
+					return OwlPackStructureType.ENV;
 				}
 			}
 		}
@@ -179,6 +187,20 @@ public class ProductInstallTask extends AbstractTask {
 		return contentLength;
 	}
 
+	private File getSubfileByPlatformTag(File parent) {
+
+		RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
+		File[] subFiles = parent.listFiles();
+
+		for (String platformTag : runtimePlatform.getCompatiblePlatformsTags()) {
+			for (File f : subFiles) {
+				if (f.getName().equals(platformTag)) {
+					return f;
+				}
+			}
+		}
+		return null;
+	}
 
 	private File getSubfileByName(File parent, String filename) {
 		for (File f : parent.listFiles()) {
@@ -188,6 +210,7 @@ public class ProductInstallTask extends AbstractTask {
 		}
 		return null;
 	}
+
 
 	/**
 	 * Compatible product archive structues
@@ -217,6 +240,7 @@ public class ProductInstallTask extends AbstractTask {
 	 */
 	private enum OwlPackStructureType {
 		DIRECT,
+		ENV,
 		NESTED,
 		NESTED_ENV,
 	}

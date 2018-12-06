@@ -1,11 +1,11 @@
 package com.dropsnorz.owlplug.core.tasks.plugins.discovery;
 
-import com.dropsnorz.owlplug.core.model.OSType;
 import com.dropsnorz.owlplug.core.model.PluginFormat;
+import com.dropsnorz.owlplug.core.model.platform.OperatingSystem;
 
 public class NativePluginBuilderFactory {
 
-	public static NativePluginBuilder createPluginBuilder(OSType osType, PluginFormat pluginFormat){
+	public static NativePluginBuilder createPluginBuilder(OperatingSystem osType, PluginFormat pluginFormat){
 
 		switch(osType){
 			case WIN: return new WindowsPluginBuilder(pluginFormat);

@@ -2,9 +2,10 @@ package com.dropsnorz.owlplug.store.service;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
-import com.dropsnorz.owlplug.core.model.OSType;
+import com.dropsnorz.owlplug.core.model.platform.RuntimePlatform;
 import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
+import com.dropsnorz.owlplug.store.model.ProductBundle;
 import com.dropsnorz.owlplug.store.model.Store;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
@@ -62,35 +63,6 @@ public class StoreService {
 	public void syncStores() {
 		taskFactory.createStoreSyncTask().schedule();
 	}
-
-
-	/**
-	 * Retrieves all products from stores which are compatible with the current platform.
-	 * @return list of store products
-	 */
-	public Iterable<StoreProduct> getStoreProducts() {
-		OSType osType = applicationDefaults.getPlatform();
-		String platformTag = osType.getCode();
-
-		return storeProductDAO.findAll(StoreProductDAO.hasPlatformTag(platformTag));
-	}
-
-	/**
-	 * Retrieves products from store with name matching the given parameters and 
-	 * compatible with the current platform.
-	 * @param name part of the plugin name
-	 * @return
-	 */
-	public Iterable<StoreProduct> getStoreProducts(String name) {
-		OSType osType = applicationDefaults.getPlatform();
-		String platformTag = osType.getCode();
-		
-		return storeProductDAO.findAll(
-				StoreProductDAO.storeEnabled().and(
-						StoreProductDAO.nameContains(name).and(
-								StoreProductDAO.hasPlatformTag(platformTag))));
-		
-	}
 	
 	/**
 	 * Retrieves products from store with name matching the given criterias and 
@@ -99,11 +71,10 @@ public class StoreService {
 	 * @return list of store products
 	 */
 	public Iterable<StoreProduct> getStoreProducts(List<StoreFilterCriteria> criteriaList) {
-		OSType osType = applicationDefaults.getPlatform();
-		String platformTag = osType.getCode();
+		RuntimePlatform env = applicationDefaults.getRuntimePlatform();
 		
 		Specification<StoreProduct> spec = StoreProductDAO.storeEnabled()
-				.and(StoreProductDAO.hasPlatformTag(platformTag));
+				.and(StoreProductDAO.hasPlatformTag(env.getCompatiblePlatformsTags()));
 		spec = spec.and(StoreCriteriaAdapter.toSpecification(criteriaList));
 		
 		return storeProductDAO.findAll(spec);
@@ -115,14 +86,49 @@ public class StoreService {
 
 	/**
 	 * Downloads and installs a store product in a directory.
-	 * @param product - store product to retrieve
+	 * @param bundle - store bundle to retrieve
 	 * @param targetDirectory - directory where the product will be installed
 	 */
-	public void install(StoreProduct product, File targetDirectory) {		
-		taskFactory.create(new ProductInstallTask(product, targetDirectory, applicationDefaults))
+	public void install(ProductBundle bundle, File targetDirectory) {		
+		taskFactory.create(new ProductInstallTask(bundle, targetDirectory, applicationDefaults))
 			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow())
 			.schedule();
 	}
+	
+	
+	/**
+	 * Find the best bundle from a prpduct based on the user current platform.
+	 * @param product - The store product
+	 */
+	public ProductBundle findBestBundle(StoreProduct product) {	
+		
+		RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
+		
+		// Look for bundles matching runtimePlatform
+		for (ProductBundle bundle : product.getBundles()) {
+			for (String platform : bundle.getTargets()) {
+				if (platform.equals(runtimePlatform.getTag()) ||
+						platform.equals(runtimePlatform.getOperatingSystem().getCode())) {
+					return bundle;
+				}
+			}
+		}
+				
+		//Look for bundles compatibles with current runtimePlatform
+		for (ProductBundle bundle : product.getBundles()) {
+			for (String platformTag : bundle.getTargets()) {
+				for (String compatibleTag : runtimePlatform.getCompatiblePlatformsTags()) {
+					if (platformTag.equals(compatibleTag)) {
+						return bundle;
+					}
+				}
+			}
+		}
+		
+		
+		return null;
+	}
+
 
 	/**
 	 * Creates a PluginStore instance requesting a store url endpoint.

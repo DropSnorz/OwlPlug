@@ -4,6 +4,7 @@ import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.model.PluginStage;
 import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.dropsnorz.owlplug.store.controllers.StoreController;
+import com.dropsnorz.owlplug.store.model.ProductBundle;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.util.Random;
 import javafx.geometry.Insets;
@@ -13,7 +14,9 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -88,20 +91,40 @@ public class StoreProductBlocView extends AnchorPane {
 		
 		TextFlow textFlow = new TextFlow();
 		textFlow.getChildren().add(new Label("Install"));
-		Text storeSourceText = new Text(" (" + storeProduct.getStore().getName() + ")");
+		Text storeSourceText = new Text(" (Auto)");
 		storeSourceText.getStyleClass().add("text-disabled");
 		textFlow.getChildren().add(storeSourceText);
 		CustomMenuItem installMenuItem = new CustomMenuItem(textFlow);
 		installMenuItem.setOnAction(e -> {
 			this.parentController.installProduct(storeProduct);
 		});
+		
+		ContextMenu contextMenu = new ContextMenu();
+		contextMenu.getItems().add(installMenuItem);
+		
+		Menu bundlesListMenuItem = new Menu("Other Packages");
+		contextMenu.getItems().add(bundlesListMenuItem);
+		
+		for (ProductBundle bundle : storeProduct.getBundles()) {
+			TextFlow bundleTextFlow = new TextFlow();
+			bundleTextFlow.getChildren().add(new Label("Install"));
+			Text bundleSource = new Text(" (" + bundle.getName() + ")");
+			bundleSource.getStyleClass().add("text-disabled");
+			bundleTextFlow.getChildren().add(bundleSource);
+			CustomMenuItem bundleMenuItem = new CustomMenuItem(bundleTextFlow);
+			bundleMenuItem.setOnAction(e -> {
+				this.parentController.installBundle(bundle);
+			});
+			bundlesListMenuItem.getItems().add(bundleMenuItem);
+			
+		}
+		
 		MenuItem pluginPageMenuItem = new MenuItem("Browse plugin page...");
 		pluginPageMenuItem.setOnAction(e -> {
 			PlatformUtils.openDefaultBrowser(storeProduct.getPageUrl());
 		});
 
-		ContextMenu contextMenu = new ContextMenu();
-		contextMenu.getItems().add(installMenuItem);
+		contextMenu.getItems().add(new SeparatorMenuItem());
 		contextMenu.getItems().add(pluginPageMenuItem);
 		this.setOnContextMenuRequested(e -> {
 			contextMenu.show(this, e.getScreenX(), e.getScreenY());

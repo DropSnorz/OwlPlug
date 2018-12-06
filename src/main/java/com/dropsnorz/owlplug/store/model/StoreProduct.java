@@ -5,6 +5,7 @@ import com.dropsnorz.owlplug.core.model.PluginType;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,7 @@ public class StoreProduct {
 	private String downloadUrl;
 	private String iconUrl;
 	private String creator;
+	@Column(columnDefinition = "text")
 	private String description;
 	private PluginType type;
 	private PluginStage stage;
@@ -33,7 +35,7 @@ public class StoreProduct {
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
-	private Set<ProductPlatform> platforms = new HashSet<>();
+	private Set<ProductBundle> bundles = new HashSet<>();
 
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
@@ -124,12 +126,12 @@ public class StoreProduct {
 		this.store = store;
 	}
 
-	public Set<ProductPlatform> getPlatforms() {
-		return platforms;
+	public Set<ProductBundle> getBundles() {
+		return bundles;
 	}
 
-	public void setPlatforms(Set<ProductPlatform> platforms) {
-		this.platforms = platforms;
+	public void setBundles(Set<ProductBundle> bundles) {
+		this.bundles = bundles;
 	}
 
 	public Set<ProductTag> getTags() {

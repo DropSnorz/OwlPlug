@@ -5,6 +5,7 @@ import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.controllers.MainController;
+import com.dropsnorz.owlplug.store.model.ProductBundle;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
 import com.dropsnorz.owlplug.store.service.StoreService;
@@ -226,10 +227,10 @@ public class StoreController {
 	}
 
 	/**
-	 * Trigger product installation.
-	 * @param product Product to install
+	 * Trigger bundle installation.
+	 * @param bundle Bundle to install
 	 */
-	public void installProduct(StoreProduct product) {
+	public void installBundle(ProductBundle bundle) {
 
 		File selectedDirectory = null;
 
@@ -252,11 +253,24 @@ public class StoreController {
 		}
 
 		if (selectedDirectory != null) {
-			storeService.install(product, selectedDirectory);
+			storeService.install(bundle, selectedDirectory);
 		} else {
 			log.error("Invalid product installation directory");
 		}
 
+	}
+	
+	/**
+	 * Trigger product installation. The best bundle will be selected based on
+	 * the current user platform.
+	 * @param product Product to install
+	 */
+	public void installProduct(StoreProduct product) {
+		
+		ProductBundle bundle = storeService.findBestBundle(product);
+		if (bundle != null) {
+			installBundle(bundle);
+		}
 	}
 
 	/**
