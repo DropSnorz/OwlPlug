@@ -49,7 +49,7 @@ public class PluginService {
 		Iterable<StoreProduct> products = pluginStoreService.getProductsByName(absoluteName);
 		
 		if (!Iterables.isEmpty(products)) {
-			url = Iterables.get(products, 0).getIconUrl();
+			url = Iterables.get(products, 0).getScreenshotUrl();
 		} else {
 			url = owlplugCentralService.getPluginImageUrl(absoluteName);		
 		}

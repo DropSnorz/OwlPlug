@@ -81,12 +81,15 @@ public class StoreProductBlocView extends AnchorPane {
 			this.getChildren().add(createPluginStageFlag(storeProduct));
 		}
 
-		BackgroundImage bgImg = new BackgroundImage(image, 
-				BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-				BackgroundPosition.CENTER, 
-				new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
+		if (image != null) {
+			BackgroundImage bgImg = new BackgroundImage(image, 
+					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+					BackgroundPosition.CENTER, 
+					new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
 
-		this.setBackground(new Background(bgImg));
+			this.setBackground(new Background(bgImg));
+		}
+		
 		this.setEffect(new InnerShadow(11, Color.BLACK));	
 		
 		TextFlow textFlow = new TextFlow();

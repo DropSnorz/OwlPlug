@@ -33,7 +33,7 @@ public class StoreProductBlocViewBuilder {
 	 */
 	public StoreProductBlocView build(StoreProduct storeProduct) {
 		
-		Image image = imageCache.get(storeProduct.getIconUrl());
+		Image image = imageCache.get(storeProduct.getScreenshotUrl());
 		return new StoreProductBlocView(applicationDefaults, storeProduct, image, storeController);
 	}
 	

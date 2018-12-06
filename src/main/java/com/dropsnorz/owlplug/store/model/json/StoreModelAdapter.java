@@ -37,7 +37,7 @@ public class StoreModelAdapter {
 		product.setName(productJsonMapper.getName());
 		product.setPageUrl(productJsonMapper.getPageUrl());
 		product.setDownloadUrl(UrlUtils.fixSpaces(productJsonMapper.getDownloadUrl()));
-		product.setIconUrl(UrlUtils.fixSpaces(productJsonMapper.getIconUrl()));
+		product.setScreenshotUrl(UrlUtils.fixSpaces(productJsonMapper.getScreenshotUrl()));
 		product.setCreator(productJsonMapper.getCreator());
 		product.setDescription(productJsonMapper.getDescription());
 		

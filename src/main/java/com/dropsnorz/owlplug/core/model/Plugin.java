@@ -18,7 +18,7 @@ public abstract class Plugin {
 	protected String path;
 	protected String bundleId;
 	protected String version;
-	protected String iconUrl;
+	protected String screenshotUrl;
 	
 	protected PluginType type;
 
@@ -64,12 +64,12 @@ public abstract class Plugin {
 		this.version = version;
 	}
 
-	public String getIconUrl() {
-		return iconUrl;
+	public String getScreenshotUrl() {
+		return screenshotUrl;
 	}
 
-	public void setIconUrl(String iconUrl) {
-		this.iconUrl = iconUrl;
+	public void setScreenshotUrl(String screenshotUrl) {
+		this.screenshotUrl = screenshotUrl;
 	}
 
 	public PluginType getType() {

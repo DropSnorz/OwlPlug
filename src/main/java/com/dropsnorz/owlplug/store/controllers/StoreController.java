@@ -15,7 +15,6 @@ import com.google.common.collect.Iterables;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
-import com.jfoenix.controls.JFXTextField;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -129,13 +129,13 @@ public class PluginInfoController {
 	
 	
 	private void setPluginImage() {
-		if (currentPlugin.getIconUrl() == null || currentPlugin.getIconUrl().isEmpty()) {
+		if (currentPlugin.getScreenshotUrl() == null || currentPlugin.getScreenshotUrl().isEmpty()) {
 			String url = pluginService.resolveImageUrl(currentPlugin);
-			currentPlugin.setIconUrl(url);
+			currentPlugin.setScreenshotUrl(url);
 			pluginDAO.save(currentPlugin);
 		}
 		
-		String url = currentPlugin.getIconUrl();
+		String url = currentPlugin.getScreenshotUrl();
 		if (knownPluginImages.contains(url) && !imageCache.contains(url)) {
 			pluginScreenshot.setImage(applicationDefaults.pluginPlaceholderImage);
 			

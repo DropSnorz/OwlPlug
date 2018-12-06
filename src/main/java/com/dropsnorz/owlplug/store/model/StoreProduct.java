@@ -23,7 +23,7 @@ public class StoreProduct {
 	private String name;
 	private String pageUrl;
 	private String downloadUrl;
-	private String iconUrl;
+	private String screenshotUrl;
 	private String creator;
 	@Column(columnDefinition = "text")
 	private String description;
@@ -78,12 +78,12 @@ public class StoreProduct {
 		this.downloadUrl = downloadUrl;
 	}
 
-	public String getIconUrl() {
-		return iconUrl;
+	public String getScreenshotUrl() {
+		return screenshotUrl;
 	}
 
-	public void setIconUrl(String iconUrl) {
-		this.iconUrl = iconUrl;
+	public void setScreenshotUrl(String screenshotUrl) {
+		this.screenshotUrl = screenshotUrl;
 	}
 
 	public String getCreator() {

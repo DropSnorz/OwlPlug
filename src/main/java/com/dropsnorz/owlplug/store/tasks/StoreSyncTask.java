@@ -12,6 +12,7 @@ import com.dropsnorz.owlplug.store.model.json.StoreJsonMapper;
 import com.dropsnorz.owlplug.store.model.json.StoreModelAdapter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Iterables;
 import java.io.IOException;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -44,17 +45,21 @@ public class StoreSyncTask extends AbstractTask {
 	@Override
 	protected TaskResult call() throws TaskException {
 
-		this.updateProgress(0, 2);
+		this.updateProgress(0, 1);
 		this.updateMessage("Sync plugins stores");
-
+		
+		Iterable<Store> storeList = pluginStoreDAO.findAll();
+		this.setMaxProgress(2 + Iterables.size(storeList));
+		
 		storeProductDAO.deleteAll();
 
-		this.updateProgress(1, 2);
+		this.commitProgress(1);
 		CloseableHttpResponse response = null;
 
 		for (Store store : pluginStoreDAO.findAll()) {
 			try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 				log.debug("Exploring store {}", store.getName());
+				this.updateMessage("Exploring store " + store.getName());
 				HttpGet httpGet = new HttpGet(store.getApiUrl());
 				response = httpclient.execute(httpGet);
 				HttpEntity entity = response.getEntity();
@@ -73,6 +78,7 @@ public class StoreSyncTask extends AbstractTask {
 				log.error("Error parsing store response", e);
 				
 			} finally {
+				this.commitProgress(1);
 				try {
 					if (response != null) {
 						response.close();
@@ -83,7 +89,7 @@ public class StoreSyncTask extends AbstractTask {
 			}
 		}
 
-		this.updateProgress(2, 2);
+		this.commitProgress(1);
 		
 		if (this.getWarnings().isEmpty()) {
 			this.updateMessage("Plugin stores synced.");

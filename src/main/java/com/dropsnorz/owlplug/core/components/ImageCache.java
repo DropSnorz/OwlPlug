@@ -60,6 +60,9 @@ public class ImageCache {
 	 */
 	public Image get(String url, String type, boolean asyncFetch) {
 
+		if (url == null || url.isEmpty()) {
+			return null;
+		}
 		Cache cache = cacheManager.getCache("image-cache");
 		Element cachedElement =  cache.get(url);
 
