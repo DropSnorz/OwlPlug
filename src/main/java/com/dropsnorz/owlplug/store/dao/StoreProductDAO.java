@@ -53,8 +53,7 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	 */
 	static Specification<StoreProduct> hasPlatformTag(List<String> platformTagList) {
 		return (product, cq, cb) -> {
-			Join<Object, Object> bundles = (Join<Object, Object>) product.fetch("bundles");
-
+			Join<Object, Object> bundles = (Join<Object, Object>) product.fetch("bundles", JoinType.INNER);
 			List<Predicate> predicates = new ArrayList<>();
 			for (String platformTag : platformTagList) {
 				predicates.add(
@@ -63,6 +62,7 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 						)
 				);
 			}
+			cq.distinct(true);
 			return cb.or(predicates.toArray(new Predicate[predicates.size()]));
 		};
 	}

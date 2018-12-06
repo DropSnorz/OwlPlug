@@ -112,7 +112,7 @@ public class ImageCache {
 
 		task.setOnSucceeded(e -> {
 			Image image = task.getValue();
-			if (!image.isError()) {
+			if (image != null && !image.isError()) {
 				Platform.runLater(() -> {
 					imageView.setImage(task.getValue());
 				});

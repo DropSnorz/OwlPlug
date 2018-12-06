@@ -28,20 +28,62 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 	public void init() {
 		
 		HashMap<String, StoreFilterCriteria> suggestions = new HashMap<>();
+		suggestions.put("Amp", 
+				new StoreFilterCriteria("Amp", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
 		suggestions.put("Analog", 
 				new StoreFilterCriteria("Analog", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Ambient", 
+				new StoreFilterCriteria("Ambient", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Bass", 
+				new StoreFilterCriteria("Bass", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Brass", 
+				new StoreFilterCriteria("Brass", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
 		suggestions.put("Compressor",
 				new StoreFilterCriteria("Compressor", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-		suggestions.put("Filter", 
-				new StoreFilterCriteria("Filter", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-		suggestions.put("LFO", 
-				new StoreFilterCriteria("LFO", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-		suggestions.put("Reverb", 
-				new StoreFilterCriteria("Reverb", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
 		suggestions.put("Delay", 
 				new StoreFilterCriteria("Delay", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-		suggestions.put("Synthesizer", 
-				new StoreFilterCriteria("Synthesizer", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Distortion", 
+				new StoreFilterCriteria("Distortion", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Drum", 
+				new StoreFilterCriteria("Drum", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Equalizer", 
+				new StoreFilterCriteria("Equalizer", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Filter", 
+				new StoreFilterCriteria("Filter", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Flanger", 
+				new StoreFilterCriteria("Flanger", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Gate", 
+				new StoreFilterCriteria("Gate", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Guitar", 
+				new StoreFilterCriteria("Guitar", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("LFO", 
+				new StoreFilterCriteria("LFO", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Limiter", 
+				new StoreFilterCriteria("Limiter", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Maximizer", 
+				new StoreFilterCriteria("Maximizer", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Monophonic", 
+				new StoreFilterCriteria("Monophonic", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Orchestral", 
+				new StoreFilterCriteria("Orchestral", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Organ", 
+				new StoreFilterCriteria("Organ", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Panner", 
+				new StoreFilterCriteria("Panner", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Phaser", 
+				new StoreFilterCriteria("Phaser", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Piano", 
+				new StoreFilterCriteria("Piano", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Reverb", 
+				new StoreFilterCriteria("Reverb", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Tremolo", 
+				new StoreFilterCriteria("Tremolo", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Tube", 
+				new StoreFilterCriteria("Tube", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Synth", 
+				new StoreFilterCriteria("Synth", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+		suggestions.put("Vintage", 
+				new StoreFilterCriteria("Vintage", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
 
 		suggestions.put("Effect", new StoreFilterCriteria(
 				PluginType.EFFECT, StoreFilterCriteriaType.TYPE, applicationDefaults.effectImage, "Effect"));

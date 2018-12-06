@@ -7,6 +7,7 @@ import com.dropsnorz.owlplug.store.controllers.StoreController;
 import com.dropsnorz.owlplug.store.model.ProductBundle;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.util.Random;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -34,7 +35,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 public class StoreProductBlocView extends AnchorPane {
-
+	
 	private StoreController parentController;
 
 	/**
@@ -55,7 +56,7 @@ public class StoreProductBlocView extends AnchorPane {
 		AnchorPane.setTopAnchor(content, 0.0);
 		AnchorPane.setLeftAnchor(content, 0.0);
 		AnchorPane.setRightAnchor(content, 0.0);
-
+		
 		HBox header = new HBox();
 		header.setSpacing(5);
 		header.getStyleClass().add("panel-transparent-dark");
@@ -74,8 +75,6 @@ public class StoreProductBlocView extends AnchorPane {
 		content.getChildren().add(header);
 
 		content.setAlignment(Pos.BOTTOM_LEFT);
-		this.setPrefHeight(getRandomSize());
-		this.setPrefWidth(getRandomSize());
 
 		if (storeProduct.getStage() != null && storeProduct.getStage() != PluginStage.RELEASE) {
 			this.getChildren().add(createPluginStageFlag(storeProduct));
@@ -132,11 +131,25 @@ public class StoreProductBlocView extends AnchorPane {
 		this.setOnContextMenuRequested(e -> {
 			contextMenu.show(this, e.getScreenX(), e.getScreenY());
 		});
+		
+		Dimension2D size = generateSize();
+		this.setPrefHeight(size.getHeight());
+		this.setPrefWidth(size.getWidth());
 	}
-
-	private int getRandomSize() {
-		Random r = new Random();
-		return ((r.nextInt(180 - 140) + 140) / 10) * 10;
+	
+	private Dimension2D generateSize() {
+		
+		Random rand = new Random();
+		float randomPoint = rand.nextFloat();
+		
+		if (randomPoint < 0.2) {
+			return new Dimension2D(260,130);
+		} else if (randomPoint < 0.35) {
+			return new Dimension2D(260,260);
+		} else {
+			return new Dimension2D(130,130);
+		}
+		
 	}
 
 

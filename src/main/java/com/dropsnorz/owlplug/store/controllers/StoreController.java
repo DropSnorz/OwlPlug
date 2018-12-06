@@ -148,7 +148,14 @@ public class StoreController {
 		
 		taskFactory.addSyncStoresListener(() -> refreshView());
 		refreshView();
+		
+		masonryPane.setHSpacing(5);
+		masonryPane.setVSpacing(5);
+		
+		masonryPane.setCellHeight(130);
+		masonryPane.setCellWidth(130);
 
+		
 	}
 
 	/**
