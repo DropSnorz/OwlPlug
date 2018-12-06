@@ -23,6 +23,7 @@ public class RuntimePlatform {
 	
 	public List<String> getCompatiblePlatformsTags() {
 		List<String> platforms = new ArrayList<>();
+		platforms.add(this.operatingSystem.getCode());
 		for (RuntimePlatform platform : compatiblePlatforms) {
 			platforms.add(platform.getTag());
 		}

@@ -1,6 +1,7 @@
 package com.dropsnorz.owlplug.store.tasks;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.model.platform.RuntimePlatform;
 import com.dropsnorz.owlplug.core.tasks.AbstractTask;
 import com.dropsnorz.owlplug.core.tasks.TaskException;
 import com.dropsnorz.owlplug.core.tasks.TaskResult;
@@ -27,7 +28,7 @@ public class ProductInstallTask extends AbstractTask {
 	private ProductBundle bundle;
 	private File targetDirectory;
 	private ApplicationDefaults applicationDefaults;
-	
+
 
 	/**
 	 * Creates a new Product Installation task.
@@ -43,8 +44,8 @@ public class ProductInstallTask extends AbstractTask {
 		setName("Install plugin - " + bundle.getProduct().getName());
 		setMaxProgress(150);
 	}
-	
-	
+
+
 	@Override
 	protected TaskResult call() throws Exception {
 
@@ -135,33 +136,39 @@ public class ProductInstallTask extends AbstractTask {
 	private void installToPluginDirectory(File source, File target) throws IOException {
 
 		OwlPackStructureType structure = getStructureType(source);
-		File newSource = null;
+		File newSource = source;
 		switch (structure) {
 			case NESTED: newSource = source.listFiles()[0]; 
 				break;
-			case NESTED_ENV: newSource = getSubfileByName(
-				source.listFiles()[0], applicationDefaults.getRuntimePlatform().getOperatingSystem().getCode()); 
+			case ENV: newSource = getSubfileByPlatformTag(source); 
+				break;
+			case NESTED_ENV: newSource = getSubfileByPlatformTag(source.listFiles()[0]); 
 				break;
 			default: break;
 		}
-		if (newSource != null) {
-			FileUtils.copyDirectory(newSource, target);
 
-		} else {
-			FileUtils.copyDirectory(source, target);
-		}
+		FileUtils.copyDirectory(newSource, target);		
 	}
 
 
 	private OwlPackStructureType getStructureType(File directory) {
 
+		RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
 		OwlPackStructureType structure = OwlPackStructureType.DIRECT;
 
-		if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory()) {
+		if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory() 
+				&& !runtimePlatform.getCompatiblePlatformsTags().contains(directory.listFiles()[0].getName())) {
 			structure = OwlPackStructureType.NESTED;
 			for (File f : directory.listFiles()[0].listFiles()) {
-				if (f.getName().equals("win") || f.getName().equals("osx")) {
+				if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
 					structure = OwlPackStructureType.NESTED_ENV;
+				}
+			}
+		} else if (directory.listFiles().length >= 1) {
+			// if the directory describes an environement related bundle
+			for (File f : directory.listFiles()) {
+				if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
+					return OwlPackStructureType.ENV;
 				}
 			}
 		}
@@ -180,6 +187,20 @@ public class ProductInstallTask extends AbstractTask {
 		return contentLength;
 	}
 
+	private File getSubfileByPlatformTag(File parent) {
+
+		RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
+		File[] subFiles = parent.listFiles();
+
+		for (String platformTag : runtimePlatform.getCompatiblePlatformsTags()) {
+			for (File f : subFiles) {
+				if (f.getName().equals(platformTag)) {
+					return f;
+				}
+			}
+		}
+		return null;
+	}
 
 	private File getSubfileByName(File parent, String filename) {
 		for (File f : parent.listFiles()) {
@@ -189,7 +210,7 @@ public class ProductInstallTask extends AbstractTask {
 		}
 		return null;
 	}
-	
+
 
 	/**
 	 * Compatible product archive structues
@@ -219,6 +240,7 @@ public class ProductInstallTask extends AbstractTask {
 	 */
 	private enum OwlPackStructureType {
 		DIRECT,
+		ENV,
 		NESTED,
 		NESTED_ENV,
 	}
