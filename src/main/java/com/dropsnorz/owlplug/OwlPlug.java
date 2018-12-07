@@ -71,9 +71,9 @@ public class OwlPlug extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		double width = 1000;
-		double height = 620;
-
+		double width = 1020;
+		double height = 650;
+		
 		Scene scene = new Scene(rootNode, width, height);
 		String css = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
 		scene.getStylesheets().add(css);

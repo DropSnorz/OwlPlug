@@ -261,17 +261,9 @@ JFXListView{
 	-fx-padding:10,10,10,10;
 }
 
-.panel-transparent Label{
-	-fx-text-fill:white;
-}
-
 .panel-dark{
 	-fx-background-color: solid-pane-color;
 	-fx-padding:10,10,10,10;
-}
-
-.panel-dark Label{
-	-fx-text-fill:white;
 }
 
 .jfx-rippler {

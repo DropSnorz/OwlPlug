@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox fx:id="productInfoContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.ProductInfoController">
+   <children>
+      <VBox fx:id="productInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0" spacing="5.0" styleClass="panel-dark">
+         <children>
+            <StackPane maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
+               <children>
+                  <VBox fx:id="topInfoPane" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
+                     <children>
+                        <VBox styleClass="panel-transparent-dark">
+                           <children>
+                              <HBox alignment="BASELINE_LEFT" spacing="5.0">
+                                 <children>
+                                    <Label fx:id="productNameLabel" styleClass="heading-1" text="Title" />
+                                    <Label styleClass="label-disabled" text="-" />
+                                    <Label fx:id="productStoreLabel" styleClass="label-disabled" text="Store" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </VBox>
+                  <JFXButton fx:id="closeButton" buttonType="RAISED" text="X" StackPane.alignment="TOP_LEFT" />
+               </children>
+            </StackPane>
+            <HBox alignment="BASELINE_RIGHT" spacing="5.0">
+               <children>
+                  <JFXButton fx:id="installButton" text="Install" />
+                  <JFXButton fx:id="browsePageButton" buttonType="RAISED" text="Browse page..." />
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <HBox alignment="TOP_CENTER">
+               <children>
+                  <Label styleClass="label-disabled" text="Nothing to display" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" />
+   </padding>
+</HBox>

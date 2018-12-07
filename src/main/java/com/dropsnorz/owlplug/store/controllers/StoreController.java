@@ -30,6 +30,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -58,6 +59,8 @@ public class StoreController {
 	private ImageCache imageCache;
 	@Autowired
 	private LazyViewRegistry viewRegistry;
+	@Autowired
+	private ProductInfoController productInfoController;
 	@Autowired
 	private MainController mainController;
 	@Autowired
@@ -192,7 +195,12 @@ public class StoreController {
 		if (Iterables.size(loadedProductPartitions) > displayedPartitions) {
 
 			for (StoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
-				JFXRippler rippler = new JFXRippler(storeProductBlocViewBuilder.build(product));			
+				JFXRippler rippler = new JFXRippler(storeProductBlocViewBuilder.build(product));	
+				rippler.setOnMouseClicked(e -> {
+					if (e.getButton().equals(MouseButton.PRIMARY)) {
+						selectProduct(product);
+					}
+				});
 				masonryPane.getChildren().add(rippler);
 			}
 			displayedPartitions += 1;
@@ -230,6 +238,15 @@ public class StoreController {
 		}
 
 		return false;
+	}
+	
+	/**
+	 * Displays full product informations.
+	 * @param product - product
+	 */
+	public void selectProduct(StoreProduct product) {
+		productInfoController.setProduct(product);
+		productInfoController.show();
 	}
 
 	/**
