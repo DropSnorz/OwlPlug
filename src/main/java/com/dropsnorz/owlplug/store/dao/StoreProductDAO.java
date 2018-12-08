@@ -4,6 +4,7 @@ import com.dropsnorz.owlplug.core.model.PluginType;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
@@ -76,11 +77,13 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
 	 */
 	static Specification<StoreProduct> hasTag(String tag) {
 		return (product, cq, cb) -> {
-			Join<Object, Object> groupPath = product.join("tags", JoinType.INNER);
+			Join<Object, Object> groupPath = (Join<Object, Object>) product.fetch("tags", JoinType.INNER);
 			return cb.equal(cb.lower(groupPath.get("name")), tag.toLowerCase());
 
 		};
 	}
+
+	
 
 	/**
 	 * Product tag filtering specification.

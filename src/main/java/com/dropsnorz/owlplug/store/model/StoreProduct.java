@@ -6,7 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,8 +38,8 @@ public class StoreProduct {
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<ProductBundle> bundles = new HashSet<>();
-
 	@OneToMany(mappedBy = "product", orphanRemoval = true, 
+			fetch = FetchType.EAGER,
 			cascade = { CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<ProductTag> tags = new HashSet<>();
 

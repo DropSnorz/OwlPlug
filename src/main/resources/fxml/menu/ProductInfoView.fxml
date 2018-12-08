@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <HBox fx:id="productInfoContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.ProductInfoController">
    <children>
-      <VBox fx:id="productInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0" spacing="5.0" styleClass="panel-dark">
+      <VBox fx:id="productInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0" spacing="5.0">
          <children>
             <StackPane maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
                <children>
@@ -35,22 +43,126 @@
                         <Insets />
                      </StackPane.margin>
                   </VBox>
-                  <JFXButton fx:id="closeButton" buttonType="RAISED" text="X" StackPane.alignment="TOP_LEFT" />
+                  <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="panel-transparent-dark" StackPane.alignment="TOP_LEFT">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                           <image>
+                              <Image url="@../../icons/arrow-ui-white-32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
                </children>
             </StackPane>
             <HBox alignment="BASELINE_RIGHT" spacing="5.0">
                <children>
-                  <JFXButton fx:id="installButton" text="Install" />
-                  <JFXButton fx:id="browsePageButton" buttonType="RAISED" text="Browse page..." />
+                  <JFXButton fx:id="installButton" styleClass="button-success" text="Install">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/download-white-32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
+                  <JFXButton fx:id="browsePageButton" buttonType="RAISED" text="Website">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/earth-white-32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
                </children>
+               <VBox.margin>
+                  <Insets right="5.0" />
+               </VBox.margin>
             </HBox>
-            <Separator prefWidth="200.0" />
-            <HBox alignment="TOP_CENTER">
-               <children>
-                  <Label styleClass="label-disabled" text="Nothing to display" />
-               </children>
-            </HBox>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin></Separator>
+            <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
+               <content>
+                  <VBox prefWidth="400.0" spacing="20.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <Label graphicTextGap="6.0" prefWidth="400.0" styleClass="label-section" text="About" />
+                              <GridPane hgap="6.0" prefWidth="400.0">
+                                <columnConstraints>
+                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="26.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="358.0" minWidth="10.0" prefWidth="358.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="32.0" valignment="TOP" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="32.0" valignment="TOP" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="1.7976931348623157E308" minHeight="32.0" valignment="TOP" vgrow="ALWAYS" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label fx:id="creatorLabel" text="CREATOR" GridPane.columnIndex="1" />
+                                    <Label fx:id="typeLabel" text="TYPE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/user-white-32.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                                       <image>
+                                          <Image url="@../../icons/wave-circle-32.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
+                                       <image>
+                                          <Image url="@../../icons/tag-white-16.png" />
+                                       </image>
+                                       <GridPane.margin>
+                                          <Insets top="8.0" />
+                                       </GridPane.margin>
+                                    </ImageView>
+                                    <FlowPane fx:id="tagContainer" hgap="5.0" vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label fx:id="descriptionLabel" text="Label">
+                                 <padding>
+                                    <Insets left="20.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                              <Label graphicTextGap="6.0" prefHeight="20.0" prefWidth="400.0" styleClass="label-section" text="Bundles" />
+                              <VBox fx:id="bundlesContainer">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="60.0" right="60.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
          </children>
+         <styleClass>
+            <String fx:value="panel-dark" />
+            <String fx:value="no-padding" />
+         </styleClass>
       </VBox>
    </children>
    <padding>

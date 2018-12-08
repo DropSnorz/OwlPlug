@@ -1,8 +1,10 @@
 .root{
+	solid-pane-header-color: rgb(48,48,48);
 	solid-pane-color: rgb(66,66,66);
 	solid-pane-hover-color:rgb(96,96,96);
 	disabled-color: rgb(160,160,160);
 	danger-color: #d9534f;
+	success-color: rgb(40, 167, 69);
 	prompt-text-color:#4D4D4D;
 	
 	theme-primary-color: #FFF58E;
@@ -11,15 +13,6 @@
 
 #mainPane{
 	-fx-background-color: linear-gradient(to top, #c79081 0%, #dfa579 100%);
-}
-
-.heading-1{
-	-fx-font-size: 22px;
-	-fx-margin:0,0,8,0;
-}
-
-.heading-2{
-	-fx-font-size: 20px;
 }
 
 JFXDialog{
@@ -49,6 +42,25 @@ Label{
 .label-dark{
 	-fx-text-fill:rgb(40,40,40);
 }
+
+.label-section{
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+	-fx-text-fill:disabled-color;
+	-fx-height:37;
+	-fx-padding:5,5,5,5;
+	-fx-background-color: solid-pane-header-color; 
+}
+
+.heading-1{
+	-fx-font-size: 22px;
+	-fx-margin:0,0,8,0;
+}
+
+.heading-2{
+	-fx-font-size: 20px;
+}
+
 
 Text{ 
  	-fx-fill: white;
@@ -95,9 +107,22 @@ JFXTextField{
 	-fx-background-color: #C5E1A5;
 }
 
-
-
 .jfx-chip-view .jfx-chip Label {
+    -fx-text-fill: black;
+}
+
+.fake-chip{
+    -fx-font-family: "Roboto Medium";
+    -fx-font-size: 14.0;
+    -fx-background-color: #E0E0E0;
+    -fx-background-radius: 40px;
+    -fx-padding: 5px 8px 5px 8px;
+    -fx-pref-height: 32px;
+    -fx-alignment: center-left;
+    -fx-spacing: 8;
+}
+
+.fake-chip Label {
     -fx-text-fill: black;
 }
 
@@ -118,6 +143,15 @@ JFXButton{
 .button-danger:pressed{
 	-fx-background-color:#ac2925;
 	
+}
+
+.button-success{
+	-fx-background-color:success-color;
+	
+}
+
+.button-action {
+	-fx-background-color:#2980b9;
 }
 
 .hyperlink-button{
@@ -257,7 +291,7 @@ JFXListView{
 }
 
 .panel-transparent-dark{
-	-fx-background-color: rgba(0,0,0, 0.8);
+	-fx-background-color: rgba(0,0,0, 0.85);
 	-fx-padding:10,10,10,10;
 }
 
@@ -265,6 +299,7 @@ JFXListView{
 	-fx-background-color: solid-pane-color;
 	-fx-padding:10,10,10,10;
 }
+
 
 .jfx-rippler {
     -jfx-rippler-fill: theme-secondary-color;
@@ -316,8 +351,6 @@ ProgressIndicator{
   -fx-text-fill: white;
 }
 
-
-
 .scroll-pane{
  -fx-background-color: transparent;
 }
@@ -325,6 +358,16 @@ ProgressIndicator{
 .scroll-pane > .viewport {
    -fx-background-color: transparent;
 }
+
+/****************************************************************
+ * 
+ * Utilities
+ * 
+ * **************************************************************/
+ 
+ .no-padding {
+ 	-fx-padding:0;
+ }
 
 /****************************************************************
  
