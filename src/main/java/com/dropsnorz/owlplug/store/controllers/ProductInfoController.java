@@ -12,6 +12,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -21,6 +22,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -100,6 +102,8 @@ public class ProductInfoController {
 					new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
 			topInfoPane.setBackground(new Background(bgImg));
 		}
+		topInfoPane.setEffect(new InnerShadow(25, Color.BLACK));	
+
 
 		this.productStoreLabel.setText(product.getStore().getName());
 		

@@ -1,5 +1,6 @@
 package com.dropsnorz.owlplug.store.model;
 
+import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ public class ProductBundle {
 	private Long id;
 	private String name;
 	private String downloadUrl;
+	private long fileSize;
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> targets;
 	
@@ -47,6 +49,14 @@ public class ProductBundle {
 		this.downloadUrl = downloadUrl;
 	}
 
+	public long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
+	}
+
 	public List<String> getTargets() {
 		return targets;
 	}
@@ -62,8 +72,5 @@ public class ProductBundle {
 	public void setProduct(StoreProduct product) {
 		this.product = product;
 	}
-	
-	
-	
 
 }

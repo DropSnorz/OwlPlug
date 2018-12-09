@@ -43,15 +43,6 @@ Label{
 	-fx-text-fill:rgb(40,40,40);
 }
 
-.label-section{
-	-fx-font-size: 14px;
-	-fx-font-weight: bold;
-	-fx-text-fill:disabled-color;
-	-fx-height:37;
-	-fx-padding:5,5,5,5;
-	-fx-background-color: solid-pane-header-color; 
-}
-
 .heading-1{
 	-fx-font-size: 22px;
 	-fx-margin:0,0,8,0;
@@ -113,11 +104,11 @@ JFXTextField{
 
 .fake-chip{
     -fx-font-family: "Roboto Medium";
-    -fx-font-size: 14.0;
+    -fx-font-size: 12.0;
     -fx-background-color: #E0E0E0;
     -fx-background-radius: 40px;
-    -fx-padding: 5px 8px 5px 8px;
-    -fx-pref-height: 32px;
+    -fx-padding: 2px 8px 2px 8px;
+    -fx-pref-height: 24px;
     -fx-alignment: center-left;
     -fx-spacing: 8;
 }
@@ -298,6 +289,19 @@ JFXListView{
 .panel-dark{
 	-fx-background-color: solid-pane-color;
 	-fx-padding:10,10,10,10;
+}
+
+.panel-section{
+	-fx-height:37;
+	-fx-padding:5,5,5,5;
+	-fx-background-color: solid-pane-header-color; 
+	-fx-margin:0,0,10,0;
+}
+
+.panel-section Label{
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+	-fx-text-fill:disabled-color;
 }
 
 

@@ -5,13 +5,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -23,25 +23,33 @@
             <StackPane maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
                <children>
                   <VBox fx:id="topInfoPane" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
-                     <children>
-                        <VBox styleClass="panel-transparent-dark">
-                           <children>
-                              <HBox alignment="BASELINE_LEFT" spacing="5.0">
-                                 <children>
-                                    <Label fx:id="productNameLabel" styleClass="heading-1" text="Title" />
-                                    <Label styleClass="label-disabled" text="-" />
-                                    <Label fx:id="productStoreLabel" styleClass="label-disabled" text="Store" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <StackPane.margin>
                         <Insets />
                      </StackPane.margin>
+                  </VBox>
+                  <VBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="panel-transparent-dark">
+                           <children>
+                              <Label fx:id="productNameLabel" styleClass="heading-1" text="Title" />
+                              <Label styleClass="label-disabled" text="-" />
+                              <Label fx:id="productStoreLabel" styleClass="label-disabled" text="Store" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <JFXButton fx:id="installButton" styleClass="button-success" text="Install">
+                                 <graphic>
+                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/download-white-32.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
                   </VBox>
                   <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="panel-transparent-dark" StackPane.alignment="TOP_LEFT">
                      <graphic>
@@ -50,52 +58,40 @@
                               <Image url="@../../icons/arrow-ui-white-32.png" />
                            </image>
                         </ImageView>
-                     </graphic></JFXButton>
+                     </graphic>
+                  </JFXButton>
                </children>
             </StackPane>
-            <HBox alignment="BASELINE_RIGHT" spacing="5.0">
-               <children>
-                  <JFXButton fx:id="installButton" styleClass="button-success" text="Install">
-                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../icons/download-white-32.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></JFXButton>
-                  <JFXButton fx:id="browsePageButton" buttonType="RAISED" text="Website">
-                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../icons/earth-white-32.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></JFXButton>
-               </children>
-               <VBox.margin>
-                  <Insets right="5.0" />
-               </VBox.margin>
-            </HBox>
-            <Separator prefWidth="200.0">
-               <VBox.margin>
-                  <Insets left="5.0" right="5.0" />
-               </VBox.margin></Separator>
-            <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
                <content>
                   <VBox prefWidth="400.0" spacing="20.0">
                      <children>
-                        <VBox>
+                        <VBox spacing="10.0">
                            <children>
-                              <Label graphicTextGap="6.0" prefWidth="400.0" styleClass="label-section" text="About" />
-                              <GridPane hgap="6.0" prefWidth="400.0">
+                              <HBox alignment="CENTER_LEFT" styleClass="panel-section">
+                                 <children>
+                                    <Label graphicTextGap="6.0" prefHeight="17.0" text="About" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <JFXButton fx:id="browsePageButton" buttonType="RAISED" text="Website">
+                                       <graphic>
+                                          <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/earth-white-32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
+                              <GridPane hgap="6.0" prefWidth="380.0" vgap="6.0">
                                 <columnConstraints>
                                   <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="26.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="358.0" minWidth="10.0" prefWidth="358.0" />
                                 </columnConstraints>
                                 <rowConstraints>
-                                  <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="32.0" valignment="TOP" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="32.0" valignment="TOP" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="1.7976931348623157E308" minHeight="32.0" valignment="TOP" vgrow="ALWAYS" />
+                                  <RowConstraints maxHeight="37.0" minHeight="24.0" prefHeight="24.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="25.0" minHeight="24.0" prefHeight="24.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="1.7976931348623157E308" minHeight="24.0" valignment="CENTER" vgrow="ALWAYS" />
                                 </rowConstraints>
                                  <children>
                                     <Label fx:id="creatorLabel" text="CREATOR" GridPane.columnIndex="1" />
@@ -115,7 +111,7 @@
                                           <Image url="@../../icons/tag-white-16.png" />
                                        </image>
                                        <GridPane.margin>
-                                          <Insets top="8.0" />
+                                          <Insets />
                                        </GridPane.margin>
                                     </ImageView>
                                     <FlowPane fx:id="tagContainer" hgap="5.0" vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -123,9 +119,6 @@
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
                               </GridPane>
                            </children>
                         </VBox>
@@ -140,7 +133,11 @@
                         </VBox>
                         <VBox>
                            <children>
-                              <Label graphicTextGap="6.0" prefHeight="20.0" prefWidth="400.0" styleClass="label-section" text="Bundles" />
+                              <HBox styleClass="panel-section">
+                                 <children>
+                                    <Label graphicTextGap="6.0" prefHeight="20.0" text="Bundles" />
+                                 </children>
+                              </HBox>
                               <VBox fx:id="bundlesContainer">
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />

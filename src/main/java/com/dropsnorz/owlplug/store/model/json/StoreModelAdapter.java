@@ -82,6 +82,7 @@ public class StoreModelAdapter {
 		productBundle.setName(mapper.getName());
 		productBundle.setDownloadUrl(mapper.getDownloadUrl());
 		productBundle.setTargets(mapper.getTargets());
+		productBundle.setFileSize(mapper.getFileSize());
 		
 		return productBundle;
 	}

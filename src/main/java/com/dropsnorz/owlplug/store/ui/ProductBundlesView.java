@@ -1,64 +1,85 @@
 package com.dropsnorz.owlplug.store.ui;
 
+import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.store.model.ProductBundle;
 import com.jfoenix.controls.JFXButton;
-import java.util.Collections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.VPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.text.Text;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Paint;
+import javafx.scene.paint.Stop;
 
-public class ProductBundlesView extends GridPane {
-	
-	private String stringPlaceholder = String.join(" ", Collections.nCopies(30, "·"));
+public class ProductBundlesView extends VBox {
+
+
+	private static final Paint FILL = new LinearGradient(
+			0, 0,
+			6, 0,
+			false,
+			CycleMethod.REPEAT,
+			new Stop(0, Color.GRAY),
+			new Stop(0.5, Color.GRAY),
+			new Stop(0.5, Color.TRANSPARENT)
+			);
+
+	// create background for regions
+	private static final Background DOT_BACKGROUND = 
+			new Background(new BackgroundFill(FILL, CornerRadii.EMPTY, Insets.EMPTY));
+
 
 	public ProductBundlesView() {
 		super();
-		
-		this.setHgap(5);
-		this.setVgap(5);
 
-		ColumnConstraints col0 = new ColumnConstraints();
-		col0.setPrefWidth(USE_COMPUTED_SIZE);
-		ColumnConstraints col1 = new ColumnConstraints();
-		col1.setHgrow(Priority.ALWAYS);
-		col1.setPrefWidth(1);
-		ColumnConstraints col2 = new ColumnConstraints();
-		col2.setPrefWidth(USE_COMPUTED_SIZE);
-		this.getColumnConstraints().addAll(col0,col1,col2);
-		
+		this.setSpacing(5);
 
 	}
-	
+
 	public void clear() {
 		this.getChildren().clear();
-		this.getRowConstraints().clear();
 	}
 
 	public void addProductBundle(ProductBundle bundle, EventHandler<ActionEvent> installHandler) {
 
-		
-		final Label bundleName = new Label(bundle.getName());
-		final Text fillText = new Text(this.stringPlaceholder);
-		fillText.getStyleClass().add("text-disabled");
-		final JFXButton installButton = new JFXButton("Install");
+
+		HBox hbox = new HBox(5);
+		hbox.setAlignment(Pos.CENTER_LEFT);
+		hbox.setFillHeight(false);
+
+
+		Label bundleName = new Label(bundle.getName());
+		hbox.getChildren().add(bundleName);
+		Region filler = new Region();
+		filler.setPrefHeight(1);
+		filler.setBackground(DOT_BACKGROUND);
+		HBox.setHgrow(filler, Priority.ALWAYS);
+		hbox.getChildren().add(filler);
+		JFXButton installButton = new JFXButton("Install");
 		installButton.getStyleClass().add("button-action");
 		installButton.setOnAction(installHandler);
-		
-		int bundlePosition = this.getRowCount();
+		hbox.getChildren().add(installButton);
 
-		this.addRow(bundlePosition, bundleName, fillText, installButton);
+		if (bundle.getFileSize() != 0) {
+			String sizeText = FileUtils.humanReadableByteCount(bundle.getFileSize(), true);
+			final Label sizeLabel = new Label("(" + sizeText + ")");
+			sizeLabel.getStyleClass().add("label-disabled");
+			hbox.getChildren().add(sizeLabel);
+		}
 
-		RowConstraints rowConstraint = new RowConstraints();
-		rowConstraint.setValignment(VPos.CENTER);
-		this.getRowConstraints().add(rowConstraint);
-		
+		this.getChildren().add(hbox);
+
 	}
-	
+
 
 }

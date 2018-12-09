@@ -50,7 +50,7 @@ public class FileUtils {
 				if (entry.isDirectory()) {
 					log.debug("Creating Directory:" + uncompressedDirectory + File.separator + entry.getName());
 					Files.createDirectories(fileSystem.getPath(uncompressedDirectory + File.separator + entry.getName()));
-					
+
 					//Else create the file
 				} else {
 					InputStream is = file.getInputStream(entry);
@@ -83,8 +83,17 @@ public class FileUtils {
 	public static void copyDirectory(File source, File target) throws IOException {
 		org.apache.commons.io.FileUtils.copyDirectory(source, target);
 	}
-	
+
 	public static void deleteDirectory(File source) throws IOException {
 		org.apache.commons.io.FileUtils.deleteDirectory(source);
+	}
+
+
+	public static String humanReadableByteCount(long bytes, boolean si) {
+		int unit = si ? 1000 : 1024;
+		if (bytes < unit) return bytes + " B";
+		int exp = (int) (Math.log(bytes) / Math.log(unit));
+		String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+		return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
 	}
 }
