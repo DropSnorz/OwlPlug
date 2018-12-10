@@ -66,7 +66,7 @@
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="200.0" styleClass="panel-transparent" VBox.vgrow="ALWAYS">
+                  <VBox prefWidth="200.0" styleClass="panel-transparent" VBox.vgrow="ALWAYS">
                      <children>
                         <Label styleClass="heading-1" text="Preferences">
                            <VBox.margin>
@@ -79,14 +79,8 @@
                                     <Label styleClass="heading-2" text="General" />
                                     <VBox spacing="20.0" VBox.vgrow="NEVER">
                                        <children>
-                                          <HBox>
-                                             <children>
-                                                <JFXCheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" />
-                                             </children>
-                                             <VBox.margin>
-                                                <Insets left="5.0" top="5.0" />
-                                             </VBox.margin>
-                                          </HBox>
+                                          <JFXCheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" />
+                                          <JFXCheckBox fx:id="storeSubDirectoryCheckBox" text="Create a subdirectory for each downloaded plugin" />
                                           <VBox spacing="5.0" VBox.vgrow="NEVER">
                                              <children>
                                                 <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save dowloaded plugins from store in directory" />
@@ -100,13 +94,13 @@
                                                    </children>
                                                 </HBox>
                                              </children>
-                                             <padding>
-                                                <Insets left="5.0" />
-                                             </padding>
                                           </VBox>
                                        </children>
                                     </VBox>
-                                 </children></VBox>
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" />
+                                 </padding></VBox>
                               <VBox spacing="10.0" VBox.vgrow="NEVER">
                                  <children>
                                     <Label styleClass="heading-2" text="Danger Zone" />
@@ -129,7 +123,7 @@
                                     <Label styleClass="heading-2" text="About" />
                                     <HBox spacing="5.0">
                                        <children>
-                                          <TextFlow prefHeight="200.0" prefWidth="200.0">
+                                          <TextFlow prefWidth="200.0">
                                              <children>
                                                 <Label text="OwlPlug -" />
                                                 <Label fx:id="versionLabel" text="V ?.?.?" wrapText="true" />

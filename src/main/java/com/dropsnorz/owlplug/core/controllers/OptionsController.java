@@ -47,6 +47,8 @@ public class OptionsController {
 	@FXML
 	private JFXButton clearCacheButton;
 	@FXML
+	private JFXCheckBox storeSubDirectoryCheckBox;
+	@FXML
 	private JFXCheckBox storeDirectoryCheckBox;
 	@FXML
 	private JFXTextField storeDirectoryTextField;
@@ -64,12 +66,10 @@ public class OptionsController {
 		pluginDirectoryButton.setDisable(false);
 
 		vst2ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-
 			prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
 		});
 
 		vst3ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-
 			prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, newValue);
 		});
 
@@ -93,7 +93,37 @@ public class OptionsController {
 			prefs.putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, newValue);
 		});
 
+		storeSubDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, newValue);;
+		});
+		
+		storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			prefs.putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
+			storeDirectoryTextField.setDisable(!newValue);
+			storeDirectoryButton.setDisable(!newValue);
+		});
 
+
+		storeDirectoryButton.setOnAction(e -> {
+			DirectoryChooser directoryChooser = new DirectoryChooser();
+			Window mainWindow = storeDirectoryButton.getScene().getWindow();
+
+			File selectedDirectory = 
+					directoryChooser.showDialog(mainWindow);
+
+			if (selectedDirectory != null) {
+				storeDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
+			}
+		});
+
+		storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			prefs.put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
+		});
+		
+		clearCacheButton.setOnAction(e -> {
+			optionsService.clearCache();
+		});
+		
 		removeDataButton.setOnAction(e -> {
 
 			JFXDialog dialog = dialogController.newDialog();
@@ -122,35 +152,7 @@ public class OptionsController {
 		});
 
 		versionLabel.setText("V " + applicationDefaults.getVersion());
-
-		storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			prefs.putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
-			storeDirectoryTextField.setDisable(!newValue);
-			storeDirectoryButton.setDisable(!newValue);
-		});
-
-
-		storeDirectoryButton.setOnAction(e -> {
-			DirectoryChooser directoryChooser = new DirectoryChooser();
-			Window mainWindow = storeDirectoryButton.getScene().getWindow();
-
-			File selectedDirectory = 
-					directoryChooser.showDialog(mainWindow);
-
-			if (selectedDirectory != null) {
-				storeDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
-			}
-		});
-
-		storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-			prefs.put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
-		});
 		
-		clearCacheButton.setOnAction(e -> {
-			optionsService.clearCache();
-		});
-
-
 		refreshView();
 	}
 
@@ -160,6 +162,7 @@ public class OptionsController {
 		vst2ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
 		vst3ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
 		syncPluginsCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
+		storeSubDirectoryCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
 		storeDirectoryCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
 		storeDirectoryTextField.setText(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
 		

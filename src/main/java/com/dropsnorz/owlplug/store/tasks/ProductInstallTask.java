@@ -28,6 +28,8 @@ public class ProductInstallTask extends AbstractTask {
 	private ProductBundle bundle;
 	private File targetDirectory;
 	private ApplicationDefaults applicationDefaults;
+	
+	private boolean createProductDirectory = false;
 
 
 	/**
@@ -36,11 +38,13 @@ public class ProductInstallTask extends AbstractTask {
 	 * @param targetDirectory Target directory where downloaded product is stored
 	 * @param applicationDefaults Ownplug ApplicationDefaults
 	 */
-	public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults) {
+	public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults,
+			boolean createProductDirectory) {
 
 		this.bundle = bundle;
 		this.targetDirectory = targetDirectory;
 		this.applicationDefaults = applicationDefaults;
+		this.createProductDirectory = createProductDirectory;
 		setName("Install plugin - " + bundle.getProduct().getName());
 		setMaxProgress(150);
 	}
@@ -136,6 +140,7 @@ public class ProductInstallTask extends AbstractTask {
 	private void installToPluginDirectory(File source, File target) throws IOException {
 
 		OwlPackStructureType structure = getStructureType(source);
+		//Choose the folder to copy from the downloaded source
 		File newSource = source;
 		switch (structure) {
 			case NESTED: newSource = source.listFiles()[0]; 
@@ -146,8 +151,15 @@ public class ProductInstallTask extends AbstractTask {
 				break;
 			default: break;
 		}
+		
+		// Select the target directory
+		File newTarget = target;
+		if (this.createProductDirectory) {
+			newTarget = new File(target, FileUtils.sanitizeFileName(this.bundle.getProduct().getName()));
+			newTarget.mkdirs();
+		}
 
-		FileUtils.copyDirectory(newSource, target);		
+		FileUtils.copyDirectory(newSource, newTarget);		
 	}
 
 

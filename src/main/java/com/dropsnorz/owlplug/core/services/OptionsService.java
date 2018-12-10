@@ -56,6 +56,9 @@ public class OptionsService {
 		if (prefs.get(ApplicationDefaults.SELECTED_ACCOUNT_KEY, null) == null) {
 			prefs.putBoolean(ApplicationDefaults.SELECTED_ACCOUNT_KEY, Boolean.FALSE);
 		}
+		if (prefs.get(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, null) == null) {
+			prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, Boolean.TRUE);
+		}
 	}
 
 
