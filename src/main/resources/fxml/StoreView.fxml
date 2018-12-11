@@ -38,7 +38,12 @@
                   </ImageView>
                   <StackPane fx:id="storeChipViewContainer" minHeight="32.0" HBox.hgrow="ALWAYS">
                   </StackPane>
-                  <Label text="Store is a WIP feature" />
+                  <HBox alignment="CENTER_LEFT" spacing="2.0">
+                     <children>
+                        <Label fx:id="resultCounter" text="0" />
+                        <Label text="results" />
+                     </children>
+                  </HBox>
                   <JFXButton fx:id="syncStoreButton" buttonType="RAISED" text="Sync">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -67,9 +72,7 @@
                   </ScrollPane>
                   <AnchorPane>
                   	<children>
-                  		<fx:include fx:id="productInfoView" source="menu/ProductInfoView.fxml" AnchorPane.topAnchor="0.0"
-             			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-             			AnchorPane.bottomAnchor="0.0"/>
+                  		<fx:include fx:id="productInfoView" source="menu/ProductInfoView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   </children>
                   </AnchorPane>
                </children>

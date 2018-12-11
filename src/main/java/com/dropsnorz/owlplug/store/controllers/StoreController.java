@@ -29,6 +29,7 @@ import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
@@ -70,6 +71,8 @@ public class StoreController {
 	private JFXButton storesButton;
 	@FXML
 	private JFXButton syncStoreButton;
+	@FXML 
+	private Label resultCounter;
 	@FXML
 	private VBox masonryWrapper;
 	@FXML
@@ -211,7 +214,10 @@ public class StoreController {
 				lazyLoadBar.setVisible(true);
 
 			}
-
+			
+			resultCounter.setText(this.masonryPane.getChildren().size() 
+					+ " / " + Iterables.size(this.loadedStoreProducts));
+			
 			Platform.runLater(() -> { 
 				masonryPane.requestLayout();
 				scrollPane.requestLayout();
