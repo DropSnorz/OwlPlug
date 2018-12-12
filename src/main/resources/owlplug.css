@@ -125,6 +125,10 @@ JFXComboBox{
 	-fx-text-fill: white ;
 }
 
+#accountComboBox {
+	-fx-prompt-text-fill: transparent;
+}
+
 JFXCheckBox {
      -fx-text-fill: white; 
 }
