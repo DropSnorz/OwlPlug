@@ -10,12 +10,12 @@
       <VBox>
          <children>
             <Label text="Hi ! It's looks like this is the first time you are using OwlPlug. " wrapText="true" />
-            <Label text="Fill the directory path where your plugins are installed.You can always change this later." wrapText="true" />
+            <Label text="Tell us where to find your plugins. You can always change this later." wrapText="true" />
          </children>
       </VBox>
       <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
          <children>
-            <JFXTextField fx:id="directoryTextField" HBox.hgrow="ALWAYS" />
+            <JFXTextField fx:id="directoryTextField" HBox.hgrow="ALWAYS" promptText="/path/to/your/plugins" />
             <JFXButton fx:id="openDirectoryButton" text="...." />
          </children>
       </HBox>
