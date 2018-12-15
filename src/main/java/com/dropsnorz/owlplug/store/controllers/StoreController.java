@@ -182,9 +182,6 @@ public class StoreController {
 		if (shouldRefreshProducts(newProducts)) {
 			this.masonryPane.getChildren().clear();
 			this.masonryPane.requestLayout();
-			
-			//Tempoprary fix for issue #2 Memory leaks in StoreView MasonryPane
-			clearMasonryPaneAnimationMap(masonryPane);
 
 			loadedStoreProducts = newProducts;
 			loadedProductPartitions = Iterables.partition(loadedStoreProducts, PARTITION_SIZE);	
@@ -308,25 +305,6 @@ public class StoreController {
 	public void requestLayout() {
 		masonryPane.requestLayout();
 		scrollPane.requestLayout();
-	}
-	
-	/**
-	 * Clear the masonryPane animation map.
-	 * Temporary fix for issue #2 Memory leaks in StoreView MasonryPane.
-	 */
-	private void clearMasonryPaneAnimationMap(JFXMasonryPane masonryPane) {
-		
-		try {
-			Field f = masonryPane.getClass().getDeclaredField("animationMap");
-			f.setAccessible(true);
-			HashMap<Region, Transition> animationMap = (HashMap<Region, Transition>) f.get(masonryPane);
-			if (animationMap != null) {
-				animationMap.clear();
-			}
-		} catch (Exception e) {
-			log.error("An error occured while clearing the masonryPane animation map", e);
-		}
-		
 	}
 
 }

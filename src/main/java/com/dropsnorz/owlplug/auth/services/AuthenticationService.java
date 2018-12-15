@@ -105,9 +105,11 @@ public class AuthenticationService {
 			prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
 		} catch (GeneralSecurityException | IOException e) {
-
 			log.error("Error during authentification", e);
 			throw new AuthentificationException(e);
+		} finally {
+			//Delete accounts without complete setup
+			userAccountDAO.deleteInvalidAccounts();
 		}
 
 	}

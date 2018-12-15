@@ -5,7 +5,7 @@
 
 	<groupId>com.dropsnorz</groupId>
 	<artifactId>owlplug</artifactId>
-	<version>0.4.2-beta</version>
+	<version>0.5.0-beta</version>
 	<packaging>jar</packaging>
 
 	<name>owlplug</name>
@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>com.jfoenix</groupId>
 			<artifactId>jfoenix</artifactId>
-			<version>9.0.7-SNAPSHOT</version>
+			<version>9.0.8</version>
 		</dependency>
 
 		<dependency>
@@ -153,7 +153,7 @@
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
