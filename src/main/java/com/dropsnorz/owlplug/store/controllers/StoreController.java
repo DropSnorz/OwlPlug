@@ -34,6 +34,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -120,6 +121,7 @@ public class StoreController {
 		});
 		
 		storeChipView = new StoreChipView(applicationDefaults);
+		HBox.setHgrow(storeChipView, Priority.ALWAYS);
 		storeChipViewContainer.getChildren().add(storeChipView);
 		
 		storeChipView.getChips().addListener((ListChangeListener) change -> {

@@ -10,14 +10,13 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dropsnorz.owlplug.store.controllers.StoreController">
    <children>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox alignment="CENTER" spacing="10.0">
+            <HBox alignment="TOP_CENTER" spacing="10.0">
                <children>
                   <JFXButton fx:id="storesButton" buttonType="RAISED" text="Stores">
                      <graphic>
@@ -27,22 +26,28 @@
                            </image>
                         </ImageView>
                      </graphic>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
                   </JFXButton>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/search-white-32.png" />
                      </image>
                      <HBox.margin>
-                        <Insets left="20.0" />
+                        <Insets left="20.0" top="8.0" />
                      </HBox.margin>
                   </ImageView>
-                  <StackPane fx:id="storeChipViewContainer" minHeight="32.0" HBox.hgrow="ALWAYS">
-                  </StackPane>
-                  <HBox alignment="CENTER_LEFT" spacing="2.0">
+                  <HBox fx:id="storeChipViewContainer" minHeight="32.0" HBox.hgrow="ALWAYS">
+                  </HBox>
+                  <HBox spacing="2.0">
                      <children>
                         <Label fx:id="resultCounter" text="0" />
                         <Label text="results" />
                      </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
                   </HBox>
                   <JFXButton fx:id="syncStoreButton" buttonType="RAISED" text="Sync">
                      <graphic>
@@ -51,7 +56,10 @@
                               <Image url="@../icons/refresh-white-16.png" />
                            </image>
                         </ImageView>
-                     </graphic></JFXButton>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin></JFXButton>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">

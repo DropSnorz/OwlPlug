@@ -64,19 +64,8 @@ JFXTextField{
 	-jfx-focus-color: theme-secondary-color;
 }
 
-#storeChipViewContainer {
-	-fx-max-height: 32px; /* Temporary fix */
-}
-
 .jfx-chip-view {
-	-fx-max-height: 32px; /* Temporary fix */
-
-}
-
-.jfx-chip-view .chips-pane {
-	-fx-width: infinity;
-	-fx-pref-width: infinity;
-	-fx-max-height: 32px; /* Temporary fix */
+	-fx-max-height:45px ;
 }
 
 
@@ -85,11 +74,10 @@ JFXTextField{
 	-fx-pref-height: 32px;
 	-fx-height: 32px;
 	-fx-max-height: 32px;
-	-fx-padding: 6 0 0 0;
 }
 
 .chip-blue {
-	-fx-background-color: #80CBC4;
+	-fx-background-color: #b2675e;
 }
 .chip-red {
 	-fx-background-color: #A1887F;
