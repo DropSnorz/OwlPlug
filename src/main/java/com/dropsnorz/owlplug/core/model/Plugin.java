@@ -4,10 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Inheritance;
+import javax.persistence.Table;
 
 @Entity
 @Inheritance
+@Table(indexes = { 
+		@Index(name = "IDX_PLUGIN_ID", columnList = "id"),
+		@Index(name = "IDX_PLUGIN_NAME", columnList = "name")})
 public abstract class Plugin {
 
 	@Id
