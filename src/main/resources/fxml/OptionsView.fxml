@@ -72,7 +72,7 @@
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin></Label>
-                        <VBox spacing="20.0" VBox.vgrow="ALWAYS">
+                        <VBox spacing="15.0" VBox.vgrow="ALWAYS">
                            <children>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
                                  <children>
@@ -80,7 +80,9 @@
                                     <VBox spacing="20.0" VBox.vgrow="NEVER">
                                        <children>
                                           <JFXCheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" />
-                                          <JFXCheckBox fx:id="storeSubDirectoryCheckBox" text="Create a subdirectory for each downloaded plugin" />
+                                          <JFXCheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugin in a subdirectory" />
+
+                                                <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
                                           <VBox spacing="5.0" VBox.vgrow="NEVER">
                                              <children>
                                                 <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save dowloaded plugins from store in directory" />
@@ -106,8 +108,8 @@
                                     <Label styleClass="heading-2" text="Danger Zone" />
                                     <HBox spacing="5.0">
                                        <children>
-                                          <JFXButton fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" text="Clear user data" HBox.hgrow="SOMETIMES" />
-                                          <Label text="Remove all user data including accounts, repositories and custom settings" wrapText="true" HBox.hgrow="ALWAYS" />
+                                          <JFXButton fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" text="Clear user data" HBox.hgrow="NEVER" />
+                                          <Label text="Remove all user data including accounts, repositories and custom settings" wrapText="true" HBox.hgrow="NEVER" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="10.0" />
@@ -118,7 +120,7 @@
                                     <Insets />
                                  </VBox.margin>
                               </VBox>
-                              <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="145.0" VBox.vgrow="ALWAYS">
+                              <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="145.0" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Label styleClass="heading-2" text="About" />
                                     <HBox spacing="5.0">

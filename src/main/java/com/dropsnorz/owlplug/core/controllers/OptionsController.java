@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.prefs.Preferences;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,8 @@ public class OptionsController {
 	private JFXButton clearCacheButton;
 	@FXML
 	private JFXCheckBox storeSubDirectoryCheckBox;
+	@FXML
+	private Label warningSubDirectory;
 	@FXML
 	private JFXCheckBox storeDirectoryCheckBox;
 	@FXML
@@ -94,8 +97,11 @@ public class OptionsController {
 		});
 
 		storeSubDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, newValue);;
+			prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, newValue);
+			warningSubDirectory.setVisible(!newValue);
 		});
+		
+		warningSubDirectory.managedProperty().bind(warningSubDirectory.visibleProperty());
 		
 		storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			prefs.putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
@@ -163,6 +169,7 @@ public class OptionsController {
 		vst3ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
 		syncPluginsCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
 		storeSubDirectoryCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
+		warningSubDirectory.setVisible(!prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
 		storeDirectoryCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
 		storeDirectoryTextField.setText(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
 		

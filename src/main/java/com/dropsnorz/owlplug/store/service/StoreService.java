@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.prefs.Preferences;
 import javax.annotation.PostConstruct;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -38,8 +37,6 @@ public class StoreService {
 
 	@Autowired
 	private ApplicationDefaults applicationDefaults;
-	@Autowired
-	private Preferences prefs;
 	@Autowired
 	private TaskFactory taskFactory;
 	@Autowired
@@ -93,8 +90,7 @@ public class StoreService {
 	 * @param targetDirectory - directory where the product will be installed
 	 */
 	public void install(ProductBundle bundle, File targetDirectory) {		
-		taskFactory.create(new ProductInstallTask(bundle, targetDirectory, applicationDefaults, 
-				prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true)))
+		taskFactory.create(new ProductInstallTask(bundle, targetDirectory, applicationDefaults))
 			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow())
 			.schedule();
 	}

@@ -5,6 +5,8 @@ import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.components.LazyViewRegistry;
 import com.dropsnorz.owlplug.core.components.TaskFactory;
 import com.dropsnorz.owlplug.core.controllers.MainController;
+import com.dropsnorz.owlplug.core.controllers.dialogs.DialogController;
+import com.dropsnorz.owlplug.core.utils.FileUtils;
 import com.dropsnorz.owlplug.store.model.ProductBundle;
 import com.dropsnorz.owlplug.store.model.StoreProduct;
 import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
@@ -13,15 +15,14 @@ import com.dropsnorz.owlplug.store.ui.StoreChipView;
 import com.dropsnorz.owlplug.store.ui.StoreProductBlocViewBuilder;
 import com.google.common.collect.Iterables;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.prefs.Preferences;
-import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,7 +36,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
@@ -65,6 +65,8 @@ public class StoreController {
 	private ProductInfoController productInfoController;
 	@Autowired
 	private MainController mainController;
+	@Autowired
+	private DialogController dialogController;
 	@Autowired
 	private TaskFactory taskFactory;
 
@@ -263,11 +265,13 @@ public class StoreController {
 		File selectedDirectory = null;
 
 		if (prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
+			// Store install target is already defined
 			String storeDirectoryPath = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,null);
 			if (storeDirectoryPath != null) {
 				selectedDirectory = new File(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY,""));
 			}
 		} else {
+			// Open dialog chooser to define store installation target
 			DirectoryChooser directoryChooser = new DirectoryChooser();
 			if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
 				File initialDirectory = new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
@@ -279,8 +283,42 @@ public class StoreController {
 			Window mainWindow = masonryPane.getScene().getWindow();
 			selectedDirectory = directoryChooser.showDialog(mainWindow);
 		}
+		
+		if (prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true)) {
+			// If the plugin is wrapped into a subdirectory, checks for already existing directory
+			File subSelectedDirectory = new File(selectedDirectory, 
+					FileUtils.sanitizeFileName(bundle.getProduct().getName()));
+			// If directory exists, asks the user for overwrite permission
+			if (subSelectedDirectory.exists()) {
+				JFXDialog dialog = dialogController.newDialog();
 
-		if (selectedDirectory != null) {
+				JFXDialogLayout layout = new JFXDialogLayout();
+
+				layout.setHeading(new Label("Remove plugin"));
+				layout.setBody(new Label("A previous installation of " + bundle.getProduct().getName()
+						+ " exists. Do you want to overwrite it ? \nOnly files in conflict will be replaced."));
+
+				JFXButton cancelButton = new JFXButton("No, do nothing");
+				cancelButton.setOnAction(cancelEvent -> {
+					dialog.close();
+				});	
+
+				JFXButton overwriteButton = new JFXButton("Yes, overwrite.");
+				overwriteButton.setOnAction(removeEvent -> {
+					dialog.close();
+					storeService.install(bundle, subSelectedDirectory);
+					
+				});	
+				overwriteButton.getStyleClass().add("button-danger");
+
+				layout.setActions(overwriteButton, cancelButton);
+				dialog.setContent(layout);
+				dialog.show();
+			} else {
+				storeService.install(bundle, subSelectedDirectory);
+			}
+		} else if (selectedDirectory != null) {
+			// If a target directory has been previously found, start install tasks
 			storeService.install(bundle, selectedDirectory);
 		} else {
 			log.error("Invalid product installation directory");

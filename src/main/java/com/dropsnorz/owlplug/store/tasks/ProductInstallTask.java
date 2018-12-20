@@ -28,9 +28,6 @@ public class ProductInstallTask extends AbstractTask {
 	private ProductBundle bundle;
 	private File targetDirectory;
 	private ApplicationDefaults applicationDefaults;
-	
-	private boolean createProductDirectory = false;
-
 
 	/**
 	 * Creates a new Product Installation task.
@@ -38,13 +35,11 @@ public class ProductInstallTask extends AbstractTask {
 	 * @param targetDirectory Target directory where downloaded product is stored
 	 * @param applicationDefaults Ownplug ApplicationDefaults
 	 */
-	public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults,
-			boolean createProductDirectory) {
+	public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults) {
 
 		this.bundle = bundle;
 		this.targetDirectory = targetDirectory;
 		this.applicationDefaults = applicationDefaults;
-		this.createProductDirectory = createProductDirectory;
 		setName("Install plugin - " + bundle.getProduct().getName());
 		setMaxProgress(150);
 	}
@@ -54,6 +49,7 @@ public class ProductInstallTask extends AbstractTask {
 	protected TaskResult call() throws Exception {
 
 		try {
+			targetDirectory.mkdirs();
 			if (targetDirectory == null || !targetDirectory.isDirectory()) {
 				this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Invalid installation directory");
 				log.error("Invalid plugin installation target directory");
@@ -152,14 +148,7 @@ public class ProductInstallTask extends AbstractTask {
 			default: break;
 		}
 		
-		// Select the target directory
-		File newTarget = target;
-		if (this.createProductDirectory) {
-			newTarget = new File(target, FileUtils.sanitizeFileName(this.bundle.getProduct().getName()));
-			newTarget.mkdirs();
-		}
-
-		FileUtils.copyDirectory(newSource, newTarget);		
+		FileUtils.copyDirectory(newSource, target);		
 	}
 
 
