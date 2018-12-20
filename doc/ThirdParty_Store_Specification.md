@@ -1,9 +1,9 @@
-# Store Endpoint specification
+# OwlPlug Store Endpoint Specification
 **Version 1.0.0**
 
 ## Introduction
 
-An OwlPlug Store is a single remote resource providing a list of available products. 
+An OwlPlug Store is a single remote resource providing a list of available Products. 
 
 ## Specification
 
@@ -23,7 +23,40 @@ The root object is a [Store](#Store) object.
 ### Example
 
 ```json
-{}
+{
+  "name": "My Custom store",
+  "url": "https://example.com",
+  "version": "1.0.0",
+  "products": [
+    {
+      "name": "Wobbleizer",
+      "creator": "Dropsnorz",
+      "screenshotUrl": "https://owlplug.dropsnorz.com/products/com.dropsnorz.wobbleizer/wobbleizer.png",
+      "description": "A frequency filter with LFO modulation",
+      "pageUrl": "https://github.com/dropsnorz/wobbleizer",
+      "type": "effect",
+      "stage": "beta",
+      "tags": ["Filter", "LFO"],
+      "bundles" : [
+      	{"name": "Win - Osx x64", "targets": ["win64", "osx"], "format":"vst", "downloadUrl":"https://owlplug.dropsnorz.com/products/com.dropsnorz.wobbleizer/wobbleizer.zip", "fileSize":5900000},
+        {"name": "Win32", "targets": ["win32"], "format":"vst", "downloadUrl":"https://owlplug.dropsnorz.com/products/com.dropsnorz.wobbleizer/wobbleizer.zip", "fileSize":5900000}
+      ]
+    },
+    {
+      "name": "Foo Plugin",
+      "creator": "Foo name",
+      "screenshotUrl": "https://via.placeholder.com/350x150.png",
+      "description": "An awesome foo plugin....",
+      "pageUrl": "http://example.com",
+      "type": "instrument",
+      "stage": "release",
+      "tags": ["Synth", "Analog"],
+      "bundles" : [
+        {"name": "Full Release", "targets": ["win32", "win64", "osx"], "format": "vst3", "downloadUrl":"https://owlplug.dropsnorz.com/products/com.dropsnorz.wobbleizer/wobbleizer.zip", "fileSize":5900000}
+      ]
+    }
+  ]
+}
 ```
 
 ## Schema
@@ -36,19 +69,19 @@ Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the store. 255 characters max.
 url | `string` | **REQUIRED**. An url to access your store or developer informations. This is not necessarily the endpoint URL. 255 characters max.
-version | `string` | **REQUIRED**. This string must be the [semantic version number](https://semver.org/spec/v2.0.0.html) of the [OwlPlug StoreSpecification](#versions) that the document uses. 255 characters max.
+version | `string` | **REQUIRED**. This string must be the [semantic version number](https://semver.org/spec/v2.0.0.html) of the [OwlPlug Store Specification](#versions) that the document uses. 255 characters max.
 products | `array` | **REQUIRED**. An array of [Product](#Product). Can be empty.
 
 ### Product
 
-A Product is basically an abstract name for a Plugin. OwlPlug only supports Steinberg VST plugins. 
+A Product is basically an abstract concept for a Plugin. OwlPlug only supports Steinberg VST plugins. 
 
 Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the product/plugin. 255 characters max.
 creator | `string` | **REQUIRED**. Product creator / manufacturer name. 255 characters max.
 type | `string` | **REQUIRED**. Must be `instrument` for VSTi or `effect` for VST/VSTfx or `unknown`. 255 characters max.
-stage | `string` | Can be `beta` for early releases or `demo` for uncomplete releases. 255 characters max.
+stage | `string` | Can be `beta` for an early release, `demo` for a limited release or `release` for stable build. 255 characters max.
 pageUrl | `string` | **REQUIRED**. The plugin page url. 255 characters max.
 screenshotUrl | `string` | **REQUIRED**. Plugin screenshot url. Must be a png file. 255 characters max.
 description | `string` | **REQUIRED**. A short plugin description. 1000 characters max.
@@ -57,34 +90,33 @@ bundles | `array` | **REQUIRED**. An array of [Bundle](#Bundle). Can be empty.
 
 ### Bundle
 
-A bundle is a package containing a plugin in different `formats` (vst2, vst3...) for one or multiple `targets` environments (Windows, OSX...).
-For example, a bundle can contains a plugin in both vst2 and vst3 format and each of them are compatible in Win64 and OSX environement. 
+A bundle is a package containing a plugin in a specific `format` (vst or vst3) for one or multiple `targets` environments (Windows, OSX...).
+For example, a bundle can contains a vst3 release compatible in Win64 and OSX environement. 
 
 Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the bundle. 255 characters max.
 targets | `array` | **REQUIRED**. Array of plugin [Target](#Target). Supported environements by the bundle.
-formats | `array` | **REQUIRED**. Array of plugin [Format](#Format). Must contains at least one element.
-downloadUrl | `string` | **REQUIRED**. Bundle download url. 255 characters max. Check [Bundle file structure](#Bundle file structure)
+format | `string` | **REQUIRED**. Plugin format. Must be `vst`, `vst3` or `unknown`.
+downloadUrl | `string` | **REQUIRED**. Bundle download url. 255 characters max. Check [Bundle file structure](#Bundle_file_structure)
 fileSize | `long` | Size of bundle file in bytes.
 
 
 ### Tag
 
-A Tag is just a simple string describing main features of a Plugin. 255 characters max are allowed for each a tag. You can specify any keywords that describes the plugin. OwlPlug will suggest the following list of tags:
+A Tag is just a simple string describing main features of a Plugin. 255 characters max are allowed for each tag. You can specify any keywords that describes the plugin. OwlPlug will suggest the following list of tags:
 ```
 Ambient,Amp,Analog,Bass,Brass,Compressor,Delay,Distortion,Drum,Equalizer,Filter,Flanger,Gate,Guitar,LFO,Limiter,Maximizer,Monophonic,Orchestral,Organ,Panner,Phaser,Piano,Reverb,Synth,Tremolo,Tube,Vintage
 ```
 
 ### Target
 
-A Target is just a simple string describing main target environments of a plugin. You must use predefined. 
+A Target is just a simple string describing main target environments of a plugin. You must use following identifiers. 
+* Windows 32 bit: `win32`
+* Windows 64 bit: `win64`
+* OSX: `osx`
 
-For example for a win 64 bit release, you should sepcify `win64`. If a bundle contains both x64 and x86 windows distributions, you can have an array of target like this ["win64", "win32"]. This is **not** a compatibility flag so if you are distributing Win32 release, you should **not** specify `win64`.
-
-### Format
-
-A Format is a string identifier that describe plugin formats. Must be `vst2` or `vst3`.
+For example, in case of a win 64 bit release, you should sepcify `win64`. If a bundle contains both x64 and x86 windows distributions, you can have an array of target like this `["win64", "win32"]`. This is **not** a compatibility flag so if you are distributing Win 32 release only, you should **not** specify `win64`.
 
 ### Bundle file structure
 
@@ -147,6 +179,231 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
 # Annexes
 
 ## Json schema
-```
-Empty
+```json
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "Store Object",
+  "required": [
+    "name",
+    "url",
+    "version",
+    "products"
+  ],
+  "properties": {
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "Store Name",
+      "default": "",
+      "examples": [
+        "My Custom store"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "url": {
+      "$id": "#/properties/url",
+      "type": "string",
+      "title": "Store Url",
+      "default": "",
+      "examples": [
+        "https://example.com"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "version": {
+      "$id": "#/properties/version",
+      "type": "string",
+      "title": "Store Version",
+      "default": "",
+      "examples": [
+        "1.0.0"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "products": {
+      "$id": "#/properties/products",
+      "type": "array",
+      "title": "Store Products",
+      "items": {
+        "$id": "#/properties/products/items",
+        "type": "object",
+        "title": "Product Item",
+        "required": [
+          "name",
+          "creator",
+          "screenshotUrl",
+          "description",
+          "pageUrl",
+          "type",
+          "bundles"
+        ],
+        "properties": {
+          "name": {
+            "$id": "#/properties/products/items/properties/name",
+            "type": "string",
+            "title": "Product Name",
+            "default": "",
+            "examples": [
+              "Wobbleizer"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "creator": {
+            "$id": "#/properties/products/items/properties/creator",
+            "type": "string",
+            "title": "Product Creator",
+            "default": "",
+            "examples": [
+              "Dropsnorz"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "screenshotUrl": {
+            "$id": "#/properties/products/items/properties/screenshotUrl",
+            "type": "string",
+            "title": "Product Screenshot Url",
+            "default": "",
+            "examples": [
+              "https://via.placeholder.com/350x150.png"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "description": {
+            "$id": "#/properties/products/items/properties/description",
+            "type": "string",
+            "title": "Product Description",
+            "default": "",
+            "examples": [
+              "A frequency filter with LFO modulation"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "pageUrl": {
+            "$id": "#/properties/products/items/properties/pageUrl",
+            "type": "string",
+            "title": "Product Page Url",
+            "default": "",
+            "examples": [
+              "https://example.com"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "type": {
+            "$id": "#/properties/products/items/properties/type",
+            "type": "string",
+            "title": "Product Type",
+            "default": "",
+            "examples": [
+              "effect"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "stage": {
+            "$id": "#/properties/products/items/properties/stage",
+            "type": "string",
+            "title": "Product Stage",
+            "default": "",
+            "examples": [
+              "release"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "tags": {
+            "$id": "#/properties/products/items/properties/tags",
+            "type": "array",
+            "title": "Product Tags",
+            "items": {
+              "$id": "#/properties/products/items/properties/tags/items",
+              "type": "string",
+              "title": "Tag Item",
+              "default": "",
+              "examples": [
+                "Filter",
+                "LFO"
+              ],
+              "pattern": "^(.*)$"
+            }
+          },
+          "bundles": {
+            "$id": "#/properties/products/items/properties/bundles",
+            "type": "array",
+            "title": "Product Bundles",
+            "items": {
+              "$id": "#/properties/products/items/properties/bundles/items",
+              "type": "object",
+              "title": "Bundle Item",
+              "required": [
+                "name",
+                "targets",
+                "format",
+                "downloadUrl"
+              ],
+              "properties": {
+                "name": {
+                  "$id": "#/properties/products/items/properties/bundles/items/properties/name",
+                  "type": "string",
+                  "title": "Bundle Name",
+                  "default": "",
+                  "examples": [
+                    "Win x64"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "targets": {
+                  "$id": "#/properties/products/items/properties/bundles/items/properties/targets",
+                  "type": "array",
+                  "title": "Bundle Targets",
+                  "items": {
+                    "$id": "#/properties/products/items/properties/bundles/items/properties/targets/items",
+                    "type": "string",
+                    "title": "Target Item",
+                    "default": "",
+                    "examples": [
+                      "win64",
+                      "osx"
+                    ],
+                    "pattern": "^(.*)$"
+                  }
+                },
+                "format": {
+                  "$id": "#/properties/products/items/properties/bundles/items/properties/format",
+                  "type": "string",
+                  "title": "Bundle format",
+                  "default": "",
+                  "examples": [
+                    "vst"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "downloadUrl": {
+                  "$id": "#/properties/products/items/properties/bundles/items/properties/downloadUrl",
+                  "type": "string",
+                  "title": "Bundle Download Url",
+                  "default": "",
+                  "examples": [
+                    "https://example.com/plugin.zip"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "fileSize": {
+                  "$id": "#/properties/products/items/properties/bundles/items/properties/fileSize",
+                  "type": "integer",
+                  "title": "Bundle FileSize",
+                  "default": 0,
+                  "examples": [
+                    5900000
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 ```
