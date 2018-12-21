@@ -12,15 +12,20 @@ import com.dropsnorz.owlplug.core.utils.PlatformUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Pane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +51,12 @@ public class PluginInfoController {
 	@Autowired
 	private TaskFactory taskFactory;
 
+	@FXML 
+	private Pane pluginScreenshotPane;
 	@FXML
-	private ImageView pluginScreenshot;
+	private ImageView pluginFormatIcon;
 	@FXML
-	private ImageView pluginTypeIcon;
+	private Label pluginFormatLabel;
 	@FXML
 	private Label pluginTitleLabel;
 	@FXML
@@ -60,7 +67,6 @@ public class PluginInfoController {
 	private Label pluginBundleIdLabel;
 	@FXML
 	private Label pluginIdLabel;
-
 	@FXML
 	private Label pluginPathLabel;
 	@FXML
@@ -76,6 +82,8 @@ public class PluginInfoController {
 	 */
 	@FXML
 	public void initialize() { 
+		
+		pluginScreenshotPane.setEffect(new ColorAdjust(0,0,-0.6,0));	
 
 		openDirectoryButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
 		openDirectoryButton.setText("");
@@ -116,7 +124,8 @@ public class PluginInfoController {
 
 	public void setPlugin(Plugin plugin){
 		this.currentPlugin = plugin;
-		pluginTypeIcon.setImage(applicationDefaults.getPluginFormatIcon(plugin));
+		pluginFormatIcon.setImage(applicationDefaults.getPluginFormatIcon(plugin));
+		pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
 		pluginTitleLabel.setText(plugin.getName());
 		pluginNameLabel.setText(plugin.getName());
 		pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse(""));
@@ -137,11 +146,26 @@ public class PluginInfoController {
 		
 		String url = currentPlugin.getScreenshotUrl();
 		if (knownPluginImages.contains(url) && !imageCache.contains(url)) {
-			pluginScreenshot.setImage(applicationDefaults.pluginPlaceholderImage);
+			
+			BackgroundImage bgImg = new BackgroundImage(applicationDefaults.pluginPlaceholderImage, 
+					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+					BackgroundPosition.CENTER, 
+					new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
+			pluginScreenshotPane.setBackground(new Background(bgImg));
 			
 		} else {
 			this.knownPluginImages.add(url);
-			imageCache.loadAsync(url, pluginScreenshot);
+			
+			Image screenshot = imageCache.get(url);
+			
+			if (screenshot != null) {
+				BackgroundImage bgImg = new BackgroundImage(screenshot, 
+						BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+						BackgroundPosition.CENTER, 
+						new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
+				pluginScreenshotPane.setBackground(new Background(bgImg));
+			}
+			
 		}
 	}
 
