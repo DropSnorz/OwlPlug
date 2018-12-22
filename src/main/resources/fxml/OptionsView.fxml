@@ -18,7 +18,7 @@
          <children>
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <VBox styleClass="panel-transparent">
+                  <VBox styleClass="panel-dark">
                      <children>
                         <Label styleClass="heading-1" text="Audio Plugins">
                            <VBox.margin>
@@ -66,7 +66,7 @@
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <VBox prefWidth="200.0" styleClass="panel-transparent" VBox.vgrow="ALWAYS">
+                  <VBox prefWidth="200.0" styleClass="panel-dark" VBox.vgrow="ALWAYS">
                      <children>
                         <Label styleClass="heading-1" text="Preferences">
                            <VBox.margin>

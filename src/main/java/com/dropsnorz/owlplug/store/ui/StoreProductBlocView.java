@@ -142,10 +142,10 @@ public class StoreProductBlocView extends AnchorPane {
 		Random rand = new Random();
 		float randomPoint = rand.nextFloat();
 		
-		if (randomPoint < 0.2) {
-			return new Dimension2D(260,130);
-		} else if (randomPoint < 0.35) {
+		if (randomPoint < 0.1) {
 			return new Dimension2D(260,260);
+		} else if (randomPoint < 0.30) {
+			return new Dimension2D(260,130);
 		} else {
 			return new Dimension2D(130,130);
 		}

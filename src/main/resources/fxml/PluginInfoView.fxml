@@ -25,7 +25,7 @@
                   <Pane fx:id="pluginScreenshotPane" prefHeight="180.0" prefWidth="500.0" />
                   <VBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <Label fx:id="pluginTitleLabel" styleClass="title" text="UNKNOW" />
+                        <Label fx:id="pluginTitleLabel" styleClass="heading-title" text="UNKNOW" />
                         <Label fx:id="pluginFormatLabel" text="Plugin Format">
                            <graphic>
                               <ImageView fx:id="pluginFormatIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />

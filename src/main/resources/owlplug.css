@@ -43,7 +43,7 @@ Label{
 	-fx-text-fill:rgb(40,40,40);
 }
 
-.title {
+.heading-title {
 	-fx-font-size: 30px;
 	-fx-font-weight: bold;
 	-fx-margin:0,0,8,0;
