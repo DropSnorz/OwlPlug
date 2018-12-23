@@ -28,16 +28,18 @@ OwlPlug came from my hate of installing and managing audio plugins. The process 
 
 I've generated OwlPlug binaries, but I've only tested them in my environment, `Win 10 - Java 9, Java 10`. I'm looking for any kind of feedbacks, even under the same configuration ! And as it's a beta phase, it's highly recommended to **backup your files before using OwlPlug**.
 
-## Requirements
+## Installation
 
-* Java 9+ or Java 10+
+**Requirements**: Java 9+ or Java 10+
 
-As JavaFx as been decoupled from JDK 11, a compatible version is maitained on `java-11` branch.
+1. Download binaries [here](http://github.com/dropsnorz/owlplug/releases)
+2. Extract archive
+3. Run application from `owplug.jar` or `owlplug.exe`
 
 
 ## How to help
 
-[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, try to configure it, download plugins, etc... And feel free to report any kind of problems, questions, suggestions by opening an issue in this repository. This is a non exhaustive list of interesting things to report and fix.
+[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, try to configure it, download plugins, etc... Feel free to report any kind of problems, questions, suggestions by opening an issue in this repository. Here is a non exhaustive list of interesting things to report and fix:
 
 * Major issues, bugs, crashes
 * Typo errors and improvements. (also in this README)
@@ -58,7 +60,7 @@ OwlPlug can discover VST2 and VST3 Plugins.
 
 ## Repositories
 
-You can set up repositories to keep your local plugin collection synced with a master source (Local network, google drive, ...). This is basically a file-pulling system from a remote folder to your local plugin folder. It's really useful when you have to collaborate and share effects or even if you manage different plugin stages (live, studio, and test plugin sets). All repository's files are stored in your plugin directory in a specific folder called `.repositories`. Some plugins protected by DRMs can't be easily included in repositories as they often require extra authorization flow to work. 
+You can set up repositories to keep your local plugin collection synced with a master source (local network, Google Drive, ...). This is basically a file-pulling system from a remote folder to your local plugin folder. It's really useful when you have to collaborate and share effects or even if you manage different plugin stages (live, studio, and test plugin sets). All repository's files are stored in your plugin directory in a specific folder called `.repositories`. Some plugins protected by DRMs can't be easily included in repositories as they often require extra authorization flow to work. 
 
 Multiple repositories types are supported:
 * Local network repositories
@@ -78,28 +80,35 @@ Create a folder in your Google Drive space. Add a new Google Drive repository in
 
 ## Stores 
 
-Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of available plugins you can install locally. For now, it's **a fully WIP feature**. Plugins delivered by OwlPlug Central are included by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
+Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of available plugins you can install locally. Plugins delivered by OwlPlug Central are included by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
 
 
 ### OwlPlug central
 
-OwlPlug central is the default Store source. If you wan't to include your plugin in OwlPlug Central, create an issue in the [OwlPlug central github repo](http://github.com/dropsnorz/owlplug-central-static). OwlPlug Central is a quick prototype/POC for the Store feature integration in OwlPlug. 
+OwlPlug central is the default Store source. It's a secure and trusted source to retrieve plugins. OwlPlug Central is a quick proof of concept for the Store feature integration in OwlPlug.
 
 * OwlPlug central: `http://owlplug.dropsnorz.com/store `
 
+### Third party
+
+Third party stores are maintained by creators, developers and distributors. For security reasons, you should only explore stores from trusted sources only.
+
+* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/GyL/owl.php`
+* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/Krakli/owl.php`
+
+
 ### Third party (Central mirror)
 
-Third party store adapter provided by OwlPlug Central but hosted by original authors. (For testing purposes)
+Third party store adapter maintained by OwlPlug Central but hosted by original creators. (For testing purposes)
 
 * Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/krakli`
 * GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/gyl`
 * AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://owlplug.dropsnorz.com/mirrors/amvst`
 
-### Third party
+### How to distriute my plugins on OwlPlug ?
 
-* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/GyL/owl.php`
-* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/Krakli/owl.php`
-
+* **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Send me a mail or create an issue in the [OwlPlug central github repo](http://github.com/dropsnorz/owlplug-central-static)
+* **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/droppsnorz/owlplug). Then, provide the endpoint url to your user.
 
 # Development
 
@@ -123,12 +132,14 @@ mvn spring-boot:run
 ```
 The first command will generate an executable binary `/target/owlplug-*.jar`. In order to use GoogleDrive repositories, you have to fill OAuth2 client id and secret in `credentials.properties`. Check Prerequisites from [Google OAuth2 Documentation](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
 
+As JavaFx as been decoupled from JDK 11, a compatible version is maitained on `java-11` branch.
+
 
 # Roadmap
 
-- November 2018 - Open beta & Available binairies
-- February 2019 - Store improvements
-- Spring 2019 - Plugin discovery update
+- February 2019 - Plugin Discovery Update
+- Spring 2019 - Better UI / UX
+- Last half of 2019 - Auto-updates, URI Schemes, OwlPlug central improvements
 
 
 # Possible incoming major features
