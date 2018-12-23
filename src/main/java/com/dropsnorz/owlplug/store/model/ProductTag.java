@@ -25,6 +25,11 @@ public class ProductTag {
 		this.name = name;
 	}
 	
+	/**
+	 * Creates a ProductTag for a given product.
+	 * @param name - name of the tag
+	 * @param product - related product
+	 */
 	public ProductTag(String name, StoreProduct product) {
 		super();
 		this.name = name;

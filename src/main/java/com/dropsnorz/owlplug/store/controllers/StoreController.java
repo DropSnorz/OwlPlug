@@ -257,7 +257,7 @@ public class StoreController {
 	}
 
 	/**
-	 * Trigger bundle installation.
+	 * Trigger bundle installation sequence.
 	 * @param bundle Bundle to install
 	 */
 	public void installBundle(ProductBundle bundle) {
@@ -279,7 +279,7 @@ public class StoreController {
 					directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
 				}
 			}
-
+			// Open directory chooser on top of the current windows
 			Window mainWindow = masonryPane.getScene().getWindow();
 			selectedDirectory = directoryChooser.showDialog(mainWindow);
 		}
@@ -315,6 +315,7 @@ public class StoreController {
 				dialog.setContent(layout);
 				dialog.show();
 			} else {
+				// If a plugin will be installed in a new directory we can trigger installation task
 				storeService.install(bundle, subSelectedDirectory);
 			}
 		} else if (selectedDirectory != null) {

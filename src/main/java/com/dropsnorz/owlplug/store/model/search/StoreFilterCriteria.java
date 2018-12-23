@@ -10,12 +10,23 @@ public class StoreFilterCriteria {
 	private StoreFilterCriteriaType filterType;
 	private Image icon;
 
+	/**
+	 * Creates a StoreFilterCriteria.
+	 * @param value - critria value
+	 * @param filterType - criteria type
+	 */
 	public StoreFilterCriteria(Object value, StoreFilterCriteriaType filterType) {
 		super();
 		this.value = value;
 		this.filterType = filterType;
 	}
 	
+	/**
+	 * Creates a StoreFilterCriteria.
+	 * @param value - criteria value
+	 * @param filterType - criteria type
+	 * @param icon - criteria icon displayed
+	 */
 	public StoreFilterCriteria(Object value, StoreFilterCriteriaType filterType, Image icon) {
 		super();
 		this.value = value;
@@ -23,6 +34,13 @@ public class StoreFilterCriteria {
 		this.icon = icon;
 	}
 	
+	/**
+	 * Creates a StoreFilterCriteria.
+	 * @param value - criteria value
+	 * @param filterType - criteria type
+	 * @param icon - criteria icon to display
+	 * @param textValue - custom text value overwriting original value toString() conversion.
+	 */
 	public StoreFilterCriteria(Object value, StoreFilterCriteriaType filterType, Image icon, String textValue) {
 		super();
 		this.value = value;

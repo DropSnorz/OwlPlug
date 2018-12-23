@@ -6,7 +6,6 @@ import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteria;
 import com.dropsnorz.owlplug.store.model.search.StoreFilterCriteriaType;
 import com.jfoenix.controls.JFXChipView;
 import com.jfoenix.controls.JFXDefaultChip;
-import com.jfoenix.controls.JFXListCell;
 import java.util.HashMap;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
@@ -19,13 +18,17 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 	
 	private ApplicationDefaults applicationDefaults;
 
+	/**
+	 * Creates a StoreChipView.
+	 * @param applicationDefaults - OwlPlug application defaults
+	 */
 	public StoreChipView(ApplicationDefaults applicationDefaults) {
 		super();
 		this.applicationDefaults = applicationDefaults;
 		init();
 	}
 
-	public void init() {
+	private void init() {
 		
 		HashMap<String, StoreFilterCriteria> suggestions = new HashMap<>();
 		suggestions.put("Amp", 
