@@ -2,13 +2,20 @@ package com.dropsnorz.owlplug;
 
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
 import com.dropsnorz.owlplug.core.controllers.MainController;
+import java.io.File;
+import java.time.Duration;
 import java.util.prefs.Preferences;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import net.sf.ehcache.CacheManager;
+import org.ehcache.CacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ExpiryPolicyBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.MemoryUnit;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +30,13 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class OwlPlug extends Application {
-	
+
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
 	private ConfigurableApplicationContext context;
 	private Parent rootNode;
-	
+
 	/**
 	 * JavaFX Application initialization method.
 	 * It boostraps Spring boot application context and binds it to FXMLLoader controller factory.
@@ -73,11 +80,11 @@ public class OwlPlug extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		double width = 1020;
 		double height = 700;
-		
+
 		Scene scene = new Scene(rootNode, width, height);
 		String css = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
 		scene.getStylesheets().add(css);
-		
+
 		primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
 		primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
 
@@ -89,7 +96,7 @@ public class OwlPlug extends Application {
 		primaryStage.centerOnScreen();
 
 		primaryStage.show();
-		
+
 	}
 
 	/**
@@ -111,14 +118,26 @@ public class OwlPlug extends Application {
 	public ServletWebServerFactory servletWebServerFactory() {
 		return new TomcatServletWebServerFactory();
 	}
-	
+
 	/**
 	 * Initialize EhCache CacheManager instance {@see CacheManager}.
 	 * @return The ChacheManager instance
 	 */
 	@Bean 
 	public CacheManager getCacheManager() {
-		return CacheManager.create();
+
+		CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
+				.with(CacheManagerBuilder.persistence(ApplicationDefaults.getUserDataDirectory() + File.separator + "cache")) 
+				.withCache("image-cache",
+						CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, byte[].class,
+								ResourcePoolsBuilder.newResourcePoolsBuilder()
+								.heap(100, MemoryUnit.MB)
+								.disk(4, MemoryUnit.GB, true))
+						.withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofDays(10))))
+				.build(); 
+		cacheManager.init();
+
+		return cacheManager;
 	}
 
 	/**
@@ -131,11 +150,11 @@ public class OwlPlug extends Application {
 	}
 
 	/**
-     * Main method called on JAR execution.
-     * It bootstraps JavaFx Application and it's preloader {@see com.dropsnorz.owlplug.OwlPlugPreloader}
-     *
-     * @param args The command line arguments given on JAR execution. Usually empty.
-     */
+	 * Main method called on JAR execution.
+	 * It bootstraps JavaFx Application and it's preloader {@see com.dropsnorz.owlplug.OwlPlugPreloader}
+	 *
+	 * @param args The command line arguments given on JAR execution. Usually empty.
+	 */
 	public static void main(String[] args) {
 		System.setProperty("javafx.preloader", "com.dropsnorz.owlplug.OwlPlugPreloader");
 		launch(OwlPlug.class, args);

@@ -3,15 +3,14 @@ package com.dropsnorz.owlplug.core.services;
 import com.dropsnorz.owlplug.auth.dao.GoogleCredentialDAO;
 import com.dropsnorz.owlplug.auth.dao.UserAccountDAO;
 import com.dropsnorz.owlplug.core.components.ApplicationDefaults;
+import com.dropsnorz.owlplug.core.components.ImageCache;
 import com.dropsnorz.owlplug.core.dao.PluginDAO;
 import com.dropsnorz.owlplug.core.dao.PluginRepositoryDAO;
 import com.dropsnorz.owlplug.store.dao.StoreDAO;
 import com.dropsnorz.owlplug.store.dao.StoreProductDAO;
-
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.annotation.PostConstruct;
-import net.sf.ehcache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class OptionsService {
 	@Autowired
 	private StoreProductDAO productDAO;
 	@Autowired
-	private CacheManager cacheManager;
+	private ImageCache imageCache;
 
 
 	@PostConstruct
@@ -93,7 +92,7 @@ public class OptionsService {
 	 * Clear data from all application caches.
 	 */
 	public void clearCache() {
-		cacheManager.clearAll();
+		imageCache.clear();
 	}
 
 }

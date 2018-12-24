@@ -110,12 +110,12 @@ public class ApplicationDefaults {
 		return env.getProperty("owlplug.version");
 	}
 	
-	public String getUserDataDirectory() {
+	public static String getUserDataDirectory() {
 		return FileUtils.convertPath(System.getProperty("user.home") + File.separator + ".owlplug");
 		
 	}
 	
-	public String getTempDowloadDirectory() {
+	public static String getTempDowloadDirectory() {
 		return getUserDataDirectory() + "/temp";
 	}
 

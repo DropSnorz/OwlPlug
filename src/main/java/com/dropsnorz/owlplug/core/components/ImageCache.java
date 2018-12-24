@@ -10,10 +10,8 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javax.imageio.ImageIO;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheException;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,14 +61,14 @@ public class ImageCache {
 		if (url == null || url.isEmpty()) {
 			return null;
 		}
-		Cache cache = cacheManager.getCache("image-cache");
-		Element cachedElement =  cache.get(url);
+		Cache<String, byte[]> cache = getCache();
+		byte[] cachedElement =  cache.get(url);
 
 		//Retrieve image from cache
 		if (cachedElement != null) {
 			try {
 				log.debug("Retrieving image {} from cache", url);
-				byte[] content = (byte[]) cachedElement.getObjectValue();
+				byte[] content = cachedElement;
 				ByteArrayInputStream s = new ByteArrayInputStream(content);
 				BufferedImage bufImage = ImageIO.read(s);
 				return SwingFXUtils.toFXImage(bufImage, null);
@@ -128,8 +126,7 @@ public class ImageCache {
 	 * @return true if cache contains key
 	 */
 	public boolean contains(String key) {
-		Cache cache = cacheManager.getCache("image-cache");
-		return cache.isKeyInCache(key);
+		return getCache().containsKey(key);
 
 	}
 	
@@ -137,13 +134,16 @@ public class ImageCache {
 	 * Clear image cache contents.
 	 */
 	public void clear() {
-		Cache cache = cacheManager.getCache("image-cache");
-		cache.removeAll();
-
+		getCache().clear();
 
 	}
 	
-	private void persistImageIntoCache(Cache cache, String key, Image image, String type) {
+	private Cache<String, byte[]> getCache() {
+		return cacheManager.getCache("image-cache", String.class, byte[].class);
+		
+	}
+	
+	private void persistImageIntoCache(Cache<String, byte[]> cache, String key, Image image, String type) {
 		try {
 			log.debug("Persisting image {} into cache", key);
 			BufferedImage buffImage = SwingFXUtils.fromFXImage(image, null);
@@ -151,10 +151,9 @@ public class ImageCache {
 			ImageIO.write(buffImage, type, s);
 			byte[] res  = s.toByteArray();
 			s.close(); //especially if you are using a different output stream.
-			cache.put(new Element(key, res));
-		} catch (IllegalArgumentException | IllegalStateException | CacheException | IOException e) {
+			cache.put(key, res);
+		} catch (IllegalArgumentException | IllegalStateException | IOException e) {
 			log.error("Error caching image", e);
 		}
 	}
-
 }
