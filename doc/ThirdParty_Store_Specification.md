@@ -178,7 +178,7 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
 
 # Annexes
 
-## Json schema
+## Json schema Draft-07
 ```json
 {
   "definitions": {},
