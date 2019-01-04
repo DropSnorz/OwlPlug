@@ -39,7 +39,7 @@ I've generated OwlPlug binaries, but I've only tested them in my environment, `W
 
 ## How to help
 
-[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, try to configure it, download plugins, etc... Feel free to report any kind of problems, questions, suggestions by opening an issue in this repository. Here is a non exhaustive list of interesting things to report and fix:
+[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, configure it, download plugins, etc... Feel free to report any kind of problems, questions, suggestions by opening an issue in this repository. Here is a non exhaustive list of interesting things to report and fix:
 
 * Major issues, bugs, crashes
 * Typo errors and improvements. (also in this README)
@@ -54,7 +54,7 @@ I'm maintaining OwlPlug during my free time, so any help will be really apprecia
 
 ## Plugins
 
-OwlPlug is compatible with your installed plugins as they are all in a specific root directory. For example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW. 
+OwlPlug is compatible with your previously installed plugins as they are all in a specific root directory, for example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW. 
 OwlPlug can discover VST2 and VST3 Plugins.
 
 
@@ -80,7 +80,7 @@ Create a folder in your Google Drive space. Add a new Google Drive repository in
 
 ## Stores 
 
-Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of available plugins you can install locally. Plugins delivered by OwlPlug Central are included by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
+Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of plugins you can download and install locally. Plugins delivered by OwlPlug Central are available by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
 
 
 ### OwlPlug central
@@ -91,7 +91,7 @@ OwlPlug central is the default Store source. It's a secure and trusted source to
 
 ### Third party
 
-Third party stores are maintained by creators, developers and distributors. For security reasons, you should only explore stores from trusted sources only.
+Third party stores are maintained by plugin creators, developers or distributors. For security reasons, you should only use stores from trusted sources only.
 
 * Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/GyL/owl.php`
 * GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/Krakli/owl.php`
@@ -99,7 +99,7 @@ Third party stores are maintained by creators, developers and distributors. For 
 
 ### Third party (Central mirror)
 
-Third party store adapter maintained by OwlPlug Central but hosted by original creators. (For testing purposes)
+Third party store adapter is maintained by OwlPlug Central but plugins are hosted by original creators. (For testing purposes)
 
 * Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/krakli`
 * GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/gyl`
@@ -108,7 +108,7 @@ Third party store adapter maintained by OwlPlug Central but hosted by original c
 ### How to distriute my plugins on OwlPlug ?
 
 * **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Send me a mail or create an issue in the [OwlPlug central github repo](http://github.com/dropsnorz/owlplug-central-static)
-* **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/droppsnorz/owlplug). Then, provide the endpoint url to your user.
+* **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/dropsnorz/owlplug). Then, provide the endpoint url to your user.
 
 # Development
 
