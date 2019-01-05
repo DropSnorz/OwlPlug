@@ -12,7 +12,7 @@
          <children>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../icons/bag-white-16.png" />
+                  <Image url="@../../icons/bag-white-32.png" />
                </image>
             </ImageView>
             <Label text="Store List" />
