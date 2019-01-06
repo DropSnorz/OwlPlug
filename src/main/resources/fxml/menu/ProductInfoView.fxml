@@ -124,7 +124,7 @@
                         </VBox>
                         <VBox>
                            <children>
-                              <Label fx:id="descriptionLabel" text="Label">
+                              <Label fx:id="descriptionLabel" text="Label" wrapText="true">
                                  <padding>
                                     <Insets left="20.0" />
                                  </padding>

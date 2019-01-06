@@ -43,7 +43,7 @@
                   <HBox spacing="2.0">
                      <children>
                         <Label fx:id="resultCounter" text="0" />
-                        <Label text="results" />
+                        <Label text="plugins" />
                      </children>
                      <padding>
                         <Insets top="10.0" />
