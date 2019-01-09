@@ -12,7 +12,7 @@
 
 [ ![Codeship Status for DropSnorz/OwlPlug](https://app.codeship.com/projects/29447280-727d-0136-a8a6-3675cf281030/status?branch=master)](https://app.codeship.com/projects/299436)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e6b8ee875daa4f74b5bf1cc8fee6df63)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DropSnorz/OwlPlug&amp;utm_campaign=Badge_Grade_Dashboard)
-![Stage Badge](https://img.shields.io/badge/stage-alpha-blue.svg)
+![Stage Badge](https://img.shields.io/badge/stage-beta-blue.svg)
 
 
 # Overview
@@ -54,8 +54,8 @@ I'm maintaining OwlPlug during my free time, so any help will be really apprecia
 
 ## Plugins
 
-OwlPlug is compatible with your previously installed plugins as they are all in a specific root directory, for example `C:/foo/AudioPlugins`. It means that you can still organize your plugins with a file explorer or with your favorite DAW. 
-OwlPlug can discover VST2 and VST3 Plugins.
+OwlPlug is compatible with your previously installed plugins as they are all in a specific root directory, for example `C:/foo/AudioPlugins`. It means that you can still organize your plugins as you want with a file explorer or with your favorite DAW. 
+OwlPlug can discover VST2 and VST3 Plugins. 
 
 
 ## Repositories
@@ -65,8 +65,6 @@ You can set up repositories to keep your local plugin collection synced with a m
 Multiple repositories types are supported:
 * Local network repositories
 * Google drive repositories
-* HTTP repositories (Coming soon)
-
 
 ### Local network repositories
 
@@ -85,7 +83,7 @@ Owlplug is shipped with a plugin store to automate plugin downloads and installa
 
 ### OwlPlug central
 
-OwlPlug central is the default Store source. It's a secure and trusted source to retrieve plugins. OwlPlug Central is a quick proof of concept for the Store feature integration in OwlPlug.
+OwlPlug central is the default Store source. It's a secure and trusted source to retrieve plugins. OwlPlug Central is a quick proof of concept for the Store feature integration in OwlPlug. For now, OwlPlug central is delivering only free Open Sourced plugins.
 
 * OwlPlug central: `http://owlplug.dropsnorz.com/store `
 
@@ -101,14 +99,13 @@ Third party stores are maintained by plugin creators, developers or distributors
 
 Third party store adapter is maintained by OwlPlug Central but plugins are hosted by original creators. (For testing purposes)
 
-* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/krakli`
-* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://owlplug.dropsnorz.com/mirrors/gyl`
 * AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://owlplug.dropsnorz.com/mirrors/amvst`
+* [Vst4free](http://vst4free.com): `http://owlplug.dropsnorz.com/mirrors/vst4free`
 
 ### How to distriute my plugins on OwlPlug ?
 
 * **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Send me a mail or create an issue in the [OwlPlug central github repo](http://github.com/dropsnorz/owlplug-central-static)
-* **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/dropsnorz/owlplug). Then, provide the endpoint url to your user.
+* **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). Then, provide the endpoint url to your user.
 
 # Development
 
@@ -141,11 +138,3 @@ As JavaFx as been decoupled from JDK 11, a compatible version is maitained on `j
 - Spring 2019 - Better UI / UX
 - Last half of 2019 - Auto-updates, URI Schemes, OwlPlug central improvements
 
-
-# Possible incoming major features
-
-- Plugins Organization (Move plugins between folders)
-- Better plugin discovery
-- HTTP Repositories
-- Plugins update from store
-- Plugins backup
