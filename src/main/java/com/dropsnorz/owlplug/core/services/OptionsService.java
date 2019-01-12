@@ -18,81 +18,79 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OptionsService {
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	private Preferences prefs;
-	@Autowired
-	private PluginRepositoryDAO pluginRepositoryDAO;
-	@Autowired
-	private PluginDAO pluginDAO;
-	@Autowired
-	private UserAccountDAO userAccountDAO;
-	@Autowired
-	private GoogleCredentialDAO googleCredentialDAO;
-	@Autowired
-	private StoreDAO storeDAO;
-	@Autowired
-	private StoreProductDAO productDAO;
-	@Autowired
-	private ImageCache imageCache;
 
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@PostConstruct
-	private void initialize() {
+  @Autowired
+  private Preferences prefs;
+  @Autowired
+  private PluginRepositoryDAO pluginRepositoryDAO;
+  @Autowired
+  private PluginDAO pluginDAO;
+  @Autowired
+  private UserAccountDAO userAccountDAO;
+  @Autowired
+  private GoogleCredentialDAO googleCredentialDAO;
+  @Autowired
+  private StoreDAO storeDAO;
+  @Autowired
+  private StoreProductDAO productDAO;
+  @Autowired
+  private ImageCache imageCache;
 
-		//Init default options
-		if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) == null) {
-			prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.DEFAULT_VST_DIRECTORY);
-		}
-		if (prefs.get(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, null) == null) {
-			prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, Boolean.TRUE);
-		}
-		if (prefs.get(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, null) == null) {
-			prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, Boolean.FALSE);
-		}
-		if (prefs.get(ApplicationDefaults.SELECTED_ACCOUNT_KEY, null) == null) {
-			prefs.putBoolean(ApplicationDefaults.SELECTED_ACCOUNT_KEY, Boolean.FALSE);
-		}
-		if (prefs.get(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, null) == null) {
-			prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, Boolean.TRUE);
-		}
-	}
+  @PostConstruct
+  private void initialize() {
 
+    // Init default options
+    if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) == null) {
+      prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.DEFAULT_VST_DIRECTORY);
+    }
+    if (prefs.get(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, null) == null) {
+      prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, Boolean.TRUE);
+    }
+    if (prefs.get(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, null) == null) {
+      prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, Boolean.FALSE);
+    }
+    if (prefs.get(ApplicationDefaults.SELECTED_ACCOUNT_KEY, null) == null) {
+      prefs.putBoolean(ApplicationDefaults.SELECTED_ACCOUNT_KEY, Boolean.FALSE);
+    }
+    if (prefs.get(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, null) == null) {
+      prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, Boolean.TRUE);
+    }
+  }
 
-	/**
-	 * Clear all user data including Options, Configured repositories and cache.
-	 * @return true if data has been successfully cleared, false otherwise
-	 */
-	public boolean clearAllUserData() {
+  /**
+   * Clear all user data including Options, Configured repositories and cache.
+   * 
+   * @return true if data has been successfully cleared, false otherwise
+   */
+  public boolean clearAllUserData() {
 
-		try {
-			prefs.clear();
-			pluginDAO.deleteAll();
-			pluginRepositoryDAO.deleteAll();
+    try {
+      prefs.clear();
+      pluginDAO.deleteAll();
+      pluginRepositoryDAO.deleteAll();
 
-			googleCredentialDAO.deleteAll();
-			userAccountDAO.deleteAll();
-			productDAO.deleteAll();
-			storeDAO.deleteAll();
-			
-			clearCache();
-			
-			return true;
-			
-		} catch (BackingStoreException e) {
-			log.error("Preferences cannot be updated", e);
-			return false;
-		}
-	}
-	
-	
-	/**
-	 * Clear data from all application caches.
-	 */
-	public void clearCache() {
-		imageCache.clear();
-	}
+      googleCredentialDAO.deleteAll();
+      userAccountDAO.deleteAll();
+      productDAO.deleteAll();
+      storeDAO.deleteAll();
+
+      clearCache();
+
+      return true;
+
+    } catch (BackingStoreException e) {
+      log.error("Preferences cannot be updated", e);
+      return false;
+    }
+  }
+
+  /**
+   * Clear data from all application caches.
+   */
+  public void clearCache() {
+    imageCache.clear();
+  }
 
 }

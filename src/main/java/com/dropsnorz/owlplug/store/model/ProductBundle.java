@@ -12,65 +12,65 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class ProductBundle {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	private String name;
-	private String downloadUrl;
-	private long fileSize;
-	@ElementCollection(fetch = FetchType.EAGER)
-	private List<String> targets;
-	
-	@ManyToOne
-	private StoreProduct product;
 
-	public Long getId() {
-		return id;
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
+  private String name;
+  private String downloadUrl;
+  private long fileSize;
+  @ElementCollection(fetch = FetchType.EAGER)
+  private List<String> targets;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+  @ManyToOne
+  private StoreProduct product;
 
-	public String getName() {
-		return name;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public String getDownloadUrl() {
-		return downloadUrl;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setDownloadUrl(String downloadUrl) {
-		this.downloadUrl = downloadUrl;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public long getFileSize() {
-		return fileSize;
-	}
+  public String getDownloadUrl() {
+    return downloadUrl;
+  }
 
-	public void setFileSize(long fileSize) {
-		this.fileSize = fileSize;
-	}
+  public void setDownloadUrl(String downloadUrl) {
+    this.downloadUrl = downloadUrl;
+  }
 
-	public List<String> getTargets() {
-		return targets;
-	}
+  public long getFileSize() {
+    return fileSize;
+  }
 
-	public void setTargets(List<String> targets) {
-		this.targets = targets;
-	}
+  public void setFileSize(long fileSize) {
+    this.fileSize = fileSize;
+  }
 
-	public StoreProduct getProduct() {
-		return product;
-	}
+  public List<String> getTargets() {
+    return targets;
+  }
 
-	public void setProduct(StoreProduct product) {
-		this.product = product;
-	}
+  public void setTargets(List<String> targets) {
+    this.targets = targets;
+  }
+
+  public StoreProduct getProduct() {
+    return product;
+  }
+
+  public void setProduct(StoreProduct product) {
+    this.product = product;
+  }
 
 }

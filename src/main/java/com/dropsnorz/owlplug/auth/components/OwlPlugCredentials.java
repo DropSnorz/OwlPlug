@@ -13,18 +13,18 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:credentials.properties")
 public class OwlPlugCredentials {
 
-	@Value("${owlplug.credentials.google.appId}")
-	private String googleAppId;
+  @Value("${owlplug.credentials.google.appId}")
+  private String googleAppId;
 
-	@Value("${owlplug.credentials.google.secret}")
-	private String googleSecret;
+  @Value("${owlplug.credentials.google.secret}")
+  private String googleSecret;
 
-	public String getGoogleAppId() {
-		return googleAppId;
-	}
+  public String getGoogleAppId() {
+    return googleAppId;
+  }
 
-	public String getGoogleSecret() {
-		return googleSecret;
-	}
-	
+  public String getGoogleSecret() {
+    return googleSecret;
+  }
+
 }

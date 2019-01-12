@@ -7,6 +7,6 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface PluginRepositoryBaseDAO<T extends PluginRepository> extends CrudRepository<T, Long> {
 
-	PluginRepository findByName(String name);
+  PluginRepository findByName(String name);
 
 }

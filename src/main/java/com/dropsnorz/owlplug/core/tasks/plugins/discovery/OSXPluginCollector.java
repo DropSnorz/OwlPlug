@@ -11,39 +11,39 @@ import org.slf4j.LoggerFactory;
 
 public class OSXPluginCollector implements NativePluginCollector {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private PluginFormat pluginFormat;
+  private PluginFormat pluginFormat;
 
-	public OSXPluginCollector(PluginFormat pluginFormat) {
-		this.pluginFormat = pluginFormat;
-	}
+  public OSXPluginCollector(PluginFormat pluginFormat) {
+    this.pluginFormat = pluginFormat;
+  }
 
-	@Override
-	public List<File> collect(String path) {
+  @Override
+  public List<File> collect(String path) {
 
-		ArrayList<File> fileList = new ArrayList<File>();
-		File dir = new File(path);
+    ArrayList<File> fileList = new ArrayList<File>();
+    File dir = new File(path);
 
-		if (dir.isDirectory()) {
-			List<File> baseFiles = (List<File>) FileUtils.listFilesAndDirs(dir,  TrueFileFilter.TRUE,  TrueFileFilter.TRUE);
+    if (dir.isDirectory()) {
+      List<File> baseFiles = (List<File>) FileUtils.listFilesAndDirs(dir, TrueFileFilter.TRUE, TrueFileFilter.TRUE);
 
-			for (File file: baseFiles) {
+      for (File file : baseFiles) {
 
-				if (pluginFormat == PluginFormat.VST2) {
-					if (file.getAbsolutePath().endsWith(".vst")) {
-						fileList.add(file);
-					}
-				} else if (pluginFormat == PluginFormat.VST3) {
-					if (file.getAbsolutePath().endsWith(".vst3")) {
-						fileList.add(file);
-					}
-				}
-			}
-		} else {
-			log.error("Plugin root is not a directory");
-		}
-		return fileList;
-	}
+        if (pluginFormat == PluginFormat.VST2) {
+          if (file.getAbsolutePath().endsWith(".vst")) {
+            fileList.add(file);
+          }
+        } else if (pluginFormat == PluginFormat.VST3) {
+          if (file.getAbsolutePath().endsWith(".vst3")) {
+            fileList.add(file);
+          }
+        }
+      }
+    } else {
+      log.error("Plugin root is not a directory");
+    }
+    return fileList;
+  }
 
 }

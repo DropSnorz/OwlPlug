@@ -5,17 +5,17 @@ import com.dropsnorz.owlplug.core.model.platform.OperatingSystem;
 
 public class NativePluginCollectorFactory {
 
-	public static NativePluginCollector getPluginFinder(OperatingSystem platform, PluginFormat pluginFormat) {
+  public static NativePluginCollector getPluginFinder(OperatingSystem platform, PluginFormat pluginFormat) {
 
-		switch (platform) {
-			case WIN: 
-				return new WindowsPluginCollector(pluginFormat);
-			case MAC: 
-				return new OSXPluginCollector(pluginFormat);
-			default: 
-				break;
-		}
-		return null;
-	}
+    switch (platform) {
+    case WIN:
+      return new WindowsPluginCollector(pluginFormat);
+    case MAC:
+      return new OSXPluginCollector(pluginFormat);
+    default:
+      break;
+    }
+    return null;
+  }
 
 }

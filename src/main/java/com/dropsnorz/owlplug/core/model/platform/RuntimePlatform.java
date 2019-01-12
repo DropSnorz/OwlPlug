@@ -4,68 +4,67 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RuntimePlatform {
-	
-	private String tag;
-	private OperatingSystem operatingSystem;
-	private String arch;
-	
-	private ArrayList<RuntimePlatform> compatiblePlatforms;
 
-	public RuntimePlatform(String tag, OperatingSystem operatingSystem, String arch) {
-		super();
-		this.tag = tag;
-		this.operatingSystem = operatingSystem;
-		this.arch = arch;
-		
-		this.compatiblePlatforms = new ArrayList<>();
-		this.compatiblePlatforms.add(this);
-	}
-	
-	public List<String> getCompatiblePlatformsTags() {
-		List<String> platforms = new ArrayList<>();
-		platforms.add(this.operatingSystem.getCode());
-		for (RuntimePlatform platform : compatiblePlatforms) {
-			platforms.add(platform.getTag());
-		}
-		return platforms;
-	}
+  private String tag;
+  private OperatingSystem operatingSystem;
+  private String arch;
 
-	public String getTag() {
-		return tag;
-	}
+  private ArrayList<RuntimePlatform> compatiblePlatforms;
 
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
+  public RuntimePlatform(String tag, OperatingSystem operatingSystem, String arch) {
+    super();
+    this.tag = tag;
+    this.operatingSystem = operatingSystem;
+    this.arch = arch;
 
-	public OperatingSystem getOperatingSystem() {
-		return operatingSystem;
-	}
+    this.compatiblePlatforms = new ArrayList<>();
+    this.compatiblePlatforms.add(this);
+  }
 
-	public void setOperatingSystem(OperatingSystem operatingSystem) {
-		this.operatingSystem = operatingSystem;
-	}
+  public List<String> getCompatiblePlatformsTags() {
+    List<String> platforms = new ArrayList<>();
+    platforms.add(this.operatingSystem.getCode());
+    for (RuntimePlatform platform : compatiblePlatforms) {
+      platforms.add(platform.getTag());
+    }
+    return platforms;
+  }
 
-	public String getArch() {
-		return arch;
-	}
+  public String getTag() {
+    return tag;
+  }
 
-	public void setArch(String arch) {
-		this.arch = arch;
-	}
+  public void setTag(String tag) {
+    this.tag = tag;
+  }
 
-	public ArrayList<RuntimePlatform> getCompatiblePlatforms() {
-		return compatiblePlatforms;
-	}
+  public OperatingSystem getOperatingSystem() {
+    return operatingSystem;
+  }
 
-	protected void setCompatiblePlatforms(ArrayList<RuntimePlatform> compatibleEnvironments) {
-		this.compatiblePlatforms = compatibleEnvironments;
-	}
+  public void setOperatingSystem(OperatingSystem operatingSystem) {
+    this.operatingSystem = operatingSystem;
+  }
 
-	@Override
-	public String toString() {
-		return "RuntimePlatform [tag=" + tag + ", operatingSystem=" + operatingSystem + ", arch=" + arch + "]";
-	}
-	
+  public String getArch() {
+    return arch;
+  }
+
+  public void setArch(String arch) {
+    this.arch = arch;
+  }
+
+  public ArrayList<RuntimePlatform> getCompatiblePlatforms() {
+    return compatiblePlatforms;
+  }
+
+  protected void setCompatiblePlatforms(ArrayList<RuntimePlatform> compatibleEnvironments) {
+    this.compatiblePlatforms = compatibleEnvironments;
+  }
+
+  @Override
+  public String toString() {
+    return "RuntimePlatform [tag=" + tag + ", operatingSystem=" + operatingSystem + ", arch=" + arch + "]";
+  }
 
 }

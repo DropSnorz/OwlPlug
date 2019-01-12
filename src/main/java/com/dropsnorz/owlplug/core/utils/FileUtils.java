@@ -18,88 +18,88 @@ import org.slf4j.LoggerFactory;
 
 public class FileUtils {
 
-	private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
+  private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
 
-	private FileUtils() {}
+  private FileUtils() {
+  }
 
-	public static String convertPath(String path) {
-		return path.replace("\\", "/");
-	}
+  public static String convertPath(String path) {
+    return path.replace("\\", "/");
+  }
 
-	public static boolean isFilenameValid(String fileName) {
+  public static boolean isFilenameValid(String fileName) {
 
-		return fileName != null && !fileName.equals("") && fileName.matches("[-_.A-Za-z0-9]*");
-	}
-	
-	public static String sanitizeFileName(String fileName) {
-		
-		return fileName.replaceAll("[^-_.A-Za-z0-9]", "");
-		
-	}
+    return fileName != null && !fileName.equals("") && fileName.matches("[-_.A-Za-z0-9]*");
+  }
 
-	public static void unzip(String source, String dest) throws IOException {
+  public static String sanitizeFileName(String fileName) {
 
-		//Open the file
-		try (ZipFile file = new ZipFile(source)) {
-			FileSystem fileSystem = FileSystems.getDefault();
-			//Get file entries
-			Enumeration<? extends ZipEntry> entries = file.entries();
+    return fileName.replaceAll("[^-_.A-Za-z0-9]", "");
 
-			//We will unzip files in this folder
-			String uncompressedDirectory = dest;
-			Files.createDirectory(fileSystem.getPath(uncompressedDirectory));
+  }
 
-			//Iterate over entries
-			while (entries.hasMoreElements()) {
-				ZipEntry entry = entries.nextElement();
-				//If directory then create a new directory in uncompressed folder
-				if (entry.isDirectory()) {
-					log.debug("Creating Directory:" + uncompressedDirectory + File.separator + entry.getName());
-					Files.createDirectories(fileSystem.getPath(uncompressedDirectory + File.separator + entry.getName()));
+  public static void unzip(String source, String dest) throws IOException {
 
-					//Else create the file
-				} else {
-					InputStream is = file.getInputStream(entry);
-					BufferedInputStream bis = new BufferedInputStream(is);
-					String uncompressedFileName = uncompressedDirectory + File.separator + entry.getName();
+    // Open the file
+    try (ZipFile file = new ZipFile(source)) {
+      FileSystem fileSystem = FileSystems.getDefault();
+      // Get file entries
+      Enumeration<? extends ZipEntry> entries = file.entries();
 
-					new File(uncompressedFileName).getParentFile().mkdirs();
+      // We will unzip files in this folder
+      String uncompressedDirectory = dest;
+      Files.createDirectory(fileSystem.getPath(uncompressedDirectory));
 
-					Path uncompressedFilePath = fileSystem.getPath(uncompressedFileName);
-					Files.createFile(uncompressedFilePath);
+      // Iterate over entries
+      while (entries.hasMoreElements()) {
+        ZipEntry entry = entries.nextElement();
+        // If directory then create a new directory in uncompressed folder
+        if (entry.isDirectory()) {
+          log.debug("Creating Directory:" + uncompressedDirectory + File.separator + entry.getName());
+          Files.createDirectories(fileSystem.getPath(uncompressedDirectory + File.separator + entry.getName()));
 
-					FileOutputStream fileOutput = new FileOutputStream(uncompressedFileName);
+          // Else create the file
+        } else {
+          InputStream is = file.getInputStream(entry);
+          BufferedInputStream bis = new BufferedInputStream(is);
+          String uncompressedFileName = uncompressedDirectory + File.separator + entry.getName();
 
-					byte[] buffer = new byte[2048]; 
-					int read = 0;
-					while ((read = bis.read(buffer)) > 0) {
-						fileOutput.write(buffer, 0, read);
-					}
+          new File(uncompressedFileName).getParentFile().mkdirs();
 
-					fileOutput.close();
-					log.debug("Written :" + entry.getName());
-				}
-			}
-		} catch (IOException e) {
-			throw e;
-		}
-	}
+          Path uncompressedFilePath = fileSystem.getPath(uncompressedFileName);
+          Files.createFile(uncompressedFilePath);
 
+          FileOutputStream fileOutput = new FileOutputStream(uncompressedFileName);
 
-	public static void copyDirectory(File source, File target) throws IOException {
-		org.apache.commons.io.FileUtils.copyDirectory(source, target);
-	}
+          byte[] buffer = new byte[2048];
+          int read = 0;
+          while ((read = bis.read(buffer)) > 0) {
+            fileOutput.write(buffer, 0, read);
+          }
 
-	public static void deleteDirectory(File source) throws IOException {
-		org.apache.commons.io.FileUtils.deleteDirectory(source);
-	}
+          fileOutput.close();
+          log.debug("Written :" + entry.getName());
+        }
+      }
+    } catch (IOException e) {
+      throw e;
+    }
+  }
 
+  public static void copyDirectory(File source, File target) throws IOException {
+    org.apache.commons.io.FileUtils.copyDirectory(source, target);
+  }
 
-	public static String humanReadableByteCount(long bytes, boolean si) {
-		int unit = si ? 1000 : 1024;
-		if (bytes < unit) return bytes + " B";
-		int exp = (int) (Math.log(bytes) / Math.log(unit));
-		String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
-		return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
-	}
+  public static void deleteDirectory(File source) throws IOException {
+    org.apache.commons.io.FileUtils.deleteDirectory(source);
+  }
+
+  public static String humanReadableByteCount(long bytes, boolean si) {
+    int unit = si ? 1000 : 1024;
+    if (bytes < unit)
+      return bytes + " B";
+    int exp = (int) (Math.log(bytes) / Math.log(unit));
+    String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
+    return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+  }
 }

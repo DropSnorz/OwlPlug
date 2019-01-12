@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PluginDAO extends CrudRepository<Plugin, Long> {
 
-	Plugin findByPath(String path);
+  Plugin findByPath(String path);
 }

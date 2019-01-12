@@ -11,35 +11,34 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class NewRepositoryController {
 
-	@Autowired
-	private MainController mainController;
-	@Autowired
-	private FileSystemRepositoryController fileSystemRepositoryController;
-	@Autowired
-	private GoogleDriveRepositoryController googleDriveRepositoryController;
+  @Autowired
+  private MainController mainController;
+  @Autowired
+  private FileSystemRepositoryController fileSystemRepositoryController;
+  @Autowired
+  private GoogleDriveRepositoryController googleDriveRepositoryController;
 
+  @FXML
+  private HBox fileSystemMenuItem;
+  @FXML
+  private HBox googleDriveMenuItem;
 
-	@FXML
-	private HBox fileSystemMenuItem;
-	@FXML
-	private HBox googleDriveMenuItem;
+  /**
+   * FXML initialize method.
+   */
+  public void initialize() {
 
-	/**
-	 * FXML initialize method.
-	 */
-	public void initialize() {
+    fileSystemMenuItem.setOnMouseClicked(e -> {
+      fileSystemRepositoryController.show();
+      fileSystemRepositoryController.startCreateSequence();
+      mainController.getLeftDrawer().close();
+    });
 
-		fileSystemMenuItem.setOnMouseClicked(e -> {
-			fileSystemRepositoryController.show();
-			fileSystemRepositoryController.startCreateSequence();
-			mainController.getLeftDrawer().close();
-		});
-
-		googleDriveMenuItem.setOnMouseClicked(e -> {
-			googleDriveRepositoryController.show();
-			googleDriveRepositoryController.startCreateSequence();
-			mainController.getLeftDrawer().close();
-		});
-	}
+    googleDriveMenuItem.setOnMouseClicked(e -> {
+      googleDriveRepositoryController.show();
+      googleDriveRepositoryController.startCreateSequence();
+      mainController.getLeftDrawer().close();
+    });
+  }
 
 }

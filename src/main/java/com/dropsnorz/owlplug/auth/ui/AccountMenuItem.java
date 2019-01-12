@@ -5,28 +5,25 @@ package com.dropsnorz.owlplug.auth.ui;
  *
  */
 public class AccountMenuItem implements AccountItem {
-	
-	private String text;
 
-	public AccountMenuItem(String text) {
-		super();
-		this.text = text;
-	}
+  private String text;
 
-	public String getText() {
-		return text;
-	}
+  public AccountMenuItem(String text) {
+    super();
+    this.text = text;
+  }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+  public String getText() {
+    return text;
+  }
 
-	@Override
-	public Long getId() {
-		return (long) -1;
-	}
-	
-	
-	
+  public void setText(String text) {
+    this.text = text;
+  }
+
+  @Override
+  public Long getId() {
+    return (long) -1;
+  }
 
 }

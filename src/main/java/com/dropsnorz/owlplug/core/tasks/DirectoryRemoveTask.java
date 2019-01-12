@@ -8,28 +8,27 @@ import com.dropsnorz.owlplug.core.model.PluginDirectory;
 
 public class DirectoryRemoveTask extends AbstractTask {
 
-	protected PluginDirectory pluginDirectory;
+  protected PluginDirectory pluginDirectory;
 
-	public DirectoryRemoveTask(PluginDirectory pluginDirectory){
+  public DirectoryRemoveTask(PluginDirectory pluginDirectory) {
 
-		this.pluginDirectory = pluginDirectory;
-		setName("Remove directory");
-	}
+    this.pluginDirectory = pluginDirectory;
+    setName("Remove directory");
+  }
 
-	@Override
-	protected TaskResult call() throws Exception {
+  @Override
+  protected TaskResult call() throws Exception {
 
-		this.updateProgress(0, 1);
-		this.updateMessage("Deleting directory " + pluginDirectory.getName() + " ...");
+    this.updateProgress(0, 1);
+    this.updateMessage("Deleting directory " + pluginDirectory.getName() + " ...");
 
+    File directoryFile = new File(pluginDirectory.getPath());
 
-		File directoryFile = new File(pluginDirectory.getPath());
-		
-		FileUtils.deleteDirectory(directoryFile);
+    FileUtils.deleteDirectory(directoryFile);
 
-		this.updateProgress(1, 1);
-		this.updateMessage("Directory successfully deleted");
+    this.updateProgress(1, 1);
+    this.updateMessage("Directory successfully deleted");
 
-		return null;
-	}
+    return null;
+  }
 }

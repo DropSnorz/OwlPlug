@@ -33,133 +33,130 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * OAuth Authentication service.
- * Authenticates users from known providers using IP Loopback and requests API call permissions for OwlPlug.
- * This service stores users access tokens for next calls.
- * Only one Authentication flow must be performed at time as this class is not thread safe and maintain 
- * states during Authentication. 
+ * OAuth Authentication service. Authenticates users from known providers using
+ * IP Loopback and requests API call permissions for OwlPlug. This service
+ * stores users access tokens for next calls. Only one Authentication flow must
+ * be performed at time as this class is not thread safe and maintain states
+ * during Authentication.
  *
  */
 @Service
 public class AuthenticationService {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private OwlPlugCredentials owlPlugCredentials;
-	@Autowired
-	private GoogleCredentialDAO googleCredentialDAO;
-	@Autowired
-	private UserAccountDAO userAccountDAO;
-	@Autowired
-	private MainController mainController;
-	@Autowired
-	private PluginRepositoryService pluginRepositoryService;
-	@Autowired
-	private Preferences prefs;
+  @Autowired
+  private OwlPlugCredentials owlPlugCredentials;
+  @Autowired
+  private GoogleCredentialDAO googleCredentialDAO;
+  @Autowired
+  private UserAccountDAO userAccountDAO;
+  @Autowired
+  private MainController mainController;
+  @Autowired
+  private PluginRepositoryService pluginRepositoryService;
+  @Autowired
+  private Preferences prefs;
 
-	private static final JsonFactory JSON_FACTORY = new JacksonFactory();
-	private LocalServerReceiver receiver = null;
+  private static final JsonFactory JSON_FACTORY = new JacksonFactory();
+  private LocalServerReceiver receiver = null;
 
+  /**
+   * Creates a new account by starting the Authentication flow.
+   * 
+   * @throws AuthentificationException if an error occurs during Authentication
+   *                                   flow.
+   */
+  public void createAccountAndAuth() throws AuthentificationException {
 
-	/**
-	 * Creates a new account by starting the Authentication flow.
-	 * @throws AuthentificationException if an error occurs during Authentication flow.
-	 */
-	public void createAccountAndAuth() throws AuthentificationException {
+    String clientId = owlPlugCredentials.getGoogleAppId();
+    String clientSecret = owlPlugCredentials.getGoogleSecret();
+    ArrayList<String> scopes = new ArrayList<>();
 
-		String clientId = owlPlugCredentials.getGoogleAppId();
-		String clientSecret = owlPlugCredentials.getGoogleSecret();
-		ArrayList<String> scopes = new ArrayList<>();
+    scopes.add("https://www.googleapis.com/auth/drive");
+    scopes.add("https://www.googleapis.com/auth/userinfo.profile");
 
-		scopes.add("https://www.googleapis.com/auth/drive");
-		scopes.add("https://www.googleapis.com/auth/userinfo.profile");
+    try {
+      NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+      DataStoreFactory dataStore = new JPADataStoreFactory(googleCredentialDAO);
+      GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientId,
+          clientSecret, scopes).setDataStoreFactory(dataStore).setAccessType("offline").setApprovalPrompt("force")
+              .build();
 
-		try {
-			NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-			DataStoreFactory dataStore = new JPADataStoreFactory(googleCredentialDAO);
-			GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-					httpTransport, JSON_FACTORY, clientId, clientSecret, scopes)
-					.setDataStoreFactory(dataStore)
-					.setAccessType("offline").setApprovalPrompt("force")
-					.build();
+      UserAccount userAccount = new UserAccount();
+      userAccountDAO.save(userAccount);
 
-			UserAccount userAccount = new UserAccount();
-			userAccountDAO.save(userAccount);
+      receiver = new LocalServerReceiver();
 
-			receiver = new LocalServerReceiver();
+      AuthorizationCodeInstalledApp authCodeAccess = new AuthorizationCodeInstalledApp(flow, receiver);
+      Credential credential = authCodeAccess.authorize(userAccount.getKey());
 
-			AuthorizationCodeInstalledApp authCodeAccess = new AuthorizationCodeInstalledApp(flow, receiver);
-			Credential credential = authCodeAccess.authorize(userAccount.getKey());
+      Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential)
+          .setApplicationName("OwlPlug").build();
+      Userinfoplus userinfo = oauth2.userinfo().get().execute();
 
-			Oauth2 oauth2 = new Oauth2.Builder(new NetHttpTransport(), new JacksonFactory(), credential).setApplicationName(
-					"OwlPlug").build();
-			Userinfoplus userinfo = oauth2.userinfo().get().execute();
+      userAccount.setName(userinfo.getName());
+      userAccount.setIconUrl(userinfo.getPicture());
+      userAccount.setAccountProvider(UserAccountProvider.GOOGLE);
+      userAccount.setCredential(googleCredentialDAO.findByKey(userAccount.getKey()));
 
-			userAccount.setName(userinfo.getName());
-			userAccount.setIconUrl(userinfo.getPicture());
-			userAccount.setAccountProvider(UserAccountProvider.GOOGLE);
-			userAccount.setCredential(googleCredentialDAO.findByKey(userAccount.getKey()));
+      userAccountDAO.save(userAccount);
+      prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
-			userAccountDAO.save(userAccount);
-			prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
+    } catch (GeneralSecurityException | IOException e) {
+      log.error("Error during authentification", e);
+      throw new AuthentificationException(e);
+    } finally {
+      // Delete accounts without complete setup
+      userAccountDAO.deleteInvalidAccounts();
+    }
 
-		} catch (GeneralSecurityException | IOException e) {
-			log.error("Error during authentification", e);
-			throw new AuthentificationException(e);
-		} finally {
-			//Delete accounts without complete setup
-			userAccountDAO.deleteInvalidAccounts();
-		}
+  }
 
-	}
+  /**
+   * Retrieve Google Credentials from key.
+   * 
+   * @param key Google credential unique key
+   * @return
+   */
+  public GoogleCredential getGoogleCredential(String key) {
 
-	/**
-	 * Retrieve Google Credentials from key.
-	 * @param key Google credential unique key
-	 * @return
-	 */
-	public GoogleCredential getGoogleCredential(String key) {
+    String clientId = owlPlugCredentials.getGoogleAppId();
+    String clientSecret = owlPlugCredentials.getGoogleSecret();
 
-		String clientId = owlPlugCredentials.getGoogleAppId();
-		String clientSecret = owlPlugCredentials.getGoogleSecret();
+    com.dropsnorz.owlplug.auth.model.GoogleCredential gc = googleCredentialDAO.findByKey(key);
 
-		com.dropsnorz.owlplug.auth.model.GoogleCredential gc = googleCredentialDAO.findByKey(key);
+    return new GoogleCredential.Builder().setTransport(new NetHttpTransport()).setJsonFactory(new JacksonFactory())
+        .setClientSecrets(clientId, clientSecret).build().setRefreshToken(gc.getRefreshToken());
+  }
 
-		return new GoogleCredential.Builder().setTransport(new NetHttpTransport())
-				.setJsonFactory(new JacksonFactory())
-				.setClientSecrets(clientId, clientSecret)
-				.build()
-				.setRefreshToken(gc.getRefreshToken());
-	}
+  /**
+   * Deletes a user account.
+   * 
+   * @param userAccount user account to delete
+   */
+  @Transactional
+  public void deleteAccount(UserAccount userAccount) {
 
-	/**
-	 * Deletes a user account.
-	 * @param userAccount user account to delete
-	 */
-	@Transactional
-	public void deleteAccount(UserAccount userAccount) {
+    pluginRepositoryService.removeAccountReferences(userAccount);
+    googleCredentialDAO.deleteByKey(userAccount.getKey());
+    userAccountDAO.delete(userAccount);
+    mainController.refreshAccounts();
+  }
 
-		pluginRepositoryService.removeAccountReferences(userAccount);
-		googleCredentialDAO.deleteByKey(userAccount.getKey());
-		userAccountDAO.delete(userAccount);
-		mainController.refreshAccounts();
-	}
-
-
-	/**
-	 * Force the Authentication flow authReceiver to stop.
-	 * Called when the user cancels authentication.
-	 */
-	public void stopAuthReceiver() {
-		try {
-			userAccountDAO.deleteInvalidAccounts();
-			if (receiver != null) {
-				receiver.stop();
-			}
-		} catch (IOException e) {
-			log.error("Error while stopping local authentification receiver", e);
-		}
-	}
+  /**
+   * Force the Authentication flow authReceiver to stop. Called when the user
+   * cancels authentication.
+   */
+  public void stopAuthReceiver() {
+    try {
+      userAccountDAO.deleteInvalidAccounts();
+      if (receiver != null) {
+        receiver.stop();
+      }
+    } catch (IOException e) {
+      log.error("Error while stopping local authentification receiver", e);
+    }
+  }
 
 }

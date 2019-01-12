@@ -14,39 +14,37 @@ import org.springframework.stereotype.Component;
 @Component
 public class RepositoryStrategyResolver {
 
-	private HashMap<Class, HashMap<RepositoryAction, IRepositoryStrategy>> strategyBindings;
+  private HashMap<Class, HashMap<RepositoryAction, IRepositoryStrategy>> strategyBindings;
 
+  public RepositoryStrategyResolver() {
 
-	public RepositoryStrategyResolver() {
+    strategyBindings = new HashMap<>();
 
-		strategyBindings = new HashMap<>();
+    // FileSystemRepository bindings
+    HashMap<RepositoryAction, IRepositoryStrategy> fileSystemBindings = new HashMap<>();
+    fileSystemBindings.put(RepositoryAction.PULL, new FileSystemRepositoryPullingStrategy());
+    fileSystemBindings.put(RepositoryAction.PUSH, new FileSystemRepositoryPushingStrategy());
 
-		// FileSystemRepository bindings
-		HashMap<RepositoryAction, IRepositoryStrategy> fileSystemBindings = new HashMap<>();
-		fileSystemBindings.put(RepositoryAction.PULL, new FileSystemRepositoryPullingStrategy());
-		fileSystemBindings.put(RepositoryAction.PUSH, new FileSystemRepositoryPushingStrategy());
+    strategyBindings.put(FileSystemRepository.class, fileSystemBindings);
 
-		strategyBindings.put(FileSystemRepository.class, fileSystemBindings);
+    // GoogleDrive Bindings
+    HashMap<RepositoryAction, IRepositoryStrategy> googleDriveBindings = new HashMap<>();
+    googleDriveBindings.put(RepositoryAction.PULL, new GoogleDrivePullingStrategy());
+    googleDriveBindings.put(RepositoryAction.PUSH, new GoogleDrivePushingStrategy());
 
-		// GoogleDrive Bindings
-		HashMap<RepositoryAction, IRepositoryStrategy> googleDriveBindings = new HashMap<>();
-		googleDriveBindings.put(RepositoryAction.PULL, new GoogleDrivePullingStrategy());
-		googleDriveBindings.put(RepositoryAction.PUSH, new GoogleDrivePushingStrategy());
+    strategyBindings.put(GoogleDriveRepository.class, googleDriveBindings);
+  }
 
-		strategyBindings.put(GoogleDriveRepository.class, googleDriveBindings);
-	}
+  public IRepositoryStrategy getStrategy(PluginRepository repository, RepositoryStrategyParameters parameters) {
 
-	public IRepositoryStrategy getStrategy(PluginRepository repository, RepositoryStrategyParameters parameters) {
+    return strategyBindings.get(repository.getClass()).get(parameters.getRepositoryAction());
 
-		return strategyBindings.get(repository.getClass()).get(parameters.getRepositoryAction());
+  }
 
-	}
+  public void execute(PluginRepository repository, RepositoryStrategyParameters parameters)
+      throws RepositoryStrategyException {
 
-
-	public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) 
-			throws RepositoryStrategyException {
-
-		strategyBindings.get(repository.getClass()).get(parameters.getRepositoryAction()).execute(repository, parameters);
-	}
+    strategyBindings.get(repository.getClass()).get(parameters.getRepositoryAction()).execute(repository, parameters);
+  }
 
 }

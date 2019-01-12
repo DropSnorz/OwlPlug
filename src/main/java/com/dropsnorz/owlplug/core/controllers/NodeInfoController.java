@@ -11,50 +11,49 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class NodeInfoController {
 
-	@Autowired
-	private PluginInfoController pluginInfoController;
+  @Autowired
+  private PluginInfoController pluginInfoController;
 
-	@Autowired
-	private DirectoryInfoController directoryInfoController;
+  @Autowired
+  private DirectoryInfoController directoryInfoController;
 
-	@Autowired
-	private RepositoryInfoController repositoryInfoController;
+  @Autowired
+  private RepositoryInfoController repositoryInfoController;
 
-	@FXML
-	private Node pluginInfoView;
-	@FXML
-	private Node directoryInfoView;
-	@FXML
-	private Node repositoryInfoView;
+  @FXML
+  private Node pluginInfoView;
+  @FXML
+  private Node directoryInfoView;
+  @FXML
+  private Node repositoryInfoView;
 
-	@FXML
-	public void initialize() { 
+  @FXML
+  public void initialize() {
 
-		pluginInfoView.setVisible(false);
-		directoryInfoView.setVisible(false);
-		repositoryInfoView.setVisible(false);
-	}
+    pluginInfoView.setVisible(false);
+    directoryInfoView.setVisible(false);
+    repositoryInfoView.setVisible(false);
+  }
 
-	public void setNode(Object node) {
+  public void setNode(Object node) {
 
-		pluginInfoView.setVisible(false);
-		directoryInfoView.setVisible(false);
-		repositoryInfoView.setVisible(false);
+    pluginInfoView.setVisible(false);
+    directoryInfoView.setVisible(false);
+    repositoryInfoView.setVisible(false);
 
+    if (node instanceof Plugin) {
+      pluginInfoController.setPlugin((Plugin) node);
+      pluginInfoView.setVisible(true);
+    }
+    if (node instanceof PluginDirectory) {
+      directoryInfoController.setPluginDirectory((PluginDirectory) node);
+      directoryInfoView.setVisible(true);
+    }
+    if (node instanceof PluginRepository) {
 
-		if (node instanceof Plugin) {
-			pluginInfoController.setPlugin((Plugin)node);
-			pluginInfoView.setVisible(true);
-		}
-		if (node instanceof PluginDirectory) {
-			directoryInfoController.setPluginDirectory((PluginDirectory)node);
-			directoryInfoView.setVisible(true);
-		}
-		if (node instanceof PluginRepository) {
-
-			repositoryInfoController.setPluginRepository((PluginRepository) node);
-			repositoryInfoView.setVisible(true);
-		}
-	}
+      repositoryInfoController.setPluginRepository((PluginRepository) node);
+      repositoryInfoView.setVisible(true);
+    }
+  }
 
 }

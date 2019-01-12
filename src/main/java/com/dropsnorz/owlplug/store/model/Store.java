@@ -9,57 +9,55 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Store {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	private String apiUrl;
-	private String name;
-	private String url;
-	private boolean enabled = true;
-	@OneToMany(mappedBy = "store", orphanRemoval = true)
-	private List<StoreProduct> products;
-	
-	
-	public String getApiUrl() {
-		return apiUrl;
-	}
 
-	public void setApiUrl(String apiUrl) {
-		this.apiUrl = apiUrl;
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
+  private String apiUrl;
+  private String name;
+  private String url;
+  private boolean enabled = true;
+  @OneToMany(mappedBy = "store", orphanRemoval = true)
+  private List<StoreProduct> products;
 
-	public Long getId() {
-		return id;
-	}
+  public String getApiUrl() {
+    return apiUrl;
+  }
 
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getUrl() {
-		return url;
-	}
-	
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  public void setApiUrl(String apiUrl) {
+    this.apiUrl = apiUrl;
+  }
 
-	public boolean isEnabled() {
-		return enabled;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public List<StoreProduct> getProducts() {
-		return products;
-	}
-	
-	
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  public List<StoreProduct> getProducts() {
+    return products;
+  }
+
 }

@@ -29,142 +29,139 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ProductInfoController {
 
-	@Autowired
-	private StoreController storeController;
-	@Autowired
-	private ImageCache imageCache;
+  @Autowired
+  private StoreController storeController;
+  @Autowired
+  private ImageCache imageCache;
 
-	@FXML
-	private Pane productInfoContainer;
-	@FXML
-	private Pane productInfoContent;
-	@FXML
-	private Pane topInfoPane;
-	@FXML
-	private JFXButton closeButton;
-	@FXML
-	private Label productNameLabel;
-	@FXML
-	private Label productStoreLabel;
-	@FXML
-	private JFXButton browsePageButton;
-	@FXML
-	private JFXButton installButton;
-	@FXML
-	private Label creatorLabel;
-	@FXML
-	private Label typeLabel;
-	@FXML
-	private FlowPane tagContainer;
-	@FXML
-	private Label descriptionLabel;
-	@FXML
-	private Pane bundlesContainer;
-	
-	private ProductBundlesView bundlesView;
+  @FXML
+  private Pane productInfoContainer;
+  @FXML
+  private Pane productInfoContent;
+  @FXML
+  private Pane topInfoPane;
+  @FXML
+  private JFXButton closeButton;
+  @FXML
+  private Label productNameLabel;
+  @FXML
+  private Label productStoreLabel;
+  @FXML
+  private JFXButton browsePageButton;
+  @FXML
+  private JFXButton installButton;
+  @FXML
+  private Label creatorLabel;
+  @FXML
+  private Label typeLabel;
+  @FXML
+  private FlowPane tagContainer;
+  @FXML
+  private Label descriptionLabel;
+  @FXML
+  private Pane bundlesContainer;
 
-	private SideBar sidebar;
+  private ProductBundlesView bundlesView;
 
-	/**
-	 * FXML initialize.
-	 */
-	public void initialize() {
+  private SideBar sidebar;
 
-		// Wrap info content inside a proxy sidebar
-		productInfoContainer.getChildren().remove(productInfoContent);
-		sidebar = new SideBar(400, productInfoContent);
-		sidebar.collapse();
-		productInfoContainer.getChildren().add(sidebar);
+  /**
+   * FXML initialize.
+   */
+  public void initialize() {
 
-		closeButton.setOnAction(e -> {
-			sidebar.collapse();
-		});
-		
-		bundlesView = new ProductBundlesView();
-		bundlesContainer.getChildren().add(bundlesView);
+    // Wrap info content inside a proxy sidebar
+    productInfoContainer.getChildren().remove(productInfoContent);
+    sidebar = new SideBar(400, productInfoContent);
+    sidebar.collapse();
+    productInfoContainer.getChildren().add(sidebar);
 
-	}
+    closeButton.setOnAction(e -> {
+      sidebar.collapse();
+    });
 
-	public void setProduct(StoreProduct product) {
-		
-		// Active install buttons
-		this.installButton.setDisable(false);
+    bundlesView = new ProductBundlesView();
+    bundlesContainer.getChildren().add(bundlesView);
 
-		
-		// Bind product properties to controls
-		this.productNameLabel.setText(product.getName());
-		Image screenshot = imageCache.get(product.getScreenshotUrl());
+  }
 
-		if (screenshot != null) {
-			BackgroundImage bgImg = new BackgroundImage(screenshot, 
-					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-					BackgroundPosition.CENTER, 
-					new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
-			topInfoPane.setBackground(new Background(bgImg));
-		}
-		topInfoPane.setEffect(new InnerShadow(25, Color.BLACK));	
+  public void setProduct(StoreProduct product) {
 
+    // Active install buttons
+    this.installButton.setDisable(false);
 
-		this.productStoreLabel.setText(product.getStore().getName());
-		
-		browsePageButton.setOnAction(e -> {
-			PlatformUtils.openDefaultBrowser(product.getPageUrl());
-		});
-		installButton.setOnAction(e -> {
-			storeController.installProduct(product);
-			this.installButton.setDisable(true);
-		});
+    // Bind product properties to controls
+    this.productNameLabel.setText(product.getName());
+    Image screenshot = imageCache.get(product.getScreenshotUrl());
 
-		this.creatorLabel.setText(product.getCreator());
+    if (screenshot != null) {
+      BackgroundImage bgImg = new BackgroundImage(screenshot, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+          BackgroundPosition.CENTER,
+          new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
+      topInfoPane.setBackground(new Background(bgImg));
+    }
+    topInfoPane.setEffect(new InnerShadow(25, Color.BLACK));
 
-		if (product.getType() == PluginType.EFFECT) {
-			this.typeLabel.setText("Instrument (VSTi)");
-		} else if (product.getType() == PluginType.INSTRUMENT) {
-			this.typeLabel.setText("Effect (VST)");
-		}
+    this.productStoreLabel.setText(product.getStore().getName());
 
-		tagContainer.getChildren().clear();
-		for (ProductTag tag : product.getTags()) {
-			Node chip =	new FakeChip(tag.getName());
-			chip.getStyleClass().add("jfx-chip");
-			tagContainer.getChildren().add(chip);
+    browsePageButton.setOnAction(e -> {
+      PlatformUtils.openDefaultBrowser(product.getPageUrl());
+    });
+    installButton.setOnAction(e -> {
+      storeController.installProduct(product);
+      this.installButton.setDisable(true);
+    });
 
-		}
+    this.creatorLabel.setText(product.getCreator());
 
-		this.descriptionLabel.setText(product.getDescription());
-		
-		bundlesView.clear();
-		for (ProductBundle bundle : product.getBundles()) {
-			bundlesView.addProductBundle(bundle, e -> storeController.installBundle(bundle));
-		}
+    if (product.getType() == PluginType.EFFECT) {
+      this.typeLabel.setText("Instrument (VSTi)");
+    } else if (product.getType() == PluginType.INSTRUMENT) {
+      this.typeLabel.setText("Effect (VST)");
+    }
 
-	}
+    tagContainer.getChildren().clear();
+    for (ProductTag tag : product.getTags()) {
+      Node chip = new FakeChip(tag.getName());
+      chip.getStyleClass().add("jfx-chip");
+      tagContainer.getChildren().add(chip);
 
-	public void show() {
-		if (sidebar.isCollapsed()) {
-			sidebar.expand();
-		}
-	}
+    }
 
-	public void hide() {
-		sidebar.collapse();
-	}
+    this.descriptionLabel.setText(product.getDescription());
 
-	public void toggleVisibility() {
-		sidebar.toggle();
-	}
+    bundlesView.clear();
+    for (ProductBundle bundle : product.getBundles()) {
+      bundlesView.addProductBundle(bundle, e -> storeController.installBundle(bundle));
+    }
 
-	private class FakeChip extends HBox {
+  }
 
-		public FakeChip(String text) {
+  public void show() {
+    if (sidebar.isCollapsed()) {
+      sidebar.expand();
+    }
+  }
 
-			Label label = new Label(text);
-			label.setWrapText(true);
-			label.setMaxWidth(100);
-			getChildren().add(label);
-			this.getStyleClass().add("fake-chip");
-		}
+  public void hide() {
+    sidebar.collapse();
+  }
 
-	}
+  public void toggleVisibility() {
+    sidebar.toggle();
+  }
+
+  private class FakeChip extends HBox {
+
+    public FakeChip(String text) {
+
+      Label label = new Label(text);
+      label.setWrapText(true);
+      label.setMaxWidth(100);
+      getChildren().add(label);
+      this.getStyleClass().add("fake-chip");
+    }
+
+  }
 
 }

@@ -23,91 +23,91 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class RepositoryInfoController {
 
-	@Autowired
-	private ApplicationDefaults applicationDefaults;
-	@Autowired
-	private PluginRepositoryService repositoryService;
-	@Autowired
-	private FileSystemRepositoryController fileSystemRepositoryController;
-	@Autowired
-	private GoogleDriveRepositoryController googleDriveRepositoryController;
-	@Autowired
-	private DialogController dialogController;
+  @Autowired
+  private ApplicationDefaults applicationDefaults;
+  @Autowired
+  private PluginRepositoryService repositoryService;
+  @Autowired
+  private FileSystemRepositoryController fileSystemRepositoryController;
+  @Autowired
+  private GoogleDriveRepositoryController googleDriveRepositoryController;
+  @Autowired
+  private DialogController dialogController;
 
-	@FXML
-	private Label repositoryNameLabel;
-	@FXML
-	private JFXButton openRepositoryButton;
-	@FXML
-	private JFXButton pullButton;
-	@FXML
-	private JFXButton deleteButton;
-	@FXML
-	private JFXButton editButton;
-	@FXML
-	private JFXListView<Plugin> pluginRepositoryListView;
+  @FXML
+  private Label repositoryNameLabel;
+  @FXML
+  private JFXButton openRepositoryButton;
+  @FXML
+  private JFXButton pullButton;
+  @FXML
+  private JFXButton deleteButton;
+  @FXML
+  private JFXButton editButton;
+  @FXML
+  private JFXListView<Plugin> pluginRepositoryListView;
 
-	private PluginRepository repository;
+  private PluginRepository repository;
 
-	/**
-	 * FXML initialize method.
-	 */
-	public void initialize() {
+  /**
+   * FXML initialize method.
+   */
+  public void initialize() {
 
-		pluginRepositoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
+    pluginRepositoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
 
-		pullButton.setOnAction(e -> {
-			repositoryService.pull(repository);
-		});
+    pullButton.setOnAction(e -> {
+      repositoryService.pull(repository);
+    });
 
-		openRepositoryButton.setOnAction(e -> {
-			PlatformUtils.openDirectoryExplorer(repositoryService.getLocalRepositoryPath(repository));
-		});
+    openRepositoryButton.setOnAction(e -> {
+      PlatformUtils.openDirectoryExplorer(repositoryService.getLocalRepositoryPath(repository));
+    });
 
-		editButton.setOnAction(e ->  {
-			if (repository instanceof FileSystemRepository) {
-				fileSystemRepositoryController.show();
-				fileSystemRepositoryController.startUpdateSequence((FileSystemRepository) repository);
-			}
-			if (repository instanceof GoogleDriveRepository) {
-				googleDriveRepositoryController.show();
-				googleDriveRepositoryController.startUpdateSequence((GoogleDriveRepository) repository);
-			}
-		});
+    editButton.setOnAction(e -> {
+      if (repository instanceof FileSystemRepository) {
+        fileSystemRepositoryController.show();
+        fileSystemRepositoryController.startUpdateSequence((FileSystemRepository) repository);
+      }
+      if (repository instanceof GoogleDriveRepository) {
+        googleDriveRepositoryController.show();
+        googleDriveRepositoryController.startUpdateSequence((GoogleDriveRepository) repository);
+      }
+    });
 
-		deleteButton.setOnAction(e -> {
+    deleteButton.setOnAction(e -> {
 
-			JFXDialog dialog = dialogController.newDialog();
-			JFXDialogLayout layout = new JFXDialogLayout();
+      JFXDialog dialog = dialogController.newDialog();
+      JFXDialogLayout layout = new JFXDialogLayout();
 
-			layout.setHeading(new Label("Remove directory"));
-			layout.setBody(new Label("Do you really want to remove repository " + repository.getName()
-					+ " and all of its content ? This will permanently delete the files from your hard drive."));
+      layout.setHeading(new Label("Remove directory"));
+      layout.setBody(new Label("Do you really want to remove repository " + repository.getName()
+          + " and all of its content ? This will permanently delete the files from your hard drive."));
 
-			JFXButton cancelButton = new JFXButton("Cancel");
-			cancelButton.setOnAction(cancelEvent -> {
-				dialog.close();
-			});	
+      JFXButton cancelButton = new JFXButton("Cancel");
+      cancelButton.setOnAction(cancelEvent -> {
+        dialog.close();
+      });
 
-			JFXButton removeButton = new JFXButton("Remove");
-			removeButton.setOnAction(removeEvent -> {
-				dialog.close();
-				repositoryService.delete(repository);
-			});	
-			removeButton.getStyleClass().add("button-danger");
+      JFXButton removeButton = new JFXButton("Remove");
+      removeButton.setOnAction(removeEvent -> {
+        dialog.close();
+        repositoryService.delete(repository);
+      });
+      removeButton.getStyleClass().add("button-danger");
 
-			layout.setActions(removeButton, cancelButton);
-			dialog.setContent(layout);
-			dialog.show();
-		});
-	}
+      layout.setActions(removeButton, cancelButton);
+      dialog.setContent(layout);
+      dialog.show();
+    });
+  }
 
-	public void setPluginRepository(PluginRepository repository) {
+  public void setPluginRepository(PluginRepository repository) {
 
-		repositoryNameLabel.setText(repository.getName());
-		pluginRepositoryListView.getItems().setAll(repository.getPluginList());
-		this.repository = repository;
+    repositoryNameLabel.setText(repository.getName());
+    pluginRepositoryListView.getItems().setAll(repository.getPluginList());
+    this.repository = repository;
 
-	}
+  }
 
 }

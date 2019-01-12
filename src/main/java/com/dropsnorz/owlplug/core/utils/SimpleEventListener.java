@@ -4,6 +4,6 @@ import java.util.EventListener;
 
 @FunctionalInterface
 public interface SimpleEventListener extends EventListener {
-	void onAction();
+  void onAction();
 
 }

@@ -23,63 +23,51 @@ import javafx.scene.paint.Stop;
 
 public class ProductBundlesView extends VBox {
 
+  private static final Paint FILL = new LinearGradient(0, 0, 6, 0, false, CycleMethod.REPEAT, new Stop(0, Color.GRAY),
+      new Stop(0.5, Color.GRAY), new Stop(0.5, Color.TRANSPARENT));
 
-	private static final Paint FILL = new LinearGradient(
-			0, 0,
-			6, 0,
-			false,
-			CycleMethod.REPEAT,
-			new Stop(0, Color.GRAY),
-			new Stop(0.5, Color.GRAY),
-			new Stop(0.5, Color.TRANSPARENT)
-			);
+  // create background for regions
+  private static final Background DOT_BACKGROUND = new Background(
+      new BackgroundFill(FILL, CornerRadii.EMPTY, Insets.EMPTY));
 
-	// create background for regions
-	private static final Background DOT_BACKGROUND = 
-			new Background(new BackgroundFill(FILL, CornerRadii.EMPTY, Insets.EMPTY));
+  public ProductBundlesView() {
+    super();
 
+    this.setSpacing(5);
 
-	public ProductBundlesView() {
-		super();
+  }
 
-		this.setSpacing(5);
+  public void clear() {
+    this.getChildren().clear();
+  }
 
-	}
+  public void addProductBundle(ProductBundle bundle, EventHandler<ActionEvent> installHandler) {
 
-	public void clear() {
-		this.getChildren().clear();
-	}
+    HBox hbox = new HBox(5);
+    hbox.setAlignment(Pos.CENTER_LEFT);
+    hbox.setFillHeight(false);
 
-	public void addProductBundle(ProductBundle bundle, EventHandler<ActionEvent> installHandler) {
+    Label bundleName = new Label(bundle.getName());
+    hbox.getChildren().add(bundleName);
+    Region filler = new Region();
+    filler.setPrefHeight(1);
+    filler.setBackground(DOT_BACKGROUND);
+    HBox.setHgrow(filler, Priority.ALWAYS);
+    hbox.getChildren().add(filler);
+    JFXButton installButton = new JFXButton("Install");
+    installButton.getStyleClass().add("button-action");
+    installButton.setOnAction(installHandler);
+    hbox.getChildren().add(installButton);
 
+    if (bundle.getFileSize() != 0) {
+      String sizeText = FileUtils.humanReadableByteCount(bundle.getFileSize(), true);
+      final Label sizeLabel = new Label("(" + sizeText + ")");
+      sizeLabel.getStyleClass().add("label-disabled");
+      hbox.getChildren().add(sizeLabel);
+    }
 
-		HBox hbox = new HBox(5);
-		hbox.setAlignment(Pos.CENTER_LEFT);
-		hbox.setFillHeight(false);
+    this.getChildren().add(hbox);
 
-
-		Label bundleName = new Label(bundle.getName());
-		hbox.getChildren().add(bundleName);
-		Region filler = new Region();
-		filler.setPrefHeight(1);
-		filler.setBackground(DOT_BACKGROUND);
-		HBox.setHgrow(filler, Priority.ALWAYS);
-		hbox.getChildren().add(filler);
-		JFXButton installButton = new JFXButton("Install");
-		installButton.getStyleClass().add("button-action");
-		installButton.setOnAction(installHandler);
-		hbox.getChildren().add(installButton);
-
-		if (bundle.getFileSize() != 0) {
-			String sizeText = FileUtils.humanReadableByteCount(bundle.getFileSize(), true);
-			final Label sizeLabel = new Label("(" + sizeText + ")");
-			sizeLabel.getStyleClass().add("label-disabled");
-			hbox.getChildren().add(sizeLabel);
-		}
-
-		this.getChildren().add(hbox);
-
-	}
-
+  }
 
 }

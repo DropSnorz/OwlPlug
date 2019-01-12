@@ -27,114 +27,112 @@ import org.springframework.stereotype.Service;
 @Service
 public class PluginRepositoryService {
 
-	@Autowired
-	protected Preferences prefs;
-	@Autowired
-	protected FileSystemRepositoryDAO fileSystemRepositoryDAO;
-	@Autowired
-	protected PluginRepositoryDAO pluginRepositoryDAO;
-	@Autowired
-	protected GoogleDriveRepositoryDAO googleDriveRepositoryDAO;
-	@Autowired
-	protected AuthenticationService authentificationService;
-	@Autowired
-	protected TaskFactory taskFactory;
-	@Autowired
-	protected ApplicationDefaults applicationDefaults;
-	@Autowired
-	private RepositoryStrategyResolver repositoryStrategyResolver;
+  @Autowired
+  protected Preferences prefs;
+  @Autowired
+  protected FileSystemRepositoryDAO fileSystemRepositoryDAO;
+  @Autowired
+  protected PluginRepositoryDAO pluginRepositoryDAO;
+  @Autowired
+  protected GoogleDriveRepositoryDAO googleDriveRepositoryDAO;
+  @Autowired
+  protected AuthenticationService authentificationService;
+  @Autowired
+  protected TaskFactory taskFactory;
+  @Autowired
+  protected ApplicationDefaults applicationDefaults;
+  @Autowired
+  private RepositoryStrategyResolver repositoryStrategyResolver;
 
-	/**
-	 * Creates and store a new repository instance.
-	 * @param repository - the new repository
-	 * @return true if repository has been created, false otherwise
-	 */
-	public boolean createRepository(PluginRepository repository) {
+  /**
+   * Creates and store a new repository instance.
+   * 
+   * @param repository - the new repository
+   * @return true if repository has been created, false otherwise
+   */
+  public boolean createRepository(PluginRepository repository) {
 
-		if (pluginRepositoryDAO.findByName(repository.getName()) == null) {
-			pluginRepositoryDAO.save(repository);
-			return true;
-		}
-		return false;
+    if (pluginRepositoryDAO.findByName(repository.getName()) == null) {
+      pluginRepositoryDAO.save(repository);
+      return true;
+    }
+    return false;
 
-	}
+  }
 
-	public void save(PluginRepository repository) {
-		pluginRepositoryDAO.save(repository);
-	}
+  public void save(PluginRepository repository) {
+    pluginRepositoryDAO.save(repository);
+  }
 
+  public void pull(PluginRepository repository) {
+    RepositoryStrategyParameters parameters = new RepositoryStrategyParameters();
+    parameters.setRepositoryAction(RepositoryAction.PULL);
 
-	public void pull(PluginRepository repository) {
-		RepositoryStrategyParameters parameters = new RepositoryStrategyParameters();
-		parameters.setRepositoryAction(RepositoryAction.PULL);
+    parameters.put("target-dir", getLocalRepositoryPath(repository));
+    parameters.put("task-name", "Pull repository - " + repository.getName());
 
-		parameters.put("target-dir", getLocalRepositoryPath(repository));
-		parameters.put("task-name", "Pull repository - " + repository.getName());
+    if (repository instanceof GoogleDriveRepository) {
+      if (((GoogleDriveRepository) repository).getUserAccount() != null) {
+        GoogleCredential credential = authentificationService
+            .getGoogleCredential(((GoogleDriveRepository) repository).getUserAccount().getKey());
+        parameters.putObject("google-credential", credential);
 
-		if (repository instanceof GoogleDriveRepository) {
-			if (((GoogleDriveRepository) repository).getUserAccount() != null) {
-				GoogleCredential credential = authentificationService.getGoogleCredential(
-						((GoogleDriveRepository) repository).getUserAccount().getKey());
-				parameters.putObject("google-credential", credential);
+      }
+    }
 
-			}
-		}
+    IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
+    taskFactory.create(new RepositoryTask(strategy, parameters, repository))
+        .setOnSucceeded(e -> taskFactory.createPluginSyncTask().schedule()).schedule();
 
-		IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
-		taskFactory.create(new RepositoryTask(strategy, parameters, repository))
-			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().schedule())
-			.schedule();
+  }
 
+  /**
+   * Deletes the given repository.
+   * 
+   * @param repository - the repository to delete
+   */
+  public void delete(PluginRepository repository) {
 
-	}
+    String localPath = getLocalRepositoryPath(repository);
+    taskFactory.create(new RepositoryRemoveTask(pluginRepositoryDAO, repository, localPath))
+        .setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow()).schedule();
+  }
 
-	/**
-	 * Deletes the given repository.
-	 * @param repository - the repository to delete
-	 */
-	public void delete(PluginRepository repository) {
+  /**
+   * Clears all userAccount fields matching the given UserAccount. This is usefull
+   * where an account is deleted but associated repositories are still managed by
+   * owlplug.
+   * 
+   * @param account - UserAccount to clear
+   */
+  public void removeAccountReferences(UserAccount account) {
 
-		String localPath = getLocalRepositoryPath(repository);
-		taskFactory.create(new RepositoryRemoveTask(pluginRepositoryDAO, repository, localPath))
-			.setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow())
-			.schedule();
-	}
+    Iterable<GoogleDriveRepository> repositories = googleDriveRepositoryDAO.findAll();
 
-	
-	/**
-	 * Clears all userAccount fields matching the given UserAccount. This is usefull where an account is deleted
-	 * but associated repositories are still managed by owlplug.
-	 * @param account - UserAccount to clear
-	 */
-	public void removeAccountReferences(UserAccount account) {
+    for (GoogleDriveRepository repository : repositories) {
+      if (repository.getUserAccount() != null && repository.getUserAccount().getId().equals(account.getId())) {
+        repository.setUserAccount(null);
+        googleDriveRepositoryDAO.save(repository);
+      }
+    }
+  }
 
-		Iterable<GoogleDriveRepository> repositories = googleDriveRepositoryDAO.findAll();
+  public String getLocalRepositoryDirectory() {
+    String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null);
+    if (path == null) {
+      return null;
+    }
+    return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME);
+  }
 
-		for (GoogleDriveRepository repository : repositories) {
-			if (repository.getUserAccount() != null 
-					&& repository.getUserAccount().getId().equals(account.getId())) {
-				repository.setUserAccount(null);
-				googleDriveRepositoryDAO.save(repository);
-			}
-		}
-	}
+  public String getLocalRepositoryPath(PluginRepository repository) {
 
-	public String getLocalRepositoryDirectory() {
-		String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null);
-		if (path == null) {
-			return null;
-		}
-		return FileUtils.convertPath(path + File.separator + ApplicationDefaults.REPOSITORY_FOLDER_NAME);
-	}
+    String path = getLocalRepositoryDirectory();
+    if (path == null) {
+      return null;
+    }
+    return FileUtils.convertPath(path + File.separator + repository.getName());
 
-	public String getLocalRepositoryPath(PluginRepository repository) {
-
-		String path = getLocalRepositoryDirectory();
-		if (path == null) {
-			return null;
-		}
-		return FileUtils.convertPath(path  + File.separator + repository.getName());
-
-	}
+  }
 
 }

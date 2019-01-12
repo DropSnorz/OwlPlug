@@ -5,26 +5,25 @@ import javax.persistence.Entity;
 @Entity
 public class FileSystemRepository extends PluginRepository {
 
-	protected String remotePath;
-	
-	public FileSystemRepository() {
-		
-	}
-	
-	public FileSystemRepository(String name, String remotePath) {
-		super(name);
-		
-		this.remotePath = remotePath;
-		
-	}
+  protected String remotePath;
 
-	public String getRemotePath() {
-		return remotePath;
-	}
+  public FileSystemRepository() {
 
-	public void setRemotePath(String remotePath) {
-		this.remotePath = remotePath;
-	}
-	
-	
+  }
+
+  public FileSystemRepository(String name, String remotePath) {
+    super(name);
+
+    this.remotePath = remotePath;
+
+  }
+
+  public String getRemotePath() {
+    return remotePath;
+  }
+
+  public void setRemotePath(String remotePath) {
+    this.remotePath = remotePath;
+  }
+
 }

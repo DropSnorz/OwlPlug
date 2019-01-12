@@ -10,42 +10,41 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class WindowsPluginCollector implements NativePluginCollector {
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	private PluginFormat pluginFormat;
-	
 
-	public WindowsPluginCollector(PluginFormat pluginFormat) {
-		this.pluginFormat  = pluginFormat;
-	}
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
+  private PluginFormat pluginFormat;
 
-	@Override
-	public List<File> collect(String path) {
+  public WindowsPluginCollector(PluginFormat pluginFormat) {
+    this.pluginFormat = pluginFormat;
+  }
 
-		ArrayList<File> fileList = new ArrayList<>();
-		File dir = new File(path);
-		
-		if (dir.isDirectory()) {
-			List<File> baseFiles = (List<File>) FileUtils.listFiles(dir,  TrueFileFilter.TRUE,  TrueFileFilter.TRUE);
+  @Override
+  public List<File> collect(String path) {
 
-			for (File file: baseFiles) {
+    ArrayList<File> fileList = new ArrayList<>();
+    File dir = new File(path);
 
-				if (pluginFormat == PluginFormat.VST2) {
-					if (file.getAbsolutePath().endsWith(".dll") && file.isFile()) {
-						fileList.add(file);
-					}
-				} else if (pluginFormat == PluginFormat.VST3) {
-					if (file.getAbsolutePath().endsWith(".vst3")) {
-						fileList.add(file);
-					}
+    if (dir.isDirectory()) {
+      List<File> baseFiles = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.TRUE, TrueFileFilter.TRUE);
 
-				}
-			}
-		} else {
-			log.error("Plugin root is not a directory");
-		}
+      for (File file : baseFiles) {
 
-		return fileList;
-	}
+        if (pluginFormat == PluginFormat.VST2) {
+          if (file.getAbsolutePath().endsWith(".dll") && file.isFile()) {
+            fileList.add(file);
+          }
+        } else if (pluginFormat == PluginFormat.VST3) {
+          if (file.getAbsolutePath().endsWith(".vst3")) {
+            fileList.add(file);
+          }
+
+        }
+      }
+    } else {
+      log.error("Plugin root is not a directory");
+    }
+
+    return fileList;
+  }
 
 }

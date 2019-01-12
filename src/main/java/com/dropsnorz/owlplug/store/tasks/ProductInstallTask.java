@@ -23,227 +23,205 @@ import org.slf4j.LoggerFactory;
 
 public class ProductInstallTask extends AbstractTask {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private ProductBundle bundle;
-	private File targetDirectory;
-	private ApplicationDefaults applicationDefaults;
+  private ProductBundle bundle;
+  private File targetDirectory;
+  private ApplicationDefaults applicationDefaults;
 
-	/**
-	 * Creates a new Product Installation task.
-	 * @param bundle Bundle to download
-	 * @param targetDirectory Target directory where downloaded product is stored
-	 * @param applicationDefaults Ownplug ApplicationDefaults
-	 */
-	public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults) {
+  /**
+   * Creates a new Product Installation task.
+   * 
+   * @param bundle              Bundle to download
+   * @param targetDirectory     Target directory where downloaded product is
+   *                            stored
+   * @param applicationDefaults Ownplug ApplicationDefaults
+   */
+  public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults) {
 
-		this.bundle = bundle;
-		this.targetDirectory = targetDirectory;
-		this.applicationDefaults = applicationDefaults;
-		setName("Install plugin - " + bundle.getProduct().getName());
-		setMaxProgress(150);
-	}
+    this.bundle = bundle;
+    this.targetDirectory = targetDirectory;
+    this.applicationDefaults = applicationDefaults;
+    setName("Install plugin - " + bundle.getProduct().getName());
+    setMaxProgress(150);
+  }
 
+  @Override
+  protected TaskResult call() throws Exception {
 
-	@Override
-	protected TaskResult call() throws Exception {
+    try {
+      targetDirectory.mkdirs();
+      if (targetDirectory == null || !targetDirectory.isDirectory()) {
+        this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Invalid installation directory");
+        log.error("Invalid plugin installation target directory");
+        throw new TaskException("Invalid plugin installation target directory");
+      }
+      this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Downloading files...");
+      File archiveFile = downloadInTempDirectory(bundle);
 
-		try {
-			targetDirectory.mkdirs();
-			if (targetDirectory == null || !targetDirectory.isDirectory()) {
-				this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Invalid installation directory");
-				log.error("Invalid plugin installation target directory");
-				throw new TaskException("Invalid plugin installation target directory");
-			}
-			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Downloading files...");
-			File archiveFile = downloadInTempDirectory(bundle);
+      this.commitProgress(100);
+      this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Extracting files...");
+      File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" + "temp-"
+          + archiveFile.getName().replace(".owlpack", ""));
+      FileUtils.unzip(archiveFile.getAbsolutePath(), extractedArchiveFolder.getAbsolutePath());
 
-			this.commitProgress(100);
-			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Extracting files...");
-			File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" 
-					+ "temp-" + archiveFile.getName().replace(".owlpack", ""));
-			FileUtils.unzip(archiveFile.getAbsolutePath(),  extractedArchiveFolder.getAbsolutePath());
+      this.commitProgress(30);
 
-			this.commitProgress(30);
+      this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Moving files...");
+      installToPluginDirectory(extractedArchiveFolder, targetDirectory);
 
-			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Moving files...");
-			installToPluginDirectory(extractedArchiveFolder, targetDirectory);
+      this.commitProgress(20);
 
-			this.commitProgress(20);
+      this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Cleaning files...");
+      archiveFile.delete();
+      FileUtils.deleteDirectory(extractedArchiveFolder);
 
-			this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Cleaning files...");
-			archiveFile.delete();
-			FileUtils.deleteDirectory(extractedArchiveFolder);
+      this.commitProgress(10);
+      this.updateMessage("Plugin " + bundle.getProduct().getName() + " successfully Installed");
 
-			this.commitProgress(10);
-			this.updateMessage("Plugin " + bundle.getProduct().getName() + " successfully Installed");
+    } catch (IOException e) {
+      this.updateProgress(1, 1);
+      throw new TaskException(e);
+    }
 
-		} catch (IOException e) {
-			this.updateProgress(1, 1);
-			throw new TaskException(e);
-		}
+    return success();
+  }
 
-		return success();
-	}
+  private File downloadInTempDirectory(ProductBundle bundle) throws TaskException {
 
+    URL website;
+    try {
+      website = new URL(bundle.getDownloadUrl());
+    } catch (MalformedURLException e) {
+      this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't download plugin files");
+      throw new TaskException(e);
 
-	private File downloadInTempDirectory(ProductBundle bundle) throws TaskException {
+    }
 
+    SimpleDateFormat horodateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
+    new File(applicationDefaults.getTempDowloadDirectory()).mkdirs();
+    String outPutFileName = horodateFormat.format(new Date()) + ".owlpack";
+    String outputFilePath = applicationDefaults.getTempDowloadDirectory() + File.separator + outPutFileName;
+    File outputFile = new File(outputFilePath);
 
-		URL website;
-		try {
-			website = new URL(bundle.getDownloadUrl());
-		} catch (MalformedURLException e) {
-			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't download plugin files");
-			throw new TaskException(e);
+    try (
+        CallbackByteChannel rbc = new CallbackByteChannel(Channels.newChannel(website.openStream()),
+            contentLength(website));
+        FileOutputStream fos = new FileOutputStream(outputFile)) {
 
-		}
+      rbc.setCallback(p -> {
+        log.debug(String.valueOf(p));
+        computeTotalProgress(p);
+      });
+      fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+      return outputFile;
 
-		SimpleDateFormat horodateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
-		new File(applicationDefaults.getTempDowloadDirectory()).mkdirs();
-		String outPutFileName =  horodateFormat.format(new Date()) + ".owlpack";
-		String outputFilePath = applicationDefaults.getTempDowloadDirectory() + File.separator + outPutFileName;
-		File outputFile = new File(outputFilePath);
+    } catch (MalformedURLException e) {
+      this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't download plugin files");
+      throw new TaskException(e);
+    } catch (FileNotFoundException e) {
+      this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: File not found");
+      throw new TaskException(e);
+    } catch (IOException e) {
+      this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't write file on disk");
+      throw new TaskException(e);
+    }
 
-		try (
-				CallbackByteChannel rbc = new CallbackByteChannel(
-						Channels.newChannel(website.openStream()), 
-						contentLength(website));
-				FileOutputStream fos = new FileOutputStream(outputFile)
-				) {
+  }
 
-			rbc.setCallback(p ->  { 
-				log.debug(String.valueOf(p));
-				computeTotalProgress(p);
-			}); 
-			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-			return outputFile;
+  private void installToPluginDirectory(File source, File target) throws IOException {
 
-		} catch (MalformedURLException e) {
-			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't download plugin files");
-			throw new TaskException(e);
-		} catch (FileNotFoundException e) {
-			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: File not found");
-			throw new TaskException(e);
-		} catch (IOException e) {
-			this.updateMessage("Installation of " + bundle.getProduct().getName() + " canceled: Can't write file on disk");
-			throw new TaskException(e);
-		} 
+    OwlPackStructureType structure = getStructureType(source);
+    // Choose the folder to copy from the downloaded source
+    File newSource = source;
+    switch (structure) {
+    case NESTED:
+      newSource = source.listFiles()[0];
+      break;
+    case ENV:
+      newSource = getSubfileByPlatformTag(source);
+      break;
+    case NESTED_ENV:
+      newSource = getSubfileByPlatformTag(source.listFiles()[0]);
+      break;
+    default:
+      break;
+    }
 
-	}
+    FileUtils.copyDirectory(newSource, target);
+  }
 
+  private OwlPackStructureType getStructureType(File directory) {
 
-	private void installToPluginDirectory(File source, File target) throws IOException {
+    RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
+    OwlPackStructureType structure = OwlPackStructureType.DIRECT;
 
-		OwlPackStructureType structure = getStructureType(source);
-		//Choose the folder to copy from the downloaded source
-		File newSource = source;
-		switch (structure) {
-			case NESTED: newSource = source.listFiles()[0]; 
-				break;
-			case ENV: newSource = getSubfileByPlatformTag(source); 
-				break;
-			case NESTED_ENV: newSource = getSubfileByPlatformTag(source.listFiles()[0]); 
-				break;
-			default: break;
-		}
-		
-		FileUtils.copyDirectory(newSource, target);		
-	}
+    if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory()
+        && !runtimePlatform.getCompatiblePlatformsTags().contains(directory.listFiles()[0].getName())) {
+      structure = OwlPackStructureType.NESTED;
+      for (File f : directory.listFiles()[0].listFiles()) {
+        if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
+          structure = OwlPackStructureType.NESTED_ENV;
+        }
+      }
+    } else if (directory.listFiles().length >= 1) {
+      // if the directory describes an environement related bundle
+      for (File f : directory.listFiles()) {
+        if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
+          return OwlPackStructureType.ENV;
+        }
+      }
+    }
+    return structure;
+  }
 
+  private int contentLength(URL url) {
+    HttpURLConnection connection;
+    int contentLength = -1;
+    try {
+      connection = (HttpURLConnection) url.openConnection();
+      contentLength = connection.getContentLength();
+    } catch (Exception e) {
+      return 1;
+    }
+    return contentLength;
+  }
 
-	private OwlPackStructureType getStructureType(File directory) {
+  private File getSubfileByPlatformTag(File parent) {
 
-		RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
-		OwlPackStructureType structure = OwlPackStructureType.DIRECT;
+    RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
+    File[] subFiles = parent.listFiles();
 
-		if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory() 
-				&& !runtimePlatform.getCompatiblePlatformsTags().contains(directory.listFiles()[0].getName())) {
-			structure = OwlPackStructureType.NESTED;
-			for (File f : directory.listFiles()[0].listFiles()) {
-				if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
-					structure = OwlPackStructureType.NESTED_ENV;
-				}
-			}
-		} else if (directory.listFiles().length >= 1) {
-			// if the directory describes an environement related bundle
-			for (File f : directory.listFiles()) {
-				if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
-					return OwlPackStructureType.ENV;
-				}
-			}
-		}
-		return structure;
-	}
+    for (String platformTag : runtimePlatform.getCompatiblePlatformsTags()) {
+      for (File f : subFiles) {
+        if (f.getName().equals(platformTag)) {
+          return f;
+        }
+      }
+    }
+    return null;
+  }
 
-	private int contentLength(URL url) {
-		HttpURLConnection connection;
-		int contentLength = -1;
-		try {
-			connection = (HttpURLConnection) url.openConnection();
-			contentLength = connection.getContentLength();
-		} catch (Exception e) {
-			return 1;
-		}
-		return contentLength;
-	}
+  private File getSubfileByName(File parent, String filename) {
+    for (File f : parent.listFiles()) {
+      if (f.getName().equals(filename)) {
+        return f;
+      }
+    }
+    return null;
+  }
 
-	private File getSubfileByPlatformTag(File parent) {
-
-		RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
-		File[] subFiles = parent.listFiles();
-
-		for (String platformTag : runtimePlatform.getCompatiblePlatformsTags()) {
-			for (File f : subFiles) {
-				if (f.getName().equals(platformTag)) {
-					return f;
-				}
-			}
-		}
-		return null;
-	}
-
-	private File getSubfileByName(File parent, String filename) {
-		for (File f : parent.listFiles()) {
-			if (f.getName().equals(filename)) {
-				return f;
-			}
-		}
-		return null;
-	}
-
-
-	/**
-	 * Compatible product archive structues
-	 * --------------
-	 *	DIRECT
-	 *	plugin.zip/
-	 *	├── plugin.dll
-	 *	└── (other required files...)
-	 *	--------------
-	 *	NESTED
-	 *	plugin.zip/
-	 *	└── plugin
-	 *		├── plugin.dll
-	 *		└── (other required files...)
-	 * --------------
-	 *	NESTED_ENV
-	 *	plugin.zip/
-	 *	└── plugin
-	 *		├── x86
-	 *		│	├── plugin.dll
-	 *		│	└── (other required files...)
-	 *		└── x64
-	 *			├── plugin.dll
-	 *			└── (other required files...)
-	 *
-	 *
-	 */
-	private enum OwlPackStructureType {
-		DIRECT,
-		ENV,
-		NESTED,
-		NESTED_ENV,
-	}
+  /**
+   * Compatible product archive structues -------------- DIRECT plugin.zip/ ├──
+   * plugin.dll └── (other required files...) -------------- NESTED plugin.zip/
+   * └── plugin ├── plugin.dll └── (other required files...) --------------
+   * NESTED_ENV plugin.zip/ └── plugin ├── x86 │ ├── plugin.dll │ └── (other
+   * required files...) └── x64 ├── plugin.dll └── (other required files...)
+   *
+   *
+   */
+  private enum OwlPackStructureType {
+    DIRECT, ENV, NESTED, NESTED_ENV,
+  }
 
 }

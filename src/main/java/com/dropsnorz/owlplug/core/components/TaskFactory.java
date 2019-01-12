@@ -22,86 +22,86 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskFactory {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private ApplicationDefaults applicationDefaults;
-	@Autowired
-	private Preferences prefs;
-	@Autowired
-	private TaskRunner taskManager;
-	@Autowired
-	private PluginDAO pluginDAO;
-	@Autowired
-	private StoreDAO pluginStoreDAO;
-	@Autowired
-	private StoreProductDAO storeProductDAO;
-	
-	private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
-	private ArrayList<SimpleEventListener> syncStoresListeners = new ArrayList<>();
+  @Autowired
+  private ApplicationDefaults applicationDefaults;
+  @Autowired
+  private Preferences prefs;
+  @Autowired
+  private TaskRunner taskManager;
+  @Autowired
+  private PluginDAO pluginDAO;
+  @Autowired
+  private StoreDAO pluginStoreDAO;
+  @Autowired
+  private StoreProductDAO storeProductDAO;
 
-	/**
-	 * Creates a {@link PluginSyncTask} and binds listeners to the success callback.
-	 * @return
-	 */
-	public TaskExecutionContext createPluginSyncTask() {
-		
-		PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
-		parameters.setPlatform(applicationDefaults.getRuntimePlatform().getOperatingSystem());
-		parameters.setPluginDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-		parameters.setFindVST2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
-		parameters.setFindVST3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+  private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
+  private ArrayList<SimpleEventListener> syncStoresListeners = new ArrayList<>();
 
-		PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO);
-		task.setOnSucceeded(e -> {
-			notifyListeners(syncPluginsListeners);
-		});
-		return create(task);
-	}
+  /**
+   * Creates a {@link PluginSyncTask} and binds listeners to the success callback.
+   * 
+   * @return
+   */
+  public TaskExecutionContext createPluginSyncTask() {
 
-	
-	/**
-	 * Creates a {@link StoreSyncTask} and binds listeners to the success callback.
-	 * @return
-	 */
-	public TaskExecutionContext createStoreSyncTask() {
-		
-		StoreSyncTask task = new StoreSyncTask(pluginStoreDAO, storeProductDAO);
-		task.setOnSucceeded(e -> {
-			notifyListeners(syncStoresListeners);
-		});
-		return create(task);
-	}
-	
-	public TaskExecutionContext create(AbstractTask task) {
-		return buildContext(task);
-	}
-	
-	private void notifyListeners(List<SimpleEventListener> listeners) {
-		for (SimpleEventListener listener : listeners) {
-			listener.onAction();
-		}
-	}
-	
-	private TaskExecutionContext buildContext(AbstractTask task) {
-		return new TaskExecutionContext(task, taskManager);
-	}
-	
-	public void addSyncPluginsListener(SimpleEventListener eventListener) {
-		syncPluginsListeners.add(eventListener);
-	}
-	
-	public void removeSyncPluginsListener(SimpleEventListener eventListener) {
-		syncPluginsListeners.remove(eventListener);
-	}
-	
-	public void addSyncStoresListener(SimpleEventListener eventListener) {
-		syncStoresListeners.add(eventListener);
-	}
-	
-	public void removeSyncStoresListener(SimpleEventListener eventListener) {
-		syncStoresListeners.remove(eventListener);
-	}
-		
+    PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
+    parameters.setPlatform(applicationDefaults.getRuntimePlatform().getOperatingSystem());
+    parameters.setPluginDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    parameters.setFindVST2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+    parameters.setFindVST3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+
+    PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO);
+    task.setOnSucceeded(e -> {
+      notifyListeners(syncPluginsListeners);
+    });
+    return create(task);
+  }
+
+  /**
+   * Creates a {@link StoreSyncTask} and binds listeners to the success callback.
+   * 
+   * @return
+   */
+  public TaskExecutionContext createStoreSyncTask() {
+
+    StoreSyncTask task = new StoreSyncTask(pluginStoreDAO, storeProductDAO);
+    task.setOnSucceeded(e -> {
+      notifyListeners(syncStoresListeners);
+    });
+    return create(task);
+  }
+
+  public TaskExecutionContext create(AbstractTask task) {
+    return buildContext(task);
+  }
+
+  private void notifyListeners(List<SimpleEventListener> listeners) {
+    for (SimpleEventListener listener : listeners) {
+      listener.onAction();
+    }
+  }
+
+  private TaskExecutionContext buildContext(AbstractTask task) {
+    return new TaskExecutionContext(task, taskManager);
+  }
+
+  public void addSyncPluginsListener(SimpleEventListener eventListener) {
+    syncPluginsListeners.add(eventListener);
+  }
+
+  public void removeSyncPluginsListener(SimpleEventListener eventListener) {
+    syncPluginsListeners.remove(eventListener);
+  }
+
+  public void addSyncStoresListener(SimpleEventListener eventListener) {
+    syncStoresListeners.add(eventListener);
+  }
+
+  public void removeSyncStoresListener(SimpleEventListener eventListener) {
+    syncStoresListeners.remove(eventListener);
+  }
 
 }

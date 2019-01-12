@@ -3,65 +3,58 @@ package com.dropsnorz.owlplug.store.model.json;
 import java.util.List;
 
 public class StoreJsonMapper {
-	
-	private String name;
-	private String url;
-	private String type;
-	private String version;
-	
-	private List<ProductJsonMapper> products;
-	
 
-	public String getName() {
-		return name;
-	}
+  private String name;
+  private String url;
+  private String type;
+  private String version;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  private List<ProductJsonMapper> products;
 
-	public String getUrl() {
-		return url;
-	}
+  public String getName() {
+    return name;
+  }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	public String getType() {
-		return type;
-	}
+  public String getUrl() {
+    return url;
+  }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-	public String getVersion() {
-		return version;
-	}
+  public String getType() {
+    return type;
+  }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+  public void setType(String type) {
+    this.type = type;
+  }
 
-	public List<ProductJsonMapper> getProducts() {
-		return products;
-	}
+  public String getVersion() {
+    return version;
+  }
 
-	public void setProducts(List<ProductJsonMapper> products) {
-		this.products = products;
-	}
+  public void setVersion(String version) {
+    this.version = version;
+  }
 
-	@Override
-	public String toString() {
-		return "PluginStoreTO [name=" + name + ", url=" + url + ", type=" + type + ", version=" + version
-				+ ", products=" + products + "]";
-	}
-	
-	
-	
-	
-	
-	
+  public List<ProductJsonMapper> getProducts() {
+    return products;
+  }
+
+  public void setProducts(List<ProductJsonMapper> products) {
+    this.products = products;
+  }
+
+  @Override
+  public String toString() {
+    return "PluginStoreTO [name=" + name + ", url=" + url + ", type=" + type + ", version=" + version + ", products="
+        + products + "]";
+  }
 
 }

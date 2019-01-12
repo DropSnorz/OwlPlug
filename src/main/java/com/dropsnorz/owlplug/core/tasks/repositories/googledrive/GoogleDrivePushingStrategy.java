@@ -6,11 +6,11 @@ import com.dropsnorz.owlplug.core.tasks.repositories.RepositoryStrategyParameter
 
 public class GoogleDrivePushingStrategy implements IRepositoryStrategy {
 
-	@Override
-	public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) {
+  @Override
+  public void execute(PluginRepository repository, RepositoryStrategyParameters parameters) {
 
-		throw new UnsupportedOperationException("Not implemented yet");
+    throw new UnsupportedOperationException("Not implemented yet");
 
-	}
+  }
 
 }

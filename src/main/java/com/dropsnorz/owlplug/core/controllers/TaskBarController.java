@@ -26,67 +26,66 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class TaskBarController {
 
-	@Autowired
-	private TaskRunner taskRunner;
-	@Autowired
-	private ApplicationDefaults applicationDefaults;
+  @Autowired
+  private TaskRunner taskRunner;
+  @Autowired
+  private ApplicationDefaults applicationDefaults;
 
-	@FXML
-	public Label taskLabel;
-	@FXML
-	public ProgressBar taskProgressBar;
-	@FXML
-	private JFXButton taskHistoryButton;
+  @FXML
+  public Label taskLabel;
+  @FXML
+  public ProgressBar taskProgressBar;
+  @FXML
+  private JFXButton taskHistoryButton;
 
+  /**
+   * FXML initialize.
+   */
+  public void initialize() {
 
-	/**
-	 * FXML initialize.
-	 */
-	public void initialize() {
+    taskHistoryButton.setOnAction(e -> openTaskHistory());
+  }
 
-		taskHistoryButton.setOnAction(e -> openTaskHistory());
-	}
+  private void openTaskHistory() {
 
-	private void openTaskHistory() {
+    if (!taskRunner.getTaskHistory().isEmpty()) {
+      JFXListView<AbstractTask> list = new JFXListView<>();
+      list.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
-		if (!taskRunner.getTaskHistory().isEmpty()) {
-			JFXListView<AbstractTask> list = new JFXListView<>();
-			list.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-			
-			ArrayList<AbstractTask> tasks = new ArrayList<>(taskRunner.getTaskHistory());
-			tasks.addAll(taskRunner.getPendingTasks());
-			list.getItems().addAll(tasks);
+      ArrayList<AbstractTask> tasks = new ArrayList<>(taskRunner.getTaskHistory());
+      tasks.addAll(taskRunner.getPendingTasks());
+      list.getItems().addAll(tasks);
 
-			list.setCellFactory(new Callback<ListView<AbstractTask>, ListCell<AbstractTask>>() {
-				@Override
-				public ListCell<AbstractTask> call(ListView<AbstractTask> param) {
-					return new JFXListCell<AbstractTask>() {
-						@Override
-						public void updateItem(AbstractTask item, boolean empty) {
-							super.updateItem(item, empty);
-							if (item != null && !empty) {
-								Image icon = applicationDefaults.taskPendingImage;
-								if (item.isRunning()) {
-									icon = applicationDefaults.taskRunningImage;
-								} else if (item.isDone()) {
-									icon = applicationDefaults.taskSuccessImage;
-								}
-								if (item.getState().equals(State.FAILED)) {
-									icon = applicationDefaults.taskFailImage;
-								}
-								ImageView imageView = new ImageView(icon);
-								setGraphic(imageView);
-								setText(item.getName());
-							}
-						}
-					};
-				}
-			});
+      list.setCellFactory(new Callback<ListView<AbstractTask>, ListCell<AbstractTask>>() {
+        @Override
+        public ListCell<AbstractTask> call(ListView<AbstractTask> param) {
+          return new JFXListCell<AbstractTask>() {
+            @Override
+            public void updateItem(AbstractTask item, boolean empty) {
+              super.updateItem(item, empty);
+              if (item != null && !empty) {
+                Image icon = applicationDefaults.taskPendingImage;
+                if (item.isRunning()) {
+                  icon = applicationDefaults.taskRunningImage;
+                } else if (item.isDone()) {
+                  icon = applicationDefaults.taskSuccessImage;
+                }
+                if (item.getState().equals(State.FAILED)) {
+                  icon = applicationDefaults.taskFailImage;
+                }
+                ImageView imageView = new ImageView(icon);
+                setGraphic(imageView);
+                setText(item.getName());
+              }
+            }
+          };
+        }
+      });
 
-			JFXPopup popup = new JFXPopup(list);
-			popup.show(taskHistoryButton, PopupVPosition.BOTTOM, PopupHPosition.RIGHT);
-		}
+      JFXPopup popup = new JFXPopup(list);
+      popup.show(taskHistoryButton, PopupVPosition.BOTTOM, PopupHPosition.RIGHT);
+    }
 
-	}
+  }
 
 }

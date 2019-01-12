@@ -20,133 +20,128 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class FileSystemRepositoryController extends AbstractDialogController implements IEntityCreateOrUpdate<FileSystemRepository> {
+public class FileSystemRepositoryController extends AbstractDialogController
+    implements IEntityCreateOrUpdate<FileSystemRepository> {
 
-	@Autowired
-	private PluginRepositoryService pluginRepositoryService;
-	@Autowired
-	private PluginsController pluginController;
-	@Autowired
-	private LazyViewRegistry viewRegistry;
-	@Autowired
-	private ApplicationDefaults applicationDefaults;
+  @Autowired
+  private PluginRepositoryService pluginRepositoryService;
+  @Autowired
+  private PluginsController pluginController;
+  @Autowired
+  private LazyViewRegistry viewRegistry;
+  @Autowired
+  private ApplicationDefaults applicationDefaults;
 
-	@FXML
-	private JFXButton closeButton;
-	@FXML
-	private JFXButton addButton;
-	@FXML
-	private JFXTextField repositoryNameTextField;
-	@FXML
-	private JFXTextField repositoryPathTextField;
-	@FXML
-	private JFXButton browseDirectoryButton;
-	@FXML
-	private Label messageLabel;
+  @FXML
+  private JFXButton closeButton;
+  @FXML
+  private JFXButton addButton;
+  @FXML
+  private JFXTextField repositoryNameTextField;
+  @FXML
+  private JFXTextField repositoryPathTextField;
+  @FXML
+  private JFXButton browseDirectoryButton;
+  @FXML
+  private Label messageLabel;
 
-	private FileSystemRepository currentFileSystemRepository = null;
+  private FileSystemRepository currentFileSystemRepository = null;
 
-	public FileSystemRepositoryController(){
-		super(600,300);
-	}
+  public FileSystemRepositoryController() {
+    super(600, 300);
+  }
 
+  public void initialize() {
 
-	public void initialize() {
+    closeButton.setOnAction(e -> {
+      close();
+    });
 
-		closeButton.setOnAction(e ->  {
-			close();
-		});
+    addButton.setOnAction(e -> {
+      if (currentFileSystemRepository != null) {
+        updateRepository();
+      } else {
+        createRepository();
+      }
+      pluginController.refreshPlugins();
+    });
 
+    browseDirectoryButton.setOnAction(e -> {
+      DirectoryChooser directoryChooser = new DirectoryChooser();
+      Window mainWindow = repositoryPathTextField.getScene().getWindow();
 
-		addButton.setOnAction(e -> {
-			if (currentFileSystemRepository != null) {
-				updateRepository();
-			} else {
-				createRepository();
-			}
-			pluginController.refreshPlugins();
-		});
+      File selectedDirectory = directoryChooser.showDialog(mainWindow);
 
-		browseDirectoryButton.setOnAction(e -> {
-			DirectoryChooser directoryChooser = new DirectoryChooser();
-			Window mainWindow = repositoryPathTextField.getScene().getWindow();
+      if (selectedDirectory != null) {
+        repositoryPathTextField.setText(selectedDirectory.getAbsolutePath());
+      }
+    });
 
-			File selectedDirectory = directoryChooser.showDialog(mainWindow);
+  }
 
-			if (selectedDirectory != null) {
-				repositoryPathTextField.setText(selectedDirectory.getAbsolutePath());
-			}
-		});
+  @Override
+  public void startCreateSequence() {
 
-	}
+    this.currentFileSystemRepository = null;
 
+    addButton.setText("Add");
+    repositoryNameTextField.setText("");
+    repositoryNameTextField.setDisable(false);
+    repositoryPathTextField.setText("");
+  }
 
-	@Override
-	public void startCreateSequence() {
+  @Override
+  public void startUpdateSequence(FileSystemRepository entity) {
 
-		this.currentFileSystemRepository = null; 
+    this.currentFileSystemRepository = entity;
 
-		addButton.setText("Add");
-		repositoryNameTextField.setText("");
-		repositoryNameTextField.setDisable(false);
-		repositoryPathTextField.setText("");
-	}
+    addButton.setText("Edit");
+    repositoryNameTextField.setText(entity.getName());
+    repositoryNameTextField.setDisable(true);
+    repositoryPathTextField.setText(entity.getRemotePath());
+  }
 
+  private void createRepository() {
 
-	@Override
-	public void startUpdateSequence(FileSystemRepository entity) {
+    String name = repositoryNameTextField.getText();
+    String path = repositoryPathTextField.getText();
 
-		this.currentFileSystemRepository = entity;
+    FileSystemRepository repository = new FileSystemRepository(name, path);
 
-		addButton.setText("Edit");
-		repositoryNameTextField.setText(entity.getName());
-		repositoryNameTextField.setDisable(true);
-		repositoryPathTextField.setText(entity.getRemotePath());
-	}
+    if (FileUtils.isFilenameValid(name)) {
+      if (pluginRepositoryService.createRepository(repository)) {
+        close();
+      } else {
+        messageLabel.setText("A repository named " + name + " already exists");
+      }
+    } else {
+      messageLabel.setText("Repository name contains illegal characters");
+    }
+  }
 
+  private void updateRepository() {
 
-	private void createRepository() {
+    String path = repositoryPathTextField.getText();
+    currentFileSystemRepository.setRemotePath(path);
+    pluginRepositoryService.save(currentFileSystemRepository);
 
-		String name = repositoryNameTextField.getText();
-		String path = repositoryPathTextField.getText();
+    close();
+  }
 
-		FileSystemRepository repository = new FileSystemRepository(name, path);
+  @Override
+  protected Node getBody() {
+    return viewRegistry.getAsNode(LazyViewRegistry.NEW_FILESYSTEM_REPOSITORY_VIEW);
+  }
 
-		if (FileUtils.isFilenameValid(name)) {
-			if (pluginRepositoryService.createRepository(repository)) {
-				close();
-			} else {
-				messageLabel.setText("A repository named " + name + " already exists");
-			}
-		} else {
-			messageLabel.setText("Repository name contains illegal characters");
-		}
-	}
+  @Override
+  protected Node getHeading() {
+    Label title = new Label("FileSystem Repository");
+    title.getStyleClass().add("heading-3");
 
-	private void updateRepository() {
-
-		String path = repositoryPathTextField.getText();
-		currentFileSystemRepository.setRemotePath(path);
-		pluginRepositoryService.save(currentFileSystemRepository);
-
-		close();
-	}
-
-
-	@Override
-	protected Node getBody() {
-		return viewRegistry.getAsNode(LazyViewRegistry.NEW_FILESYSTEM_REPOSITORY_VIEW);
-	}
-
-	@Override
-	protected Node getHeading() {
-		Label title = new Label("FileSystem Repository");
-		title.getStyleClass().add("heading-3");
-
-		ImageView iv = new ImageView(applicationDefaults.fileSystemRepositoryImage);
-		iv.setFitHeight(20);
-		iv.setFitWidth(20);
-		title.setGraphic(iv);
-		return title;
-	}
+    ImageView iv = new ImageView(applicationDefaults.fileSystemRepositoryImage);
+    iv.setFitHeight(20);
+    iv.setFitWidth(20);
+    title.setGraphic(iv);
+    return title;
+  }
 }
