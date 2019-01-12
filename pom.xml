@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.dropsnorz</groupId>
+	<groupId>com.owlplug</groupId>
 	<artifactId>owlplug</artifactId>
 	<version>0.6.0-beta</version>
 	<packaging>jar</packaging>
@@ -181,7 +181,7 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<configuration>
-						<mainClass>com.dropsnorz.owlplug.OwlPlug</mainClass>
+						<mainClass>com.owlplug.OwlPlug</mainClass>
 						<layout>JAR</layout>
 					</configuration>
 					<executions>

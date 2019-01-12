@@ -31,7 +31,7 @@
 		</filter>
 	</appender>
 
-	<logger name="com.dropsnorz.owlplug" additivity="false">
+	<logger name="com.owlplug" additivity="false">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 	</logger>
