@@ -4,7 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.TaskFactory;
+import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.FileSystemRepositoryDAO;
 import com.owlplug.core.dao.GoogleDriveRepositoryDAO;
 import com.owlplug.core.dao.PluginRepositoryDAO;
@@ -37,7 +37,7 @@ public class PluginRepositoryService {
   @Autowired
   protected AuthenticationService authentificationService;
   @Autowired
-  protected TaskFactory taskFactory;
+  protected CoreTaskFactory taskFactory;
   @Autowired
   protected ApplicationDefaults applicationDefaults;
   @Autowired

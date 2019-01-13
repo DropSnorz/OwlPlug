@@ -2,7 +2,6 @@ package com.owlplug.store.controllers;
 
 import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.model.Store;
 import com.owlplug.store.service.StoreService;
 import javafx.fxml.FXML;

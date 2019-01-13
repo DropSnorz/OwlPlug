@@ -6,7 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
-import com.owlplug.core.components.TaskFactory;
+import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginRepositoryDAO;
 import com.owlplug.core.model.IDirectory;
@@ -52,7 +52,7 @@ public class PluginsController {
   @Autowired
   private NodeInfoController nodeInfoController;
   @Autowired
-  protected TaskFactory taskFactory;
+  protected CoreTaskFactory taskFactory;
   @Autowired
   protected Preferences prefs;
   @Autowired

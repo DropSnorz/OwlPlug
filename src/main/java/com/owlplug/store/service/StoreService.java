@@ -3,7 +3,6 @@ package com.owlplug.store.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.TaskFactory;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
@@ -14,8 +13,6 @@ import com.owlplug.store.model.json.StoreJsonMapper;
 import com.owlplug.store.model.json.StoreModelAdapter;
 import com.owlplug.store.model.search.StoreCriteriaAdapter;
 import com.owlplug.store.model.search.StoreFilterCriteria;
-import com.owlplug.store.tasks.ProductInstallTask;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -38,8 +35,6 @@ public class StoreService {
   @Autowired
   private ApplicationDefaults applicationDefaults;
   @Autowired
-  private TaskFactory taskFactory;
-  @Autowired
   private StoreDAO storeDAO;
   @Autowired
   private StoreProductDAO storeProductDAO;
@@ -57,10 +52,6 @@ public class StoreService {
     store.setUrl("http://owlplug.dropsnorz.com/store.json");
 
     storeDAO.save(store);
-  }
-
-  public void syncStores() {
-    taskFactory.createStoreSyncTask().schedule();
   }
   
   public Iterable<Store> getStores() {
@@ -86,17 +77,6 @@ public class StoreService {
 
   public Iterable<StoreProduct> getProductsByName(String name) {
     return storeProductDAO.findByNameContainingIgnoreCase(name);
-  }
-
-  /**
-   * Downloads and installs a store product in a directory.
-   * 
-   * @param bundle          - store bundle to retrieve
-   * @param targetDirectory - directory where the product will be installed
-   */
-  public void install(ProductBundle bundle, File targetDirectory) {
-    taskFactory.create(new ProductInstallTask(bundle, targetDirectory, applicationDefaults))
-        .setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow()).schedule();
   }
 
   /**

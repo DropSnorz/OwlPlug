@@ -9,10 +9,10 @@ import com.jfoenix.controls.JFXRippler;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
-import com.owlplug.core.components.TaskFactory;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.store.components.StoreTaskFactory;
 import com.owlplug.store.model.ProductBundle;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.model.search.StoreFilterCriteria;
@@ -68,7 +68,7 @@ public class StoreController {
   @Autowired
   private DialogController dialogController;
   @Autowired
-  private TaskFactory taskFactory;
+  private StoreTaskFactory storeTaskFactory;
 
   @FXML
   private JFXButton storesButton;
@@ -119,7 +119,7 @@ public class StoreController {
     });
 
     syncStoreButton.setOnAction(e -> {
-      storeService.syncStores();
+      storeTaskFactory.createStoreSyncTask().schedule();
     });
 
     storeChipView = new StoreChipView(applicationDefaults);
@@ -128,7 +128,6 @@ public class StoreController {
 
     storeChipView.getChips().addListener((ListChangeListener) change -> {
       final List<StoreFilterCriteria> criteriaList = storeChipView.getChips();
-      log.debug("Hi there");
 
       Task<Iterable<StoreProduct>> task = new Task<Iterable<StoreProduct>>() {
         @Override
@@ -156,7 +155,7 @@ public class StoreController {
     });
     lazyLoadBar.setVisible(false);
 
-    taskFactory.addSyncStoresListener(() -> refreshView());
+    storeTaskFactory.addSyncStoresListener(() -> refreshView());
     refreshView();
 
     masonryPane.setHSpacing(5);
@@ -310,7 +309,7 @@ public class StoreController {
         JFXButton overwriteButton = new JFXButton("Yes, overwrite.");
         overwriteButton.setOnAction(removeEvent -> {
           dialog.close();
-          storeService.install(bundle, subSelectedDirectory);
+          storeTaskFactory.createBundleInstallTask(bundle, subSelectedDirectory).schedule();
 
         });
         overwriteButton.getStyleClass().add("button-danger");
@@ -321,11 +320,11 @@ public class StoreController {
       } else {
         // If a plugin will be installed in a new directory we can trigger installation
         // task
-        storeService.install(bundle, subSelectedDirectory);
+        storeTaskFactory.createBundleInstallTask(bundle, subSelectedDirectory).schedule();;
       }
     } else if (selectedDirectory != null) {
       // If a target directory has been previously found, start install tasks
-      storeService.install(bundle, selectedDirectory);
+      storeTaskFactory.createBundleInstallTask(bundle, selectedDirectory).schedule();;
     } else {
       log.error("Invalid product installation directory");
     }

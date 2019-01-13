@@ -5,7 +5,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
-import com.owlplug.core.components.TaskFactory;
+import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
@@ -49,7 +49,7 @@ public class PluginInfoController {
   @Autowired
   private ApplicationDefaults applicationDefaults;
   @Autowired
-  private TaskFactory taskFactory;
+  private CoreTaskFactory taskFactory;
 
   @FXML
   private Pane pluginScreenshotPane;

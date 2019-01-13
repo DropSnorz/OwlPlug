@@ -4,7 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
-import com.owlplug.core.components.TaskFactory;
+import com.owlplug.core.components.CoreTaskFactory;
 import java.io.File;
 import java.util.prefs.Preferences;
 import javafx.fxml.FXML;
@@ -24,7 +24,7 @@ public class WelcomeDialogController extends AbstractDialogController {
   @Autowired
   private Preferences prefs;
   @Autowired
-  private TaskFactory taskFactory;
+  private CoreTaskFactory taskFactory;
   @Autowired
   private ApplicationDefaults applicationDefaults;
 

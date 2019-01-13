@@ -5,7 +5,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.TaskFactory;
+import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
@@ -27,7 +27,7 @@ public class DirectoryInfoController {
   @Autowired
   private DialogController dialogController;
   @Autowired
-  private TaskFactory taskFactory;
+  private CoreTaskFactory taskFactory;
 
   @FXML
   private Label directoryPathLabel;

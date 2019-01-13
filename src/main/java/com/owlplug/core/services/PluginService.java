@@ -2,7 +2,7 @@ package com.owlplug.core.services;
 
 import com.google.common.collect.Iterables;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.TaskFactory;
+import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.utils.PluginUtils;
@@ -26,7 +26,7 @@ public class PluginService {
   @Autowired
   protected PluginDAO pluginDAO;
   @Autowired
-  protected TaskFactory taskFactory;
+  protected CoreTaskFactory taskFactory;
 
   public void syncPlugins() {
     taskFactory.createPluginSyncTask().schedule();
