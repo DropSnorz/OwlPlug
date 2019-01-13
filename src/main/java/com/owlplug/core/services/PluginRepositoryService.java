@@ -58,6 +58,14 @@ public class PluginRepositoryService {
     return false;
 
   }
+  
+  public PluginRepository findByName(String name) {
+    return pluginRepositoryDAO.findByName(name);
+  }
+  
+  public Iterable<PluginRepository> findAll() {
+    return pluginRepositoryDAO.findAll();
+  }
 
   public void save(PluginRepository repository) {
     pluginRepositoryDAO.save(repository);

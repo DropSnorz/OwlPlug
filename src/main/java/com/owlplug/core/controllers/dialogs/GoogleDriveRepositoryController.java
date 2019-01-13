@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.owlplug.auth.dao.UserAccountDAO;
 import com.owlplug.auth.model.UserAccount;
+import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.auth.ui.AccountCellFactory;
 import com.owlplug.auth.ui.AccountItem;
 import com.owlplug.core.components.ApplicationDefaults;
@@ -34,7 +35,7 @@ public class GoogleDriveRepositoryController extends AbstractDialogController
   @Autowired
   private PluginRepositoryService pluginRepositoryService;
   @Autowired
-  private UserAccountDAO userAccountDAO;
+  private AuthenticationService authenticationService;
   @Autowired
   private PluginsController pluginController;
   @Autowired
@@ -99,7 +100,7 @@ public class GoogleDriveRepositoryController extends AbstractDialogController
 
     long selectedAccountId = prefs.getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
     if (selectedAccountId != -1) {
-      Optional<UserAccount> selectedAccount = userAccountDAO.findById(selectedAccountId);
+      Optional<UserAccount> selectedAccount = authenticationService.getUserAccountById(selectedAccountId);
 
       if (selectedAccount.isPresent()) {
         // Bug workaround. The only way way to pre-select the account is to find it's
@@ -140,7 +141,7 @@ public class GoogleDriveRepositoryController extends AbstractDialogController
     this.accountComboBox.setValue(null);
     ArrayList<UserAccount> accounts = new ArrayList<>();
 
-    for (UserAccount account : userAccountDAO.findAll()) {
+    for (UserAccount account : authenticationService.getAccounts()) {
       accounts.add(account);
     }
 

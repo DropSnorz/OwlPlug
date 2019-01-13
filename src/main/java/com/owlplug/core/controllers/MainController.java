@@ -48,8 +48,6 @@ public class MainController {
   @Autowired
   private StoreController storeController;
   @Autowired
-  private UserAccountDAO userAccountDAO;
-  @Autowired
   private AuthenticationService authentificationService;
   @Autowired
   private Preferences prefs;
@@ -143,7 +141,7 @@ public class MainController {
 
     ArrayList<UserAccount> accounts = new ArrayList<UserAccount>();
 
-    for (UserAccount account : userAccountDAO.findAll()) {
+    for (UserAccount account : authentificationService.getAccounts()) {
       accounts.add(account);
     }
 
@@ -154,7 +152,7 @@ public class MainController {
 
     long selectedAccountId = prefs.getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
     if (selectedAccountId != -1) {
-      Optional<UserAccount> selectedAccount = userAccountDAO.findById(selectedAccountId);
+      Optional<UserAccount> selectedAccount = authentificationService.getUserAccountById(selectedAccountId);
       if (selectedAccount.isPresent()) {
 
         // Bug workaround. The only way way to pre-select the account is to find it's

@@ -52,8 +52,6 @@ public class PluginsController {
   @Autowired
   private NodeInfoController nodeInfoController;
   @Autowired
-  private PluginRepositoryDAO repositoryDAO;
-  @Autowired
   protected TaskFactory taskFactory;
   @Autowired
   protected Preferences prefs;
@@ -173,7 +171,7 @@ public class PluginsController {
     treeRepositoryRootNode.setExpanded(true);
     treeRepositoryRootNode.getInternalChildren().clear();
 
-    Iterable<PluginRepository> pluginRepositories = repositoryDAO.findAll();
+    Iterable<PluginRepository> pluginRepositories = pluginRepositoryService.findAll();
     buildRepositoryTree(pluginTree, treeRepositoryRootNode, pluginRepositories);
 
   }
@@ -213,7 +211,7 @@ public class PluginsController {
             }
             PluginRepository repository = null;
             if (currentPath.endsWith(pluginRepositoryService.getLocalRepositoryDirectory() + "/" + subDirs[i] + "/")) {
-              repository = repositoryDAO.findByName(subDirs[i]);
+              repository = pluginRepositoryService.findByName(subDirs[i]);
             }
             if (repository != null) {
               repository.setPluginList(localPluginList);

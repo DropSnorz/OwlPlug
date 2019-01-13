@@ -25,6 +25,7 @@ import com.owlplug.core.services.PluginRepositoryService;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.prefs.Preferences;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
@@ -142,6 +143,23 @@ public class AuthenticationService {
     googleCredentialDAO.deleteByKey(userAccount.getKey());
     userAccountDAO.delete(userAccount);
     mainController.refreshAccounts();
+  }
+  
+  /**
+   * Returns all registered UserAccounts
+   * @return list of user accounts
+   */
+  public Iterable<UserAccount> getAccounts() {
+    return userAccountDAO.findAll();
+  }
+  
+  /**
+   * Returns a user account matching a given id.
+   * @param id - user account unique id
+   * @return related user account
+   */
+  public Optional<UserAccount> getUserAccountById(Long id) {
+    return userAccountDAO.findById(id);
   }
 
   /**

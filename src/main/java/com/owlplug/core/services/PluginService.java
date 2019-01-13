@@ -55,5 +55,16 @@ public class PluginService {
     return url;
 
   }
-
+  
+  /**
+   * Removes a plugin reference from database.
+   * @param plugin - plugin to remoeve
+   */
+  public void delete(Plugin plugin) {
+    pluginDAO.delete(plugin);
+  }
+  
+  public Plugin save(Plugin plugin) {
+    return pluginDAO.save(plugin);
+  }
 }

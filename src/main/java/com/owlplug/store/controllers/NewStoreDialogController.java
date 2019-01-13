@@ -29,8 +29,6 @@ public class NewStoreDialogController extends AbstractDialogController implement
   @Autowired
   private StoreService pluginStoreService;
   @Autowired
-  private StoreDAO pluginStoreDAO;
-  @Autowired
   private StoreMenuController storeMenuController;
   @Autowired
   private DialogController dialogController;
@@ -100,7 +98,7 @@ public class NewStoreDialogController extends AbstractDialogController implement
         progressSpinner.setVisible(false);
         if (pluginStore != null) {
           errorLabel.setVisible(false);
-          pluginStoreDAO.save(pluginStore);
+          pluginStoreService.save(pluginStore);
           storeMenuController.refreshView();
           close();
           dialogController.newSimpleInfoDialog("Success",

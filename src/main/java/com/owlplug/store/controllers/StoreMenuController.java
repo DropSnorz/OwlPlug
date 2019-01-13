@@ -29,8 +29,6 @@ public class StoreMenuController {
   private NewStoreDialogController newStoreDialogController;
   @Autowired
   private StoreService storeService;
-  @Autowired
-  private StoreDAO pluginStoreDAO;
 
   @FXML
   private VBox storeListHolder;
@@ -56,7 +54,7 @@ public class StoreMenuController {
    */
   public void refreshView() {
     storeListHolder.getChildren().clear();
-    for (Store pluginStore : pluginStoreDAO.findAll()) {
+    for (Store pluginStore : storeService.getStores()) {
       storeListHolder.getChildren().add(new StoreMenuItem(pluginStore));
     }
   }
@@ -109,7 +107,7 @@ public class StoreMenuController {
       this.getChildren().add(deleteButton);
 
       deleteButton.setOnAction(e -> {
-        pluginStoreDAO.delete(pluginStore);
+        storeService.delete(pluginStore);
         refreshView();
       });
 

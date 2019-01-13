@@ -62,6 +62,10 @@ public class StoreService {
   public void syncStores() {
     taskFactory.createStoreSyncTask().schedule();
   }
+  
+  public Iterable<Store> getStores() {
+    return storeDAO.findAll();
+  }
 
   /**
    * Retrieves products from store with name matching the given criterias and
@@ -167,5 +171,13 @@ public class StoreService {
   public void enableStore(Store store, boolean enabled) {
     store.setEnabled(enabled);
     storeDAO.save(store);
+  }
+  
+  public Store save(Store store) {
+    return storeDAO.save(store);
+  }
+  
+  public void delete(Store store) {
+    storeDAO.delete(store);
   }
 }

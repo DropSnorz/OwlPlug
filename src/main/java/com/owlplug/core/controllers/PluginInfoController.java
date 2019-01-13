@@ -139,7 +139,7 @@ public class PluginInfoController {
     if (currentPlugin.getScreenshotUrl() == null || currentPlugin.getScreenshotUrl().isEmpty()) {
       String url = pluginService.resolveImageUrl(currentPlugin);
       currentPlugin.setScreenshotUrl(url);
-      pluginDAO.save(currentPlugin);
+      pluginService.save(currentPlugin);
     }
 
     String url = currentPlugin.getScreenshotUrl();
