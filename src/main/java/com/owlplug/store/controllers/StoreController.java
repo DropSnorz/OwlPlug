@@ -262,19 +262,22 @@ public class StoreController {
    * 
    * @param bundle Bundle to install
    */
-  public void installBundle(ProductBundle bundle) {
+  public boolean installBundle(ProductBundle bundle) {
 
     File selectedDirectory = null;
 
+    // A custom root directory to store plugin is defined
     if (prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
       // Store install target is already defined
       String storeDirectoryPath = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, null);
       if (storeDirectoryPath != null) {
         selectedDirectory = new File(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
       }
+      // A plugin root directory is not defined
     } else {
       // Open dialog chooser to define store installation target
       DirectoryChooser directoryChooser = new DirectoryChooser();
+      // Open the VST directory if defined
       if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
         File initialDirectory = new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
         if (initialDirectory.isDirectory()) {
@@ -286,6 +289,12 @@ public class StoreController {
       selectedDirectory = directoryChooser.showDialog(mainWindow);
     }
 
+    // If any install target directory can be found, abort install
+    if (selectedDirectory == null || !selectedDirectory.isDirectory()) {
+      return false;
+    }
+
+    // Plugin should be wrapped in a subdirectory
     if (prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true)) {
       // If the plugin is wrapped into a subdirectory, checks for already existing
       // directory
@@ -317,17 +326,16 @@ public class StoreController {
         layout.setActions(overwriteButton, cancelButton);
         dialog.setContent(layout);
         dialog.show();
+        return false;
       } else {
-        // If a plugin will be installed in a new directory we can trigger installation
-        // task
-        storeTaskFactory.createBundleInstallTask(bundle, subSelectedDirectory).schedule();;
+        // Plugin can be installed in the subdirectory (no conflicts)
+        storeTaskFactory.createBundleInstallTask(bundle, subSelectedDirectory).schedule();
+        return true;
       }
-    } else if (selectedDirectory != null) {
-      // If a target directory has been previously found, start install tasks
-      storeTaskFactory.createBundleInstallTask(bundle, selectedDirectory).schedule();;
-    } else {
-      log.error("Invalid product installation directory");
     }
+    // If a target directory has been previously found, start install tasks
+    storeTaskFactory.createBundleInstallTask(bundle, selectedDirectory).schedule();;
+    return true;
 
   }
 
@@ -337,12 +345,14 @@ public class StoreController {
    * 
    * @param product Product to install
    */
-  public void installProduct(StoreProduct product) {
+  public boolean installProduct(StoreProduct product) {
 
     ProductBundle bundle = storeService.findBestBundle(product);
     if (bundle != null) {
-      installBundle(bundle);
+      return installBundle(bundle);
     }
+    
+    return false;
   }
 
   /**

@@ -108,8 +108,10 @@ public class ProductInfoController {
       PlatformUtils.openDefaultBrowser(product.getPageUrl());
     });
     installButton.setOnAction(e -> {
-      storeController.installProduct(product);
-      this.installButton.setDisable(true);
+      boolean installStarted = storeController.installProduct(product);
+      if (installStarted) {
+        this.installButton.setDisable(true);
+      }
     });
 
     this.creatorLabel.setText(product.getCreator());
