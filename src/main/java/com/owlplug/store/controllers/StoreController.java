@@ -16,7 +16,7 @@ import com.owlplug.store.components.StoreTaskFactory;
 import com.owlplug.store.model.ProductBundle;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.model.search.StoreFilterCriteria;
-import com.owlplug.store.service.StoreService;
+import com.owlplug.store.services.StoreService;
 import com.owlplug.store.ui.StoreChipView;
 import com.owlplug.store.ui.StoreProductBlocViewBuilder;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.owlplug.store.service;
+package com.owlplug.store.services;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

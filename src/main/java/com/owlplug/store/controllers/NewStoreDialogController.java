@@ -10,7 +10,7 @@ import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.model.Store;
-import com.owlplug.store.service.StoreService;
+import com.owlplug.store.services.StoreService;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

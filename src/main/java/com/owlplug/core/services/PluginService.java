@@ -7,7 +7,7 @@ import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.store.model.StoreProduct;
-import com.owlplug.store.service.StoreService;
+import com.owlplug.store.services.StoreService;
 import java.util.prefs.Preferences;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
