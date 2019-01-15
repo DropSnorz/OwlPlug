@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.controllers.dialogs.FileSystemRepositoryController;
 import com.owlplug.core.controllers.dialogs.GoogleDriveRepositoryController;
@@ -33,6 +34,8 @@ public class RepositoryInfoController {
   private GoogleDriveRepositoryController googleDriveRepositoryController;
   @Autowired
   private DialogController dialogController;
+  @Autowired
+  private CoreTaskFactory coreTaskFactory;
 
   @FXML
   private Label repositoryNameLabel;
@@ -57,7 +60,8 @@ public class RepositoryInfoController {
     pluginRepositoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
 
     pullButton.setOnAction(e -> {
-      repositoryService.pull(repository);
+      coreTaskFactory.createRepositoryPullTask(repository)
+      .setOnSucceeded(t -> coreTaskFactory.createPluginSyncTask().schedule()).schedule();
     });
 
     openRepositoryButton.setOnAction(e -> {
@@ -92,7 +96,8 @@ public class RepositoryInfoController {
       JFXButton removeButton = new JFXButton("Remove");
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
-        repositoryService.delete(repository);
+        coreTaskFactory.createRepositoryRemoveTask(repository)
+        .setOnSucceeded(t -> coreTaskFactory.createPluginSyncTask().scheduleNow()).schedule();
       });
       removeButton.getStyleClass().add("button-danger");
 

@@ -13,10 +13,8 @@ public class NodeInfoController {
 
   @Autowired
   private PluginInfoController pluginInfoController;
-
   @Autowired
   private DirectoryInfoController directoryInfoController;
-
   @Autowired
   private RepositoryInfoController repositoryInfoController;
 
@@ -27,7 +25,9 @@ public class NodeInfoController {
   @FXML
   private Node repositoryInfoView;
 
-  @FXML
+  /**
+   * FXML initialize.
+   */
   public void initialize() {
 
     pluginInfoView.setVisible(false);

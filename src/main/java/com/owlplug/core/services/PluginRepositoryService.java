@@ -1,6 +1,5 @@
 package com.owlplug.core.services;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.core.components.ApplicationDefaults;
@@ -10,16 +9,9 @@ import com.owlplug.core.dao.GoogleDriveRepositoryDAO;
 import com.owlplug.core.dao.PluginRepositoryDAO;
 import com.owlplug.core.model.GoogleDriveRepository;
 import com.owlplug.core.model.PluginRepository;
-import com.owlplug.core.tasks.RepositoryRemoveTask;
-import com.owlplug.core.tasks.RepositoryTask;
-import com.owlplug.core.tasks.repositories.IRepositoryStrategy;
-import com.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
-import com.owlplug.core.tasks.repositories.RepositoryStrategyResolver;
-import com.owlplug.core.tasks.repositories.RepositoryStrategyParameters.RepositoryAction;
 import com.owlplug.core.utils.FileUtils;
 import java.io.File;
 import java.util.prefs.Preferences;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +32,6 @@ public class PluginRepositoryService {
   protected CoreTaskFactory taskFactory;
   @Autowired
   protected ApplicationDefaults applicationDefaults;
-  @Autowired
-  private RepositoryStrategyResolver repositoryStrategyResolver;
 
   /**
    * Creates and store a new repository instance.
@@ -71,39 +61,6 @@ public class PluginRepositoryService {
     pluginRepositoryDAO.save(repository);
   }
 
-  public void pull(PluginRepository repository) {
-    RepositoryStrategyParameters parameters = new RepositoryStrategyParameters();
-    parameters.setRepositoryAction(RepositoryAction.PULL);
-
-    parameters.put("target-dir", getLocalRepositoryPath(repository));
-    parameters.put("task-name", "Pull repository - " + repository.getName());
-
-    if (repository instanceof GoogleDriveRepository) {
-      if (((GoogleDriveRepository) repository).getUserAccount() != null) {
-        GoogleCredential credential = authentificationService
-            .getGoogleCredential(((GoogleDriveRepository) repository).getUserAccount().getKey());
-        parameters.putObject("google-credential", credential);
-
-      }
-    }
-
-    IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
-    taskFactory.create(new RepositoryTask(strategy, parameters, repository))
-        .setOnSucceeded(e -> taskFactory.createPluginSyncTask().schedule()).schedule();
-
-  }
-
-  /**
-   * Deletes the given repository.
-   * 
-   * @param repository - the repository to delete
-   */
-  public void delete(PluginRepository repository) {
-
-    String localPath = getLocalRepositoryPath(repository);
-    taskFactory.create(new RepositoryRemoveTask(pluginRepositoryDAO, repository, localPath))
-        .setOnSucceeded(e -> taskFactory.createPluginSyncTask().scheduleNow()).schedule();
-  }
 
   /**
    * Clears all userAccount fields matching the given UserAccount. This is usefull

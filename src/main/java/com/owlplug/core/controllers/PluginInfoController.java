@@ -4,13 +4,11 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.CoreTaskFactory;
+import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.dialogs.DialogController;
-import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.PluginService;
-import com.owlplug.core.tasks.PluginRemoveTask;
 import com.owlplug.core.utils.PlatformUtils;
 import java.io.File;
 import java.util.ArrayList;
@@ -43,13 +41,11 @@ public class PluginInfoController {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private PluginDAO pluginDAO;
-  @Autowired
   private ImageCache imageCache;
   @Autowired
   private ApplicationDefaults applicationDefaults;
   @Autowired
-  private CoreTaskFactory taskFactory;
+  private CoreTaskFactory coreTaskFactory;
 
   @FXML
   private Pane pluginScreenshotPane;
@@ -110,7 +106,7 @@ public class PluginInfoController {
       JFXButton removeButton = new JFXButton("Remove");
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
-        taskFactory.create(new PluginRemoveTask(currentPlugin, pluginDAO))
+        coreTaskFactory.createPluginRemoveTask(currentPlugin)
             .setOnSucceeded(x -> pluginsController.refreshPlugins()).schedule();
       });
       removeButton.getStyleClass().add("button-danger");

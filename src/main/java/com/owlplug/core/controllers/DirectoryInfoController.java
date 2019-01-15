@@ -40,7 +40,9 @@ public class DirectoryInfoController {
 
   private PluginDirectory pluginDirectory;
 
-  @FXML
+  /**
+   * FXML Initialize.
+   */
   public void initialize() {
 
     openDirectoryButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
