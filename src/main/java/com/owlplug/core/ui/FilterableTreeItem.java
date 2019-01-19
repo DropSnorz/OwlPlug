@@ -1,6 +1,6 @@
 package com.owlplug.core.ui;
 
-import java.lang.reflect.Field;
+import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -9,71 +9,42 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TreeItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FilterableTreeItem<T> extends TreeItem<T> {
-
-  private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-  private final ObservableList<TreeItem<T>> sourceList;
-  private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
+  private final ObservableList<TreeItem<T>> sourceChildren = FXCollections.observableArrayList();
+  private final FilteredList<TreeItem<T>> filteredChildren = new FilteredList<>(sourceChildren);
+  private final ObjectProperty<Predicate<T>> predicate = new SimpleObjectProperty<>();
 
   public FilterableTreeItem(T value) {
     super(value);
-    this.sourceList = FXCollections.observableArrayList();
-    FilteredList<TreeItem<T>> filteredList = new FilteredList<>(this.sourceList);
-    filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      return child -> {
-        // Set the predicate of child items to force filtering
+
+    filteredChildren.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+      Predicate<TreeItem<T>> p = child -> {
         if (child instanceof FilterableTreeItem) {
-          FilterableTreeItem<T> filterableChild = (FilterableTreeItem<T>) child;
-          filterableChild.setPredicate(this.predicate.get());
+          ((FilterableTreeItem<T>) child).predicateProperty().set(predicate.get());
         }
-        // If there is no predicate, keep this tree item
-        if (this.predicate.get() == null) {
+        if (predicate.get() == null || !child.getChildren().isEmpty()) {
           return true;
-
         }
-        // If there are children, keep this tree item
-        if (child.getChildren().size() > 0) {
-          return true;
-
-        }
-        // Otherwise ask the TreeItemPredicate
-        return this.predicate.get().test(this, child.getValue());
+        return predicate.get().test(child.getValue());
       };
-    }, this.predicate));
-    setHiddenFieldChildren(filteredList);
-  }
+      return p;
+    }, predicate));
 
-  protected void setHiddenFieldChildren(ObservableList<TreeItem<T>> list) {
-    try {
-      Field childrenField = TreeItem.class.getDeclaredField("children"); //$NON-NLS-1$
-      childrenField.setAccessible(true);
-      childrenField.set(this, list);
-
-      Field declaredField = TreeItem.class.getDeclaredField("childrenListener"); //$NON-NLS-1$
-      declaredField.setAccessible(true);
-      list.addListener((ListChangeListener<? super TreeItem<T>>) declaredField.get(this));
-    } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-      log.error("Error creating Filetrable Tree Item", e);
-    }
+    filteredChildren.addListener((ListChangeListener<TreeItem<T>>) c -> {
+      while (c.next()) {
+        getChildren().removeAll(c.getRemoved());
+        getChildren().addAll(c.getAddedSubList());
+      }
+    });
   }
 
   public ObservableList<TreeItem<T>> getInternalChildren() {
-    return this.sourceList;
+    return sourceChildren;
   }
 
-  public void setPredicate(TreeItemPredicate<T> predicate) {
-    this.predicate.set(predicate);
-  }
-
-  public TreeItemPredicate getPredicate() {
-    return predicate.get();
-  }
-
-  public ObjectProperty<TreeItemPredicate<T>> predicateProperty() {
+  public ObjectProperty<Predicate<T>> predicateProperty() {
     return predicate;
   }
-}
+
+} 

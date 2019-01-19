@@ -5,10 +5,9 @@ import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.components.CoreTaskFactory;
+import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.dao.PluginDAO;
-import com.owlplug.core.dao.PluginRepositoryDAO;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
@@ -17,7 +16,6 @@ import com.owlplug.core.services.PluginRepositoryService;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.CustomTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
-import com.owlplug.core.ui.TreeItemPredicate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,8 +123,7 @@ public class PluginsController {
       if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
         return null;
       }
-      return TreeItemPredicate
-          .create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
+      return actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
     }, searchTextField.textProperty()));
 
     // Binds serch property to plugin tree filter
@@ -134,8 +131,7 @@ public class PluginsController {
       if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
         return null;
       }
-      return TreeItemPredicate
-          .create(actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase()));
+      return actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
     }, searchTextField.textProperty()));
 
     syncButton.setOnAction(e -> {
