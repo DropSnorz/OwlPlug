@@ -1,13 +1,11 @@
-package com.owlplug.core.tasks.plugins.discovery;
+package com.owlplug.core.tasks.plugins.discovery.fileformats;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.NSObject;
 import com.dd.plist.PropertyListFormatException;
 import com.dd.plist.PropertyListParser;
 import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.VST2Plugin;
-import com.owlplug.core.model.VST3Plugin;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -17,46 +15,42 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-public class OSXPluginBuilder extends NativePluginBuilder {
-
+public class OsxVstFile extends PluginFile {
+  
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  OSXPluginBuilder(PluginFormat pluginFormat) {
-    super(pluginFormat);
+  /**
+   * Type checking function against current format for the given file.
+   * @param file - file to test
+   * @return true if the file matches the current file format
+   */
+  public static boolean formatCheck(File file) {
+    return file.getAbsolutePath().endsWith(".vst") 
+        && file.isDirectory();
+    
+  }
+  
+  public OsxVstFile(File file) {
+    super(file);
   }
 
   @Override
-  public Plugin build(File pluginFile) {
-
-    if (pluginFormat == PluginFormat.VST2) {
-      return buildVst2Plugin(pluginFile);
-    }
-    return null;
-  }
-
-  private Plugin buildVst2Plugin(File pluginFile) {
-
-    String pluginName = FilenameUtils.removeExtension(pluginFile.getName());
-    String pluginPath = pluginFile.getAbsolutePath().replace("\\", "/");
-
+  public Plugin toPlugin() {
+    
+    String pluginName = FilenameUtils.removeExtension(this.getPluginFile().getName());
+    String pluginPath = this.getPluginFile().getAbsolutePath().replace("\\", "/");
     Plugin plugin = new VST2Plugin(pluginName, pluginPath);
-
-    File plist = new File(pluginFile.getAbsolutePath() + "/Contents/Info.plist");
+    
+    File plist = new File(this.getPluginFile().getAbsolutePath() + "/Contents/Info.plist");
     if (plist.exists()) {
-      buildPluginFromVST2Plist(plugin, plist);
+      bindPlistInfo(plugin, plist);
     }
+    
     return plugin;
+    
   }
-
-  private Plugin buildVST3Plugin(File pluginFile) {
-    String pluginName = FilenameUtils.removeExtension(pluginFile.getName());
-    String pluginPath = pluginFile.getAbsolutePath().replace("\\", "/");
-
-    return new VST3Plugin(pluginName, pluginPath);
-  }
-
-  private void buildPluginFromVST2Plist(Plugin plugin, File plist) {
-
+  
+  private void bindPlistInfo(Plugin plugin, File plist) {
     try {
       NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(plist);
       NSObject nsBundleId = rootDict.objectForKey("CFBundleIdentifier");

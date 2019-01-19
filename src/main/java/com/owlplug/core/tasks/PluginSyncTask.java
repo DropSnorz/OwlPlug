@@ -3,14 +3,10 @@ package com.owlplug.core.tasks;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFormat;
-import com.owlplug.core.tasks.plugins.discovery.NativePluginBuilder;
-import com.owlplug.core.tasks.plugins.discovery.NativePluginBuilderFactory;
-import com.owlplug.core.tasks.plugins.discovery.NativePluginCollector;
-import com.owlplug.core.tasks.plugins.discovery.NativePluginCollectorFactory;
+import com.owlplug.core.tasks.plugins.discovery.PluginFileCollector;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
-import java.io.File;
+import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PluginSyncTask extends AbstractTask {
 
@@ -37,37 +33,31 @@ public class PluginSyncTask extends AbstractTask {
     this.updateProgress(0, 2);
 
     try {
-      ArrayList<Plugin> discoveredPlugins = new ArrayList<Plugin>();
-      if (parameters.isFindVST2()) {
-
-        List<File> vst2files = new ArrayList<>();
-        NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(parameters.getPlatform(),
-            PluginFormat.VST2);
-        vst2files = collector.collect(parameters.getPluginDirectory());
-        NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(parameters.getPlatform(),
-            PluginFormat.VST2);
-
-        for (File file : vst2files) {
-          discoveredPlugins.add(builder.build(file));
-        }
-      }
+      
+      ArrayList<PluginFile> collectedPluginFiles = new ArrayList<>();
+      
+      PluginFileCollector pluginCollector = new PluginFileCollector(parameters.getPlatform());
+      String pluginDirectory = parameters.getPluginDirectory();
 
       this.updateProgress(1, 3);
 
+      
+      if (parameters.isFindVST2()) {
+        collectedPluginFiles.addAll(pluginCollector.collect(pluginDirectory, PluginFormat.VST2));
+      }
+
       if (parameters.isFindVST3()) {
-
-        List<File> vst3files = new ArrayList<>();
-        NativePluginCollector collector = NativePluginCollectorFactory.getPluginFinder(parameters.getPlatform(),
-            PluginFormat.VST3);
-        vst3files = collector.collect(parameters.getPluginDirectory());
-        NativePluginBuilder builder = NativePluginBuilderFactory.createPluginBuilder(parameters.getPlatform(),
-            PluginFormat.VST3);
-
-        for (File file : vst3files) {
-          discoveredPlugins.add(builder.build(file));
-        }
+        collectedPluginFiles.addAll(pluginCollector.collect(pluginDirectory, PluginFormat.VST3));
       }
       this.updateProgress(2, 3);
+      
+      ArrayList<Plugin> discoveredPlugins = new ArrayList<>();
+      for (PluginFile pluginFile : collectedPluginFiles) {
+        Plugin plugin = pluginFile.toPlugin();
+        if (plugin != null) {
+          discoveredPlugins.add(plugin);
+        }
+      }
 
       pluginDAO.deleteAll();
       pluginDAO.saveAll(discoveredPlugins);
