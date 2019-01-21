@@ -40,11 +40,27 @@ public class PluginFileCollector {
       PluginFileFormatResolver pluginFileResolver = new PluginFileFormatResolver(runtimePlatform, pluginFormat);
 
       for (File file : baseFiles) {
-        PluginFile pluginFile = pluginFileResolver.resolve(file);
-        if (pluginFile != null) {
-          fileList.add(pluginFile);
+
+        /*
+         *  Loopkup for nested plugins in bundles and prevent them from being referenced multiple times.
+         *  For example a VST3 bundle file can contains a .vst3 file for windows but we
+         *  don't want it to be referenced as it's an internal package managed by the host.
+         *  Maybe this should be refactored to recursively explore directories and directly prevent exploration of
+         *  bundles subdirectories.
+         */
+        boolean nestedPluginDetected = false;
+        for (PluginFile previouslyCollectedFile : fileList) {
+          if (file.getAbsolutePath().contains(previouslyCollectedFile.getPluginFile().getAbsolutePath())) {
+            nestedPluginDetected = true;
+          }
         }
 
+        if (!nestedPluginDetected) {
+          PluginFile pluginFile = pluginFileResolver.resolve(file);
+          if (pluginFile != null) {
+            fileList.add(pluginFile);
+          }
+        }
       }
     } else {
       log.error("Plugin root is not a directory");

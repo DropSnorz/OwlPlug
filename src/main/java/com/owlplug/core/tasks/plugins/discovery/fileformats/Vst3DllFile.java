@@ -2,6 +2,7 @@ package com.owlplug.core.tasks.plugins.discovery.fileformats;
 
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.VST2Plugin;
+import com.owlplug.core.model.VST3Plugin;
 import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 
@@ -27,7 +28,7 @@ public class Vst3DllFile extends PluginFile {
     
     String pluginName = FilenameUtils.removeExtension(this.getPluginFile().getName());
     String pluginPath = this.getPluginFile().getAbsolutePath().replace("\\", "/");
-    return new VST2Plugin(pluginName, pluginPath);
+    return new VST3Plugin(pluginName, pluginPath);
     
   }
 

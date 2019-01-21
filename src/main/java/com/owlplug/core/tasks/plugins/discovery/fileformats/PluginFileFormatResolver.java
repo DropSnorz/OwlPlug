@@ -57,12 +57,13 @@ public class PluginFileFormatResolver {
     
     
     /*
-     * Osx vst3 plugin
+     * Windows and OSX vst3 plugin bunle
      */
-    if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)
+    if ((runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)
+        || runtimePlatform.getOperatingSystem().equals(OperatingSystem.WIN))
         && pluginFormat.equals(PluginFormat.VST3)
-        && OsxVst3File.formatCheck(file)) {
-      return new OsxVst3File(file);
+        && Vst3BundleFile.formatCheck(file)) {
+      return new Vst3BundleFile(file);
     }
     
     
