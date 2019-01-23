@@ -257,12 +257,12 @@ JFXTreeView:focused{
 }
 
 JFXListView{
-	-fx-background-color: rgba(66,66,66, 0.5);
+	-fx-background-color: rgb(55,55,55);
 	-fx-text-fill:white;
 	
 }
 .list-view .list-cell{
-	-fx-background-color: rgba(66,66,66, 0.5);
+	-fx-background-color: rgb(44,44,44);
 	-fx-text-fill:white;
 }
 
