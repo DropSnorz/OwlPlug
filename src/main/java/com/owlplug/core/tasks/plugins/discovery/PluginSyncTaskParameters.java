@@ -1,19 +1,19 @@
 package com.owlplug.core.tasks.plugins.discovery;
 
-import com.owlplug.core.model.platform.OperatingSystem;
+import com.owlplug.core.model.platform.RuntimePlatform;
 
 public class PluginSyncTaskParameters {
 
-  private OperatingSystem platform;
+  private RuntimePlatform platform;
   private String pluginDirectory;
   private boolean findVST2;
   private boolean findVST3;
 
-  public OperatingSystem getPlatform() {
+  public RuntimePlatform getPlatform() {
     return platform;
   }
 
-  public void setPlatform(OperatingSystem platform) {
+  public void setPlatform(RuntimePlatform platform) {
     this.platform = platform;
   }
 
