@@ -24,48 +24,48 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DataJpaTest
 public class GoogleCredentialDAOTest {
 
-	@Autowired
-	private TestEntityManager entityManager;
+  @Autowired
+  private TestEntityManager entityManager;
 
-	@Autowired
-	private GoogleCredentialDAO googleCredentialDAO;
+  @Autowired
+  private GoogleCredentialDAO googleCredentialDAO;
 
-	@Before
-	public void beforeTest() {
-		GoogleCredential gc = new GoogleCredential();
-		gc.setKey("TEST-KEY-1");
-		entityManager.persist(gc);
+  @Before
+  public void beforeTest() {
+    GoogleCredential gc = new GoogleCredential();
+    gc.setKey("TEST-KEY-1");
+    entityManager.persist(gc);
 
-		gc = new GoogleCredential();
-		gc.setKey("TEST-KEY-2");
-		entityManager.persist(gc);
-		entityManager.flush();
+    gc = new GoogleCredential();
+    gc.setKey("TEST-KEY-2");
+    entityManager.persist(gc);
+    entityManager.flush();
 
-	}
+  }
 
-	@Test
-	public void findGoogleCredentialKeySetTest() {
-		Set<String> keys = googleCredentialDAO.findAllKeys();
+  @Test
+  public void findGoogleCredentialKeySetTest() {
+    Set<String> keys = googleCredentialDAO.findAllKeys();
 
-		assertNotNull(keys);
-		assertEquals(2, keys.size());
-		assertThat(keys, containsInAnyOrder("TEST-KEY-1", "TEST-KEY-2"));
+    assertNotNull(keys);
+    assertEquals(2, keys.size());
+    assertThat(keys, containsInAnyOrder("TEST-KEY-1", "TEST-KEY-2"));
 
-	}
+  }
 
-	@Test
-	public void findGoogleCredentialStreamTest() {
+  @Test
+  public void findGoogleCredentialStreamTest() {
 
-		Stream<GoogleCredential> stream = googleCredentialDAO.findAllCredentialAsStream();
-		assertNotNull(stream);
-		assertEquals(2, stream.count());
+    Stream<GoogleCredential> stream = googleCredentialDAO.findAllCredentialAsStream();
+    assertNotNull(stream);
+    assertEquals(2, stream.count());
 
-		stream = googleCredentialDAO.findAllCredentialAsStream();
-		assertThat((Iterable<GoogleCredential>)stream::iterator, contains(
-				hasProperty("key", is("TEST-KEY-1")), 
-				hasProperty("key", is("TEST-KEY-2"))
-				));
+    stream = googleCredentialDAO.findAllCredentialAsStream();
+    assertThat((Iterable<GoogleCredential>)stream::iterator, contains(
+        hasProperty("key", is("TEST-KEY-1")), 
+        hasProperty("key", is("TEST-KEY-2"))
+        ));
 
-	}
+  }
 
 }
