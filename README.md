@@ -81,9 +81,9 @@ Create a folder in your Google Drive space. Add a new Google Drive repository in
 Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of plugins you can download and install locally. Plugins delivered by OwlPlug Central are available by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
 
 
-### OwlPlug central
+### OwlPlug Central
 
-OwlPlug central is the default Store source. It's a secure and trusted source to retrieve plugins. OwlPlug Central is a quick proof of concept for the Store feature integration in OwlPlug. For now, OwlPlug central is delivering only free Open Sourced plugins.
+OwlPlug Central is the default store. It's a secure and trusted source to retrieve plugins. OwlPlug Central is a quick proof of concept for the store feature integration. For now, OwlPlug Central is delivering only free open sourced plugins.
 
 * OwlPlug central: `http://owlplug.dropsnorz.com/store `
 
@@ -97,14 +97,14 @@ Third party stores are maintained by plugin creators, developers or distributors
 
 ### Third party (Central mirror)
 
-Third party store adapter is maintained by OwlPlug Central but plugins are hosted by original creators. (For testing purposes)
+Third party store adapters are maintained by OwlPlug Central but plugins are hosted by original creators. (For testing purposes)
 
 * AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://owlplug.dropsnorz.com/mirrors/amvst`
 * [Vst4free](http://vst4free.com): `http://owlplug.dropsnorz.com/mirrors/vst4free`
 
 ### How to distriute my plugins on OwlPlug ?
 
-* **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Send me a mail or create an issue in the [OwlPlug central github repo](http://github.com/dropsnorz/owlplug-central-static)
+* **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Open a submission ticket on [OwlPlug Central support desk](https://owlplug.freshdesk.com/support/home)
 * **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). Then, provide the endpoint url to your user.
 
 # Development
@@ -129,7 +129,7 @@ mvn spring-boot:run
 ```
 The first command will generate an executable binary `/target/owlplug-*.jar`. In order to use GoogleDrive repositories, you have to fill OAuth2 client id and secret in `credentials.properties`. Check Prerequisites from [Google OAuth2 Documentation](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
 
-As JavaFx as been decoupled from JDK 11, a compatible version is maitained on `java-11` branch.
+As JavaFx as been decoupled from JDK 11, an (outdated) compatible version is maitained on `java-11` branch.
 
 
 # Roadmap
