@@ -1,5 +1,6 @@
 package com.owlplug.store.model;
 
+import com.owlplug.core.model.PluginFormat;
 import java.math.BigInteger;
 import java.util.List;
 import javax.persistence.ElementCollection;
@@ -18,6 +19,7 @@ public class ProductBundle {
   private Long id;
   private String name;
   private String downloadUrl;
+  private PluginFormat format;
   private long fileSize;
   @ElementCollection(fetch = FetchType.EAGER)
   private List<String> targets;
@@ -72,5 +74,14 @@ public class ProductBundle {
   public void setProduct(StoreProduct product) {
     this.product = product;
   }
+
+  public PluginFormat getFormat() {
+    return format;
+  }
+
+  public void setFormat(PluginFormat format) {
+    this.format = format;
+  }
+  
 
 }

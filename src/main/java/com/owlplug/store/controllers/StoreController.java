@@ -264,6 +264,9 @@ public class StoreController {
    */
   public boolean installBundle(ProductBundle bundle) {
 
+    String baseDirectoryPath = storeService.getBundleInstallFolder(bundle);
+    String relativeDirectoryPath  = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
+
     File selectedDirectory = null;
 
     // A custom root directory to store plugin is defined
@@ -271,26 +274,28 @@ public class StoreController {
       // Store install target is already defined
       String storeDirectoryPath = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, null);
       if (storeDirectoryPath != null) {
-        selectedDirectory = new File(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
+        selectedDirectory = new File(baseDirectoryPath, relativeDirectoryPath);
       }
       // A plugin root directory is not defined
     } else {
       // Open dialog chooser to define store installation target
       DirectoryChooser directoryChooser = new DirectoryChooser();
-      // Open the VST directory if defined
-      if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) != null) {
-        File initialDirectory = new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-        if (initialDirectory.isDirectory()) {
-          directoryChooser.setInitialDirectory(new File(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "")));
-        }
+      // Open the VST directory
+      File initialDirectory = new File(baseDirectoryPath);
+      if (initialDirectory.isDirectory()) {
+        directoryChooser.setInitialDirectory(initialDirectory);
       }
       // Open directory chooser on top of the current windows
       Window mainWindow = masonryPane.getScene().getWindow();
       selectedDirectory = directoryChooser.showDialog(mainWindow);
     }
 
+    
+    
     // If any install target directory can be found, abort install
-    if (selectedDirectory == null || !selectedDirectory.isDirectory()) {
+    if (selectedDirectory == null 
+        || (selectedDirectory.exists() && !selectedDirectory.isDirectory())) {
+      log.error("Install directory can't be found: " + selectedDirectory);
       return false;
     }
 
@@ -351,7 +356,7 @@ public class StoreController {
     if (bundle != null) {
       return installBundle(bundle);
     }
-    
+
     return false;
   }
 

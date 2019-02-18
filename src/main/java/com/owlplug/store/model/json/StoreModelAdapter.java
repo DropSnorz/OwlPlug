@@ -1,5 +1,6 @@
 package com.owlplug.store.model.json;
 
+import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.model.PluginType;
 import com.owlplug.core.utils.UrlUtils;
@@ -83,6 +84,12 @@ public class StoreModelAdapter {
     productBundle.setDownloadUrl(mapper.getDownloadUrl());
     productBundle.setTargets(mapper.getTargets());
     productBundle.setFileSize(mapper.getFileSize());
+
+    if ("vst3".equals(mapper.getFormat())) {
+      productBundle.setFormat(PluginFormat.VST3);
+    } else {
+      productBundle.setFormat(PluginFormat.VST2);
+    }
 
     return productBundle;
   }

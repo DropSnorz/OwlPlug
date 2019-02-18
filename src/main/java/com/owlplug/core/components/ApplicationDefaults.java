@@ -54,6 +54,7 @@ public class ApplicationDefaults {
 
   public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
   public static final String VST2_DISCOVERY_ENABLED_KEY = "VST2_DISCOVERY_ENABLED";
+  public static final String VST3_DIRECTORY_KEY = "VST3_DIRECTORY";
   public static final String VST3_DISCOVERY_ENABLED_KEY = "VST3_DISCOVERY_ENABLED";
   public static final String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";
   public static final String SYNC_PLUGINS_STARTUP_KEY = "SYNC_PLUGINS_STARTUP_KEY";

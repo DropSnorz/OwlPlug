@@ -3,6 +3,7 @@ package com.owlplug.store.services;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
@@ -15,6 +16,7 @@ import com.owlplug.store.model.search.StoreCriteriaAdapter;
 import com.owlplug.store.model.search.StoreFilterCriteria;
 import java.io.IOException;
 import java.util.List;
+import java.util.prefs.Preferences;
 import javax.annotation.PostConstruct;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -34,6 +36,8 @@ public class StoreService {
 
   @Autowired
   private ApplicationDefaults applicationDefaults;
+  @Autowired
+  private Preferences prefs;
   @Autowired
   private StoreDAO storeDAO;
   @Autowired
@@ -159,5 +163,24 @@ public class StoreService {
   
   public void delete(Store store) {
     storeDAO.delete(store);
+  }
+  
+  /**
+   * Returns the bundle installation folder based on the plugin type
+   * @param bundle - bundle to install
+   * @return path to install directory
+   */
+  public String getBundleInstallFolder(ProductBundle bundle) {
+       
+    if (bundle.getFormat().equals(PluginFormat.VST2)) {
+      return prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+    }
+    
+    if (bundle.getFormat().equals(PluginFormat.VST3)) {
+      return prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
+    }
+    
+    return prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+        
   }
 }

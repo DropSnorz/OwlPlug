@@ -99,9 +99,9 @@ public class ProductInstallTask extends AbstractTask {
     }
 
     SimpleDateFormat horodateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
-    new File(applicationDefaults.getTempDowloadDirectory()).mkdirs();
+    new File(ApplicationDefaults.getTempDowloadDirectory()).mkdirs();
     String outPutFileName = horodateFormat.format(new Date()) + ".owlpack";
-    String outputFilePath = applicationDefaults.getTempDowloadDirectory() + File.separator + outPutFileName;
+    String outputFilePath = ApplicationDefaults.getTempDowloadDirectory() + File.separator + outPutFileName;
     File outputFile = new File(outputFilePath);
 
     try (
