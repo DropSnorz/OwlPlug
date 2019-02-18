@@ -58,9 +58,10 @@ public class CoreTaskFactory extends BaseTaskFactory {
 
     PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
     parameters.setPlatform(applicationDefaults.getRuntimePlatform());
-    parameters.setPluginDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-    parameters.setFindVST2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
-    parameters.setFindVST3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+    parameters.setVstDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+    parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+    parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
 
     PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO);
     task.setOnSucceeded(e -> {

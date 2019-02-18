@@ -7,6 +7,7 @@ public class BundleJsonMapper {
   private String name;
   private List<String> targets;
   private String downloadUrl;
+  private String format;
   private long fileSize;
 
   public String getName() {
@@ -39,6 +40,14 @@ public class BundleJsonMapper {
 
   public void setFileSize(long fileSize) {
     this.fileSize = fileSize;
+  }
+
+  public String getFormat() {
+    return format;
+  }
+
+  public void setFormat(String format) {
+    this.format = format;
   }
 
 }

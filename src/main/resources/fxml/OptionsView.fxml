@@ -24,15 +24,20 @@
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin></Label>
-                        <VBox spacing="20.0">
+                        <VBox spacing="25.0">
                            <children>
                               <VBox>
                                  <children>
-                                    <Label styleClass="heading-2" text="Plugin folder" />
+                                    <Label styleClass="heading-2" text="VST 2" />
+                                    <FlowPane prefWidth="200.0">
+                                       <children>
+                                          <JFXToggleButton fx:id="vst2ToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore VST2 plugins" />
+                                       </children>
+                                    </FlowPane>
                                     <HBox alignment="BASELINE_LEFT" spacing="5.0">
                                        <children>
-                                          <JFXTextField fx:id="pluginDirectoryTextField" HBox.hgrow="ALWAYS" />
-                                          <JFXButton fx:id="pluginDirectoryButton" text="..." />
+                                          <JFXTextField fx:id="vst2DirectoryTextField" promptText="VST2 plugin directory" HBox.hgrow="ALWAYS" />
+                                          <JFXButton fx:id="vst2DirectoryButton" text="..." />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="15.0" />
@@ -42,17 +47,21 @@
                               </VBox>
                               <VBox VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Label styleClass="heading-2" text="Plugin types" />
+                                    <Label styleClass="heading-2" text="VST 3" />
                                     <FlowPane prefWidth="200.0">
                                        <children>
-                                          <JFXToggleButton fx:id="vst2ToggleButton" text="Manage VST2 plugins" />
+                                          <JFXToggleButton fx:id="vst3ToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore VST3 plugins" />
                                        </children>
                                     </FlowPane>
-                                    <FlowPane prefWidth="200.0">
+                                    <HBox alignment="BASELINE_LEFT" spacing="5.0">
                                        <children>
-                                          <JFXToggleButton fx:id="vst3ToggleButton" text="Manage VST3 plugins" />
+                                          <JFXTextField fx:id="vst3DirectoryTextField" promptText="VST3 plugin directory" HBox.hgrow="ALWAYS" />
+                                          <JFXButton fx:id="vst3DirectoryButton" text="..." />
                                        </children>
-                                    </FlowPane>
+                                       <padding>
+                                          <Insets left="15.0" />
+                                       </padding>
+                                    </HBox>
                                  </children>
                               </VBox>
                            </children>
@@ -91,8 +100,8 @@
                                                       <Insets left="5.0" />
                                                    </VBox.margin>
                                                    <children>
-                                                      <JFXTextField fx:id="storeDirectoryTextField" HBox.hgrow="ALWAYS" />
-                                                      <JFXButton fx:id="storeDirectoryButton" text="..." />
+                                                      <Label text="\@plugin-directory/" />
+                                                      <JFXTextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" HBox.hgrow="ALWAYS" />
                                                    </children>
                                                 </HBox>
                                              </children>

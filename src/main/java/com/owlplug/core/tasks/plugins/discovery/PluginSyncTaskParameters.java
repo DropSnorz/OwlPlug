@@ -5,9 +5,10 @@ import com.owlplug.core.model.platform.RuntimePlatform;
 public class PluginSyncTaskParameters {
 
   private RuntimePlatform platform;
-  private String pluginDirectory;
-  private boolean findVST2;
-  private boolean findVST3;
+  private String vstDirectory;
+  private String vst3Directory;
+  private boolean findVst2;
+  private boolean findVst3;
 
   public RuntimePlatform getPlatform() {
     return platform;
@@ -17,28 +18,36 @@ public class PluginSyncTaskParameters {
     this.platform = platform;
   }
 
-  public String getPluginDirectory() {
-    return pluginDirectory;
+  public String getVstDirectory() {
+    return vstDirectory;
   }
 
-  public void setPluginDirectory(String pluginDirectory) {
-    this.pluginDirectory = pluginDirectory;
+  public void setVstDirectory(String pluginDirectory) {
+    this.vstDirectory = pluginDirectory;
   }
 
-  public boolean isFindVST2() {
-    return findVST2;
+  public String getVst3Directory() {
+    return vst3Directory;
   }
 
-  public void setFindVST2(boolean findVST2) {
-    this.findVST2 = findVST2;
+  public void setVst3Directory(String vst3Directory) {
+    this.vst3Directory = vst3Directory;
   }
 
-  public boolean isFindVST3() {
-    return findVST3;
+  public boolean isFindVst2() {
+    return findVst2;
   }
 
-  public void setFindVST3(boolean findVST3) {
-    this.findVST3 = findVST3;
+  public void setFindVst2(boolean findVst2) {
+    this.findVst2 = findVst2;
+  }
+
+  public boolean isFindVst3() {
+    return findVst3;
+  }
+
+  public void setFindVst3(boolean findVst3) {
+    this.findVst3 = findVst3;
   }
 
 }

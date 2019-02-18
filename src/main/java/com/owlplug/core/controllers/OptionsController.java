@@ -34,11 +34,16 @@ public class OptionsController {
   @FXML
   private JFXToggleButton vst2ToggleButton;
   @FXML
-  private JFXTextField pluginDirectoryTextField;
+  private JFXTextField vst2DirectoryTextField;
   @FXML
-  private JFXButton pluginDirectoryButton;
+  private JFXButton vst2DirectoryButton;
   @FXML
   private JFXToggleButton vst3ToggleButton;
+  @FXML
+  private JFXTextField vst3DirectoryTextField;
+  @FXML
+  private JFXButton vst3DirectoryButton;
+
   @FXML
   private JFXCheckBox syncPluginsCheckBox;
   @FXML
@@ -55,8 +60,6 @@ public class OptionsController {
   private JFXCheckBox storeDirectoryCheckBox;
   @FXML
   private JFXTextField storeDirectoryTextField;
-  @FXML
-  private JFXButton storeDirectoryButton;
 
   /**
    * FXML initialize method.
@@ -64,31 +67,40 @@ public class OptionsController {
   @FXML
   public void initialize() {
 
-    pluginDirectoryTextField.setDisable(false);
-    pluginDirectoryButton.setDisable(false);
+    vst2DirectoryTextField.setDisable(false);
+    vst2DirectoryButton.setDisable(false);
 
     vst2ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
+      vst2DirectoryTextField.setDisable(!newValue);
+      vst2DirectoryButton.setDisable(!newValue);
     });
 
     vst3ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, newValue);
+      vst3DirectoryTextField.setDisable(!newValue);
+      vst3DirectoryButton.setDisable(!newValue);
     });
 
-    pluginDirectoryButton.setOnAction(e -> {
+    vst2DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = pluginDirectoryButton.getScene().getWindow();
+      Window mainWindow = vst2DirectoryButton.getScene().getWindow();
 
       File selectedDirectory = directoryChooser.showDialog(mainWindow);
 
       if (selectedDirectory != null) {
-        pluginDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
+        vst2DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
       }
     });
 
-    pluginDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+    vst2DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
     });
+
+    vst3DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+      prefs.put(ApplicationDefaults.VST3_DIRECTORY_KEY, newValue);
+    });
+
 
     syncPluginsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       prefs.putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, newValue);
@@ -104,18 +116,6 @@ public class OptionsController {
     storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       prefs.putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
       storeDirectoryTextField.setDisable(!newValue);
-      storeDirectoryButton.setDisable(!newValue);
-    });
-
-    storeDirectoryButton.setOnAction(e -> {
-      DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = storeDirectoryButton.getScene().getWindow();
-
-      File selectedDirectory = directoryChooser.showDialog(mainWindow);
-
-      if (selectedDirectory != null) {
-        storeDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
-      }
     });
 
     storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -160,7 +160,8 @@ public class OptionsController {
 
   public void refreshView() {
 
-    pluginDirectoryTextField.setText(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    vst2DirectoryTextField.setText(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    vst3DirectoryTextField.setText(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
     vst2ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     vst3ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
     syncPluginsCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
@@ -171,7 +172,6 @@ public class OptionsController {
 
     if (!storeDirectoryCheckBox.isSelected()) {
       storeDirectoryTextField.setDisable(true);
-      storeDirectoryButton.setDisable(false);
     }
 
   }

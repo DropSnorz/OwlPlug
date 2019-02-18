@@ -37,17 +37,18 @@ public class PluginSyncTask extends AbstractTask {
       ArrayList<PluginFile> collectedPluginFiles = new ArrayList<>();
       
       PluginFileCollector pluginCollector = new PluginFileCollector(parameters.getPlatform());
-      String pluginDirectory = parameters.getPluginDirectory();
+      String vstDirectory = parameters.getVstDirectory();
+      String vst3Directory = parameters.getVst3Directory();
 
       this.updateProgress(1, 3);
 
       
-      if (parameters.isFindVST2()) {
-        collectedPluginFiles.addAll(pluginCollector.collect(pluginDirectory, PluginFormat.VST2));
+      if (parameters.isFindVst2()) {
+        collectedPluginFiles.addAll(pluginCollector.collect(vstDirectory, PluginFormat.VST2));
       }
 
-      if (parameters.isFindVST3()) {
-        collectedPluginFiles.addAll(pluginCollector.collect(pluginDirectory, PluginFormat.VST3));
+      if (parameters.isFindVst3()) {
+        collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
       }
       this.updateProgress(2, 3);
       
