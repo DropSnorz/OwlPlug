@@ -21,12 +21,16 @@
 
 # Join OwlPlug Beta  :rocket:
 
-
 **Why i have created OwlPlug ?** 
 
 OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple thats looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, i've discovered dozens of cool plugins just by using my own tool. So i realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
 
 I've generated OwlPlug binaries, but I've only tested them in my environment, `Win 10 - Java 9, Java 10`. I'm looking for any kind of feedbacks, even under the same configuration ! And as it's a beta phase, it's highly recommended to **backup your files before using OwlPlug**.
+
+**About OwlPlug**
+* [OwlPlug Website](https://owlplug.com)
+* [Roadmap](https://owlplug.com/roadmap)
+
 
 ## Installation
 
@@ -131,10 +135,4 @@ The first command will generate an executable binary `/target/owlplug-*.jar`. In
 
 As JavaFx as been decoupled from JDK 11, an (outdated) compatible version is maitained on `java-11` branch.
 
-
-# Roadmap
-
-- February 2019 - Plugin Discovery Update
-- Spring 2019 - Better UI / UX
-- Last half of 2019 - Auto-updates, URI Schemes, OwlPlug central improvements
 
