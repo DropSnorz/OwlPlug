@@ -24,7 +24,6 @@ public class ApplicationDefaults {
   private RuntimePlatform runtimePlatform;
 
   public static final String APPLICATION_NAME = "OwlPlug";
-  public static final String REPOSITORY_FOLDER_NAME = "repositories";
   public static final String DEFAULT_VST_DIRECTORY = "C:/VST";
 
   // CHECKSTYLE:OFF

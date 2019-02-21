@@ -1,23 +1,12 @@
 package com.owlplug.core.components;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.core.dao.PluginDAO;
-import com.owlplug.core.dao.PluginRepositoryDAO;
-import com.owlplug.core.model.GoogleDriveRepository;
 import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginRepository;
-import com.owlplug.core.services.PluginRepositoryService;
 import com.owlplug.core.tasks.PluginRemoveTask;
 import com.owlplug.core.tasks.PluginSyncTask;
-import com.owlplug.core.tasks.RepositoryRemoveTask;
-import com.owlplug.core.tasks.RepositoryTask;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
-import com.owlplug.core.tasks.repositories.IRepositoryStrategy;
-import com.owlplug.core.tasks.repositories.RepositoryStrategyParameters;
-import com.owlplug.core.tasks.repositories.RepositoryStrategyParameters.RepositoryAction;
-import com.owlplug.core.tasks.repositories.RepositoryStrategyResolver;
 import com.owlplug.core.utils.SimpleEventListener;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
@@ -37,14 +26,9 @@ public class CoreTaskFactory extends BaseTaskFactory {
   private Preferences prefs;
   @Autowired
   private PluginDAO pluginDAO;
-  @Autowired
-  private PluginRepositoryDAO pluginRepositoryDAO;
-  @Autowired 
-  private PluginRepositoryService repositoryService;
   @Autowired 
   private AuthenticationService authenticationService;
-  @Autowired
-  private RepositoryStrategyResolver repositoryStrategyResolver;
+
 
 
   private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
@@ -80,46 +64,6 @@ public class CoreTaskFactory extends BaseTaskFactory {
     
     return create(task);
   }
-  
-  /**
-   * Creates a {@link RepositoryRemoveTask}.
-   * @param repository - repository to remove
-   * @return task execution context
-   */
-  public TaskExecutionContext createRepositoryRemoveTask(PluginRepository repository) {
-    String localPath = repositoryService.getLocalRepositoryPath(repository);
-    RepositoryRemoveTask task = new RepositoryRemoveTask(pluginRepositoryDAO, repository, localPath);
-    
-    return create(task);
-  }
-  
-  /**
-   * Creates a pull {@link RepositoryTask}.
-   * @param repository - repository to pull
-   * @return task execution  context
-   */
-  public TaskExecutionContext createRepositoryPullTask(PluginRepository repository) {
-    RepositoryStrategyParameters parameters = new RepositoryStrategyParameters();
-    parameters.setRepositoryAction(RepositoryAction.PULL);
-
-    parameters.put("target-dir", repositoryService.getLocalRepositoryPath(repository));
-    parameters.put("task-name", "Pull repository - " + repository.getName());
-
-    if (repository instanceof GoogleDriveRepository) {
-      if (((GoogleDriveRepository) repository).getUserAccount() != null) {
-        GoogleCredential credential = authenticationService
-            .getGoogleCredential(((GoogleDriveRepository) repository).getUserAccount().getKey());
-        parameters.putObject("google-credential", credential);
-
-      }
-    }
-
-    IRepositoryStrategy strategy = repositoryStrategyResolver.getStrategy(repository, parameters);
-    return create(new RepositoryTask(strategy, parameters, repository));
-
-  }
-
-
 
   public void addSyncPluginsListener(SimpleEventListener eventListener) {
     syncPluginsListeners.add(eventListener);

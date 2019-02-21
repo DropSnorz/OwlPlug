@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.menus.NewRepositoryController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="5.0">
          <children>
@@ -20,28 +24,11 @@
       </HBox>
       <Separator prefWidth="200.0" />
       <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="NEVER">
-         <children>
-            <HBox fx:id="fileSystemMenuItem" alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item">
-               <children>
-                  <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" scaleX="0.75" scaleY="0.75">
-                     <image>
-                        <Image url="@../../icons/filesystem-grey-48.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="File System Repository" />
-               </children>
-            </HBox>
-            <HBox fx:id="googleDriveMenuItem" alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item">
-               <children>
-                  <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icons/gdrive-grey-64.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Google Drive Repository" />
-               </children>
-            </HBox>
-         </children>
+         <TextFlow prefHeight="200.0" prefWidth="200.0">
+            <children>
+              <Label prefHeight="68.0" prefWidth="200.0" text="Repositories have been deactivated. They will be replaced by the Link feature in the future versions of OwlPlug." wrapText="true" />
+            </children>
+         </TextFlow>
       </VBox>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
    </children>

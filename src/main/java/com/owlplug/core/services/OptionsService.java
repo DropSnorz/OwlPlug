@@ -5,7 +5,6 @@ import com.owlplug.auth.dao.UserAccountDAO;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.dao.PluginDAO;
-import com.owlplug.core.dao.PluginRepositoryDAO;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
 import java.util.prefs.BackingStoreException;
@@ -23,8 +22,6 @@ public class OptionsService {
 
   @Autowired
   private Preferences prefs;
-  @Autowired
-  private PluginRepositoryDAO pluginRepositoryDAO;
   @Autowired
   private PluginDAO pluginDAO;
   @Autowired
@@ -69,7 +66,6 @@ public class OptionsService {
     try {
       prefs.clear();
       pluginDAO.deleteAll();
-      pluginRepositoryDAO.deleteAll();
 
       googleCredentialDAO.deleteAll();
       userAccountDAO.deleteAll();

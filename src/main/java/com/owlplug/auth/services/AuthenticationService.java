@@ -21,7 +21,6 @@ import com.owlplug.auth.model.UserAccountProvider;
 import com.owlplug.auth.utils.AuthentificationException;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.core.services.PluginRepositoryService;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -54,8 +53,6 @@ public class AuthenticationService {
   private UserAccountDAO userAccountDAO;
   @Autowired
   private MainController mainController;
-  @Autowired
-  private PluginRepositoryService pluginRepositoryService;
   @Autowired
   private Preferences prefs;
 
@@ -139,7 +136,6 @@ public class AuthenticationService {
   @Transactional
   public void deleteAccount(UserAccount userAccount) {
 
-    pluginRepositoryService.removeAccountReferences(userAccount);
     googleCredentialDAO.deleteByKey(userAccount.getKey());
     userAccountDAO.delete(userAccount);
     mainController.refreshAccounts();

@@ -12,7 +12,6 @@ import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.model.PluginRepository;
-import com.owlplug.core.services.PluginRepositoryService;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.CustomTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
@@ -39,8 +38,6 @@ public class PluginsController {
 
   @Autowired
   private PluginService pluginService;
-  @Autowired
-  private PluginRepositoryService pluginRepositoryService;
   @Autowired
   private MainController mainController;
   @Autowired
@@ -71,7 +68,6 @@ public class PluginsController {
   private FileTree pluginTree;
   private FilterableTreeItem<Object> treePluginNode;
   private FilterableTreeItem<Object> treeFileRootNode;
-  private FilterableTreeItem<Object> treeRepositoryRootNode;
 
   /**
    * FXML initilaize method.
@@ -87,7 +83,6 @@ public class PluginsController {
 
     treePluginNode = new FilterableTreeItem<>("(all)");
     treeFileRootNode = new FilterableTreeItem<>("(all)");
-    treeRepositoryRootNode = new FilterableTreeItem<>("Repositories");
 
     treeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
       @Override
@@ -111,8 +106,6 @@ public class PluginsController {
     treeViewTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
       if (newTab.getId().equals("treeTabAll")) {
         treeView.setRoot(treePluginNode);
-      } else if (newTab.getId().equals("treeTabRepositories")) {
-        treeView.setRoot(treeRepositoryRootNode);
       } else {
         treeView.setRoot(treeFileRootNode);
       }
@@ -164,12 +157,6 @@ public class PluginsController {
     generatePluginTree();
     buildDirectoryTree(pluginTree, treeFileRootNode, null);
 
-    treeRepositoryRootNode.setExpanded(true);
-    treeRepositoryRootNode.getInternalChildren().clear();
-
-    Iterable<PluginRepository> pluginRepositories = pluginRepositoryService.findAll();
-    buildRepositoryTree(pluginTree, treeRepositoryRootNode, pluginRepositories);
-
   }
 
   /**
@@ -196,7 +183,7 @@ public class PluginsController {
           if (i == subDirs.length - 1) {
             ft.setNodeValue(plug);
 
-            // Node is a directory or a repository
+            // Node is a directory
           } else {
             // TODO Should be optimized for large plugin set
             List<Plugin> localPluginList = new ArrayList<Plugin>();
@@ -205,21 +192,11 @@ public class PluginsController {
                 localPluginList.add(p);
               }
             }
-            PluginRepository repository = null;
-            if (currentPath.endsWith(pluginRepositoryService.getLocalRepositoryDirectory() + "/" + subDirs[i] + "/")) {
-              repository = pluginRepositoryService.findByName(subDirs[i]);
-            }
-            if (repository != null) {
-              repository.setPluginList(localPluginList);
-              ft.setNodeValue(repository);
-
-            } else {
-              PluginDirectory directory = new PluginDirectory();
-              directory.setName(segment);
-              directory.setPath(currentPath);
-              directory.setPluginList(localPluginList);
-              ft.setNodeValue(directory);
-            }
+            PluginDirectory directory = new PluginDirectory();
+            directory.setName(segment);
+            directory.setPath(currentPath);
+            directory.setPluginList(localPluginList);
+            ft.setNodeValue(directory);
           }
           node.put(segment, ft);
         }
@@ -296,6 +273,7 @@ public class PluginsController {
    * @param pluginTree   File tree representation
    * @param node         root tree view node
    * @param repositories List of known repositories
+   * @deprecated since OwlPlug 0.7.0
    */
   private void buildRepositoryTree(FileTree pluginTree, FilterableTreeItem<Object> node,
       Iterable<PluginRepository> repositories) {
@@ -304,7 +282,7 @@ public class PluginsController {
     node.setExpanded(true);
 
     FileTree treeHead = pluginTree;
-    String repositoryPath = pluginRepositoryService.getLocalRepositoryDirectory();
+    String repositoryPath = "C/fakepath";
     if (repositoryPath == null) {
       return;
     }

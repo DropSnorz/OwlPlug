@@ -3,25 +3,20 @@ package com.owlplug.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.Transient;
-
-@Entity
-@Inheritance
+/**
+ * This class is no longer used. 
+ * In OwlPlug 0.6.0 Repositories were remote sources of plugin. The remote
+ * souces can be pulled inside plugin directories.
+ * This feature has been deactivated since OwlPlug 0.7.0
+ * @deprecated
+ *
+ */
 public abstract class PluginRepository implements IDirectory {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+
   protected Long id;
   protected String name;
-
-  @Transient
   protected List<Plugin> pluginList;
-  @Transient
   protected String displayName;
 
   PluginRepository(String name) {
