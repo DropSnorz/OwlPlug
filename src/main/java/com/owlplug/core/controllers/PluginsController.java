@@ -17,7 +17,9 @@ import com.owlplug.core.ui.CustomTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.prefs.Preferences;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -155,7 +157,23 @@ public class PluginsController {
     treeFileRootNode.getInternalChildren().clear();
 
     generatePluginTree();
-    buildDirectoryTree(pluginTree, treeFileRootNode, null);
+
+    Set<String> userPluginDirectories = new HashSet<>();
+    if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
+        && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").equals("")) {
+      userPluginDirectories.add(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    }
+
+    if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
+        && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").equals("")) {
+      userPluginDirectories.add(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+    }
+
+    for (String directory : userPluginDirectories) {
+      treeFileRootNode.getInternalChildren().add(initDirectoryRoot(pluginTree, directory));
+    }
+
+    treeFileRootNode.setExpanded(true);
 
   }
 
@@ -203,6 +221,32 @@ public class PluginsController {
         node = node.get(segment);
       }
     }
+  }
+
+  private FilterableTreeItem<Object> initDirectoryRoot(FileTree pluginTree, String directoryPath) {
+
+
+    FilterableTreeItem<Object> item = new FilterableTreeItem<>(null);
+
+    item.setGraphic(new ImageView(applicationDefaults.directoryImage));
+    item.setExpanded(true);
+
+    FileTree treeHead = pluginTree;
+    String[] directories = directoryPath.split("/");
+
+    for (String dir : directories) {
+      if (treeHead != null) {
+        treeHead = treeHead.get(dir);
+      }
+    }
+
+    if (treeHead != null) {
+      item.setValue(treeHead.getNodeValue());
+      buildDirectoryTree(treeHead, item, "");
+    }
+
+    return item;
+
   }
 
   /**
