@@ -20,14 +20,10 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication
 public class OwlPlug extends Application {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -106,17 +102,6 @@ public class OwlPlug extends Application {
   public Preferences getPreference() {
     return Preferences.userRoot().node("com.owlplug.user");
 
-  }
-
-  /**
-   * Initialize spring boot embedded Tomcat server. Used to catch loopback
-   * requests from google drive OAuth API.
-   * 
-   * @return
-   */
-  @Bean
-  public ServletWebServerFactory servletWebServerFactory() {
-    return new TomcatServletWebServerFactory();
   }
 
   /**
