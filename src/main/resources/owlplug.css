@@ -156,6 +156,10 @@ JFXButton{
 	-fx-text-fill: rgb(40,40,40);
 }
 
+.hyperlink-web:visited {
+	-fx-text-fill: disabled-color;
+}
+
 
 JFXToggleButton{
 	-fx-text-fill:white;

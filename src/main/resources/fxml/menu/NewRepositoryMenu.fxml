@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0"  fx:controller="com.owlplug.core.controllers.RepositoryController" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="5.0">
          <children>
@@ -27,6 +27,8 @@
          <TextFlow prefHeight="200.0" prefWidth="200.0">
             <children>
               <Label prefHeight="68.0" prefWidth="200.0" text="Repositories have been deactivated. They will be replaced by the Link feature in the future versions of OwlPlug." wrapText="true" />
+               <Label text="Check the" />
+               <Hyperlink fx:id="roadmapLink" styleClass="hyperlink-web" text="Roadmap" />
             </children>
          </TextFlow>
       </VBox>
