@@ -62,24 +62,6 @@ OwlPlug is compatible with your previously installed plugins as they are all in 
 OwlPlug can discover VST2 and VST3 Plugins. 
 
 
-## Repositories
-
-You can set up repositories to keep your local plugin collection synced with a master source (local network, Google Drive, ...). This is basically a file-pulling system from a remote folder to your local plugin folder. It's really useful when you have to collaborate and share effects or even if you manage different plugin stages (live, studio, and test plugin sets). All repository's files are stored in your plugin directory in a specific folder called `.repositories`. Some plugins protected by DRMs can't be easily included in repositories as they often require extra authorization flow to work. 
-
-Multiple repositories types are supported:
-* Local network repositories
-* Google drive repositories
-
-### Local network repositories
-
-Create a local or remote folder and mount it on your filesystem. This folder will act as a remote source that you can pull into your local plugin directory.
-
-
-### Google drive repositories
-
-Create a folder in your Google Drive space. Add a new Google Drive repository in OwlPlug using the folder fileId. You can retrieve fileId from the folder URL. You can use any Google drive folders as long as your account have authorization to read it. OwlPlug will pull the entire folder content in your local plugin directory.
-
-
 ## Stores 
 
 Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of plugins you can download and install locally. Plugins delivered by OwlPlug Central are available by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
