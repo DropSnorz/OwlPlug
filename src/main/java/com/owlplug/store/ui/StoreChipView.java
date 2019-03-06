@@ -9,6 +9,7 @@ import com.owlplug.store.model.search.StoreFilterCriteriaType;
 import java.util.HashMap;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -132,6 +133,9 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
           imageView.setFitWidth(10);
           imageView.setFitHeight(10);
           setGraphic(imageView);
+        } else {
+          setGraphic(null);
+          setText(null);
         }
       }
     });
