@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.skins.JFXComboBoxListViewSkin;
 import com.owlplug.auth.controllers.AccountController;
-import com.owlplug.auth.dao.UserAccountDAO;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.auth.ui.AccountCellFactory;
@@ -16,11 +15,13 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.owlplug.core.services.PluginService;
+import com.owlplug.core.services.UpdateService;
 import com.owlplug.store.controllers.StoreController;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -50,6 +51,8 @@ public class MainController {
   @Autowired
   private AuthenticationService authentificationService;
   @Autowired
+  private UpdateService updateService;
+  @Autowired
   private Preferences prefs;
   @Autowired
   private PluginService pluginService;
@@ -75,7 +78,7 @@ public class MainController {
    */
   @FXML
   public void initialize() {
-
+    
     viewRegistry.preload();
 
     this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener((options, oldValue, newValue) -> {
@@ -112,6 +115,17 @@ public class MainController {
     accountComboBox.setSkin(accountCBSkin);
 
     refreshAccounts();
+    
+    Task<Void> task = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            
+            log.info("Application is up to date: " + updateService.isUpToDate());
+            return null;
+        }
+    };
+
+    new Thread(task).start();
 
   }
 
