@@ -1,87 +1,87 @@
+/****************************************************************
+ Global Theme rules
+****************************************************************/
+
 .root{
-	solid-pane-header-color: rgb(48,48,48);
-	solid-pane-color: rgb(66,66,66);
-	solid-pane-hover-color:rgb(96,96,96);
+	card-pane-darkshade-color: rgb(48,48,48);
+	card-pane-color: rgb(66,66,66);
+	card-pane-lightshade-color: rgb(96,96,96);
+	
 	disabled-color: rgb(160,160,160);
 	danger-color: #d9534f;
 	success-color: rgb(40, 167, 69);
-	prompt-text-color:#4D4D4D;
+	prompt-text-color: #4D4D4D;
 	
 	theme-primary-color: #FFF58E;
 	theme-secondary-color: #FFF0D4;
+	
+	text-color: white;
 }
 
 #mainPane{
 	-fx-background-color: linear-gradient(to top, #c79081 0%, #dfa579 100%);
 }
 
+
 JFXDialog{
-	-fx-background-color:rgba(0,0,0,0.5);
-	
+	-fx-background-color: rgba(0,0,0,0.5);
 }
-
 JFXDialog Label{
-	-fx-text-fill: white;
-	
+	-fx-text-fill: text-color;
+}
+.jfx-dialog-overlay-pane > StackPane {
+    -fx-background-color: card-pane-color;
 }
 
-.jfx-dialog-overlay-pane > StackPane {
-    -fx-background-color: solid-pane-color;
-    
-}
 
 Label{ 
- 	-fx-text-fill: white;
+ 	-fx-text-fill: text-color;
 }
 .label-danger{
-	-fx-text-fill:danger-color;
+	-fx-text-fill: danger-color;
 }
 .label-disabled{
-	-fx-text-fill:disabled-color;
+	-fx-text-fill: disabled-color;
 }
 .label-dark{
-	-fx-text-fill:rgb(40,40,40);
+	-fx-text-fill: rgb(40,40,40);
 }
-
 .heading-title {
 	-fx-font-size: 30px;
 	-fx-font-weight: bold;
-	-fx-margin:0,0,8,0;
+	-fx-margin: 0,0,8,0;
 }
-
 .heading-1{
 	-fx-font-size: 22px;
-	-fx-margin:0,0,8,0;
+	-fx-margin: 0,0,8,0;
 }
-
 .heading-2{
 	-fx-font-size: 20px;
 }
-
-
 Text{ 
- 	-fx-fill: white;
+ 	-fx-fill: text-color;
 }
 .text-disabled{
 	-fx-fill: disabled-color;
 }
 JFXTextField{
-	-fx-text-fill:white;
+	-fx-text-fill: text-color;
 	-jfx-focus-color: theme-secondary-color;
 }
 
+
 .jfx-chip-view {
-	-fx-max-height:45px ;
+	-fx-max-height: 45px ;
 }
-
-
 .jfx-chip-view .chips-pane .text-area {
 	-fx-prompt-text-fill: prompt-text-color;
 	-fx-pref-height: 32px;
 	-fx-height: 32px;
 	-fx-max-height: 32px;
 }
-
+.jfx-chip-view .jfx-chip Label {
+    -fx-text-fill: black;
+}
 .chip-blue {
 	-fx-background-color: #b2675e;
 }
@@ -91,11 +91,6 @@ JFXTextField{
 .chip-green {
 	-fx-background-color: #C5E1A5;
 }
-
-.jfx-chip-view .jfx-chip Label {
-    -fx-text-fill: black;
-}
-
 .fake-chip{
     -fx-font-family: "Roboto Medium";
     -fx-font-size: 12.0;
@@ -106,107 +101,92 @@ JFXTextField{
     -fx-alignment: center-left;
     -fx-spacing: 8;
 }
-
 .fake-chip Label {
     -fx-text-fill: black;
 }
 
-JFXButton{
-	-fx-text-fill:white;
-	-fx-background-color:rgba(0,0,0,0.1);
-}
 
+JFXButton{
+	-fx-text-fill: text-color;
+	-fx-background-color: rgba(0,0,0,0.1);
+}
 .button-danger{
-	-fx-background-color:danger-color;
+	-fx-background-color: danger-color;
 	
 }
 .button-danger:hover{
-	-fx-background-color:#c9302c;
-	
+	-fx-background-color: #c9302c;
 }
 
 .button-danger:pressed{
-	-fx-background-color:#ac2925;
-	
+	-fx-background-color: #ac2925;
 }
-
 .button-success{
-	-fx-background-color:success-color;
-	
+	-fx-background-color: success-color;
+}
+.button-info {
+	-fx-background-color: #2980b9;
 }
 
-.button-action {
-	-fx-background-color:#2980b9;
-}
 
 .hyperlink-button{
 	-fx-underline: false;
-	-fx-text-fill: white;
+	-fx-text-fill: text-color;
 }
 .hyperlink-button:hover{
 	-fx-underline: false;
-	-fx-text-fill: white;
+	-fx-text-fill: text-color;
 }
 .hyperlink-button:visited{
 	-fx-underline: false;
-	-fx-text-fill: white;
+	-fx-text-fill: text-color;
 }
-
 .hyperlink-dark{
 	-fx-text-fill: rgb(40,40,40);
 }
-
 .hyperlink-web:visited {
 	-fx-text-fill: disabled-color;
 }
 
 
 JFXToggleButton{
-	-fx-text-fill:white;
+	-fx-text-fill: text-color;
 }
+
 
 JFXComboBox{
 	-jfx-focus-color: theme-secondary-color;
 }
-
-.menu-combobox{
-	-fx-background-color:solid-pane-color;
-	-fx-background-radius: 0;
-	-fx-border-radius: 0;
-	-fx-text-fill: white;
-}
-
 .combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
-    -fx-background-color: solid-pane-color ;
-    -fx-text-fill: white ;
+    -fx-background-color: card-pane-color;
+    -fx-text-fill: white;
 }
 .combo-box .combo-box-popup .list-cell:hover {
-    -fx-text-fill: white ;
-    -fx-background-color: solid-pane-hover-color ;
+    -fx-text-fill: white;
+    -fx-background-color: card-pane-lightshade-color;
 }
-
 .combo-box .list-cell{
-	-fx-text-fill: white ;
+	-fx-text-fill: white;
 }
-
 #accountComboBox {
 	-fx-prompt-text-fill: transparent;
 }
 
+
 JFXCheckBox {
-     -fx-text-fill: white; 
+     -fx-text-fill: text-color; 
 }
 JFXCheckBox .box {
      -fx-border-color: white;
 }
-
 JFXCheckBox:selected .box{
 	-fx-border-color: transparent;
 }
  
+ 
 JFXTreeView{
-	-fx-background-color:solid-pane-color;
-	-fx-text-fill:white;
+	-fx-background-color:card-pane-color;
+	-fx-text-fill: text-color;
 	-fx-border-color: transparent;
 	-fx-focus-color: transparent;
 	-fx-faint-focus-color: transparent;
@@ -221,93 +201,55 @@ JFXTreeView:focused{
 }
 
 .tree-view, .tree-cell {
-    -fx-background-color: solid-pane-color;
-    -fx-text-fill: white ;
+    -fx-background-color: card-pane-color;
+    -fx-text-fill: text-color;
 }
-
 .tree-cell > .tree-disclosure-node > .arrow  {
     -fx-background-color: white;
 }
-
 .tree-cell .selection-bar {
     -fx-background-color: theme-primary-color;
 }
-
 .jfx-tab-pane *.tab-header-background{
-	-fx-background-color:solid-pane-color;
+	-fx-background-color: card-pane-color;
 }
 .jfx-tab-pane .tab-selected-line {
     -fx-background-color: theme-primary-color;
 }
 
 .no-header-tab-pane {
-    -fx-tab-max-height: 0 ;
+    -fx-tab-max-height: 0;
 } 
 .no-header-tab-pane > .tab-header-area {
-    visibility: hidden ;
+    visibility: hidden;
 }
-
-.jfx-drawer-side-pane {
-    -fx-background-color: solid-pane-color;
-}
-
-.menu-item:hover{
-	-fx-background-color: solid-pane-hover-color;
-}
-
 .small-tab-pane *.tab *.tab-label{
 	-fx-font-size: 15px;
 	-fx-font-weight: normal;
 }
 
+.jfx-drawer-side-pane {
+    -fx-background-color: card-pane-color;
+}
+.menu-item:hover{
+	-fx-background-color: card-pane-lightshade-color;
+}
+
 JFXListView{
 	-fx-background-color: rgb(55,55,55);
-	-fx-text-fill:white;
+	-fx-text-fill: text-color;
 	
 }
 .list-view .list-cell{
 	-fx-background-color: rgb(44,44,44);
-	-fx-text-fill:white;
+	-fx-text-fill: text-color;
 }
-
 .autocomplete-list {
-	-fx-background-color:solid-pane-color;
+	-fx-background-color:card-pane-color;
 }
 .autocomplete-list .list-cell{
-	-fx-background-color: solid-pane-color;
-	-fx-text-fill:white;
-}
-
-.panel-transparent{
-	-fx-background-color: rgba(66,66,66, 0.7);
-	-fx-padding:10,10,10,10;
-}
-
-.panel-transparent-dark{
-	-fx-background-color: rgba(0,0,0, 0.85);
-	-fx-padding:10,10,10,10;
-}
-
-.panel-dark{
-	-fx-background-color: solid-pane-color;
-	-fx-padding:10,10,10,10;
-}
-
-.panel-section{
-	-fx-height:37;
-	-fx-padding:5,5,5,5;
-	-fx-background-color: solid-pane-header-color; 
-	-fx-margin:0,0,10,0;
-}
-
-.panel-section Label{
-	-fx-font-size: 14px;
-	-fx-font-weight: bold;
-	-fx-text-fill:disabled-color;
-}
-
-.dark-block {
-	-fx-background-color: solid-pane-color;
+	-fx-background-color: card-pane-color;
+	-fx-text-fill: text-color;
 }
 
 
@@ -315,59 +257,82 @@ JFXListView{
     -jfx-rippler-fill: theme-secondary-color;
 }
 
+
 .jfx-popup,
 .jfx-popup .jfx-popup-container,
 .jfx-popup .jfx-list-view{
-    -fx-background-color:solid-pane-color;
+    -fx-background-color:card-pane-color;
 }
+
+
 .progress-bar-error > .bar {
     -fx-background-color: red;
 }
-
 ProgressIndicator{
 	-fx-progress-color: theme-primary-color;
 }
-
 .jfx-spinner .arc {
     -fx-stroke: theme-primary-color;
 }
 
 
 .jfx-snackbar-content {
-    -fx-background-color: solid-pane-color;
+    -fx-background-color: card-pane-color;
 }
 .jfx-snackbar-toast {
-    -fx-text-fill: WHITE;   
-}
-.jfx-snackbar-action {
-    -fx-text-fill: #ff4081; 
-}
-
-.store-product-bloc{
-	-fx-background-color: rgba(66,66,66, 0.7);
+    -fx-text-fill: text-color;   
 }
 
 
 .context-menu {
-  -fx-background-color: solid-pane-color;
-  -fx-text-fill: white;
+  -fx-background-color: card-pane-color;
+  -fx-text-fill: text-color;
 }
-
 .context-menu .menu-item:focused {
-  -fx-background-color: solid-pane-hover-color;
+  -fx-background-color: card-pane-lightshade-color;
 }
-
 .context-menu .menu-item .label {
-  -fx-text-fill: white;
+  -fx-text-fill: text-color;
 }
 
-.scroll-pane{
- -fx-background-color: transparent;
+
+/****************************************************************
+  App section theme
+****************************************************************/
+
+.header {
+	-fx-background-color: card-pane-color;
+}
+.header .combobox{
+	-fx-background-color:card-pane-color;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+	-fx-text-fill: text-color;
 }
 
-.scroll-pane > .viewport {
-   -fx-background-color: transparent;
+.pane-card {
+	-fx-background-color: card-pane-color;
+	-fx-padding: 10,10,10,10;
 }
+.pane-card .card-title {
+	-fx-height: 37;
+	-fx-padding: 5,5,5,5;
+	-fx-background-color: card-pane-darkshade-color; 
+	-fx-margin: 0,0,10,0;
+}
+.pane-card .card-title Label {
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+	-fx-text-fill: disabled-color;
+}
+
+
+.product-bloc-header{
+	-fx-background-color: rgba(0,0,0, 0.85);
+	-fx-padding:10,10,10,10;
+}
+
+
 
 /****************************************************************
  * 
@@ -376,7 +341,7 @@ ProgressIndicator{
  * **************************************************************/
  
  .no-padding {
- 	-fx-padding:0;
+ 	-fx-padding: 0;
  }
 
 /****************************************************************
@@ -384,6 +349,12 @@ ProgressIndicator{
   ScrollBar Skin | inspired by farrukhobaid work
  
 ****************************************************************/
+.scroll-pane{
+ -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
 .scroll-bar{
  -fx-background-color: transparent;
  -fx-background-radius: 1em;

@@ -32,7 +32,7 @@
                   </VBox>
                   <VBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
                      <children>
-                        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="panel-transparent-dark">
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="product-bloc-header">
                            <children>
                               <Label fx:id="productNameLabel" styleClass="heading-1" text="Title" />
                               <Label styleClass="label-disabled" text="-" />
@@ -51,7 +51,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="panel-transparent-dark" StackPane.alignment="TOP_LEFT">
+                  <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="product-bloc-header" StackPane.alignment="TOP_LEFT">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
                            <image>
@@ -68,7 +68,7 @@
                      <children>
                         <VBox spacing="10.0">
                            <children>
-                              <HBox alignment="CENTER_LEFT" styleClass="panel-section">
+                              <HBox alignment="CENTER_LEFT" styleClass="card-title">
                                  <children>
                                     <Label graphicTextGap="6.0" prefHeight="17.0" text="About" />
                                     <Region HBox.hgrow="ALWAYS" />
@@ -133,7 +133,7 @@
                         </VBox>
                         <VBox>
                            <children>
-                              <HBox styleClass="panel-section">
+                              <HBox styleClass="card-title">
                                  <children>
                                     <Label graphicTextGap="6.0" prefHeight="20.0" text="Bundles" />
                                  </children>
@@ -157,7 +157,7 @@
             </ScrollPane>
          </children>
          <styleClass>
-            <String fx:value="panel-dark" />
+            <String fx:value="pane-card" />
             <String fx:value="no-padding" />
          </styleClass>
       </VBox>

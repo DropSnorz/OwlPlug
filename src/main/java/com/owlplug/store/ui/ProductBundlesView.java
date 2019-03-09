@@ -55,7 +55,7 @@ public class ProductBundlesView extends VBox {
     HBox.setHgrow(filler, Priority.ALWAYS);
     hbox.getChildren().add(filler);
     JFXButton installButton = new JFXButton("Install");
-    installButton.getStyleClass().add("button-action");
+    installButton.getStyleClass().add("button-info");
     installButton.setOnAction(installHandler);
     hbox.getChildren().add(installButton);
 

@@ -19,7 +19,7 @@
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox styleClass="dark-block">
+            <HBox styleClass="header">
                <children>
                   <JFXTabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
                      <tabs>
@@ -46,7 +46,7 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </HBox>
-                  <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts Manager" styleClass="menu-combobox" />
+                  <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts Manager" />
                </children>
             </HBox>
             <JFXDrawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">

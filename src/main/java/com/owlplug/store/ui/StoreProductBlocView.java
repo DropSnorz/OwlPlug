@@ -60,7 +60,7 @@ public class StoreProductBlocView extends AnchorPane {
 
     HBox header = new HBox();
     header.setSpacing(5);
-    header.getStyleClass().add("panel-transparent-dark");
+    header.getStyleClass().add("product-bloc-header");
     if (storeProduct.getType() != null) {
       Image typeIcon = applicationDefaults.getProductTypeIcon(storeProduct);
       if (typeIcon != null) {
