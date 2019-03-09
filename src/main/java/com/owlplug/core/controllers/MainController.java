@@ -1,5 +1,6 @@
 package com.owlplug.core.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
@@ -16,6 +17,7 @@ import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.services.UpdateService;
+import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.store.controllers.StoreController;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -26,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -38,6 +41,8 @@ public class MainController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+  @Autowired 
+  private ApplicationDefaults applicationDefaults;
   @Autowired
   private LazyViewRegistry viewRegistry;
   @Autowired
@@ -72,6 +77,10 @@ public class MainController {
   private JFXDrawer leftDrawer;
   @FXML
   private JFXComboBox<AccountItem> accountComboBox;
+  @FXML
+  private Pane updatePane;
+  @FXML
+  private JFXButton downloadUpdateButton;
 
   /**
    * FXML initialize method.
@@ -116,16 +125,26 @@ public class MainController {
 
     refreshAccounts();
     
-    Task<Void> task = new Task<Void>() {
+    downloadUpdateButton.setOnAction(e -> {
+      PlatformUtils.openDefaultBrowser(applicationDefaults.getUpdateDownloadUrl());
+    });
+    
+    updatePane.setVisible(false);
+    
+    Task<Boolean> retrieveUpdateStatusTask = new Task<Boolean>() {
         @Override
-        protected Void call() throws Exception {
-            
-            log.info("Application is up to date: " + updateService.isUpToDate());
-            return null;
+        protected Boolean call() throws Exception {
+          return updateService.isUpToDate();
         }
     };
+    
+    retrieveUpdateStatusTask.setOnSucceeded(e -> {
+      if (!retrieveUpdateStatusTask.getValue()) {
+        updatePane.setVisible(true);
+      }
+    });
 
-    new Thread(task).start();
+    new Thread(retrieveUpdateStatusTask).start();
 
   }
 

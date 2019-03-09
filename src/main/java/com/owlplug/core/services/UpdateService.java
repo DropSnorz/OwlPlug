@@ -32,7 +32,7 @@ public class UpdateService {
       return remoteSemver.isLowerThanOrEqualTo(currentSemver);
 
     }
-    return false;
+    return true;
 
   }
   
@@ -40,7 +40,8 @@ public class UpdateService {
     RestTemplate restTemplate = new RestTemplate();
     RemoteVersion remoteVersion = null;
     try {
-      remoteVersion = restTemplate.getForObject("http://hub.owlplug.com/releases/latest/version.json", RemoteVersion.class);
+      remoteVersion = restTemplate.getForObject(applicationDefaults.getOwlPlugHubUrl() 
+          + "/releases/latest/version.json", RemoteVersion.class);
     } catch (RestClientException e) {
       log.error("Error retrieving latest owlplug version", e);
     }
