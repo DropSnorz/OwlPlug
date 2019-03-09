@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.paint.*?>
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.MainController">
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.MainController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox>
+            <HBox styleClass="dark-block">
                <children>
                   <JFXTabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
                      <tabs>
@@ -24,6 +29,23 @@
                         <Tab text="Options" />
                      </tabs>
                   </JFXTabPane>
+                  <HBox fx:id="updatePane" alignment="CENTER_LEFT" prefHeight="45.0" spacing="5.0">
+                     <children>
+                        <Label text="New OwlPlug version available" />
+                        <JFXButton fx:id="downloadUpdateButton" text="Download">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/download-white-32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" right="10.0" />
+                     </padding>
+                  </HBox>
                   <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts Manager" styleClass="menu-combobox" />
                </children>
             </HBox>

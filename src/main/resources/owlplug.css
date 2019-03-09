@@ -306,6 +306,10 @@ JFXListView{
 	-fx-text-fill:disabled-color;
 }
 
+.dark-block {
+	-fx-background-color: solid-pane-color;
+}
+
 
 .jfx-rippler {
     -jfx-rippler-fill: theme-secondary-color;

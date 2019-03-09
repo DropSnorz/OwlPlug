@@ -1,11 +1,11 @@
 package com.owlplug.core.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.skins.JFXComboBoxListViewSkin;
 import com.owlplug.auth.controllers.AccountController;
-import com.owlplug.auth.dao.UserAccountDAO;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.auth.ui.AccountCellFactory;
@@ -16,15 +16,19 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.owlplug.core.services.PluginService;
+import com.owlplug.core.services.UpdateService;
+import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.store.controllers.StoreController;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -37,6 +41,8 @@ public class MainController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+  @Autowired 
+  private ApplicationDefaults applicationDefaults;
   @Autowired
   private LazyViewRegistry viewRegistry;
   @Autowired
@@ -49,6 +55,8 @@ public class MainController {
   private StoreController storeController;
   @Autowired
   private AuthenticationService authentificationService;
+  @Autowired
+  private UpdateService updateService;
   @Autowired
   private Preferences prefs;
   @Autowired
@@ -69,13 +77,17 @@ public class MainController {
   private JFXDrawer leftDrawer;
   @FXML
   private JFXComboBox<AccountItem> accountComboBox;
+  @FXML
+  private Pane updatePane;
+  @FXML
+  private JFXButton downloadUpdateButton;
 
   /**
    * FXML initialize method.
    */
   @FXML
   public void initialize() {
-
+    
     viewRegistry.preload();
 
     this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener((options, oldValue, newValue) -> {
@@ -112,6 +124,27 @@ public class MainController {
     accountComboBox.setSkin(accountCBSkin);
 
     refreshAccounts();
+    
+    downloadUpdateButton.setOnAction(e -> {
+      PlatformUtils.openDefaultBrowser(applicationDefaults.getUpdateDownloadUrl());
+    });
+    
+    updatePane.setVisible(false);
+    
+    Task<Boolean> retrieveUpdateStatusTask = new Task<Boolean>() {
+        @Override
+        protected Boolean call() throws Exception {
+          return updateService.isUpToDate();
+        }
+    };
+    
+    retrieveUpdateStatusTask.setOnSucceeded(e -> {
+      if (!retrieveUpdateStatusTask.getValue()) {
+        updatePane.setVisible(true);
+      }
+    });
+
+    new Thread(retrieveUpdateStatusTask).start();
 
   }
 

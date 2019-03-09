@@ -116,6 +116,14 @@ public class ApplicationDefaults {
   public String getVersion() {
     return env.getProperty("owlplug.version");
   }
+  
+  public String getOwlPlugHubUrl() {
+    return env.getProperty("owlplug.hub.url");
+  }
+  
+  public String getUpdateDownloadUrl() {
+    return env.getProperty("owlplug.hub.updateDownloadUrl");
+  }
 
   public static String getUserDataDirectory() {
     return FileUtils.convertPath(System.getProperty("user.home") + File.separator + ".owlplug");
