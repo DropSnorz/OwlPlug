@@ -89,7 +89,7 @@
                                     <VBox spacing="20.0" VBox.vgrow="NEVER">
                                        <children>
                                           <JFXCheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" />
-                                          <JFXCheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugin in a subdirectory" />
+                                          <JFXCheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugins in dedicated subdirectories" />
 
                                                 <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
                                           <VBox spacing="5.0" VBox.vgrow="NEVER">

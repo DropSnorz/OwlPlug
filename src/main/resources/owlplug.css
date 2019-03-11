@@ -12,10 +12,11 @@
 	success-color: rgb(40, 167, 69);
 	prompt-text-color: #4D4D4D;
 	
-	theme-primary-color: #FFF58E;
-	theme-secondary-color: #FFF0D4;
+	theme-primary-color: #e5dd92;
+	theme-secondary-color: #ebc8ae;
 	
-	text-color: white;
+	text-color: #F5F5F1;
+	text-emphase-color: lightgrey;
 }
 
 #mainPane{
@@ -45,6 +46,9 @@ Label{
 }
 .label-dark{
 	-fx-text-fill: rgb(40,40,40);
+}
+.label-emphase {
+	-fx-text-fill: text-emphase-color;
 }
 .heading-title {
 	-fx-font-size: 30px;
@@ -312,6 +316,7 @@ ProgressIndicator{
 
 .pane-card {
 	-fx-background-color: card-pane-color;
+	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 	-fx-padding: 10,10,10,10;
 }
 .pane-card .card-title {

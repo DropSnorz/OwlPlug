@@ -123,9 +123,9 @@ public class PluginInfoController {
     pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
     pluginTitleLabel.setText(plugin.getName());
     pluginNameLabel.setText(plugin.getName());
-    pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse(""));
-    pluginIdLabel.setText("");
-    pluginBundleIdLabel.setText(Optional.ofNullable(plugin.getBundleId()).orElse(""));
+    pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse("Unknown"));
+    pluginIdLabel.setText("Unknown");
+    pluginBundleIdLabel.setText(Optional.ofNullable(plugin.getBundleId()).orElse("Unknown"));
     pluginPathLabel.setText(plugin.getPath());
 
     setPluginImage();
@@ -147,10 +147,9 @@ public class PluginInfoController {
       pluginScreenshotPane.setBackground(new Background(bgImg));
 
     } else {
+      
       this.knownPluginImages.add(url);
-
       Image screenshot = imageCache.get(url);
-
       if (screenshot != null) {
         BackgroundImage bgImg = new BackgroundImage(screenshot, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
             BackgroundPosition.CENTER,

@@ -56,7 +56,7 @@
                   </JFXButton>
                </children>
             </HBox>
-            <GridPane styleClass="pane-card">
+            <GridPane>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="230.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="230.0" />
@@ -70,25 +70,25 @@
                   <TextFlow prefWidth="200.0">
                      <children>
                         <Label text="Plugin Name: " />
-                        <Label fx:id="pluginNameLabel" text="UNKNOW" />
+                        <Label fx:id="pluginNameLabel" styleClass="label-emphase" text="UNKNOW" />
                      </children>
                   </TextFlow>
                   <TextFlow prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
                         <Label text="Plugin Version: " />
-                        <Label fx:id="pluginVersionLabel" text="UNKNOW" />
+                        <Label fx:id="pluginVersionLabel" styleClass="label-emphase" text="UNKNOW" />
                      </children>
                   </TextFlow>
                   <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
                         <Label text="Bundle Id: " />
-                        <Label fx:id="pluginBundleIdLabel" text="UNKNOW" />
+                        <Label fx:id="pluginBundleIdLabel" styleClass="label-emphase" text="UNKNOW" />
                      </children>
                   </TextFlow>
                   <TextFlow prefWidth="200.0" GridPane.rowIndex="1">
                      <children>
                         <Label text="Id: " />
-                        <Label fx:id="pluginIdLabel" text="UNKNOW" />
+                        <Label fx:id="pluginIdLabel" styleClass="label-emphase" text="UNKNOW" />
                      </children>
                   </TextFlow>
                   <HBox alignment="BASELINE_LEFT" spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
@@ -96,14 +96,17 @@
                         <TextFlow GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                            <children>
                               <Label text="Path: " />
-                              <Label fx:id="pluginPathLabel" text="UNKNOW" />
+                              <Label fx:id="pluginPathLabel" styleClass="label-emphase" text="UNKNOW" />
                            </children>
                         </TextFlow>
-                        <JFXButton fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" text="Open folder">
+                        <JFXButton fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" styleClass="label-emphase" text="Open folder">
                         </JFXButton>
                      </children>
                   </HBox>
                </children>
+               <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+               </padding>
             </GridPane>
          </children>
          <styleClass>
