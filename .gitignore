@@ -6,3 +6,9 @@ installer/output/
 .settings
 *.log
 src/main/resources/credentials.properties
+
+*.dll
+
+
+# OwlPlug Host / Juce / C++ files
+/owlplug-host/src/main/juce/Builds

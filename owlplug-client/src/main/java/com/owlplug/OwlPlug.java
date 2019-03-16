@@ -2,6 +2,7 @@ package com.owlplug;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.host.NativeHostJNI;
 import java.io.File;
 import java.time.Duration;
 import java.util.prefs.Preferences;
@@ -39,6 +40,10 @@ public class OwlPlug extends Application {
    */
   @Override
   public void init() throws Exception {
+    
+    //Simple JNI Hello world
+    NativeHostJNI jni = new NativeHostJNI();
+    jni.hello();
 
     try {
       SpringApplicationBuilder builder = new SpringApplicationBuilder(OwlPlug.class);
