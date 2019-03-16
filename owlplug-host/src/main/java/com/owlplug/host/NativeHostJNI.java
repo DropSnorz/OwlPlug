@@ -8,15 +8,8 @@ public class NativeHostJNI {
     LibraryLoader.load("owlplug-host", NativeHostJNI.class, true);
     
   }
-
-  public static void main(String[] args) {
-    new NativeHostJNI().sayHello();
-  }
   
-  public void hello() {
-    sayHello();
-  }
-
-  // Declare a native method sayHello() that receives no arguments and returns void
-  private native void sayHello();
+  public native NativePlugin loadPlugin(String path);
+  
+  
 }

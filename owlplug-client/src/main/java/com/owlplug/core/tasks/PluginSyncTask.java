@@ -6,6 +6,8 @@ import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.tasks.plugins.discovery.PluginFileCollector;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
+import com.owlplug.host.NativeHostJNI;
+import com.owlplug.host.NativePlugin;
 import java.util.ArrayList;
 
 public class PluginSyncTask extends AbstractTask {
@@ -58,6 +60,15 @@ public class PluginSyncTask extends AbstractTask {
         if (plugin != null) {
           discoveredPlugins.add(plugin);
         }
+        
+        System.out.println("Exploring: " + plugin.getPath());
+        NativeHostJNI jni = new NativeHostJNI();
+        NativePlugin nativePlugin = jni.loadPlugin(plugin.getPath());
+        
+        if(nativePlugin != null) {
+          plugin.setVersion(nativePlugin.getVersion());
+        }
+        
       }
 
       pluginDAO.deleteAll();

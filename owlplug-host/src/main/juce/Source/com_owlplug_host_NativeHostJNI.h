@@ -7,13 +7,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*
- * Class:     com_owlplug_host_NativeHostJNI
- * Method:    sayHello
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_owlplug_host_NativeHostJNI_sayHello
-  (JNIEnv *, jobject);
+	/*
+	* Class:     com_owlplug_host_NativeHostJNI
+	* Method:    loadPlugin
+	* Signature: (Ljava/lang/String;)Lcom/owlplug/host/NativePlugin;
+	*/
+	JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
+	(JNIEnv *, jobject, jstring);
 
 #ifdef __cplusplus
 }

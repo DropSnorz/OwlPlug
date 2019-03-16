@@ -40,10 +40,6 @@ public class OwlPlug extends Application {
    */
   @Override
   public void init() throws Exception {
-    
-    //Simple JNI Hello world
-    NativeHostJNI jni = new NativeHostJNI();
-    jni.hello();
 
     try {
       SpringApplicationBuilder builder = new SpringApplicationBuilder(OwlPlug.class);
