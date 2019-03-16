@@ -14,6 +14,10 @@
 JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
   (JNIEnv* env, jobject thisObject, jstring pluginPath) {
 
+	// Used by Console / Library app to take care of Juce components lifecycle
+	// MessageManager is automatically released at the end of function scope
+	ScopedJuceInitialiser_GUI initGui;
+
 	const char* pathCharPointer = env->GetStringUTFChars(pluginPath, NULL);
 
 	AudioPluginFormatManager pluginFormatManager;
@@ -21,8 +25,7 @@ JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
 	KnownPluginList plugList;
 	OwnedArray<juce::PluginDescription> pluginDescriptions;
 
-	for (int i = 0; i < pluginFormatManager.getNumFormats(); ++i)
-	{
+	for (int i = 0; i < pluginFormatManager.getNumFormats(); ++i) {
 		plugList.scanAndAddFile(pathCharPointer, false, pluginDescriptions,
 			*pluginFormatManager.getFormat(i));
 	}
@@ -58,6 +61,8 @@ JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
 	env->SetIntField(nativePlugin, uidField, uid);
 	env->SetObjectField(nativePlugin, versionField, version);
 	env->SetObjectField(nativePlugin, manufacturerNameField, manufacturer);
+
+	delete pluginInstance;
 
 	return nativePlugin;
 }
