@@ -19,13 +19,11 @@
 #include <juce_audio_formats/juce_audio_formats.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_core/juce_core.h>
-#include <juce_cryptography/juce_cryptography.h>
 #include <juce_data_structures/juce_data_structures.h>
 #include <juce_events/juce_events.h>
 #include <juce_graphics/juce_graphics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
-#include <juce_opengl/juce_opengl.h>
 
 
 #if ! DONT_SET_USING_JUCE_NAMESPACE
@@ -39,7 +37,7 @@ namespace ProjectInfo
 {
     const char* const  projectName    = "owlplug-host";
     const char* const  companyName    = "OwlPlug";
-    const char* const  versionString  = "0.1.0";
-    const int          versionNumber  = 0x100;
+    const char* const  versionString  = "0.1.1";
+    const int          versionNumber  = 0x101;
 }
 #endif
