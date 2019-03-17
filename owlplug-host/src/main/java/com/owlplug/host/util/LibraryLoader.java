@@ -7,26 +7,19 @@ import java.io.InputStream;
 /**
  * Custom Library Loader.
  * Loads Native library from regular library path or classpath.
- * TODO: Export library from classpath each time to override new versions
- * TODO: Remove platform specific file extensions
- * @author Arthur
  *
  */
 public class LibraryLoader {
-  private static String SEPARATOR;
-  private static String TMP_PATH;
+  private static String SEPARATOR = System.getProperty("file.separator");
+  private static String TMP_PATH = System.getProperty("java.io.tmpdir");
+  private static String  LIB_EXTENSION = getPlatformLibraryExtension();
   
-  static {
-    SEPARATOR = System.getProperty("file.separator");
-    TMP_PATH = System.getProperty("java.io.tmpdir");
-    TMP_PATH = new File(TMP_PATH).getAbsolutePath();
-  }
 
   public static boolean load(String libName, Class ref, boolean throwOnFailure) {
     if (load(libName)) {
       return true;
     }
-    if (load(TMP_PATH + SEPARATOR + libName + ".dll")) {
+    if (load(TMP_PATH + SEPARATOR + libName + LIB_EXTENSION)) {
       return true;
     }
     if (extract(ref, libName)) {
@@ -69,8 +62,8 @@ public class LibraryLoader {
    */
   public static boolean extract(Class ref, String libName) {
     try {
-      File file = new File(TMP_PATH + SEPARATOR + libName + ".dll");
-      InputStream is = ref.getClassLoader().getResourceAsStream(libName + ".dll");
+      File file = new File(TMP_PATH + SEPARATOR + libName + LIB_EXTENSION);
+      InputStream is = ref.getClassLoader().getResourceAsStream(libName + LIB_EXTENSION);
       if (is == null) {
         return false;
 
@@ -94,5 +87,23 @@ public class LibraryLoader {
 
     return false;
   }
+  
+  /**
+   * Returns platform default library extension.
+   * - Windows host: .dll
+   * - Mac host: .dylib
+   * Returns an empty string for any other hosts
+   * @return host default library extension
+   */
+  private static String getPlatformLibraryExtension() {
+    String osName = System.getProperty("os.name").toLowerCase();
+    if (osName.indexOf("win") >= 0) {
+      return ".dll";
+    } else if (osName.indexOf("mac") >= 0) {
+      return ".dylib";
+    }
+    return "";
+  }
+  
 
 }
