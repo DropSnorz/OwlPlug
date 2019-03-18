@@ -3,6 +3,8 @@ package com.owlplug.host.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Custom Library Loader.
@@ -10,6 +12,8 @@ import java.io.InputStream;
  *
  */
 public class LibraryLoader {
+  private static final Logger log = LoggerFactory.getLogger(LibraryLoader.class);
+
   private static String SEPARATOR = System.getProperty("file.separator");
   private static String TMP_PATH = System.getProperty("java.io.tmpdir");
   private static String  LIB_EXTENSION = getPlatformLibraryExtension();
@@ -27,9 +31,10 @@ public class LibraryLoader {
     }
 
     if (throwOnFailure) {
-      throw new UnsatisfiedLinkError("no " + libName 
+      throw new UnsatisfiedLinkError("No " + libName 
           + " in java.library.path or on the classpath");
     } else {
+      log.error("No " + libName + " in java.library.path or on the classpath");
       return false;
     }
   }
@@ -48,7 +53,8 @@ public class LibraryLoader {
       }
       return true;
     } catch (UnsatisfiedLinkError e) {
-      e.printStackTrace();
+      log.debug("Can't load library " + libName);
+
     }
 
     return false;
@@ -65,6 +71,7 @@ public class LibraryLoader {
       File file = new File(TMP_PATH + SEPARATOR + libName + LIB_EXTENSION);
       InputStream is = ref.getClassLoader().getResourceAsStream(libName + LIB_EXTENSION);
       if (is == null) {
+        log.debug("Library " + libName + LIB_EXTENSION + " not in classpath");
         return false;
 
       }
@@ -82,7 +89,7 @@ public class LibraryLoader {
         }
       }
     } catch (Throwable t) {
-      t.printStackTrace();
+      log.debug("Can't export Library " + libName + " from classpath to temp directory");
     }
 
     return false;
@@ -102,6 +109,8 @@ public class LibraryLoader {
     } else if (osName.indexOf("mac") >= 0) {
       return ".dylib";
     }
+    
+    log.warn("No library file extension is defined for current platform");
     return "";
   }
   
