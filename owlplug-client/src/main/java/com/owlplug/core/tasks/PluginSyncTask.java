@@ -14,6 +14,10 @@ public class PluginSyncTask extends AbstractTask {
 
   protected PluginDAO pluginDAO;
   private PluginSyncTaskParameters parameters;
+  
+  private boolean useNativeHost = false;
+  private NativeHost nativeHost;
+
 
   /**
    * Creates a new SyncPluginTask.
@@ -24,6 +28,8 @@ public class PluginSyncTask extends AbstractTask {
   public PluginSyncTask(PluginSyncTaskParameters parameters, PluginDAO pluginDAO) {
     this.parameters = parameters;
     this.pluginDAO = pluginDAO;
+    
+    nativeHost = new NativeHost();
 
     setName("Sync Plugins");
   }
@@ -61,8 +67,7 @@ public class PluginSyncTask extends AbstractTask {
           discoveredPlugins.add(plugin);
         }
         
-        NativeHost nativeHost = new NativeHost();
-        if (nativeHost.isAvailable()) {
+        if (useNativeHost && nativeHost.isAvailable()) {
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
           
           if(nativePlugin != null) {
