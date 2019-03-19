@@ -85,8 +85,8 @@ Third party stores are maintained by plugin creators, developers or distributors
 
 Third party store adapters are maintained by OwlPlug Central but plugins are hosted by original creators. (For testing purposes)
 
-* AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://owlplug.dropsnorz.com/mirrors/amvst`
-* [Vst4free](http://vst4free.com): `http://owlplug.dropsnorz.com/mirrors/vst4free`
+* AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://central.owlplug.com/mirrors/amvst/store`
+* [Vst4free](http://vst4free.com): `http://central.owlplug.com/mirrors/vst4free/store`
 
 ### How to distriute my plugins on OwlPlug ?
 
