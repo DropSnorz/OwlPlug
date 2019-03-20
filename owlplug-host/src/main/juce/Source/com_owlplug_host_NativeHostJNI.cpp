@@ -9,8 +9,38 @@
 */
 #include <iostream>
 #include "../JuceLibraryCode/JuceHeader.h"
-
 #include "com_owlplug_host_NativeHostJNI.h"
+
+/**
+* Returns a NativePlugin jobject for a given PluginDescription
+*
+*/
+jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescription) {
+
+	jstring name = env->NewStringUTF(pluginDescription->name.getCharPointer());
+	jint uid = pluginDescription->uid;
+	jstring version = env->NewStringUTF(pluginDescription->version.getCharPointer());
+	jstring manufacturer = env->NewStringUTF(pluginDescription->manufacturerName.getCharPointer());
+
+	// Create the object of the class UserData
+	jclass nativePluginClass = env->FindClass("com/owlplug/host/NativePlugin");
+	jobject nativePlugin = env->AllocObject(nativePluginClass);
+
+	// Get the UserData fields to be set
+	jfieldID nameField = env->GetFieldID(nativePluginClass, "name", "Ljava/lang/String;");
+	jfieldID uidField = env->GetFieldID(nativePluginClass, "uid", "I");
+	jfieldID versionField = env->GetFieldID(nativePluginClass, "version", "Ljava/lang/String;");
+	jfieldID manufacturerNameField = env->GetFieldID(nativePluginClass, "manufacturerName", "Ljava/lang/String;");
+
+	env->SetObjectField(nativePlugin, nameField, name);
+	env->SetIntField(nativePlugin, uidField, uid);
+	env->SetObjectField(nativePlugin, versionField, version);
+	env->SetObjectField(nativePlugin, manufacturerNameField, manufacturer);
+
+	return nativePlugin;
+}
+
+
 JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
   (JNIEnv* env, jobject thisObject, jstring pluginPath) {
 
@@ -34,35 +64,7 @@ JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
 		return NULL;
 	}
 
-	String pluginLoadError("An error occured loading plugin");
-	AudioPluginInstance* pluginInstance = pluginFormatManager.createPluginInstance(*pluginDescriptions[0], 44100, 512, pluginLoadError);
-
-
-	jstring path = env->NewStringUTF(pathCharPointer);
-	jstring name = env->NewStringUTF(pluginInstance->getPluginDescription().name.getCharPointer());
-	jint uid = pluginInstance->getPluginDescription().uid;
-	jstring version = env->NewStringUTF(pluginInstance->getPluginDescription().version.getCharPointer());
-	jstring manufacturer = env->NewStringUTF(pluginInstance->getPluginDescription().manufacturerName.getCharPointer());
-
-	// Create the object of the class UserData
-	jclass nativePluginClass = env->FindClass("com/owlplug/host/NativePlugin");
-	jobject nativePlugin = env->AllocObject(nativePluginClass);
-
-	// Get the UserData fields to be set
-	jfieldID pathField = env->GetFieldID(nativePluginClass, "path", "Ljava/lang/String;");
-	jfieldID nameField = env->GetFieldID(nativePluginClass, "name", "Ljava/lang/String;");
-	jfieldID uidField = env->GetFieldID(nativePluginClass, "uid", "I");
-	jfieldID versionField = env->GetFieldID(nativePluginClass, "version", "Ljava/lang/String;");
-	jfieldID manufacturerNameField = env->GetFieldID(nativePluginClass, "manufacturerName", "Ljava/lang/String;");
-
-
-	env->SetObjectField(nativePlugin, pathField, path);
-	env->SetObjectField(nativePlugin, nameField, name);
-	env->SetIntField(nativePlugin, uidField, uid);
-	env->SetObjectField(nativePlugin, versionField, version);
-	env->SetObjectField(nativePlugin, manufacturerNameField, manufacturer);
-
-	delete pluginInstance;
+	jobject nativePlugin = buildJNativePluginInstance(env, pluginDescriptions[0]);
 
 	return nativePlugin;
 }
