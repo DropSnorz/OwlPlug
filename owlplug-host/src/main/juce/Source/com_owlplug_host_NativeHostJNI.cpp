@@ -17,10 +17,20 @@
 */
 jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescription) {
 
+	// Converts native types to JVM objects
 	jstring name = env->NewStringUTF(pluginDescription->name.getCharPointer());
-	jint uid = pluginDescription->uid;
+	jstring descriptiveName = env->NewStringUTF(pluginDescription->descriptiveName.getCharPointer());
+	jstring pluginFormatName = env->NewStringUTF(pluginDescription->pluginFormatName.getCharPointer());
+	jstring category = env->NewStringUTF(pluginDescription->category.getCharPointer());
+	jstring manufacturerName = env->NewStringUTF(pluginDescription->manufacturerName.getCharPointer());
 	jstring version = env->NewStringUTF(pluginDescription->version.getCharPointer());
-	jstring manufacturer = env->NewStringUTF(pluginDescription->manufacturerName.getCharPointer());
+	jstring fileOrIdentifier = env->NewStringUTF(pluginDescription->fileOrIdentifier.getCharPointer());
+	jint uid = pluginDescription->uid;
+	jboolean isInstrument = pluginDescription->isInstrument;
+	jint numInputChannels = pluginDescription->numInputChannels;
+	jint numOutputChannels = pluginDescription->numOutputChannels;
+	jboolean hasSharedContainer = pluginDescription->hasSharedContainer;
+
 
 	// Create the object of the class UserData
 	jclass nativePluginClass = env->FindClass("com/owlplug/host/NativePlugin");
@@ -28,14 +38,32 @@ jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescrip
 
 	// Get the UserData fields to be set
 	jfieldID nameField = env->GetFieldID(nativePluginClass, "name", "Ljava/lang/String;");
-	jfieldID uidField = env->GetFieldID(nativePluginClass, "uid", "I");
-	jfieldID versionField = env->GetFieldID(nativePluginClass, "version", "Ljava/lang/String;");
+	jfieldID descriptiveNameField = env->GetFieldID(nativePluginClass, "descriptiveName", "Ljava/lang/String;");
+	jfieldID pluginFormatNameField = env->GetFieldID(nativePluginClass, "pluginFormatName", "Ljava/lang/String;");
 	jfieldID manufacturerNameField = env->GetFieldID(nativePluginClass, "manufacturerName", "Ljava/lang/String;");
+	jfieldID categoryField = env->GetFieldID(nativePluginClass, "category", "Ljava/lang/String;");
+	jfieldID versionField = env->GetFieldID(nativePluginClass, "version", "Ljava/lang/String;");
+	jfieldID fileOrIdentifierField = env->GetFieldID(nativePluginClass, "fileOrIdentifier", "Ljava/lang/String;");
+	jfieldID uidField = env->GetFieldID(nativePluginClass, "uid", "I");
+	jfieldID isInstrumentField = env->GetFieldID(nativePluginClass, "isInstrument", "Z");
+	jfieldID numInputChannelsField = env->GetFieldID(nativePluginClass, "numInputChannels", "I");
+	jfieldID numOutputChannelsField = env->GetFieldID(nativePluginClass, "numOutputChannels", "I");
+	jfieldID hasSharedContainerField = env->GetFieldID(nativePluginClass, "hasSharedContainer", "Z");
+
 
 	env->SetObjectField(nativePlugin, nameField, name);
-	env->SetIntField(nativePlugin, uidField, uid);
+	env->SetObjectField(nativePlugin, descriptiveNameField, descriptiveName);
+	env->SetObjectField(nativePlugin, pluginFormatNameField, pluginFormatName);
+	env->SetObjectField(nativePlugin, manufacturerNameField, manufacturerName);
+	env->SetObjectField(nativePlugin, categoryField, category);
 	env->SetObjectField(nativePlugin, versionField, version);
-	env->SetObjectField(nativePlugin, manufacturerNameField, manufacturer);
+	env->SetObjectField(nativePlugin, fileOrIdentifierField, fileOrIdentifier);
+	env->SetIntField(nativePlugin, uidField, uid);
+	env->SetBooleanField(nativePlugin, isInstrumentField, isInstrument);
+	env->SetIntField(nativePlugin, numInputChannelsField, numInputChannels);
+	env->SetIntField(nativePlugin, numOutputChannelsField, numOutputChannels);
+	env->SetBooleanField(nativePlugin, hasSharedContainerField, hasSharedContainer);
+
 
 	return nativePlugin;
 }

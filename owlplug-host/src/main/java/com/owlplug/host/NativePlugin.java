@@ -2,58 +2,76 @@ package com.owlplug.host;
 
 public class NativePlugin {
   
-  private String path;
   private String name;
-  private int uid;
-  private String version;
+  private String descriptiveName;
+  private String pluginFormatName;
+  private String category;
   private String manufacturerName;
+  private String version;
+  private String fileOrIdentifier;
+  private int uid;
+  private boolean isInstrument;
+  private int numInputChannels;
+  private int numOutputChannels;
+  private boolean hasSharedContainer;
   
   
-  public String getPath() {
-    return path;
-  }
-
-  public void setPath(String path) {
-    this.path = path;
-  }
-
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public String getDescriptiveName() {
+    return descriptiveName;
   }
 
-  public int getUid() {
-    return uid;
+  public String getPluginFormatName() {
+    return pluginFormatName;
   }
 
-  public void setUid(int uid) {
-    this.uid = uid;
-  }
-
-  public String getVersion() {
-    return version;
-  }
-
-  public void setVersion(String version) {
-    this.version = version;
+  public String getCategory() {
+    return category;
   }
 
   public String getManufacturerName() {
     return manufacturerName;
   }
 
-  public void setManufacturerName(String manufacturerName) {
-    this.manufacturerName = manufacturerName;
+  public String getVersion() {
+    return version;
   }
 
+  public String getFileOrIdentifier() {
+    return fileOrIdentifier;
+  }
+
+  public int getUid() {
+    return uid;
+  }
+
+  public boolean isInstrument() {
+    return isInstrument;
+  }
+
+  public int getNumInputChannels() {
+    return numInputChannels;
+  }
+
+  public int getNumOutputChannels() {
+    return numOutputChannels;
+  }
+
+  public boolean isHasSharedContainer() {
+    return hasSharedContainer;
+  }
 
   @Override
   public String toString() {
-    return "NativePlugin [path=" + path + ", name=" + name + ", uid=" + uid + ", version=" + version
-        + ", manufacturerName=" + manufacturerName + "]";
+    return "NativePlugin [name=" + name + ", descriptiveName=" + descriptiveName + ", pluginFormatName="
+        + pluginFormatName + ", category=" + category + ", manufacturerName=" + manufacturerName + ", version="
+        + version + ", fileOrIdentifier=" + fileOrIdentifier + ", uid=" + uid + ", isInstrument=" + isInstrument
+        + ", numInputChannels=" + numInputChannels + ", numOutputChannels=" + numOutputChannels
+        + ", hasSharedContainer=" + hasSharedContainer + "]";
   }
+
   
 }
