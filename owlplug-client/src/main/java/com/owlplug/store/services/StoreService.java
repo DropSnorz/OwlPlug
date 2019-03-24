@@ -52,8 +52,8 @@ public class StoreService {
       store = new Store();
       store.setName("OwlPlug Central");
     }
-    store.setApiUrl("http://owlplug.dropsnorz.com/store.json");
-    store.setUrl("http://owlplug.dropsnorz.com/store.json");
+    store.setApiUrl("https://central.owlplug.com/store.json");
+    store.setUrl("https://central.owlplug.com");
 
     storeDAO.save(store);
   }
