@@ -119,7 +119,7 @@ public class OwlPlug extends Application {
         .with(CacheManagerBuilder.persistence(ApplicationDefaults.getUserDataDirectory() + File.separator + "cache"))
         .withCache("image-cache", CacheConfigurationBuilder
             .newCacheConfigurationBuilder(String.class, byte[].class,
-                ResourcePoolsBuilder.newResourcePoolsBuilder().heap(100, MemoryUnit.MB).disk(4, MemoryUnit.GB, true))
+                ResourcePoolsBuilder.newResourcePoolsBuilder().heap(100, MemoryUnit.MB).disk(700, MemoryUnit.MB, true))
             .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofDays(10))))
         .build();
     cacheManager.init();
