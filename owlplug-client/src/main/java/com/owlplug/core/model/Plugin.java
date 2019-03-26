@@ -12,27 +12,34 @@ import javax.persistence.Table;
 @Inheritance
 @Table(indexes = { @Index(name = "IDX_PLUGIN_ID", columnList = "id"),
     @Index(name = "IDX_PLUGIN_NAME", columnList = "name") })
-public abstract class Plugin {
+public class Plugin {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   protected String name;
+  protected String descriptiveName;
+  protected String uid;
+  protected String category;
+  protected String manufacturerName;
+  protected String identifier;
   protected String path;
   protected String bundleId;
   protected String version;
   protected String screenshotUrl;
-
+  
+  protected PluginFormat format;
   protected PluginType type;
 
   public Plugin() {
 
   }
 
-  public Plugin(String name, String path) {
+ public Plugin(String name, String path, PluginFormat format) {
     this.name = name;
     this.path = path;
+    this.format = format;
   }
 
   public String getName() {
@@ -75,6 +82,46 @@ public abstract class Plugin {
     this.screenshotUrl = screenshotUrl;
   }
 
+  public String getDescriptiveName() {
+    return descriptiveName;
+  }
+
+  public void setDescriptiveName(String descriptiveName) {
+    this.descriptiveName = descriptiveName;
+  }
+
+  public String getUid() {
+    return uid;
+  }
+
+  public void setUid(String uid) {
+    this.uid = uid;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
+  }
+
+  public String getManufacturerName() {
+    return manufacturerName;
+  }
+
+  public void setManufacturerName(String manufacturerName) {
+    this.manufacturerName = manufacturerName;
+  }
+
+  public String getIdentifier() {
+    return identifier;
+  }
+
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
+  }
+
   public PluginType getType() {
     return type;
   }
@@ -83,11 +130,17 @@ public abstract class Plugin {
     this.type = type;
   }
 
+  public PluginFormat getFormat() {
+    return format;
+  }
+
+  public void setFormat(PluginFormat format) {
+    this.format = format;
+  }
+
   @Override
   public String toString() {
     return name;
   }
-
-  public abstract PluginFormat getFormat();
 
 }

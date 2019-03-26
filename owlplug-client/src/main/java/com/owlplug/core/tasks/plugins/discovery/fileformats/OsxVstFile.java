@@ -1,7 +1,7 @@
 package com.owlplug.core.tasks.plugins.discovery.fileformats;
 
 import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.VST2Plugin;
+import com.owlplug.core.model.PluginFormat;
 import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class OsxVstFile extends PluginFile {
     
     String pluginName = FilenameUtils.removeExtension(this.getPluginFile().getName());
     String pluginPath = this.getPluginFile().getAbsolutePath().replace("\\", "/");
-    Plugin plugin = new VST2Plugin(pluginName, pluginPath);
+    Plugin plugin = new Plugin(pluginName, pluginPath, PluginFormat.VST2);
     
     File plist = new File(this.getPluginFile().getAbsolutePath() + "/Contents/Info.plist");
     if (plist.exists()) {

@@ -2,7 +2,7 @@ package com.owlplug.core.tasks.plugins.discovery.fileformats;
 
 import com.google.common.collect.Iterables;
 import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.VST3Plugin;
+import com.owlplug.core.model.PluginFormat;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class Vst3BundleFile extends PluginFile {
 
     String pluginName = FilenameUtils.removeExtension(this.getPluginFile().getName());
     String pluginPath = this.getPluginFile().getAbsolutePath().replace("\\", "/");
-    Plugin plugin = new VST3Plugin(pluginName, pluginPath);
+    Plugin plugin = new Plugin(pluginName, pluginPath, PluginFormat.VST3);
 
     File plist = new File(this.getPluginFile().getAbsolutePath() + "/Contents/Info.plist");
     if (plist.exists()) {
