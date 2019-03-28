@@ -60,9 +60,11 @@ public class PluginInfoController {
   @FXML
   private Label pluginVersionLabel;
   @FXML
-  private Label pluginBundleIdLabel;
+  private Label pluginIdentifierLabel;
   @FXML
-  private Label pluginIdLabel;
+  private Label pluginManufacturerLabel;
+  @FXML
+  private Label pluginCategoryLabel;
   @FXML
   private Label pluginPathLabel;
   @FXML
@@ -122,10 +124,11 @@ public class PluginInfoController {
     pluginFormatIcon.setImage(applicationDefaults.getPluginFormatIcon(plugin));
     pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
     pluginTitleLabel.setText(plugin.getName());
-    pluginNameLabel.setText(plugin.getName());
+    pluginNameLabel.setText(Optional.ofNullable(plugin.getDescriptiveName()).orElse(plugin.getName()));
     pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse("Unknown"));
-    pluginIdLabel.setText("Unknown");
-    pluginBundleIdLabel.setText(Optional.ofNullable(plugin.getBundleId()).orElse("Unknown"));
+    pluginManufacturerLabel.setText(Optional.ofNullable(plugin.getManufacturerName()).orElse("Unknown"));
+    pluginIdentifierLabel.setText(Optional.ofNullable(plugin.getUid()).orElse("Unknown"));
+    pluginCategoryLabel.setText(Optional.ofNullable(plugin.getCategory()).orElse("Unknown"));
     pluginPathLabel.setText(plugin.getPath());
 
     setPluginImage();

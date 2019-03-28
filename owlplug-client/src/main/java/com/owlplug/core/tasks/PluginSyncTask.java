@@ -69,9 +69,13 @@ public class PluginSyncTask extends AbstractTask {
         
         if (useNativeHost && nativeHost.isAvailable()) {
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
-          
           if(nativePlugin != null) {
+            plugin.setDescriptiveName(nativePlugin.getDescriptiveName());
             plugin.setVersion(nativePlugin.getVersion());
+            plugin.setCategory(nativePlugin.getCategory());
+            plugin.setManufacturerName(nativePlugin.getManufacturerName());
+            plugin.setIdentifier(nativePlugin.getFileOrIdentifier());
+            plugin.setUid(String.valueOf(nativePlugin.getUid()));
           }
         }
         
