@@ -46,7 +46,10 @@ public class OptionsService {
       prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, Boolean.TRUE);
     }
     if (prefs.get(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, null) == null) {
-      prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, Boolean.FALSE);
+      prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, Boolean.TRUE);
+    }
+    if (prefs.get(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, null) == null) {
+      prefs.putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, Boolean.TRUE);
     }
     if (prefs.get(ApplicationDefaults.SELECTED_ACCOUNT_KEY, null) == null) {
       prefs.putBoolean(ApplicationDefaults.SELECTED_ACCOUNT_KEY, Boolean.FALSE);

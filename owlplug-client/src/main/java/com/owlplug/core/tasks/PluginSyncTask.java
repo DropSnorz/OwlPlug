@@ -3,6 +3,7 @@ package com.owlplug.core.tasks;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFormat;
+import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.tasks.plugins.discovery.PluginFileCollector;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
@@ -25,11 +26,12 @@ public class PluginSyncTask extends AbstractTask {
    * @param parameters Task Parameters
    * @param pluginDAO  pluginDAO
    */
-  public PluginSyncTask(PluginSyncTaskParameters parameters, PluginDAO pluginDAO) {
+  public PluginSyncTask(PluginSyncTaskParameters parameters, PluginDAO pluginDAO, NativeHostService nativeHostService) {
     this.parameters = parameters;
     this.pluginDAO = pluginDAO;
     
-    nativeHost = new NativeHost();
+    nativeHost = nativeHostService.getNativeHost();
+    useNativeHost = nativeHostService.isNativeHostEnabled();
 
     setName("Sync Plugins");
   }

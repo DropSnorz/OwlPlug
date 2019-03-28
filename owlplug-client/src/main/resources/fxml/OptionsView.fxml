@@ -64,6 +64,15 @@
                                     </HBox>
                                  </children>
                               </VBox>
+                              <VBox spacing="4.0">
+                                 <children>
+                                    <JFXCheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery" />
+                                    <Label styleClass="label-emphase" text="Allow deep plugin metadatas discovery using platform specific features" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="16.0" top="16.0" />
+                                 </VBox.margin>
+                              </VBox>
                            </children>
                         </VBox>
                      </children>

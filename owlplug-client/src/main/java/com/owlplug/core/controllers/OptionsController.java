@@ -8,12 +8,12 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.dialogs.DialogController;
+import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.OptionsService;
 import java.io.File;
 import java.util.prefs.Preferences;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +28,8 @@ public class OptionsController {
   private ApplicationDefaults applicationDefaults;
   @Autowired
   private OptionsService optionsService;
+  @Autowired 
+  private NativeHostService nativeHostService;
   @Autowired
   private DialogController dialogController;
 
@@ -43,6 +45,8 @@ public class OptionsController {
   private JFXTextField vst3DirectoryTextField;
   @FXML
   private JFXButton vst3DirectoryButton;
+  @FXML
+  private JFXCheckBox pluginNativeCheckbox;
 
   @FXML
   private JFXCheckBox syncPluginsCheckBox;
@@ -100,7 +104,10 @@ public class OptionsController {
     vst3DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       prefs.put(ApplicationDefaults.VST3_DIRECTORY_KEY, newValue);
     });
-
+    
+    pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      prefs.putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
+    });
 
     syncPluginsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       prefs.putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, newValue);
@@ -164,6 +171,8 @@ public class OptionsController {
     vst3DirectoryTextField.setText(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
     vst2ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     vst3ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+    pluginNativeCheckbox.setDisable(!nativeHostService.isNativeHostAvailable());
+    pluginNativeCheckbox.setSelected(prefs.getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
     syncPluginsCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
     storeSubDirectoryCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     warningSubDirectory.setVisible(!prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));

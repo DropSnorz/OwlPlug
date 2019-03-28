@@ -1,8 +1,8 @@
 package com.owlplug.core.components;
 
-import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.tasks.PluginRemoveTask;
 import com.owlplug.core.tasks.PluginSyncTask;
 import com.owlplug.core.tasks.TaskExecutionContext;
@@ -26,9 +26,8 @@ public class CoreTaskFactory extends BaseTaskFactory {
   private Preferences prefs;
   @Autowired
   private PluginDAO pluginDAO;
-  @Autowired 
-  private AuthenticationService authenticationService;
-
+  @Autowired
+  private NativeHostService nativeHostService;
 
 
   private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
@@ -47,7 +46,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
     parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
 
-    PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO);
+    PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO, nativeHostService);
     task.setOnSucceeded(e -> {
       notifyListeners(syncPluginsListeners);
     });
