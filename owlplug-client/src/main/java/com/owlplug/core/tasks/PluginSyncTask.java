@@ -10,8 +10,12 @@ import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
 import com.owlplug.host.NativeHost;
 import com.owlplug.host.NativePlugin;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PluginSyncTask extends AbstractTask {
+  
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   protected PluginDAO pluginDAO;
   private PluginSyncTaskParameters parameters;
@@ -34,33 +38,28 @@ public class PluginSyncTask extends AbstractTask {
     useNativeHost = nativeHostService.isNativeHostEnabled();
 
     setName("Sync Plugins");
+    setMaxProgress(100);
+
   }
 
   @Override
   protected TaskResult call() throws Exception {
 
-    this.updateMessage("Syncing Plugins...");
-    this.updateProgress(0, 2);
+    this.updateMessage("Collecting plugins...");
+    this.commitProgress(10);
 
     try {
-      
       ArrayList<PluginFile> collectedPluginFiles = new ArrayList<>();
-      
       PluginFileCollector pluginCollector = new PluginFileCollector(parameters.getPlatform());
       String vstDirectory = parameters.getVstDirectory();
       String vst3Directory = parameters.getVst3Directory();
 
-      this.updateProgress(1, 3);
-
-      
       if (parameters.isFindVst2()) {
         collectedPluginFiles.addAll(pluginCollector.collect(vstDirectory, PluginFormat.VST2));
       }
-
       if (parameters.isFindVst3()) {
         collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
       }
-      this.updateProgress(2, 3);
       
       ArrayList<Plugin> discoveredPlugins = new ArrayList<>();
       for (PluginFile pluginFile : collectedPluginFiles) {
@@ -70,6 +69,7 @@ public class PluginSyncTask extends AbstractTask {
         }
         
         if (useNativeHost && nativeHost.isAvailable()) {
+          this.updateMessage("Exploring plugin " + plugin.getName());
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
           if(nativePlugin != null) {
             plugin.setDescriptiveName(nativePlugin.getDescriptiveName());
@@ -80,18 +80,20 @@ public class PluginSyncTask extends AbstractTask {
             plugin.setUid(String.valueOf(nativePlugin.getUid()));
           }
         }
-        
-      }
 
+        this.commitProgress(80.0 / collectedPluginFiles.size());
+      }
+      
+      this.updateMessage("Applying plugin changes");
       pluginDAO.deleteAll();
       pluginDAO.saveAll(discoveredPlugins);
-
-      this.updateProgress(3, 3);
+      this.updateProgress(1, 1);
       this.updateMessage("Plugins synchronized");
 
       return success();
 
     } catch (Exception e) {
+      log.error("Plugins synchronization failed", e);
       this.updateMessage("Plugins synchronization failed. Check your plugin directory.");
       throw new TaskException("Plugins synchronization failed");
 
