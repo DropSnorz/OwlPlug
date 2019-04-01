@@ -4,6 +4,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.BaseTaskFactory;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.tasks.TaskExecutionContext;
+import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.SimpleEventListener;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
@@ -52,8 +53,9 @@ public class StoreTaskFactory extends BaseTaskFactory {
    * @return task execution context
    */
   public TaskExecutionContext createBundleInstallTask(ProductBundle bundle, File targetDirectory) {
+    String path = FileUtils.convertPath(targetDirectory.getAbsolutePath());
     return create(new ProductInstallTask(bundle, targetDirectory, applicationDefaults))
-        .setOnSucceeded(e -> coreTaskFactory.createPluginSyncTask().scheduleNow());
+        .setOnSucceeded(e -> coreTaskFactory.createPluginSyncTask(path).scheduleNow());
   }
 
 

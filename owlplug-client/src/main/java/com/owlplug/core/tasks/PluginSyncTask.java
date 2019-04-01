@@ -13,27 +13,54 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * OwlPlug task to collect plugin metadatas from directories
+ * By default, the task collects and sync all plugins from user folders. A directory scope
+ * can be defined to reduce the amount of scanned files.
+ *
+ */
 public class PluginSyncTask extends AbstractTask {
-  
+
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   protected PluginDAO pluginDAO;
   private PluginSyncTaskParameters parameters;
-  
+  private String directoryScope = null;
+
   private boolean useNativeHost = false;
   private NativeHost nativeHost;
 
 
   /**
-   * Creates a new SyncPluginTask.
-   * 
+   * Creates a new PluginSyncTask.
    * @param parameters Task Parameters
-   * @param pluginDAO  pluginDAO
+   * @param pluginDAO pluginDAO
+   * @param nativeHostService nativeHostService
    */
   public PluginSyncTask(PluginSyncTaskParameters parameters, PluginDAO pluginDAO, NativeHostService nativeHostService) {
     this.parameters = parameters;
     this.pluginDAO = pluginDAO;
-    
+
+    nativeHost = nativeHostService.getNativeHost();
+    useNativeHost = nativeHostService.isNativeHostEnabled();
+
+    setName("Sync Plugins");
+    setMaxProgress(100);
+
+  }
+
+  /**
+   * Creates a new PluginSyncTask scoped to a subdirectory. Only plugins in the directory scope will be scanned.
+   * @param directoryScope plugin subdirectory. 
+   * @param parameters Task Parameters
+   * @param pluginDAO pluginDAO
+   * @param nativeHostService nativeHostService
+   */
+  public PluginSyncTask(String directoryScope, PluginSyncTaskParameters parameters, PluginDAO pluginDAO, NativeHostService nativeHostService) {
+    this.parameters = parameters;
+    this.pluginDAO = pluginDAO;
+    this.directoryScope = directoryScope;
+
     nativeHost = nativeHostService.getNativeHost();
     useNativeHost = nativeHostService.isNativeHostEnabled();
 
@@ -51,23 +78,36 @@ public class PluginSyncTask extends AbstractTask {
     try {
       ArrayList<PluginFile> collectedPluginFiles = new ArrayList<>();
       PluginFileCollector pluginCollector = new PluginFileCollector(parameters.getPlatform());
-      String vstDirectory = parameters.getVstDirectory();
-      String vst3Directory = parameters.getVst3Directory();
 
-      if (parameters.isFindVst2()) {
-        collectedPluginFiles.addAll(pluginCollector.collect(vstDirectory, PluginFormat.VST2));
+
+      if(directoryScope != null) {
+        // Plugins are retrieved from a scoped directory
+        if (parameters.isFindVst2()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(directoryScope, PluginFormat.VST2));
+        }
+        if (parameters.isFindVst3()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(directoryScope, PluginFormat.VST3));
+        }
+      } else {
+        // Plugins are retrieved from regulars directories
+        String vstDirectory = parameters.getVstDirectory();
+        String vst3Directory = parameters.getVst3Directory();
+
+        if (parameters.isFindVst2()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(vstDirectory, PluginFormat.VST2));
+        }
+        if (parameters.isFindVst3()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
+        }
       }
-      if (parameters.isFindVst3()) {
-        collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
-      }
-      
+
       ArrayList<Plugin> discoveredPlugins = new ArrayList<>();
       for (PluginFile pluginFile : collectedPluginFiles) {
         Plugin plugin = pluginFile.toPlugin();
         if (plugin != null) {
           discoveredPlugins.add(plugin);
         }
-        
+
         if (useNativeHost && nativeHost.isAvailable()) {
           this.updateMessage("Exploring plugin " + plugin.getName());
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
@@ -84,9 +124,16 @@ public class PluginSyncTask extends AbstractTask {
 
         this.commitProgress(80.0 / collectedPluginFiles.size());
       }
-      
+
       this.updateMessage("Applying plugin changes");
-      pluginDAO.deleteAll();
+      
+      if(directoryScope != null) {
+        // Delete previous plugins scanned in the directory scope
+        pluginDAO.deleteByPathContainingIgnoreCase(directoryScope);
+      } else {
+        // Delete all previous plugins by default (in case of a complete Sync task)
+        pluginDAO.deleteAll();
+      }
       pluginDAO.saveAll(discoveredPlugins);
       this.updateProgress(1, 1);
       this.updateMessage("Plugins synchronized");

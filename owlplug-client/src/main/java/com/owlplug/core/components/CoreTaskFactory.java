@@ -54,6 +54,29 @@ public class CoreTaskFactory extends BaseTaskFactory {
   }
   
   /**
+   * Creates a {@link PluginSyncTask} and binds listeners to the success callback.
+   * The task synchronizes plugins in the given directory scope.
+   * @param directoryScope
+   * @return
+   */
+  public TaskExecutionContext createPluginSyncTask(String directoryScope) {
+
+    PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
+    parameters.setPlatform(applicationDefaults.getRuntimePlatform());
+    parameters.setVstDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+    parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+    parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+
+    PluginSyncTask task = new PluginSyncTask(directoryScope, parameters, pluginDAO, nativeHostService);
+    task.setOnSucceeded(e -> {
+      notifyListeners(syncPluginsListeners);
+    });
+    return create(task);
+  }
+  
+  
+  /**
    * Creates a {@link PluginRemoveTask}.
    * @param plugin - plugin to remove
    * @return task execution context
