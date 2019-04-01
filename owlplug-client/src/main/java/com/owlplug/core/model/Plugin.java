@@ -28,6 +28,7 @@ public class Plugin {
   protected String bundleId;
   protected String version;
   protected String screenshotUrl;
+  protected boolean nativeCompatible = false;
   
   protected PluginFormat format;
   protected PluginType type;
@@ -136,6 +137,14 @@ public class Plugin {
 
   public void setFormat(PluginFormat format) {
     this.format = format;
+  }
+
+  public boolean isNativeCompatible() {
+    return nativeCompatible;
+  }
+
+  public void setNativeCompatible(boolean nativeCompatible) {
+    this.nativeCompatible = nativeCompatible;
   }
 
   @Override

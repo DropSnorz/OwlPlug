@@ -338,6 +338,15 @@ ProgressIndicator{
 }
 
 
+.shape-success {
+	-fx-fill: success-color;
+}
+
+.shape-disabled {
+	-fx-fill: disabled-color;
+}
+
+
 
 /****************************************************************
  * 

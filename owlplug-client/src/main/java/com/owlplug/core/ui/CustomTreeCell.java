@@ -3,8 +3,11 @@ package com.owlplug.core.ui;
 import com.jfoenix.controls.JFXTreeCell;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -21,30 +24,40 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
       setText(null);
       setGraphic(null);
     } else {
-
       if (item instanceof Plugin) {
-        setText(item.toString());
-        setGraphic(getTreeItem().getGraphic());
+        Plugin plugin = (Plugin) item;
+        setText(null);
+        HBox hBox = new HBox(4);
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        hBox.getChildren().add(getTreeItem().getGraphic());
+        hBox.getChildren().add(new Label(plugin.getName()));
+        Circle circle = new Circle(0, 0, 2);
+        hBox.getChildren().add(circle);
+        if(plugin.isNativeCompatible()) {
+          circle.getStyleClass().add("shape-success");
+        } else {
+          circle.getStyleClass().add("shape-disabled");
+        }
+        setGraphic(hBox);
       } else if (item instanceof IDirectory) {
         setText(null);
         textFlow = new TextFlow();
 
         IDirectory dir = (IDirectory) item;
-        Text name;
+        Text directoryName;
 
         if (dir.getDisplayName() != null && !dir.getName().equals(dir.getDisplayName())) {
-
           String preText = dir.getDisplayName().replaceAll("/" + dir.getName() + "$", "");
           Text pre = new Text(preText);
           pre.getStyleClass().add("text-disabled");
           textFlow.getChildren().add(pre);
-          name = new Text("/" + dir.getName());
+          directoryName = new Text("/" + dir.getName());
 
         } else {
-          name = new Text(dir.getName());
+          directoryName = new Text(dir.getName());
         }
 
-        textFlow.getChildren().add(name);
+        textFlow.getChildren().add(directoryName);
 
         Node icon = getTreeItem().getGraphic();
         hbox = new HBox(5);

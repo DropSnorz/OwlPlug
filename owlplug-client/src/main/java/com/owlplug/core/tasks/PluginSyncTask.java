@@ -72,6 +72,7 @@ public class PluginSyncTask extends AbstractTask {
           this.updateMessage("Exploring plugin " + plugin.getName());
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
           if(nativePlugin != null) {
+            plugin.setNativeCompatible(true);
             plugin.setDescriptiveName(nativePlugin.getDescriptiveName());
             plugin.setVersion(nativePlugin.getVersion());
             plugin.setCategory(nativePlugin.getCategory());
