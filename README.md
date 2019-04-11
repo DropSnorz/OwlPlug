@@ -12,7 +12,11 @@
 
 [ ![Codeship Status for DropSnorz/OwlPlug](https://app.codeship.com/projects/29447280-727d-0136-a8a6-3675cf281030/status?branch=master)](https://app.codeship.com/projects/299436)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e6b8ee875daa4f74b5bf1cc8fee6df63)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DropSnorz/OwlPlug&amp;utm_campaign=Badge_Grade_Dashboard)
+![Last commit](https://img.shields.io/github/last-commit/dropsnorz/owlplug/dev.svg)
+![Last Pre release](https://img.shields.io/github/release-date-pre/dropsnorz/owlplug.svg)
 ![Stage Badge](https://img.shields.io/badge/stage-beta-blue.svg)
+[![Discord](https://img.shields.io/badge/chat-on%20discord-%237289DA.svg)](https://discord.gg/nEdHAMB)
+
 
 
 # Overview
@@ -25,7 +29,7 @@
 
 OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple thats looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, i've discovered dozens of cool plugins just by using my own tool. So i realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
 
-I've generated OwlPlug binaries, but I've only tested them in my environment, `Win 10 - Java 9, Java 10`. I'm looking for any kind of feedbacks, even under the same configuration ! And as it's a beta phase, it's highly recommended to **backup your files before using OwlPlug**.
+I've generated OwlPlug binaries, but I've only tested them in my environment, `Win 10 - Java 9, Java 10`. I'm looking for any kind of feedbacks, even under the same configuration ! And as it's a beta release, it's highly recommended to **backup your files before using OwlPlug**.
 
 **About OwlPlug**
 * [OwlPlug Website](https://owlplug.com)
@@ -34,11 +38,19 @@ I've generated OwlPlug binaries, but I've only tested them in my environment, `W
 
 ## Installation
 
-**Requirements**: Java 9+ or Java 10+
+### Windows
+
+**Requirements**: Windows 10
 
 1. Download binaries [here](http://github.com/dropsnorz/owlplug/releases)
-2. Extract archive
-3. Run application from `owplug.jar` or `owlplug.exe`
+2. Run the MSI Installer.
+3. OwlPlug is ready ;)
+
+## Mac
+
+**Requirements**: Java 9+
+
+Things are a bit more complicated for OSX users. I haven't a Mac to generate a packaged app ready to be installed. A compatible Java environement must be set up before directly run the JAR file. Cross platform JAR binary is available [here](http://github.com/dropsnorz/owlplug/releases)
 
 
 ## How to help
@@ -71,7 +83,7 @@ Owlplug is shipped with a plugin store to automate plugin downloads and installa
 
 OwlPlug Central is the default store. It's a secure and trusted source to retrieve plugins. OwlPlug Central is a quick proof of concept for the store feature integration. For now, OwlPlug Central is delivering only free open sourced plugins.
 
-* OwlPlug central: `http://owlplug.dropsnorz.com/store `
+* OwlPlug central: `https://central.owlplug.com/store`
 
 ### Third party
 
