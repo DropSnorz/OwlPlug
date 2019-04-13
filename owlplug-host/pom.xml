@@ -7,11 +7,9 @@
 	<parent>
 		<groupId>com.owlplug</groupId>
 		<artifactId>owlplug</artifactId>
-		<version>0.7.0-beta</version>
+		<version>0.8.0</version>
 	</parent>
-	<groupId>com.owlplug</groupId>
 	<artifactId>owlplug-host</artifactId>
-	<version>0.7.0-beta</version>
 	<name>owlplug-host</name>
 	<url>http://maven.apache.org</url>
 	<properties>
