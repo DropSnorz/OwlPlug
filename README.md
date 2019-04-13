@@ -40,7 +40,7 @@ I've generated OwlPlug binaries, but I've only tested them in my environment, `W
 
 ### Windows
 
-**Requirements**: Windows 10
+**Requirements**: Windows 10 (64bit)
 
 1. Download binaries [here](http://github.com/dropsnorz/owlplug/releases)
 2. Run the MSI Installer.
@@ -113,6 +113,7 @@ Third party store adapters are maintained by OwlPlug Central but plugins are hos
 * JavaFx & JFoenix
 * Hibernate & H2
 * Maven
+* Juce
 
 
 ## Development Setup
@@ -121,7 +122,11 @@ Third party store adapters are maintained by OwlPlug Central but plugins are hos
 2. Run following commands
 ```sh
 # Install dependecies
-mvn clean install spring-boot:repackage
+mvn clean install
+# Move to owlplug client folder
+cd owlplug-client
+# (Optional) Create the runnable JAR file
+mvn spring-boot:repackage
 # Run owlplug
 mvn spring-boot:run
 ```
