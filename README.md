@@ -12,11 +12,10 @@
 
 [ ![Codeship Status for DropSnorz/OwlPlug](https://app.codeship.com/projects/29447280-727d-0136-a8a6-3675cf281030/status?branch=master)](https://app.codeship.com/projects/299436)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e6b8ee875daa4f74b5bf1cc8fee6df63)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DropSnorz/OwlPlug&amp;utm_campaign=Badge_Grade_Dashboard)
-![Last commit](https://img.shields.io/github/last-commit/dropsnorz/owlplug/dev.svg)
 ![Last Pre release](https://img.shields.io/github/release-date-pre/dropsnorz/owlplug.svg)
 ![Stage Badge](https://img.shields.io/badge/stage-beta-blue.svg)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-%237289DA.svg)](https://discord.gg/nEdHAMB)
-
+[![Patreon](https://img.shields.io/badge/patreon-donate-%23F96854.svg?logo=patreon&logoColor=white&logoWidth=10)](https://www.patreon.com/owlplug)
 
 
 # Overview
