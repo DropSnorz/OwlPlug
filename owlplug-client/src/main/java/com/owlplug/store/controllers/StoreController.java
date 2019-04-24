@@ -272,10 +272,8 @@ public class StoreController {
     // A custom root directory to store plugin is defined
     if (prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
       // Store install target is already defined
-      String storeDirectoryPath = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, null);
-      if (storeDirectoryPath != null) {
-        selectedDirectory = new File(baseDirectoryPath, relativeDirectoryPath);
-      }
+      selectedDirectory = new File(baseDirectoryPath, relativeDirectoryPath);
+      
       // A plugin root directory is not defined
     } else {
       // Open dialog chooser to define store installation target
