@@ -71,6 +71,7 @@ Text{
 JFXTextField{
 	-fx-text-fill: text-color;
 	-jfx-focus-color: theme-secondary-color;
+	-fx-prompt-text-fill: prompt-text-color;
 }
 
 
@@ -329,6 +330,10 @@ ProgressIndicator{
 	-fx-font-size: 14px;
 	-fx-font-weight: bold;
 	-fx-text-fill: disabled-color;
+}
+
+.pane-card .jfx-text-field {
+	-fx-prompt-text-fill: rgb(140, 140, 140);
 }
 
 
