@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -28,8 +27,10 @@ public class StoreProduct {
 
   private String name;
   private String pageUrl;
+  @Deprecated
   private String downloadUrl;
   private String screenshotUrl;
+  private String donateUrl;
   private String creator;
   @Column(columnDefinition = "text")
   private String description;
@@ -73,10 +74,12 @@ public class StoreProduct {
     this.pageUrl = pageUrl;
   }
 
+  @Deprecated
   public String getDownloadUrl() {
     return downloadUrl;
   }
 
+  @Deprecated
   public void setDownloadUrl(String downloadUrl) {
     this.downloadUrl = downloadUrl;
   }
@@ -87,6 +90,14 @@ public class StoreProduct {
 
   public void setScreenshotUrl(String screenshotUrl) {
     this.screenshotUrl = screenshotUrl;
+  }
+
+  public String getDonateUrl() {
+    return donateUrl;
+  }
+
+  public void setDonateUrl(String donateUrl) {
+    this.donateUrl = donateUrl;
   }
 
   public String getCreator() {

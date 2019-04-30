@@ -72,7 +72,16 @@
                                  <children>
                                     <Label graphicTextGap="6.0" prefHeight="17.0" text="About" />
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <JFXButton fx:id="browsePageButton" buttonType="RAISED" text="Website">
+                                    <JFXButton fx:id="donateButton" buttonType="RAISED" text="Donate">
+                                       <graphic>
+                                          <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/dollar-white-32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
+                                    <JFXButton fx:id="browsePageButton" buttonType="RAISED" layoutX="306.0" layoutY="10.0" text="Website">
                                        <graphic>
                                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                              <image>

@@ -47,6 +47,8 @@ public class ProductInfoController {
   @FXML
   private Label productStoreLabel;
   @FXML
+  private JFXButton donateButton;
+  @FXML
   private JFXButton browsePageButton;
   @FXML
   private JFXButton installButton;
@@ -107,6 +109,14 @@ public class ProductInfoController {
     browsePageButton.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(product.getPageUrl());
     });
+    if(product.getDonateUrl() != null) {
+      donateButton.setVisible(true);
+      donateButton.setOnAction(e -> {
+        PlatformUtils.openDefaultBrowser(product.getDonateUrl());
+      });
+    } else {
+      donateButton.setVisible(false);
+    }
     installButton.setOnAction(e -> {
       boolean installStarted = storeController.installProduct(product);
       if (installStarted) {

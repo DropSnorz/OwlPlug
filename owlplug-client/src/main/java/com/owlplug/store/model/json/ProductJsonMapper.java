@@ -6,8 +6,10 @@ public class ProductJsonMapper {
 
   private String name;
   private String pageUrl;
+  @Deprecated
   private String downloadUrl;
   private String screenshotUrl;
+  private String donateUrl;
   private String creator;
   private String description;
   private String type;
@@ -31,10 +33,12 @@ public class ProductJsonMapper {
     this.pageUrl = pageUrl;
   }
 
+  @Deprecated
   public String getDownloadUrl() {
     return downloadUrl;
   }
 
+  @Deprecated
   public void setDownloadUrl(String downloadUrl) {
     this.downloadUrl = downloadUrl;
   }
@@ -45,6 +49,14 @@ public class ProductJsonMapper {
 
   public void setScreenshotUrl(String screenshotUrl) {
     this.screenshotUrl = screenshotUrl;
+  }
+
+  public String getDonateUrl() {
+    return donateUrl;
+  }
+
+  public void setDonateUrl(String donateURL) {
+    this.donateUrl = donateURL;
   }
 
   public String getCreator() {
