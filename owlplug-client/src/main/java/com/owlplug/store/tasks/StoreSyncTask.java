@@ -45,7 +45,6 @@ public class StoreSyncTask extends AbstractTask {
   @Override
   protected TaskResult call() throws TaskException {
 
-    this.updateProgress(0, 1);
     this.updateMessage("Sync plugins stores");
 
     Iterable<Store> storeList = pluginStoreDAO.findAll();

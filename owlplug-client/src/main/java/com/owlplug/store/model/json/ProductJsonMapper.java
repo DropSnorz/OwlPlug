@@ -11,6 +11,7 @@ public class ProductJsonMapper {
   private String screenshotUrl;
   private String donateUrl;
   private String creator;
+  private String version;
   private String description;
   private String type;
   private List<BundleJsonMapper> bundles;
@@ -65,6 +66,14 @@ public class ProductJsonMapper {
 
   public void setCreator(String creator) {
     this.creator = creator;
+  }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
   }
 
   public String getDescription() {

@@ -55,6 +55,8 @@ public class ProductInfoController {
   @FXML
   private Label creatorLabel;
   @FXML
+  private Label versionLabel;
+  @FXML
   private Label typeLabel;
   @FXML
   private FlowPane tagContainer;
@@ -125,6 +127,12 @@ public class ProductInfoController {
     });
 
     this.creatorLabel.setText(product.getCreator());
+    if(product.getVersion() != null) {
+      versionLabel.setVisible(true);
+      versionLabel.setText(product.getVersion());
+    } else {
+      versionLabel.setVisible(false);
+    }
 
     if (product.getType() == PluginType.EFFECT) {
       this.typeLabel.setText("Instrument (VSTi)");

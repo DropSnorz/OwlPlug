@@ -94,8 +94,8 @@
                               </HBox>
                               <GridPane hgap="6.0" prefWidth="380.0" vgap="6.0">
                                 <columnConstraints>
-                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="26.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="358.0" minWidth="10.0" prefWidth="358.0" />
+                                  <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" percentWidth="50.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints maxHeight="37.0" minHeight="24.0" prefHeight="24.0" valignment="CENTER" vgrow="SOMETIMES" />
@@ -103,27 +103,44 @@
                                   <RowConstraints maxHeight="1.7976931348623157E308" minHeight="24.0" valignment="CENTER" vgrow="ALWAYS" />
                                 </rowConstraints>
                                  <children>
-                                    <Label fx:id="creatorLabel" text="CREATOR" GridPane.columnIndex="1" />
-                                    <Label fx:id="typeLabel" text="TYPE" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../icons/user-white-32.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
-                                       <image>
-                                          <Image url="@../../icons/wave-circle-32.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2">
-                                       <image>
-                                          <Image url="@../../icons/tag-white-16.png" />
-                                       </image>
-                                       <GridPane.margin>
-                                          <Insets />
-                                       </GridPane.margin>
-                                    </ImageView>
-                                    <FlowPane fx:id="tagContainer" hgap="5.0" vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Label fx:id="creatorLabel" text="CREATOR">
+                                       <graphic>
+                                          <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/user-white-32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic></Label>
+                                    <Label fx:id="typeLabel" text="TYPE" GridPane.rowIndex="1">
+                                       <graphic>
+                                          <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/wave-circle-32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic></Label>
+                                    <HBox spacing="5.0" GridPane.rowIndex="2">
+                                       <children>
+                                          <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/tag-white-16.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets top="4.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <FlowPane fx:id="tagContainer" hgap="5.0" vgap="5.0" />
+                                       </children>
+                                    </HBox>
+                                    <Label fx:id="versionLabel" text="VERSION" GridPane.columnIndex="1">
+                                       <graphic>
+                                          <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/package-white-32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Label>
                                  </children>
                                  <padding>
                                     <Insets left="10.0" />

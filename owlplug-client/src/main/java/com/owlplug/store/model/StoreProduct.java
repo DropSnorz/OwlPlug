@@ -32,6 +32,7 @@ public class StoreProduct {
   private String screenshotUrl;
   private String donateUrl;
   private String creator;
+  private String version;
   @Column(columnDefinition = "text")
   private String description;
   private PluginType type;
@@ -106,6 +107,14 @@ public class StoreProduct {
 
   public void setCreator(String creator) {
     this.creator = creator;
+  }
+  
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
   }
 
   public String getDescription() {
