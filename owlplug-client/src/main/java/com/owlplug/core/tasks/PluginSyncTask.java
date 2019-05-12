@@ -1,11 +1,14 @@
 package com.owlplug.core.tasks;
 
 import com.owlplug.core.dao.PluginDAO;
+import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFormat;
+import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.tasks.plugins.discovery.PluginFileCollector;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
+import com.owlplug.core.tasks.plugins.discovery.SymlinkCollector;
 import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
 import com.owlplug.host.NativeHost;
 import com.owlplug.host.NativePlugin;
@@ -23,7 +26,8 @@ public class PluginSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  protected PluginDAO pluginDAO;
+  private PluginDAO pluginDAO;
+  private SymlinkDAO symlinkDAO;
   private PluginSyncTaskParameters parameters;
   private String directoryScope = null;
 
@@ -35,11 +39,14 @@ public class PluginSyncTask extends AbstractTask {
    * Creates a new PluginSyncTask.
    * @param parameters Task Parameters
    * @param pluginDAO pluginDAO
+   * @param symlinkDAO symlinkDAO
    * @param nativeHostService nativeHostService
    */
-  public PluginSyncTask(PluginSyncTaskParameters parameters, PluginDAO pluginDAO, NativeHostService nativeHostService) {
+  public PluginSyncTask(PluginSyncTaskParameters parameters, 
+      PluginDAO pluginDAO, SymlinkDAO symlinkDAO, NativeHostService nativeHostService) {
     this.parameters = parameters;
     this.pluginDAO = pluginDAO;
+    this.symlinkDAO = symlinkDAO;
 
     nativeHost = nativeHostService.getNativeHost();
     useNativeHost = nativeHostService.isNativeHostEnabled();
@@ -54,11 +61,19 @@ public class PluginSyncTask extends AbstractTask {
    * @param directoryScope plugin subdirectory. 
    * @param parameters Task Parameters
    * @param pluginDAO pluginDAO
+   * @param symlinkDAO symlinkDAO
    * @param nativeHostService nativeHostService
    */
-  public PluginSyncTask(String directoryScope, PluginSyncTaskParameters parameters, PluginDAO pluginDAO, NativeHostService nativeHostService) {
+  public PluginSyncTask(String directoryScope, 
+      PluginSyncTaskParameters parameters, 
+      PluginDAO pluginDAO,
+      SymlinkDAO symlinkDAO,
+      NativeHostService nativeHostService) {
+    
     this.parameters = parameters;
     this.pluginDAO = pluginDAO;
+    this.symlinkDAO = symlinkDAO;
+    
     this.directoryScope = directoryScope;
 
     nativeHost = nativeHostService.getNativeHost();
@@ -78,6 +93,8 @@ public class PluginSyncTask extends AbstractTask {
     try {
       ArrayList<PluginFile> collectedPluginFiles = new ArrayList<>();
       PluginFileCollector pluginCollector = new PluginFileCollector(parameters.getPlatform());
+      ArrayList<Symlink> collectedSymlinks = new ArrayList<>();
+      SymlinkCollector symlinkCollector = new SymlinkCollector(true);
 
 
       if(directoryScope != null) {
@@ -95,9 +112,11 @@ public class PluginSyncTask extends AbstractTask {
 
         if (parameters.isFindVst2()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vstDirectory, PluginFormat.VST2));
+          collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
         }
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
+          collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
         }
       }
 
@@ -133,8 +152,11 @@ public class PluginSyncTask extends AbstractTask {
       } else {
         // Delete all previous plugins by default (in case of a complete Sync task)
         pluginDAO.deleteAll();
+        symlinkDAO.deleteAll();
       }
       pluginDAO.saveAll(discoveredPlugins);
+      symlinkDAO.saveAll(collectedSymlinks);
+      
       this.updateProgress(1, 1);
       this.updateMessage("Plugins synchronized");
 
