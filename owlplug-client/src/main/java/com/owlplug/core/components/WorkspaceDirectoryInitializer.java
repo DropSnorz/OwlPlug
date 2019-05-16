@@ -1,5 +1,7 @@
 package com.owlplug.core.components;
 
+import com.vdurmont.semver4j.Semver;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -11,45 +13,55 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
+/**
+ * Performs data cleanup on the workspace directory
+ * User data migration are not supported for now. Database schema is updated using
+ * hibernate auto-ddl=update feature which is limited in case of major relational changes.
+ * 
+ * When the schema can't be updated by hibernate the database will be flushed.
+ *
+ */
 @Component("workspaceDirectoryInitializer")
 public class WorkspaceDirectoryInitializer {
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	@Autowired
-	ApplicationDefaults applicationDefaults;
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private ApplicationDefaults applicationDefaults;
 
 	@PostConstruct
 	public void cleanup() {
-	
+
 		File workingDirectory = new File(ApplicationDefaults.getUserDataDirectory());
-		
-		if(!workingDirectory.exists()) {
+
+		if (!workingDirectory.exists()) {
 			workingDirectory.mkdirs();
 		}
-		
+
 		File versionFile = new File(workingDirectory, ".version");
-		if(versionFile.exists()) {
-			
+		if (versionFile.exists()) {
+
 			try {
-				String currentVersion = applicationDefaults.getVersion();
+
 				String workspaceVersion = FileUtils.readFileToString(versionFile);
-				
-				File dbFile = new File(workingDirectory, "owlplug.mv.db");
-				/*
-				 * TODO: Database file should removed only if workspace version
-				 * is not compatible with currentVersion
-				 */
-				dbFile.delete();
+				Semver workspaceSemver = new Semver(workspaceVersion);
+				Semver workspaceMinSemver = new Semver(
+						applicationDefaults.getEnvProperty("owlplug.workspace.min-version"));
+
+				if (workspaceSemver.isLowerThan(workspaceMinSemver)) {
+					log.info("Clean outdated workspace data");
+					File dbFile = new File(workingDirectory, "owlplug.mv.db");
+					dbFile.delete();
+				}
 
 			} catch (IOException e) {
 				log.error("Workspace version can't be retrieved from file", e);
 			}
-						
+
 			versionFile.delete();
 		}
-		
+
 		try {
 			String currentVersion = applicationDefaults.getVersion();
 			versionFile.createNewFile();
@@ -57,7 +69,7 @@ public class WorkspaceDirectoryInitializer {
 		} catch (IOException e) {
 			log.error("Version file can't be created in workspace directory", e);
 		}
-						
+
 	}
 
 }
