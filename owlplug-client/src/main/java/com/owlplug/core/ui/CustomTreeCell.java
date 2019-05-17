@@ -20,7 +20,7 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
   public void updateItem(Object item, boolean empty) {
     super.updateItem(item, empty);
 
-    if (empty) {
+    if (empty || item == null) {
       setText(null);
       setGraphic(null);
     } else {
