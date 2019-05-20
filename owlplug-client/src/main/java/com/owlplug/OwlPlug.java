@@ -2,20 +2,16 @@ package com.owlplug;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.host.NativeHostJNI;
-
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.time.Duration;
 import java.util.prefs.Preferences;
-
-import javax.sql.DataSource;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.sql.DataSource;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
