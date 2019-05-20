@@ -2,7 +2,7 @@ package com.owlplug;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.host.NativeHostJNI;
+import java.beans.PropertyVetoException;
 import java.io.File;
 import java.time.Duration;
 import java.util.prefs.Preferences;
@@ -11,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.sql.DataSource;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
@@ -21,10 +22,14 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @SpringBootApplication
 public class OwlPlug extends Application {
@@ -33,7 +38,11 @@ public class OwlPlug extends Application {
 
   private ConfigurableApplicationContext context;
   private Parent rootNode;
-
+  
+  @Autowired
+  private Environment environment;
+  
+  
   /**
    * JavaFX Application initialization method. It boostraps Spring boot
    * application context and binds it to FXMLLoader controller factory.
@@ -94,6 +103,18 @@ public class OwlPlug extends Application {
 
     primaryStage.show();
 
+  }
+  
+
+  @Bean
+  @DependsOn("workspaceDirectoryInitializer")
+  public DataSource datasource() throws PropertyVetoException {
+      final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+      dataSource.setDriverClassName(environment.getProperty("spring.datasource.driver-class-name"));
+      dataSource.setUrl(environment.getProperty("spring.datasource.url"));
+      dataSource.setUsername(environment.getProperty("spring.datasource.username"));
+      dataSource.setPassword(environment.getProperty("spring.datasource.password"));
+      return dataSource;
   }
 
   /**
