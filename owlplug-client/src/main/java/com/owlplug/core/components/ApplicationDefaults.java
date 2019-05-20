@@ -46,6 +46,8 @@ public class ApplicationDefaults {
   public final Image instrumentImage = new Image(getClass().getResourceAsStream("/icons/synth-white-16.png"));
   public final Image effectImage = new Image(getClass().getResourceAsStream("/icons/effect-white-16.png"));
   public final Image tagImage = new Image(getClass().getResourceAsStream("/icons/tag-white-16.png"));
+  public final Image symlinkImage = new Image(getClass().getResourceAsStream("/icons/folderlink-grey-16.png"));
+
 
   public final Image pluginPlaceholderImage = new Image(
       getClass().getResourceAsStream("/media/plugin-placeholder.png"));

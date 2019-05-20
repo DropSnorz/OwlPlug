@@ -8,10 +8,12 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.dao.PluginDAO;
+import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.model.PluginRepository;
+import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.CustomTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
@@ -46,6 +48,8 @@ public class PluginsController {
   private LazyViewRegistry viewRegistry;
   @Autowired
   private PluginDAO pluginDAO;
+  @Autowired
+  private SymlinkDAO symlinkDAO;
   @Autowired
   private NodeInfoController nodeInfoController;
   @Autowired
@@ -189,6 +193,11 @@ public class PluginsController {
     for (Plugin plug : pluginList) {
       FileTree node = pluginTree;
 
+      /* TODO This must be refactored
+       * How about UNIX FS ? path starts with a /.
+       * We should wheck how the path looks like before the split to
+       * correctly build tree nodes and sub paths.
+       */
       String[] subDirs = plug.getPath().split("/");
       String currentPath = "";
       for (int i = 0; i < subDirs.length; i++) {
@@ -210,11 +219,21 @@ public class PluginsController {
                 localPluginList.add(p);
               }
             }
-            PluginDirectory directory = new PluginDirectory();
-            directory.setName(segment);
-            directory.setPath(currentPath);
-            directory.setPluginList(localPluginList);
-            ft.setNodeValue(directory);
+            
+            // Retrieve Symlink if exist
+            // TODO: This must be refactored to prevent trailing slash removal
+            Symlink symlink = symlinkDAO.findByPath(currentPath.substring(0, currentPath.length() -1));
+            if(symlink != null) {
+              symlink.setPluginList(localPluginList);
+              ft.setNodeValue(symlink);
+            } else {
+              PluginDirectory directory = new PluginDirectory();
+              directory.setName(segment);
+              directory.setPath(currentPath);
+              directory.setPluginList(localPluginList);
+              ft.setNodeValue(directory);
+            }
+
           }
           node.put(segment, ft);
         }
@@ -262,8 +281,8 @@ public class PluginsController {
 
     String mergedParentName = mergedParent;
 
-    if (node.getValue() instanceof PluginRepository) {
-      node.setGraphic(new ImageView(applicationDefaults.repositoryImage));
+    if (node.getValue() instanceof Symlink) {
+      node.setGraphic(new ImageView(applicationDefaults.symlinkImage));
     } else {
       node.setGraphic(new ImageView(applicationDefaults.directoryImage));
     }
@@ -287,7 +306,7 @@ public class PluginsController {
         IDirectory directory;
         // If child node contains only one directory we can merge it with the child node
         if (child.size() == 1 && ((FileTree) child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory
-            && !(child.getNodeValue() instanceof PluginRepository)) {
+            && !(child.getNodeValue() instanceof Symlink)) {
 
           directory = (IDirectory) child.getNodeValue();
           mergedParentName = mergedParentName + directory.getName() + "/";
