@@ -17,6 +17,7 @@ public class Symlink implements IDirectory {
   protected String path;
   protected String targetPath;
   protected boolean enabled;
+  protected boolean stale;
   
   @Transient
   protected List<Plugin> pluginList;
@@ -35,6 +36,7 @@ public class Symlink implements IDirectory {
   public Long getId() {
     return id;
   }
+  
   public void setId(Long id) {
     this.id = id;
   }
@@ -69,6 +71,14 @@ public class Symlink implements IDirectory {
   
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
+  }
+
+  public boolean isStale() {
+    return stale;
+  }
+
+  public void setStale(boolean stale) {
+    this.stale = stale;
   }
 
   public List<Plugin> getPluginList() {

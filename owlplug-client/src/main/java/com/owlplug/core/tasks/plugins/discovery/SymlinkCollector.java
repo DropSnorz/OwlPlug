@@ -26,24 +26,25 @@ public class SymlinkCollector {
     collectedSymlinks = new HashSet<String>();
   }
 
-  public List<Symlink> collect(String directoryPath){
+  public List<Symlink> collect(String directoryPath) {
 
     File dir = new File(directoryPath);
     ArrayList<Symlink> linkList = new ArrayList<>();
     if (dir.isDirectory()) {
       List<File> baseFiles = (List<File>) FileUtils.listFilesAndDirs(dir, TrueFileFilter.TRUE, TrueFileFilter.TRUE);
 
-      for(File file : baseFiles) {
+      for (File file : baseFiles) {
         if (Files.isSymbolicLink(file.toPath())) {
           Symlink link = new Symlink(com.owlplug.core.utils.FileUtils.convertPath(file.getAbsolutePath()), file.getName(), true);
           Path targetPath;
           try {
             targetPath = Files.readSymbolicLink(file.toPath());
             link.setTargetPath(com.owlplug.core.utils.FileUtils.convertPath(targetPath.toString()));
+            link.setStale(!targetPath.toFile().exists());
           } catch (IOException e) {
             log.error("Error reading symlink properties: " + file.getPath(), e);
           }
-          if(uniqueReferences && !collectedSymlinks.contains(file.getAbsolutePath())) {
+          if (uniqueReferences && !collectedSymlinks.contains(file.getAbsolutePath())) {
             collectedSymlinks.add(file.getAbsolutePath());
             linkList.add(link);
           } else if (!uniqueReferences) {
