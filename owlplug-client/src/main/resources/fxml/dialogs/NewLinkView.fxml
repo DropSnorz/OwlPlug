@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.NewLinkController">
+   <children>
+      <VBox>
+         <children>
+            <Label text="1. Link path on one of your plugin folder" wrapText="true" />
+            <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="linkSourceTextField" promptText="/path/to/your/vst/directory" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox layoutX="10.0" layoutY="45.0">
+         <children>
+            <Label text="2. Link target located anywhere on your file system." wrapText="true" />
+            <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="linkTargetTextField" promptText="/path/to/any/custom/directory" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Link can't be created" />
+      <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <JFXButton fx:id="createButton" text="Create link" />
+            <JFXButton fx:id="cancelButton" text="Cancel" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

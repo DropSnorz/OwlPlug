@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
+import com.owlplug.core.controllers.dialogs.NewLinkController;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.IDirectory;
@@ -43,15 +44,13 @@ public class PluginsController {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private MainController mainController;
-  @Autowired
-  private LazyViewRegistry viewRegistry;
-  @Autowired
   private PluginDAO pluginDAO;
   @Autowired
   private SymlinkDAO symlinkDAO;
   @Autowired
   private NodeInfoController nodeInfoController;
+  @Autowired
+  private NewLinkController newLinkController;
   @Autowired
   protected CoreTaskFactory taskFactory;
   @Autowired
@@ -68,7 +67,7 @@ public class PluginsController {
   @FXML
   private JFXTextField searchTextField;
   @FXML
-  private JFXButton newRepositoryButton;
+  private JFXButton newLinkButton;
 
   private Iterable<Plugin> pluginList;
   private FileTree pluginTree;
@@ -81,10 +80,8 @@ public class PluginsController {
   @FXML
   public void initialize() {
 
-    newRepositoryButton.setOnAction(e -> {
-      mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.NEW_REPOSITORY_MENU_VIEW));
-      mainController.getLeftDrawer().open();
-
+    newLinkButton.setOnAction(e -> {
+      newLinkController.show();
     });
 
     treePluginNode = new FilterableTreeItem<>("(all)");
@@ -222,8 +219,8 @@ public class PluginsController {
             
             // Retrieve Symlink if exist
             // TODO: This must be refactored to prevent trailing slash removal
-            Symlink symlink = symlinkDAO.findByPath(currentPath.substring(0, currentPath.length() -1));
-            if(symlink != null) {
+            Symlink symlink = symlinkDAO.findByPath(currentPath.substring(0, currentPath.length() - 1));
+            if (symlink != null) {
               symlink.setPluginList(localPluginList);
               ft.setNodeValue(symlink);
             } else {
@@ -306,6 +303,7 @@ public class PluginsController {
         IDirectory directory;
         // If child node contains only one directory we can merge it with the child node
         if (child.size() == 1 && ((FileTree) child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory
+            && !(node.getValue() instanceof Symlink) 
             && !(child.getNodeValue() instanceof Symlink)) {
 
           directory = (IDirectory) child.getNodeValue();
