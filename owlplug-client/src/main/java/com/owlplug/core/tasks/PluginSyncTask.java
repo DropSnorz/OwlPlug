@@ -105,6 +105,8 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(directoryScope, PluginFormat.VST3));
         }
+        collectedSymlinks.addAll(symlinkCollector.collect(directoryScope));
+
       } else {
         // Plugins are retrieved from regulars directories
         String vstDirectory = parameters.getVstDirectory();
@@ -149,6 +151,7 @@ public class PluginSyncTask extends AbstractTask {
       if(directoryScope != null) {
         // Delete previous plugins scanned in the directory scope
         pluginDAO.deleteByPathContainingIgnoreCase(directoryScope);
+        symlinkDAO.deleteByPathContainingIgnoreCase(directoryScope);
       } else {
         // Delete all previous plugins by default (in case of a complete Sync task)
         pluginDAO.deleteAll();

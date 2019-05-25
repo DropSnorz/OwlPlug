@@ -13,7 +13,9 @@
             <Label text="1. Link path on one of your plugin folder" wrapText="true" />
             <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
                <children>
-                  <JFXTextField fx:id="linkSourceTextField" promptText="/path/to/your/vst/directory" HBox.hgrow="ALWAYS" />
+                  <JFXTextField fx:id="linkSourceParentTextField" promptText="/path/to/your/vst/directory" HBox.hgrow="ALWAYS" />
+                  <JFXButton fx:id="sourceDirectoryButton" text="..." />
+                  <JFXTextField fx:id="linkSourceNameTextField" promptText="Link Name" />
                </children>
             </HBox>
          </children>
@@ -24,6 +26,7 @@
             <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
                <children>
                   <JFXTextField fx:id="linkTargetTextField" promptText="/path/to/any/custom/directory" HBox.hgrow="ALWAYS" />
+                  <JFXButton fx:id="targetDirectoryButton" text="..." />
                </children>
             </HBox>
          </children>
