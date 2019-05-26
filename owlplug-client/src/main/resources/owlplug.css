@@ -30,6 +30,11 @@ JFXDialog{
 JFXDialog Label{
 	-fx-text-fill: text-color;
 }
+
+.jfx-dialog .jfx-text-field {
+	-fx-prompt-text-fill: rgb(140, 140, 140);
+}
+
 .jfx-dialog-overlay-pane > StackPane {
     -fx-background-color: card-pane-color;
 }
