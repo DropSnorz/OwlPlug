@@ -97,7 +97,7 @@ public class PluginSyncTask extends AbstractTask {
       SymlinkCollector symlinkCollector = new SymlinkCollector(true);
 
 
-      if(directoryScope != null) {
+      if (directoryScope != null) {
         // Plugins are retrieved from a scoped directory
         if (parameters.isFindVst2()) {
           collectedPluginFiles.addAll(pluginCollector.collect(directoryScope, PluginFormat.VST2));

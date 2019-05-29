@@ -9,10 +9,12 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +38,53 @@ public class FileUtils {
 
     return fileName.replaceAll("[^-_.A-Za-z0-9]", "");
 
+  }
+
+  public static Collection<File> listUniqueFilesAndDirs(File directory) {
+
+
+    //Find files
+    ArrayList<File> files = new ArrayList<>();
+    if (directory.isDirectory()) {
+      files.add(directory);
+    }
+
+    innerListFiles(files, directory, true);
+    return files;
+
+  }
+
+  private static void innerListFiles(List<File> files, File directory, boolean includeSubDirectories) {
+    File[] found = directory.listFiles();
+
+    if (found != null) {
+      for (File file : found) {
+        if (file.isDirectory() && includeSubDirectories) {
+
+          // A Symlink is excluded if his target is a parent directory
+          if (Files.isSymbolicLink(file.toPath())) {
+            try {
+              Path targetPath = Files.readSymbolicLink(file.toPath());
+              if (!file.getAbsolutePath().startsWith(targetPath.toString())) {
+                files.add(file);
+                innerListFiles(files, file, includeSubDirectories);
+              }
+
+            } catch (IOException e) {
+              // If we fails to read symlink target, we add the symlink be we won't explore inner files.
+              files.add(file);
+            }
+          } else {
+            files.add(file);
+            innerListFiles(files, file, includeSubDirectories);
+          }
+
+        } else {
+          files.add(file);
+
+        }
+      }
+    }
   }
 
   public static void unzip(String source, String dest) throws IOException {

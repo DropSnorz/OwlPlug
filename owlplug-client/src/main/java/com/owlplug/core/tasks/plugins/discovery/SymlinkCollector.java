@@ -1,6 +1,7 @@
 package com.owlplug.core.tasks.plugins.discovery;
 
 import com.owlplug.core.model.Symlink;
+import com.owlplug.core.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +30,11 @@ public class SymlinkCollector {
     File dir = new File(directoryPath);
     ArrayList<Symlink> linkList = new ArrayList<>();
     if (dir.isDirectory()) {
-      List<File> baseFiles = (List<File>) FileUtils.listFilesAndDirs(dir, TrueFileFilter.TRUE, TrueFileFilter.TRUE);
+      List<File> baseFiles = (List<File>) FileUtils.listUniqueFilesAndDirs(dir);
 
       for (File file : baseFiles) {
         if (Files.isSymbolicLink(file.toPath())) {
-          Symlink link = new Symlink(com.owlplug.core.utils.FileUtils.convertPath(file.getAbsolutePath()), file.getName(), true);
+          Symlink link = new Symlink(FileUtils.convertPath(file.getAbsolutePath()), file.getName(), true);
           Path targetPath;
           try {
             targetPath = Files.readSymbolicLink(file.toPath());
