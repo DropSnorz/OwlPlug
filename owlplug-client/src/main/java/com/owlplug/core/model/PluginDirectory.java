@@ -65,4 +65,9 @@ public class PluginDirectory implements IDirectory {
 
   }
 
+  @Override
+  public boolean isStale() {
+    return false;
+  }
+
 }

@@ -73,6 +73,9 @@ Text{
 .text-disabled{
 	-fx-fill: disabled-color;
 }
+.text-danger{
+	-fx-fill: disabled-color;	
+}
 JFXTextField{
 	-fx-text-fill: text-color;
 	-jfx-focus-color: theme-secondary-color;
