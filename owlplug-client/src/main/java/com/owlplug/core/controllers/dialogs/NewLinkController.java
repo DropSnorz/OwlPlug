@@ -52,7 +52,7 @@ public class NewLinkController extends AbstractDialogController {
   private Label errorLabel;
 
   NewLinkController() {
-    super(700, 470);
+    super(700, 500);
   }
 
   /**
