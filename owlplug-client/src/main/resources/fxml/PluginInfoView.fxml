@@ -18,7 +18,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PluginInfoController">
    <children>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0" spacing="5.0">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
          <children>
             <StackPane maxHeight="180.0" prefHeight="180.0" prefWidth="500.0">
                <children>
@@ -112,7 +112,7 @@
                   </HBox>
                </children>
                <padding>
-                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="14.0" />
                </padding>
             </GridPane>
          </children>

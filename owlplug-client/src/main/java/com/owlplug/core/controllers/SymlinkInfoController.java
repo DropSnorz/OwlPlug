@@ -66,8 +66,8 @@ public class SymlinkInfoController {
       JFXDialogLayout layout = new JFXDialogLayout();
 
       layout.setHeading(new Label("Remove directory"));
-      layout.setBody(new Label("Do you really want to delete " + symlink.getName()
-          + " ? Content will NOT be removed from the target folder"));
+      layout.setBody(new Label("Do you really want to delete link " + symlink.getName()
+          + " ? Content will NOT be removed from the target folder."));
 
       JFXButton cancelButton = new JFXButton("Cancel");
 

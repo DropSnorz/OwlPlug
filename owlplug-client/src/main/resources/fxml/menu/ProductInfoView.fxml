@@ -18,7 +18,7 @@
 
 <HBox fx:id="productInfoContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.store.controllers.ProductInfoController">
    <children>
-      <VBox fx:id="productInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0" spacing="5.0">
+      <VBox fx:id="productInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0">
          <children>
             <StackPane maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
                <children>
@@ -119,7 +119,7 @@
                                              </image>
                                           </ImageView>
                                        </graphic></Label>
-                                    <HBox spacing="5.0" GridPane.rowIndex="2">
+                                    <HBox spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                                        <children>
                                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
