@@ -40,6 +40,11 @@ public class FileUtils {
 
   }
 
+  /**
+   * Recursively finds file in a given directory. 
+   * @param directory - Directory path
+   * @return
+   */
   public static Collection<File> listUniqueFilesAndDirs(File directory) {
 
 
@@ -49,25 +54,40 @@ public class FileUtils {
       files.add(directory);
     }
 
-    innerListFiles(files, directory, true);
+    innerListFiles(files, directory, true, new ArrayList<String>());
     return files;
 
   }
 
-  private static void innerListFiles(List<File> files, File directory, boolean includeSubDirectories) {
+  /**
+   * Finds files in a given directory. The symlinks context is used to track recursive symlink
+   * by resolving the real path. The algorithm keeps track of which symlink it is currently resolving 
+   * (or which symlinks in case of recursive links), it can detect if it is attempting to resolve a link again 
+   * recursively which it is still busy resolving. 
+   * @param files - List of already explored files
+   * @param directory - Directory to explore
+   * @param includeSubDirectories - Recursively explore subdirectories and symlinks
+   * @param symlinksContext - Current symlink context
+   */
+  private static void innerListFiles(List<File> files, File directory, boolean includeSubDirectories, 
+      List<String> symlinksContext) {
+    
     File[] found = directory.listFiles();
 
     if (found != null) {
       for (File file : found) {
+        log.info(file.getPath());
         if (file.isDirectory() && includeSubDirectories) {
 
-          // A Symlink is excluded if his target is a parent directory
           if (Files.isSymbolicLink(file.toPath())) {
             try {
+              List<String> currentSymlinksContext = new ArrayList<>(symlinksContext);
               Path targetPath = Files.readSymbolicLink(file.toPath());
-              if (!file.getAbsolutePath().startsWith(targetPath.toString())) {
+              // We explore the symlink only if we are not currently resolving it's target path.
+              if (!currentSymlinksContext.contains(targetPath.toString())) {
                 files.add(file);
-                innerListFiles(files, file, includeSubDirectories);
+                currentSymlinksContext.add(targetPath.toString());
+                innerListFiles(files, file, includeSubDirectories, currentSymlinksContext);
               }
 
             } catch (IOException e) {
@@ -76,7 +96,7 @@ public class FileUtils {
             }
           } else {
             files.add(file);
-            innerListFiles(files, file, includeSubDirectories);
+            innerListFiles(files, file, includeSubDirectories, symlinksContext);
           }
 
         } else {
