@@ -72,6 +72,7 @@ public class NewLinkController extends AbstractDialogController {
       if (checkSymlinkCreation(sourcePath, targetPath)) {
         if (createSymlink(sourcePath, targetPath)) {
           coreTaskFactory.createPluginSyncTask(new File(sourcePath).getParent()).schedule();
+          setErrorMessage(null);
           this.close();
         }
       }
@@ -111,7 +112,6 @@ public class NewLinkController extends AbstractDialogController {
     });
 
   }
-
   
   private boolean createSymlink(String sourcePath, String targetPath) {
     Path link = Paths.get(sourcePath);
@@ -120,6 +120,7 @@ public class NewLinkController extends AbstractDialogController {
       Files.createSymbolicLink(link, target);
       return true;
     } catch (IOException e) {
+      setErrorMessage("Error creating Symlink: " + e.getMessage());
       log.error("Error creating Symlink", e);
       return false;
     }
@@ -127,18 +128,38 @@ public class NewLinkController extends AbstractDialogController {
 
   private boolean checkSymlinkCreation(String sourcePath, String targetPath) {
     
+    if (sourcePath == null || "".equals(sourcePath)) {
+      setErrorMessage("Error creating Symlink, invalid source path: " + sourcePath);
+      return false;
+    }
+    if (targetPath == null || "".equals(targetPath)) {
+      setErrorMessage("Error creating Symlink, invalid target path: " + targetPath);
+      return false;
+    }
     File sourceFile = new File(sourcePath);
     File targetFile = new File(targetPath);
     if (sourceFile.exists()) {
+      setErrorMessage("Error creating Symlink, file already exists: " + sourcePath);
       return false;
     }
     if (Files.isSymbolicLink(Paths.get(sourcePath))) {
+      setErrorMessage("Error creating Symlink, file already exists: " + sourcePath);
       return false;
     }
     if (targetFile.exists() && targetFile.isDirectory()) {
       return true;
     }
+    setErrorMessage("Error creating Symlink, invalid target directory: " + targetPath);
     return false;
+  }
+  
+  private void setErrorMessage(String errorMessage) {
+    if (errorMessage != null) {
+      errorLabel.setVisible(true);
+      errorLabel.setText(errorMessage);
+    } else {
+      errorLabel.setVisible(false);
+    }
   }
 
   
