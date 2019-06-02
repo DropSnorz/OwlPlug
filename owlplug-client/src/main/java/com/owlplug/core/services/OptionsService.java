@@ -60,7 +60,7 @@ public class OptionsService {
   }
 
   /**
-   * Clear all user data including Options, Configured repositories and cache.
+   * Clear all user data including Options, configured stores and cache.
    * 
    * @return true if data has been successfully cleared, false otherwise
    */

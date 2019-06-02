@@ -32,15 +32,10 @@ public class ApplicationDefaults {
   public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
   public final Image vst2Image = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
   public final Image vst3Image = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
-  public final Image repositoryImage = new Image(getClass().getResourceAsStream("/icons/box-yellow-16.png"));
   public final Image taskPendingImage = new Image(getClass().getResourceAsStream("/icons/loading-grey-16.png"));
   public final Image taskSuccessImage = new Image(getClass().getResourceAsStream("/icons/check-green-16.png"));
   public final Image taskFailImage = new Image(getClass().getResourceAsStream("/icons/cross-red-16.png"));
   public final Image taskRunningImage = new Image(getClass().getResourceAsStream("/icons/play-green-16.png"));
-  public final Image fileSystemRepositoryImage = new Image(
-      getClass().getResourceAsStream("/icons/filesystem-grey-48.png"));
-  public final Image googleDriveRepositoryImage = new Image(
-      getClass().getResourceAsStream("/icons/gdrive-grey-64.png"));
   public final Image rocketImage = new Image(getClass().getResourceAsStream("/icons/rocket-white-64.png"));
   public final Image storeImage = new Image(getClass().getResourceAsStream("/icons/bag-white-32.png"));
   public final Image instrumentImage = new Image(getClass().getResourceAsStream("/icons/synth-white-16.png"));

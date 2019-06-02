@@ -6,14 +6,12 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
-import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.NewLinkController;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
-import com.owlplug.core.model.PluginRepository;
 import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.CustomTreeCell;
@@ -324,63 +322,6 @@ public class PluginsController {
           node.getInternalChildren().add(item);
           buildDirectoryTree(child, item, mergedParentName);
         }
-      }
-    }
-  }
-
-  /**
-   * Builds the repository tree view using the file tree representation.
-   * 
-   * @param pluginTree   File tree representation
-   * @param node         root tree view node
-   * @param repositories List of known repositories
-   * @deprecated since OwlPlug 0.7.0
-   */
-  private void buildRepositoryTree(FileTree pluginTree, FilterableTreeItem<Object> node,
-      Iterable<PluginRepository> repositories) {
-
-    node.setGraphic(new ImageView(applicationDefaults.directoryImage));
-    node.setExpanded(true);
-
-    FileTree treeHead = pluginTree;
-    String repositoryPath = "C/fakepath";
-    if (repositoryPath == null) {
-      return;
-    }
-    String[] directories = repositoryPath.split("/");
-
-    for (String dir : directories) {
-      if (treeHead != null) {
-        treeHead = treeHead.get(dir);
-      }
-    }
-
-    // Searching for missing or empty repositories
-    for (PluginRepository repository : repositories) {
-      if (treeHead == null || !treeHead.containsKey(repository.getName())) {
-        FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(repository);
-        item.setGraphic(new ImageView(applicationDefaults.repositoryImage));
-        node.getInternalChildren().add(item);
-      }
-    }
-
-    // Break search if tree is not setup (no plugin registered)
-    if (treeHead == null) {
-      return;
-    }
-
-    for (String dir : treeHead.keySet()) {
-      if (treeHead.get(dir).values().isEmpty()) {
-        Plugin plugin = (Plugin) treeHead.get(dir).getNodeValue();
-        FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
-        plugItem.setGraphic(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
-
-        node.getInternalChildren().add(plugItem);
-      } else {
-        FilterableTreeItem<Object> item = new FilterableTreeItem<>(treeHead.get(dir).getNodeValue());
-        node.getInternalChildren().add(item);
-        buildDirectoryTree(treeHead.get(dir), item, null);
-
       }
     }
   }
