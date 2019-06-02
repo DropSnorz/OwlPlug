@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.scene.paint.*?>
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Label?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PluginsController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PluginsController">
    <center>
       <BorderPane BorderPane.alignment="CENTER">
       	<center>
@@ -32,13 +36,9 @@
       	<top>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <JFXButton fx:id="newRepositoryButton" alignment="BASELINE_CENTER" buttonType="RAISED" text="New repository">
+                  <JFXButton fx:id="newLinkButton" alignment="BASELINE_CENTER" buttonType="RAISED" text="New link">
                      <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/box-white-32.png" />
-                           </image>
-                        </ImageView>
+                        <Region prefHeight="15.0" prefWidth="18.0" style="-fx-background-color: white; -fx-shape: &quot; m 19.847458,19.194915 4.152543,-2.943321 -4.152543,-2.870237 v 1.263203 c 0,0 -4.824423,1.072601 -5.813559,5.380864 2.106169,-2.255246 5.813559,-2.166797 5.813559,-2.166797 z M 19.5,13 c -13,7.333333 -6.5,3.666667 0,0 z m -4.68,9 H 0 V 2 h 7 c 1.695,1.942 2.371,3 4,3 h 13 v 7.82 C 22.831,11.696 21.246,11 19.5,11 15.916,11 13,13.916 13,17.5 c 0,1.747 0.695,3.331 1.82,4.5 z&quot;;" />
                      </graphic></JFXButton>
             		<HBox alignment="CENTER_RIGHT" prefHeight="40.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
             			<children>

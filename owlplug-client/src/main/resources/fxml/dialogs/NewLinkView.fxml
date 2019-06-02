@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXProgressBar?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.NewLinkController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="4.0">
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <SVGPath content="m 19.847458,19.194915 4.152543,-2.943321 -4.152543,-2.870237 v 1.263203 c 0,0 -4.824423,1.072601 -5.813559,5.380864 2.106169,-2.255246 5.813559,-2.166797 5.813559,-2.166797 z M 19.5,13 c -13,7.333333 -6.5,3.666667 0,0 z m -4.68,9 H 0 V 2 h 7 c 1.695,1.942 2.371,3 4,3 h 13 v 7.82 C 22.831,11.696 21.246,11 19.5,11 15.916,11 13,13.916 13,17.5 c 0,1.747 0.695,3.331 1.82,4.5 z" fill="#949494" />
+                  <Label styleClass="label-small" text="/vst/link" />
+               </children>
+            </VBox>
+            <JFXProgressBar styleClass="progress-bar-link" />
+            <VBox alignment="CENTER">
+               <children>
+                  <SVGPath content="M11 5c-1.629 0-2.305-1.058-4-3h-7v20h24v-17h-13z" fill="#8f8f8f" />
+                  <Label styleClass="label-small" text="/target" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <VBox>
+         <children>
+            <Label text="Links allows you to create and manage symlinks accross your file-system and plugin directories." wrapText="true" />
+            <TextFlow>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="For example, you can configure a link named hard-drive in " />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="C:/VST">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" to target your usb hard drive " />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="D:/myPlugins">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=". All plugins in " />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="D:/myPlugins">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" will be accessible using " />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="C:/VST/hard-drive. ">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </TextFlow>
+         </children>
+      </VBox>
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <children>
+            <VBox fillWidth="false" prefHeight="100.0" prefWidth="25.0" spacing="9.0">
+               <children>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/folderlink-grey-16.png" />
+                     </image>
+                  </ImageView>
+                  <SVGPath content="M 11,21.883 4.765,14.356 4,15 11.521,24 19,15 18.236,14.355 12,21.884 12,-9.6875002 h -1 z" fill="#8f8f8f" />
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/folder-grey-16.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox maxWidth="1.7976931348623157E308" spacing="20.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox>
+                     <children>
+                        <Label text="1. New link path from one of your plugin folder" wrapText="true" />
+                        <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+                           <children>
+                              <JFXTextField fx:id="linkSourceParentTextField" promptText="/path/to/your/vst/directory" HBox.hgrow="ALWAYS" />
+                              <JFXButton fx:id="sourceDirectoryButton" text="..." />
+                              <JFXTextField fx:id="linkSourceNameTextField" prefHeight="25.0" prefWidth="170.0" promptText="Link Name" HBox.hgrow="SOMETIMES" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="2. Target directory located anywhere on your file system." wrapText="true" />
+                        <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+                           <children>
+                              <JFXTextField fx:id="linkTargetTextField" promptText="/path/to/any/custom/directory" HBox.hgrow="ALWAYS" />
+                              <JFXButton fx:id="targetDirectoryButton" text="..." />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+      </HBox>
+      <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Link can't be created" />
+      <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <JFXButton fx:id="createButton" text="Create link" />
+            <JFXButton fx:id="cancelButton" text="Cancel" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

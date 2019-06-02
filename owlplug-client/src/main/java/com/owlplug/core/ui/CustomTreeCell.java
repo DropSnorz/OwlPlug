@@ -13,8 +13,6 @@ import javafx.scene.text.TextFlow;
 
 public class CustomTreeCell extends JFXTreeCell<Object> {
 
-  protected HBox hbox;
-  protected TextFlow textFlow;
 
   @Override
   public void updateItem(Object item, boolean empty) {
@@ -41,7 +39,7 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
         setGraphic(hBox);
       } else if (item instanceof IDirectory) {
         setText(null);
-        textFlow = new TextFlow();
+        TextFlow textFlow = new TextFlow();
 
         IDirectory dir = (IDirectory) item;
         Text directoryName;
@@ -56,11 +54,16 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
         } else {
           directoryName = new Text(dir.getName());
         }
+        
+        if (dir.isStale()) {
+          directoryName.getStyleClass().add("text-danger");
+          directoryName.setText(dir.getName() + " (Stale)");
+        }
 
         textFlow.getChildren().add(directoryName);
 
         Node icon = getTreeItem().getGraphic();
-        hbox = new HBox(5);
+        HBox hbox = new HBox(5);
         hbox.getChildren().add(icon);
         hbox.getChildren().add(textFlow);
 

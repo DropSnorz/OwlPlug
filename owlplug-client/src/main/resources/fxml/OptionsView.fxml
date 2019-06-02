@@ -103,7 +103,7 @@
                                                 <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
                                           <VBox spacing="5.0" VBox.vgrow="NEVER">
                                              <children>
-                                                <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save dowloaded plugins from store in directory" />
+                                                <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save dowloaded plugins from store in a dedicated directory" />
                                                 <HBox alignment="BASELINE_LEFT" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <VBox.margin>
                                                       <Insets left="5.0" />
@@ -127,7 +127,7 @@
                                     <HBox spacing="5.0">
                                        <children>
                                           <JFXButton fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" text="Clear user data" HBox.hgrow="NEVER" />
-                                          <Label text="Remove all user data including accounts, repositories and custom settings" wrapText="true" HBox.hgrow="NEVER" />
+                                          <Label text="Remove all user data including accounts, stores and custom settings" wrapText="true" HBox.hgrow="NEVER" />
                                        </children>
                                        <VBox.margin>
                                           <Insets top="10.0" />

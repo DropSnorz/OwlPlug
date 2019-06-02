@@ -2,6 +2,7 @@ package com.owlplug.core.controllers;
 
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
+import com.owlplug.core.model.Symlink;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,15 @@ public class NodeInfoController {
   private PluginInfoController pluginInfoController;
   @Autowired
   private DirectoryInfoController directoryInfoController;
+  @Autowired
+  private SymlinkInfoController symlinkInfoController;
 
   @FXML
   private Node pluginInfoView;
   @FXML
   private Node directoryInfoView;
+  @FXML
+  private Node symlinkInfoView;
 
   /**
    * FXML initialize.
@@ -27,12 +32,14 @@ public class NodeInfoController {
 
     pluginInfoView.setVisible(false);
     directoryInfoView.setVisible(false);
+    symlinkInfoView.setVisible(false);
   }
 
   public void setNode(Object node) {
 
     pluginInfoView.setVisible(false);
     directoryInfoView.setVisible(false);
+    symlinkInfoView.setVisible(false);
 
     if (node instanceof Plugin) {
       pluginInfoController.setPlugin((Plugin) node);
@@ -41,6 +48,12 @@ public class NodeInfoController {
     if (node instanceof PluginDirectory) {
       directoryInfoController.setPluginDirectory((PluginDirectory) node);
       directoryInfoView.setVisible(true);
+    }
+    
+    if (node instanceof Symlink) {
+      symlinkInfoController.setSymlink((Symlink) node);
+      symlinkInfoView.setVisible(true);
+      
     }
   }
 

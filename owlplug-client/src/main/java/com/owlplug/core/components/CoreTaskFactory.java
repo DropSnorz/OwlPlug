@@ -1,12 +1,14 @@
 package com.owlplug.core.components;
 
 import com.owlplug.core.dao.PluginDAO;
+import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.tasks.PluginRemoveTask;
 import com.owlplug.core.tasks.PluginSyncTask;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
+import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.SimpleEventListener;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
@@ -27,6 +29,8 @@ public class CoreTaskFactory extends BaseTaskFactory {
   @Autowired
   private PluginDAO pluginDAO;
   @Autowired
+  private SymlinkDAO symlinkDAO;
+  @Autowired
   private NativeHostService nativeHostService;
 
 
@@ -46,7 +50,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
     parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
 
-    PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO, nativeHostService);
+    PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO, symlinkDAO, nativeHostService);
     task.setOnSucceeded(e -> {
       notifyListeners(syncPluginsListeners);
     });
@@ -67,8 +71,10 @@ public class CoreTaskFactory extends BaseTaskFactory {
     parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
     parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+    
+    String fixedDirectoryScope = FileUtils.convertPath(directoryScope);
 
-    PluginSyncTask task = new PluginSyncTask(directoryScope, parameters, pluginDAO, nativeHostService);
+    PluginSyncTask task = new PluginSyncTask(fixedDirectoryScope, parameters, pluginDAO, symlinkDAO, nativeHostService);
     task.setOnSucceeded(e -> {
       notifyListeners(syncPluginsListeners);
     });

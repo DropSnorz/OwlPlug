@@ -9,10 +9,12 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +38,73 @@ public class FileUtils {
 
     return fileName.replaceAll("[^-_.A-Za-z0-9]", "");
 
+  }
+
+  /**
+   * Recursively finds file in a given directory. 
+   * @param directory - Directory path
+   * @return
+   */
+  public static Collection<File> listUniqueFilesAndDirs(File directory) {
+
+
+    //Find files
+    ArrayList<File> files = new ArrayList<>();
+    if (directory.isDirectory()) {
+      files.add(directory);
+    }
+
+    innerListFiles(files, directory, true, new ArrayList<String>());
+    return files;
+
+  }
+
+  /**
+   * Finds files in a given directory. The symlinks context is used to track recursive symlink
+   * by resolving the real path. The algorithm keeps track of which symlink it is currently resolving 
+   * (or which symlinks in case of recursive links), it can detect if it is attempting to resolve a link again 
+   * recursively which it is still busy resolving. 
+   * @param files - List of already explored files
+   * @param directory - Directory to explore
+   * @param includeSubDirectories - Recursively explore subdirectories and symlinks
+   * @param symlinksContext - Current symlink context
+   */
+  private static void innerListFiles(List<File> files, File directory, boolean includeSubDirectories, 
+      List<String> symlinksContext) {
+    
+    File[] found = directory.listFiles();
+
+    if (found != null) {
+      for (File file : found) {
+        log.info(file.getPath());
+        if (file.isDirectory() && includeSubDirectories) {
+
+          if (Files.isSymbolicLink(file.toPath())) {
+            try {
+              List<String> currentSymlinksContext = new ArrayList<>(symlinksContext);
+              Path targetPath = Files.readSymbolicLink(file.toPath());
+              // We explore the symlink only if we are not currently resolving it's target path.
+              if (!currentSymlinksContext.contains(targetPath.toString())) {
+                files.add(file);
+                currentSymlinksContext.add(targetPath.toString());
+                innerListFiles(files, file, includeSubDirectories, currentSymlinksContext);
+              }
+
+            } catch (IOException e) {
+              // If we fails to read symlink target, we add the symlink be we won't explore inner files.
+              files.add(file);
+            }
+          } else {
+            files.add(file);
+            innerListFiles(files, file, includeSubDirectories, symlinksContext);
+          }
+
+        } else {
+          files.add(file);
+
+        }
+      }
+    }
   }
 
   public static void unzip(String source, String dest) throws IOException {

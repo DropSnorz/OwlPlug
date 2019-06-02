@@ -17,7 +17,11 @@ public class PlatformUtils {
   }
 
   public static void openDirectoryExplorer(String path) {
-    openDirectoryExplorer(new File(path));
+    if (path != null) {
+      openDirectoryExplorer(new File(path));
+    } else {
+      throw new IllegalArgumentException("path can't be null");
+    }
   }
 
   public static void openDirectoryExplorer(File file) {

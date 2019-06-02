@@ -4,11 +4,10 @@ import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
 import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFileFormatResolver;
+import com.owlplug.core.utils.FileUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,7 @@ public class PluginFileCollector {
     File dir = new File(directoryPath);
 
     if (dir.isDirectory()) {
-      List<File> baseFiles = (List<File>) FileUtils.listFilesAndDirs(dir, TrueFileFilter.TRUE, TrueFileFilter.TRUE);
+      List<File> baseFiles = (List<File>) FileUtils.listUniqueFilesAndDirs(dir);
       PluginFileFormatResolver pluginFileResolver = new PluginFileFormatResolver(runtimePlatform, pluginFormat);
 
       for (File file : baseFiles) {

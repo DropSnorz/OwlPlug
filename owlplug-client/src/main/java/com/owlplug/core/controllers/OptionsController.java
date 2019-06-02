@@ -141,7 +141,8 @@ public class OptionsController {
 
       layout.setHeading(new Label("Remove plugin"));
       layout.setBody(new Label(
-          "Do you really want to remove all user data including accounts, " + "repositories and custom settings ?"));
+          "Do you really want to remove all user data including accounts, " 
+          + "stores and custom settings ?"));
 
       JFXButton cancelButton = new JFXButton("Cancel");
       cancelButton.setOnAction(cancelEvent -> {
