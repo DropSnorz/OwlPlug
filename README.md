@@ -72,6 +72,9 @@ I'm maintaining OwlPlug during my free time, so any help will be really apprecia
 OwlPlug is compatible with your previously installed plugins as they are all in a specific root directory, for example `C:/foo/AudioPlugins`. It means that you can still organize your plugins as you want with a file explorer or with your favorite DAW. 
 OwlPlug can discover VST2 and VST3 Plugins. 
 
+## Links
+
+Links allows you to create and manage symlinks accross your filesystem and plugin directories. You can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through your system plugin directory. For example, you can configure a link named *usb-drive* in `C:/VST` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/VST/usb-drive`. 
 
 ## Stores 
 
