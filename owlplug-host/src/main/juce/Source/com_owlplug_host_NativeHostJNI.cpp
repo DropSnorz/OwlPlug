@@ -1,3 +1,20 @@
+/* OwlPlug
+ * Copyright (C) 2018 Arthur <dropsnorz@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 /*
   ==============================================================================
 
@@ -12,12 +29,12 @@
 #include "com_owlplug_host_NativeHostJNI.h"
 
 /**
-* Returns a NativePlugin jobject for a given PluginDescription
+* Returns a NativePlugin jobject instance from a PluginDescription
 *
 */
 jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescription) {
 
-	// Converts native types to JVM objects
+	// Convert native types to JVM objects
 	jstring name = env->NewStringUTF(pluginDescription->name.getCharPointer());
 	jstring descriptiveName = env->NewStringUTF(pluginDescription->descriptiveName.getCharPointer());
 	jstring pluginFormatName = env->NewStringUTF(pluginDescription->pluginFormatName.getCharPointer());
@@ -32,7 +49,7 @@ jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescrip
 	jboolean hasSharedContainer = pluginDescription->hasSharedContainer;
 
 
-	// Create the object of the class UserData
+	// Create NativePlugin class instance
 	jclass nativePluginClass = env->FindClass("com/owlplug/host/NativePlugin");
 	jobject nativePlugin = env->AllocObject(nativePluginClass);
 
@@ -49,8 +66,8 @@ jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescrip
 	jfieldID numInputChannelsField = env->GetFieldID(nativePluginClass, "numInputChannels", "I");
 	jfieldID numOutputChannelsField = env->GetFieldID(nativePluginClass, "numOutputChannels", "I");
 	jfieldID hasSharedContainerField = env->GetFieldID(nativePluginClass, "hasSharedContainer", "Z");
-
-
+	
+	// Apply values to fields
 	env->SetObjectField(nativePlugin, nameField, name);
 	env->SetObjectField(nativePlugin, descriptiveNameField, descriptiveName);
 	env->SetObjectField(nativePlugin, pluginFormatNameField, pluginFormatName);
@@ -69,6 +86,13 @@ jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescrip
 }
 
 
+/**
+ * JNI loadPlugin implementation.
+ * Returns a com.owlplug.host.NativePlugin instance based on the given path. 
+ * NativePlugins field are filled with plugin description and metadata properties
+ * By default, the first plugin instance is used to retrieve descriptions. This must be updated
+ * as a single plugin file can contains subcomponents.
+ */
 JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
   (JNIEnv* env, jobject thisObject, jstring pluginPath) {
 
@@ -76,13 +100,17 @@ JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
 	// MessageManager is automatically released at the end of function scope
 	ScopedJuceInitialiser_GUI initGui;
 
+	// Retrieve plugin path from JVM env
 	const char* pathCharPointer = env->GetStringUTFChars(pluginPath, NULL);
 
 	AudioPluginFormatManager pluginFormatManager;
 	pluginFormatManager.addDefaultFormats();
 	KnownPluginList plugList;
+	
+	// Array of plugin description
 	OwnedArray<juce::PluginDescription> pluginDescriptions;
 
+	// For each managed format, we try to fill pluginDescriptions array.
 	for (int i = 0; i < pluginFormatManager.getNumFormats(); ++i) {
 		plugList.scanAndAddFile(pathCharPointer, false, pluginDescriptions,
 			*pluginFormatManager.getFormat(i));
@@ -92,6 +120,8 @@ JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
 		return NULL;
 	}
 
+	// Build native plugin using the first plugin description
+	// TODO: This must be changed to retrieve all subcomponents
 	jobject nativePlugin = buildJNativePluginInstance(env, pluginDescriptions[0]);
 
 	return nativePlugin;
