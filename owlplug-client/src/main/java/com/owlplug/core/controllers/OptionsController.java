@@ -119,6 +119,17 @@ public class OptionsController {
     vst2DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
     });
+    
+    vst3DirectoryButton.setOnAction(e -> {
+      DirectoryChooser directoryChooser = new DirectoryChooser();
+      Window mainWindow = vst3DirectoryButton.getScene().getWindow();
+
+      File selectedDirectory = directoryChooser.showDialog(mainWindow);
+
+      if (selectedDirectory != null) {
+        vst3DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
+      }
+    });
 
     vst3DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       prefs.put(ApplicationDefaults.VST3_DIRECTORY_KEY, newValue);
