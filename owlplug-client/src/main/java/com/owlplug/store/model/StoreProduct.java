@@ -51,6 +51,8 @@ public class StoreProduct {
   private String screenshotUrl;
   private String donateUrl;
   private String creator;
+  @Deprecated
+  // Version must be be hold by bundles
   private String version;
   @Column(columnDefinition = "text")
   private String description;
@@ -128,10 +130,12 @@ public class StoreProduct {
     this.creator = creator;
   }
   
+  @Deprecated
   public String getVersion() {
     return version;
   }
 
+  @Deprecated
   public void setVersion(String version) {
     this.version = version;
   }

@@ -24,6 +24,7 @@ import java.util.List;
 public class ProductJsonMapper {
 
   private String name;
+  private String technicalUid;
   private String pageUrl;
   @Deprecated
   private String downloadUrl;
@@ -43,6 +44,14 @@ public class ProductJsonMapper {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getTechnicalUid() {
+    return technicalUid;
+  }
+
+  public void setTechnicalUid(String technicalUid) {
+    this.technicalUid = technicalUid;
   }
 
   public String getPageUrl() {

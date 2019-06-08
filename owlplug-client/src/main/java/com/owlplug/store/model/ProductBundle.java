@@ -39,6 +39,8 @@ public class ProductBundle {
   private String name;
   private String downloadUrl;
   private PluginFormat format;
+  private String technicalUid;
+  private String version;
   private long fileSize;
   @ElementCollection(fetch = FetchType.EAGER)
   private List<String> targets;
@@ -68,6 +70,22 @@ public class ProductBundle {
 
   public void setDownloadUrl(String downloadUrl) {
     this.downloadUrl = downloadUrl;
+  }
+
+  public String getTechnicalUid() {
+    return technicalUid;
+  }
+
+  public void setTechnicalUid(String technicalUid) {
+    this.technicalUid = technicalUid;
+  }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
   }
 
   public long getFileSize() {

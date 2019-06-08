@@ -75,6 +75,15 @@ public class StoreModelAdapter {
     if (productJsonMapper.getBundles() != null) {
       for (BundleJsonMapper bundleMapper : productJsonMapper.getBundles()) {
         ProductBundle bundle = jsonMapperToEntity(bundleMapper);
+        
+        // If bundle version is not defined, apply product version.
+        if (bundle.getVersion() == null) {
+          bundle.setVersion(productJsonMapper.getVersion());
+        }
+        // If bundle technical uid is not defined, apply product technical uId.
+        if (bundle.getTechnicalUid() == null) {
+          bundle.setTechnicalUid(productJsonMapper.getTechnicalUid());
+        }
         bundle.setProduct(product);
         bundles.add(bundle);
       }

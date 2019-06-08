@@ -27,6 +27,8 @@ public class BundleJsonMapper {
   private List<String> targets;
   private String downloadUrl;
   private String format;
+  private String version;
+  private String technicalUid;
   private long fileSize;
 
   public String getName() {
@@ -63,6 +65,22 @@ public class BundleJsonMapper {
 
   public String getFormat() {
     return format;
+  }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
+  }
+
+  public String getTechnicalUid() {
+    return technicalUid;
+  }
+
+  public void setTechnicalUid(String technicalUid) {
+    this.technicalUid = technicalUid;
   }
 
   public void setFormat(String format) {

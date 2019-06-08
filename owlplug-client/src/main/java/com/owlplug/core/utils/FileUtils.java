@@ -95,7 +95,6 @@ public class FileUtils {
 
     if (found != null) {
       for (File file : found) {
-        log.info(file.getPath());
         if (file.isDirectory() && includeSubDirectories) {
 
           if (Files.isSymbolicLink(file.toPath())) {
