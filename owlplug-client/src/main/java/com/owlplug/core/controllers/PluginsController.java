@@ -35,6 +35,7 @@ import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.CustomTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
+import com.owlplug.core.utils.FileUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -179,12 +180,14 @@ public class PluginsController {
     Set<String> userPluginDirectories = new HashSet<>();
     if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").equals("")) {
-      userPluginDirectories.add(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+      String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+      userPluginDirectories.add(FileUtils.convertPath(path));
     }
 
     if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").equals("")) {
-      userPluginDirectories.add(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+      String path = prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
+      userPluginDirectories.add(FileUtils.convertPath(path));
     }
 
     for (String directory : userPluginDirectories) {
@@ -257,7 +260,6 @@ public class PluginsController {
   }
 
   private FilterableTreeItem<Object> initDirectoryRoot(FileTree pluginTree, String directoryPath) {
-
 
     FilterableTreeItem<Object> item = new FilterableTreeItem<>(null);
 
