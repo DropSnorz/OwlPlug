@@ -81,7 +81,7 @@ public class PluginFileCollector {
         }
       }
     } else {
-      log.error("Plugin root is not a directory");
+      log.error("Scan target is not a valid directory. 0 plugins have been collected from " + directoryPath);
     }
 
     return fileList;

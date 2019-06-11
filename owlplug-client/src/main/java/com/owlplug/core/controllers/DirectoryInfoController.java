@@ -89,7 +89,8 @@ public class DirectoryInfoController {
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         taskFactory.create(new DirectoryRemoveTask(pluginDirectory))
-            .setOnSucceeded(x -> taskFactory.createPluginSyncTask().schedule()).schedule();
+            .setOnSucceeded(x -> taskFactory.createPluginSyncTask(pluginDirectory.getPath()).schedule())
+          .schedule();
       });
       removeButton.getStyleClass().add("button-danger");
 
