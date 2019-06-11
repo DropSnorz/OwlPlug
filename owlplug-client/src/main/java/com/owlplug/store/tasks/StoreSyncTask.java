@@ -22,6 +22,7 @@ package com.owlplug.store.tasks;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
@@ -33,6 +34,8 @@ import com.owlplug.store.model.json.ProductJsonMapper;
 import com.owlplug.store.model.json.StoreJsonMapper;
 import com.owlplug.store.model.json.StoreModelAdapter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -65,13 +68,14 @@ public class StoreSyncTask extends AbstractTask {
   protected TaskResult call() throws TaskException {
 
     this.updateMessage("Sync plugins stores");
+    this.commitProgress(-1);
 
     Iterable<Store> storeList = pluginStoreDAO.findAll();
     this.setMaxProgress(2 + Iterables.size(storeList));
 
     storeProductDAO.deleteAll();
 
-    this.commitProgress(1);
+    this.commitProgress(2);
     CloseableHttpResponse response = null;
 
     for (Store store : pluginStoreDAO.findAll()) {
@@ -125,11 +129,18 @@ public class StoreSyncTask extends AbstractTask {
 
     try {
       StoreJsonMapper pluginStoreTO = objectMapper.readValue(entity.getContent(), StoreJsonMapper.class);
-      for (ProductJsonMapper productTO : pluginStoreTO.getProducts()) {
-        StoreProduct product = StoreModelAdapter.jsonMapperToEntity(productTO);
-        product.setStore(store);
-        storeProductDAO.save(product);
+      List<List<ProductJsonMapper>> chunks = Lists.partition(pluginStoreTO.getProducts(), 100);
+      
+      for (List<ProductJsonMapper> partition : chunks) {
+        List<StoreProduct> storeProductPartition = new ArrayList<>();
+        for (ProductJsonMapper productMapper : partition) {
+          StoreProduct product = StoreModelAdapter.jsonMapperToEntity(productMapper);
+          product.setStore(store);
+          storeProductPartition.add(product);
+        }
+        storeProductDAO.saveAll(storeProductPartition);
       }
+      
     } catch (Exception e) {
       throw new StoreParsingException(e);
     }
