@@ -68,7 +68,7 @@
                      <children>
                         <VBox spacing="10.0">
                            <children>
-                              <HBox alignment="CENTER_LEFT" styleClass="card-title">
+                              <HBox alignment="CENTER_LEFT" spacing="4.0" styleClass="card-title">
                                  <children>
                                     <Label graphicTextGap="6.0" prefHeight="17.0" text="About" />
                                     <Region HBox.hgrow="ALWAYS" />
