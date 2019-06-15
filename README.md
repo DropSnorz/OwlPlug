@@ -74,7 +74,7 @@ OwlPlug can discover VST2 and VST3 Plugins.
 
 ## Links
 
-Links allows you to create and manage symlinks accross your filesystem and plugin directories. You can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through your system plugin directory. For example, you can configure a link named *usb-drive* in `C:/VST` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/VST/usb-drive`. 
+Links allows you to create and manage symlinks accross your filesystem and plugin directories. You can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through your system plugin directory. For example, you can configure a link named *usb-drive* in `C:/VST` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/VST/usb-drive`. On some Windows version, symlinks creation may require admin privileges.
 
 ## Stores 
 
@@ -91,16 +91,16 @@ OwlPlug Central is the default store. It's a secure and trusted source to retrie
 
 Third party stores are maintained by plugin creators, developers or distributors. For security reasons, you should only use stores from trusted sources only.
 
-* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/GyL/owl.php`
-* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `http://getdunne.net/Krakli/owl.php`
+* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `https://getdunne.net/GyL/owl.php`
+* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `https://getdunne.net/Krakli/owl.php`
 
 
 ### Third party (Central mirror)
 
 Third party store adapters are maintained by OwlPlug Central but plugins are hosted by original creators. (For testing purposes)
 
-* AmVST (By [Angular Momentum](http://www.amvst.com/)): `http://central.owlplug.com/mirrors/amvst/store`
-* [Vst4free](http://vst4free.com): `http://central.owlplug.com/mirrors/vst4free/store`
+* AmVST (By [Angular Momentum](http://www.amvst.com/)): `https://central.owlplug.com/mirrors/amvst/store`
+* [Vst4free](http://vst4free.com): `https://central.owlplug.com/mirrors/vst4free/store`
 
 ### How to distriute my plugins on OwlPlug ?
 
