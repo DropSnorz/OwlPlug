@@ -44,18 +44,19 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
       if (item instanceof Plugin) {
         Plugin plugin = (Plugin) item;
         setText(null);
-        HBox hBox = new HBox(4);
-        hBox.setAlignment(Pos.CENTER_LEFT);
-        hBox.getChildren().add(getTreeItem().getGraphic());
-        hBox.getChildren().add(new Label(plugin.getName()));
+        HBox hbox = new HBox(4);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        hbox.getChildren().add(getTreeItem().getGraphic());
+        hbox.getChildren().add(new Label(plugin.getName()));
         Circle circle = new Circle(0, 0, 2);
-        hBox.getChildren().add(circle);
-        if(plugin.isNativeCompatible()) {
+        hbox.getChildren().add(circle);
+        if (plugin.isNativeCompatible()) {
           circle.getStyleClass().add("shape-success");
         } else {
           circle.getStyleClass().add("shape-disabled");
         }
-        setGraphic(hBox);
+        circle.applyCss();
+        setGraphic(hbox);
       } else if (item instanceof IDirectory) {
         setText(null);
         TextFlow textFlow = new TextFlow();

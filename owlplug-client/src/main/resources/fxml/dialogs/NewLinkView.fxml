@@ -62,6 +62,7 @@
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Some systems may require admin privileges to create symlinks." />
                </children>
             </TextFlow>
          </children>
