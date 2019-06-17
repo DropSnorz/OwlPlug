@@ -1,5 +1,5 @@
 # OwlPlug Store Endpoint Specification
-**Version 1.0.0**
+**Version 1.0.1**
 
 ## Introduction
 
@@ -11,9 +11,9 @@ An OwlPlug Store is a single remote resource providing a list of available Produ
 
 The Owlplug Store Specification is versioned using [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html) semver.
 
-The `major`.`minor` portion of the semver (for example `3.0`) designate the OSS feature set. Typically, *`.patch`* versions address errors in this document, not the feature set. Tooling which supports OSS 3.0 should be compatible with all OSS 3.0.* versions. The patch version should not be considered by tooling, making no distinction between `3.0.0` and `3.0.1` for example.
+The `major`.`minor` portion of the semver (for example `3.0`) designate the Store Specification feature set. Typically, *`.patch`* versions address errors in this document, not the feature set. Tooling which supports Store Specification 3.0 should be compatible with all 3.0.* versions. The patch version should not be considered by tooling, making no distinction between `3.0.0` and `3.0.1` for example.
 
-Subsequent minor version releases of the Specification should not interfere with tooling developed to a lower minor version and same major version.  Thus a hypothetical `3.1.0` specification should be usable with tooling designed for `3.0.0`.
+Subsequent minor version releases of the Specification should not interfere with tooling developed to a lower minor version and same major version. Thus a hypothetical `3.1.0` specification should be usable with tooling designed for `3.0.0`.
 
 ## Format
 
@@ -83,6 +83,7 @@ creator | `string` | **REQUIRED**. Product creator / manufacturer name. 255 char
 type | `string` | **REQUIRED**. Must be `instrument` for VSTi or `effect` for VST/VSTfx or `unknown`. 255 characters max.
 stage | `string` | Can be `beta` for an early release, `demo` for a limited release or `release` for stable build. 255 characters max.
 pageUrl | `string` | **REQUIRED**. The plugin page url. 255 characters max.
+donateUrl | `string` | Creator support/donation URL. 255 characters max.
 screenshotUrl | `string` | **REQUIRED**. Plugin screenshot url. Must be a png file. 255 characters max.
 description | `string` | **REQUIRED**. A short plugin description. 1000 characters max.
 tags | `array` | An array of [Tag](#Tag). Can be empty.
@@ -97,7 +98,7 @@ Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the bundle. 255 characters max.
 targets | `array` | **REQUIRED**. Array of plugin [Target](#Target). Supported environements by the bundle.
-format | `string` | **REQUIRED**. Plugin format. Must be `vst`, `vst3` or `unknown`.
+format | `string` | **REQUIRED**. Plugin format. Must be `vst`, `vst3`, `various` or `unknown`.
 downloadUrl | `string` | **REQUIRED**. Bundle download url. 255 characters max. Check [Bundle file structure](#Bundle_file_structure)
 fileSize | `long` | Size of bundle file in bytes.
 
@@ -285,6 +286,16 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
             "$id": "#/properties/products/items/properties/pageUrl",
             "type": "string",
             "title": "Product Page Url",
+            "default": "",
+            "examples": [
+              "https://example.com"
+            ],
+            "pattern": "^(.*)$"
+          },
+	  "donateUrl": {
+            "$id": "#/properties/products/items/properties/donateUrl",
+            "type": "string",
+            "title": "Creator donate Url",
             "default": "",
             "examples": [
               "https://example.com"
