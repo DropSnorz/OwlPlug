@@ -1,5 +1,5 @@
 # OwlPlug Store Endpoint Specification
-**Version 1.0.1**
+**Version 1.1.0**
 
 ## Introduction
 
@@ -26,7 +26,7 @@ The root object is a [Store](#Store) object.
 {
   "name": "My Custom store",
   "url": "https://example.com",
-  "version": "1.0.0",
+  "schemaVersion": "1.0.0",
   "products": [
     {
       "name": "Wobbleizer",
@@ -69,7 +69,8 @@ Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the store. 255 characters max.
 url | `string` | **REQUIRED**. An url to access your store or developer informations. This is not necessarily the endpoint URL. 255 characters max.
-version | `string` | **REQUIRED**. This string must be the [semantic version number](https://semver.org/spec/v2.0.0.html) of the [OwlPlug Store Specification](#versions) that the document uses. 255 characters max.
+schemaVersion | `string` | **REQUIRED**. This string must be the [semantic version number](https://semver.org/spec/v2.0.0.html) of the [OwlPlug Store Specification](#versions) that the document uses. 255 characters max.
+version | `string` | *Deprecated*
 products | `array` | **REQUIRED**. An array of [Product](#Product). Can be empty.
 
 ### Product
@@ -86,6 +87,8 @@ pageUrl | `string` | **REQUIRED**. The plugin page url. 255 characters max.
 donateUrl | `string` | Creator support/donation URL. 255 characters max.
 screenshotUrl | `string` | **REQUIRED**. Plugin screenshot url. Must be a png file. 255 characters max.
 description | `string` | **REQUIRED**. A short plugin description. 1000 characters max.
+version | `string`| Plugin version. Version will be applied to all bundles if not overloaded.
+technicalUid | `string` | Plugin unique id. Uid will be applied to all bundles if not overloaded.
 tags | `array` | An array of [Tag](#Tag). Can be empty.
 bundles | `array` | **REQUIRED**. An array of [Bundle](#Bundle). Can be empty.
 
@@ -99,6 +102,8 @@ Field Name | Type | Description
 name | `string` | **REQUIRED**. The name of the bundle. 255 characters max.
 targets | `array` | **REQUIRED**. Array of plugin [Target](#Target). Supported environements by the bundle.
 format | `string` | **REQUIRED**. Plugin format. Must be `vst`, `vst3`, `various` or `unknown`.
+version | `string`| Bundle/Plugin version. Overload parent *store.product.version* property.
+technicalUid | `string` | Bundle/Plugin unique id. Overload parent *store.product.technicalUid* property.
 downloadUrl | `string` | **REQUIRED**. Bundle download url. 255 characters max. Check [Bundle file structure](#Bundle_file_structure)
 fileSize | `long` | Size of bundle file in bytes.
 
@@ -190,7 +195,7 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
   "required": [
     "name",
     "url",
-    "version",
+    "schemaVersion",
     "products"
   ],
   "properties": {
@@ -211,6 +216,16 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
       "default": "",
       "examples": [
         "https://example.com"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "schemaVersion": {
+      "$id": "#/properties/version",
+      "type": "string",
+      "title": "Store Version",
+      "default": "",
+      "examples": [
+        "1.0.0"
       ],
       "pattern": "^(.*)$"
     },
@@ -279,6 +294,26 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
             "default": "",
             "examples": [
               "A frequency filter with LFO modulation"
+            ],
+            "pattern": "^(\n|.)*$"
+          },
+	  "version": {
+            "$id": "#/properties/products/items/properties/version",
+            "type": "string",
+            "title": "Product version",
+            "default": "",
+            "examples": [
+              "1.0.0"
+            ],
+            "pattern": "^(.*)$"
+          },
+	  "technicalUid": {
+            "$id": "#/properties/products/items/properties/technicalUid",
+            "type": "string",
+            "title": "Product unique Id",
+            "default": "",
+            "examples": [
+              "1237986614"
             ],
             "pattern": "^(.*)$"
           },
@@ -387,6 +422,26 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
                   "examples": [
                     "vst"
                   ],
+                  "pattern": "^(.*)$"
+                },
+	       "version": {
+	         "$id": "#/properties/products/items/properties/version",
+	          "type": "string",
+	          "title": "Product version",
+                  "default": "",
+                  "examples": [
+	            "1.0.0"
+	          ],
+	          "pattern": "^(.*)$"
+	        },
+                "technicalUid": {
+                  "$id": "#/properties/products/items/properties/technicalUid",
+                   "type": "string",
+                   "title": "Product unique Id",
+                   "default": "",
+                   "examples": [
+                     "1237986614"
+                   ],
                   "pattern": "^(.*)$"
                 },
                 "downloadUrl": {
