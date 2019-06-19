@@ -39,7 +39,7 @@ I've generated OwlPlug binaries, but I've only tested them in my environment, `W
 
 ### Windows
 
-**Requirements**: Windows 10 (64bit)
+**Requirements**: Windows 7, 8, 10 (64bit)
 
 1. Download binaries [here](http://github.com/dropsnorz/owlplug/releases)
 2. Run the MSI Installer.
@@ -104,7 +104,7 @@ Third party store adapters are maintained by OwlPlug Central but plugins are hos
 
 ### How to distriute my plugins on OwlPlug ?
 
-* **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Open a submission ticket on [OwlPlug Central support desk](https://owlplug.freshdesk.com/support/home)
+* **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Open an issue or a pull request on the [OwlPlug Central repository](https://github.com/owlplug/central)
 * **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). Then, provide the endpoint url to your user.
 
 # Development
