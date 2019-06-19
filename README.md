@@ -33,7 +33,7 @@ I've generated OwlPlug binaries, but I've only tested them in my environment, `W
 **About OwlPlug**
 * [OwlPlug Website](https://owlplug.com)
 * [Roadmap](https://owlplug.com/roadmap)
-
+* [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki)
 
 ## Installation
 
@@ -45,7 +45,7 @@ I've generated OwlPlug binaries, but I've only tested them in my environment, `W
 2. Run the MSI Installer.
 3. OwlPlug is ready ;)
 
-## Mac
+### Mac
 
 **Requirements**: Java 9+
 
