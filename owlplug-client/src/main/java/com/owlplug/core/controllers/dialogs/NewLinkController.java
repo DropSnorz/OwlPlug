@@ -69,6 +69,8 @@ public class NewLinkController extends AbstractDialogController {
   private JFXButton cancelButton;
   @FXML
   private Label errorLabel;
+  
+  private JFXAutoCompletePopup<String> autoCompletePath;
 
   NewLinkController() {
     super(700, 500);
@@ -115,21 +117,27 @@ public class NewLinkController extends AbstractDialogController {
       }
     });
     
-    JFXAutoCompletePopup<String> autoComplete = new JFXAutoCompletePopup<>();
-    if (preferences.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
-      autoComplete.getSuggestions().add(preferences.get(ApplicationDefaults.VST3_DIRECTORY_KEY,""));
-    }
-    if (preferences.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
-      autoComplete.getSuggestions().add(preferences.get(ApplicationDefaults.VST_DIRECTORY_KEY,""));
-    }
-    autoComplete.setSelectionHandler(e -> {
+    autoCompletePath = new JFXAutoCompletePopup<>();
+    autoCompletePath.setSelectionHandler(e -> {
       linkSourceParentTextField.setText(e.getObject().toString());
     });
     
     linkSourceParentTextField.setOnKeyPressed(e -> {
-      autoComplete.show(linkSourceParentTextField);
+      autoCompletePath.show(linkSourceParentTextField);
     });
 
+  }
+  
+  @Override
+  public void show() {
+    autoCompletePath.getSuggestions().clear();
+    if (preferences.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
+      autoCompletePath.getSuggestions().add(preferences.get(ApplicationDefaults.VST_DIRECTORY_KEY,""));
+    }
+    if (preferences.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
+      autoCompletePath.getSuggestions().add(preferences.get(ApplicationDefaults.VST3_DIRECTORY_KEY,""));
+    }
+    super.show();
   }
   
   private boolean createSymlink(String sourcePath, String targetPath) {
