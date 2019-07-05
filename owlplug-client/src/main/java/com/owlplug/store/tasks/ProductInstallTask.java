@@ -69,8 +69,13 @@ public class ProductInstallTask extends AbstractTask {
   protected TaskResult call() throws Exception {
 
     try {
-      targetDirectory.mkdirs();
-      if (targetDirectory == null || !targetDirectory.isDirectory()) {
+      boolean created = targetDirectory.mkdirs();
+      if (!targetDirectory.exists() && !created) {
+          this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Can't create installation directory");
+          log.error("Can't create installation directory. ");
+          throw new TaskException("Can't create installation directory");
+      }
+      else if (!targetDirectory.isDirectory()) {
         this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Invalid installation directory");
         log.error("Invalid plugin installation target directory");
         throw new TaskException("Invalid plugin installation target directory");
