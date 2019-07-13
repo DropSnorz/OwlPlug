@@ -60,19 +60,22 @@ public class PluginService {
    */
   public String resolveImageUrl(Plugin plugin) {
 
-    String url = "";
-
     String absoluteName = PluginUtils.absoluteName(plugin.getName());
     Iterable<StoreProduct> products = pluginStoreService.getProductsByName(absoluteName);
 
     if (!Iterables.isEmpty(products)) {
-      url = Iterables.get(products, 0).getScreenshotUrl();
-    } else {
-      url = owlplugCentralService.getPluginImageUrl(absoluteName);
+      return Iterables.get(products, 0).getScreenshotUrl();
     }
-
-    return url;
-
+    
+    if (plugin.getDescriptiveName() != null) {
+      products = pluginStoreService.getProductsByName(plugin.getDescriptiveName());
+      if (!Iterables.isEmpty(products)) {
+        return Iterables.get(products, 0).getScreenshotUrl();
+      }
+    }
+    
+    return owlplugCentralService.getPluginImageUrl(absoluteName);
+    
   }
   
   /**
