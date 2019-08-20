@@ -46,7 +46,7 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </HBox>
-                  <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts Manager" />
+                  <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts" />
                </children>
             </HBox>
             <JFXDrawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
