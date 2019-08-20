@@ -49,8 +49,8 @@ public class OwlPlugPreloader extends Preloader {
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
 
     primaryStage.initStyle(StageStyle.UNDECORATED);
-    primaryStage.setWidth(400);
-    primaryStage.setHeight(100);
+    primaryStage.setWidth(600);
+    primaryStage.setHeight(300);
     primaryStage.setScene(scene);
     primaryStage.show();
   }

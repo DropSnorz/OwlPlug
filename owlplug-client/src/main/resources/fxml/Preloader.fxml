@@ -1,31 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXProgressBar?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, #dfa579, #424242 100%);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PreloaderController">
    <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="pane-card" VBox.vgrow="ALWAYS">
+      <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="33.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../media/owlplug-logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="295.0" layoutY="36.0" style="-fx-font-size: 68;" text="OwlPlug" />
+      <JFXProgressBar layoutY="297.0" prefWidth="600.0" />
+      <Label layoutX="485.0" layoutY="128.0" styleClass="label-disabled" text="Loading...." />
+      <ImageView fitHeight="50.0" fitWidth="159.0" layoutX="359.0" layoutY="233.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../media/juce.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="50.0" fitWidth="100.0" layoutX="506.0" layoutY="233.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../media/steinberg-vst-compatible.png" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER" layoutX="133.0" layoutY="247.0">
          <children>
-            <Label styleClass="heading-1" text="Loading OwlPlug...">
-               <graphic>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../media/owlplug-logo-white.png" />
-                     </image>
-                  </ImageView>
-               </graphic></Label>
+            <Hyperlink fx:id="owlplugHyperlink" styleClass="hyperlink-disabled" text="owlplug.com" />
+            <Label styleClass="label-disabled" text=" - " />
+            <Hyperlink fx:id="statusHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled" text="Status" />
+            <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - " />
+            <Hyperlink fx:id="roadmapHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled" text="Roadmap" />
          </children>
       </HBox>
-      <AnchorPane>
-         <children>
-            <JFXProgressBar AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-         </children>
-      </AnchorPane>
    </children>
-</VBox>
+</Pane>

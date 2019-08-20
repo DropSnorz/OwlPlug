@@ -160,6 +160,21 @@ JFXButton{
 .hyperlink-dark{
 	-fx-text-fill: rgb(40,40,40);
 }
+.hyperlink-dark:focused {
+	-fx-border-color: null ;
+	-fx-border-style: solid ;
+	-fx-border-width: 0px;
+}
+
+.hyperlink-disabled{
+	-fx-text-fill: disabled-color;
+}
+.hyperlink-disabled:focused {
+	-fx-border-color: null ;
+	-fx-border-style: solid ;
+	-fx-border-width: 0px;
+}
+
 .hyperlink-web:visited {
 	-fx-text-fill: disabled-color;
 }
