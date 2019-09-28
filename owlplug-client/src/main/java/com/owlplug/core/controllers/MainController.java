@@ -34,6 +34,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
+import com.owlplug.core.services.AnalyticsService;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.services.UpdateService;
 import com.owlplug.core.utils.PlatformUtils;
@@ -76,6 +77,8 @@ public class MainController {
   private AuthenticationService authentificationService;
   @Autowired
   private UpdateService updateService;
+  @Autowired
+  private AnalyticsService analyticsService;
   @Autowired
   private Preferences prefs;
   @Autowired
@@ -178,6 +181,8 @@ public class MainController {
     }
     prefs.putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
     optionsController.refreshView();
+    
+    analyticsService.pageView("/app/core/startup");
 
     if (prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
       log.info("Starting auto plugin sync");
