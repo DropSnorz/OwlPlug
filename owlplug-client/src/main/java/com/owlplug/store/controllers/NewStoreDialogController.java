@@ -27,6 +27,7 @@ import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.owlplug.core.controllers.dialogs.DialogController;
+import com.owlplug.core.services.AnalyticsService;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.model.Store;
 import com.owlplug.store.services.StoreService;
@@ -51,6 +52,8 @@ public class NewStoreDialogController extends AbstractDialogController implement
   private StoreMenuController storeMenuController;
   @Autowired
   private DialogController dialogController;
+  @Autowired
+  private AnalyticsService analyticsService;
 
   @FXML
   private JFXTextField storeUrlTextField;
@@ -122,6 +125,7 @@ public class NewStoreDialogController extends AbstractDialogController implement
           close();
           dialogController.newSimpleInfoDialog("Success",
               "The plugin store " + pluginStore.getName() + " has been sucessfully added !").show();
+          analyticsService.pageView("/app/store/action/add");
         } else {
           errorLabel.setVisible(true);
         }

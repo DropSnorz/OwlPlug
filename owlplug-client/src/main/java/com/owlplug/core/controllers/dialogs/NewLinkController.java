@@ -25,6 +25,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
+import com.owlplug.core.services.AnalyticsService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,6 +53,8 @@ public class NewLinkController extends AbstractDialogController {
   private CoreTaskFactory coreTaskFactory;
   @Autowired
   private Preferences preferences;
+  @Autowired
+  private AnalyticsService analyticsService;
 
   @FXML
   private JFXTextField linkSourceParentTextField; 
@@ -92,6 +95,7 @@ public class NewLinkController extends AbstractDialogController {
       String targetPath = linkTargetTextField.getText();
       if (checkSymlinkCreation(sourcePath, targetPath)) {
         if (createSymlink(sourcePath, targetPath)) {
+          analyticsService.pageView("/app/plugins/symlink/action/create");
           coreTaskFactory.createPluginSyncTask(new File(sourcePath).getParent()).schedule();
           setErrorMessage(null);
           this.close();

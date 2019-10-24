@@ -288,6 +288,11 @@ public class StoreController {
    * @param bundle Bundle to install
    */
   public boolean installBundle(ProductBundle bundle) {
+    
+    analyticsService.pageView("app/store/action/install", 
+        bundle.getProduct().getStore().getName(), 
+        bundle.getProduct().getName(), 
+        bundle.getName());
 
     String baseDirectoryPath = storeService.getBundleInstallFolder(bundle);
     String relativeDirectoryPath  = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");

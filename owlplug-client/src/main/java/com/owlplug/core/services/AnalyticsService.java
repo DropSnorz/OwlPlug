@@ -20,6 +20,7 @@
 package com.owlplug.core.services;
 
 import com.brsanthu.googleanalytics.GoogleAnalytics;
+import com.brsanthu.googleanalytics.request.PageViewHit;
 import com.owlplug.core.components.ApplicationDefaults;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,15 +46,30 @@ public class AnalyticsService {
     
   }
   
-  
   public void pageView(String name) {
-    
     ga.pageView()
+      .documentTitle(name)
+      .documentPath(name)
+      .applicationName(ApplicationDefaults.APPLICATION_NAME)
+      .applicationVersion(applicationDefaults.getVersion())
+      .sendAsync();
+    
+  }
+  
+  public void pageView(String name, String... parameters) {
+    
+    PageViewHit pvh = ga.pageView()
         .documentTitle(name)
         .documentPath(name)
         .applicationName(ApplicationDefaults.APPLICATION_NAME)
-        .applicationVersion(applicationDefaults.getVersion())
-        .sendAsync();
+        .applicationVersion(applicationDefaults.getVersion());
+    
+    int customDimensionId = 1;
+    for (String dimension : parameters) {
+      pvh.customDimension(customDimensionId, dimension);
+      customDimensionId = customDimensionId++;
+    }
+    pvh.sendAsync();
         
   }
   
