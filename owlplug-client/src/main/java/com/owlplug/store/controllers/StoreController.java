@@ -30,6 +30,7 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.controllers.dialogs.DialogController;
+import com.owlplug.core.services.AnalyticsService;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.store.components.StoreTaskFactory;
 import com.owlplug.store.model.ProductBundle;
@@ -88,6 +89,8 @@ public class StoreController {
   private DialogController dialogController;
   @Autowired
   private StoreTaskFactory storeTaskFactory;
+  @Autowired
+  private AnalyticsService analyticsService;
 
   @FXML
   private JFXButton storesButton;
@@ -158,6 +161,9 @@ public class StoreController {
         refreshView(task.getValue());
       });
       new Thread(task).start();
+      
+      analyticsService.pageView("/app/store/action/search");
+
     });
 
     scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
@@ -282,6 +288,11 @@ public class StoreController {
    * @param bundle Bundle to install
    */
   public boolean installBundle(ProductBundle bundle) {
+    
+    analyticsService.pageView("app/store/action/install", 
+        bundle.getProduct().getStore().getName(), 
+        bundle.getProduct().getName(), 
+        bundle.getName());
 
     String baseDirectoryPath = storeService.getBundleInstallFolder(bundle);
     String relativeDirectoryPath  = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
