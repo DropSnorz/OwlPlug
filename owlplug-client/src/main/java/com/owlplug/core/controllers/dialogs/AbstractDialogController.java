@@ -19,14 +19,11 @@
  
 package com.owlplug.core.controllers.dialogs;
 
+import com.owlplug.core.controllers.BaseController;
 import javafx.scene.Node;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractDialogController {
-
-  @Autowired
-  private DialogController dialogController;
-
+public abstract class AbstractDialogController extends BaseController {
+  
   private double width = -1;
   private double height = -1;
   private boolean overlayClose = true;
@@ -60,19 +57,19 @@ public abstract class AbstractDialogController {
 
     if (width != -1 && height != -1) {
       if (this.getHeading() != null) {
-        dialogController.newDialog(width, height, this.getBody(), this.getHeading());
+        this.getDialogController().newDialog(width, height, this.getBody(), this.getHeading());
       } else {
-        dialogController.newDialog(width, height, this.getBody());
+        this.getDialogController().newDialog(width, height, this.getBody());
       }
     } else {
       if (this.getHeading() != null) {
-        dialogController.newDialog(this.getBody(), this.getHeading());
+        this.getDialogController().newDialog(this.getBody(), this.getHeading());
       } else {
-        dialogController.newDialog(this.getBody());
+        this.getDialogController().newDialog(this.getBody());
       }
     }
-    dialogController.getDialog().setOverlayClose(overlayClose);
-    dialogController.getDialog().show();
+    this.getDialogController().getDialog().setOverlayClose(overlayClose);
+    this.getDialogController().getDialog().show();
 
   }
 
@@ -81,7 +78,7 @@ public abstract class AbstractDialogController {
    */
   public void close() {
     onDialogClose();
-    dialogController.getDialog().close();
+    this.getDialogController().getDialog().close();
 
   }
 

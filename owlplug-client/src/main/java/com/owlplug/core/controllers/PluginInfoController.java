@@ -22,10 +22,8 @@ package com.owlplug.core.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
-import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.utils.PlatformUtils;
@@ -49,20 +47,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class PluginInfoController {
+public class PluginInfoController extends BaseController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired
-  private DialogController dialogController;
   @Autowired
   private PluginsController pluginsController;
   @Autowired
   private PluginService pluginService;
   @Autowired
   private ImageCache imageCache;
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
   @Autowired
   private CoreTaskFactory coreTaskFactory;
 
@@ -102,7 +96,7 @@ public class PluginInfoController {
 
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
 
-    openDirectoryButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
+    openDirectoryButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openDirectoryButton.setText("");
     openDirectoryButton.setOnAction(e -> {
       File pluginFile = new File(pluginPathLabel.getText());
@@ -111,7 +105,7 @@ public class PluginInfoController {
 
     uninstallButton.setOnAction(e -> {
 
-      JFXDialog dialog = dialogController.newDialog();
+      JFXDialog dialog = this.getDialogController().newDialog();
 
       JFXDialogLayout layout = new JFXDialogLayout();
 
@@ -140,7 +134,7 @@ public class PluginInfoController {
 
   public void setPlugin(Plugin plugin) {
     this.currentPlugin = plugin;
-    pluginFormatIcon.setImage(applicationDefaults.getPluginFormatIcon(plugin));
+    pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(plugin));
     pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
     pluginTitleLabel.setText(plugin.getName());
     pluginNameLabel.setText(Optional.ofNullable(plugin.getDescriptiveName()).orElse(plugin.getName()));
@@ -163,7 +157,7 @@ public class PluginInfoController {
     String url = currentPlugin.getScreenshotUrl();
     if (knownPluginImages.contains(url) && !imageCache.contains(url)) {
 
-      BackgroundImage bgImg = new BackgroundImage(applicationDefaults.pluginPlaceholderImage,
+      BackgroundImage bgImg = new BackgroundImage(this.getApplicationDefaults().pluginPlaceholderImage,
           BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
           new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
       pluginScreenshotPane.setBackground(new Background(bgImg));

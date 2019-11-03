@@ -34,14 +34,12 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
-import com.owlplug.core.services.AnalyticsService;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.services.UpdateService;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.store.controllers.StoreController;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -57,12 +55,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MainController {
+public class MainController extends BaseController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired 
-  private ApplicationDefaults applicationDefaults;
   @Autowired
   private LazyViewRegistry viewRegistry;
   @Autowired
@@ -77,10 +73,6 @@ public class MainController {
   private AuthenticationService authentificationService;
   @Autowired
   private UpdateService updateService;
-  @Autowired
-  private AnalyticsService analyticsService;
-  @Autowired
-  private Preferences prefs;
   @Autowired
   private PluginService pluginService;
   @Autowired
@@ -132,7 +124,7 @@ public class MainController {
       }
       if (newValue instanceof UserAccount) {
         UserAccount userAccount = (UserAccount) newValue;
-        prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
+        this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
       }
       accountComboBox.hide();
@@ -148,7 +140,7 @@ public class MainController {
     refreshAccounts();
     
     downloadUpdateButton.setOnAction(e -> {
-      PlatformUtils.openDefaultBrowser(applicationDefaults.getUpdateDownloadUrl());
+      PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getUpdateDownloadUrl());
     });
     
     updatePane.setVisible(false);
@@ -176,15 +168,15 @@ public class MainController {
    */
   public void dispatchPostInitialize() {
 
-    if (prefs.getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
+    if (this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
       welcomeDialogController.show();
     }
-    prefs.putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
+    this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
     optionsController.refreshView();
     
-    analyticsService.pageView("/app/core/startup");
+    this.getAnalyticsService().pageView("/app/core/startup");
 
-    if (prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
+    if (this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
       log.info("Starting auto plugin sync");
       pluginService.syncPlugins();
     }
@@ -207,7 +199,7 @@ public class MainController {
     accountComboBox.getItems().setAll(accounts);
     accountComboBox.getItems().add(new AccountMenuItem(" + New Account"));
 
-    long selectedAccountId = prefs.getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
+    long selectedAccountId = this.getPreferences().getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
     if (selectedAccountId != -1) {
       Optional<UserAccount> selectedAccount = authentificationService.getUserAccountById(selectedAccountId);
       if (selectedAccount.isPresent()) {

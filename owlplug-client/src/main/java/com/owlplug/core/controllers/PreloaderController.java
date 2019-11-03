@@ -28,11 +28,11 @@ import org.springframework.stereotype.Controller;
 public class PreloaderController {
   
   @FXML
-  Hyperlink owlplugHyperlink;
+  private Hyperlink owlplugHyperlink;
   @FXML
-  Hyperlink statusHyperlink;
+  private Hyperlink statusHyperlink;
   @FXML
-  Hyperlink roadmapHyperlink;
+  private Hyperlink roadmapHyperlink;
   
   /**
    * FXML initialize.

@@ -26,11 +26,9 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.OptionsService;
 import java.io.File;
-import java.util.prefs.Preferences;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
@@ -39,18 +37,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class OptionsController {
+public class OptionsController extends BaseController {
 
-  @Autowired
-  private Preferences prefs;
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
   @Autowired
   private OptionsService optionsService;
   @Autowired 
   private NativeHostService nativeHostService;
-  @Autowired
-  private DialogController dialogController;
 
   @FXML
   private JFXToggleButton vst2ToggleButton;
@@ -94,13 +86,13 @@ public class OptionsController {
     vst2DirectoryButton.setDisable(false);
 
     vst2ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
+      this.getPreferences().putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
       vst2DirectoryTextField.setDisable(!newValue);
       vst2DirectoryButton.setDisable(!newValue);
     });
 
     vst3ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, newValue);
+      this.getPreferences().putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, newValue);
       vst3DirectoryTextField.setDisable(!newValue);
       vst3DirectoryButton.setDisable(!newValue);
     });
@@ -117,7 +109,7 @@ public class OptionsController {
     });
 
     vst2DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
+      this.getPreferences().put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
     });
     
     vst3DirectoryButton.setOnAction(e -> {
@@ -132,31 +124,31 @@ public class OptionsController {
     });
 
     vst3DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.put(ApplicationDefaults.VST3_DIRECTORY_KEY, newValue);
+      this.getPreferences().put(ApplicationDefaults.VST3_DIRECTORY_KEY, newValue);
     });
     
     pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
+      this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
     });
 
     syncPluginsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, newValue);
+      this.getPreferences().putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, newValue);
     });
 
     storeSubDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, newValue);
+      this.getPreferences().putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, newValue);
       warningSubDirectory.setVisible(!newValue);
     });
 
     warningSubDirectory.managedProperty().bind(warningSubDirectory.visibleProperty());
 
     storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
+      this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
       storeDirectoryTextField.setDisable(!newValue);
     });
 
     storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
+      this.getPreferences().put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
     });
 
     clearCacheButton.setOnAction(e -> {
@@ -165,7 +157,7 @@ public class OptionsController {
 
     removeDataButton.setOnAction(e -> {
 
-      JFXDialog dialog = dialogController.newDialog();
+      JFXDialog dialog = this.getDialogController().newDialog();
 
       JFXDialogLayout layout = new JFXDialogLayout();
 
@@ -191,24 +183,24 @@ public class OptionsController {
       dialog.show();
     });
 
-    versionLabel.setText("V " + applicationDefaults.getVersion());
+    versionLabel.setText("V " + this.getApplicationDefaults().getVersion());
 
     refreshView();
   }
 
   public void refreshView() {
 
-    vst2DirectoryTextField.setText(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-    vst3DirectoryTextField.setText(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
-    vst2ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
-    vst3ToggleButton.setSelected(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+    vst2DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    vst3DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+    vst2ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+    vst3ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
     pluginNativeCheckbox.setDisable(!nativeHostService.isNativeHostAvailable());
-    pluginNativeCheckbox.setSelected(prefs.getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
-    syncPluginsCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
-    storeSubDirectoryCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
-    warningSubDirectory.setVisible(!prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
-    storeDirectoryCheckBox.setSelected(prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
-    storeDirectoryTextField.setText(prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
+    pluginNativeCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
+    syncPluginsCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
+    storeSubDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
+    warningSubDirectory.setVisible(!this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
+    storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
+    storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
 
     if (!storeDirectoryCheckBox.isSelected()) {
       storeDirectoryTextField.setDisable(true);

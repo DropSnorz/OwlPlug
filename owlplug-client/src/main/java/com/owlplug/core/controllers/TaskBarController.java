@@ -25,7 +25,6 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXPopup.PopupHPosition;
 import com.jfoenix.controls.JFXPopup.PopupVPosition;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.tasks.AbstractTask;
 import java.util.ArrayList;
@@ -43,12 +42,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class TaskBarController {
+public class TaskBarController extends BaseController {
 
   @Autowired
   private TaskRunner taskRunner;
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
 
   @FXML
   public Label taskLabel;
@@ -83,14 +80,14 @@ public class TaskBarController {
             public void updateItem(AbstractTask item, boolean empty) {
               super.updateItem(item, empty);
               if (item != null && !empty) {
-                Image icon = applicationDefaults.taskPendingImage;
+                Image icon = getApplicationDefaults().taskPendingImage;
                 if (item.isRunning()) {
-                  icon = applicationDefaults.taskRunningImage;
+                  icon = getApplicationDefaults().taskRunningImage;
                 } else if (item.isDone()) {
-                  icon = applicationDefaults.taskSuccessImage;
+                  icon = getApplicationDefaults().taskSuccessImage;
                 }
                 if (item.getState().equals(State.FAILED)) {
-                  icon = applicationDefaults.taskFailImage;
+                  icon = getApplicationDefaults().taskFailImage;
                 }
                 ImageView imageView = new ImageView(icon);
                 setGraphic(imageView);

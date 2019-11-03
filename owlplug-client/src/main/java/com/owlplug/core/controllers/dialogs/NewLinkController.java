@@ -25,13 +25,11 @@ import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
-import com.owlplug.core.services.AnalyticsService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.prefs.Preferences;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -51,10 +49,6 @@ public class NewLinkController extends AbstractDialogController {
   private LazyViewRegistry lazyViewRegistry;
   @Autowired
   private CoreTaskFactory coreTaskFactory;
-  @Autowired
-  private Preferences preferences;
-  @Autowired
-  private AnalyticsService analyticsService;
 
   @FXML
   private JFXTextField linkSourceParentTextField; 
@@ -95,7 +89,7 @@ public class NewLinkController extends AbstractDialogController {
       String targetPath = linkTargetTextField.getText();
       if (checkSymlinkCreation(sourcePath, targetPath)) {
         if (createSymlink(sourcePath, targetPath)) {
-          analyticsService.pageView("/app/plugins/symlink/action/create");
+          this.getAnalyticsService().pageView("/app/plugins/symlink/action/create");
           coreTaskFactory.createPluginSyncTask(new File(sourcePath).getParent()).schedule();
           setErrorMessage(null);
           this.close();
@@ -135,11 +129,11 @@ public class NewLinkController extends AbstractDialogController {
   @Override
   public void show() {
     autoCompletePath.getSuggestions().clear();
-    if (preferences.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
-      autoCompletePath.getSuggestions().add(preferences.get(ApplicationDefaults.VST_DIRECTORY_KEY,""));
+    if (this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
+      autoCompletePath.getSuggestions().add(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY,""));
     }
-    if (preferences.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
-      autoCompletePath.getSuggestions().add(preferences.get(ApplicationDefaults.VST3_DIRECTORY_KEY,""));
+    if (this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
+      autoCompletePath.getSuggestions().add(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY,""));
     }
     super.show();
   }

@@ -130,7 +130,7 @@ public class ProductInfoController {
     browsePageButton.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(product.getPageUrl());
     });
-    if(product.getDonateUrl() != null) {
+    if (product.getDonateUrl() != null) {
       donateButton.setVisible(true);
       donateButton.setOnAction(e -> {
         PlatformUtils.openDefaultBrowser(product.getDonateUrl());
@@ -146,7 +146,7 @@ public class ProductInfoController {
     });
 
     this.creatorLabel.setText(product.getCreator());
-    if(product.getVersion() != null) {
+    if (product.getVersion() != null) {
       versionLabel.setVisible(true);
       versionLabel.setText(product.getVersion());
     } else {

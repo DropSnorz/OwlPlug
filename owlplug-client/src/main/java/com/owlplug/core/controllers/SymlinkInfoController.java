@@ -23,9 +23,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
-import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.Symlink;
 import com.owlplug.core.tasks.SymlinkRemoveTask;
@@ -39,12 +37,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class SymlinkInfoController {
+public class SymlinkInfoController extends BaseController {
 
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
-  @Autowired
-  private DialogController dialogController;
   @Autowired
   private CoreTaskFactory taskFactory;
 
@@ -68,20 +62,20 @@ public class SymlinkInfoController {
    */
   public void initialize() {
 
-    openLinkButton.setGraphic(new ImageView(applicationDefaults.symlinkImage));
+    openLinkButton.setGraphic(new ImageView(this.getApplicationDefaults().symlinkImage));
     openLinkButton.setOnAction(e -> {
       PlatformUtils.openDirectoryExplorer(symlink.getPath());
     });
     
-    openTargetButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
+    openTargetButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openTargetButton.setOnAction(e -> {
       PlatformUtils.openDirectoryExplorer(symlink.getTargetPath());
     });
 
-    pluginDirectoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
+    pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
 
     deleteLinkButton.setOnAction(e -> {
-      JFXDialog dialog = dialogController.newDialog();
+      JFXDialog dialog = this.getDialogController().newDialog();
       JFXDialogLayout layout = new JFXDialogLayout();
 
       layout.setHeading(new Label("Remove directory"));

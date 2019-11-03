@@ -22,10 +22,9 @@ package com.owlplug.core.controllers.dialogs;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.components.CoreTaskFactory;
+import com.owlplug.core.components.LazyViewRegistry;
 import java.io.File;
-import java.util.prefs.Preferences;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -41,11 +40,7 @@ public class WelcomeDialogController extends AbstractDialogController {
   @Autowired
   private LazyViewRegistry lazyViewRegistry;
   @Autowired
-  private Preferences prefs;
-  @Autowired
   private CoreTaskFactory taskFactory;
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
 
   @FXML
   private JFXButton openDirectoryButton;
@@ -85,7 +80,7 @@ public class WelcomeDialogController extends AbstractDialogController {
     okButton.setOnAction(e -> {
       if (isDirectoryPathValid()) {
         this.close();
-        prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, directoryTextField.getText());
+        this.getPreferences().put(ApplicationDefaults.VST_DIRECTORY_KEY, directoryTextField.getText());
         taskFactory.createPluginSyncTask().schedule();
       } else {
         errorLabel.setVisible(true);
@@ -112,7 +107,7 @@ public class WelcomeDialogController extends AbstractDialogController {
   protected Node getHeading() {
     Label title = new Label("Owlplug is ready to go !");
     title.getStyleClass().add("heading-3");
-    ImageView iv = new ImageView(applicationDefaults.rocketImage);
+    ImageView iv = new ImageView(this.getApplicationDefaults().rocketImage);
     iv.setFitHeight(20);
     iv.setFitWidth(20);
     title.setGraphic(iv);

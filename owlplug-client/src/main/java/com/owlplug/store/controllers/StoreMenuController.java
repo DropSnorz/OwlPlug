@@ -20,6 +20,7 @@
 package com.owlplug.store.controllers;
 
 import com.jfoenix.controls.JFXToggleButton;
+import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.store.model.Store;
 import com.owlplug.store.services.StoreService;
@@ -37,7 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class StoreMenuController {
+public class StoreMenuController extends BaseController {
 
   @Autowired
   private MainController mainController;

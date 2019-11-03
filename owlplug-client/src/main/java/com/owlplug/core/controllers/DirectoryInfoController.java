@@ -23,9 +23,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
-import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.tasks.DirectoryRemoveTask;
@@ -34,17 +32,12 @@ import com.owlplug.core.utils.PlatformUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class DirectoryInfoController {
+public class DirectoryInfoController extends BaseController {
 
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
-  @Autowired
-  private DialogController dialogController;
   @Autowired
   private CoreTaskFactory taskFactory;
 
@@ -64,15 +57,15 @@ public class DirectoryInfoController {
    */
   public void initialize() {
 
-    openDirectoryButton.setGraphic(new ImageView(applicationDefaults.directoryImage));
+    openDirectoryButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openDirectoryButton.setOnAction(e -> {
       PlatformUtils.openDirectoryExplorer(pluginDirectory.getPath());
     });
 
-    pluginDirectoryListView.setCellFactory(new PluginListCellFactory(applicationDefaults));
+    pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
 
     deleteDirectoryButton.setOnAction(e -> {
-      JFXDialog dialog = dialogController.newDialog();
+      JFXDialog dialog = this.getDialogController().newDialog();
       JFXDialogLayout layout = new JFXDialogLayout();
 
       layout.setHeading(new Label("Remove directory"));

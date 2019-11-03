@@ -55,7 +55,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class PluginsController {
+public class PluginsController extends BaseController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -71,10 +71,6 @@ public class PluginsController {
   private NewLinkController newLinkController;
   @Autowired
   protected CoreTaskFactory taskFactory;
-  @Autowired
-  protected Preferences prefs;
-  @Autowired
-  protected ApplicationDefaults applicationDefaults;
 
   @FXML
   private JFXButton syncButton;
@@ -167,7 +163,7 @@ public class PluginsController {
     for (Plugin plugin : pluginList) {
 
       TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
-      item.setGraphic(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
+      item.setGraphic(new ImageView(this.getApplicationDefaults().getPluginFormatIcon(plugin)));
       treePluginNode.getInternalChildren().add(item);
     }
 
@@ -178,6 +174,7 @@ public class PluginsController {
     generatePluginTree();
 
     Set<String> userPluginDirectories = new HashSet<>();
+    Preferences prefs = this.getPreferences();
     if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").equals("")) {
       String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
@@ -263,7 +260,7 @@ public class PluginsController {
 
     FilterableTreeItem<Object> item = new FilterableTreeItem<>(null);
 
-    item.setGraphic(new ImageView(applicationDefaults.directoryImage));
+    item.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     item.setExpanded(true);
 
     FileTree treeHead = pluginTree;
@@ -298,9 +295,9 @@ public class PluginsController {
     String mergedParentName = mergedParent;
 
     if (node.getValue() instanceof Symlink) {
-      node.setGraphic(new ImageView(applicationDefaults.symlinkImage));
+      node.setGraphic(new ImageView(this.getApplicationDefaults().symlinkImage));
     } else {
-      node.setGraphic(new ImageView(applicationDefaults.directoryImage));
+      node.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     }
     node.setExpanded(true);
 
@@ -315,7 +312,7 @@ public class PluginsController {
       if (child.values().isEmpty()) {
         Plugin plugin = (Plugin) child.getNodeValue();
         FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
-        plugItem.setGraphic(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
+        plugItem.setGraphic(new ImageView(this.getApplicationDefaults().getPluginFormatIcon(plugin)));
         node.getInternalChildren().add(plugItem);
         // If not we are exploring a directory
       } else {

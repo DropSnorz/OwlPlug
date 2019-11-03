@@ -28,9 +28,8 @@ import com.jfoenix.controls.JFXRippler;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
+import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.core.controllers.dialogs.DialogController;
-import com.owlplug.core.services.AnalyticsService;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.store.components.StoreTaskFactory;
 import com.owlplug.store.model.ProductBundle;
@@ -42,7 +41,6 @@ import com.owlplug.store.ui.StoreProductBlocViewBuilder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -65,16 +63,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class StoreController {
+public class StoreController extends BaseController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private static final int PARTITION_SIZE = 20;
 
-  @Autowired
-  private Preferences prefs;
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
   @Autowired
   private StoreService storeService;
   @Autowired
@@ -86,11 +80,7 @@ public class StoreController {
   @Autowired
   private MainController mainController;
   @Autowired
-  private DialogController dialogController;
-  @Autowired
   private StoreTaskFactory storeTaskFactory;
-  @Autowired
-  private AnalyticsService analyticsService;
 
   @FXML
   private JFXButton storesButton;
@@ -132,7 +122,7 @@ public class StoreController {
    */
   public void initialize() {
 
-    storeProductBlocViewBuilder = new StoreProductBlocViewBuilder(applicationDefaults, imageCache, this);
+    storeProductBlocViewBuilder = new StoreProductBlocViewBuilder(this.getApplicationDefaults(), imageCache, this);
 
     storesButton.setOnAction(e -> {
       mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.STORE_MENU_VIEW));
@@ -144,7 +134,7 @@ public class StoreController {
       storeTaskFactory.createStoreSyncTask().schedule();
     });
 
-    storeChipView = new StoreChipView(applicationDefaults);
+    storeChipView = new StoreChipView(this.getApplicationDefaults());
     HBox.setHgrow(storeChipView, Priority.ALWAYS);
     storeChipViewContainer.getChildren().add(storeChipView);
 
@@ -162,7 +152,7 @@ public class StoreController {
       });
       new Thread(task).start();
       
-      analyticsService.pageView("/app/store/action/search");
+      this.getAnalyticsService().pageView("/app/store/action/search");
 
     });
 
@@ -289,18 +279,18 @@ public class StoreController {
    */
   public boolean installBundle(ProductBundle bundle) {
     
-    analyticsService.pageView("app/store/action/install", 
+    this.getAnalyticsService().pageView("app/store/action/install", 
         bundle.getProduct().getStore().getName(), 
         bundle.getProduct().getName(), 
         bundle.getName());
 
     String baseDirectoryPath = storeService.getBundleInstallFolder(bundle);
-    String relativeDirectoryPath  = prefs.get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
+    String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
 
     File selectedDirectory = null;
 
     // A custom root directory to store plugin is defined
-    if (prefs.getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
+    if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
       // Store install target is already defined
       selectedDirectory = new File(baseDirectoryPath, relativeDirectoryPath);
       
@@ -328,14 +318,14 @@ public class StoreController {
     }
 
     // Plugin should be wrapped in a subdirectory
-    if (prefs.getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true)) {
+    if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true)) {
       // If the plugin is wrapped into a subdirectory, checks for already existing
       // directory
       File subSelectedDirectory = new File(selectedDirectory,
           FileUtils.sanitizeFileName(bundle.getProduct().getName()));
       // If directory exists, asks the user for overwrite permission
       if (subSelectedDirectory.exists()) {
-        JFXDialog dialog = dialogController.newDialog();
+        JFXDialog dialog = this.getDialogController().newDialog();
 
         JFXDialogLayout layout = new JFXDialogLayout();
 

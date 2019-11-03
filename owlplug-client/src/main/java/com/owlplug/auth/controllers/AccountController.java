@@ -93,7 +93,7 @@ public class AccountController extends AbstractDialogController {
         messageLabel.setText("Your account has been successfully added");
         messageLabel.setVisible(true);
         cancelFlag = false;
-        mainController.refreshAccounts();	
+        mainController.refreshAccounts();
       });
 
       task.setOnFailed(event -> {
@@ -114,7 +114,7 @@ public class AccountController extends AbstractDialogController {
       cancelButton.setVisible(true);
       closeButton.setVisible(false);
       new Thread(task).start();
-    });	
+    });
 
     cancelButton.setOnAction(event -> {
       cancelFlag = true;

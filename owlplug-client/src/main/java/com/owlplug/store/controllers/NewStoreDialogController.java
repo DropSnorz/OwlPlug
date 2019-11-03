@@ -22,13 +22,9 @@ package com.owlplug.store.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
-import com.owlplug.core.controllers.dialogs.DialogController;
-import com.owlplug.core.services.AnalyticsService;
-import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.model.Store;
 import com.owlplug.store.services.StoreService;
 import javafx.concurrent.Task;
@@ -43,17 +39,11 @@ import org.springframework.stereotype.Controller;
 public class NewStoreDialogController extends AbstractDialogController implements IEntityCreateOrUpdate<Store> {
 
   @Autowired
-  private ApplicationDefaults applicationDefaults;
-  @Autowired
   private LazyViewRegistry lazyViewRegistry;
   @Autowired
   private StoreService pluginStoreService;
   @Autowired
   private StoreMenuController storeMenuController;
-  @Autowired
-  private DialogController dialogController;
-  @Autowired
-  private AnalyticsService analyticsService;
 
   @FXML
   private JFXTextField storeUrlTextField;
@@ -123,9 +113,9 @@ public class NewStoreDialogController extends AbstractDialogController implement
           pluginStoreService.save(pluginStore);
           storeMenuController.refreshView();
           close();
-          dialogController.newSimpleInfoDialog("Success",
+          this.getDialogController().newSimpleInfoDialog("Success",
               "The plugin store " + pluginStore.getName() + " has been sucessfully added !").show();
-          analyticsService.pageView("/app/store/action/add");
+          this.getAnalyticsService().pageView("/app/store/action/add");
         } else {
           errorLabel.setVisible(true);
         }
@@ -146,7 +136,7 @@ public class NewStoreDialogController extends AbstractDialogController implement
     Label title = new Label("Add a new store");
     title.getStyleClass().add("heading-3");
 
-    ImageView iv = new ImageView(applicationDefaults.storeImage);
+    ImageView iv = new ImageView(this.getApplicationDefaults().storeImage);
     iv.setFitHeight(20);
     iv.setFitWidth(20);
     title.setGraphic(iv);
