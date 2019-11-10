@@ -20,28 +20,22 @@
 package com.owlplug.core.services;
 
 import com.google.common.collect.Iterables;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.services.StoreService;
-import java.util.prefs.Preferences;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PluginService {
+public class PluginService extends BaseService {
 
   @Autowired
   protected OwlPlugCentralService owlplugCentralService;
   @Autowired
   protected StoreService pluginStoreService;
-  @Autowired
-  protected ApplicationDefaults applicationDefaults;
-  @Autowired
-  protected Preferences prefs;
   @Autowired
   protected PluginDAO pluginDAO;
   @Autowired

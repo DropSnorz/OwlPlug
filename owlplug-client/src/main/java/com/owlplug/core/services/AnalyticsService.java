@@ -23,14 +23,10 @@ import com.brsanthu.googleanalytics.GoogleAnalytics;
 import com.brsanthu.googleanalytics.request.PageViewHit;
 import com.owlplug.core.components.ApplicationDefaults;
 import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AnalyticsService {
-  
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
+public class AnalyticsService extends BaseService {
   
   private GoogleAnalytics ga;
     
@@ -38,7 +34,7 @@ public class AnalyticsService {
   private void initialize() {
     
     ga = GoogleAnalytics.builder()
-        .withTrackingId(applicationDefaults.getAnalyticsTrackingId())
+        .withTrackingId(this.getApplicationDefaults().getAnalyticsTrackingId())
         .build();
     
     // Ignore session UUID for now.
@@ -51,7 +47,7 @@ public class AnalyticsService {
       .documentTitle(name)
       .documentPath(name)
       .applicationName(ApplicationDefaults.APPLICATION_NAME)
-      .applicationVersion(applicationDefaults.getVersion())
+      .applicationVersion(this.getApplicationDefaults().getVersion())
       .sendAsync();
     
   }
@@ -62,7 +58,7 @@ public class AnalyticsService {
         .documentTitle(name)
         .documentPath(name)
         .applicationName(ApplicationDefaults.APPLICATION_NAME)
-        .applicationVersion(applicationDefaults.getVersion());
+        .applicationVersion(this.getApplicationDefaults().getVersion());
     
     int customDimensionId = 1;
     for (String dimension : parameters) {

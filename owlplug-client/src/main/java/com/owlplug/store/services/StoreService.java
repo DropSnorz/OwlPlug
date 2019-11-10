@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.RuntimePlatform;
+import com.owlplug.core.services.BaseService;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
 import com.owlplug.store.model.ProductBundle;
@@ -35,7 +36,6 @@ import com.owlplug.store.model.search.StoreCriteriaAdapter;
 import com.owlplug.store.model.search.StoreFilterCriteria;
 import java.io.IOException;
 import java.util.List;
-import java.util.prefs.Preferences;
 import javax.annotation.PostConstruct;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -50,13 +50,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StoreService {
+public class StoreService extends BaseService {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
-  @Autowired
-  private Preferences prefs;
   @Autowired
   private StoreDAO storeDAO;
   @Autowired
@@ -89,7 +85,7 @@ public class StoreService {
    * @return list of store products
    */
   public Iterable<StoreProduct> getStoreProducts(List<StoreFilterCriteria> criteriaList) {
-    RuntimePlatform env = applicationDefaults.getRuntimePlatform();
+    RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
 
     Specification<StoreProduct> spec = StoreProductDAO.storeEnabled()
         .and(StoreProductDAO.hasPlatformTag(env.getCompatiblePlatformsTags()));
@@ -109,7 +105,7 @@ public class StoreService {
    */
   public ProductBundle findBestBundle(StoreProduct product) {
 
-    RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
+    RuntimePlatform runtimePlatform = this.getApplicationDefaults().getRuntimePlatform();
 
     // Look for bundles matching runtimePlatform
     for (ProductBundle bundle : product.getBundles()) {
@@ -185,21 +181,21 @@ public class StoreService {
   }
   
   /**
-   * Returns the bundle installation folder based on the plugin type
+   * Returns the bundle installation folder based on the plugin type.
    * @param bundle - bundle to install
    * @return path to install directory
    */
   public String getBundleInstallFolder(ProductBundle bundle) {
        
     if (bundle.getFormat().equals(PluginFormat.VST2)) {
-      return prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+      return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
     }
     
     if (bundle.getFormat().equals(PluginFormat.VST3)) {
-      return prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
+      return this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
     }
     
-    return prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+    return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
         
   }
 }

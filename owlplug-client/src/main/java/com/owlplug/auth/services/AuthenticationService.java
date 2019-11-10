@@ -40,11 +40,11 @@ import com.owlplug.auth.model.UserAccountProvider;
 import com.owlplug.auth.utils.AuthentificationException;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.services.BaseService;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.prefs.Preferences;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +60,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class AuthenticationService {
+public class AuthenticationService extends BaseService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -72,8 +72,6 @@ public class AuthenticationService {
   private UserAccountDAO userAccountDAO;
   @Autowired
   private MainController mainController;
-  @Autowired
-  private Preferences prefs;
 
   private static final JsonFactory JSON_FACTORY = new JacksonFactory();
   private LocalServerReceiver receiver = null;
@@ -118,7 +116,7 @@ public class AuthenticationService {
       userAccount.setCredential(googleCredentialDAO.findByKey(userAccount.getKey()));
 
       userAccountDAO.save(userAccount);
-      prefs.putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
+      this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
     } catch (GeneralSecurityException | IOException e) {
       log.error("Error during authentification", e);
@@ -161,7 +159,7 @@ public class AuthenticationService {
   }
   
   /**
-   * Returns all registered UserAccounts
+   * Returns all registered UserAccounts.
    * @return list of user accounts
    */
   public Iterable<UserAccount> getAccounts() {

@@ -35,12 +35,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OptionsService {
+public class OptionsService extends BaseService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired
-  private Preferences prefs;
   @Autowired
   private PluginDAO pluginDAO;
   @Autowired
@@ -56,7 +54,8 @@ public class OptionsService {
 
   @PostConstruct
   private void initialize() {
-
+    
+    Preferences prefs = this.getPreferences();
     // Init default options
     if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) == null) {
       prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.DEFAULT_VST_DIRECTORY);
@@ -86,7 +85,7 @@ public class OptionsService {
   public boolean clearAllUserData() {
 
     try {
-      prefs.clear();
+      this.getPreferences().clear();
       pluginDAO.deleteAll();
 
       googleCredentialDAO.deleteAll();

@@ -16,31 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.services;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.host.NativeHost;
-import org.springframework.stereotype.Service;
+import java.util.prefs.Preferences;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Service
-public class NativeHostService extends BaseService {
+public class BaseService {
   
-  private NativeHost nativeHost = new NativeHost();
+  @Autowired
+  private ApplicationDefaults applicationDefaults;
+  @Autowired
+  private Preferences preferences;
   
-  public NativeHost getNativeHost() {
-    return nativeHost;
+  
+  public ApplicationDefaults getApplicationDefaults() {
+    return applicationDefaults;
   }
   
-  public boolean isNativeHostEnabled() {
-    return this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false)
-        && nativeHost.isAvailable();
+  public Preferences getPreferences() {
+    return preferences;
   }
-  
-  public boolean isNativeHostAvailable() {
-    return nativeHost.isAvailable();
-  }
-  
-  
 
 }
