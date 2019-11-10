@@ -35,7 +35,7 @@ public class LibraryLoader {
 
   private static String SEPARATOR = System.getProperty("file.separator");
   private static String TMP_PATH = System.getProperty("java.io.tmpdir");
-  private static String  LIB_EXTENSION = getPlatformLibraryExtension();
+  private static String LIB_EXTENSION = getPlatformLibraryExtension();
   
 
   public static boolean load(String libName, Class ref, boolean throwOnFailure) {
@@ -72,7 +72,7 @@ public class LibraryLoader {
       }
       return true;
     } catch (UnsatisfiedLinkError e) {
-      log.debug("Can't load library " + libName);
+      log.debug("Can't load library " + libName, e);
 
     }
 
@@ -105,10 +105,12 @@ public class LibraryLoader {
         is.close();
         if (load(file.getAbsolutePath())) {
           return true;
+        } else {
+          log.error("Library can't be loaded from " + file.getAbsolutePath());
         }
       }
     } catch (Throwable t) {
-      log.debug("Can't export Library " + libName + " from classpath to temp directory");
+      log.error("Can't export Library " + libName + " from classpath to temp directory", t);
     }
 
     return false;
