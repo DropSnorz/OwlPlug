@@ -33,6 +33,7 @@ import com.owlplug.auth.ui.AccountMenuItem;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
+import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.services.UpdateService;
@@ -49,6 +50,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +79,8 @@ public class MainController extends BaseController {
   private PluginService pluginService;
   @Autowired
   private ImageCache imageCache;
+  @Autowired
+  private TaskRunner taskRunner;
   @FXML
   private StackPane rootPane;
   @FXML
@@ -217,6 +221,11 @@ public class MainController extends BaseController {
 
     }
 
+  }
+  
+  @PreDestroy
+  private void destroy() {
+    this.taskRunner.close();
   }
 
   public StackPane getRootPane() {

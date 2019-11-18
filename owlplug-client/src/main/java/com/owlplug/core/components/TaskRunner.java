@@ -30,7 +30,6 @@ import javafx.concurrent.Worker.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
@@ -50,7 +49,7 @@ public class TaskRunner {
   @Autowired
   private TaskBarController taskBarController;
 
-  private AsyncListenableTaskExecutor exec;
+  private SimpleAsyncTaskExecutor exec;
   private LinkedBlockingDeque<AbstractTask> taskQueue;
   private AbstractTask currentTask = null;
 
@@ -148,6 +147,17 @@ public class TaskRunner {
     }
     taskHistory.add(task);
   }
+  
+  public void close() {
+    taskQueue.clear();
+    AbstractTask pendingTask = currentTask;
+    removeCurrentTask();
+    if (pendingTask != null) {
+      pendingTask.cancel();
+    }
+    
+  }
+  
 
   public List<AbstractTask> getPendingTasks() {
     return new ArrayList<AbstractTask>(taskQueue);

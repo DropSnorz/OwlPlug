@@ -54,12 +54,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 public class OwlPlug extends Application {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-  private ConfigurableApplicationContext context;
-  private Parent rootNode;
   
   @Autowired
   private Environment environment;
+
+  private ConfigurableApplicationContext context;
+  private Parent rootNode;
   
   
   /**
@@ -128,12 +128,12 @@ public class OwlPlug extends Application {
   @Bean
   @DependsOn("workspaceDirectoryInitializer")
   public DataSource datasource() throws PropertyVetoException {
-      final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-      dataSource.setDriverClassName(environment.getProperty("spring.datasource.driver-class-name"));
-      dataSource.setUrl(environment.getProperty("spring.datasource.url"));
-      dataSource.setUsername(environment.getProperty("spring.datasource.username"));
-      dataSource.setPassword(environment.getProperty("spring.datasource.password"));
-      return dataSource;
+    final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    dataSource.setDriverClassName(environment.getProperty("spring.datasource.driver-class-name"));
+    dataSource.setUrl(environment.getProperty("spring.datasource.url"));
+    dataSource.setUsername(environment.getProperty("spring.datasource.username"));
+    dataSource.setPassword(environment.getProperty("spring.datasource.password"));
+    return dataSource;
   }
 
   /**
