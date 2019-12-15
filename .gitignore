@@ -12,3 +12,7 @@ src/main/resources/credentials.properties
 
 # OwlPlug Host / Juce / C++ files
 /owlplug-host/src/main/juce/Builds
+
+# OSX Files
+.DS_Store
+
