@@ -14,6 +14,6 @@ echo ** Generating OwlPlug MSI Install package **
 
 javapackager -deploy -native installer -appclass org.springframework.boot.loader.JarLauncher \
 -srcdir ../owlplug-client/target/ -srcfiles owlplug.jar -outdir ./output -outfile owlplug-app \
--name OwlPlug -BappVersion=$owlplugversion -Bicon=resources/owlplug.ico
+-name OwlPlug -BappVersion=$owlplugversion -Bicon=resources/owlplug.icns
 
 echo ** OwlPlug Dmg Install package generated **
