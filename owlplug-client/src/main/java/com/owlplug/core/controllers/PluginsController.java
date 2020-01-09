@@ -206,12 +206,6 @@ public class PluginsController extends BaseController {
 
     for (Plugin plug : pluginList) {
       FileTree node = pluginTree;
-
-      /* TODO This must be refactored
-       * How about UNIX FS ? path starts with a /.
-       * We should wheck how the path looks like before the split to
-       * correctly build tree nodes and sub paths.
-       */
       String[] subDirs = plug.getPath().split("/");
       String currentPath = "";
       for (int i = 0; i < subDirs.length; i++) {
@@ -235,7 +229,7 @@ public class PluginsController extends BaseController {
             }
             
             // Retrieve Symlink if exist
-            // TODO: This must be refactored to prevent trailing slash removal
+            // TODO: This can be refactored to prevent trailing slash removal
             Symlink symlink = symlinkDAO.findByPath(currentPath.substring(0, currentPath.length() - 1));
             if (symlink != null) {
               symlink.setPluginList(localPluginList);
