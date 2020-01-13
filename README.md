@@ -28,7 +28,7 @@
 
 OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple thats looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, i've discovered dozens of cool plugins just by using my own tool. So i realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
 
-I've generated OwlPlug binaries, but I've only tested them in my environment, `Win 10 - Java 9, Java 10`. I'm looking for any kind of feedbacks, even under the same configuration ! And as it's a beta release, it's highly recommended to **backup your files before using OwlPlug**.
+I've generated OwlPlug binaries, but I've only tested them in my environment, `Win 10 - Java 9 | MacOS 10.12.6`. I'm looking for any kind of feedbacks, even under the same configuration. And as it's a beta release, it's highly recommended to **backup your files before using OwlPlug**.
 
 **About OwlPlug**
 * [OwlPlug Website](https://owlplug.com)
@@ -37,19 +37,13 @@ I've generated OwlPlug binaries, but I've only tested them in my environment, `W
 
 ## Installation
 
-### Windows
+### Windows & MacOS
 
-**Requirements**: Windows 7, 8, 10 (64bit)
+**Requirements**: Windows 7 (64 bit) or later, MacOS Sierra or later.
 
 1. Download binaries [here](http://github.com/dropsnorz/owlplug/releases)
-2. Run the MSI Installer.
+2. Run the `.msi` installer on Windows or the `.dmg` file on Mac.
 3. OwlPlug is ready ;)
-
-### Mac
-
-**Requirements**: Java 9+
-
-Things are a bit more complicated for OSX users. I haven't a Mac to generate a packaged app ready to be installed. A compatible Java environement must be set up before directly run the JAR file. Cross platform JAR binary is available [here](http://github.com/dropsnorz/owlplug/releases)
 
 
 ## How to help
@@ -128,7 +122,7 @@ mvn clean install
 # Move to owlplug client folder
 cd owlplug-client
 # (Optional) Create the runnable JAR file
-mvn spring-boot:repackage
+mvn clean install spring-boot:repackage
 # Run owlplug
 mvn spring-boot:run
 ```
@@ -137,3 +131,6 @@ The first command will generate an executable binary `/target/owlplug-*.jar`. In
 As JavaFx as been decoupled from JDK 11, an (outdated) compatible version is maitained on `java-11` branch.
 
 
+# Licence
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug?ref=badge_large)
