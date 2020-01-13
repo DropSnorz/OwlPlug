@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" jucerVersion="5.4.5"
-              version="0.1.1" companyName="OwlPlug" companyWebsite="https://owlplug.com"
+              version="0.1.2" companyName="OwlPlug" companyWebsite="https://owlplug.com"
               bundleIdentifier="com.owlplug.host">
   <MAINGROUP id="tTU8aN" name="owlplug-host">
     <GROUP id="{67E14D11-0E24-62FA-D544-692759DB4816}" name="Source">
