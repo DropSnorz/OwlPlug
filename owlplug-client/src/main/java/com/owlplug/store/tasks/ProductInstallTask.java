@@ -71,11 +71,10 @@ public class ProductInstallTask extends AbstractTask {
     try {
       boolean created = targetDirectory.mkdirs();
       if (!targetDirectory.exists() && !created) {
-          this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Can't create installation directory");
-          log.error("Can't create installation directory. ");
-          throw new TaskException("Can't create installation directory");
-      }
-      else if (!targetDirectory.isDirectory()) {
+        this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Can't create installation directory");
+        log.error("Can't create installation directory. ");
+        throw new TaskException("Can't create installation directory");
+      } else if (!targetDirectory.isDirectory()) {
         this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Invalid installation directory");
         log.error("Invalid plugin installation target directory");
         throw new TaskException("Invalid plugin installation target directory");
@@ -104,8 +103,10 @@ public class ProductInstallTask extends AbstractTask {
       this.updateMessage("Plugin " + bundle.getProduct().getName() + " successfully Installed");
 
     } catch (IOException e) {
+      this.updateMessage("An error occured during plugin install: " + e.getMessage());
+      log.error("An error occured during plugin install: " + e.getMessage());
       this.updateProgress(1, 1);
-      throw new TaskException(e);
+      throw new TaskException("An error occured during plugin install", e);
     }
 
     return success();
