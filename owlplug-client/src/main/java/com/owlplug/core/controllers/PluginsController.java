@@ -145,6 +145,7 @@ public class PluginsController extends BaseController {
     }, searchTextField.textProperty()));
 
     syncButton.setOnAction(e -> {
+      this.getAnalyticsService().pageView("/app/core/actions/syncPlugins");
       pluginService.syncPlugins();
     });
 

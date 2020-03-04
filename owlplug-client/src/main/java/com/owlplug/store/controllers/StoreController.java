@@ -131,6 +131,7 @@ public class StoreController extends BaseController {
     });
 
     syncStoreButton.setOnAction(e -> {
+      this.getAnalyticsService().pageView("/app/store/actions/syncStores");
       storeTaskFactory.createStoreSyncTask().schedule();
     });
 
