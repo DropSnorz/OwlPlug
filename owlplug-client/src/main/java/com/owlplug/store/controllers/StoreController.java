@@ -21,32 +21,42 @@ package com.owlplug.store.controllers;
 
 import com.google.common.collect.Iterables;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXMasonryPane;
+import com.jfoenix.controls.JFXPopup;
+import com.jfoenix.controls.JFXPopup.PopupHPosition;
+import com.jfoenix.controls.JFXPopup.PopupVPosition;
 import com.jfoenix.controls.JFXRippler;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.store.components.StoreTaskFactory;
 import com.owlplug.store.model.ProductBundle;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.model.search.StoreFilterCriteria;
+import com.owlplug.store.model.search.StoreFilterCriteriaType;
 import com.owlplug.store.services.StoreService;
 import com.owlplug.store.ui.StoreChipView;
 import com.owlplug.store.ui.StoreProductBlocViewBuilder;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -85,6 +95,8 @@ public class StoreController extends BaseController {
   @FXML
   private JFXButton storesButton;
   @FXML
+  private JFXButton platformFilterButton;
+  @FXML
   private JFXButton syncStoreButton;
   @FXML
   private Label resultCounter;
@@ -100,6 +112,9 @@ public class StoreController extends BaseController {
   private Hyperlink lazyLoadLink;
   @FXML
   private Pane storeChipViewContainer;
+  
+  private HashMap<String, CheckBox> targetFilterCheckBoxes = new HashMap<>();
+  
 
   private StoreChipView storeChipView;
   private StoreProductBlocViewBuilder storeProductBlocViewBuilder = null;
@@ -129,6 +144,40 @@ public class StoreController extends BaseController {
       mainController.getLeftDrawer().open();
 
     });
+    
+    targetFilterCheckBoxes.put("win32", new JFXCheckBox("Windows 32 bit"));
+    targetFilterCheckBoxes.put("win64", new JFXCheckBox("Windows 64 bit"));
+    targetFilterCheckBoxes.put("osx", new JFXCheckBox("OSX (any)"));
+    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
+      entry.getValue().setDisable(true);
+      entry.getValue().setSelected(false);
+      entry.getValue().setOnAction(e -> {
+        performProductSearch();
+      });
+    }
+    
+    RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
+    for (String tag : env.getCompatiblePlatformsTags()) {
+      if (targetFilterCheckBoxes.containsKey(tag)) {
+        targetFilterCheckBoxes.get(tag).setDisable(false);
+        targetFilterCheckBoxes.get(tag).setSelected(false);
+      }
+    }
+    
+    VBox vbx = new VBox();
+    vbx.setSpacing(5);
+    vbx.setPadding(new Insets(5,10,5,10));
+    Label popupLabel = new Label("Target environment contains");
+    popupLabel.getStyleClass().add("label-disabled");
+    vbx.getChildren().add(popupLabel);
+    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
+      vbx.getChildren().add(entry.getValue());
+    }
+
+    platformFilterButton.setOnAction(e -> {
+      JFXPopup popup = new JFXPopup(vbx);
+      popup.show(platformFilterButton, PopupVPosition.TOP, PopupHPosition.RIGHT);
+    });
 
     syncStoreButton.setOnAction(e -> {
       this.getAnalyticsService().pageView("/app/store/actions/syncStores");
@@ -140,21 +189,7 @@ public class StoreController extends BaseController {
     storeChipViewContainer.getChildren().add(storeChipView);
 
     storeChipView.getChips().addListener((ListChangeListener) change -> {
-      final List<StoreFilterCriteria> criteriaList = storeChipView.getChips();
-
-      Task<Iterable<StoreProduct>> task = new Task<Iterable<StoreProduct>>() {
-        @Override
-        protected Iterable<StoreProduct> call() throws Exception {
-          return storeService.getStoreProducts(criteriaList);
-        }
-      };
-      task.setOnSucceeded(e -> {
-        refreshView(task.getValue());
-      });
-      new Thread(task).start();
-      
-      this.getAnalyticsService().pageView("/app/store/action/search");
-
+      performProductSearch();
     });
 
     scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
@@ -179,6 +214,31 @@ public class StoreController extends BaseController {
 
     masonryPane.setCellHeight(130);
     masonryPane.setCellWidth(130);
+
+  }
+  
+  private void performProductSearch() {
+    final List<StoreFilterCriteria> criteriaChipList = storeChipView.getChips();
+    List<StoreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
+    
+    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
+      if (entry.getValue().isSelected()) {
+        criteriaList.add(new StoreFilterCriteria(entry.getKey(), StoreFilterCriteriaType.PLATFORM));
+      }
+    }
+
+    Task<Iterable<StoreProduct>> task = new Task<Iterable<StoreProduct>>() {
+      @Override
+      protected Iterable<StoreProduct> call() throws Exception {
+        return storeService.getStoreProducts(criteriaList);
+      }
+    };
+    task.setOnSucceeded(e -> {
+      refreshView(task.getValue());
+    });
+    new Thread(task).start();
+    
+    this.getAnalyticsService().pageView("/app/store/action/search");
 
   }
 
