@@ -145,8 +145,8 @@ public class StoreController extends BaseController {
 
     });
     
-    targetFilterCheckBoxes.put("win32", new JFXCheckBox("Windows 32 bit"));
-    targetFilterCheckBoxes.put("win64", new JFXCheckBox("Windows 64 bit"));
+    targetFilterCheckBoxes.put("win32", new JFXCheckBox("Windows 32 bits"));
+    targetFilterCheckBoxes.put("win64", new JFXCheckBox("Windows 64 bits"));
     targetFilterCheckBoxes.put("osx", new JFXCheckBox("OSX (any)"));
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
       entry.getValue().setDisable(true);

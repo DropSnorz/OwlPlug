@@ -40,7 +40,17 @@
                   </ImageView>
                   <HBox fx:id="storeChipViewContainer" minHeight="32.0" HBox.hgrow="ALWAYS">
                   </HBox>
-                  <JFXButton fx:id="platformFilterButton" text="..." />
+                  <JFXButton fx:id="platformFilterButton" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/gear-white-32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
                   <HBox spacing="2.0">
                      <children>
                         <Label fx:id="resultCounter" text="0" />
