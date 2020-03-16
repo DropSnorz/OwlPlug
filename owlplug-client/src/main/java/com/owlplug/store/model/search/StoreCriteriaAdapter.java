@@ -48,6 +48,9 @@ public class StoreCriteriaAdapter {
     if (criteria.getFilterType().equals(StoreFilterCriteriaType.TYPE)) {
       return StoreProductDAO.isTyped((PluginType) criteria.getValue());
     }
+    if (criteria.getFilterType().equals(StoreFilterCriteriaType.PLATFORM)) {
+      return StoreProductDAO.hasPlatformTag(String.valueOf(criteria.getValue()));
+    }
     return Specification.where(null);
 
   }
