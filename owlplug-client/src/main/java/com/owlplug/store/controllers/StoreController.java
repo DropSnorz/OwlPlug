@@ -272,7 +272,6 @@ public class StoreController extends BaseController {
   private void displayNewProductPartition() {
 
     if (Iterables.size(loadedProductPartitions) > displayedPartitions) {
-
       for (StoreProduct product : Iterables.get(loadedProductPartitions, displayedPartitions)) {
         JFXRippler rippler = new JFXRippler(storeProductBlocViewBuilder.build(product));
         rippler.setOnMouseClicked(e -> {
@@ -291,13 +290,13 @@ public class StoreController extends BaseController {
 
       }
 
-      resultCounter.setText(this.masonryPane.getChildren().size() + " / " + Iterables.size(this.loadedStoreProducts));
-
       Platform.runLater(() -> {
         masonryPane.requestLayout();
         scrollPane.requestLayout();
       });
     }
+    
+    resultCounter.setText(this.masonryPane.getChildren().size() + " / " + Iterables.size(this.loadedStoreProducts));
 
   }
 
