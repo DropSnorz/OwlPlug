@@ -16,14 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.components;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.FileAppender;
 import com.vdurmont.semver4j.Semver;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
@@ -50,6 +58,11 @@ public class WorkspaceDirectoryInitializer {
   private ApplicationDefaults applicationDefaults;
 
   @PostConstruct
+  private void postConstruct() {
+    cleanup();
+    setupCustomLogLevel();
+  }
+
   public void cleanup() {
 
     File workingDirectory = new File(ApplicationDefaults.getUserDataDirectory());
@@ -68,8 +81,8 @@ public class WorkspaceDirectoryInitializer {
         Semver workspaceMinSemver = new Semver(applicationDefaults.getEnvProperty("owlplug.workspace.min-version"));
 
         if (workspaceSemver.isLowerThan(workspaceMinSemver)) {
-          log.info("Cleanning outdated workspace data from version "
-              + workspaceVersion + " to match constraint " + workspaceMinSemver);
+          log.info("Cleanning outdated workspace data from version " + workspaceVersion + " to match constraint "
+              + workspaceMinSemver);
           File dbFile = new File(workingDirectory, "owlplug.mv.db");
           dbFile.delete();
         }
@@ -91,4 +104,45 @@ public class WorkspaceDirectoryInitializer {
 
   }
 
+  /**
+   * Retrieve user defined log level in a logging.properties file on the workspace
+   * directory.
+   */
+  public void setupCustomLogLevel() {
+
+    File workingDirectory = new File(ApplicationDefaults.getUserDataDirectory());
+    File loggingFile = new File(workingDirectory, "logging.properties");
+
+    if (loggingFile.exists()) {
+      log.info("Found custom logging properties " + loggingFile.getPath());
+      List<String> allowedLogLevels = Arrays
+          .asList(new String[] { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL", "OFF", "ALL" });
+      Properties loggingProperties = new Properties();
+      try {
+        loggingProperties.load(new FileInputStream(loggingFile));
+        
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        List<ch.qos.logback.classic.Logger> loggerList = loggerContext.getLoggerList();
+        loggerList.stream().forEach(logger -> {
+
+          if (loggingProperties.containsKey(logger.getName())) {
+            String logLevelStr = loggingProperties.getProperty(logger.getName());
+            
+            if (allowedLogLevels.parallelStream().anyMatch(logLevelStr::contains)) {
+              Level level = Level.toLevel(logLevelStr.toUpperCase());
+              logger.setLevel(level);
+              log.info("Log level for " + logger.getName() + " set to " + logLevelStr);
+
+            } else {
+              log.error("Unknown log level " + logLevelStr + " for logger " + logger.getName());
+            }
+          }
+        });
+
+      } catch (IOException e) {
+        log.error("Error while parsing custom log file " + loggingFile.getPath(), e);
+      }
+
+    }
+  }
 }

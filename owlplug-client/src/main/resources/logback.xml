@@ -17,21 +17,15 @@
 		<encoder>
 			<pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>WARN</level>
-		</filter>
 	</appender>
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%-5relative %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>INFO</level>
-		</filter>
 	</appender>
 
-	<logger name="com.owlplug" additivity="false">
+	<logger name="com.owlplug" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 	</logger>
@@ -40,7 +34,7 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
-	<logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+	<logger name="org.hibernate.SQL" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 
