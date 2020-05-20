@@ -28,11 +28,13 @@
             <Image url="@../media/steinberg-vst-compatible.png" />
          </image>
       </ImageView>
-      <HBox alignment="CENTER" layoutX="133.0" layoutY="247.0">
+      <HBox alignment="CENTER" layoutX="94.0" layoutY="247.0">
          <children>
             <Hyperlink fx:id="owlplugHyperlink" styleClass="hyperlink-disabled" text="owlplug.com" />
             <Label styleClass="label-disabled" text=" - " />
             <Hyperlink fx:id="statusHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled" text="Status" />
+            <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - " />
+            <Hyperlink fx:id="documentationHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled" text="Docs" />
             <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - " />
             <Hyperlink fx:id="roadmapHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled" text="Roadmap" />
          </children>
