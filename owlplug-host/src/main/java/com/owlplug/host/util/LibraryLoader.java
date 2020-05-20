@@ -70,6 +70,7 @@ public class LibraryLoader {
       } else {
         System.loadLibrary(libName);
       }
+      log.info("Library " + libName + " successfully loaded");
       return true;
     } catch (UnsatisfiedLinkError e) {
       log.debug("Can't load library " + libName, e);
@@ -87,10 +88,11 @@ public class LibraryLoader {
    */
   public static boolean extract(Class ref, String libName) {
     try {
+      log.debug("Extracting library to " + TMP_PATH + SEPARATOR + libName + LIB_EXTENSION);
       File file = new File(TMP_PATH + SEPARATOR + libName + LIB_EXTENSION);
       InputStream is = ref.getClassLoader().getResourceAsStream(libName + LIB_EXTENSION);
       if (is == null) {
-        log.debug("Library " + libName + LIB_EXTENSION + " not in classpath");
+        log.error("Library " + libName + LIB_EXTENSION + " not in classpath");
         return false;
 
       }

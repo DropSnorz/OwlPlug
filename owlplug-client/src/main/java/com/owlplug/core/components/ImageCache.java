@@ -89,7 +89,7 @@ public class ImageCache {
     // Retrieve image from cache
     if (cachedElement != null) {
       try {
-        log.debug("Retrieving image {} from cache", url);
+        log.trace("Retrieving image {} from cache", url);
         byte[] content = cachedElement;
         ByteArrayInputStream s = new ByteArrayInputStream(content);
         BufferedImage bufImage = ImageIO.read(s);
@@ -169,7 +169,7 @@ public class ImageCache {
 
   private void persistImageIntoCache(Cache<String, byte[]> cache, String key, Image image, String type) {
     try {
-      log.debug("Persisting image {} into cache", key);
+      log.trace("Persisting image {} into cache", key);
       BufferedImage buffImage = SwingFXUtils.fromFXImage(image, null);
       ByteArrayOutputStream s = new ByteArrayOutputStream();
       ImageIO.write(buffImage, type, s);

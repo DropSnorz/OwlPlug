@@ -21,8 +21,12 @@ package com.owlplug.core.tasks;
 
 import java.util.ArrayList;
 import javafx.concurrent.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractTask extends Task<TaskResult> {
+  
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private String name = "OwlPlug task";
 
@@ -79,6 +83,12 @@ public abstract class AbstractTask extends Task<TaskResult> {
 
   protected ArrayList<String> getWarnings() {
     return warnings;
+  }
+  
+  @Override
+  protected void updateMessage(String message) {
+    log.trace("Task status update [" + message + "]");
+    super.updateMessage(message);
   }
 
   @Override

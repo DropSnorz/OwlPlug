@@ -106,6 +106,7 @@ public class PluginSyncTask extends AbstractTask {
   @Override
   protected TaskResult call() throws Exception {
 
+    log.info("Plugin Sync task started");
     this.updateMessage("Collecting plugins...");
     this.commitProgress(10);
 
@@ -140,6 +141,8 @@ public class PluginSyncTask extends AbstractTask {
           collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
         }
       }
+      
+      log.debug(collectedPluginFiles.size() + " plugins collected");
 
       ArrayList<Plugin> discoveredPlugins = new ArrayList<>();
       for (PluginFile pluginFile : collectedPluginFiles) {
@@ -149,6 +152,7 @@ public class PluginSyncTask extends AbstractTask {
         }
 
         if (useNativeHost && nativeHost.isAvailable()) {
+          log.debug("Load plugin using native discovery: " + plugin.getPath());
           this.updateMessage("Exploring plugin " + plugin.getName());
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
           if(nativePlugin != null) {
@@ -181,7 +185,8 @@ public class PluginSyncTask extends AbstractTask {
       
       this.updateProgress(1, 1);
       this.updateMessage("Plugins synchronized");
-
+      log.info("Plugin Sync task complete");
+      
       return success();
 
     } catch (Exception e) {
