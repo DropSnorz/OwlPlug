@@ -1,10 +1,13 @@
 /target/
-installer/output/
+/.idea/
 
 .project
 .classpath
 .settings
 *.log
+
+# Owlplug specific
+installer/output/
 src/main/resources/credentials.properties
 
 # OwlPlug Host binaries 
