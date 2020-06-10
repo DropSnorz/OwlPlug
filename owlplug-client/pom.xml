@@ -81,6 +81,8 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<!-- Override sb managed version. Major performance degradation since 1.4.198-->
+			<version>1.4.197</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -229,7 +231,7 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<configuration>
-						<mainClass>com.owlplug.OwlPlug</mainClass>
+						<mainClass>com.owlplug.Bootstrap</mainClass>
 						<layout>JAR</layout>
 					</configuration>
 					<executions>

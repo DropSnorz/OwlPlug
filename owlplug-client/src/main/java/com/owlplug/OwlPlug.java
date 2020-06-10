@@ -182,7 +182,7 @@ public class OwlPlug extends Application {
    *
    * @param args The command line arguments given on JAR execution. Usually empty.
    */
-  public static void main(String[] args) {
+  public static void boot(String[] args) {
     System.setProperty("javafx.preloader", "com.owlplug.OwlPlugPreloader");
     launch(OwlPlug.class, args);
 
