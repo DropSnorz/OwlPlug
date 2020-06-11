@@ -153,9 +153,9 @@ public class ProductInfoController {
       versionLabel.setVisible(false);
     }
 
-    if (product.getType() == PluginType.EFFECT) {
+    if (product.getType() == PluginType.INSTRUMENT) {
       this.typeLabel.setText("Instrument (VSTi)");
-    } else if (product.getType() == PluginType.INSTRUMENT) {
+    } else if (product.getType() == PluginType.EFFECT) {
       this.typeLabel.setText("Effect (VST)");
     }
 
