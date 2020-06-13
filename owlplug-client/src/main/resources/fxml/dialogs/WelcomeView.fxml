@@ -1,29 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.WelcomeDialogController">
+<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.WelcomeDialogController">
    <children>
       <VBox>
          <children>
             <Label text="Hi ! It's looks like this is the first time you are using OwlPlug. " wrapText="true" />
-            <Label text="Tell us where to find your plugins. You can always change this later." wrapText="true" />
+            <Label text="Select paths where your plugins are installed. You can change this configuration later." wrapText="true" />
          </children>
       </VBox>
-      <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+      <VBox>
          <children>
-            <JFXTextField fx:id="directoryTextField" HBox.hgrow="ALWAYS" promptText="/path/to/your/plugins" />
-            <JFXButton fx:id="openDirectoryButton" text="...." />
+            <JFXToggleButton fx:id="vst2ToggleButton" text="VST2" />
+            <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="vst2DirectoryTextField" promptText="/path/to/your/plugins" HBox.hgrow="ALWAYS" />
+                  <JFXButton fx:id="vst2DirectoryButton" text="...." />
+               </children>
+            </HBox>
          </children>
-      </HBox>
-      <Label fx:id="errorLabel" styleClass="label-danger" text="Selected directory is not valid" />
+      </VBox>
+      <VBox layoutX="10.0" layoutY="54.0">
+         <children>
+            <JFXToggleButton fx:id="vst3ToggleButton" text="VST3" />
+            <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="vst3DirectoryTextField" promptText="/path/to/your/plugins" HBox.hgrow="ALWAYS" />
+                  <JFXButton fx:id="vst3DirectoryButton" text="...." />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
       <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <JFXButton fx:id="okButton" text="Continue" />
-            <JFXButton fx:id="cancelButton" text="Later" />
+            <JFXButton fx:id="cancelButton" text="Ignore step" />
+            <JFXButton fx:id="okButton" text="Apply" />
          </children>
       </HBox>
    </children>

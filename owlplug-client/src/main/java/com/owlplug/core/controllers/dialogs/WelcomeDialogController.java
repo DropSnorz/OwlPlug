@@ -21,9 +21,11 @@ package com.owlplug.core.controllers.dialogs;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
+import com.owlplug.core.controllers.OptionsController;
 import java.io.File;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -41,17 +43,25 @@ public class WelcomeDialogController extends AbstractDialogController {
   private LazyViewRegistry lazyViewRegistry;
   @Autowired
   private CoreTaskFactory taskFactory;
+  @Autowired
+  private OptionsController optionsController;
 
   @FXML
-  private JFXButton openDirectoryButton;
+  private JFXToggleButton vst2ToggleButton;
   @FXML
-  private JFXTextField directoryTextField;
+  private JFXButton vst2DirectoryButton;
+  @FXML
+  private JFXTextField vst2DirectoryTextField;
+  @FXML
+  private JFXToggleButton vst3ToggleButton;
+  @FXML
+  private JFXButton vst3DirectoryButton;
+  @FXML
+  private JFXTextField vst3DirectoryTextField;
   @FXML
   private JFXButton okButton;
   @FXML
   private JFXButton cancelButton;
-  @FXML
-  private Label errorLabel;
 
   WelcomeDialogController() {
     super(650, 300);
@@ -63,39 +73,43 @@ public class WelcomeDialogController extends AbstractDialogController {
    */
   public void initialize() {
 
-    errorLabel.setVisible(false);
-
-    openDirectoryButton.setOnAction(e -> {
+    vst2DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = openDirectoryButton.getScene().getWindow();
+      Window mainWindow = vst2DirectoryButton.getScene().getWindow();
 
       File selectedDirectory = directoryChooser.showDialog(mainWindow);
 
       if (selectedDirectory != null) {
-        directoryTextField.setText(selectedDirectory.getAbsolutePath());
+        vst2DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
       }
-      errorLabel.setVisible(false);
+    });
+    
+    vst3DirectoryButton.setOnAction(e -> {
+      DirectoryChooser directoryChooser = new DirectoryChooser();
+      Window mainWindow = vst3DirectoryButton.getScene().getWindow();
+
+      File selectedDirectory = directoryChooser.showDialog(mainWindow);
+
+      if (selectedDirectory != null) {
+        vst3DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
+      }
     });
 
     okButton.setOnAction(e -> {
-      if (isDirectoryPathValid()) {
-        this.close();
-        this.getPreferences().put(ApplicationDefaults.VST_DIRECTORY_KEY, directoryTextField.getText());
-        taskFactory.createPluginSyncTask().schedule();
-      } else {
-        errorLabel.setVisible(true);
-      }
+      this.close();
+      this.getPreferences().putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, vst2ToggleButton.isSelected());
+      this.getPreferences().put(ApplicationDefaults.VST_DIRECTORY_KEY, vst2DirectoryTextField.getText());
+      this.getPreferences().putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, vst3ToggleButton.isSelected());
+      this.getPreferences().put(ApplicationDefaults.VST3_DIRECTORY_KEY, vst3DirectoryTextField.getText());
+      optionsController.refreshView();
+      taskFactory.createPluginSyncTask().schedule();
+
     });
 
     cancelButton.setOnAction(e -> {
       this.close();
     });
 
-  }
-
-  private boolean isDirectoryPathValid() {
-    File directoryFile = new File(directoryTextField.getText());
-    return directoryFile.exists() && directoryFile.isDirectory();
   }
 
   @Override
@@ -105,7 +119,7 @@ public class WelcomeDialogController extends AbstractDialogController {
 
   @Override
   protected Node getHeading() {
-    Label title = new Label("Owlplug is ready to go !");
+    Label title = new Label("Owlplug is almost ready !");
     title.getStyleClass().add("heading-3");
     ImageView iv = new ImageView(this.getApplicationDefaults().rocketImage);
     iv.setFitHeight(20);
