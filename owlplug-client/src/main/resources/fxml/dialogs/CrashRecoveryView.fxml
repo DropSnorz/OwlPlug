@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
+   <children>
+      <VBox>
+         <children>
+            <Label text="It's look like OwlPlug has not been terminated properly." wrapText="true" />
+            <Label text="If a crash happens during plugin Sync/Scan, it's probably due to a plugin that can't be loaded. Like some other DAWs, a corrupted plugin may crash the host. You can try to disable native discovery:" wrapText="true" />
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+            <JFXCheckBox fx:id="nativeDiscoveryCheckbox" text="Native Discovery" />
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" top="10.0" />
+         </VBox.margin>
+      </VBox>
+      <HBox>
+         <children>
+            <TextFlow>
+               <children>
+                  <Label text="You can also keep Native Discovery enabled and find the corrupted plugin using" wrapText="true" />
+                  <Hyperlink fx:id="troubleshootingLink" text="this guide" />
+                  <Label text=".If the plugin is stable on your DAW, you can" />
+                  <Hyperlink fx:id="issuesLink" text="report the issue." />
+               </children>
+            </TextFlow>
+         </children>
+      </HBox>
+      <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <JFXButton fx:id="closeButton" text="Close" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

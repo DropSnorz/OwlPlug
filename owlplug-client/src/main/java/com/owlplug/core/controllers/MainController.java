@@ -31,9 +31,11 @@ import com.owlplug.auth.ui.AccountCellFactory;
 import com.owlplug.auth.ui.AccountItem;
 import com.owlplug.auth.ui.AccountMenuItem;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationMonitor;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.components.TaskRunner;
+import com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.services.UpdateService;
@@ -66,6 +68,8 @@ public class MainController extends BaseController {
   @Autowired
   private AccountController accountController;
   @Autowired
+  private CrashRecoveryDialogController crashRecoveryDialogController;
+  @Autowired
   private WelcomeDialogController welcomeDialogController;
   @Autowired
   private OptionsController optionsController;
@@ -81,6 +85,8 @@ public class MainController extends BaseController {
   private ImageCache imageCache;
   @Autowired
   private TaskRunner taskRunner;
+  @Autowired
+  private ApplicationMonitor applicationMonitor;
   @FXML
   private StackPane rootPane;
   @FXML
@@ -172,7 +178,9 @@ public class MainController extends BaseController {
    */
   public void dispatchPostInitialize() {
 
-    if (this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
+    if (!this.applicationMonitor.isPreviousExecutionSafelyTerminated()) {
+      crashRecoveryDialogController.show();
+    } else if (this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
       welcomeDialogController.show();
     }
     this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);

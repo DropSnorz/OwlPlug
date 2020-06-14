@@ -40,6 +40,7 @@ public class LazyViewRegistry {
   public static final String WELCOME_VIEW = "WELCOME_VIEW";
   public static final String STORE_MENU_VIEW = "STORE_MENU_VIEW";
   public static final String NEW_STORE_VIEW = "NEW_STORE_VIEW";
+  public static final String CRASH_RECOVERY_VIEW = "CRASH_RECOVERY_VIEW";
 
   @Autowired
   private ApplicationContext context;
@@ -60,6 +61,7 @@ public class LazyViewRegistry {
     preloadFxml(WELCOME_VIEW, "/fxml/dialogs/WelcomeView.fxml");
     preloadFxml(STORE_MENU_VIEW, "/fxml/menu/StoreMenu.fxml");
     preloadFxml(NEW_STORE_VIEW, "/fxml/dialogs/NewStoreView.fxml");
+    preloadFxml(CRASH_RECOVERY_VIEW, "/fxml/dialogs/CrashRecoveryView.fxml");
 
   }
 
