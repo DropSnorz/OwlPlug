@@ -26,9 +26,10 @@ import com.owlplug.core.model.PluginType;
 import com.owlplug.store.model.search.StoreFilterCriteria;
 import com.owlplug.store.model.search.StoreFilterCriteriaType;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
@@ -37,21 +38,29 @@ import javafx.util.StringConverter;
 public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
 
   private ApplicationDefaults applicationDefaults;
+  private List<String> pluginCreators;
 
   /**
    * Creates a StoreChipView.
    * 
    * @param applicationDefaults - OwlPlug application defaults
    */
-  public StoreChipView(ApplicationDefaults applicationDefaults) {
+  public StoreChipView(ApplicationDefaults applicationDefaults, List<String> pluginCreators) {
     super();
     this.applicationDefaults = applicationDefaults;
+    this.pluginCreators = pluginCreators;
     init();
   }
 
   private void init() {
 
-    HashMap<String, StoreFilterCriteria> suggestions = new HashMap<>();
+    HashMap<String, StoreFilterCriteria> suggestions = new LinkedHashMap<>();
+    
+    suggestions.put("Effect", new StoreFilterCriteria(PluginType.EFFECT, StoreFilterCriteriaType.TYPE,
+        applicationDefaults.effectImage, "Effect"));
+    suggestions.put("Instrument", new StoreFilterCriteria(PluginType.INSTRUMENT, StoreFilterCriteriaType.TYPE,
+        applicationDefaults.instrumentImage, "Instrument"));
+    
     suggestions.put("Amp", new StoreFilterCriteria("Amp", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
     suggestions.put("Analog",
         new StoreFilterCriteria("Analog", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
@@ -103,10 +112,10 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
     suggestions.put("Vintage",
         new StoreFilterCriteria("Vintage", StoreFilterCriteriaType.TAG, applicationDefaults.tagImage));
 
-    suggestions.put("Effect", new StoreFilterCriteria(PluginType.EFFECT, StoreFilterCriteriaType.TYPE,
-        applicationDefaults.effectImage, "Effect"));
-    suggestions.put("Instrument", new StoreFilterCriteria(PluginType.INSTRUMENT, StoreFilterCriteriaType.TYPE,
-        applicationDefaults.instrumentImage, "Instrument"));
+    for (String creator : pluginCreators) {
+      suggestions.put(creator, new StoreFilterCriteria(creator, StoreFilterCriteriaType.CREATOR,
+          applicationDefaults.userImage));
+    }
 
     this.getSuggestions().addAll(suggestions.values());
     this.setConverter(new StringConverter<StoreFilterCriteria>() {
@@ -158,9 +167,10 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
         }
       }
     });
-
+    
     displayPromptText();
   }
+  
 
   private void displayPromptText() {
     Node textAreaNode = this.lookup(".text-area");

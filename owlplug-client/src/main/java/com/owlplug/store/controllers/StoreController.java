@@ -184,7 +184,7 @@ public class StoreController extends BaseController {
       storeTaskFactory.createStoreSyncTask().schedule();
     });
 
-    storeChipView = new StoreChipView(this.getApplicationDefaults());
+    storeChipView = new StoreChipView(this.getApplicationDefaults(), this.storeService.getDistinctCreators());
     HBox.setHgrow(storeChipView, Priority.ALWAYS);
     storeChipViewContainer.getChildren().add(storeChipView);
 

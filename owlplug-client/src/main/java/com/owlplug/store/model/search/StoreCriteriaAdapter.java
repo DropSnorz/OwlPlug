@@ -42,6 +42,9 @@ public class StoreCriteriaAdapter {
     if (criteria.getFilterType().equals(StoreFilterCriteriaType.NAME)) {
       return StoreProductDAO.nameContains(String.valueOf(criteria.getValue()));
     }
+    if (criteria.getFilterType().equals(StoreFilterCriteriaType.CREATOR)) {
+      return StoreProductDAO.hasCreator(String.valueOf(criteria.getValue()));
+    }
     if (criteria.getFilterType().equals(StoreFilterCriteriaType.TAG)) {
       return StoreProductDAO.hasTag(String.valueOf(criteria.getValue()));
     }

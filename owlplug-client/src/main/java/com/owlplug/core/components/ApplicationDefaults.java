@@ -61,6 +61,8 @@ public class ApplicationDefaults {
   public final Image effectImage = new Image(getClass().getResourceAsStream("/icons/effect-white-16.png"));
   public final Image tagImage = new Image(getClass().getResourceAsStream("/icons/tag-white-16.png"));
   public final Image symlinkImage = new Image(getClass().getResourceAsStream("/icons/folderlink-grey-16.png"));
+  public final Image userImage = new Image(getClass().getResourceAsStream("/icons/user-white-32.png"));
+
 
 
   public final Image pluginPlaceholderImage = new Image(
