@@ -135,10 +135,13 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
     this.setChipFactory((chipView, criteria) -> new JFXDefaultChip<StoreFilterCriteria>(chipView, criteria) {
       {
         if (getItem().getFilterType() == StoreFilterCriteriaType.TYPE) {
-          root.getStyleClass().add("chip-blue");
+          root.getStyleClass().add("chip-brown");
         }
         if (getItem().getFilterType() == StoreFilterCriteriaType.TAG) {
           root.getStyleClass().add("chip-red");
+        }
+        if (getItem().getFilterType() == StoreFilterCriteriaType.CREATOR) {
+          root.getStyleClass().add("chip-blue");
         }
       }
     });

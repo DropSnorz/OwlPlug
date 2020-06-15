@@ -98,7 +98,7 @@ JFXTextField{
 .jfx-chip-view .jfx-chip Label {
     -fx-text-fill: black;
 }
-.chip-blue {
+.chip-brown {
 	-fx-background-color: #b2675e;
 }
 .chip-red {
@@ -106,6 +106,9 @@ JFXTextField{
 }
 .chip-green {
 	-fx-background-color: #C5E1A5;
+}
+.chip-blue {
+	-fx-background-color: #657899
 }
 .fake-chip{
     -fx-font-family: "Roboto Medium";
