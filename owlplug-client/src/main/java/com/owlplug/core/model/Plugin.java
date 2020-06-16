@@ -25,6 +25,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Inheritance;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -51,12 +52,14 @@ public class Plugin {
   
   protected PluginFormat format;
   protected PluginType type;
+  @OneToOne
+  protected PluginFootprint footprint;
 
   public Plugin() {
 
   }
 
- public Plugin(String name, String path, PluginFormat format) {
+  public Plugin(String name, String path, PluginFormat format) {
     this.name = name;
     this.path = path;
     this.format = format;
@@ -164,6 +167,14 @@ public class Plugin {
 
   public void setNativeCompatible(boolean nativeCompatible) {
     this.nativeCompatible = nativeCompatible;
+  }
+
+  public PluginFootprint getFootprint() {
+    return footprint;
+  }
+
+  public void setFootprint(PluginFootprint footprint) {
+    this.footprint = footprint;
   }
 
   @Override

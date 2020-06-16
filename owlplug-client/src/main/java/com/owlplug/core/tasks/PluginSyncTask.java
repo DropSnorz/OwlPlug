@@ -20,8 +20,10 @@
 package com.owlplug.core.tasks;
 
 import com.owlplug.core.dao.PluginDAO;
+import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginFootprint;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.NativeHostService;
@@ -47,6 +49,7 @@ public class PluginSyncTask extends AbstractTask {
 
   private PluginDAO pluginDAO;
   private SymlinkDAO symlinkDAO;
+  private PluginFootprintDAO pluginFootprintDAO;
   private PluginSyncTaskParameters parameters;
   private String directoryScope = null;
 
@@ -58,13 +61,18 @@ public class PluginSyncTask extends AbstractTask {
    * Creates a new PluginSyncTask.
    * @param parameters Task Parameters
    * @param pluginDAO pluginDAO
+   * @param pluginFootprintDAO pluginFootprintDAO
    * @param symlinkDAO symlinkDAO
    * @param nativeHostService nativeHostService
    */
   public PluginSyncTask(PluginSyncTaskParameters parameters, 
-      PluginDAO pluginDAO, SymlinkDAO symlinkDAO, NativeHostService nativeHostService) {
+      PluginDAO pluginDAO,
+      PluginFootprintDAO pluginFootprintDAO,
+      SymlinkDAO symlinkDAO,
+      NativeHostService nativeHostService) {
     this.parameters = parameters;
     this.pluginDAO = pluginDAO;
+    this.pluginFootprintDAO = pluginFootprintDAO;
     this.symlinkDAO = symlinkDAO;
 
     nativeHost = nativeHostService.getNativeHost();
@@ -80,27 +88,20 @@ public class PluginSyncTask extends AbstractTask {
    * @param directoryScope plugin subdirectory. 
    * @param parameters Task Parameters
    * @param pluginDAO pluginDAO
+   * @param pluginFootprintDAO pluginFootprintDAO
    * @param symlinkDAO symlinkDAO
    * @param nativeHostService nativeHostService
    */
   public PluginSyncTask(String directoryScope, 
       PluginSyncTaskParameters parameters, 
       PluginDAO pluginDAO,
+      PluginFootprintDAO pluginFootprintDAO,
       SymlinkDAO symlinkDAO,
       NativeHostService nativeHostService) {
     
-    this.parameters = parameters;
-    this.pluginDAO = pluginDAO;
-    this.symlinkDAO = symlinkDAO;
-    
+    this(parameters, pluginDAO, pluginFootprintDAO, symlinkDAO, nativeHostService);
     this.directoryScope = directoryScope;
-
-    nativeHost = nativeHostService.getNativeHost();
-    useNativeHost = nativeHostService.isNativeHostEnabled();
-
-    setName("Sync Plugins");
-    setMaxProgress(100);
-
+    
   }
 
   @Override
@@ -147,15 +148,21 @@ public class PluginSyncTask extends AbstractTask {
       ArrayList<Plugin> discoveredPlugins = new ArrayList<>();
       for (PluginFile pluginFile : collectedPluginFiles) {
         Plugin plugin = pluginFile.toPlugin();
-        if (plugin != null) {
-          discoveredPlugins.add(plugin);
+        discoveredPlugins.add(plugin);
+        
+        PluginFootprint pluginFootprint = pluginFootprintDAO.findByPath(plugin.getPath());
+        
+        if (pluginFootprint == null) {
+          pluginFootprint = new PluginFootprint(plugin.getPath());
+          pluginFootprintDAO.save(pluginFootprint);
         }
+        plugin.setFootprint(pluginFootprint);
 
         if (useNativeHost && nativeHost.isAvailable()) {
           log.debug("Load plugin using native discovery: " + plugin.getPath());
           this.updateMessage("Exploring plugin " + plugin.getName());
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
-          if(nativePlugin != null) {
+          if (nativePlugin != null) {
             plugin.setNativeCompatible(true);
             plugin.setDescriptiveName(nativePlugin.getDescriptiveName());
             plugin.setVersion(nativePlugin.getVersion());
@@ -171,7 +178,7 @@ public class PluginSyncTask extends AbstractTask {
 
       this.updateMessage("Applying plugin changes");
       
-      if(directoryScope != null) {
+      if (directoryScope != null) {
         // Delete previous plugins scanned in the directory scope
         pluginDAO.deleteByPathContainingIgnoreCase(directoryScope);
         symlinkDAO.deleteByPathContainingIgnoreCase(directoryScope);
