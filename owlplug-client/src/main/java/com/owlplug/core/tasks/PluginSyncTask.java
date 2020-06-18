@@ -158,7 +158,8 @@ public class PluginSyncTask extends AbstractTask {
         }
         plugin.setFootprint(pluginFootprint);
 
-        if (useNativeHost && nativeHost.isAvailable()) {
+        if (useNativeHost && nativeHost.isAvailable()
+            && pluginFootprint.isNativeDiscoveryEnabled()) {
           log.debug("Load plugin using native discovery: " + plugin.getPath());
           this.updateMessage("Exploring plugin " + plugin.getName());
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -115,6 +116,17 @@
                   <Insets bottom="10.0" left="20.0" right="20.0" top="14.0" />
                </padding>
             </GridPane>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
+               <children>
+                  <Label text="Extras" />
+                  <Pane HBox.hgrow="ALWAYS" />
+                  <JFXToggleButton fx:id="nativeDiscoveryToggleButton" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" scaleX="0.8" scaleY="0.8" scaleZ="0.8" selected="true" text=" Native Discovery">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </JFXToggleButton>
+               </children>
+            </HBox>
          </children>
          <styleClass>
             <String fx:value="pane-card" />

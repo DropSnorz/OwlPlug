@@ -22,7 +22,9 @@ package com.owlplug.core.services;
 import com.google.common.collect.Iterables;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.PluginDAO;
+import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginFootprint;
 import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.services.StoreService;
@@ -38,6 +40,8 @@ public class PluginService extends BaseService {
   protected StoreService pluginStoreService;
   @Autowired
   protected PluginDAO pluginDAO;
+  @Autowired
+  protected PluginFootprintDAO pluginFootprintDAO;
   @Autowired
   protected CoreTaskFactory taskFactory;
 
@@ -82,5 +86,9 @@ public class PluginService extends BaseService {
   
   public Plugin save(Plugin plugin) {
     return pluginDAO.save(plugin);
+  }
+  
+  public PluginFootprint save(PluginFootprint pluginFootprint) {
+    return pluginFootprintDAO.save(pluginFootprint);
   }
 }
