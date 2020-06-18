@@ -116,7 +116,17 @@ public class PluginSyncTask extends AbstractTask {
       PluginFileCollector pluginCollector = new PluginFileCollector(parameters.getPlatform());
       ArrayList<Symlink> collectedSymlinks = new ArrayList<>();
       SymlinkCollector symlinkCollector = new SymlinkCollector(true);
-
+      
+      if (directoryScope != null) {
+        // Delete previous plugins scanned in the directory scope
+        pluginDAO.deleteByPathContainingIgnoreCase(directoryScope);
+        symlinkDAO.deleteByPathContainingIgnoreCase(directoryScope);
+      } else {
+        // Delete all previous plugins by default (in case of a complete Sync task)
+        pluginDAO.deleteAll();
+        symlinkDAO.deleteAll();
+      }
+      
 
       if (directoryScope != null) {
         // Plugins are retrieved from a scoped directory
@@ -144,11 +154,12 @@ public class PluginSyncTask extends AbstractTask {
       }
       
       log.debug(collectedPluginFiles.size() + " plugins collected");
+      
+      //Save all discovered symlinks
+      symlinkDAO.saveAll(collectedSymlinks);
 
-      ArrayList<Plugin> discoveredPlugins = new ArrayList<>();
       for (PluginFile pluginFile : collectedPluginFiles) {
         Plugin plugin = pluginFile.toPlugin();
-        discoveredPlugins.add(plugin);
         
         PluginFootprint pluginFootprint = pluginFootprintDAO.findByPath(plugin.getPath());
         
@@ -157,6 +168,7 @@ public class PluginSyncTask extends AbstractTask {
           pluginFootprintDAO.save(pluginFootprint);
         }
         plugin.setFootprint(pluginFootprint);
+        pluginDAO.save(plugin);
 
         if (useNativeHost && nativeHost.isAvailable()
             && pluginFootprint.isNativeDiscoveryEnabled()) {
@@ -173,23 +185,13 @@ public class PluginSyncTask extends AbstractTask {
             plugin.setUid(String.valueOf(nativePlugin.getUid()));
           }
         }
+        
+        plugin.setSyncComplete(true);
+        pluginDAO.save(plugin);
 
         this.commitProgress(80.0 / collectedPluginFiles.size());
       }
 
-      this.updateMessage("Applying plugin changes");
-      
-      if (directoryScope != null) {
-        // Delete previous plugins scanned in the directory scope
-        pluginDAO.deleteByPathContainingIgnoreCase(directoryScope);
-        symlinkDAO.deleteByPathContainingIgnoreCase(directoryScope);
-      } else {
-        // Delete all previous plugins by default (in case of a complete Sync task)
-        pluginDAO.deleteAll();
-        symlinkDAO.deleteAll();
-      }
-      pluginDAO.saveAll(discoveredPlugins);
-      symlinkDAO.saveAll(collectedSymlinks);
       
       this.updateProgress(1, 1);
       this.updateMessage("Plugins synchronized");

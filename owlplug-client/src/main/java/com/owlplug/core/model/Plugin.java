@@ -49,6 +49,7 @@ public class Plugin {
   protected String version;
   protected String screenshotUrl;
   protected boolean nativeCompatible = false;
+  protected boolean syncComplete = false;
   
   protected PluginFormat format;
   protected PluginType type;
@@ -175,6 +176,14 @@ public class Plugin {
 
   public void setFootprint(PluginFootprint footprint) {
     this.footprint = footprint;
+  }
+  
+  public boolean isSyncComplete() {
+    return syncComplete;
+  }
+
+  public void setSyncComplete(boolean syncComplete) {
+    this.syncComplete = syncComplete;
   }
 
   @Override
