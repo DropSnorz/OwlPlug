@@ -28,6 +28,7 @@ import com.owlplug.core.model.PluginFootprint;
 import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.services.StoreService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -90,5 +91,9 @@ public class PluginService extends BaseService {
   
   public PluginFootprint save(PluginFootprint pluginFootprint) {
     return pluginFootprintDAO.save(pluginFootprint);
+  }
+  
+  public List<Plugin> getsyncUncompletePlugins() {
+    return pluginDAO.findBySyncComplete(false);
   }
 }

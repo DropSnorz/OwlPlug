@@ -20,12 +20,15 @@
 package com.owlplug.core.dao;
 
 import com.owlplug.core.model.Plugin;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface PluginDAO extends CrudRepository<Plugin, Long> {
 
   Plugin findByPath(String path);
+  
+  List<Plugin> findBySyncComplete(boolean syncComplete);
   
   @Transactional
   void deleteByPathContainingIgnoreCase(String path);
