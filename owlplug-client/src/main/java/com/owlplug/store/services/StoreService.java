@@ -198,4 +198,12 @@ public class StoreService extends BaseService {
     return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
         
   }
+  
+  /** 
+   * Returns all distinct product creators.
+   * @return lit of creators
+   */
+  public List<String> getDistinctCreators() {
+    return storeProductDAO.findDistinctCreators();
+  }
 }

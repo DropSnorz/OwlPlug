@@ -29,6 +29,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, JpaSpecificationExecutor<StoreProduct> {
@@ -51,6 +52,16 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
   static Specification<StoreProduct> nameContains(String name) {
     return (product, cq, cb) -> cb.like(cb.lower(product.get("name")), "%" + name.toLowerCase() + "%");
   }
+  
+  /**
+   * Creator name filtering JPA Specification.
+   * @param creator - The creator name
+   * @return The JPA Specification
+   */
+  static Specification<StoreProduct> hasCreator(String creator) {
+    return (product, cq, cb) -> cb.equal(product.get("creator"), creator);
+  }
+
 
   /**
    * Platform filtering JPA Specification Filter products matching the given
@@ -113,5 +124,9 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
   }
 
   public Iterable<StoreProduct> findByNameContainingIgnoreCase(String name);
+  
+  @Query("SELECT DISTINCT p.creator FROM StoreProduct p")
+  public List<String> findDistinctCreators();
+  
 
 }
