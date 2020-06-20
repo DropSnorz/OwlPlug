@@ -5,21 +5,39 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
+<VBox prefWidth="500.0" spacing="25.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
    <children>
-      <VBox>
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label text="It's look like OwlPlug has not been terminated properly." wrapText="true" />
-            <Label text="If a crash happens during plugin Sync/Scan, it's probably due to a plugin that can't be loaded. Like some other DAWs, a corrupted plugin may crash the host. You can try to disable native discovery:" wrapText="true" />
+            <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../media/owlplug-owl-crash.png" />
+               </image>
+            </ImageView>
+            <VBox>
+               <children>
+                  <Label text="It's look like OwlPlug has not been terminated properly." wrapText="true" />
+                  <Label text="If a crash happens during plugin Sync, it's probably due to a plugin that can't be loaded. Like some other DAWs, a corrupted plugin may crash the host." wrapText="true" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <VBox fx:id="uncompleteSyncPane" spacing="5.0">
+         <children>
+            <Label text="Following plugins have not been analyzed correctly" />
+            <VBox fx:id="pluginListContainer" />
          </children>
       </VBox>
-      <VBox>
+      <VBox spacing="5.0">
          <children>
-            <JFXCheckBox fx:id="nativeDiscoveryCheckbox" text="Native Discovery" />
+            <Label text="You can try to disable native discovery globally" />
+            <JFXCheckBox fx:id="nativeDiscoveryCheckbox" text="Use Native Discovery (Global)" />
          </children>
          <VBox.margin>
             <Insets bottom="10.0" top="10.0" />
@@ -29,9 +47,9 @@
          <children>
             <TextFlow>
                <children>
-                  <Label text="You can also keep Native Discovery enabled and find the corrupted plugin using" wrapText="true" />
-                  <Hyperlink fx:id="troubleshootingLink" text="this guide" />
-                  <Label text=".If the plugin is stable on your DAW, you can" />
+                  <Label text="For more information, you can check the" wrapText="true" />
+                  <Hyperlink fx:id="troubleshootingLink" text="OwlPlug documentation" />
+                  <Label text="If the problem seems located on OwlPlug, you can" wrapText="true" />
                   <Hyperlink fx:id="issuesLink" text="report the issue." />
                </children>
             </TextFlow>

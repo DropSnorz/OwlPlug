@@ -135,7 +135,6 @@ public class ProductInstallTask extends AbstractTask {
         FileOutputStream fos = new FileOutputStream(outputFile)) {
 
       rbc.setCallback(p -> {
-        log.debug(String.valueOf(p));
         computeTotalProgress(p);
       });
       fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);

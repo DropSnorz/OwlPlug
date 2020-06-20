@@ -16,20 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.dao;
 
-import com.owlplug.core.model.Plugin;
-import java.util.List;
+import com.owlplug.core.model.PluginFootprint;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.transaction.annotation.Transactional;
 
-public interface PluginDAO extends CrudRepository<Plugin, Long> {
+public interface PluginFootprintDAO  extends CrudRepository<PluginFootprint, Long> {
+  
+  PluginFootprint findByPath(String path);
 
-  Plugin findByPath(String path);
-  
-  List<Plugin> findBySyncComplete(boolean syncComplete);
-  
-  @Transactional
-  void deleteByPathContainingIgnoreCase(String path);
 }

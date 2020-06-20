@@ -22,6 +22,7 @@ package com.owlplug.core.controllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.model.Plugin;
@@ -84,6 +85,8 @@ public class PluginInfoController extends BaseController {
   private JFXButton openDirectoryButton;
   @FXML
   private JFXButton uninstallButton;
+  @FXML
+  private JFXToggleButton nativeDiscoveryToggleButton;
 
   private Plugin currentPlugin = null;
   private ArrayList<String> knownPluginImages = new ArrayList<>();
@@ -130,6 +133,15 @@ public class PluginInfoController extends BaseController {
       dialog.setContent(layout);
       dialog.show();
     });
+    
+    nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      if (currentPlugin != null && currentPlugin.getFootprint() != null) {
+        currentPlugin.getFootprint().setNativeDiscoveryEnabled(newValue);
+        pluginService.save(currentPlugin.getFootprint());
+      }
+      
+    });
+
   }
 
   public void setPlugin(Plugin plugin) {
@@ -143,6 +155,10 @@ public class PluginInfoController extends BaseController {
     pluginIdentifierLabel.setText(Optional.ofNullable(plugin.getUid()).orElse("Unknown"));
     pluginCategoryLabel.setText(Optional.ofNullable(plugin.getCategory()).orElse("Unknown"));
     pluginPathLabel.setText(plugin.getPath());
+    
+    if (plugin.getFootprint() != null) {
+      nativeDiscoveryToggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
+    }
 
     setPluginImage();
   }

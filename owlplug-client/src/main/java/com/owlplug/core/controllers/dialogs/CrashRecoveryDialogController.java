@@ -23,21 +23,29 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
+import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.NativeHostService;
+import com.owlplug.core.services.PluginService;
+import com.owlplug.core.ui.RecoveredPluginView;
 import com.owlplug.core.utils.PlatformUtils;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class CrashRecoveryDialogController extends AbstractDialogController {
-
+  
   @Autowired
   private LazyViewRegistry lazyViewRegistry;
+  @Autowired
+  private PluginService pluginService;
   @Autowired
   private NativeHostService nativeHostService;
   @Autowired 
@@ -52,10 +60,14 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
   protected Hyperlink troubleshootingLink;
   @FXML 
   protected Hyperlink issuesLink;
+  @FXML
+  protected VBox pluginListContainer;
+  @FXML
+  protected Pane uncompleteSyncPane;
   
   
   CrashRecoveryDialogController() {
-    super(650, 350);
+    super(600, 550);
     this.setOverlayClose(false);
   }
 
@@ -65,7 +77,8 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
   public void initialize() {
     
     nativeDiscoveryCheckbox.setDisable(!nativeHostService.isNativeHostAvailable());
-    nativeDiscoveryCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
+    nativeDiscoveryCheckbox.setSelected(this.getPreferences().getBoolean(
+        ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
     
     nativeDiscoveryCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
@@ -79,7 +92,19 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
       optionsController.refreshView();
       this.close();
     });
-
+    
+    List<Plugin> uncompleteSyncPlugins = pluginService.getsyncUncompletePlugins();
+    
+    if (uncompleteSyncPlugins.size() > 0) {
+      uncompleteSyncPane.setVisible(true);
+      for (Plugin p : uncompleteSyncPlugins) {
+        RecoveredPluginView pluginView = new RecoveredPluginView(p, pluginService, this.getApplicationDefaults());
+        pluginListContainer.getChildren().add(pluginView);
+      }
+    } else {
+      uncompleteSyncPane.setVisible(false);
+    }
+    
   }
 
   @Override

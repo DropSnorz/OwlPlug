@@ -20,6 +20,7 @@
 package com.owlplug.core.components;
 
 import com.owlplug.core.dao.PluginDAO;
+import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.NativeHostService;
@@ -48,6 +49,8 @@ public class CoreTaskFactory extends BaseTaskFactory {
   @Autowired
   private PluginDAO pluginDAO;
   @Autowired
+  private PluginFootprintDAO pluginFootprintDAO;
+  @Autowired
   private SymlinkDAO symlinkDAO;
   @Autowired
   private NativeHostService nativeHostService;
@@ -69,7 +72,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
     parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
 
-    PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO, symlinkDAO, nativeHostService);
+    PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO, pluginFootprintDAO, symlinkDAO, nativeHostService);
     task.setOnSucceeded(e -> {
       notifyListeners(syncPluginsListeners);
     });
@@ -93,7 +96,12 @@ public class CoreTaskFactory extends BaseTaskFactory {
     
     String fixedDirectoryScope = FileUtils.convertPath(directoryScope);
 
-    PluginSyncTask task = new PluginSyncTask(fixedDirectoryScope, parameters, pluginDAO, symlinkDAO, nativeHostService);
+    PluginSyncTask task = new PluginSyncTask(fixedDirectoryScope, parameters, 
+        pluginDAO, 
+        pluginFootprintDAO, 
+        symlinkDAO, 
+        nativeHostService);
+    
     task.setOnSucceeded(e -> {
       notifyListeners(syncPluginsListeners);
     });

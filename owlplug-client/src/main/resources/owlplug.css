@@ -389,6 +389,10 @@ ProgressIndicator{
 	-fx-fill: disabled-color;
 }
 
+.recovered-plugin-view {
+	-fx-background-color: rgba(0,0,0, 0.2);
+	-fx-padding:10,0,10,0;
+}
 
 
 /****************************************************************
