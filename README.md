@@ -22,18 +22,17 @@
 
 ![owlplug-demo](http://dropsnorz.com/projects/owlplug/owlplug.gif)
 
-# Join OwlPlug Beta  :rocket:
+
+**About OwlPlug**
+* :earth_africa: [OwlPlug Website](https://owlplug.com)
+* :pushpin: [Roadmap](https://owlplug.com/roadmap)
+* :page_facing_up: [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki)
 
 **Why i have created OwlPlug ?** 
 
 OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple thats looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, i've discovered dozens of cool plugins just by using my own tool. So i realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
 
-I've generated OwlPlug binaries, but I've only tested them in my environment, `Win 10 - Java 9 | MacOS 10.12.6`. I'm looking for any kind of feedbacks, even under the same configuration. And as it's a beta release, it's highly recommended to **backup your files before using OwlPlug**.
-
-**About OwlPlug**
-* [OwlPlug Website](https://owlplug.com)
-* [Roadmap](https://owlplug.com/roadmap)
-* [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki)
+OwlPlug is regularly tested on `Windows 10 | MacOS 10.12.6`. All kind of feedbacks are greatly welcomed, even under the same configuration. And as it's a **beta release**, it's highly recommended to **backup your files before using OwlPlug**.
 
 ## Installation
 
@@ -48,31 +47,27 @@ I've generated OwlPlug binaries, but I've only tested them in my environment, `W
 
 ## How to help
 
-[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, configure it, download plugins, etc... Feel free to report any kind of problems, questions, suggestions by opening an issue in this repository. Here is a non exhaustive list of interesting things to report and fix:
+[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, configure it, download plugins, etc... Feel free to report any kind of problems, questions, suggestions by opening an issue on this repository. Here is a non exhaustive list of interesting things to report:
 
 * Major issues, bugs, crashes
 * Typo errors and improvements. (also in this README)
 * Suggestions and things you wanted to see in OwlPlug: new features, UI/UX improvements, docs needed, ...
 
 
-## How to contribute
-
-I'm maintaining OwlPlug during my free time, so any help will be really appreciated. Check the [Development Setup](#development-setup) section for technical informations.
-
 # Features
 
 ## Plugins
 
-OwlPlug is compatible with your previously installed plugins as they are all in a specific root directory, for example `C:/foo/AudioPlugins`. It means that you can still organize your plugins as you want with a file explorer or with your favorite DAW. 
-OwlPlug can discover VST2 and VST3 Plugins. 
+OwlPlug can discover VST2 and VST3 Plugins. OwlPlug is compatible with your previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
+You can configure the tool to work with multiple plugin directories using the **Link** feature.  
 
 ## Links
 
-Links allows you to create and manage symlinks accross your filesystem and plugin directories. You can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through your system plugin directory. For example, you can configure a link named *usb-drive* in `C:/VST` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/VST/usb-drive`. On some Windows version, symlinks creation may require admin privileges.
+Links allows you to create and manage symlinks accross your filesystem and plugin directories. You can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through your root plugin directory. For example, you can configure a link named *usb-drive* in `C:/AudioPlugins` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/AudioPlugins/usb-drive`. On some Windows version, symlinks creation may require admin privileges.
 
 ## Stores 
 
-Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of plugins you can download and install locally. Plugins delivered by OwlPlug Central are available by default. You can configure OwlPlug to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
+Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of downloadable plugins that can be installed locally. Plugins delivered by OwlPlug Central are available by default. OwlPlug can be configured to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
 
 
 ### OwlPlug Central
@@ -91,7 +86,7 @@ Third party stores are maintained by plugin creators, developers or distributors
 
 ### Third party (Central mirror)
 
-Third party store adapters are maintained by OwlPlug Central but plugins are hosted by original creators. (For testing purposes)
+Third party store adapters are maintained by OwlPlug Central but plugins binaries are hosted by original creators. (For testing purposes)
 
 * AmVST (By [Angular Momentum](http://www.amvst.com/)): `https://central.owlplug.com/mirrors/amvst/store`
 * [Vst4free](http://vst4free.com): `https://central.owlplug.com/mirrors/vst4free/store`
@@ -99,7 +94,7 @@ Third party store adapters are maintained by OwlPlug Central but plugins are hos
 ### How to distriute my plugins on OwlPlug ?
 
 * **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Open an issue or a pull request on the [OwlPlug Central repository](https://github.com/owlplug/central)
-* **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). Then, provide the endpoint url to your user.
+* **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). 
 
 # Development
 
@@ -121,15 +116,11 @@ Third party store adapters are maintained by OwlPlug Central but plugins are hos
 mvn clean install
 # Move to owlplug client folder
 cd owlplug-client
-# (Optional) Create the runnable JAR file
+# (Optional) Create the runnable JAR file in /target/ folder
 mvn clean install spring-boot:repackage
 # Run owlplug
 mvn spring-boot:run
 ```
-The first command will generate an executable binary `/target/owlplug-*.jar`. In order to use GoogleDrive repositories, you have to fill OAuth2 client id and secret in `credentials.properties`. Check Prerequisites from [Google OAuth2 Documentation](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
-
-As JavaFx as been decoupled from JDK 11, an (outdated) compatible version is maitained on `java-11` branch.
-
 
 # Licence
 
