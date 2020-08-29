@@ -1,19 +1,20 @@
-echo ** Preparing package **
+echo "Preparing package"
 
 owlplugversion=$1
 
-echo ** Exporting LICENSE File **
+echo "Exporting LICENSE File"
 
-cp ../LICENSE ../owlplug-client/target/LICENSE
+cp ../LICENSE ./input/LICENSE
 
-echo ** Copying owlplug-client-$owlplugversion.jar to owlplug.jar **
+echo "Copying owlplug-client-$owlplugversion.jar to owlplug.jar"
 
-cp ../owlplug-client/target/owlplug-client-$owlplugversion.jar ../owlplug-client/target/owlplug.jar
+cp ../owlplug-client/target/owlplug-client-$owlplugversion.jar ./input/owlplug.jar
 
-echo ** Generating OwlPlug MSI Install package **
+echo "Generating OwlPlug MSI Install package"
 
-javapackager -deploy -native installer -appclass org.springframework.boot.loader.JarLauncher \
--srcdir ../owlplug-client/target/ -srcfiles owlplug.jar -outdir ./output -outfile owlplug-app \
--name OwlPlug -BappVersion=$owlplugversion -Bicon=resources/owlplug.icns
+jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.JarLauncher \
+--main-jar owlplug.jar --license-file ./input/LICENSE --dest ./output \
+--app-version $owlplugversion --icon ./resources/owlplug.icns --vendor OwlPlug \
+--mac-package-identifier owlplug --mac-package-name OwlPlug
 
-echo ** OwlPlug Dmg Install package generated **
+echo "OwlPlug Dmg Install package generated"

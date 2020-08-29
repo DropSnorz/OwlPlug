@@ -2,7 +2,9 @@
  Global Theme rules
 ****************************************************************/
 
+
 .root{
+    -fx-font-family: "Roboto";
 	card-pane-darkshade-color: rgb(48,48,48);
 	card-pane-color: rgb(66,66,66);
 	card-pane-lightshade-color: rgb(96,96,96);

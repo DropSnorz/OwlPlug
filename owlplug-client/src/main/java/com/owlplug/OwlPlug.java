@@ -19,6 +19,7 @@
 
 package com.owlplug;
 
+import com.jfoenix.assets.JFoenixResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
 import java.beans.PropertyVetoException;
@@ -107,8 +108,10 @@ public class OwlPlug extends Application {
     double height = 700;
 
     Scene scene = new Scene(rootNode, width, height);
-    String css = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
-    scene.getStylesheets().add(css);
+    String fontsCss = JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm();
+    scene.getStylesheets().add(fontsCss);
+    String owlplugCss = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
+    scene.getStylesheets().add(owlplugCss);
 
     primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
@@ -182,7 +185,7 @@ public class OwlPlug extends Application {
    *
    * @param args The command line arguments given on JAR execution. Usually empty.
    */
-  public static void main(String[] args) {
+  public static void boot(String[] args) {
     System.setProperty("javafx.preloader", "com.owlplug.OwlPlugPreloader");
     launch(OwlPlug.class, args);
 
