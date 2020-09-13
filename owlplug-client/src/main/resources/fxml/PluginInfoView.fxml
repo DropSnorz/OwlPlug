@@ -120,7 +120,7 @@
                <children>
                   <Label text="Extras" />
                   <Pane HBox.hgrow="ALWAYS" />
-                  <JFXToggleButton fx:id="nativeDiscoveryToggleButton" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" scaleX="0.8" scaleY="0.8" scaleZ="0.8" selected="true" text=" Native Discovery">
+                  <JFXToggleButton fx:id="nativeDiscoveryToggleButton" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" scaleX="0.8" scaleY="0.8" selected="true" text=" Native Discovery">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
