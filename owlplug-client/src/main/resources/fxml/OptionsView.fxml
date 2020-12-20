@@ -5,10 +5,12 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
@@ -124,15 +126,17 @@
                               <VBox spacing="10.0" VBox.vgrow="NEVER">
                                  <children>
                                     <Label styleClass="heading-2" text="Danger Zone" />
-                                    <HBox spacing="5.0">
+                                    <VBox>
                                        <children>
-                                          <JFXButton fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" text="Clear user data" HBox.hgrow="NEVER" />
-                                          <Label text="Remove all user data including accounts, stores and custom settings" wrapText="true" HBox.hgrow="NEVER" />
+                                          <Label text="Remove all user data including accounts, stores and custom settings. Plugins will not be deleted." wrapText="true" />
+                                          <HBox>
+                                             <children>
+                                                <Pane HBox.hgrow="ALWAYS" />
+                                                <JFXButton fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" text="Clear user data" />
+                                             </children>
+                                          </HBox>
                                        </children>
-                                       <VBox.margin>
-                                          <Insets top="10.0" />
-                                       </VBox.margin>
-                                    </HBox>
+                                    </VBox>
                                  </children>
                                  <VBox.margin>
                                     <Insets />
@@ -141,6 +145,11 @@
                               <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="145.0" VBox.vgrow="SOMETIMES">
                                  <children>
                                     <Label styleClass="heading-2" text="About" />
+                                    <Hyperlink fx:id="owlplugWebsiteLink" alignment="BASELINE_LEFT" styleClass="hyperlink-disabled" text="https://owlplug.com">
+                                       <VBox.margin>
+                                          <Insets left="-5.0" />
+                                       </VBox.margin>
+                                    </Hyperlink>
                                     <HBox spacing="5.0">
                                        <children>
                                           <TextFlow prefWidth="200.0">
