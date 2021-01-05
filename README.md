@@ -80,8 +80,8 @@ OwlPlug Central is the default store. It's a secure and trusted source to retrie
 
 Third party stores are maintained by plugin creators, developers or distributors. For security reasons, you should only use stores from trusted sources only.
 
-* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `https://getdunne.net/GyL/owl.php`
-* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `https://getdunne.net/Krakli/owl.php`
+* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `https://getdunne.net/Krakli/owl.php`
+* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `https://getdunne.net/GyL/owl.php`
 
 
 ### Third party (Central mirror)
