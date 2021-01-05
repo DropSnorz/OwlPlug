@@ -15,7 +15,7 @@
 ![Last Pre release](https://img.shields.io/github/release-date/dropsnorz/owlplug.svg)
 ![Stage Badge](https://img.shields.io/badge/stage-beta-blue.svg)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-%237289DA.svg)](https://discord.gg/nEdHAMB)
-[![Patreon](https://img.shields.io/badge/patreon-donate-%23F96854.svg?logo=patreon&logoColor=white&logoWidth=10)](https://www.patreon.com/owlplug)
+[![Patreon](https://img.shields.io/badge/donate-%E2%99%A5-%23253b80)](https://www.paypal.com/donate?hosted_button_id=7MJGDTQXAPJ22)
 
 
 # Overview
@@ -91,7 +91,7 @@ Third party store adapters are maintained by OwlPlug Central but plugins binarie
 * AmVST (By [Angular Momentum](http://www.amvst.com/)): `https://central.owlplug.com/mirrors/amvst/store`
 * [Vst4free](http://vst4free.com): `https://central.owlplug.com/mirrors/vst4free/store`
 
-### How to distriute my plugins on OwlPlug ?
+### How to distribute my plugins on OwlPlug ?
 
 * **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Open an issue or a pull request on the [OwlPlug Central repository](https://github.com/owlplug/central)
 * **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). 
@@ -122,6 +122,6 @@ mvn clean install spring-boot:repackage
 mvn spring-boot:run
 ```
 
-# Licence
+# License
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug?ref=badge_large)
