@@ -47,12 +47,7 @@ OwlPlug is regularly tested on `Windows 10 | MacOS 10.12.6`. All kind of feedbac
 
 ## How to help
 
-[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, configure it, download plugins, etc... Feel free to report any kind of problems, questions, suggestions by opening an issue on this repository. Here is a non exhaustive list of interesting things to report:
-
-* Major issues, bugs, crashes
-* Typo errors and improvements. (also in this README)
-* Suggestions and things you wanted to see in OwlPlug: new features, UI/UX improvements, docs needed, ...
-
+[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, configure it, download plugins, etc... Report any kind of problems by [opening an issue](https://github.com/DropSnorz/OwlPlug/issues) on this repository. Feel free to use the [discussions tab](https://github.com/DropSnorz/OwlPlug/discussions) to ask questions, report suggestions and feedback about features and potential improvements.
 
 # Features
 
