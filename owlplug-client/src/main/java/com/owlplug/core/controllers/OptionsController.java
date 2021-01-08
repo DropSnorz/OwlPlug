@@ -81,6 +81,8 @@ public class OptionsController extends BaseController {
   private JFXCheckBox storeDirectoryCheckBox;
   @FXML
   private JFXTextField storeDirectoryTextField;
+  @FXML
+  private Label storeDirectoryDelimeter;
 
   /**
    * FXML initialize method.
@@ -90,6 +92,7 @@ public class OptionsController extends BaseController {
 
     vst2DirectoryTextField.setDisable(false);
     vst2DirectoryButton.setDisable(false);
+    storeByMakerLabel.setVisible(false);
 
     vst2ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
@@ -150,12 +153,16 @@ public class OptionsController extends BaseController {
 
     storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
-      storeDirectoryTextField.setVisible(!newValue);
+      double width = newValue ? 150 : 0;
+      storeDirectoryTextField.setVisible(newValue);
+      storeDirectoryDelimeter.setVisible(newValue);
+      storeDirectoryTextField.setDisable(!newValue);
+      storeDirectoryTextField.setMaxWidth(width);
     });
 
     storeByMakerCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_BY_MAKER_ENABLED_KEY, newValue);
-      storeByMakerLabel.setVisible(!newValue);
+      storeByMakerLabel.setVisible(newValue);
     });
 
     storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
