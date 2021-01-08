@@ -223,8 +223,11 @@ public class OptionsController extends BaseController {
 
     if (!storeDirectoryCheckBox.isSelected()) {
       storeDirectoryTextField.setDisable(true);
+      storeDirectoryTextField.setVisible(false);
     }
-
+    if(!storeByMakerCheckBox.isSelected()){
+       storeByMakerLabel.setVisible(false); 
+    }
   }
 
 }
