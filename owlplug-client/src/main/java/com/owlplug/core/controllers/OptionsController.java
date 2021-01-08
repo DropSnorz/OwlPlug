@@ -65,10 +65,16 @@ public class OptionsController extends BaseController {
   private JFXButton removeDataButton;
   @FXML
   private Label versionLabel;
+
+  
   @FXML
   private JFXButton clearCacheButton;
   @FXML
   private JFXCheckBox storeSubDirectoryCheckBox;
+  @FXML
+  private JFXCheckBox storeByMakerCheckBox;
+  @FXML
+  private Label storeByMakerLabel;
   @FXML
   private Label warningSubDirectory;
   @FXML
@@ -144,7 +150,12 @@ public class OptionsController extends BaseController {
 
     storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
-      storeDirectoryTextField.setDisable(!newValue);
+      storeDirectoryTextField.setVisible(!newValue);
+    });
+
+    storeByMakerCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
+      storeDirectoryTextField.setVisible(!newValue);
     });
 
     storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -200,6 +211,7 @@ public class OptionsController extends BaseController {
     storeSubDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     warningSubDirectory.setVisible(!this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
+    storeByMakerCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_MAKER_ENABLED_KEY, false));
     storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
 
     if (!storeDirectoryCheckBox.isSelected()) {
