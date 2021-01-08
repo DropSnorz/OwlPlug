@@ -154,8 +154,8 @@ public class OptionsController extends BaseController {
     });
 
     storeByMakerCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
-      storeDirectoryTextField.setVisible(!newValue);
+      this.getPreferences().putBoolean(ApplicationDefaults.STORE_BY_MAKER_ENABLED_KEY, newValue);
+      storeByMakerLabel.setVisible(!newValue);
     });
 
     storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
