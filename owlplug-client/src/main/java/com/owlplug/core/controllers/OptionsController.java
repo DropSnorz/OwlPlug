@@ -28,8 +28,11 @@ import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.OptionsService;
+import com.owlplug.core.utils.PlatformUtils;
+
 import java.io.File;
 import javafx.fxml.FXML;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
@@ -83,6 +86,8 @@ public class OptionsController extends BaseController {
   private JFXTextField storeDirectoryTextField;
   @FXML
   private Label storeDirectoryDelimeter;
+  @FXML
+  private Hyperlink owlplugWebsiteLink;
 
   /**
    * FXML initialize method.
@@ -202,6 +207,10 @@ public class OptionsController extends BaseController {
     });
 
     versionLabel.setText("V " + this.getApplicationDefaults().getVersion());
+    
+    owlplugWebsiteLink.setOnAction(e -> {
+    	PlatformUtils.openDefaultBrowser(owlplugWebsiteLink.getText());
+    });
 
     refreshView();
   }

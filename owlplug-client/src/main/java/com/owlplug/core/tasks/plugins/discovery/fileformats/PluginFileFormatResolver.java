@@ -57,6 +57,15 @@ public class PluginFileFormatResolver {
     }
     
     /*
+     * Osx VST2 plugin
+     */
+    if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)
+        && pluginFormat.equals(PluginFormat.VST2)
+        && OsxVstFile.formatCheck(file)) {
+      return new OsxVstFile(file);
+    }
+    
+    /*
      * Windows VST3 < 3.6.10 Library files 
      */
     if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.WIN)
@@ -66,17 +75,7 @@ public class PluginFileFormatResolver {
     }
     
     /*
-     * Osx vst2 plugin
-     */
-    if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)
-        && pluginFormat.equals(PluginFormat.VST3)
-        && OsxVstFile.formatCheck(file)) {
-      return new OsxVstFile(file);
-    }
-    
-    
-    /*
-     * Windows and OSX vst3 plugin bunle
+     * Windows and OSX VST3 plugin bundle
      */
     if ((runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)
         || runtimePlatform.getOperatingSystem().equals(OperatingSystem.WIN))
