@@ -353,7 +353,7 @@ public class StoreController extends BaseController {
     //if the enduser wishes to group plugins by their creator,
     //then we need to include the subdirectory as well.
     if(shouldGroupByCreator) {
-        String creator = bundle.getProduct().getCreator();
+        String creator = FileUtils.sanitizeFileName(bundle.getProduct().getCreator());
         relativeDirectoryPath = relativeDirectoryPath + File.separator + creator;
     }
 
