@@ -75,9 +75,9 @@ public class OptionsController extends BaseController {
   @FXML
   private JFXCheckBox storeSubDirectoryCheckBox;
   @FXML
-  private JFXCheckBox storeByMakerCheckBox;
+  private JFXCheckBox storeByCreatorCheckBox;
   @FXML
-  private Label storeByMakerLabel;
+  private Label storeByCreatorLabel;
   @FXML
   private Label warningSubDirectory;
   @FXML
@@ -85,7 +85,7 @@ public class OptionsController extends BaseController {
   @FXML
   private JFXTextField storeDirectoryTextField;
   @FXML
-  private Label storeDirectoryDelimeter;
+  private Label storeDirectorySeperator;
   @FXML
   private Hyperlink owlplugWebsiteLink;
 
@@ -97,7 +97,7 @@ public class OptionsController extends BaseController {
 
     vst2DirectoryTextField.setDisable(false);
     vst2DirectoryButton.setDisable(false);
-    storeByMakerLabel.setVisible(false);
+    storeByCreatorLabel.setVisible(false);
 
     vst2ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
@@ -160,14 +160,14 @@ public class OptionsController extends BaseController {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
       double width = newValue ? 150 : 0;
       storeDirectoryTextField.setVisible(newValue);
-      storeDirectoryDelimeter.setVisible(newValue);
+      storeDirectorySeperator.setVisible(newValue);
       storeDirectoryTextField.setDisable(!newValue);
       storeDirectoryTextField.setMaxWidth(width);
     });
 
-    storeByMakerCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.STORE_BY_MAKER_ENABLED_KEY, newValue);
-      storeByMakerLabel.setVisible(newValue);
+    storeByCreatorCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      this.getPreferences().putBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, newValue);
+      storeByCreatorLabel.setVisible(newValue);
     });
 
     storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -227,15 +227,15 @@ public class OptionsController extends BaseController {
     storeSubDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     warningSubDirectory.setVisible(!this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
-    storeByMakerCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_MAKER_ENABLED_KEY, false));
+    storeByCreatorCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false));
     storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
 
     if (!storeDirectoryCheckBox.isSelected()) {
       storeDirectoryTextField.setDisable(true);
       storeDirectoryTextField.setVisible(false);
     }
-    if(!storeByMakerCheckBox.isSelected()){
-       storeByMakerLabel.setVisible(false); 
+    if(!storeByCreatorCheckBox.isSelected()){
+       storeByCreatorLabel.setVisible(false); 
     }
   }
 

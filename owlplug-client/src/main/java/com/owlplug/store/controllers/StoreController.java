@@ -348,7 +348,7 @@ public class StoreController extends BaseController {
     String baseDirectoryPath = storeService.getBundleInstallFolder(bundle);
     String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
 
-    Boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_MAKER_ENABLED_KEY, false);
+    Boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
 
     //if the enduser wishes to group plugins by their creator,
     //then we need to include the subdirectory as well.
