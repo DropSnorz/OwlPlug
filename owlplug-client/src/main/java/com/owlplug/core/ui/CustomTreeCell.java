@@ -22,6 +22,7 @@ package com.owlplug.core.ui;
 import com.jfoenix.controls.JFXTreeCell;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
+
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -43,7 +44,6 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
     } else {
       if (item instanceof Plugin) {
         Plugin plugin = (Plugin) item;
-        setText(null);
         HBox hbox = new HBox(4);
         hbox.setAlignment(Pos.CENTER_LEFT);
         hbox.getChildren().add(getTreeItem().getGraphic());
@@ -57,10 +57,10 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
         }
         circle.applyCss();
         setGraphic(hbox);
-      } else if (item instanceof IDirectory) {
         setText(null);
+      } else if (item instanceof IDirectory) {
+    	  
         TextFlow textFlow = new TextFlow();
-
         IDirectory dir = (IDirectory) item;
         Text directoryName;
 
@@ -88,11 +88,16 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
         hbox.getChildren().add(textFlow);
 
         setGraphic(hbox);
+        setText(null);
       } else {
         setText(item.toString());
         setGraphic(getTreeItem().getGraphic());
       }
     }
+    
+    // Force the rendering immediately to avoid blinking nodes on the TreeView
+    // Blinking appears since JavaFX14 migration
+    this.applyCss();
   }
 
 }
