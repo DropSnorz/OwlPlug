@@ -100,20 +100,22 @@
                                        <children>
                                           <JFXCheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" />
                                           <JFXCheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugins in dedicated subdirectories" />
-
-                                                <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
+                                          <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
                                           <VBox spacing="5.0" VBox.vgrow="NEVER">
                                              <children>
                                                 <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save dowloaded plugins from store in a dedicated directory" />
+                                                <JFXCheckBox fx:id="storeByCreatorCheckBox" text="Save dowloaded plugins grouped by their creator or manufacturer" />
                                                 <HBox alignment="BASELINE_LEFT" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <VBox.margin>
                                                       <Insets left="5.0" />
                                                    </VBox.margin>
                                                    <children>
                                                       <Label text="\@plugin-directory/" />
-                                                      <JFXTextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" HBox.hgrow="ALWAYS" />
+                                                      <JFXTextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)"  /><Label fx:id="storeDirectorySeperator" text="/" />
+                                                      <Label fx:id="storeByCreatorLabel" text="\@creator/" />
                                                    </children>
                                                 </HBox>
+                                                
                                              </children>
                                           </VBox>
                                        </children>

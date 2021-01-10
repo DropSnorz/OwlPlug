@@ -77,6 +77,7 @@ public class ApplicationDefaults {
   public static final String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";
   public static final String SYNC_PLUGINS_STARTUP_KEY = "SYNC_PLUGINS_STARTUP_KEY";
   public static final String STORE_DIRECTORY_ENABLED_KEY = "STORE_DIRECTORY_ENABLED_KEY";
+  public static final String STORE_BY_CREATOR_ENABLED_KEY = "STORE_BY_CREATOR_ENABLED_KEY";
   public static final String STORE_DIRECTORY_KEY = "STORE_DIRECTORY_KEY";
   public static final String STORE_SUBDIRECTORY_ENABLED = "STORE_SUBDIRECTORY_ENABLED";
   public static final String FIRST_LAUNCH_KEY = "FIRST_LAUNCH_KEY";

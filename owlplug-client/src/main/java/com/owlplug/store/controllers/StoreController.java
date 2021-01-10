@@ -344,14 +344,25 @@ public class StoreController extends BaseController {
         bundle.getProduct().getName(), 
         bundle.getName());
 
+    
     String baseDirectoryPath = storeService.getBundleInstallFolder(bundle);
     String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
+
+    Boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
+
+    //if the enduser wishes to group plugins by their creator,
+    //then we need to include the subdirectory as well.
+    if(shouldGroupByCreator) {
+        String creator = FileUtils.sanitizeFileName(bundle.getProduct().getCreator());
+        relativeDirectoryPath = relativeDirectoryPath + File.separator + creator;
+    }
 
     File selectedDirectory = null;
 
     // A custom root directory to store plugin is defined
     if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
       // Store install target is already defined
+
       selectedDirectory = new File(baseDirectoryPath, relativeDirectoryPath);
       
       // A plugin root directory is not defined
