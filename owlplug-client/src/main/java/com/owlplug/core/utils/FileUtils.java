@@ -48,14 +48,9 @@ public class FileUtils {
     return path.replace("\\", "/");
   }
 
-  public static boolean isFilenameValid(String fileName) {
-
-    return fileName != null && !fileName.equals("") && fileName.matches("[-_.A-Za-z0-9]*");
-  }
-
   public static String sanitizeFileName(String fileName) {
 
-    return fileName.replaceAll("[^-_.A-Za-z0-9]", "");
+    return fileName.replaceAll("[^-_.A-Za-z0-9 ]", "").trim().replaceAll("\\s+"," ");
 
   }
 
