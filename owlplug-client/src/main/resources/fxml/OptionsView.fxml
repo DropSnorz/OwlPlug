@@ -65,6 +65,25 @@
                                     </HBox>
                                  </children>
                               </VBox>
+                              <VBox layoutX="10.0" layoutY="117.0">
+                                 <children>
+                                    <Label styleClass="heading-2" text="AU" />
+                                    <FlowPane prefWidth="200.0">
+                                       <children>
+                                          <JFXToggleButton fx:id="auToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore AU plugins" />
+                                       </children>
+                                    </FlowPane>
+                                    <HBox alignment="BASELINE_LEFT" spacing="5.0">
+                                       <children>
+                                          <JFXTextField fx:id="auDirectoryTextField" promptText="AU plugin directory" HBox.hgrow="ALWAYS" />
+                                          <JFXButton fx:id="auDirectoryButton" text="..." />
+                                       </children>
+                                       <padding>
+                                          <Insets left="15.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                               <VBox spacing="4.0">
                                  <children>
                                     <JFXCheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery" />
@@ -111,7 +130,7 @@
                                                    </VBox.margin>
                                                    <children>
                                                       <Label text="\@plugin-directory/" />
-                                                      <JFXTextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)"  /><Label fx:id="storeDirectorySeperator" text="/" />
+                                                      <JFXTextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" /><Label fx:id="storeDirectorySeperator" text="/" />
                                                       <Label fx:id="storeByCreatorLabel" text="\@creator/" />
                                                    </children>
                                                 </HBox>

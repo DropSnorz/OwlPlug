@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.controllers;
 
 import com.jfoenix.controls.JFXButton;
@@ -44,7 +44,7 @@ public class OptionsController extends BaseController {
 
   @Autowired
   private OptionsService optionsService;
-  @Autowired 
+  @Autowired
   private NativeHostService nativeHostService;
 
   @FXML
@@ -56,9 +56,15 @@ public class OptionsController extends BaseController {
   @FXML
   private JFXToggleButton vst3ToggleButton;
   @FXML
+  private JFXToggleButton auToggleButton;
+  @FXML
   private JFXTextField vst3DirectoryTextField;
   @FXML
   private JFXButton vst3DirectoryButton;
+  @FXML
+  private JFXTextField auDirectoryTextField;
+  @FXML
+  private JFXButton auDirectoryButton;
   @FXML
   private JFXCheckBox pluginNativeCheckbox;
 
@@ -69,7 +75,6 @@ public class OptionsController extends BaseController {
   @FXML
   private Label versionLabel;
 
-  
   @FXML
   private JFXButton clearCacheButton;
   @FXML
@@ -111,12 +116,16 @@ public class OptionsController extends BaseController {
       vst3DirectoryButton.setDisable(!newValue);
     });
 
+    auToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      this.getPreferences().putBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, newValue);
+      auDirectoryTextField.setDisable(!newValue);
+      auDirectoryButton.setDisable(!newValue);
+    });
+
     vst2DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
       Window mainWindow = vst2DirectoryButton.getScene().getWindow();
-
       File selectedDirectory = directoryChooser.showDialog(mainWindow);
-
       if (selectedDirectory != null) {
         vst2DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
       }
@@ -125,13 +134,11 @@ public class OptionsController extends BaseController {
     vst2DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
     });
-    
+
     vst3DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
       Window mainWindow = vst3DirectoryButton.getScene().getWindow();
-
       File selectedDirectory = directoryChooser.showDialog(mainWindow);
-
       if (selectedDirectory != null) {
         vst3DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
       }
@@ -140,7 +147,20 @@ public class OptionsController extends BaseController {
     vst3DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().put(ApplicationDefaults.VST3_DIRECTORY_KEY, newValue);
     });
-    
+
+    auDirectoryButton.setOnAction(e -> {
+      DirectoryChooser directoryChooser = new DirectoryChooser();
+      Window mainWindow = auDirectoryButton.getScene().getWindow();
+      File selectedDirectory = directoryChooser.showDialog(mainWindow);
+      if (selectedDirectory != null) {
+        auDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
+      }
+    });
+
+    auDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+      this.getPreferences().put(ApplicationDefaults.AU_DIRECTORY_KEY, newValue);
+    });
+
     pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
     });
@@ -179,14 +199,10 @@ public class OptionsController extends BaseController {
     });
 
     removeDataButton.setOnAction(e -> {
-
       JFXDialog dialog = this.getDialogController().newDialog();
-
       JFXDialogLayout layout = new JFXDialogLayout();
-
       layout.setHeading(new Label("Remove plugin"));
-      layout.setBody(new Label(
-          "Do you really want to remove all user data including accounts, " 
+      layout.setBody(new Label("Do you really want to remove all user data including accounts, "
           + "stores and custom settings ?"));
 
       JFXButton cancelButton = new JFXButton("Cancel");
@@ -207,9 +223,9 @@ public class OptionsController extends BaseController {
     });
 
     versionLabel.setText("V " + this.getApplicationDefaults().getVersion());
-    
+
     owlplugWebsiteLink.setOnAction(e -> {
-    	PlatformUtils.openDefaultBrowser(owlplugWebsiteLink.getText());
+      PlatformUtils.openDefaultBrowser(owlplugWebsiteLink.getText());
     });
 
     refreshView();
@@ -219,8 +235,10 @@ public class OptionsController extends BaseController {
 
     vst2DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
     vst3DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+    auDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
     vst2ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     vst3ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+    auToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
     pluginNativeCheckbox.setDisable(!nativeHostService.isNativeHostAvailable());
     pluginNativeCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
     syncPluginsCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
@@ -234,8 +252,8 @@ public class OptionsController extends BaseController {
       storeDirectoryTextField.setDisable(true);
       storeDirectoryTextField.setVisible(false);
     }
-    if(!storeByCreatorCheckBox.isSelected()){
-       storeByCreatorLabel.setVisible(false); 
+    if (!storeByCreatorCheckBox.isSelected()) {
+      storeByCreatorLabel.setVisible(false);
     }
   }
 
