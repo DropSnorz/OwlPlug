@@ -82,6 +82,7 @@ public class ApplicationDefaults {
   public static final String STORE_SUBDIRECTORY_ENABLED = "STORE_SUBDIRECTORY_ENABLED";
   public static final String FIRST_LAUNCH_KEY = "FIRST_LAUNCH_KEY";
   public static final String APPLICATION_STATE_KEY = "APPLICATION_STATE_KEY";
+  public static final String DEVELOPER_MODE_ENABLED_KEY = "DEVELOPER_MODE_ENABLED_KEY";
 
   /**
    * Creates a new ApplicationDefaults.
