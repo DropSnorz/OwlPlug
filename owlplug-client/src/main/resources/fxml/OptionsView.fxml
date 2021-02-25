@@ -111,7 +111,7 @@
                                                    </VBox.margin>
                                                    <children>
                                                       <Label text="\@plugin-directory/" />
-                                                      <JFXTextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)"  /><Label fx:id="storeDirectorySeperator" text="/" />
+                                                      <JFXTextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" /><Label fx:id="storeDirectorySeperator" text="/" />
                                                       <Label fx:id="storeByCreatorLabel" text="\@creator/" />
                                                    </children>
                                                 </HBox>
@@ -137,6 +137,18 @@
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
+                              </VBox>
+                              <VBox spacing="10.0">
+                                 <children>
+                                    <Label styleClass="heading-2" text="Developer Tools " />
+                                    <JFXCheckBox fx:id="devModeCheckBox" text="Enable developer mode" />
+                                    <HBox>
+                                       <children>
+                                          <JFXTextField fx:id="devModeTextField" editable="false" promptText="OwlPlug must be restarted to access developer server" HBox.hgrow="ALWAYS" />
+                                          <JFXButton fx:id="devModeButton" text="Access" />
+                                       </children>
+                                    </HBox>
+                                 </children>
                               </VBox>
                               <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="145.0" VBox.vgrow="SOMETIMES">
                                  <children>
