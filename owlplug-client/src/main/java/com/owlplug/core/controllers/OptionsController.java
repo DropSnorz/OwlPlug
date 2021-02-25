@@ -88,6 +88,14 @@ public class OptionsController extends BaseController {
   private Label storeDirectorySeperator;
   @FXML
   private Hyperlink owlplugWebsiteLink;
+  
+  @FXML
+  private JFXCheckBox devModeCheckBox;
+  @FXML
+  private JFXTextField devModeTextField;
+  @FXML
+  private JFXButton devModeButton;
+  
 
   /**
    * FXML initialize method.
@@ -211,6 +219,13 @@ public class OptionsController extends BaseController {
     owlplugWebsiteLink.setOnAction(e -> {
     	PlatformUtils.openDefaultBrowser(owlplugWebsiteLink.getText());
     });
+    
+    
+    devModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        this.getPreferences().putBoolean(ApplicationDefaults.DEVELOPER_MODE_ENABLED_KEY, newValue);
+    	devModeTextField.setVisible(newValue);
+    	devModeButton.setVisible(newValue);
+      });
 
     refreshView();
   }
@@ -236,6 +251,15 @@ public class OptionsController extends BaseController {
     }
     if(!storeByCreatorCheckBox.isSelected()){
        storeByCreatorLabel.setVisible(false); 
+    }
+    
+    devModeCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.DEVELOPER_MODE_ENABLED_KEY, false));
+    if(devModeCheckBox.isSelected()) {
+    	devModeTextField.setVisible(true);
+    	devModeButton.setVisible(true);
+    } else {
+    	devModeTextField.setVisible(false);
+    	devModeButton.setVisible(false);
     }
   }
 

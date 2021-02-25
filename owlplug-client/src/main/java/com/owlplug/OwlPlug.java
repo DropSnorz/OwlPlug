@@ -59,6 +59,7 @@ public class OwlPlug extends Application {
   @Autowired
   private Environment environment;
 
+  private Preferences preferences = Preferences.userRoot().node("com.owlplug.user");
   private ConfigurableApplicationContext context;
   private Parent rootNode;
   
@@ -73,6 +74,10 @@ public class OwlPlug extends Application {
     try {
       SpringApplicationBuilder builder = new SpringApplicationBuilder(OwlPlug.class);
       builder.headless(false);
+      
+      if(preferences.getBoolean(ApplicationDefaults.DEVELOPER_MODE_ENABLED_KEY, false)) {
+          builder.profiles("dev-mode");
+      }
       context = builder.run(getParameters().getRaw().toArray(new String[0]));
 
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
@@ -146,7 +151,7 @@ public class OwlPlug extends Application {
    */
   @Bean
   public Preferences getPreference() {
-    return Preferences.userRoot().node("com.owlplug.user");
+    return preferences;
 
   }
 
