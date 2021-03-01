@@ -26,6 +26,7 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.WebServerContext;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.OptionsService;
 import com.owlplug.core.utils.PlatformUtils;
@@ -46,6 +47,8 @@ public class OptionsController extends BaseController {
   private OptionsService optionsService;
   @Autowired 
   private NativeHostService nativeHostService;
+  @Autowired
+  private WebServerContext webServerContext;
 
   @FXML
   private JFXToggleButton vst2ToggleButton;
@@ -226,6 +229,12 @@ public class OptionsController extends BaseController {
     	devModeTextField.setVisible(newValue);
     	devModeButton.setVisible(newValue);
       });
+    
+    devModeButton.setOnAction(e -> {
+        if(webServerContext.isServerStarted()) {
+            PlatformUtils.openDefaultBrowser(webServerContext.getUrl());
+        }
+    });
 
     refreshView();
   }
@@ -257,10 +266,16 @@ public class OptionsController extends BaseController {
     if(devModeCheckBox.isSelected()) {
     	devModeTextField.setVisible(true);
     	devModeButton.setVisible(true);
+
     } else {
     	devModeTextField.setVisible(false);
     	devModeButton.setVisible(false);
     }
+    
+    if(webServerContext.isServerStarted()) {
+        devModeTextField.setText(webServerContext.getUrl());
+    }
+
   }
 
 }
