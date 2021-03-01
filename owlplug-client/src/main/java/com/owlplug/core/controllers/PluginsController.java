@@ -19,6 +19,18 @@
  
 package com.owlplug.core.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.prefs.Preferences;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
@@ -26,7 +38,6 @@ import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.controllers.dialogs.NewLinkController;
-import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
@@ -36,12 +47,7 @@ import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.CustomTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.core.utils.FileUtils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.prefs.Preferences;
+
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeCell;
@@ -49,10 +55,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
 @Controller
 public class PluginsController extends BaseController {
@@ -61,8 +63,6 @@ public class PluginsController extends BaseController {
 
   @Autowired
   private PluginService pluginService;
-  @Autowired
-  private PluginDAO pluginDAO;
   @Autowired
   private SymlinkDAO symlinkDAO;
   @Autowired
@@ -159,7 +159,7 @@ public class PluginsController extends BaseController {
   public void refreshPlugins() {
 
     treePluginNode.getInternalChildren().clear();
-    this.pluginList = pluginDAO.findAll();
+    this.pluginList = pluginService.findAll();
 
     for (Plugin plugin : pluginList) {
 

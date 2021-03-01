@@ -77,6 +77,10 @@ public class PluginService extends BaseService {
     
   }
   
+  public Iterable<Plugin> findAll() {
+	  return pluginDAO.findAll();
+  }
+  
   /**
    * Removes a plugin reference from database.
    * @param plugin - plugin to remoeve
