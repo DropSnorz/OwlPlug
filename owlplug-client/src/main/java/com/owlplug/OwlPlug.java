@@ -98,6 +98,10 @@ public class OwlPlug extends Application {
       throw e;
     } catch (Exception e) {
       log.error("OwlPlug could not be started", e);
+      if(preferences.getBoolean(ApplicationDefaults.DEVELOPER_MODE_ENABLED_KEY, false)) {
+          log.info("Disabling developer mode after unexpected error during startup");
+          preferences.putBoolean(ApplicationDefaults.DEVELOPER_MODE_ENABLED_KEY, false);
+      }
       notifyPreloader(new PreloaderProgressMessage("error", "OwlPlug could not be started"));
       throw e;
     }
