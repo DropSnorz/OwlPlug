@@ -65,18 +65,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
    */
   public TaskExecutionContext createPluginSyncTask() {
 
-    PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
-    parameters.setPlatform(applicationDefaults.getRuntimePlatform());
-    parameters.setVstDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-    parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
-    parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
-    parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
-
-    PluginSyncTask task = new PluginSyncTask(parameters, pluginDAO, pluginFootprintDAO, symlinkDAO, nativeHostService);
-    task.setOnSucceeded(e -> {
-      notifyListeners(syncPluginsListeners);
-    });
-    return create(task);
+    return createPluginSyncTask(null);
   }
   
   /**
@@ -91,12 +80,16 @@ public class CoreTaskFactory extends BaseTaskFactory {
     parameters.setPlatform(applicationDefaults.getRuntimePlatform());
     parameters.setVstDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
     parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+    parameters.setAuDirectory(prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
     parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+    parameters.setFindAu(prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
     
-    String fixedDirectoryScope = FileUtils.convertPath(directoryScope);
-
-    PluginSyncTask task = new PluginSyncTask(fixedDirectoryScope, parameters, 
+    if(directoryScope != null) {
+        parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
+    }
+    
+    PluginSyncTask task = new PluginSyncTask(parameters, 
         pluginDAO, 
         pluginFootprintDAO, 
         symlinkDAO, 

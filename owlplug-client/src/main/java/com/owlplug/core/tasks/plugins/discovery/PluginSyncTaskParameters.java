@@ -24,10 +24,13 @@ import com.owlplug.core.model.platform.RuntimePlatform;
 public class PluginSyncTaskParameters {
 
   private RuntimePlatform platform;
+  private String directoryScope;
   private String vstDirectory;
   private String vst3Directory;
+  private String auDirectory;
   private boolean findVst2;
   private boolean findVst3;
+  private boolean findAu;
 
   public RuntimePlatform getPlatform() {
     return platform;
@@ -36,9 +39,17 @@ public class PluginSyncTaskParameters {
   public void setPlatform(RuntimePlatform platform) {
     this.platform = platform;
   }
+  
+  public String getDirectoryScope() {
+	  return directoryScope;
+  }
+
+  public void setDirectoryScope(String directoryScope) {
+	  this.directoryScope = directoryScope;
+  }
 
   public String getVstDirectory() {
-    return vstDirectory;
+	  return vstDirectory;
   }
 
   public void setVstDirectory(String pluginDirectory) {
@@ -51,6 +62,14 @@ public class PluginSyncTaskParameters {
 
   public void setVst3Directory(String vst3Directory) {
     this.vst3Directory = vst3Directory;
+  }
+  
+  public String getAuDirectory() {
+	return auDirectory;
+  }
+
+  public void setAuDirectory(String auDirectory) {
+	this.auDirectory = auDirectory;
   }
 
   public boolean isFindVst2() {
@@ -67,6 +86,14 @@ public class PluginSyncTaskParameters {
 
   public void setFindVst3(boolean findVst3) {
     this.findVst3 = findVst3;
+  }
+
+  public boolean isFindAu() {
+	  return findAu;
+  }
+
+  public void setFindAu(boolean findAu) {
+	  this.findAu = findAu;
   }
 
 }
