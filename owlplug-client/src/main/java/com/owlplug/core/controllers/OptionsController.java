@@ -19,6 +19,11 @@
 
 package com.owlplug.core.controllers;
 
+import java.io.File;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDialog;
@@ -26,18 +31,16 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.OptionsService;
 import com.owlplug.core.utils.PlatformUtils;
 
-import java.io.File;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
 @Controller
 public class OptionsController extends BaseController {
@@ -255,6 +258,14 @@ public class OptionsController extends BaseController {
     if (!storeByCreatorCheckBox.isSelected()) {
       storeByCreatorLabel.setVisible(false);
     }
+    
+    // Disable AU options for non MAC users
+    if(!this.getApplicationDefaults().getRuntimePlatform()
+    		.getOperatingSystem().equals(OperatingSystem.MAC)) {
+    	auToggleButton.setSelected(false);
+    	auToggleButton.setDisable(true);
+    }
+    
   }
 
 }
