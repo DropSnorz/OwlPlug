@@ -1,23 +1,43 @@
-/target/
-/.idea/
-.vscode/
-
-.project
-.classpath
-.settings
-*.log
-
 # Owlplug specific
 installer/input/
 installer/output/
 src/main/resources/credentials.properties
 
-# OwlPlug Host binaries 
+# OwlPlug Host binaries
 *.dll
 *.dylib
 
 # OwlPlug Host / Juce / C++ files
 /owlplug-host/src/main/juce/Builds
+
+# Maven
+/target/
+
+# Eclipse files
+.project
+.classpath
+.settings
+
+# IntelliJ User-specific stuff
+/.idea/
+
+
+# IntelliJ Gradle and Maven with auto-import
+# When using Gradle or Maven with auto-import, you should exclude module files,
+# since they will be recreated, and may cause churn.  Uncomment if using
+# auto-import.
+# .idea/artifacts
+# .idea/compiler.xml
+# .idea/jarRepositories.xml
+# .idea/modules.xml
+# .idea/*.iml
+# .idea/modules
+*.iml
+# *.ipr
+
+# Other IDE
+.vscode/
+*.log
 
 # OSX Files
 .DS_Store
