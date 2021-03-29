@@ -66,6 +66,15 @@ public class PluginFileFormatResolver {
     }
     
     /*
+     * Osx AU plugin
+     */
+    if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)
+        && pluginFormat.equals(PluginFormat.AU)
+        && AuComponentFile.formatCheck(file)) {
+      return new AuComponentFile(file);
+    }
+    
+    /*
      * Windows VST3 < 3.6.10 Library files 
      */
     if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.WIN)

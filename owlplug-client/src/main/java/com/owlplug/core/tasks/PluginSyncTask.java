@@ -51,7 +51,6 @@ public class PluginSyncTask extends AbstractTask {
   private SymlinkDAO symlinkDAO;
   private PluginFootprintDAO pluginFootprintDAO;
   private PluginSyncTaskParameters parameters;
-  private String directoryScope = null;
 
   private boolean useNativeHost = false;
   private NativeHost nativeHost;
@@ -83,27 +82,6 @@ public class PluginSyncTask extends AbstractTask {
 
   }
 
-  /**
-   * Creates a new PluginSyncTask scoped to a subdirectory. Only plugins in the directory scope will be scanned.
-   * @param directoryScope plugin subdirectory. 
-   * @param parameters Task Parameters
-   * @param pluginDAO pluginDAO
-   * @param pluginFootprintDAO pluginFootprintDAO
-   * @param symlinkDAO symlinkDAO
-   * @param nativeHostService nativeHostService
-   */
-  public PluginSyncTask(String directoryScope, 
-      PluginSyncTaskParameters parameters, 
-      PluginDAO pluginDAO,
-      PluginFootprintDAO pluginFootprintDAO,
-      SymlinkDAO symlinkDAO,
-      NativeHostService nativeHostService) {
-    
-    this(parameters, pluginDAO, pluginFootprintDAO, symlinkDAO, nativeHostService);
-    this.directoryScope = directoryScope;
-    
-  }
-
   @Override
   protected TaskResult call() throws Exception {
 
@@ -117,10 +95,10 @@ public class PluginSyncTask extends AbstractTask {
       ArrayList<Symlink> collectedSymlinks = new ArrayList<>();
       SymlinkCollector symlinkCollector = new SymlinkCollector(true);
       
-      if (directoryScope != null) {
+      if (parameters.getDirectoryScope() != null) {
         // Delete previous plugins scanned in the directory scope
-        pluginDAO.deleteByPathContainingIgnoreCase(directoryScope);
-        symlinkDAO.deleteByPathContainingIgnoreCase(directoryScope);
+        pluginDAO.deleteByPathContainingIgnoreCase(parameters.getDirectoryScope());
+        symlinkDAO.deleteByPathContainingIgnoreCase(parameters.getDirectoryScope());
       } else {
         // Delete all previous plugins by default (in case of a complete Sync task)
         pluginDAO.deleteAll();
@@ -128,20 +106,24 @@ public class PluginSyncTask extends AbstractTask {
       }
       
 
-      if (directoryScope != null) {
+      if (parameters.getDirectoryScope() != null) {
         // Plugins are retrieved from a scoped directory
         if (parameters.isFindVst2()) {
-          collectedPluginFiles.addAll(pluginCollector.collect(directoryScope, PluginFormat.VST2));
+          collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.VST2));
         }
         if (parameters.isFindVst3()) {
-          collectedPluginFiles.addAll(pluginCollector.collect(directoryScope, PluginFormat.VST3));
+          collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.VST3));
         }
-        collectedSymlinks.addAll(symlinkCollector.collect(directoryScope));
+        if (parameters.isFindAu()) {
+            collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.AU));
+        }
+        collectedSymlinks.addAll(symlinkCollector.collect(parameters.getDirectoryScope()));
 
       } else {
         // Plugins are retrieved from regulars directories
         String vstDirectory = parameters.getVstDirectory();
         String vst3Directory = parameters.getVst3Directory();
+        String auDirectory = parameters.getAuDirectory();
 
         if (parameters.isFindVst2()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vstDirectory, PluginFormat.VST2));
@@ -151,6 +133,10 @@ public class PluginSyncTask extends AbstractTask {
           collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
           collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
         }
+        if (parameters.isFindAu()) {
+            collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
+            collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
+          }
       }
       
       log.debug(collectedPluginFiles.size() + " plugins collected");
