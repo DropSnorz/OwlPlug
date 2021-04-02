@@ -8,8 +8,8 @@
 *.log
 
 # Owlplug specific
-installer/input/
-installer/output/
+build/input/
+build/output/
 src/main/resources/credentials.properties
 
 # OwlPlug Host binaries 
