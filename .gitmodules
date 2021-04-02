@@ -1,0 +1,3 @@
+[submodule "owlplug-host/modules/JUCE"]
+	path = owlplug-host/modules/JUCE
+	url = https://github.com/juce-framework/JUCE
