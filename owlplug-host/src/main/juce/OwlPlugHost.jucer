@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" jucerVersion="5.4.5"
+<JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" jucerVersion="5.4.7"
               version="0.1.2" companyName="OwlPlug" companyWebsite="https://owlplug.com"
               bundleIdentifier="com.owlplug.host">
   <MAINGROUP id="tTU8aN" name="owlplug-host">
@@ -20,16 +20,16 @@
                        targetName="owlplug-host-${JUCE_APP_VERSION}"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../../../../tools/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../modules/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <VS2017 targetFolder="Builds/VisualStudio2017">
@@ -40,30 +40,30 @@
                        targetName="owlplug-host-${JUCE_APP_VERSION}"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../../../../tools/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../../../../tools/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../modules/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../modules/JUCE/modules"/>
       </MODULEPATHS>
     </VS2017>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
   <LIVE_SETTINGS>
     <WINDOWS/>
