@@ -6,8 +6,31 @@ name: Owlplug Main
 on: push
 
 jobs:
-  build:
+  build-host-win:
+      runs-on: windows-latest
+      steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: "Download Projucer"
+        run: ./build/download-projucer.sh
+        shell: bash
+        env:
+          OS: win
+  build-host-osx:
+      runs-on: macos-latest
+      steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: "Download Projucer"
+        run: ./build/download-projucer.sh
+        shell: bash
+        env:
+          OS: mac
+  build-jar:
     runs-on: ubuntu-latest
+    needs: [build-host-win, build-host-osx]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 14
