@@ -7,27 +7,34 @@ on: push
 
 jobs:
   build-host-win:
-      runs-on: windows-latest
-      steps:
-      - uses: actions/checkout@v1
-        with:
-          submodules: true
-      - name: "Download Projucer"
-        run: ./build/download-projucer.sh
-        shell: bash
-        env:
-          OS: win
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: "Download Projucer"
+      run: ./build/download-projucer.sh
+      shell: bash
+      env:
+        OS: win
   build-host-osx:
-      runs-on: macos-latest
-      steps:
-      - uses: actions/checkout@v1
-        with:
-          submodules: true
-      - name: "Download Projucer"
-        run: ./build/download-projucer.sh
-        shell: bash
-        env:
-          OS: mac
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        submodules: true
+    - name: Set up JDK 14
+      uses: actions/setup-java@v1.4.3
+      with:
+        java-version: 14
+    - name: "Download Projucer"
+      run: ./build/download-projucer.sh
+      shell: bash
+      env:
+        OS: mac
+    - name: "Build Host"
+      run: ./build/build-host-osx.sh
+      shell: bash
   build-jar:
     runs-on: ubuntu-latest
     needs: [build-host-win, build-host-osx]
