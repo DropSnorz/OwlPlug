@@ -22,9 +22,17 @@ jobs:
       shell: bash
       env:
         OS: win
+    - name: Get Host Version
+      run: Write-Host ::set-output name=version::$((Select-Xml -Path owlplug-host/src/main/juce/OwlPlugHost.jucer -XPath "//JUCERPROJECT/@version").Node.Value)
+      id: get-version
     - name: "Build Host"
       run: ./build/build-host-win.sh
       shell: bash
+    - name: Upload Host Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: owlplug-host-win
+        path: owlplug-host/src/main/juce/Builds/VisualStudio2017/x64/Release/Dynamic Library/owlplug-host-${{ steps.get-version.outputs.version }}.dll
   build-host-osx:
     runs-on: macos-latest
     steps:
