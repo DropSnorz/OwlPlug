@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" jucerVersion="5.4.7"
-              version="0.1.2" companyName="OwlPlug" companyWebsite="https://owlplug.com"
-              bundleIdentifier="com.owlplug.host">
+<JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" version="0.1.2"
+              companyName="OwlPlug" companyWebsite="https://owlplug.com" bundleIdentifier="com.owlplug.host"
+              displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="tTU8aN" name="owlplug-host">
     <GROUP id="{67E14D11-0E24-62FA-D544-692759DB4816}" name="Source">
       <FILE id="LpOsQn" name="com_owlplug_host_NativeHostJNI.cpp" compile="1"
@@ -17,7 +17,7 @@
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" headerPath="$JAVA_HOME/include;$JAVA_HOME/include/darwin"
                        targetName="owlplug-host-${JUCE_APP_VERSION}"/>
-        <CONFIGURATION isDebug="0" name="Release" headerPath="$JAVA_HOME/include;$JAVA_HOME/include/darwin"
+        <CONFIGURATION isDebug="0" name="Release" headerPath="/$JAVA_HOME/include;/$JAVA_HOME/include/darwin"
                        targetName="owlplug-host-${JUCE_APP_VERSION}"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
