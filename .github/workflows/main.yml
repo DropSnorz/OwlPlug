@@ -49,9 +49,19 @@ jobs:
       shell: bash
       env:
         OS: mac
+    - name: Install XmlStarlet
+      run: brew install xmlstarlet
+    - name: Get Host Version
+      run: echo ::set-output name=version::$(xmlstarlet sel -t -v 'string(//JUCERPROJECT/@version)' owlplug-host/src/main/juce/OwlPlugHost.jucer)
+      id: get-version
     - name: "Build Host"
       run: ./build/build-host-osx.sh
       shell: bash
+    - name: Upload Host Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: owlplug-host-osx
+        path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ steps.get-version.outputs.version }}.dylib
   build-jar:
     runs-on: ubuntu-latest
     needs: [build-host-win, build-host-osx]
