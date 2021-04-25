@@ -93,3 +93,52 @@ jobs:
       with:
         name: owlplug-client-jar
         path: owlplug-client/target/owlplug-client-${{ steps.get-version.outputs.version }}.jar
+  package-win:
+    runs-on: windows-latest
+    needs: [build-jar]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 14
+      uses: actions/setup-java@v1.4.3
+      with:
+        java-version: 14
+    - name: Get version
+      run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+      shell: bash
+      id: get-version
+    - name: Install Jar artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: owlplug-client-jar
+        path: owlplug-client/target
+    - name: Package installer
+      run: cd build && ./package-msi.cmd ${{ steps.get-version.outputs.version }}
+    - name: Upload Installer Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: owlplug-installer-win
+        path: build/output/OwlPlug-${{ steps.get-version.outputs.version }}.msi
+  package-osx:
+    runs-on: macos-latest
+    needs: [build-jar]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 14
+      uses: actions/setup-java@v1.4.3
+      with:
+        java-version: 14
+    - name: Get version
+      run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+      id: get-version
+    - name: Install Jar artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: owlplug-client-jar
+        path: owlplug-client/target
+    - name: Package installer
+      run: cd build && ./package-dmg.sh ${{ steps.get-version.outputs.version }}
+    - name: Upload Installer Artifact
+      uses: actions/upload-artifact@v2.2.2
+      with:
+        name: owlplug-installer-osx
+        path: build/output/OwlPlug-${{ steps.get-version.outputs.version }}.dmg
