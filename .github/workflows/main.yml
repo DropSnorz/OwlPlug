@@ -74,6 +74,16 @@ jobs:
     - name: Get version
       run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
       id: get-version
+    - name: Install Windows native Host artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: owlplug-host-win
+        path: owlplug-host/src/main/resources
+    - name: Install OSX native Host artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: owlplug-host-osx
+        path: owlplug-host/src/main/resources
     - name: Build maven parent project
       run: mvn -B install -DskipTests
     - name: Build runnable Jar
