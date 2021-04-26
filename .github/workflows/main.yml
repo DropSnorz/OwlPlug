@@ -3,7 +3,12 @@
 
 name: Owlplug Main
 
-on: push
+on: 
+  push:
+    branches:
+      - main
+      - dev
+      - ci/*
 
 jobs:
   build-host-win:
