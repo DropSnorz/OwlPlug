@@ -10,7 +10,7 @@ echo "Copying owlplug-client-$owlplugversion.jar to owlplug.jar"
 
 cp ../owlplug-client/target/owlplug-client-$owlplugversion.jar ./input/owlplug.jar
 
-echo "Generating OwlPlug MSI Install package"
+echo "Generating OwlPlug DMG Install package"
 
 jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.JarLauncher \
 --main-jar owlplug.jar --license-file ./input/LICENSE --dest ./output \

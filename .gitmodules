@@ -1,0 +1,9 @@
+[submodule "owlplug-host/modules/JUCE"]
+	path = owlplug-host/modules/JUCE
+	url = https://github.com/juce-framework/JUCE
+[submodule "owlplug-host/modules/vst2sdk"]
+	path = owlplug-host/modules/vst2sdk
+	url = https://github.com/OwlPlug/vst2sdk
+[submodule "owlplug-host/modules/vst3sdk"]
+	path = owlplug-host/modules/vst3sdk
+	url = https://github.com/steinbergmedia/vst3sdk
