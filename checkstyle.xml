@@ -12,6 +12,10 @@
   <property name="severity" value="warning"/>
   <property name="charset" value="UTF-8"/>
   <property name="fileExtensions" value="java, properties, xml"/>
+  <module name="LineLength">
+    <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+    <property name="max" value="120"/>
+  </module>
   <module name="TreeWalker">
     <module name="OuterTypeFilename"/>
     <module name="IllegalTokenText">
@@ -23,10 +27,6 @@
       <property name="allowEscapesForControlCharacters" value="true"/>
       <property name="allowByTailComment" value="true"/>
       <property name="allowNonPrintableEscapes" value="true"/>
-    </module>
-    <module name="LineLength">
-      <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
-      <property name="max" value="120"/>
     </module>
     <module name="AvoidStarImport"/>
     <module name="OneTopLevelClass"/>
@@ -179,12 +179,9 @@
       <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
     </module>
     <module name="JavadocMethod">
-      <property name="minLineCount" value="2"/>
       <property name="allowedAnnotations" value="Override, Test"/>
       <property name="scope" value="public"/>
-      <property name="allowThrowsTagsForSubclasses" value="true"/>
       <property name="allowMissingParamTags" value="true"/>
-      <property name="allowMissingThrowsTags" value="true"/>
       <property name="allowMissingReturnTag" value="true"/>
     </module>
     <module name="MethodName">
@@ -203,7 +200,7 @@
     <property name="eachLine" value="true"/>
   </module>
   <module name="Header">
-    <property name="header" value="/* OwlPlug\n * Copyright (C) 2019 Arthur &lt;dropsnorz@gmail.com&gt;\n *\n * This file is part of OwlPlug.\n *\n * OwlPlug is free software: you can redistribute it and/or modify\n * it under the terms of the GNU General Public License as published by\n * the Free Software Foundation, either version 3 of the License, or\n * (at your option) any later version.\n *\n * OwlPlug is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n * GNU General Public License for more details.\n *\n * You should have received a copy of the GNU General Public License\n * along with OwlPlug.  If not, see &lt;https://www.gnu.org/licenses/&gt;.\n */"/>
+    <property name="header" value="/* OwlPlug\n * Copyright (C) 2021 Arthur &lt;dropsnorz@gmail.com&gt;\n *\n * This file is part of OwlPlug.\n *\n * OwlPlug is free software: you can redistribute it and/or modify\n * it under the terms of the GNU General Public License version 3 \n * as published by the Free Software Foundation.\n *\n * OwlPlug is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n * GNU General Public License for more details.\n *\n * You should have received a copy of the GNU General Public License\n * along with OwlPlug.  If not, see &lt;https://www.gnu.org/licenses/&gt;.\n */"/>
     <property name="ignoreLines" value="2"/>
     <property name="fileExtensions" value="java"/>
   </module>
