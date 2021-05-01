@@ -141,7 +141,7 @@ jobs:
         name: owlplug-client-jar
         path: owlplug-client/target
     - name: Package installer
-      run: cd build && ./package-dmg.sh ${{ steps.get-version.outputs.version }}
+      run: cd build && ./apply-osx-package-perms.sh && ./package-dmg.sh ${{ steps.get-version.outputs.version }}
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v2.2.2
       with:
