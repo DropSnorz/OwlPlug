@@ -25,6 +25,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
+import com.owlplug.core.model.platform.OperatingSystem;
 import java.io.File;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -58,12 +59,18 @@ public class WelcomeDialogController extends AbstractDialogController {
   @FXML
   private JFXTextField vst3DirectoryTextField;
   @FXML
+  private JFXToggleButton auToggleButton;
+  @FXML
+  private JFXButton auDirectoryButton;
+  @FXML
+  private JFXTextField auDirectoryTextField;
+  @FXML
   private JFXButton okButton;
   @FXML
   private JFXButton cancelButton;
 
   WelcomeDialogController() {
-    super(650, 300);
+    super(700, 300);
     this.setOverlayClose(false);
   }
 
@@ -71,6 +78,9 @@ public class WelcomeDialogController extends AbstractDialogController {
    * FXML initialize.
    */
   public void initialize() {
+    
+    vst2ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+    vst2DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
 
     vst2DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -83,6 +93,9 @@ public class WelcomeDialogController extends AbstractDialogController {
       }
     });
     
+    vst3ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+    vst3DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+    
     vst3DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
       Window mainWindow = vst3DirectoryButton.getScene().getWindow();
@@ -93,6 +106,32 @@ public class WelcomeDialogController extends AbstractDialogController {
         vst3DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
       }
     });
+    
+    auToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
+    auDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
+    
+    auDirectoryButton.setOnAction(e -> {
+      DirectoryChooser directoryChooser = new DirectoryChooser();
+      Window mainWindow = auDirectoryButton.getScene().getWindow();
+
+      File selectedDirectory = directoryChooser.showDialog(mainWindow);
+
+      if (selectedDirectory != null) {
+        auDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
+      }
+    });
+    
+    
+    // Disable AU options for non MAC users
+    if (!this.getApplicationDefaults().getRuntimePlatform()
+        .getOperatingSystem().equals(OperatingSystem.MAC)) {
+      //auToggleButton.setSelected(true);
+      auToggleButton.setSelected(false);
+      auDirectoryTextField.setDisable(true);
+      auDirectoryButton.setDisable(true);
+      auToggleButton.setDisable(true);
+    }
+
 
     okButton.setOnAction(e -> {
       this.close();

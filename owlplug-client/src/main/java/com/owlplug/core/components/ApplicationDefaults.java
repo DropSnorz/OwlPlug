@@ -15,10 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.components;
 
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginFormat;
+import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.model.platform.RuntimePlatformResolver;
 import com.owlplug.core.utils.FileUtils;
@@ -42,7 +44,6 @@ public class ApplicationDefaults {
   private RuntimePlatform runtimePlatform;
 
   public static final String APPLICATION_NAME = "OwlPlug";
-  public static final String DEFAULT_VST_DIRECTORY = "C:/VST";
 
   // CHECKSTYLE:OFF
   public static final Image owlplugLogo = new Image(
@@ -138,22 +139,43 @@ public class ApplicationDefaults {
     }
   }
 
+  public String getDefaultPluginPath(PluginFormat format) {
+
+    if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.WIN)) {
+      if (format.equals(PluginFormat.VST2)) {
+        return "C:/Program Files/VSTPlugins";
+      } else if (format.equals(PluginFormat.VST3)) {
+        return "C:/Program Files/Common Files/VST3";
+      }
+    } else if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)) {
+      if (format.equals(PluginFormat.VST2)) {
+        return "/Library/Audio/Plug-ins/VST";
+      } else if (format.equals(PluginFormat.VST3)) {
+        return "/Library/Audio/Plug-ins/VST3";
+      } else if (format.equals(PluginFormat.AU)) {
+        return "Library/Audio/Plug-ins/Components";
+      }
+    }
+
+    return "/path/to/audio/plugins";
+  }
+
   public String getVersion() {
     return env.getProperty("owlplug.version");
   }
-  
+
   public String getOwlPlugHubUrl() {
     return env.getProperty("owlplug.hub.url");
   }
-  
+
   public String getUpdateDownloadUrl() {
     return env.getProperty("owlplug.hub.updateDownloadUrl");
   }
-  
+
   public String getAnalyticsTrackingId() {
     return env.getProperty("owlplug.analytics.trackingId");
   }
-  
+
   public String getEnvProperty(String property) {
     return env.getProperty(property);
   }

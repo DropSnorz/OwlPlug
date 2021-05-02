@@ -17,7 +17,7 @@
       </VBox>
       <VBox>
          <children>
-            <JFXToggleButton fx:id="vst2ToggleButton" text="VST2" />
+            <JFXToggleButton fx:id="vst2ToggleButton" text="Explore VST2 plugins" />
             <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
                <children>
                   <JFXTextField fx:id="vst2DirectoryTextField" promptText="/path/to/your/plugins" HBox.hgrow="ALWAYS" />
@@ -28,11 +28,22 @@
       </VBox>
       <VBox layoutX="10.0" layoutY="54.0">
          <children>
-            <JFXToggleButton fx:id="vst3ToggleButton" text="VST3" />
+            <JFXToggleButton fx:id="vst3ToggleButton" text="Explore VST3 plugins" />
             <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
                <children>
                   <JFXTextField fx:id="vst3DirectoryTextField" promptText="/path/to/your/plugins" HBox.hgrow="ALWAYS" />
                   <JFXButton fx:id="vst3DirectoryButton" text="...." />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+            <JFXToggleButton fx:id="auToggleButton" text="Explore AU plugins" />
+            <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="auDirectoryTextField" promptText="/path/to/your/plugins" HBox.hgrow="ALWAYS" />
+                  <JFXButton fx:id="auDirectoryButton" text="...." />
                </children>
             </HBox>
          </children>

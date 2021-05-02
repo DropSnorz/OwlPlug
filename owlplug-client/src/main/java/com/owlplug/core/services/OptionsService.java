@@ -23,6 +23,8 @@ import com.owlplug.auth.dao.UserAccountDAO;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.dao.PluginDAO;
+import com.owlplug.core.model.PluginFormat;
+import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
 import java.util.prefs.BackingStoreException;
@@ -57,7 +59,17 @@ public class OptionsService extends BaseService {
     Preferences prefs = this.getPreferences();
     // Init default options
     if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) == null) {
-      prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.DEFAULT_VST_DIRECTORY);
+      prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, 
+          this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.VST2));
+    }
+    if (prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, null) == null) {
+      prefs.put(ApplicationDefaults.VST3_DIRECTORY_KEY, 
+          this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.VST3));
+    }
+    if (prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, null) == null
+        && this.getApplicationDefaults().getRuntimePlatform().getOperatingSystem().equals(OperatingSystem.MAC)) {
+      prefs.put(ApplicationDefaults.AU_DIRECTORY_KEY, 
+          this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.AU));
     }
     if (prefs.get(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, null) == null) {
       prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, Boolean.TRUE);
