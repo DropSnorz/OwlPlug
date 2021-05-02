@@ -194,6 +194,10 @@ public class StoreService extends BaseService {
       return this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
     }
     
+    if (bundle.getFormat().equals(PluginFormat.AU)) {
+      return this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
+    }
+    
     return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
         
   }
