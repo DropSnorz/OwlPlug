@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" version="0.1.2"
+<JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" version="0.2.0"
               companyName="OwlPlug" companyWebsite="https://owlplug.com" bundleIdentifier="com.owlplug.host"
               displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="tTU8aN" name="owlplug-host">
