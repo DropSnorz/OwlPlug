@@ -6,7 +6,7 @@ name: Owlplug Main
 on: 
   push:
     branches:
-      - main
+      - master
       - dev
       - ci/*
 
