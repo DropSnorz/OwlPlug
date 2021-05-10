@@ -153,7 +153,7 @@ public class ApplicationDefaults {
       } else if (format.equals(PluginFormat.VST3)) {
         return "/Library/Audio/Plug-ins/VST3";
       } else if (format.equals(PluginFormat.AU)) {
-        return "Library/Audio/Plug-ins/Components";
+        return "/Library/Audio/Plug-ins/Components";
       }
     }
 

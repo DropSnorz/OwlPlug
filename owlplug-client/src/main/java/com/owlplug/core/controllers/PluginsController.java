@@ -176,14 +176,20 @@ public class PluginsController extends BaseController {
     Set<String> userPluginDirectories = new HashSet<>();
     Preferences prefs = this.getPreferences();
     if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
-        && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").equals("")) {
+        && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
     }
 
     if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
-        && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").equals("")) {
+        && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
+      userPluginDirectories.add(FileUtils.convertPath(path));
+    }
+    
+    if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)
+        && !prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "").isBlank()) {
+      String path = prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
     }
 
