@@ -4,7 +4,7 @@
 </p>
 <p align="center">
 <sup>
-<b>OwlPlug is a small audio plugin manager. It provides a complete view of your plugin setup and simple tools to manage it.</b>
+<b>OwlPlug is an audio plugin manager. It provides a complete view of your plugin setup and simple tools to manage it.</b>
 </sup>
 </p>
 
@@ -24,15 +24,15 @@
 
 
 **About OwlPlug**
-* :earth_africa: [OwlPlug Website](https://owlplug.com)
-* :pushpin: [Roadmap](https://owlplug.com/roadmap)
-* :page_facing_up: [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki)
+
+
+:earth_africa: [OwlPlug Website](https://owlplug.com) | :pushpin: [Roadmap](https://owlplug.com/roadmap) | :page_facing_up: [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki)
 
 **Why i have created OwlPlug ?** 
 
 OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple thats looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, i've discovered dozens of cool plugins just by using my own tool. So i realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
 
-OwlPlug is regularly tested on `Windows 10 | MacOS 10.12.6`. All kind of feedbacks are greatly welcomed, even under the same configuration. And as it's a **beta release**, it's highly recommended to **backup your files before using OwlPlug**.
+All kinds of feedbacks are greatly welcomed.
 
 ## Installation
 
@@ -53,7 +53,7 @@ OwlPlug is regularly tested on `Windows 10 | MacOS 10.12.6`. All kind of feedbac
 
 ## Plugins
 
-OwlPlug can discover VST2 and VST3 Plugins. OwlPlug is compatible with your previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
+OwlPlug can discover VST2, VST3 and AU Plugins. OwlPlug is compatible with your previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
 You can configure the tool to work with multiple plugin directories using the **Link** feature.  
 
 ## Links
