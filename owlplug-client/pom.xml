@@ -138,7 +138,7 @@
 		<dependency>
 			<groupId>com.googlecode.plist</groupId>
 			<artifactId>dd-plist</artifactId>
-			<version>1.20</version>
+			<version>1.23</version>
 		</dependency>
 
 		<dependency>
@@ -155,7 +155,7 @@
 		<dependency>
 			<groupId>com.google.api-client</groupId>
 			<artifactId>google-api-client</artifactId>
-			<version>1.23.0</version>
+			<version>1.31.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.apis</groupId>
