@@ -35,7 +35,7 @@ jobs:
       run: ./build/build-host-win.sh
       shell: bash
     - name: Upload Host Artifact
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: owlplug-host-win
         path: owlplug-host/src/main/juce/Builds/VisualStudio2017/x64/Release/Dynamic Library/owlplug-host-${{ steps.get-version.outputs.version }}.dll
@@ -65,7 +65,7 @@ jobs:
       run: ./build/build-host-osx.sh
       shell: bash
     - name: Upload Host Artifact
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: owlplug-host-osx
         path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ steps.get-version.outputs.version }}.dylib
@@ -97,7 +97,7 @@ jobs:
     - name: Build runnable Jar
       run: cd owlplug-client && mvn -B install spring-boot:repackage -DskipTests
     - name: Upload Jar Build Artifact
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: owlplug-client-jar
         path: owlplug-client/target/owlplug-client-${{ steps.get-version.outputs.version }}.jar
@@ -123,7 +123,7 @@ jobs:
     - name: Package installer
       run: cd build && ./package-msi.cmd ${{ steps.get-version.outputs.version }}
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: owlplug-installer-win
         path: build/output/OwlPlug-${{ steps.get-version.outputs.version }}.msi
@@ -148,7 +148,7 @@ jobs:
     - name: Package installer
       run: cd build && ./apply-osx-package-perms.sh && ./package-dmg.sh ${{ steps.get-version.outputs.version }}
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v2.2.3
+      uses: actions/upload-artifact@v2.2.4
       with:
         name: owlplug-installer-osx
         path: build/output/OwlPlug-${{ steps.get-version.outputs.version }}.dmg
