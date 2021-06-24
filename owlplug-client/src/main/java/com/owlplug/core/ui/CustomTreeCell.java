@@ -21,7 +21,6 @@ package com.owlplug.core.ui;
 import com.jfoenix.controls.JFXTreeCell;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
-
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -55,10 +54,15 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
           circle.getStyleClass().add("shape-disabled");
         }
         circle.applyCss();
+        
+        if (((Plugin) item).isDisabled()) {
+          Label label = new Label("(disabled)");
+          label.getStyleClass().add("label-disabled");
+          hbox.getChildren().add(label);
+        }
         setGraphic(hbox);
         setText(null);
       } else if (item instanceof IDirectory) {
-    	  
         TextFlow textFlow = new TextFlow();
         IDirectory dir = (IDirectory) item;
         Text directoryName;

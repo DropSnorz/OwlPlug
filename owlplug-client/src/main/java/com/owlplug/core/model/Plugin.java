@@ -18,6 +18,7 @@
  
 package com.owlplug.core.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -49,6 +50,8 @@ public class Plugin {
   protected String screenshotUrl;
   protected boolean nativeCompatible = false;
   protected boolean syncComplete = false;
+  @Column(columnDefinition = "boolean default false")
+  protected boolean disabled = false;
   
   protected PluginFormat format;
   protected PluginType type;
@@ -183,6 +186,14 @@ public class Plugin {
 
   public void setSyncComplete(boolean syncComplete) {
     this.syncComplete = syncComplete;
+  }
+
+  public boolean isDisabled() {
+    return disabled;
+  }
+
+  public void setDisabled(boolean disabled) {
+    this.disabled = disabled;
   }
 
   @Override
