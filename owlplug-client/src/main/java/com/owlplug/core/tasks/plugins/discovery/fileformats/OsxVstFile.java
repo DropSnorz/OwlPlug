@@ -35,7 +35,7 @@ public class OsxVstFile extends PluginFile {
    * @return true if the file matches the current file format
    */
   public static boolean formatCheck(File file) {
-    return file.getAbsolutePath().endsWith(".vst") 
+    return (file.getAbsolutePath().endsWith(".vst") || file.getAbsolutePath().endsWith(".vst.disabled"))
         && file.isDirectory();
     
   }
@@ -56,6 +56,8 @@ public class OsxVstFile extends PluginFile {
       OsxPlistFile plistFile = new OsxPlistFile(plist);
       plistFile.bindProperties(plugin);
     }
+    
+    plugin.setDisabled(this.isDisabled());
     
     return plugin;
     

@@ -40,5 +40,9 @@ public abstract class PluginFile {
     this.pluginFile = pluginFile;
   }
   
+  public boolean isDisabled() {
+    return pluginFile.getAbsolutePath().endsWith(".disabled");
+  }
+  
 
 }
