@@ -43,7 +43,7 @@ public class OsxPlistFile {
   }
 
 
-  public void bindProperties(Plugin plugin){
+  public void bindProperties(Plugin plugin) {
     
     try {
       NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(plist);

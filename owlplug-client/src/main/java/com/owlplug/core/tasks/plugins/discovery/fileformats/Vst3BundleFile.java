@@ -40,7 +40,7 @@ public class Vst3BundleFile extends PluginFile {
    * @return true if the file matches the current file format
    */
   public static boolean formatCheck(File file) {
-    return file.getAbsolutePath().endsWith(".vst3") 
+    return (file.getAbsolutePath().endsWith(".vst3") || file.getAbsolutePath().endsWith(".vst3.disabled"))
         && file.isDirectory();
 
   }
@@ -78,6 +78,8 @@ public class Vst3BundleFile extends PluginFile {
         }
       }
     }
+    
+    plugin.setDisabled(this.isDisabled());
 
     return plugin;
   }

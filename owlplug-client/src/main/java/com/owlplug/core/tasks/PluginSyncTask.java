@@ -114,7 +114,7 @@ public class PluginSyncTask extends AbstractTask {
           collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.VST3));
         }
         if (parameters.isFindAu()) {
-            collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.AU));
+          collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.AU));
         }
         collectedSymlinks.addAll(symlinkCollector.collect(parameters.getDirectoryScope()));
 
@@ -133,9 +133,9 @@ public class PluginSyncTask extends AbstractTask {
           collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
         }
         if (parameters.isFindAu()) {
-            collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
-            collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
-          }
+          collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
+          collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
+        }
       }
       
       log.debug(collectedPluginFiles.size() + " plugins collected");
@@ -156,7 +156,7 @@ public class PluginSyncTask extends AbstractTask {
         pluginDAO.save(plugin);
 
         if (useNativeHost && nativeHost.isAvailable()
-            && pluginFootprint.isNativeDiscoveryEnabled()) {
+            && pluginFootprint.isNativeDiscoveryEnabled() && !plugin.isDisabled()) {
           log.debug("Load plugin using native discovery: " + plugin.getPath());
           this.updateMessage("Exploring plugin " + plugin.getName());
           NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
