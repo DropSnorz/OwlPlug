@@ -1,5 +1,5 @@
 # OwlPlug Store Endpoint Specification
-**Version 1.1.1**
+**Version 1.1.2**
 
 ## Introduction
 
@@ -117,10 +117,11 @@ Ambient,Amp,Analog,Bass,Brass,Compressor,Delay,Distortion,Drum,Equalizer,Filter,
 
 ### Target
 
-A Target is just a simple string describing main target environments of a plugin. You must use following identifiers. 
+A Target is just a simple string describing main target environments of a plugin. You must use following identifiers:
 * Windows 32 bit: `win32`
 * Windows 64 bit: `win64`
 * OSX: `osx`
+* Linux: `linux`
 
 For example, in case of a win 64 bit release, you should sepcify `win64`. If a bundle contains both x64 and x86 windows distributions, you can have an array of target like this `["win64", "win32"]`. This is **not** a compatibility flag so if you are distributing Win 32 release only, you should **not** specify `win64`.
 
