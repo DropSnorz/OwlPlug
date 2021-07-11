@@ -50,7 +50,7 @@ public class RuntimePlatformResolver {
       return platforms.get("osx");
     }
 
-    return new RuntimePlatform("unknow", OperatingSystem.UNDEFINED, "");
+    return new RuntimePlatform("unknown", OperatingSystem.UNKNOWN, "");
   }
 
   private boolean is64bitPlatform() {
