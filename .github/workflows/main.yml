@@ -16,6 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
       with:
+        fetch-depth: 0
         submodules: recursive
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
     - name: Set up JDK 14
@@ -27,7 +28,7 @@ jobs:
       run: ./build/download-projucer.sh
       shell: bash
       env:
-        OS: win
+        OS: windows
     - name: Get Host Version
       run: Write-Host ::set-output name=version::$((Select-Xml -Path owlplug-host/src/main/juce/OwlPlugHost.jucer -XPath "//JUCERPROJECT/@version").Node.Value)
       id: get-version
@@ -44,6 +45,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
       with:
+        fetch-depth: 0
         submodules: recursive
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
     - name: Set up JDK 14
@@ -55,7 +57,7 @@ jobs:
       run: ./build/download-projucer.sh
       shell: bash
       env:
-        OS: mac
+        OS: osx
     - name: Install XmlStarlet
       run: brew install xmlstarlet
     - name: Get Host Version
