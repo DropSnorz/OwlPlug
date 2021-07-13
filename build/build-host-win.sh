@@ -1,7 +1,7 @@
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 
 # Resave jucer files
-"$ROOT/build/bin/Projucer.exe" --resave "$ROOT/owlplug-host/src/main/juce/OwlPlugHost.jucer"
+"$ROOT/build/bin/JUCE/Projucer.exe" --resave "$ROOT/owlplug-host/src/main/juce/OwlPlugHost.jucer"
 
 VS_WHERE="C:/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
   
