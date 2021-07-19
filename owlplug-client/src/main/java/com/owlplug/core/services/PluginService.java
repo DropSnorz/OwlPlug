@@ -27,7 +27,12 @@ import com.owlplug.core.model.PluginFootprint;
 import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.services.StoreService;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +49,9 @@ public class PluginService extends BaseService {
   protected PluginFootprintDAO pluginFootprintDAO;
   @Autowired
   protected CoreTaskFactory taskFactory;
+  
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
   public void syncPlugins() {
     taskFactory.createPluginSyncTask().schedule();
@@ -73,6 +81,45 @@ public class PluginService extends BaseService {
     }
     
     return owlplugCentralService.getPluginImageUrl(absoluteName);
+    
+  }
+  
+  public void disablePlugin(Plugin plugin) {
+    
+    try {
+      File originFile = new File(plugin.getPath());
+      File destFile = new File(plugin.getPath() + ".disabled");
+      FileUtils.moveFile(originFile, destFile);
+      
+      plugin.setDisabled(true);
+      plugin.setPath(plugin.getPath() + ".disabled");
+      pluginDAO.save(plugin);
+      
+    } catch (IOException e) {
+      log.error("Plugin can't be disabled", e);
+    }
+    
+  }
+  
+  public void enablePlugin(Plugin plugin) {
+    
+    try {
+      File originFile = new File(plugin.getPath());
+      
+      String newPath = plugin.getPath();
+      if (plugin.getPath().endsWith(".disabled")) {
+        newPath = plugin.getPath().substring(0, plugin.getPath().length() - ".disabled".length());
+      }
+      File destFile = new File(newPath);
+      FileUtils.moveFile(originFile, destFile);
+      
+      plugin.setDisabled(false);
+      plugin.setPath(newPath);
+      pluginDAO.save(plugin);
+      
+    } catch (IOException e) {
+      log.error("Plugin can't be enabled", e);
+    }
     
   }
   

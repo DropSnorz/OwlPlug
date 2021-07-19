@@ -107,8 +107,8 @@ public class PluginsController extends BaseController {
       }
     });
     treeView.setRoot(treePluginNode);
-
-    refreshPlugins();
+    
+    clearAndFillPluginTree();
 
     // Dispatchs treeView selection event to the nodeInfoController
     treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -148,14 +148,18 @@ public class PluginsController extends BaseController {
       pluginService.syncPlugins();
     });
 
-    taskFactory.addSyncPluginsListener(() -> refreshPlugins());
+    taskFactory.addSyncPluginsListener(() -> clearAndFillPluginTree());
 
+  }
+  
+  public void refreshPluginTree() {
+    treeView.refresh();
   }
 
   /**
    * Refreshes displayed plugins in tree views.
    */
-  public void refreshPlugins() {
+  public void clearAndFillPluginTree() {
 
     treePluginNode.getInternalChildren().clear();
     this.pluginList = pluginDAO.findAll();

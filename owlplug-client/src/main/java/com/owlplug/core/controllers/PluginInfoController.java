@@ -41,15 +41,11 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PluginInfoController extends BaseController {
-
-  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
   private PluginsController pluginsController;
@@ -82,6 +78,10 @@ public class PluginInfoController extends BaseController {
   private Label pluginPathLabel;
   @FXML
   private JFXButton openDirectoryButton;
+  @FXML
+  private JFXButton enableButton;
+  @FXML
+  private JFXButton disableButton;
   @FXML
   private JFXButton uninstallButton;
   @FXML
@@ -124,13 +124,25 @@ public class PluginInfoController extends BaseController {
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         coreTaskFactory.createPluginRemoveTask(currentPlugin)
-            .setOnSucceeded(x -> pluginsController.refreshPlugins()).schedule();
+            .setOnSucceeded(x -> pluginsController.clearAndFillPluginTree()).schedule();
       });
       removeButton.getStyleClass().add("button-danger");
 
       layout.setActions(removeButton, cancelButton);
       dialog.setContent(layout);
       dialog.show();
+    });
+    
+    disableButton.setOnAction(e -> {
+      pluginService.disablePlugin(currentPlugin);
+      setPlugin(currentPlugin);
+      pluginsController.refreshPluginTree();
+    });
+    
+    enableButton.setOnAction(e -> {
+      pluginService.enablePlugin(currentPlugin);
+      setPlugin(currentPlugin);
+      pluginsController.refreshPluginTree();
     });
     
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -154,6 +166,19 @@ public class PluginInfoController extends BaseController {
     pluginIdentifierLabel.setText(Optional.ofNullable(plugin.getUid()).orElse("Unknown"));
     pluginCategoryLabel.setText(Optional.ofNullable(plugin.getCategory()).orElse("Unknown"));
     pluginPathLabel.setText(plugin.getPath());
+    
+    if (plugin.isDisabled()) {
+      enableButton.setManaged(true);
+      enableButton.setVisible(true);
+      disableButton.setManaged(false);
+      disableButton.setVisible(false);
+    } else {
+      enableButton.setManaged(false);
+      enableButton.setVisible(false);
+      disableButton.setManaged(true);
+      disableButton.setVisible(true);
+
+    }
     
     if (plugin.getFootprint() != null) {
       nativeDiscoveryToggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());

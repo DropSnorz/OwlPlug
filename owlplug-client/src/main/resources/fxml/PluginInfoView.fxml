@@ -42,10 +42,12 @@
                   </VBox>
                </children>
             </StackPane>
-            <HBox alignment="CENTER_LEFT" styleClass="card-title">
+            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="card-title">
                <children>
                   <Label text="General" />
                   <Pane HBox.hgrow="ALWAYS" />
+                  <JFXButton fx:id="enableButton" buttonType="RAISED" layoutX="353.0" layoutY="10.0" text="Enable" />
+                  <JFXButton fx:id="disableButton" buttonType="RAISED" layoutX="428.0" layoutY="10.0" text="Disable" />
                   <JFXButton fx:id="uninstallButton" buttonType="RAISED" styleClass="button-danger" text="Uninstall">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
