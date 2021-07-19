@@ -46,8 +46,22 @@
                <children>
                   <Label text="General" />
                   <Pane HBox.hgrow="ALWAYS" />
-                  <JFXButton fx:id="enableButton" buttonType="RAISED" layoutX="353.0" layoutY="10.0" text="Enable" />
-                  <JFXButton fx:id="disableButton" buttonType="RAISED" layoutX="428.0" layoutY="10.0" text="Disable" />
+                  <JFXButton fx:id="enableButton" buttonType="RAISED" layoutX="353.0" layoutY="10.0" text="Enable">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/eye-white-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
+                  <JFXButton fx:id="disableButton" buttonType="RAISED" layoutX="428.0" layoutY="10.0" text="Disable">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/eye2-white-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
                   <JFXButton fx:id="uninstallButton" buttonType="RAISED" styleClass="button-danger" text="Uninstall">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
