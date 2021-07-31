@@ -15,13 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXToggleButton;
+import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.model.Plugin;
@@ -41,6 +43,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -106,51 +109,33 @@ public class PluginInfoController extends BaseController {
     });
 
     uninstallButton.setOnAction(e -> {
+      this.showUninstallDialog();
 
-      JFXDialog dialog = this.getDialogController().newDialog();
-
-      JFXDialogLayout layout = new JFXDialogLayout();
-
-      layout.setHeading(new Label("Remove plugin"));
-      layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName()
-          + " ? This will permanently delete the file from your hard drive."));
-
-      JFXButton cancelButton = new JFXButton("Cancel");
-      cancelButton.setOnAction(cancelEvent -> {
-        dialog.close();
-      });
-
-      JFXButton removeButton = new JFXButton("Remove");
-      removeButton.setOnAction(removeEvent -> {
-        dialog.close();
-        coreTaskFactory.createPluginRemoveTask(currentPlugin)
-            .setOnSucceeded(x -> pluginsController.clearAndFillPluginTree()).schedule();
-      });
-      removeButton.getStyleClass().add("button-danger");
-
-      layout.setActions(removeButton, cancelButton);
-      dialog.setContent(layout);
-      dialog.show();
     });
-    
+
     disableButton.setOnAction(e -> {
-      pluginService.disablePlugin(currentPlugin);
-      setPlugin(currentPlugin);
-      pluginsController.refreshPluginTree();
+      if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
+        this.showDisableDialog();
+      } else {
+        pluginService.disablePlugin(currentPlugin);
+        setPlugin(currentPlugin);
+        pluginsController.refreshPluginTree();
+      }
+
     });
-    
+
     enableButton.setOnAction(e -> {
       pluginService.enablePlugin(currentPlugin);
       setPlugin(currentPlugin);
       pluginsController.refreshPluginTree();
     });
-    
+
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       if (currentPlugin != null && currentPlugin.getFootprint() != null) {
         currentPlugin.getFootprint().setNativeDiscoveryEnabled(newValue);
         pluginService.save(currentPlugin.getFootprint());
       }
-      
+
     });
 
   }
@@ -166,7 +151,7 @@ public class PluginInfoController extends BaseController {
     pluginIdentifierLabel.setText(Optional.ofNullable(plugin.getUid()).orElse("Unknown"));
     pluginCategoryLabel.setText(Optional.ofNullable(plugin.getCategory()).orElse("Unknown"));
     pluginPathLabel.setText(plugin.getPath());
-    
+
     if (plugin.isDisabled()) {
       enableButton.setManaged(true);
       enableButton.setVisible(true);
@@ -179,7 +164,7 @@ public class PluginInfoController extends BaseController {
       disableButton.setVisible(true);
 
     }
-    
+
     if (plugin.getFootprint() != null) {
       nativeDiscoveryToggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
     }
@@ -203,7 +188,7 @@ public class PluginInfoController extends BaseController {
       pluginScreenshotPane.setBackground(new Background(bgImg));
 
     } else {
-      
+
       this.knownPluginImages.add(url);
       Image screenshot = imageCache.get(url);
       if (screenshot != null) {
@@ -214,6 +199,76 @@ public class PluginInfoController extends BaseController {
       }
 
     }
+  }
+  
+  private void showUninstallDialog() {
+    
+    JFXDialog dialog = this.getDialogController().newDialog();
+
+    JFXDialogLayout layout = new JFXDialogLayout();
+
+    layout.setHeading(new Label("Remove plugin"));
+    layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName()
+        + " ? This will permanently delete the file from your hard drive."));
+
+    JFXButton cancelButton = new JFXButton("Cancel");
+    cancelButton.setOnAction(cancelEvent -> {
+      dialog.close();
+    });
+
+    JFXButton removeButton = new JFXButton("Remove");
+    removeButton.setOnAction(removeEvent -> {
+      dialog.close();
+      coreTaskFactory.createPluginRemoveTask(currentPlugin)
+          .setOnSucceeded(x -> pluginsController.clearAndFillPluginTree()).schedule();
+    });
+    removeButton.getStyleClass().add("button-danger");
+
+    layout.setActions(removeButton, cancelButton);
+    dialog.setContent(layout);
+    dialog.show();
+  }
+  
+  private void showDisableDialog() {
+    
+    JFXDialogLayout layout = new JFXDialogLayout();
+
+    layout.setHeading(new Label("Disable plugin"));
+    
+    VBox vbox = new VBox(30);
+    Label dialogLabel = new Label(
+        "Disabling a plugin will rename the plugin file by updating the extension. "
+        + "The suffix \".disabled\" will be appended to the filename causing the DAW to ignore the plugin. "
+        + "You can reactivate the plugin at any time from OwlPlug or by renaming the file manually");
+    vbox.getChildren().add(dialogLabel);
+    
+    JFXCheckBox displayDialog = new JFXCheckBox("Don't show me this message again");
+    displayDialog.setSelected(!getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true));
+    displayDialog.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      this.getPreferences().putBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, !newValue);
+    });
+    vbox.getChildren().add(displayDialog);
+    layout.setBody(vbox);
+    
+    JFXDialog dialog = this.getDialogController().newDialog();
+
+    JFXButton cancelButton = new JFXButton("Cancel");
+    cancelButton.setOnAction(cancelEvent -> {
+      dialog.close();
+    });
+
+    JFXButton disableButton = new JFXButton("Disable Plugin");
+    disableButton.setOnAction(removeEvent -> {
+      pluginService.disablePlugin(currentPlugin);
+      setPlugin(currentPlugin);
+      pluginsController.refreshPluginTree();
+      dialog.close();
+    });
+
+    layout.setActions(disableButton, cancelButton);
+    layout.setPrefSize(600, 250);
+    dialog.setContent(layout);
+    dialog.show();
   }
 
 }
