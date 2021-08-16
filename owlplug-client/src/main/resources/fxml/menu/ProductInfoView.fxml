@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.Tooltip?>
 <HBox fx:id="productInfoContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.store.controllers.ProductInfoController">
    <children>
       <VBox fx:id="productInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0">
@@ -110,7 +111,9 @@
                                                 <Image url="@../../icons/user-white-32.png" />
                                              </image>
                                           </ImageView>
-                                       </graphic></Label>
+                                       </graphic>
+                                       <tooltip><Tooltip text="Creator" /></tooltip>
+                                    </Label>
                                     <Label fx:id="typeLabel" text="TYPE" GridPane.rowIndex="1">
                                        <graphic>
                                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -118,7 +121,9 @@
                                                 <Image url="@../../icons/wave-circle-32.png" />
                                              </image>
                                           </ImageView>
-                                       </graphic></Label>
+                                       </graphic>
+                                       <tooltip><Tooltip text="Plugin type" /></tooltip>
+                                    </Label>
                                     <HBox spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                                        <children>
                                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -132,7 +137,17 @@
                                           <FlowPane fx:id="tagContainer" hgap="5.0" vgap="5.0" />
                                        </children>
                                     </HBox>
-                                    <Label fx:id="versionLabel" text="VERSION" GridPane.columnIndex="1">
+                                    <Label fx:id="licenseLabel" text="LICENSE" GridPane.columnIndex="1">
+                                       <graphic>
+                                          <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/share-white-32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <tooltip><Tooltip text="License" /></tooltip>
+                                    </Label>
+                                    <Label fx:id="versionLabel" text="VERSION" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <graphic>
                                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -140,6 +155,7 @@
                                              </image>
                                           </ImageView>
                                        </graphic>
+                                       <tooltip><Tooltip text="Version" /></tooltip>
                                     </Label>
                                  </children>
                                  <padding>

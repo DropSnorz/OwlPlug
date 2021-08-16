@@ -50,6 +50,7 @@ public class StoreProduct {
   private String screenshotUrl;
   private String donateUrl;
   private String creator;
+  private String license;
   @Deprecated
   // Version must be be hold by bundles
   private String version;
@@ -128,7 +129,15 @@ public class StoreProduct {
   public void setCreator(String creator) {
     this.creator = creator;
   }
-  
+
+  public String getLicense() {
+    return license;
+  }
+
+  public void setLicense(String license) {
+    this.license = license;
+  }
+
   @Deprecated
   public String getVersion() {
     return version;

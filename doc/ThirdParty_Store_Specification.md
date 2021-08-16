@@ -1,5 +1,5 @@
 # OwlPlug Store Endpoint Specification
-**Version 1.1.2**
+**Version 1.1.3**
 
 ## Introduction
 
@@ -31,6 +31,7 @@ The root object is a [Store](#Store) object.
     {
       "name": "Wobbleizer",
       "creator": "Dropsnorz",
+      "license": "mit",
       "screenshotUrl": "https://owlplug.dropsnorz.com/products/com.dropsnorz.wobbleizer/wobbleizer.png",
       "description": "A frequency filter with LFO modulation",
       "pageUrl": "https://github.com/dropsnorz/wobbleizer",
@@ -45,6 +46,7 @@ The root object is a [Store](#Store) object.
     {
       "name": "Foo Plugin",
       "creator": "Foo name",
+      "license": "mit",
       "screenshotUrl": "https://via.placeholder.com/350x150.png",
       "description": "An awesome foo plugin....",
       "pageUrl": "http://example.com",
@@ -81,6 +83,7 @@ Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the product/plugin. 255 characters max.
 creator | `string` | **REQUIRED**. Product creator / manufacturer name. 255 characters max.
+license | `string` | Distribution license. Free field but keep it short. Use the [Github keywords](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/licensing-a-repository) like `gpl-3.0`, `mit`, `...` as most as possible for consistency. 255 character max.
 type | `string` | **REQUIRED**. Must be `instrument` for VSTi or `effect` for VST/VSTfx or `unknown`. 255 characters max.
 stage | `string` | Can be `beta` for an early release, `demo` for a limited release or `release` for stable build. 255 characters max.
 pageUrl | `string` | **REQUIRED**. The plugin page url. 255 characters max.
@@ -95,7 +98,7 @@ bundles | `array` | **REQUIRED**. An array of [Bundle](#Bundle). Can be empty.
 ### Bundle
 
 A bundle is a package containing a plugin in a specific `format` (vst or vst3) for one or multiple `targets` environments (Windows, OSX...).
-For example, a bundle can contains a vst3 release compatible in Win64 and OSX environement. 
+For example, a bundle can contains a vst3 release compatible in Win64 and OSX environment. 
 
 Field Name | Type | Description
 ---|:---:|---
@@ -123,7 +126,7 @@ A Target is just a simple string describing main target environments of a plugin
 * OSX: `osx`
 * Linux: `linux`
 
-For example, in case of a win 64 bit release, you should sepcify `win64`. If a bundle contains both x64 and x86 windows distributions, you can have an array of target like this `["win64", "win32"]`. This is **not** a compatibility flag so if you are distributing Win 32 release only, you should **not** specify `win64`.
+For example, in case of a win 64 bit release, you should specify `win64`. If a bundle contains both x64 and x86 windows distributions, you can have an array of target like this `["win64", "win32"]`. This is **not** a compatibility flag so if you are distributing Win 32 release only, you should **not** specify `win64`.
 
 ### Bundle file structure
 
@@ -275,6 +278,16 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
             "default": "",
             "examples": [
               "Dropsnorz"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "license": {
+            "$id": "#/properties/products/items/properties/license",
+            "type": "string",
+            "title": "Product License",
+            "default": "",
+            "examples": [
+              "mit"
             ],
             "pattern": "^(.*)$"
           },

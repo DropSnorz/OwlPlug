@@ -73,6 +73,8 @@ public class ProductInfoController {
   @FXML
   private Label creatorLabel;
   @FXML
+  private Label licenseLabel;
+  @FXML
   private Label versionLabel;
   @FXML
   private Label typeLabel;
@@ -145,6 +147,12 @@ public class ProductInfoController {
     });
 
     this.creatorLabel.setText(product.getCreator());
+
+    if(product.getLicense() != null ) {
+      licenseLabel.setText(product.getLicense());
+    } else {
+      licenseLabel.setText("Unknown license");
+    }
     if (product.getVersion() != null) {
       versionLabel.setVisible(true);
       versionLabel.setText(product.getVersion());

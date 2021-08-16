@@ -59,6 +59,7 @@ public class StoreModelAdapter {
     product.setScreenshotUrl(UrlUtils.fixSpaces(productJsonMapper.getScreenshotUrl()));
     product.setDonateUrl(UrlUtils.fixSpaces(productJsonMapper.getDonateUrl()));
     product.setCreator(productJsonMapper.getCreator());
+    product.setLicense(productJsonMapper.getLicense());
     product.setVersion(productJsonMapper.getVersion());
     product.setDescription(productJsonMapper.getDescription());
 

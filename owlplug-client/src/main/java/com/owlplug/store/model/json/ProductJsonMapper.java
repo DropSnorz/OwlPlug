@@ -30,6 +30,7 @@ public class ProductJsonMapper {
   private String screenshotUrl;
   private String donateUrl;
   private String creator;
+  private String license;
   private String version;
   private String description;
   private String type;
@@ -93,6 +94,14 @@ public class ProductJsonMapper {
 
   public void setCreator(String creator) {
     this.creator = creator;
+  }
+
+  public String getLicense() {
+    return license;
+  }
+
+  public void setLicense(String license) {
+    this.license = license;
   }
 
   public String getVersion() {
