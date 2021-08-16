@@ -33,6 +33,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -235,14 +236,20 @@ public class PluginInfoController extends BaseController {
 
     layout.setHeading(new Label("Disable plugin"));
     
-    VBox vbox = new VBox(30);
+    VBox vbox = new VBox(10);
     Label dialogLabel = new Label(
         "Disabling a plugin will rename the plugin file by updating the extension. "
         + "The suffix \".disabled\" will be appended to the filename causing the DAW to ignore the plugin. "
-        + "You can reactivate the plugin at any time from OwlPlug or by renaming the file manually");
+        + "You can reactivate the plugin at any time from OwlPlug or by renaming the file manually.");
+    dialogLabel.setWrapText(true);
     vbox.getChildren().add(dialogLabel);
+
+    Label noteLabel = new Label("You may need admin privileges to rename plugins");
+    noteLabel.getStyleClass().add("label-disabled");
+    vbox.getChildren().add(noteLabel);
     
     JFXCheckBox displayDialog = new JFXCheckBox("Don't show me this message again");
+    VBox.setMargin(displayDialog, new Insets(20,0,0,0));
     displayDialog.setSelected(!getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true));
     displayDialog.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, !newValue);
@@ -266,7 +273,7 @@ public class PluginInfoController extends BaseController {
     });
 
     layout.setActions(disableButton, cancelButton);
-    layout.setPrefSize(600, 250);
+    layout.setPrefSize(600, 280);
     dialog.setContent(layout);
     dialog.show();
   }
