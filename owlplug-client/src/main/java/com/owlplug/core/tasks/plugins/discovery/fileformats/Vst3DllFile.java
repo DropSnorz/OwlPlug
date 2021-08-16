@@ -31,7 +31,7 @@ public class Vst3DllFile extends PluginFile {
    * @return true if the file matches the current file format
    */
   public static boolean formatCheck(File file) {
-    return file.getAbsolutePath().endsWith(".vst3") 
+    return (file.getAbsolutePath().endsWith(".vst3") || file.getAbsolutePath().endsWith(".vst3.disabled"))
         && file.isFile();
     
   }
@@ -45,7 +45,11 @@ public class Vst3DllFile extends PluginFile {
     
     String pluginName = FilenameUtils.removeExtension(this.getPluginFile().getName());
     String pluginPath = this.getPluginFile().getAbsolutePath().replace("\\", "/");
-    return new Plugin(pluginName, pluginPath, PluginFormat.VST3);
+    Plugin plugin = new  Plugin(pluginName, pluginPath, PluginFormat.VST3);
+    
+    plugin.setDisabled(this.isDisabled());
+    
+    return plugin;
     
   }
 
