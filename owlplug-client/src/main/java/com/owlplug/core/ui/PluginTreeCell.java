@@ -21,6 +21,8 @@ package com.owlplug.core.ui;
 import com.jfoenix.controls.JFXTreeCell;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginState;
+import com.owlplug.core.services.PluginService;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -29,7 +31,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class CustomTreeCell extends JFXTreeCell<Object> {
+public class PluginTreeCell extends JFXTreeCell<Object> {
+
+  private PluginService pluginService;
+
+  public PluginTreeCell(PluginService pluginService){
+    this.pluginService = pluginService;
+  }
 
 
   @Override
@@ -48,11 +56,16 @@ public class CustomTreeCell extends JFXTreeCell<Object> {
         hbox.getChildren().add(new Label(plugin.getName()));
         Circle circle = new Circle(0, 0, 2);
         hbox.getChildren().add(circle);
-        if (plugin.isNativeCompatible()) {
-          circle.getStyleClass().add("shape-success");
+
+        PluginState state = pluginService.getPluginState(plugin);
+        if(state.equals(PluginState.ACTIVE)) {
+          circle.getStyleClass().add("shape-state-active");
+        } else if (state.equals(PluginState.DISABLED)) {
+          circle.getStyleClass().add("shape-state-disabled");
         } else {
-          circle.getStyleClass().add("shape-disabled");
+          circle.getStyleClass().add("shape-state-installed");
         }
+
         circle.applyCss();
         
         if (((Plugin) item).isDisabled()) {

@@ -28,6 +28,7 @@ import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.PluginService;
+import com.owlplug.core.ui.PluginStateView;
 import com.owlplug.core.utils.PlatformUtils;
 import java.io.File;
 import java.util.ArrayList;
@@ -78,6 +79,8 @@ public class PluginInfoController extends BaseController {
   private Label pluginManufacturerLabel;
   @FXML
   private Label pluginCategoryLabel;
+  @FXML
+  private PluginStateView pluginStateView;
   @FXML
   private Label pluginPathLabel;
   @FXML
@@ -151,6 +154,7 @@ public class PluginInfoController extends BaseController {
     pluginManufacturerLabel.setText(Optional.ofNullable(plugin.getManufacturerName()).orElse("Unknown"));
     pluginIdentifierLabel.setText(Optional.ofNullable(plugin.getUid()).orElse("Unknown"));
     pluginCategoryLabel.setText(Optional.ofNullable(plugin.getCategory()).orElse("Unknown"));
+    pluginStateView.setPluginState(pluginService.getPluginState(plugin));
     pluginPathLabel.setText(plugin.getPath());
 
     if (plugin.isDisabled()) {

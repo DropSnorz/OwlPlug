@@ -24,6 +24,7 @@ import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFootprint;
+import com.owlplug.core.model.PluginState;
 import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.services.StoreService;
@@ -121,6 +122,16 @@ public class PluginService extends BaseService {
       log.error("Plugin can't be enabled", e);
     }
     
+  }
+
+  public PluginState getPluginState(Plugin plugin) {
+    if(plugin.isDisabled()) {
+      return PluginState.DISABLED;
+    }
+    if(plugin.isNativeCompatible()) {
+      return PluginState.ACTIVE;
+    }
+    return PluginState.INSTALLED;
   }
   
   /**

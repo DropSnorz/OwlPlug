@@ -32,7 +32,7 @@ import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.PluginService;
-import com.owlplug.core.ui.CustomTreeCell;
+import com.owlplug.core.ui.PluginTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.core.utils.FileUtils;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class PluginsController extends BaseController {
     treeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
       @Override
       public TreeCell<Object> call(TreeView<Object> p) {
-        return new CustomTreeCell();
+        return new PluginTreeCell(pluginService);
       }
     });
     treeView.setRoot(treePluginNode);

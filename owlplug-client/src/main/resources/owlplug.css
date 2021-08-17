@@ -383,11 +383,15 @@ ProgressIndicator{
 }
 
 
-.shape-success {
+.shape-state-active {
 	-fx-fill: success-color;
 }
 
-.shape-disabled {
+.shape-state-installed {
+	-fx-fill: #94d3a3;
+}
+
+.shape-state-disabled {
 	-fx-fill: disabled-color;
 }
 

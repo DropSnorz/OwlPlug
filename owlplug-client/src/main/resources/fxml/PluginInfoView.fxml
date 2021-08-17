@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
+<?import com.owlplug.core.ui.PluginStateView?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PluginInfoController">
    <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
@@ -88,31 +89,37 @@
                   <TextFlow prefWidth="200.0">
                      <children>
                         <Label text="Plugin Name: " />
-                        <Label fx:id="pluginNameLabel" styleClass="label-emphase" text="UNKNOW" />
+                        <Label fx:id="pluginNameLabel" styleClass="label-emphase" text="UNKNOWN" />
                      </children>
                   </TextFlow>
                   <TextFlow prefWidth="200.0" GridPane.columnIndex="1">
                      <children>
                         <Label text="Plugin Version: " />
-                        <Label fx:id="pluginVersionLabel" styleClass="label-emphase" text="UNKNOW" />
+                        <Label fx:id="pluginVersionLabel" styleClass="label-emphase" text="UNKNOWN" />
                      </children>
                   </TextFlow>
                   <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
                         <Label text="Identifier: " />
-                        <Label fx:id="pluginIdentifierLabel" styleClass="label-emphase" text="UNKNOW" />
+                        <Label fx:id="pluginIdentifierLabel" styleClass="label-emphase" text="UNKNOWN" />
                      </children>
                   </TextFlow>
+                  <HBox prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <Label text="State: " />
+                        <PluginStateView fx:id="pluginStateView" styleClass="label-emphase"/>
+                     </children>
+                  </HBox>
                   <TextFlow prefWidth="200.0" GridPane.rowIndex="1">
                      <children>
                         <Label text="Manufacturer: " />
-                        <Label fx:id="pluginManufacturerLabel" styleClass="label-emphase" text="UNKNOW" />
+                        <Label fx:id="pluginManufacturerLabel" styleClass="label-emphase" text="UNKNOWN" />
                      </children>
                   </TextFlow>
                   <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                      <children>
                         <Label text="Category: " />
-                        <Label fx:id="pluginCategoryLabel" styleClass="label-emphase" text="UNKNOW" />
+                        <Label fx:id="pluginCategoryLabel" styleClass="label-emphase" text="UNKNOWN" />
                      </children>
                   </TextFlow>
                   <HBox alignment="BASELINE_LEFT" spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
