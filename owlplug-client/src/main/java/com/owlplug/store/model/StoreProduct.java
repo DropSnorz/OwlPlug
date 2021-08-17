@@ -44,6 +44,7 @@ public class StoreProduct {
   private Long id;
 
   private String name;
+  private String slug;
   private String pageUrl;
   @Deprecated
   private String downloadUrl;
@@ -78,6 +79,14 @@ public class StoreProduct {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getSlug() {
+    return slug;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
   }
 
   public String getName() {

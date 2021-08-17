@@ -23,6 +23,7 @@ import java.util.List;
 public class ProductJsonMapper {
 
   private String name;
+  private String slug;
   private String technicalUid;
   private String pageUrl;
   @Deprecated
@@ -44,6 +45,14 @@ public class ProductJsonMapper {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getSlug() {
+    return slug;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
   }
 
   public String getTechnicalUid() {

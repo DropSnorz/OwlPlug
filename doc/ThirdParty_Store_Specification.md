@@ -1,5 +1,5 @@
 # OwlPlug Store Endpoint Specification
-**Version 1.1.3**
+**Version 1.2.0**
 
 ## Introduction
 
@@ -17,7 +17,7 @@ Subsequent minor version releases of the Specification should not interfere with
 
 ## Format
 
-A Store endpoint serve a JSON document. All field names in the specification are **case sensitive**.
+A Store endpoint serve a JSON document. All field names in the specification are **case-sensitive**.
 The root object is a [Store](#Store) object.
 
 ### Example
@@ -30,6 +30,7 @@ The root object is a [Store](#Store) object.
   "products": [
     {
       "name": "Wobbleizer",
+      "slug": "wobbleizer",
       "creator": "Dropsnorz",
       "license": "mit",
       "screenshotUrl": "https://owlplug.dropsnorz.com/products/com.dropsnorz.wobbleizer/wobbleizer.png",
@@ -65,12 +66,12 @@ The root object is a [Store](#Store) object.
 
 ### Store
 
-Document root object. Provides general informations about your store and carries a list of products.
+Document root object. Provides general information about your store and carries a list of products.
 
 Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the store. 255 characters max.
-url | `string` | **REQUIRED**. An url to access your store or developer informations. This is not necessarily the endpoint URL. 255 characters max.
+url | `string` | **REQUIRED**. An url to access your store or developer information. This is not necessarily the endpoint URL. 255 characters max.
 schemaVersion | `string` | **REQUIRED**. This string must be the [semantic version number](https://semver.org/spec/v2.0.0.html) of the [OwlPlug Store Specification](#versions) that the document uses. 255 characters max.
 version | `string` | *Deprecated*
 products | `array` | **REQUIRED**. An array of [Product](#Product). Can be empty.
@@ -82,6 +83,7 @@ A Product is basically an abstract concept for a Plugin. OwlPlug only supports S
 Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the product/plugin. 255 characters max.
+slug | `string` | **REQUIRED**. Unique lower case and hyphen-separated identifier. 255 characters max and must match `^[a-z0-9]+(?:[a-z0-9]+)*$`. Examples: `wobbleizer`, `my-plugin`, `an-other-slug`.  
 creator | `string` | **REQUIRED**. Product creator / manufacturer name. 255 characters max.
 license | `string` | Distribution license. Free field but keep it short. Use the [Github keywords](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/licensing-a-repository) like `gpl-3.0`, `mit`, `...` as most as possible for consistency. 255 character max.
 type | `string` | **REQUIRED**. Must be `instrument` for VSTi or `effect` for VST/VSTfx or `unknown`. 255 characters max.
@@ -270,6 +272,16 @@ If you are providing only one archive, replace `downloadUrl` with a `bundles` at
               "Wobbleizer"
             ],
             "pattern": "^(.*)$"
+          },
+          "slug": {
+            "$id": "#/properties/products/items/properties/slug",
+            "type": "string",
+            "title": "Product Slug",
+            "default": "",
+            "examples": [
+              "wobbleizer", "my-plugin", "an-other-slug"
+            ],
+            "pattern": "^[a-z0-9]+(?:[a-z0-9]+)*$"
           },
           "creator": {
             "$id": "#/properties/products/items/properties/creator",
