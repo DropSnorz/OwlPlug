@@ -408,7 +408,7 @@ public class StoreController extends BaseController {
           dialog.close();
         });
 
-        JFXButton overwriteButton = new JFXButton("Yes, overwrite.");
+        JFXButton overwriteButton = new JFXButton("Yes, overwrite");
         overwriteButton.setOnAction(removeEvent -> {
           dialog.close();
           storeTaskFactory.createBundleInstallTask(bundle, subSelectedDirectory).schedule();

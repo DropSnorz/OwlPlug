@@ -209,7 +209,7 @@ public class OptionsController extends BaseController {
         dialog.close();
       });
 
-      JFXButton removeButton = new JFXButton("Clear");
+      JFXButton removeButton = new JFXButton("Remove data");
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         optionsService.clearAllUserData();

@@ -35,7 +35,7 @@
       </HBox>
       <VBox>
          <children>
-            <Label text="Links allows you to create and manage symlinks accross your file-system and plugin directories." wrapText="true" />
+            <Label text="Links allows you to create and manage symlinks across your file-system and plugin directories." wrapText="true" />
             <TextFlow>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="For example, you can configure a link named hard-drive in " />
@@ -115,9 +115,6 @@
                </children>
             </VBox>
          </children>
-         <VBox.margin>
-            <Insets top="20.0" />
-         </VBox.margin>
       </HBox>
       <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Link can't be created" />
       <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">

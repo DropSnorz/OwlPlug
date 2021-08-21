@@ -21,7 +21,7 @@
       <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Invalid store response" />
       <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <JFXButton fx:id="okButton" text="Ok" />
+            <JFXButton fx:id="okButton" text="Add store" />
             <JFXButton fx:id="cancelButton" text="Later" />
          </children>
       </HBox>

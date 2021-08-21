@@ -87,7 +87,7 @@ public class SymlinkInfoController extends BaseController {
         dialog.close();
       });
 
-      JFXButton removeButton = new JFXButton("Remove");
+      JFXButton removeButton = new JFXButton("Delete");
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         taskFactory.create(new SymlinkRemoveTask(symlink))

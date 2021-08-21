@@ -51,7 +51,7 @@
       <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
             <JFXButton fx:id="cancelButton" text="Ignore step" />
-            <JFXButton fx:id="okButton" text="Apply" />
+            <JFXButton fx:id="okButton" text="Next" />
          </children>
       </HBox>
    </children>

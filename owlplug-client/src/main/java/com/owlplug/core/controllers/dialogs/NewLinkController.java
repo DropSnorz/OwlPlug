@@ -69,7 +69,7 @@ public class NewLinkController extends AbstractDialogController {
   private JFXAutoCompletePopup<String> autoCompletePath;
 
   NewLinkController() {
-    super(700, 500);
+    super(750, 300);
   }
 
   /**
