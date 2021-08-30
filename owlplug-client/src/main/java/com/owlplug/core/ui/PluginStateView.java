@@ -15,7 +15,9 @@ public class PluginStateView extends Label {
   public void setPluginState(PluginState state) {
 
     Circle circle = new Circle(0, 0, 2);
-    if (state.equals(PluginState.ACTIVE)) {
+    if (state.equals(PluginState.UNSTABLE)) {
+      circle.getStyleClass().add("shape-state-unstable");
+    } else if (state.equals(PluginState.ACTIVE)) {
       circle.getStyleClass().add("shape-state-active");
     } else if (state.equals(PluginState.DISABLED)) {
       circle.getStyleClass().add("shape-state-disabled");

@@ -125,6 +125,10 @@ public class PluginService extends BaseService {
   }
 
   public PluginState getPluginState(Plugin plugin) {
+
+    if(!plugin.isSyncComplete()) {
+      return PluginState.UNSTABLE;
+    }
     if(plugin.isDisabled()) {
       return PluginState.DISABLED;
     }
@@ -150,7 +154,7 @@ public class PluginService extends BaseService {
     return pluginFootprintDAO.save(pluginFootprint);
   }
   
-  public List<Plugin> getsyncUncompletePlugins() {
+  public List<Plugin> getSyncIncompletePlugins() {
     return pluginDAO.findBySyncComplete(false);
   }
 }

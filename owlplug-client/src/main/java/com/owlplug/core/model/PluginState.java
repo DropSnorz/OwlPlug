@@ -4,6 +4,7 @@ public enum PluginState {
 
   INSTALLED("Installed", "Plugin has been detected by OwlPlug"),
   DISABLED("Disabled", "Plugin is disabled"),
+  UNSTABLE("Unstable", "Last plugin scan crashed OwlPlug"),
   ACTIVE("Active", "Plugin is working properly");
 
   private String text;

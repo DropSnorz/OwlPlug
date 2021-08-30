@@ -387,6 +387,10 @@ ProgressIndicator{
 	-fx-fill: success-color;
 }
 
+.shape-state-unstable {
+	-fx-fill: danger-color;
+}
+
 .shape-state-installed {
 	-fx-fill: #94d3a3;
 }

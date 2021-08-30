@@ -35,11 +35,15 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class CrashRecoveryDialogController extends AbstractDialogController {
+
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
   
   @Autowired
   private LazyViewRegistry lazyViewRegistry;
@@ -62,7 +66,7 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
   @FXML
   protected VBox pluginListContainer;
   @FXML
-  protected Pane uncompleteSyncPane;
+  protected Pane incompleteSyncPane;
   
   
   CrashRecoveryDialogController() {
@@ -92,16 +96,17 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
       this.close();
     });
     
-    List<Plugin> uncompleteSyncPlugins = pluginService.getsyncUncompletePlugins();
+    List<Plugin> incompleteSyncPlugins = pluginService.getSyncIncompletePlugins();
     
-    if (uncompleteSyncPlugins.size() > 0) {
-      uncompleteSyncPane.setVisible(true);
-      for (Plugin p : uncompleteSyncPlugins) {
+    if (incompleteSyncPlugins.size() > 0) {
+      incompleteSyncPane.setVisible(true);
+      for (Plugin p : incompleteSyncPlugins) {
+        log.info("Crash report opened for plugin {}", p.getName());
         RecoveredPluginView pluginView = new RecoveredPluginView(p, pluginService, this.getApplicationDefaults());
         pluginListContainer.getChildren().add(pluginView);
       }
     } else {
-      uncompleteSyncPane.setVisible(false);
+      incompleteSyncPane.setVisible(false);
     }
     
   }

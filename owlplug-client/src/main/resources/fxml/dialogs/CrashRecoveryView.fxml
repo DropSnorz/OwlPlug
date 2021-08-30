@@ -28,7 +28,7 @@
             </VBox>
          </children>
       </HBox>
-      <VBox fx:id="uncompleteSyncPane" spacing="5.0">
+      <VBox fx:id="incompleteSyncPane" spacing="5.0">
          <children>
             <Label text="Following plugins have not been analyzed correctly" />
             <VBox fx:id="pluginListContainer" />
