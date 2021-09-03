@@ -40,6 +40,7 @@ import com.owlplug.core.services.PluginService;
 import com.owlplug.core.services.UpdateService;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.store.controllers.StoreController;
+import com.owlplug.store.services.StoreService;
 import java.util.ArrayList;
 import java.util.Optional;
 import javafx.application.Platform;
@@ -80,6 +81,8 @@ public class MainController extends BaseController {
   private UpdateService updateService;
   @Autowired
   private PluginService pluginService;
+  @Autowired
+  private StoreService storeService;
   @Autowired
   private ImageCache imageCache;
   @Autowired
@@ -181,6 +184,7 @@ public class MainController extends BaseController {
       crashRecoveryDialogController.show();
     } else if (this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
       welcomeDialogController.show();
+      storeService.syncStores();
     }
     this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
     optionsController.refreshView();

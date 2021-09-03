@@ -24,6 +24,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.services.BaseService;
+import com.owlplug.store.components.StoreTaskFactory;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
 import com.owlplug.store.model.ProductBundle;
@@ -56,6 +57,8 @@ public class StoreService extends BaseService {
   private StoreDAO storeDAO;
   @Autowired
   private StoreProductDAO storeProductDAO;
+  @Autowired
+  private StoreTaskFactory storeTaskFactory;
 
   @PostConstruct
   private void init() {
@@ -70,6 +73,13 @@ public class StoreService extends BaseService {
     store.setUrl("https://central.owlplug.com");
 
     storeDAO.save(store);
+  }
+
+  /**
+   * Triggers Store sync task
+   */
+  public void syncStores() {
+    storeTaskFactory.createStoreSyncTask().schedule();
   }
   
   public Iterable<Store> getStores() {
