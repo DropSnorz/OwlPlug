@@ -187,7 +187,10 @@ public class MainController extends BaseController {
     
     this.getAnalyticsService().pageView("/app/core/startup");
 
-    if (this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
+    // Startup plugin sync only triggered if configured and previous application
+    // instance safely terminated
+    if (this.applicationMonitor.isPreviousExecutionSafelyTerminated()
+            && this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
       log.info("Starting auto plugin sync");
       pluginService.syncPlugins();
     }
