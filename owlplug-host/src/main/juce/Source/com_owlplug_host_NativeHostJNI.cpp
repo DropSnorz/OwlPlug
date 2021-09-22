@@ -41,7 +41,7 @@ jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescrip
 	jstring manufacturerName = env->NewStringUTF(pluginDescription->manufacturerName.getCharPointer());
 	jstring version = env->NewStringUTF(pluginDescription->version.getCharPointer());
 	jstring fileOrIdentifier = env->NewStringUTF(pluginDescription->fileOrIdentifier.getCharPointer());
-	jint uid = pluginDescription->uid;
+	jint uid = pluginDescription->uniqueId;
 	jboolean isInstrument = pluginDescription->isInstrument;
 	jint numInputChannels = pluginDescription->numInputChannels;
 	jint numOutputChannels = pluginDescription->numOutputChannels;
