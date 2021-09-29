@@ -300,6 +300,9 @@ JFXListView{
     -fx-background-color:card-pane-color;
 }
 
+JFXProgressBar {
+    -fx-skin: "com.owlplug.core.ui.skins.OwlPlugProgressBarSkin"
+}
 
 .progress-bar-error > .bar {
     -fx-background-color: red;
