@@ -89,7 +89,7 @@ public class OptionsController extends BaseController {
   @FXML
   private JFXTextField storeDirectoryTextField;
   @FXML
-  private Label storeDirectorySeperator;
+  private Label storeDirectorySeparator;
   @FXML
   private Hyperlink owlplugWebsiteLink;
 
@@ -179,7 +179,7 @@ public class OptionsController extends BaseController {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
       double width = newValue ? 150 : 0;
       storeDirectoryTextField.setVisible(newValue);
-      storeDirectorySeperator.setVisible(newValue);
+      storeDirectorySeparator.setVisible(newValue);
       storeDirectoryTextField.setDisable(!newValue);
       storeDirectoryTextField.setMaxWidth(width);
     });

@@ -322,7 +322,7 @@ public class StoreController extends BaseController {
   }
 
   /**
-   * Displays full product informations.
+   * Displays full product information.
    * 
    * @param product - product
    */
@@ -427,7 +427,7 @@ public class StoreController extends BaseController {
       }
     }
     // If a target directory has been previously found, start install tasks
-    storeTaskFactory.createBundleInstallTask(bundle, selectedDirectory).schedule();;
+    storeTaskFactory.createBundleInstallTask(bundle, selectedDirectory).schedule();
     return true;
 
   }

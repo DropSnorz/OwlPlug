@@ -36,7 +36,7 @@ import com.owlplug.auth.dao.GoogleCredentialDAO;
 import com.owlplug.auth.dao.UserAccountDAO;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.model.UserAccountProvider;
-import com.owlplug.auth.utils.AuthentificationException;
+import com.owlplug.auth.utils.AuthenticationException;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.services.BaseService;
@@ -78,10 +78,10 @@ public class AuthenticationService extends BaseService {
   /**
    * Creates a new account by starting the Authentication flow.
    * 
-   * @throws AuthentificationException if an error occurs during Authentication
+   * @throws AuthenticationException if an error occurs during Authentication
    *                                   flow.
    */
-  public void createAccountAndAuth() throws AuthentificationException {
+  public void createAccountAndAuth() throws AuthenticationException {
 
     String clientId = owlPlugCredentials.getGoogleAppId();
     String clientSecret = owlPlugCredentials.getGoogleSecret();
@@ -118,8 +118,8 @@ public class AuthenticationService extends BaseService {
       this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
     } catch (GeneralSecurityException | IOException e) {
-      log.error("Error during authentification", e);
-      throw new AuthentificationException(e);
+      log.error("Error during authentication", e);
+      throw new AuthenticationException(e);
     } finally {
       // Delete accounts without complete setup
       userAccountDAO.deleteInvalidAccounts();
@@ -185,7 +185,7 @@ public class AuthenticationService extends BaseService {
         receiver.stop();
       }
     } catch (IOException e) {
-      log.error("Error while stopping local authentification receiver", e);
+      log.error("Error while stopping local authentication receiver", e);
     }
   }
 

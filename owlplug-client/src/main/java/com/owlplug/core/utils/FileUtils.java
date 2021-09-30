@@ -95,7 +95,7 @@ public class FileUtils {
             try {
               List<String> currentSymlinksContext = new ArrayList<>(symlinksContext);
               Path targetPath = Files.readSymbolicLink(file.toPath());
-              // We explore the symlink only if we are not currently resolving it's target path.
+              // We explore the symlink only if we are not currently resolving its target path.
               if (!currentSymlinksContext.contains(targetPath.toString())) {
                 files.add(file);
                 currentSymlinksContext.add(targetPath.toString());
@@ -103,7 +103,7 @@ public class FileUtils {
               }
 
             } catch (IOException e) {
-              // If we fails to read symlink target, we add the symlink be we won't explore inner files.
+              // If we fail to read symlink target, we add the symlink be we won't explore inner files.
               files.add(file);
             }
           } else {

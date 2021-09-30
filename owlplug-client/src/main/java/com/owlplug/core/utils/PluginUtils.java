@@ -36,10 +36,10 @@ public class PluginUtils {
     // Remove trailing (XXbit)
     name = name.replaceAll("[(]64bit[)]$", "");
     name = name.replaceAll("[(]32bit[)]$", "");
-    // Remove trailing winXX, (?i) for case insensitive regex
+    // Remove trailing winXX, (?i) for case-insensitive regex
     name = name.replaceAll("(?i)win64$", "");
     name = name.replaceAll("(?i)win32$", "");
-    // Remove trailing winXXvst, (?i) for case insensitive regex
+    // Remove trailing winXXvst, (?i) for case-insensitive regex
     name = name.replaceAll("(?i)win64vst$", "");
     name = name.replaceAll("(?i)win32vst$", "");
     // Remove trailing xXX

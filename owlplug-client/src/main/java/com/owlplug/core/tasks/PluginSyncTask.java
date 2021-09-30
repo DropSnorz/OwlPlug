@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * OwlPlug task to collect plugin metadatas from directories
+ * OwlPlug task to collect plugin metadata from directories
  * By default, the task collects and sync all plugins from user folders. A directory scope
  * can be defined to reduce the amount of scanned files.
  *

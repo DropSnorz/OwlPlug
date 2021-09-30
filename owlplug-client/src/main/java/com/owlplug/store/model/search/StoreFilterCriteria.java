@@ -31,7 +31,7 @@ public class StoreFilterCriteria {
   /**
    * Creates a StoreFilterCriteria.
    * 
-   * @param value      - critria value
+   * @param value      - criteria value
    * @param filterType - criteria type
    */
   public StoreFilterCriteria(Object value, StoreFilterCriteriaType filterType) {

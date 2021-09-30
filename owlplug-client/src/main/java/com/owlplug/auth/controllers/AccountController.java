@@ -40,7 +40,7 @@ public class AccountController extends AbstractDialogController {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
-  private AuthenticationService authentificationService;
+  private AuthenticationService authenticationService;
   @Autowired 
   private MainController mainController;
   @Autowired 
@@ -77,7 +77,7 @@ public class AccountController extends AbstractDialogController {
         @Override
         protected Void call() throws Exception {
           log.debug("Google auth task started");
-          authentificationService.createAccountAndAuth();
+          authenticationService.createAccountAndAuth();
           this.updateProgress(1, 1);
           return null;
         }
@@ -104,7 +104,7 @@ public class AccountController extends AbstractDialogController {
         messageLabel.setVisible(false);
 
         if (!cancelFlag) {
-          messageLabel.setText("En error occured during authentification");
+          messageLabel.setText("En error occurred during authentication");
           messageLabel.setVisible(true);
         }
         cancelFlag = false;
@@ -117,7 +117,7 @@ public class AccountController extends AbstractDialogController {
 
     cancelButton.setOnAction(event -> {
       cancelFlag = true;
-      authentificationService.stopAuthReceiver();
+      authenticationService.stopAuthReceiver();
     });
 
     closeButton.setOnAction(event -> {

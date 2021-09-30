@@ -186,7 +186,7 @@ public class ApplicationDefaults {
 
   }
 
-  public static String getTempDowloadDirectory() {
+  public static String getTempDownloadDirectory() {
     return getUserDataDirectory() + "/temp";
   }
 

@@ -53,7 +53,7 @@ public class ProductInstallTask extends AbstractTask {
    * @param bundle              Bundle to download
    * @param targetDirectory     Target directory where downloaded product is
    *                            stored
-   * @param applicationDefaults Ownplug ApplicationDefaults
+   * @param applicationDefaults Owlplug ApplicationDefaults
    */
   public ProductInstallTask(ProductBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults) {
 
@@ -83,7 +83,7 @@ public class ProductInstallTask extends AbstractTask {
 
       this.commitProgress(100);
       this.updateMessage("Installing plugin " + bundle.getProduct().getName() + " - Extracting files...");
-      File extractedArchiveFolder = new File(applicationDefaults.getTempDowloadDirectory() + "/" + "temp-"
+      File extractedArchiveFolder = new File(applicationDefaults.getTempDownloadDirectory() + "/" + "temp-"
           + archiveFile.getName().replace(".owlpack", ""));
       FileUtils.unzip(archiveFile.getAbsolutePath(), extractedArchiveFolder.getAbsolutePath());
 
@@ -102,10 +102,10 @@ public class ProductInstallTask extends AbstractTask {
       this.updateMessage("Plugin " + bundle.getProduct().getName() + " successfully Installed");
 
     } catch (IOException e) {
-      this.updateMessage("An error occured during plugin install: " + e.getMessage());
-      log.error("An error occured during plugin install: " + e.getMessage());
+      this.updateMessage("An error occurred during plugin install: " + e.getMessage());
+      log.error("An error occurred during plugin install: " + e.getMessage());
       this.updateProgress(1, 1);
-      throw new TaskException("An error occured during plugin install", e);
+      throw new TaskException("An error occurred during plugin install", e);
     }
 
     return success();
@@ -123,9 +123,9 @@ public class ProductInstallTask extends AbstractTask {
     }
 
     SimpleDateFormat horodateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
-    new File(ApplicationDefaults.getTempDowloadDirectory()).mkdirs();
+    new File(ApplicationDefaults.getTempDownloadDirectory()).mkdirs();
     String outPutFileName = horodateFormat.format(new Date()) + ".owlpack";
-    String outputFilePath = ApplicationDefaults.getTempDowloadDirectory() + File.separator + outPutFileName;
+    String outputFilePath = ApplicationDefaults.getTempDownloadDirectory() + File.separator + outPutFileName;
     File outputFile = new File(outputFilePath);
 
     try (
@@ -188,7 +188,7 @@ public class ProductInstallTask extends AbstractTask {
         }
       }
     } else if (directory.listFiles().length >= 1) {
-      // if the directory describes an environement related bundle
+      // if the directory describes an environment related bundle
       for (File f : directory.listFiles()) {
         if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
           return OwlPackStructureType.ENV;
@@ -235,7 +235,7 @@ public class ProductInstallTask extends AbstractTask {
   }
 
   /**
-   * Compatible product archive structues -------------- DIRECT plugin.zip/ ├──
+   * Compatible product archive structures -------------- DIRECT plugin.zip/ ├──
    * plugin.dll └── (other required files...) -------------- NESTED plugin.zip/
    * └── plugin ├── plugin.dll └── (other required files...) --------------
    * NESTED_ENV plugin.zip/ └── plugin ├── x86 │ ├── plugin.dll │ └── (other

@@ -28,9 +28,9 @@
 
 :earth_africa: [OwlPlug Website](https://owlplug.com) | :pushpin: [Roadmap](https://owlplug.com/roadmap) | :page_facing_up: [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki)
 
-**Why i have created OwlPlug ?** 
+**Why I have created OwlPlug ?** 
 
-OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple thats looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, i've discovered dozens of cool plugins just by using my own tool. So i realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
+OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple that looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, I've discovered dozens of cool plugins just by using my own tool. So I realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
 
 All kinds of feedbacks are greatly welcomed.
 
@@ -38,7 +38,7 @@ All kinds of feedbacks are greatly welcomed.
 
 ### Windows & MacOS
 
-**Requirements**: Windows 7 (64 bit) or later, MacOS Sierra or later.
+**Requirements**: Windows 7 (64 bit) or later, macOS Sierra or later.
 
 1. Download binaries [here](http://github.com/dropsnorz/owlplug/releases)
 2. Run the `.msi` installer on Windows or the `.dmg` file on Mac.
@@ -58,7 +58,7 @@ You can configure the tool to work with multiple plugin directories using the **
 
 ## Links
 
-Links allows you to create and manage symlinks accross your filesystem and plugin directories. You can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through your root plugin directory. For example, you can configure a link named *usb-drive* in `C:/AudioPlugins` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/AudioPlugins/usb-drive`. On some Windows version, symlinks creation may require admin privileges.
+A Link allows you to create and manage symlinks across your filesystem and plugin directories. You can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through your root plugin directory. For example, you can configure a link named *usb-drive* in `C:/AudioPlugins` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/AudioPlugins/usb-drive`. On some Windows version, symlinks creation may require admin privileges.
 
 ## Stores 
 
@@ -89,7 +89,7 @@ Third party store adapters are maintained by OwlPlug Central but plugins binarie
 ### How to distribute my plugins on OwlPlug ?
 
 * **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Open an issue or a pull request on the [OwlPlug Central repository](https://github.com/owlplug/central)
-* **Setup your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). 
+* **Set up your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). 
 
 # Development
 

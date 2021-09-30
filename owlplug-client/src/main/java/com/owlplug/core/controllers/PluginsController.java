@@ -88,7 +88,7 @@ public class PluginsController extends BaseController {
   private FilterableTreeItem<Object> treeFileRootNode;
 
   /**
-   * FXML initilaize method.
+   * FXML initialize method.
    */
   @FXML
   public void initialize() {
@@ -110,7 +110,7 @@ public class PluginsController extends BaseController {
     
     clearAndFillPluginTree();
 
-    // Dispatchs treeView selection event to the nodeInfoController
+    // Dispatches treeView selection event to the nodeInfoController
     treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
         TreeItem<Object> selectedItem = newValue;
@@ -127,7 +127,7 @@ public class PluginsController extends BaseController {
       }
     });
 
-    // Binds serch property to plugin tree filter
+    // Binds search property to plugin tree filter
     treePluginNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
       if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
         return null;
@@ -135,7 +135,7 @@ public class PluginsController extends BaseController {
       return actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
     }, searchTextField.textProperty()));
 
-    // Binds serch property to plugin tree filter
+    // Binds search property to plugin tree filter
     treeFileRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
       if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
         return null;

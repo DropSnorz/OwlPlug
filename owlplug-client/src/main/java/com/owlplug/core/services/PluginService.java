@@ -59,7 +59,7 @@ public class PluginService extends BaseService {
   }
 
   /**
-   * Returns an url to retrieve plugin screenshots. Url can be retrieve from
+   * Returns an url to retrieve plugin screenshots. Url can be retrieved from
    * registered products in store or using OwlPlug Central screenshot API.
    * 
    * @param plugin the plugin
@@ -140,7 +140,7 @@ public class PluginService extends BaseService {
   
   /**
    * Removes a plugin reference from database.
-   * @param plugin - plugin to remoeve
+   * @param plugin - plugin to remove
    */
   public void delete(Plugin plugin) {
     pluginDAO.delete(plugin);

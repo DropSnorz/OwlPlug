@@ -80,7 +80,7 @@ public class WorkspaceDirectoryInitializer {
         Semver workspaceMinSemver = new Semver(applicationDefaults.getEnvProperty("owlplug.workspace.min-version"));
 
         if (workspaceSemver.isLowerThan(workspaceMinSemver)) {
-          log.info("Cleanning outdated workspace data from version " + workspaceVersion + " to match constraint "
+          log.info("Cleaning outdated workspace data from version " + workspaceVersion + " to match constraint "
               + workspaceMinSemver);
           File dbFile = new File(workingDirectory, "owlplug.mv.db");
           dbFile.delete();

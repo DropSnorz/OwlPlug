@@ -72,12 +72,12 @@ public class LazyViewRegistry {
     return viewRegistry.get(key);
   }
 
-  private void preloadFxml(String key, String ressource) {
-    viewRegistry.put(key, loadFxml(ressource));
+  private void preloadFxml(String key, String resource) {
+    viewRegistry.put(key, loadFxml(resource));
   }
 
-  private Parent loadFxml(String ressource) {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource(ressource));
+  private Parent loadFxml(String resource) {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource(resource));
     loader.setControllerFactory(context::getBean);
     try {
       return loader.load();

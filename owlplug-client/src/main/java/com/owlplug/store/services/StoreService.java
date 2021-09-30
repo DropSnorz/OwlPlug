@@ -87,7 +87,7 @@ public class StoreService extends BaseService {
   }
 
   /**
-   * Retrieves products from store with name matching the given criterias and
+   * Retrieves products from store with name matching the given criteria and
    * compatible with the current platform.
    * 
    * @param criteriaList criteria list
@@ -108,7 +108,7 @@ public class StoreService extends BaseService {
   }
 
   /**
-   * Find the best bundle from a prpduct based on the user current platform.
+   * Find the best bundle from a product based on the user current platform.
    * 
    * @param product - The store product
    */
