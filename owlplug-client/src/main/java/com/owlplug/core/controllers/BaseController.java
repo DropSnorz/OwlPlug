@@ -19,9 +19,9 @@
 package com.owlplug.core.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.controllers.dialogs.DialogController;
 import com.owlplug.core.services.AnalyticsService;
-import java.util.prefs.Preferences;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BaseController {
@@ -29,7 +29,7 @@ public class BaseController {
   @Autowired
   private ApplicationDefaults applicationDefaults;
   @Autowired
-  private Preferences preferences;
+  private ApplicationPreferences preferences;
   @Autowired
   private AnalyticsService analyticsService;
   @Autowired
@@ -40,7 +40,7 @@ public class BaseController {
     return applicationDefaults;
   }
   
-  public Preferences getPreferences() {
+  public ApplicationPreferences getPreferences() {
     return preferences;
   }
   

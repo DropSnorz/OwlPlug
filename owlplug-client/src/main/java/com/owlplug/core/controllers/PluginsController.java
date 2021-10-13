@@ -23,6 +23,7 @@ import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.controllers.dialogs.NewLinkController;
 import com.owlplug.core.dao.PluginDAO;
@@ -40,7 +41,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.prefs.Preferences;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeCell;
@@ -178,7 +178,7 @@ public class PluginsController extends BaseController {
     generatePluginTree();
 
     Set<String> userPluginDirectories = new HashSet<>();
-    Preferences prefs = this.getPreferences();
+    ApplicationPreferences prefs = this.getPreferences();
     if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");

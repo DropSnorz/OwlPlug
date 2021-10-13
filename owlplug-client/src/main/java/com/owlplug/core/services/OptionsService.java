@@ -21,6 +21,7 @@ package com.owlplug.core.services;
 import com.owlplug.auth.dao.GoogleCredentialDAO;
 import com.owlplug.auth.dao.UserAccountDAO;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.PluginFormat;
@@ -28,7 +29,6 @@ import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
 import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public class OptionsService extends BaseService {
   @PostConstruct
   private void initialize() {
     
-    Preferences prefs = this.getPreferences();
+    ApplicationPreferences prefs = this.getPreferences();
     // Init default options
     if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) == null) {
       prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, 

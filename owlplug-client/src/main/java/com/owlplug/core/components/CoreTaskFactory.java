@@ -30,7 +30,6 @@ import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.SimpleEventListener;
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
   @Autowired
   private ApplicationDefaults applicationDefaults;
   @Autowired
-  private Preferences prefs;
+  private ApplicationPreferences prefs;
   @Autowired
   private PluginDAO pluginDAO;
   @Autowired
