@@ -130,11 +130,11 @@ public class PluginSyncTask extends AbstractTask {
         }
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
-          collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
+          collectedSymlinks.addAll(symlinkCollector.collect(vst3Directory));
         }
         if (parameters.isFindAu()) {
           collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
-          collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
+          collectedSymlinks.addAll(symlinkCollector.collect(auDirectory));
         }
       }
       
