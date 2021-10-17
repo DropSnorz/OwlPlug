@@ -46,6 +46,7 @@ public class OwlPlugProgressBarSkin extends ProgressIndicatorSkin {
   private double secondaryBarWidth = 0;
   private Animation indeterminateTransition;
   private Region clip;
+  boolean wasIndeterminate = false;
 
   private TreeShowingExpression treeShowingExpression;
 
@@ -145,8 +146,6 @@ public class OwlPlugProgressBarSkin extends ProgressIndicatorSkin {
             * Math.min(1, Math.max(0, control.getSecondaryProgress()))) / 2.0F;
     control.requestLayout();
   }
-
-  boolean wasIndeterminate = false;
 
   protected void pauseTimeline(boolean pause) {
     if (getSkinnable().isIndeterminate()) {
