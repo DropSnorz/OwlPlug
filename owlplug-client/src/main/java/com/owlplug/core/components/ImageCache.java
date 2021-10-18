@@ -117,7 +117,7 @@ public class ImageCache {
 
   /**
    * Load asynchronously an Image from cache on the given ImageView. If image
-   * don't exists in cache, it will be created retrieving the image from url.
+   * don't exist in cache, it will be created retrieving the image from url.
    * 
    * @param url       Image url
    * @param imageView Target image view

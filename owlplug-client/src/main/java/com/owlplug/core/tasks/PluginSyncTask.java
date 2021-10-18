@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * OwlPlug task to collect plugin metadatas from directories
+ * OwlPlug task to collect plugin metadata from directories
  * By default, the task collects and sync all plugins from user folders. A directory scope
  * can be defined to reduce the amount of scanned files.
  *
@@ -130,11 +130,11 @@ public class PluginSyncTask extends AbstractTask {
         }
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
-          collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
+          collectedSymlinks.addAll(symlinkCollector.collect(vst3Directory));
         }
         if (parameters.isFindAu()) {
           collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
-          collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
+          collectedSymlinks.addAll(symlinkCollector.collect(auDirectory));
         }
       }
       

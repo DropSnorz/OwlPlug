@@ -30,7 +30,7 @@ public abstract class AbstractTask extends Task<TaskResult> {
   private String name = "OwlPlug task";
 
   private double maxProgress = 1;
-  private double commitedProgress = 0;
+  private double committedProgress = 0;
 
   private ArrayList<String> warnings = new ArrayList<>();
 
@@ -42,17 +42,17 @@ public abstract class AbstractTask extends Task<TaskResult> {
   }
 
   protected void commitProgress(double progress) {
-    commitedProgress = commitedProgress + progress;
-    this.updateProgress(commitedProgress, getMaxProgress());
+    committedProgress = committedProgress + progress;
+    this.updateProgress(committedProgress, getMaxProgress());
 
   }
 
-  protected double getCommitedProgress() {
-    return commitedProgress;
+  protected double getCommittedProgress() {
+    return committedProgress;
   }
 
-  protected void setCommitedProgress(double commitedProgress) {
-    this.commitedProgress = commitedProgress;
+  protected void setCommittedProgress(double committedProgress) {
+    this.committedProgress = committedProgress;
 
   }
 
@@ -65,7 +65,7 @@ public abstract class AbstractTask extends Task<TaskResult> {
   }
 
   protected void computeTotalProgress(double progress) {
-    updateProgress(commitedProgress + progress, maxProgress);
+    updateProgress(committedProgress + progress, maxProgress);
   }
 
   protected TaskResult success() {

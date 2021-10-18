@@ -53,7 +53,7 @@ public class StoreProduct {
   private String creator;
   private String license;
   @Deprecated
-  // Version must be be hold by bundles
+  // Version must be hold by bundles
   private String version;
   @Column(columnDefinition = "text")
   private String description;

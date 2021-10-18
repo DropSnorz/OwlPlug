@@ -35,7 +35,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 /**
- * This class stores and executes submited tasks one by one. Each pending tasks
+ * This class stores and executes submitted tasks one by one. Each pending tasks
  * is stored before execution. The runner dispatches execution information to
  * the TaskBarController bean.
  *
@@ -67,7 +67,7 @@ public class TaskRunner {
    * @param task - the task to submit
    */
   public void submitTask(AbstractTask task) {
-    log.debug("Task submited to queue - {} ", task.getClass().getName());
+    log.debug("Task submitted to queue - {} ", task.getClass().getName());
     taskQueue.addLast(task);
     scheduleNext();
 
@@ -79,7 +79,7 @@ public class TaskRunner {
    * @param task - the task to submit
    */
   public void submitTaskOnQueueHead(AbstractTask task) {
-    log.debug("Task submited to queue - {} ", task.getClass().getName());
+    log.debug("Task submitted to queue - {} ", task.getClass().getName());
     taskQueue.addFirst(task);
     scheduleNext();
 

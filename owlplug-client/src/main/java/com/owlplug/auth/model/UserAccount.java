@@ -27,7 +27,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
- * OwlPlug JPA Entity class to handle users accounts informations.
+ * OwlPlug JPA Entity class to handle users accounts information.
  */
 @Entity
 public class UserAccount implements AccountItem {

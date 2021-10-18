@@ -36,7 +36,7 @@ import javafx.util.Callback;
 public class AccountCellFactory implements Callback<ListView<AccountItem>, ListCell<AccountItem>> {
 
   private boolean showDeleteButton = false;
-  private AuthenticationService authentificationService = null;
+  private AuthenticationService authenticationService = null;
   private ImageCache imageCache;
   private Pos align = Pos.CENTER_LEFT;
 
@@ -60,16 +60,16 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
   /**
    * Creates a CellFactory with custom content alignment.
    * 
-   * @param authentificationService AuthentificationService instance
+   * @param authenticationService   AuthenticationService instance
    * @param imageCache              image cache instance
    * @param showDeleteButton        if a button should be displayed to delete
    *                                accounts
    */
-  public AccountCellFactory(AuthenticationService authentificationService, ImageCache imageCache,
+  public AccountCellFactory(AuthenticationService authenticationService, ImageCache imageCache,
       boolean showDeleteButton) {
 
     this.showDeleteButton = showDeleteButton;
-    this.authentificationService = authentificationService;
+    this.authenticationService = authenticationService;
     this.imageCache = imageCache;
   }
 
@@ -107,7 +107,7 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
             cell.getChildren().add(deleteButton);
 
             deleteButton.setOnAction(e -> {
-              authentificationService.deleteAccount(account);
+              authenticationService.deleteAccount(account);
             });
           }
 

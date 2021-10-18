@@ -99,7 +99,7 @@ public class OwlPlug extends Application {
 
   /**
    * The main JavaFX applications entry point. The start method is called after
-   * the {@link #init} method method has returned
+   * the {@link #init} method has returned
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
@@ -152,7 +152,7 @@ public class OwlPlug extends Application {
   /**
    * Initialize EhCache CacheManager instance {@see CacheManager}.
    * 
-   * @return The ChacheManager instance
+   * @return The CacheManager instance
    */
   @Bean
   public CacheManager getCacheManager() {

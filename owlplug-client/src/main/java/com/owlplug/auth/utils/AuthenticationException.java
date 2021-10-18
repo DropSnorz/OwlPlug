@@ -18,9 +18,9 @@
  
 package com.owlplug.auth.utils;
 
-public class AuthentificationException extends Exception {
+public class AuthenticationException extends Exception {
 
-  public AuthentificationException(Exception e) {
+  public AuthenticationException(Exception e) {
     super(e);
   }
 

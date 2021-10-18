@@ -59,8 +59,8 @@ public class PluginFileCollector {
       for (File file : baseFiles) {
 
         /*
-         *  Loopkup for nested plugins in bundles and prevent them from being referenced multiple times.
-         *  For example a VST3 bundle file can contains a .vst3 file for windows but we
+         *  Lookup for nested plugins in bundles and prevent them from being referenced multiple times.
+         *  For example a VST3 bundle file can contain a .vst3 file for windows, but we
          *  don't want it to be referenced as it's an internal package managed by the host.
          *  Maybe this should be refactored to recursively explore directories and directly prevent exploration of
          *  bundles subdirectories.

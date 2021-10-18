@@ -113,7 +113,7 @@ public class NewStoreDialogController extends AbstractDialogController implement
           storeMenuController.refreshView();
           close();
           this.getDialogController().newSimpleInfoDialog("Success",
-              "The plugin store " + pluginStore.getName() + " has been sucessfully added !").show();
+              "The plugin store " + pluginStore.getName() + " has been successfully added !").show();
           this.getAnalyticsService().pageView("/app/store/action/add");
         } else {
           errorLabel.setVisible(true);

@@ -76,7 +76,7 @@ public class MainController extends BaseController {
   @Autowired
   private StoreController storeController;
   @Autowired
-  private AuthenticationService authentificationService;
+  private AuthenticationService authenticationService;
   @Autowired
   private UpdateService updateService;
   @Autowired
@@ -143,7 +143,7 @@ public class MainController extends BaseController {
     });
 
     accountComboBox.setButtonCell(new AccountCellFactory(imageCache, Pos.CENTER_RIGHT).call(null));
-    accountComboBox.setCellFactory(new AccountCellFactory(authentificationService, imageCache, true));
+    accountComboBox.setCellFactory(new AccountCellFactory(authenticationService, imageCache, true));
 
     JFXComboBoxListViewSkin<AccountItem> accountCBSkin = new JFXComboBoxListViewSkin<AccountItem>(accountComboBox);
     accountCBSkin.setHideOnClick(false);
@@ -208,7 +208,7 @@ public class MainController extends BaseController {
 
     ArrayList<UserAccount> accounts = new ArrayList<UserAccount>();
 
-    for (UserAccount account : authentificationService.getAccounts()) {
+    for (UserAccount account : authenticationService.getAccounts()) {
       accounts.add(account);
     }
 
@@ -219,10 +219,10 @@ public class MainController extends BaseController {
 
     long selectedAccountId = this.getPreferences().getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
     if (selectedAccountId != -1) {
-      Optional<UserAccount> selectedAccount = authentificationService.getUserAccountById(selectedAccountId);
+      Optional<UserAccount> selectedAccount = authenticationService.getUserAccountById(selectedAccountId);
       if (selectedAccount.isPresent()) {
 
-        // Bug workaround. The only way way to pre-select the account is to find it's
+        // Bug workaround. The only way to pre-select the account is to find its
         // index in the list
         // If not, the selected cell is not rendered correctly
         accountComboBox.getItems().stream().filter(account -> account.getId().equals(selectedAccount.get().getId()))

@@ -34,7 +34,7 @@ public class UpdateService extends BaseService {
 
   /**
    * Returns application update status based on OwlPlug Hub remote version.
-   * @return true if app is up to date, false otherwise
+   * @return true if app is up-to-date, false otherwise
    */
   public boolean isUpToDate() {
     

@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.owlplug</groupId>
 		<artifactId>owlplug</artifactId>
-		<version>0.17.1</version>
+		<version>1.18.0</version>
 	</parent>
 
 	<artifactId>owlplug-client</artifactId>
@@ -14,13 +14,6 @@
 
 	<name>owlplug-client</name>
 	<url>http://maven.apache.org</url>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>14</java.version>
-		<maven.compiler.source>14</maven.compiler.source>
-		<maven.compiler.target>14</maven.compiler.target>
-	</properties>
 
 	<repositories>
 		<repository>
@@ -40,7 +33,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.2.6.RELEASE</version>
+				<version>2.5.5</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -51,7 +44,7 @@
 		<dependency>
 			<groupId>com.owlplug</groupId>
 			<artifactId>owlplug-host</artifactId>
-			<version>0.17.1</version>
+			<version>1.18.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -99,34 +92,34 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>14</version>
+			<version>17</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>14</version>
+			<version>17</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
-			<version>14</version>
+			<version>17</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>14</version>
+			<version>17</version>
 			<classifier>win</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>14</version>
+			<version>17</version>
 			<classifier>linux</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>14</version>
+			<version>17</version>
 			<classifier>mac</classifier>
 		</dependency>
 		<dependency>
@@ -251,6 +244,10 @@
 					<configuration>
 						<mainClass>com.owlplug.Bootstrap</mainClass>
 						<layout>JAR</layout>
+						<!--Arg required to fix illegal reflective access in JFXTextField -->
+						<jvmArguments>
+							--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+						</jvmArguments>
 					</configuration>
 					<executions>
 						<execution>

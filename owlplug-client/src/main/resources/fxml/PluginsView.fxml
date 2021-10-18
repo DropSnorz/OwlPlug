@@ -25,7 +25,7 @@
       		<JFXTabPane fx:id="treeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
       			<tabs>
       				<Tab fx:id="treeTabAll" text="All" />
-      				<Tab fx:id="treeTabDirecctories" text="Directories">
+      				<Tab fx:id="treeTabDirectories" text="Directories">
       					<content>
       						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
       					</content>

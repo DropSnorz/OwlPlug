@@ -31,7 +31,7 @@ import java.util.HashSet;
 public class StoreModelAdapter {
 
   /**
-   * Crestes a {@link Store} entity from a {@link StoreJsonMapper}.
+   * Creates a {@link Store} entity from a {@link StoreJsonMapper}.
    * 
    * @param storeJsonMapper pluginStore json mapper
    * @return pluginStoreEntity
