@@ -171,7 +171,7 @@
 		<dependency>
 			<groupId>com.google.apis</groupId>
 			<artifactId>google-api-services-oauth2</artifactId>
-			<version>v2-rev65-1.17.0-rc</version>
+			<version>v2-rev20200213-1.32.1</version>
 		</dependency>
 
 		<dependency>
