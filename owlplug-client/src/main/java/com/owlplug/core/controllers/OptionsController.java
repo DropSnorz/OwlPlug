@@ -25,11 +25,14 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.OptionsService;
 import com.owlplug.core.utils.PlatformUtils;
 import java.io.File;
+import java.text.MessageFormat;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -45,6 +48,8 @@ public class OptionsController extends BaseController {
   private OptionsService optionsService;
   @Autowired
   private NativeHostService nativeHostService;
+  @Autowired
+  private ListDirectoryDialogController listDirectoryDialogController;
 
   @FXML
   private JFXToggleButton vst2ToggleButton;
@@ -53,17 +58,23 @@ public class OptionsController extends BaseController {
   @FXML
   private JFXButton vst2DirectoryButton;
   @FXML
-  private JFXToggleButton vst3ToggleButton;
+  private Hyperlink vst2ExtraDirectoryLink;
   @FXML
-  private JFXToggleButton auToggleButton;
+  private JFXToggleButton vst3ToggleButton;
   @FXML
   private JFXTextField vst3DirectoryTextField;
   @FXML
   private JFXButton vst3DirectoryButton;
   @FXML
+  private Hyperlink vst3ExtraDirectoryLink;
+  @FXML
+  private JFXToggleButton auToggleButton;
+  @FXML
   private JFXTextField auDirectoryTextField;
   @FXML
   private JFXButton auDirectoryButton;
+  @FXML
+  private Hyperlink auExtraDirectoryLink;
   @FXML
   private JFXCheckBox pluginNativeCheckbox;
 
@@ -134,6 +145,11 @@ public class OptionsController extends BaseController {
       this.getPreferences().put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
     });
 
+    vst2ExtraDirectoryLink.setOnAction(e -> {
+      listDirectoryDialogController.configure(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY);
+      listDirectoryDialogController.show();
+    });
+
     vst3DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
       Window mainWindow = vst3DirectoryButton.getScene().getWindow();
@@ -147,6 +163,11 @@ public class OptionsController extends BaseController {
       this.getPreferences().put(ApplicationDefaults.VST3_DIRECTORY_KEY, newValue);
     });
 
+    vst3ExtraDirectoryLink.setOnAction(e -> {
+      listDirectoryDialogController.configure(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY);
+      listDirectoryDialogController.show();
+    });
+
     auDirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
       Window mainWindow = auDirectoryButton.getScene().getWindow();
@@ -158,6 +179,11 @@ public class OptionsController extends BaseController {
 
     auDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().put(ApplicationDefaults.AU_DIRECTORY_KEY, newValue);
+    });
+
+    auExtraDirectoryLink.setOnAction(e -> {
+      listDirectoryDialogController.configure(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY);
+      listDirectoryDialogController.show();
     });
 
     pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -246,6 +272,25 @@ public class OptionsController extends BaseController {
     storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
     storeByCreatorCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false));
     storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
+
+    MessageFormat extraDirectoryMessageFormat = new MessageFormat("using {0} additional directories");
+    vst2ExtraDirectoryLink.setText(extraDirectoryMessageFormat.format(
+      new Object[] {
+        this.getPreferences().getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY).size()
+      }
+    ));
+
+    vst3ExtraDirectoryLink.setText(extraDirectoryMessageFormat.format(
+      new Object[] {
+        this.getPreferences().getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY).size()
+      }
+    ));
+
+    auExtraDirectoryLink.setText(extraDirectoryMessageFormat.format(
+      new Object[] {
+        this.getPreferences().getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY).size()
+      }
+    ));
 
     if (!storeDirectoryCheckBox.isSelected()) {
       storeDirectoryTextField.setDisable(true);

@@ -41,7 +41,7 @@
                                     <HBox alignment="CENTER_LEFT">
                                        <children>
                                           <SVGPath content="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z" scaleX="0.5" scaleY="0.5" styleClass="shape-state-disabled" />
-                                          <Hyperlink styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
+                                          <Hyperlink fx:id="vst2ExtraDirectoryLink" styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="15.0" top="6.0" />
@@ -69,7 +69,7 @@
                                     <HBox alignment="CENTER_LEFT">
                                        <children>
                                           <SVGPath content="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z" scaleX="0.5" scaleY="0.5" styleClass="shape-state-disabled" />
-                                          <Hyperlink styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
+                                          <Hyperlink fx:id="vst3ExtraDirectoryLink" styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="15.0" top="6.0" />
@@ -97,7 +97,7 @@
                                     <HBox alignment="CENTER_LEFT">
                                        <children>
                                           <SVGPath content="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z" scaleX="0.5" scaleY="0.5" styleClass="shape-state-disabled" />
-                                          <Hyperlink styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
+                                          <Hyperlink fx:id="auExtraDirectoryLink" styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
                                        </children>
                                        <VBox.margin>
                                           <Insets left="15.0" top="6.0" />

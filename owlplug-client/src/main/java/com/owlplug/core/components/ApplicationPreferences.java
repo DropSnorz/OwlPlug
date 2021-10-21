@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
@@ -67,6 +68,10 @@ public class ApplicationPreferences {
 
   public void putLong(String key, long value) {
     basePreferences.putLong(key, value);
+  }
+
+  public List<String> getList(String key) {
+    return getList(key, new ArrayList<String>());
   }
 
   public List<String> getList(String key, List<String> def) {

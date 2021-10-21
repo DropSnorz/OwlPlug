@@ -271,15 +271,18 @@ JFXTreeView:focused{
 	-fx-background-color: card-pane-lightshade-color;
 }
 
-JFXListView{
+.list-view {
 	-fx-background-color: rgb(55,55,55);
 	-fx-text-fill: text-color;
-	
 }
-.list-view .list-cell{
+.list-view .list-cell {
 	-fx-background-color: rgb(44,44,44);
 	-fx-text-fill: text-color;
 }
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:focused {
+    -fx-background-color: rgb(55,55,55);
+}
+
 .autocomplete-list {
 	-fx-background-color:card-pane-color;
 }
