@@ -20,16 +20,21 @@ package com.owlplug.core.tasks.plugins.discovery;
 
 import com.owlplug.core.model.platform.RuntimePlatform;
 
+import java.util.List;
+
 public class PluginSyncTaskParameters {
 
   private RuntimePlatform platform;
   private String directoryScope;
-  private String vstDirectory;
+  private String vst2Directory;
   private String vst3Directory;
   private String auDirectory;
   private boolean findVst2;
   private boolean findVst3;
   private boolean findAu;
+  private List<String> vst2ExtraDirectories;
+  private List<String> vst3ExtraDirectories;
+  private List<String> auExtraDirectories;
 
   public RuntimePlatform getPlatform() {
     return platform;
@@ -47,12 +52,12 @@ public class PluginSyncTaskParameters {
 	  this.directoryScope = directoryScope;
   }
 
-  public String getVstDirectory() {
-	  return vstDirectory;
+  public String getVst2Directory() {
+	  return vst2Directory;
   }
 
-  public void setVstDirectory(String pluginDirectory) {
-    this.vstDirectory = pluginDirectory;
+  public void setVst2Directory(String pluginDirectory) {
+    this.vst2Directory = pluginDirectory;
   }
 
   public String getVst3Directory() {
@@ -93,6 +98,30 @@ public class PluginSyncTaskParameters {
 
   public void setFindAu(boolean findAu) {
 	  this.findAu = findAu;
+  }
+
+  public List<String> getVst2ExtraDirectories() {
+    return vst2ExtraDirectories;
+  }
+
+  public void setVst2ExtraDirectories(List<String> vst2ExtraDirectories) {
+    this.vst2ExtraDirectories = vst2ExtraDirectories;
+  }
+
+  public List<String> getVst3ExtraDirectories() {
+    return vst3ExtraDirectories;
+  }
+
+  public void setVst3ExtraDirectories(List<String> vst3ExtraDirectories) {
+    this.vst3ExtraDirectories = vst3ExtraDirectories;
+  }
+
+  public List<String> getAuExtraDirectories() {
+    return auExtraDirectories;
+  }
+
+  public void setAuExtraDirectories(List<String> auExtraDirectories) {
+    this.auExtraDirectories = auExtraDirectories;
   }
 
 }

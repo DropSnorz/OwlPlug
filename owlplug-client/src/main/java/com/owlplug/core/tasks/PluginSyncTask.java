@@ -33,6 +33,9 @@ import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
 import com.owlplug.host.NativeHost;
 import com.owlplug.host.NativePlugin;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +92,7 @@ public class PluginSyncTask extends AbstractTask {
     this.commitProgress(10);
 
     try {
-      ArrayList<PluginFile> collectedPluginFiles = new ArrayList<>();
+      Set<PluginFile> collectedPluginFiles = new LinkedHashSet<>();
       PluginFileCollector pluginCollector = new PluginFileCollector(parameters.getPlatform());
       ArrayList<Symlink> collectedSymlinks = new ArrayList<>();
       SymlinkCollector symlinkCollector = new SymlinkCollector(true);
@@ -120,21 +123,33 @@ public class PluginSyncTask extends AbstractTask {
 
       } else {
         // Plugins are retrieved from regulars directories
-        String vstDirectory = parameters.getVstDirectory();
+        String vst2Directory = parameters.getVst2Directory();
         String vst3Directory = parameters.getVst3Directory();
         String auDirectory = parameters.getAuDirectory();
 
         if (parameters.isFindVst2()) {
-          collectedPluginFiles.addAll(pluginCollector.collect(vstDirectory, PluginFormat.VST2));
-          collectedSymlinks.addAll(symlinkCollector.collect(vstDirectory));
+          collectedPluginFiles.addAll(pluginCollector.collect(vst2Directory, PluginFormat.VST2));
+          collectedSymlinks.addAll(symlinkCollector.collect(vst2Directory));
+          for(String path : parameters.getVst2ExtraDirectories()) {
+            collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.VST2));
+            collectedSymlinks.addAll(symlinkCollector.collect(path));
+          }
         }
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
           collectedSymlinks.addAll(symlinkCollector.collect(vst3Directory));
+          for(String path : parameters.getVst3ExtraDirectories()) {
+            collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.VST3));
+            collectedSymlinks.addAll(symlinkCollector.collect(path));
+          }
         }
         if (parameters.isFindAu()) {
           collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
           collectedSymlinks.addAll(symlinkCollector.collect(auDirectory));
+          for(String path : parameters.getAuExtraDirectories()) {
+            collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.AU));
+            collectedSymlinks.addAll(symlinkCollector.collect(path));
+          }
         }
       }
       

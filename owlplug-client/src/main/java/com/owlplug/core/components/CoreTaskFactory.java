@@ -76,13 +76,16 @@ public class CoreTaskFactory extends BaseTaskFactory {
 
     PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
     parameters.setPlatform(applicationDefaults.getRuntimePlatform());
-    parameters.setVstDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    parameters.setVst2Directory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
     parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
     parameters.setAuDirectory(prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
     parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindAu(prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
-    
+    parameters.setVst2ExtraDirectories(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
+    parameters.setVst3ExtraDirectories(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
+    parameters.setAuExtraDirectories(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
+
     if(directoryScope != null) {
         parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
     }

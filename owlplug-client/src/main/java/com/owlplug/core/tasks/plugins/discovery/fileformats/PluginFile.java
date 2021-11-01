@@ -20,6 +20,7 @@ package com.owlplug.core.tasks.plugins.discovery.fileformats;
 
 import com.owlplug.core.model.Plugin;
 import java.io.File;
+import java.util.Objects;
 
 public abstract class PluginFile {
   
@@ -43,6 +44,17 @@ public abstract class PluginFile {
   public boolean isDisabled() {
     return pluginFile.getAbsolutePath().endsWith(".disabled");
   }
-  
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    PluginFile that = (PluginFile) o;
+    return Objects.equals(pluginFile.getAbsolutePath(), that.pluginFile.getAbsolutePath());
+  }
+
+  @Override
+  public int hashCode() {
+    return pluginFile.getAbsolutePath().hashCode();
+  }
 }
