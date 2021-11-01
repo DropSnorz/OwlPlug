@@ -110,26 +110,39 @@ public class OptionsController extends BaseController {
   @FXML
   public void initialize() {
 
-    vst2DirectoryTextField.setDisable(false);
-    vst2DirectoryButton.setDisable(false);
+    // Disable all directory options on init
+    vst2DirectoryTextField.setDisable(true);
+    vst2DirectoryButton.setDisable(true);
+    vst2ExtraDirectoryLink.setDisable(true);
+    vst3DirectoryTextField.setDisable(true);
+    vst3DirectoryButton.setDisable(true);
+    vst3ExtraDirectoryLink.setDisable(true);
+    auDirectoryTextField.setDisable(true);
+    auDirectoryButton.setDisable(true);
+    auExtraDirectoryLink.setDisable(true);
+
     storeByCreatorLabel.setVisible(false);
+
 
     vst2ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
       vst2DirectoryTextField.setDisable(!newValue);
       vst2DirectoryButton.setDisable(!newValue);
+      vst2ExtraDirectoryLink.setDisable(!newValue);
     });
 
     vst3ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, newValue);
       vst3DirectoryTextField.setDisable(!newValue);
       vst3DirectoryButton.setDisable(!newValue);
+      vst3ExtraDirectoryLink.setDisable(!newValue);
     });
 
     auToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, newValue);
       auDirectoryTextField.setDisable(!newValue);
       auDirectoryButton.setDisable(!newValue);
+      auExtraDirectoryLink.setDisable(!newValue);
     });
 
     vst2DirectoryButton.setOnAction(e -> {
@@ -273,7 +286,7 @@ public class OptionsController extends BaseController {
     storeByCreatorCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false));
     storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
 
-    MessageFormat extraDirectoryMessageFormat = new MessageFormat("using {0} additional directories");
+    MessageFormat extraDirectoryMessageFormat = new MessageFormat("+ {0} additional directories");
     vst2ExtraDirectoryLink.setText(extraDirectoryMessageFormat.format(
       new Object[] {
         this.getPreferences().getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY).size()
@@ -307,6 +320,7 @@ public class OptionsController extends BaseController {
       auToggleButton.setSelected(false);
       auDirectoryTextField.setDisable(true);
       auDirectoryButton.setDisable(true);
+      auExtraDirectoryLink.setDisable(true);
       auToggleButton.setDisable(true);
     }
 

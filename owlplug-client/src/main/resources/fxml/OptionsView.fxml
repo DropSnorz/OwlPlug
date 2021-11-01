@@ -4,7 +4,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.OptionsController">
@@ -19,7 +18,7 @@
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin></Label>
-                        <VBox spacing="20.0">
+                        <VBox spacing="30.0">
                            <children>
                               <VBox>
                                  <children>
@@ -27,6 +26,14 @@
                                     <FlowPane prefWidth="200.0">
                                        <children>
                                           <JFXToggleButton fx:id="vst2ToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore VST2 plugins" />
+                                          <Label text="(" />
+                                          <Hyperlink fx:id="vst2ExtraDirectoryLink" graphicTextGap="0.0" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
+                                          <Label text=")" />
+                                          <HBox alignment="CENTER_LEFT">
+                                             <FlowPane.margin>
+                                                <Insets />
+                                             </FlowPane.margin>
+                                          </HBox>
                                        </children>
                                     </FlowPane>
                                     <HBox alignment="BASELINE_LEFT" spacing="5.0">
@@ -38,15 +45,6 @@
                                           <Insets left="15.0" />
                                        </VBox.margin>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT">
-                                       <children>
-                                          <SVGPath content="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z" scaleX="0.5" scaleY="0.5" styleClass="shape-state-disabled" />
-                                          <Hyperlink fx:id="vst2ExtraDirectoryLink" styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets left="15.0" top="6.0" />
-                                       </VBox.margin>
-                                    </HBox>
                                  </children>
                               </VBox>
                               <VBox VBox.vgrow="ALWAYS">
@@ -55,6 +53,9 @@
                                     <FlowPane prefWidth="200.0">
                                        <children>
                                           <JFXToggleButton fx:id="vst3ToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore VST3 plugins" />
+                                          <Label text="(" />
+                                          <Hyperlink fx:id="vst3ExtraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
+                                          <Label text=")" />
                                        </children>
                                     </FlowPane>
                                     <HBox alignment="BASELINE_LEFT" spacing="5.0">
@@ -66,15 +67,6 @@
                                           <Insets left="15.0" />
                                        </padding>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT">
-                                       <children>
-                                          <SVGPath content="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z" scaleX="0.5" scaleY="0.5" styleClass="shape-state-disabled" />
-                                          <Hyperlink fx:id="vst3ExtraDirectoryLink" styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets left="15.0" top="6.0" />
-                                       </VBox.margin>
-                                    </HBox>
                                  </children>
                               </VBox>
                               <VBox layoutX="10.0" layoutY="117.0">
@@ -83,6 +75,9 @@
                                     <FlowPane prefWidth="200.0">
                                        <children>
                                           <JFXToggleButton fx:id="auToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore AU plugins" />
+                                          <Label text="(" />
+                                          <Hyperlink fx:id="auExtraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
+                                          <Label text=")" />
                                        </children>
                                     </FlowPane>
                                     <HBox alignment="BASELINE_LEFT" spacing="5.0">
@@ -93,15 +88,6 @@
                                        <padding>
                                           <Insets left="15.0" />
                                        </padding>
-                                    </HBox>
-                                    <HBox alignment="CENTER_LEFT">
-                                       <children>
-                                          <SVGPath content="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z" scaleX="0.5" scaleY="0.5" styleClass="shape-state-disabled" />
-                                          <Hyperlink fx:id="auExtraDirectoryLink" styleClass="hyperlink-disabled" text="using 0 additional directories" underline="true" />
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets left="15.0" top="6.0" />
-                                       </VBox.margin>
                                     </HBox>
                                  </children>
                               </VBox>
