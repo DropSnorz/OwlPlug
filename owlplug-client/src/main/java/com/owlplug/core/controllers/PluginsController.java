@@ -183,18 +183,27 @@ public class PluginsController extends BaseController {
         && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
+      for(String extraDirectory : prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY)) {
+        userPluginDirectories.add(extraDirectory);
+      }
     }
 
     if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
+      for(String extraDirectory : prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY)) {
+        userPluginDirectories.add(extraDirectory);
+      }
     }
     
     if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
+      for(String extraDirectory : prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY)) {
+        userPluginDirectories.add(extraDirectory);
+      }
     }
 
     for (String directory : userPluginDirectories) {
