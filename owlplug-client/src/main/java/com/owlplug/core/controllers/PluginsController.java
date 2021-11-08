@@ -103,7 +103,7 @@ public class PluginsController extends BaseController {
     treeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
       @Override
       public TreeCell<Object> call(TreeView<Object> p) {
-        return new PluginTreeCell(pluginService);
+        return new PluginTreeCell(getApplicationDefaults(), pluginService);
       }
     });
     treeView.setRoot(treePluginNode);
@@ -167,7 +167,6 @@ public class PluginsController extends BaseController {
     for (Plugin plugin : pluginList) {
 
       TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
-      item.setGraphic(new ImageView(this.getApplicationDefaults().getPluginFormatIcon(plugin)));
       treePluginNode.getInternalChildren().add(item);
     }
 
@@ -272,8 +271,6 @@ public class PluginsController extends BaseController {
   private FilterableTreeItem<Object> initDirectoryRoot(FileTree pluginTree, String directoryPath) {
 
     FilterableTreeItem<Object> item = new FilterableTreeItem<>(null);
-
-    item.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     item.setExpanded(true);
 
     FileTree treeHead = pluginTree;
@@ -306,12 +303,6 @@ public class PluginsController extends BaseController {
   private void buildDirectoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent) {
 
     String mergedParentName = mergedParent;
-
-    if (node.getValue() instanceof Symlink) {
-      node.setGraphic(new ImageView(this.getApplicationDefaults().symlinkImage));
-    } else {
-      node.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
-    }
     node.setExpanded(true);
 
     if (mergedParentName == null) {
@@ -325,7 +316,6 @@ public class PluginsController extends BaseController {
       if (child.values().isEmpty()) {
         Plugin plugin = (Plugin) child.getNodeValue();
         FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
-        plugItem.setGraphic(new ImageView(this.getApplicationDefaults().getPluginFormatIcon(plugin)));
         node.getInternalChildren().add(plugItem);
         // If not we are exploring a directory
       } else {
