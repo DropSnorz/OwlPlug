@@ -282,8 +282,10 @@ public class PluginsController extends BaseController {
       }
     }
 
-    if (treeHead != null) {
-      item.setValue(treeHead.getNodeValue());
+    if (treeHead != null && treeHead.getNodeValue() instanceof PluginDirectory) {
+      PluginDirectory directory = (PluginDirectory) treeHead.getNodeValue();
+      directory.setRootDirectory(true);
+      item.setValue(directory);
       buildDirectoryTree(treeHead, item, "");
     }
 

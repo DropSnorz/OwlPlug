@@ -20,10 +20,7 @@ package com.owlplug.core.ui;
 
 import com.jfoenix.controls.JFXTreeCell;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.model.IDirectory;
-import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginState;
-import com.owlplug.core.model.Symlink;
+import com.owlplug.core.model.*;
 import com.owlplug.core.services.PluginService;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -108,6 +105,12 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
         Node icon;
         if(dir instanceof Symlink) {
           icon = new ImageView(applicationDefaults.symlinkImage);
+        } else if (dir instanceof PluginDirectory pluginDirectory) {
+          if (pluginDirectory.isRootDirectory()) {
+            icon = new ImageView(applicationDefaults.rootDirectoryImage);
+          } else {
+            icon = new ImageView(applicationDefaults.directoryImage);
+          }
         } else {
           icon = new ImageView(applicationDefaults.directoryImage);
         }
