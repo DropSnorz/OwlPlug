@@ -63,7 +63,7 @@ public class ApplicationDefaults {
   public final Image tagImage = new Image(getClass().getResourceAsStream("/icons/tag-white-16.png"));
   public final Image symlinkImage = new Image(getClass().getResourceAsStream("/icons/folderlink-grey-16.png"));
   public final Image userImage = new Image(getClass().getResourceAsStream("/icons/user-white-32.png"));
-
+  public final Image rootDirectoryImage = new Image(getClass().getResourceAsStream("/icons/foldersearch-grey-16.png"));
 
 
   public final Image pluginPlaceholderImage = new Image(
@@ -72,10 +72,13 @@ public class ApplicationDefaults {
 
   public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
   public static final String VST2_DISCOVERY_ENABLED_KEY = "VST2_DISCOVERY_ENABLED";
+  public static final String VST2_EXTRA_DIRECTORY_KEY = "VST2_EXTRA_DIRECTORY_KEY";
   public static final String VST3_DIRECTORY_KEY = "VST3_DIRECTORY";
   public static final String VST3_DISCOVERY_ENABLED_KEY = "VST3_DISCOVERY_ENABLED";
+  public static final String VST3_EXTRA_DIRECTORY_KEY = "VST3_EXTRA_DIRECTORY_KEY";
   public static final String AU_DIRECTORY_KEY = "AU_DIRECTORY_KEY";
   public static final String AU_DISCOVERY_ENABLED_KEY = "AU_DISCOVERY_ENABLED_KEY";
+  public static final String AU_EXTRA_DIRECTORY_KEY = "AU_EXTRA_DIRECTORY_KEY";
   public static final String NATIVE_HOST_ENABLED_KEY = "NATIVE_HOST_ENABLED_KEY";
   public static final String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";
   public static final String SYNC_PLUGINS_STARTUP_KEY = "SYNC_PLUGINS_STARTUP_KEY";

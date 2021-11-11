@@ -19,7 +19,6 @@
 package com.owlplug.core.components;
 
 import com.owlplug.core.model.ApplicationState;
-import java.util.prefs.Preferences;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ public class ApplicationMonitor {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
   
   @Autowired
-  protected Preferences preferences;
+  protected ApplicationPreferences preferences;
   private boolean previousExecutionSafelyTerminated = true;
   
   

@@ -30,7 +30,6 @@ import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.SimpleEventListener;
 import java.util.ArrayList;
-import java.util.prefs.Preferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
   @Autowired
   private ApplicationDefaults applicationDefaults;
   @Autowired
-  private Preferences prefs;
+  private ApplicationPreferences prefs;
   @Autowired
   private PluginDAO pluginDAO;
   @Autowired
@@ -77,13 +76,16 @@ public class CoreTaskFactory extends BaseTaskFactory {
 
     PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
     parameters.setPlatform(applicationDefaults.getRuntimePlatform());
-    parameters.setVstDirectory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+    parameters.setVst2Directory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
     parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
     parameters.setAuDirectory(prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
     parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
     parameters.setFindAu(prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
-    
+    parameters.setVst2ExtraDirectories(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
+    parameters.setVst3ExtraDirectories(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
+    parameters.setAuExtraDirectories(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
+
     if(directoryScope != null) {
         parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
     }

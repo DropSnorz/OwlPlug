@@ -19,13 +19,13 @@
 package com.owlplug.core.ui;
 
 import com.jfoenix.controls.JFXTreeCell;
-import com.owlplug.core.model.IDirectory;
-import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginState;
+import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.model.*;
 import com.owlplug.core.services.PluginService;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -34,8 +34,10 @@ import javafx.scene.text.TextFlow;
 public class PluginTreeCell extends JFXTreeCell<Object> {
 
   private PluginService pluginService;
+  private ApplicationDefaults applicationDefaults;
 
-  public PluginTreeCell(PluginService pluginService){
+  public PluginTreeCell(ApplicationDefaults applicationDefaults, PluginService pluginService){
+    this.applicationDefaults = applicationDefaults;
     this.pluginService = pluginService;
   }
 
@@ -52,7 +54,7 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
         Plugin plugin = (Plugin) item;
         HBox hbox = new HBox(4);
         hbox.setAlignment(Pos.CENTER_LEFT);
-        hbox.getChildren().add(getTreeItem().getGraphic());
+        hbox.getChildren().add(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
         hbox.getChildren().add(new Label(plugin.getName()));
         Circle circle = new Circle(0, 0, 2);
         hbox.getChildren().add(circle);
@@ -100,7 +102,18 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
 
         textFlow.getChildren().add(directoryName);
 
-        Node icon = getTreeItem().getGraphic();
+        Node icon;
+        if(dir instanceof Symlink) {
+          icon = new ImageView(applicationDefaults.symlinkImage);
+        } else if (dir instanceof PluginDirectory pluginDirectory) {
+          if (pluginDirectory.isRootDirectory()) {
+            icon = new ImageView(applicationDefaults.rootDirectoryImage);
+          } else {
+            icon = new ImageView(applicationDefaults.directoryImage);
+          }
+        } else {
+          icon = new ImageView(applicationDefaults.directoryImage);
+        }
         HBox hbox = new HBox(5);
         hbox.getChildren().add(icon);
         hbox.getChildren().add(textFlow);

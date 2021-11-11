@@ -24,7 +24,6 @@ import com.owlplug.core.controllers.MainController;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.time.Duration;
-import java.util.prefs.Preferences;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -136,17 +135,6 @@ public class OwlPlug extends Application {
     dataSource.setUsername(environment.getProperty("spring.datasource.username"));
     dataSource.setPassword(environment.getProperty("spring.datasource.password"));
     return dataSource;
-  }
-
-  /**
-   * Initialize Application preferences.
-   * 
-   * @return
-   */
-  @Bean
-  public Preferences getPreference() {
-    return Preferences.userRoot().node("com.owlplug.user");
-
   }
 
   /**

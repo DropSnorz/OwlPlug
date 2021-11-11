@@ -25,6 +25,7 @@ public class PluginDirectory implements IDirectory {
   protected String name;
   protected String displayName;
   protected String path;
+  protected boolean rootDirectory;
   protected List<Plugin> pluginList;
 
   public PluginDirectory() {
@@ -64,6 +65,14 @@ public class PluginDirectory implements IDirectory {
 
   public void setPath(String path) {
     this.path = path;
+  }
+
+  public boolean isRootDirectory() {
+    return rootDirectory;
+  }
+
+  public void setRootDirectory(boolean rootDirectory) {
+    this.rootDirectory = rootDirectory;
   }
 
   public List<Plugin> getPluginList() {

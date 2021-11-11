@@ -19,7 +19,8 @@
 package com.owlplug.core.services;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import java.util.prefs.Preferences;
+
+import com.owlplug.core.components.ApplicationPreferences;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BaseService {
@@ -27,14 +28,14 @@ public class BaseService {
   @Autowired
   private ApplicationDefaults applicationDefaults;
   @Autowired
-  private Preferences preferences;
+  private ApplicationPreferences preferences;
   
   
   public ApplicationDefaults getApplicationDefaults() {
     return applicationDefaults;
   }
   
-  public Preferences getPreferences() {
+  public ApplicationPreferences getPreferences() {
     return preferences;
   }
 

@@ -23,6 +23,7 @@ import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.controllers.dialogs.NewLinkController;
 import com.owlplug.core.dao.PluginDAO;
@@ -40,7 +41,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.prefs.Preferences;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeCell;
@@ -103,7 +103,7 @@ public class PluginsController extends BaseController {
     treeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
       @Override
       public TreeCell<Object> call(TreeView<Object> p) {
-        return new PluginTreeCell(pluginService);
+        return new PluginTreeCell(getApplicationDefaults(), pluginService);
       }
     });
     treeView.setRoot(treePluginNode);
@@ -167,7 +167,6 @@ public class PluginsController extends BaseController {
     for (Plugin plugin : pluginList) {
 
       TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
-      item.setGraphic(new ImageView(this.getApplicationDefaults().getPluginFormatIcon(plugin)));
       treePluginNode.getInternalChildren().add(item);
     }
 
@@ -178,23 +177,32 @@ public class PluginsController extends BaseController {
     generatePluginTree();
 
     Set<String> userPluginDirectories = new HashSet<>();
-    Preferences prefs = this.getPreferences();
+    ApplicationPreferences prefs = this.getPreferences();
     if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
+      for(String extraDirectory : prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY)) {
+        userPluginDirectories.add(extraDirectory);
+      }
     }
 
     if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
+      for(String extraDirectory : prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY)) {
+        userPluginDirectories.add(extraDirectory);
+      }
     }
     
     if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
+      for(String extraDirectory : prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY)) {
+        userPluginDirectories.add(extraDirectory);
+      }
     }
 
     for (String directory : userPluginDirectories) {
@@ -263,8 +271,6 @@ public class PluginsController extends BaseController {
   private FilterableTreeItem<Object> initDirectoryRoot(FileTree pluginTree, String directoryPath) {
 
     FilterableTreeItem<Object> item = new FilterableTreeItem<>(null);
-
-    item.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     item.setExpanded(true);
 
     FileTree treeHead = pluginTree;
@@ -276,8 +282,10 @@ public class PluginsController extends BaseController {
       }
     }
 
-    if (treeHead != null) {
-      item.setValue(treeHead.getNodeValue());
+    if (treeHead != null && treeHead.getNodeValue() instanceof PluginDirectory) {
+      PluginDirectory directory = (PluginDirectory) treeHead.getNodeValue();
+      directory.setRootDirectory(true);
+      item.setValue(directory);
       buildDirectoryTree(treeHead, item, "");
     }
 
@@ -297,12 +305,6 @@ public class PluginsController extends BaseController {
   private void buildDirectoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent) {
 
     String mergedParentName = mergedParent;
-
-    if (node.getValue() instanceof Symlink) {
-      node.setGraphic(new ImageView(this.getApplicationDefaults().symlinkImage));
-    } else {
-      node.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
-    }
     node.setExpanded(true);
 
     if (mergedParentName == null) {
@@ -316,7 +318,6 @@ public class PluginsController extends BaseController {
       if (child.values().isEmpty()) {
         Plugin plugin = (Plugin) child.getNodeValue();
         FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
-        plugItem.setGraphic(new ImageView(this.getApplicationDefaults().getPluginFormatIcon(plugin)));
         node.getInternalChildren().add(plugItem);
         // If not we are exploring a directory
       } else {

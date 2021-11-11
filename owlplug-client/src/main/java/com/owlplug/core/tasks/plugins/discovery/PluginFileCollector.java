@@ -49,7 +49,8 @@ public class PluginFileCollector {
    */
   public List<PluginFile> collect(String directoryPath, PluginFormat pluginFormat) {
 
-    ArrayList<PluginFile> fileList = new ArrayList<>();
+    ArrayList<PluginFile> collectedFiles = new ArrayList<>();
+
     File dir = new File(directoryPath);
 
     if (dir.isDirectory()) {
@@ -66,7 +67,7 @@ public class PluginFileCollector {
          *  bundles subdirectories.
          */
         boolean nestedPluginDetected = false;
-        for (PluginFile previouslyCollectedFile : fileList) {
+        for (PluginFile previouslyCollectedFile : collectedFiles) {
           if (file.getAbsolutePath().contains(previouslyCollectedFile.getPluginFile().getAbsolutePath())) {
             nestedPluginDetected = true;
           }
@@ -75,7 +76,7 @@ public class PluginFileCollector {
         if (!nestedPluginDetected) {
           PluginFile pluginFile = pluginFileResolver.resolve(file);
           if (pluginFile != null) {
-            fileList.add(pluginFile);
+            collectedFiles.add(pluginFile);
           }
         }
       }
@@ -83,7 +84,7 @@ public class PluginFileCollector {
       log.error("Scan target is not a valid directory. 0 plugins have been collected from " + directoryPath);
     }
 
-    return fileList;
+    return collectedFiles;
   }
 
   public RuntimePlatform getRuntimePlatform() {
