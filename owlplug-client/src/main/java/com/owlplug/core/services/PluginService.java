@@ -87,41 +87,38 @@ public class PluginService extends BaseService {
   
   public void disablePlugin(Plugin plugin) {
     
-    try {
       File originFile = new File(plugin.getPath());
       File destFile = new File(plugin.getPath() + ".disabled");
-      FileUtils.moveFile(originFile, destFile);
-      
-      plugin.setDisabled(true);
-      plugin.setPath(plugin.getPath() + ".disabled");
-      pluginDAO.save(plugin);
-      
-    } catch (IOException e) {
-      log.error("Plugin can't be disabled", e);
+
+      if (originFile.renameTo(destFile)) {
+        plugin.setDisabled(true);
+        plugin.setPath(plugin.getPath() + ".disabled");
+        pluginDAO.save(plugin);
+
+      } else {
+        log.error("Plugin can't be disabled: failed to rename file {}", plugin.getPath());
     }
     
   }
   
   public void enablePlugin(Plugin plugin) {
-    
-    try {
+
       File originFile = new File(plugin.getPath());
-      
+
       String newPath = plugin.getPath();
       if (plugin.getPath().endsWith(".disabled")) {
         newPath = plugin.getPath().substring(0, plugin.getPath().length() - ".disabled".length());
       }
       File destFile = new File(newPath);
-      FileUtils.moveFile(originFile, destFile);
-      
-      plugin.setDisabled(false);
-      plugin.setPath(newPath);
-      pluginDAO.save(plugin);
-      
-    } catch (IOException e) {
-      log.error("Plugin can't be enabled", e);
-    }
-    
+
+      if (originFile.renameTo(destFile)) {
+        plugin.setDisabled(false);
+        plugin.setPath(newPath);
+        pluginDAO.save(plugin);
+      } else {
+        log.error("Plugin can't be enabled: failed to rename file {}", plugin.getPath());
+      }
+
   }
 
   public PluginState getPluginState(Plugin plugin) {
