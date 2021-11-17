@@ -132,7 +132,7 @@ public class PluginsController extends BaseController {
       if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
         return null;
       }
-      return actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
+      return item -> item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
     }, searchTextField.textProperty()));
 
     // Binds search property to plugin tree filter
@@ -140,7 +140,7 @@ public class PluginsController extends BaseController {
       if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
         return null;
       }
-      return actor -> actor.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
+      return item -> item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
     }, searchTextField.textProperty()));
 
     syncButton.setOnAction(e -> {
