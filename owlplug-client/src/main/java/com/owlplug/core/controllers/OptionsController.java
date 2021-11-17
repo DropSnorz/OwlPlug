@@ -260,7 +260,7 @@ public class OptionsController extends BaseController {
       dialog.show();
     });
 
-    versionLabel.setText("V " + this.getApplicationDefaults().getVersion());
+    versionLabel.setText(this.getApplicationDefaults().getVersion());
 
     owlplugWebsiteLink.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(owlplugWebsiteLink.getText());

@@ -177,7 +177,7 @@
                                           <TextFlow prefWidth="200.0">
                                              <children>
                                                 <Label text="OwlPlug -" />
-                                                <Label fx:id="versionLabel" text="V ?.?.?" wrapText="true" />
+                                                <Label fx:id="versionLabel" text="?.?.?" wrapText="true" />
                                              </children>
                                           </TextFlow>
                                           <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
