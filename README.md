@@ -53,12 +53,13 @@ All kinds of feedbacks are greatly welcomed.
 
 ## Plugins
 
-OwlPlug can discover VST2, VST3 and AU Plugins. OwlPlug is compatible with your previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
-You can configure the tool to work with multiple plugin directories using the **Link** feature.  
+OwlPlug can discover VST2, VST3 and AU Plugins. OwlPlug is compatible with all previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. Additional directories can be configured if your plugin setup is fragmented on the filesystem.
+
+After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
 
 ## Links
 
-A Link allows you to create and manage symlinks across your filesystem and plugin directories. You can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through your root plugin directory. For example, you can configure a link named *usb-drive* in `C:/AudioPlugins` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/AudioPlugins/usb-drive`. On some Windows version, symlinks creation may require admin privileges.
+A Link allows you to create and manage symlinks across your filesystem and plugin directories. With Links, you can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through a single root plugin directory. For example, you can configure a link named *usb-drive* in `C:/AudioPlugins` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/AudioPlugins/usb-drive`. This feature may be useful for DAW that scans plugins from predefined or limited number directories. On some Windows version, symlinks creation may require admin privileges.
 
 ## Stores 
 
@@ -107,7 +108,7 @@ Third party store adapters are maintained by OwlPlug Central but plugins binarie
 1. Clone or download project sources
 2. Run following commands
 ```sh
-# Install dependecies
+# Install dependencies
 mvn clean install
 # Move to owlplug client folder
 cd owlplug-client
