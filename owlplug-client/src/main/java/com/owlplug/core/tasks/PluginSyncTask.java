@@ -30,7 +30,6 @@ import com.owlplug.core.tasks.plugins.discovery.PluginFileCollector;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.tasks.plugins.discovery.SymlinkCollector;
 import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
-import com.owlplug.host.NativeHost;
 import com.owlplug.host.NativePlugin;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -52,10 +51,8 @@ public class PluginSyncTask extends AbstractTask {
   private PluginDAO pluginDAO;
   private SymlinkDAO symlinkDAO;
   private PluginFootprintDAO pluginFootprintDAO;
+  private NativeHostService nativeHostService;
   private PluginSyncTaskParameters parameters;
-
-  private boolean useNativeHost = false;
-  private NativeHost nativeHost;
 
 
   /**
@@ -76,8 +73,7 @@ public class PluginSyncTask extends AbstractTask {
     this.pluginFootprintDAO = pluginFootprintDAO;
     this.symlinkDAO = symlinkDAO;
 
-    nativeHost = nativeHostService.getNativeHost();
-    useNativeHost = nativeHostService.isNativeHostEnabled();
+    this.nativeHostService = nativeHostService;
 
     setName("Sync Plugins");
     setMaxProgress(100);
@@ -170,11 +166,11 @@ public class PluginSyncTask extends AbstractTask {
         plugin.setFootprint(pluginFootprint);
         pluginDAO.save(plugin);
 
-        if (useNativeHost && nativeHost.isAvailable()
+        if (nativeHostService.isNativeHostEnabled() && nativeHostService.getCurrentPluginLoader().isAvailable()
             && pluginFootprint.isNativeDiscoveryEnabled() && !plugin.isDisabled()) {
           log.debug("Load plugin using native discovery: " + plugin.getPath());
           this.updateMessage("Exploring plugin " + plugin.getName());
-          NativePlugin nativePlugin = nativeHost.loadPlugin(plugin.getPath());
+          NativePlugin nativePlugin = nativeHostService.loadPlugin(plugin.getPath());
           if (nativePlugin != null) {
             plugin.setNativeCompatible(true);
             plugin.setDescriptiveName(nativePlugin.getDescriptiveName());

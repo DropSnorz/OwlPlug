@@ -17,7 +17,7 @@
 /*
   ==============================================================================
 
-    com_owlplug_host_NativeHostJNI.cpp
+    com_owlplug_host_loaders_jni_JNIPluginMapper.cpp
     Created: 16 Mar 2019 12:08:36am
     Author:  Arthur
 
@@ -25,7 +25,7 @@
 */
 #include <iostream>
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "com_owlplug_host_NativeHostJNI.h"
+#include "com_owlplug_host_loaders_jni_JNIPluginMapper.h"
 
 /**
 * Returns a NativePlugin jobject instance from a PluginDescription
@@ -86,13 +86,13 @@ jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescrip
 
 
 /**
- * JNI loadPlugin implementation.
+ * JNI mapPlugin implementation.
  * Returns a com.owlplug.host.NativePlugin instance based on the given path. 
  * NativePlugins field are filled with plugin description and metadata properties
  * By default, the first plugin instance is used to retrieve descriptions. This must be updated
  * as a single plugin file can contains subcomponents.
  */
-JNIEXPORT jobject JNICALL Java_com_owlplug_host_NativeHostJNI_loadPlugin
+JNIEXPORT jobject JNICALL Java_com_owlplug_host_loaders_jni_JNIPluginMapper_mapPlugin
   (JNIEnv* env, jobject thisObject, jstring pluginPath) {
 
 	// Used by Console / Library app to take care of Juce components lifecycle
