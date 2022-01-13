@@ -20,6 +20,7 @@ package com.owlplug.core.services;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.host.NativePlugin;
+import com.owlplug.host.loaders.EmbeddedScannerPluginLoader;
 import com.owlplug.host.loaders.NativePluginLoader;
 import com.owlplug.host.loaders.jni.JNINativePluginLoader;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ public class NativeHostService extends BaseService {
 
   @PostConstruct
   private void init() {
+    pluginLoaders.add(EmbeddedScannerPluginLoader.getInstance());
     pluginLoaders.add(JNINativePluginLoader.getInstance());
     for (NativePluginLoader loader : pluginLoaders) {
       loader.init();

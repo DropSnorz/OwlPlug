@@ -6,7 +6,7 @@ import com.owlplug.host.loaders.NativePluginLoader;
 public class JNINativePluginLoader implements NativePluginLoader {
 
   private static JNINativePluginLoader INSTANCE;
-  JNIPluginMapper nativeHost;
+  JNIPluginMapper nativePluginMapper;
 
   private JNINativePluginLoader(){
 
@@ -21,8 +21,8 @@ public class JNINativePluginLoader implements NativePluginLoader {
 
   @Override
   public void init() {
-    nativeHost = JNIPluginMapper.getInstance();
-    nativeHost.init();
+    nativePluginMapper = JNIPluginMapper.getInstance();
+    nativePluginMapper.init();
   }
 
   @Override
@@ -32,7 +32,7 @@ public class JNINativePluginLoader implements NativePluginLoader {
 
   @Override
   public NativePlugin loadPlugin(String path) {
-    return nativeHost.mapPlugin(path);
+    return nativePluginMapper.mapPlugin(path);
   }
 
   @Override
@@ -42,7 +42,7 @@ public class JNINativePluginLoader implements NativePluginLoader {
 
   @Override
   public boolean isAvailable() {
-    return nativeHost.isNativeLibraryLoaded();
+    return nativePluginMapper.isNativeLibraryLoaded();
   }
 
   @Override
