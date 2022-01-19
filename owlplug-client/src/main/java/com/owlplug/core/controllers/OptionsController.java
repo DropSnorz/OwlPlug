@@ -18,12 +18,7 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXToggleButton;
+import com.jfoenix.controls.*;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.model.platform.OperatingSystem;
@@ -33,6 +28,9 @@ import com.owlplug.core.utils.PlatformUtils;
 import java.io.File;
 import java.text.MessageFormat;
 
+import com.owlplug.host.loaders.NativePluginLoader;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -77,6 +75,8 @@ public class OptionsController extends BaseController {
   private Hyperlink auExtraDirectoryLink;
   @FXML
   private JFXCheckBox pluginNativeCheckbox;
+  @FXML
+  private JFXComboBox<NativePluginLoader> pluginNativeComboBox;
 
   @FXML
   private JFXCheckBox syncPluginsCheckBox;
@@ -201,6 +201,18 @@ public class OptionsController extends BaseController {
 
     pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
+      this.pluginNativeComboBox.setDisable(!newValue);
+    });
+
+    ObservableList<NativePluginLoader> pluginLoaders = FXCollections.observableArrayList(
+      nativeHostService.getAvailablePluginLoaders());
+    pluginNativeComboBox.setItems(pluginLoaders);
+
+    pluginNativeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+      if(newValue != null) {
+        this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER,newValue.getId());
+        nativeHostService.setCurrentPluginLoader(newValue);
+      }
     });
 
     syncPluginsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -278,6 +290,7 @@ public class OptionsController extends BaseController {
     vst3ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
     auToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
     pluginNativeCheckbox.setDisable(!nativeHostService.isNativeHostAvailable());
+    pluginNativeComboBox.setDisable(!nativeHostService.isNativeHostAvailable());
     pluginNativeCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
     syncPluginsCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
     storeSubDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
@@ -305,6 +318,9 @@ public class OptionsController extends BaseController {
       }
     ));
 
+    NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
+    pluginNativeComboBox.getSelectionModel().select(pluginLoader);
+
     if (!storeDirectoryCheckBox.isSelected()) {
       storeDirectoryTextField.setDisable(true);
       storeDirectoryTextField.setVisible(false);
@@ -316,7 +332,6 @@ public class OptionsController extends BaseController {
     // Disable AU options for non MAC users
     if (!this.getApplicationDefaults().getRuntimePlatform()
         .getOperatingSystem().equals(OperatingSystem.MAC)) {
-      //auToggleButton.setSelected(true);
       auToggleButton.setSelected(false);
       auDirectoryTextField.setDisable(true);
       auDirectoryButton.setDisable(true);

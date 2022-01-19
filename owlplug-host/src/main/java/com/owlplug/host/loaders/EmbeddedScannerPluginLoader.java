@@ -59,18 +59,19 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
 
     log.debug("Init plugin loader");
     File scannerFile = new File(scannerDirectory, scannerId);
-    System.out.println(scannerFile.getAbsolutePath());
     if (!scannerFile.exists()) {
       try {
         ClassPathFileExtractor.extract(this.getClass(), DEFAULT_SCANNER_ID, scannerFile);
-        available = true;
-
       } catch (IOException e) {
         log.error("Scanner executable can't be extracted to " + scannerFile.getAbsolutePath());
       }
 
-    } else {
+    }
+
+    if (scannerFile.exists()) {
       available = true;
+    } else {
+      log.error("Can't find owlplug scanner executable at {}",scannerFile.getPath());
     }
 
   }
@@ -126,6 +127,16 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   @Override
   public String getName() {
     return "OwlPlug Scanner";
+  }
+
+  @Override
+  public String getId() {
+    return "owlplug-scanner";
+  }
+
+  @Override
+  public String toString() {
+    return this.getName();
   }
 
 

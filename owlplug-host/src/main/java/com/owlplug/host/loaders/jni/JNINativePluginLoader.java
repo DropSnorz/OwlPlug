@@ -49,4 +49,15 @@ public class JNINativePluginLoader implements NativePluginLoader {
   public String getName() {
     return "OwlPlug JNI (legacy)";
   }
+
+  @Override
+  public String getId() {
+    return "owlplug-jni";
+  }
+
+  @Override
+  public String toString(){
+    return this.getName();
+  }
+
 }

@@ -11,5 +11,6 @@ public interface NativePluginLoader {
 
   public boolean isAvailable();
   public String getName();
+  public String getId();
 
 }
