@@ -16,24 +16,31 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.host.loaders;
+package com.owlplug.host.io;
 
-import com.owlplug.host.NativePlugin;
+public class CommandResult {
 
-public interface NativePluginLoader {
+  private int exitValue;
+  private String output;
 
-  public void init();
+  public CommandResult(int exitValue, String output) {
+    this.exitValue = exitValue;
+    this.output = output;
+  }
 
-  public void open();
+  public int getExitValue() {
+    return exitValue;
+  }
 
-  public NativePlugin loadPlugin(String path);
+  public void setExitValue(int exitValue) {
+    this.exitValue = exitValue;
+  }
 
-  public void close();
+  public String getOutput() {
+    return output;
+  }
 
-  public boolean isAvailable();
-
-  public String getName();
-
-  public String getId();
-
+  public void setOutput(String output) {
+    this.output = output;
+  }
 }

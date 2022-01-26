@@ -1,20 +1,38 @@
+/* OwlPlug
+ * Copyright (C) 2021 Arthur <dropsnorz@gmail.com>
+ *
+ * This file is part of OwlPlug.
+ *
+ * OwlPlug is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3
+ * as published by the Free Software Foundation.
+ *
+ * OwlPlug is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.owlplug.host.loaders;
 
 import com.owlplug.host.JuceXMLPlugin;
 import com.owlplug.host.NativePlugin;
-import com.owlplug.host.util.ClassPathFileExtractor;
-import com.owlplug.host.util.CommandResult;
-import com.owlplug.host.util.CommandRunner;
-import com.owlplug.host.util.LibraryLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import com.owlplug.host.io.ClassPathFileExtractor;
+import com.owlplug.host.io.CommandResult;
+import com.owlplug.host.io.CommandRunner;
+import com.owlplug.host.io.LibraryLoader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class EmbeddedScannerPluginLoader implements NativePluginLoader {
 
@@ -26,7 +44,8 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   private static final String DEFAULT_SCANNER_NAME = "owlplug-scanner";
   private static final String DEFAULT_SCANNER_VERSION = "0.0.1";
   private static String DEFAULT_SCANNER_EXT = getPlatformExecutableExtension();
-  private static final String DEFAULT_SCANNER_ID = DEFAULT_SCANNER_NAME + "-" + DEFAULT_SCANNER_VERSION + DEFAULT_SCANNER_EXT;
+  private static final String DEFAULT_SCANNER_ID =
+      DEFAULT_SCANNER_NAME + "-" + DEFAULT_SCANNER_VERSION + DEFAULT_SCANNER_EXT;
 
   private boolean available = false;
   private String scannerDirectory;

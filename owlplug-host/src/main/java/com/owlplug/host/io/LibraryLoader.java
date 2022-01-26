@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.host.util;
+package com.owlplug.host.io;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
 public class LibraryLoader {
   private static final Logger log = LoggerFactory.getLogger(LibraryLoader.class);
 
-  private static String SEPARATOR = System.getProperty("file.separator");
-  private static String TMP_PATH = System.getProperty("java.io.tmpdir");
-  private static String LIB_EXTENSION = getPlatformLibraryExtension();
+  private static final String SEPARATOR = System.getProperty("file.separator");
+  private static final String TMP_PATH = System.getProperty("java.io.tmpdir");
+  private static final String LIB_EXTENSION = getPlatformLibraryExtension();
   
 
   public static boolean load(String libName, Class ref, boolean throwOnFailure) {
@@ -64,7 +64,7 @@ public class LibraryLoader {
    */
   public static boolean load(String libName) {
     try {
-      if (libName.indexOf(SEPARATOR) != -1) {
+      if (libName.contains(SEPARATOR)) {
         System.load(libName);
       } else {
         System.loadLibrary(libName);
@@ -95,21 +95,22 @@ public class LibraryLoader {
         return false;
 
       }
-      if (is != null) {
-        int read;
-        byte[] buffer = new byte[4096];
-        FileOutputStream os = new FileOutputStream(file);
-        while ((read = is.read(buffer)) != -1) {
-          os.write(buffer, 0, read);
-        }
-        os.close();
-        is.close();
-        if (load(file.getAbsolutePath())) {
-          return true;
-        } else {
-          log.error("Library can't be loaded from " + file.getAbsolutePath());
-        }
+
+      int read;
+      byte[] buffer = new byte[4096];
+      FileOutputStream os = new FileOutputStream(file);
+      while ((read = is.read(buffer)) != -1) {
+        os.write(buffer, 0, read);
       }
+      os.close();
+      is.close();
+
+      if (load(file.getAbsolutePath())) {
+        return true;
+      } else {
+        log.error("Library can't be loaded from " + file.getAbsolutePath());
+      }
+
     } catch (Throwable t) {
       log.error("Can't export Library " + libName + " from classpath to temp directory", t);
     }
@@ -126,9 +127,9 @@ public class LibraryLoader {
    */
   private static String getPlatformLibraryExtension() {
     String osName = System.getProperty("os.name").toLowerCase();
-    if (osName.indexOf("win") >= 0) {
+    if (osName.contains("win")) {
       return ".dll";
-    } else if (osName.indexOf("mac") >= 0) {
+    } else if (osName.contains("mac")) {
       return ".dylib";
     }
     
