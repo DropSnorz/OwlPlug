@@ -24,7 +24,6 @@ import com.owlplug.host.loaders.DummyPluginLoader;
 import com.owlplug.host.loaders.EmbeddedScannerPluginLoader;
 import com.owlplug.host.loaders.NativePluginLoader;
 import com.owlplug.host.loaders.jni.JNINativePluginLoader;
-import javafx.application.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

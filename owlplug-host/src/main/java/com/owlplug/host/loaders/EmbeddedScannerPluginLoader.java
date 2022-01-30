@@ -113,7 +113,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
       log.trace("Response received from scanner");
       log.trace(result.getOutput());
 
-      if (result.getExitValue() > 0) {
+      if (result.getExitValue() >= 0) {
         JAXBContext jaxbContext = JAXBContext.newInstance(JuceXMLPlugin.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(result.getOutput()));
@@ -121,7 +121,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
         return juceXmlPlugin.toNativePlugin();
 
       } else {
-        log.debug("Invalid response from plugin scanner");
+        log.debug("Invalid return code {} received from plugin scanner", result.getExitValue());
       }
 
     } catch (JAXBException e) {

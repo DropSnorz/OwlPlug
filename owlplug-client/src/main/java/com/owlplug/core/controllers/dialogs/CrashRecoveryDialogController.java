@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers.dialogs;
 
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
@@ -28,6 +29,10 @@ import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.RecoveredPluginView;
 import com.owlplug.core.utils.PlatformUtils;
 import java.util.List;
+
+import com.owlplug.host.loaders.NativePluginLoader;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -58,6 +63,8 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
   @FXML
   protected JFXCheckBox nativeDiscoveryCheckbox;
   @FXML
+  protected JFXComboBox<NativePluginLoader> pluginNativeComboBox;
+  @FXML
   protected Button closeButton;
   @FXML
   protected Hyperlink troubleshootingLink;
@@ -85,11 +92,26 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     
     nativeDiscoveryCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
+      this.pluginNativeComboBox.setDisable(!newValue);
     });
-    
+
+    ObservableList<NativePluginLoader> pluginLoaders = FXCollections.observableArrayList(
+      nativeHostService.getAvailablePluginLoaders());
+    pluginNativeComboBox.setItems(pluginLoaders);
+
+    pluginNativeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+      if(newValue != null) {
+        this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER,newValue.getId());
+        nativeHostService.setCurrentPluginLoader(newValue);
+      }
+    });
+
+    pluginNativeComboBox.setDisable(!nativeHostService.isNativeHostAvailable());
+    NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
+    pluginNativeComboBox.getSelectionModel().select(pluginLoader);
+
     troubleshootingLink.setOnAction((e) -> PlatformUtils.openDefaultBrowser("https://github.com/DropSnorz/OwlPlug/wiki"));
     issuesLink.setOnAction((e) -> PlatformUtils.openDefaultBrowser("https://github.com/DropSnorz/OwlPlug/issues"));
-
     
     closeButton.setOnAction(e -> {
       optionsController.refreshView();
