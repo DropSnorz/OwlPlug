@@ -90,7 +90,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
     if (scannerFile.exists()) {
       available = true;
     } else {
-      log.error("Can't find owlplug scanner executable at {}",scannerFile.getPath());
+      log.error("Can't find owlplug scanner executable at {}", scannerFile.getPath());
     }
 
   }

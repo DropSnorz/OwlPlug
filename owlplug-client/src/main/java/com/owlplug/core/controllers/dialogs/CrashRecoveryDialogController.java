@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -28,9 +28,8 @@ import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.RecoveredPluginView;
 import com.owlplug.core.utils.PlatformUtils;
-import java.util.List;
-
 import com.owlplug.host.loaders.NativePluginLoader;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -96,12 +95,12 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     });
 
     ObservableList<NativePluginLoader> pluginLoaders = FXCollections.observableArrayList(
-      nativeHostService.getAvailablePluginLoaders());
+        nativeHostService.getAvailablePluginLoaders());
     pluginNativeComboBox.setItems(pluginLoaders);
 
     pluginNativeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      if(newValue != null) {
-        this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER,newValue.getId());
+      if (newValue != null) {
+        this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER, newValue.getId());
         nativeHostService.setCurrentPluginLoader(newValue);
       }
     });

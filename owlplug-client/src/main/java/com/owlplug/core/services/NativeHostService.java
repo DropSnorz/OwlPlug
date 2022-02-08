@@ -24,14 +24,13 @@ import com.owlplug.host.loaders.DummyPluginLoader;
 import com.owlplug.host.loaders.EmbeddedScannerPluginLoader;
 import com.owlplug.host.loaders.NativePluginLoader;
 import com.owlplug.host.loaders.jni.JNINativePluginLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 @Service
 public class NativeHostService extends BaseService {
@@ -84,7 +83,7 @@ public class NativeHostService extends BaseService {
       log.info("No preferred native loader configured");
     }
 
-    if(currentPluginLoader == null) {
+    if (currentPluginLoader == null) {
       currentPluginLoader = getAvailablePluginLoaders().stream().findFirst().get();
     }
 
