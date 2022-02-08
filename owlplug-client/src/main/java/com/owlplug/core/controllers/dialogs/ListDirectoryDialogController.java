@@ -19,9 +19,10 @@
 package com.owlplug.core.controllers.dialogs;
 
 import com.jfoenix.controls.JFXButton;
-import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -31,9 +32,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class ListDirectoryDialogController extends AbstractDialogController implements ListChangeListener {
@@ -52,7 +50,7 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
   private String currentPreferenceKey;
   private ObservableList<String> observableItems;
 
-  public void initialize(){
+  public void initialize() {
 
     addDirectoryButton.setOnAction(e -> {
       observableItems.add(newDirectoryItem);
@@ -60,10 +58,10 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
     directoryListView.setCellFactory(TextFieldListCell.forListView());
   }
 
-  public void configure (String preferenceKey){
+  public void configure (String preferenceKey) {
     this.currentPreferenceKey = preferenceKey;
 
-    if(observableItems != null) {
+    if (observableItems != null) {
       observableItems.removeListener(this);
     }
 
@@ -81,7 +79,7 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
 
     List<String> eventList = change.getList();
     // Remove blank entries in the backed list
-    eventList.removeIf(x -> x.isBlank() );
+    eventList.removeIf(x -> x.isBlank());
 
     // Create a new list and filter it before saving it to preferences
     List<String> prefList = new ArrayList<>(change.getList());

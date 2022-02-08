@@ -5,10 +5,10 @@
               displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="tTU8aN" name="owlplug-host">
     <GROUP id="{67E14D11-0E24-62FA-D544-692759DB4816}" name="Source">
-      <FILE id="LpOsQn" name="com_owlplug_host_NativeHostJNI.cpp" compile="1"
-            resource="0" file="Source/com_owlplug_host_NativeHostJNI.cpp"/>
-      <FILE id="kEgHr4" name="com_owlplug_host_NativeHostJNI.h" compile="0"
-            resource="0" file="Source/com_owlplug_host_NativeHostJNI.h"/>
+      <FILE id="LpOsQn" name="com_owlplug_host_loaders_jni_JNIPluginMapper.cpp" compile="1"
+            resource="0" file="Source/com_owlplug_host_loaders_jni_JNIPluginMapper.cpp"/>
+      <FILE id="kEgHr4" name="com_owlplug_host_loaders_jni_JNIPluginMapper.h" compile="0"
+            resource="0" file="Source/com_owlplug_host_loaders_jni_JNIPluginMapper.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

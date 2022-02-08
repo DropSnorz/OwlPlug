@@ -93,7 +93,12 @@
                               </VBox>
                               <VBox spacing="4.0">
                                  <children>
-                                    <JFXCheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery" />
+                                    <HBox spacing="10.0">
+                                       <children>
+                                          <JFXCheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery using" />
+                                          <JFXComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="NEVER" />
+                                       </children>
+                                    </HBox>
                                     <Label styleClass="label-emphase" text="Allow deep plugin metadatas discovery using platform specific features" />
                                  </children>
                                  <VBox.margin>

@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.TextFlow?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox prefWidth="500.0" spacing="25.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
+<VBox prefWidth="500.0" spacing="15.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
@@ -34,16 +30,21 @@
             <VBox fx:id="pluginListContainer" />
          </children>
       </VBox>
-      <VBox spacing="5.0">
+      <VBox spacing="10.0" VBox.vgrow="SOMETIMES">
          <children>
-            <Label text="You can try to disable native discovery globally" />
-            <JFXCheckBox fx:id="nativeDiscoveryCheckbox" text="Use Native Discovery (Global)" />
+            <Label text="You can try to change the scanner implementation or disable native discovery globally in OwlPlug Options." wrapText="true" />
+            <HBox>
+               <children>
+                  <JFXCheckBox fx:id="nativeDiscoveryCheckbox" text="Use Native Discovery (Global)" />
+                  <JFXComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="SOMETIMES" />
+               </children>
+            </HBox>
          </children>
          <VBox.margin>
             <Insets bottom="10.0" top="10.0" />
          </VBox.margin>
       </VBox>
-      <HBox>
+      <HBox VBox.vgrow="SOMETIMES">
          <children>
             <TextFlow>
                <children>

@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -16,24 +16,31 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.host;
+package com.owlplug.host.io;
 
-public class NativeHost {
+public class CommandResult {
 
-  private NativeHostJNI jni;
-  
-  public NativeHost() {
-    jni = new NativeHostJNI();
-  }
-  
-  public boolean isAvailable() {
-    return NativeHostJNI.isNativeLibraryLoaded();
-    
-  }
-  
-  public NativePlugin loadPlugin(String path) {
-    return jni.loadPlugin(path);
-  }
-  
+  private int exitValue;
+  private String output;
 
+  public CommandResult(int exitValue, String output) {
+    this.exitValue = exitValue;
+    this.output = output;
+  }
+
+  public int getExitValue() {
+    return exitValue;
+  }
+
+  public void setExitValue(int exitValue) {
+    this.exitValue = exitValue;
+  }
+
+  public String getOutput() {
+    return output;
+  }
+
+  public void setOutput(String output) {
+    this.output = output;
+  }
 }

@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -29,9 +29,7 @@ import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.store.model.StoreProduct;
 import com.owlplug.store.services.StoreService;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,49 +85,49 @@ public class PluginService extends BaseService {
   
   public void disablePlugin(Plugin plugin) {
     
-      File originFile = new File(plugin.getPath());
-      File destFile = new File(plugin.getPath() + ".disabled");
+    File originFile = new File(plugin.getPath());
+    File destFile = new File(plugin.getPath() + ".disabled");
 
-      if (originFile.renameTo(destFile)) {
-        plugin.setDisabled(true);
-        plugin.setPath(plugin.getPath() + ".disabled");
-        pluginDAO.save(plugin);
+    if (originFile.renameTo(destFile)) {
+      plugin.setDisabled(true);
+      plugin.setPath(plugin.getPath() + ".disabled");
+      pluginDAO.save(plugin);
 
-      } else {
-        log.error("Plugin can't be disabled: failed to rename file {}", plugin.getPath());
+    } else {
+      log.error("Plugin can't be disabled: failed to rename file {}", plugin.getPath());
     }
     
   }
   
   public void enablePlugin(Plugin plugin) {
 
-      File originFile = new File(plugin.getPath());
+    File originFile = new File(plugin.getPath());
 
-      String newPath = plugin.getPath();
-      if (plugin.getPath().endsWith(".disabled")) {
-        newPath = plugin.getPath().substring(0, plugin.getPath().length() - ".disabled".length());
-      }
-      File destFile = new File(newPath);
+    String newPath = plugin.getPath();
+    if (plugin.getPath().endsWith(".disabled")) {
+      newPath = plugin.getPath().substring(0, plugin.getPath().length() - ".disabled".length());
+    }
+    File destFile = new File(newPath);
 
-      if (originFile.renameTo(destFile)) {
-        plugin.setDisabled(false);
-        plugin.setPath(newPath);
-        pluginDAO.save(plugin);
-      } else {
-        log.error("Plugin can't be enabled: failed to rename file {}", plugin.getPath());
-      }
+    if (originFile.renameTo(destFile)) {
+      plugin.setDisabled(false);
+      plugin.setPath(newPath);
+      pluginDAO.save(plugin);
+    } else {
+      log.error("Plugin can't be enabled: failed to rename file {}", plugin.getPath());
+    }
 
   }
 
   public PluginState getPluginState(Plugin plugin) {
 
-    if(!plugin.isSyncComplete()) {
+    if (!plugin.isSyncComplete()) {
       return PluginState.UNSTABLE;
     }
-    if(plugin.isDisabled()) {
+    if (plugin.isDisabled()) {
       return PluginState.DISABLED;
     }
-    if(plugin.isNativeCompatible()) {
+    if (plugin.isNativeCompatible()) {
       return PluginState.ACTIVE;
     }
     return PluginState.INSTALLED;

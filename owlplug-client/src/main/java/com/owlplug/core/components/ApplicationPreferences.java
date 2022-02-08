@@ -21,15 +21,14 @@ package com.owlplug.core.components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * Preferences wrapper supporting string list persistence.
@@ -41,7 +40,7 @@ public class ApplicationPreferences {
 
   private Preferences basePreferences;
 
-  public ApplicationPreferences(){
+  public ApplicationPreferences() {
     basePreferences = Preferences.userRoot().node("com.owlplug.user");
 
   }
@@ -77,7 +76,7 @@ public class ApplicationPreferences {
   public List<String> getList(String key, List<String> def) {
 
     String jsonValue = get(key, null);
-    if(jsonValue == null) {
+    if (jsonValue == null) {
       return def;
     }
 
