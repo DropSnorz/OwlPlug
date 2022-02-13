@@ -20,10 +20,7 @@ package com.owlplug.host.loaders;
 
 import com.owlplug.host.JuceXMLPlugin;
 import com.owlplug.host.NativePlugin;
-import com.owlplug.host.io.ClassPathFileExtractor;
-import com.owlplug.host.io.CommandResult;
-import com.owlplug.host.io.CommandRunner;
-import com.owlplug.host.io.LibraryLoader;
+import com.owlplug.host.io.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -42,7 +39,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   private static String SEPARATOR = System.getProperty("file.separator");
 
   private static final String DEFAULT_SCANNER_NAME = "owlplug-scanner";
-  private static final String DEFAULT_SCANNER_VERSION = "0.0.1";
+  private static final String DEFAULT_SCANNER_VERSION = ClassPathVersionUtils.getVersionSafe(DEFAULT_SCANNER_NAME);
   private static String DEFAULT_SCANNER_EXT = getPlatformExecutableExtension();
   private static final String DEFAULT_SCANNER_ID =
       DEFAULT_SCANNER_NAME + "-" + DEFAULT_SCANNER_VERSION + DEFAULT_SCANNER_EXT;

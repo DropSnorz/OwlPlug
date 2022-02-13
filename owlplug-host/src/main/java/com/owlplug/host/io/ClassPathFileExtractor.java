@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 public class ClassPathFileExtractor {
 
-  private static final Logger log = LoggerFactory.getLogger(LibraryLoader.class);
+  private static final Logger log = LoggerFactory.getLogger(ClassPathFileExtractor.class);
 
   public static void extract(Class classRef, String resourceName, File outputFile) throws IOException {
 
