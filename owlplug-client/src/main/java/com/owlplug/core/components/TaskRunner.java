@@ -88,8 +88,8 @@ public class TaskRunner {
   /**
    * Refresh the task runner by submitting the next pending task for execution.
    * 
-   * @param deleteCurrentTask true if the current running task should be deleted
    */
+  @SuppressWarnings({"unchecked"})
   private synchronized void scheduleNext() {
 
     if (!taskQueue.isEmpty() && currentTask == null) {

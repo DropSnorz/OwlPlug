@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ListDirectoryDialogController extends AbstractDialogController implements ListChangeListener {
+public class ListDirectoryDialogController extends AbstractDialogController implements ListChangeListener<String> {
 
   @Autowired
   private OptionsController optionsController;
@@ -75,9 +75,9 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
 
 
   @Override
-  public void onChanged(Change change) {
+  public void onChanged(Change<? extends String> change) {
 
-    List<String> eventList = change.getList();
+    ObservableList<? extends String> eventList = change.getList();
     // Remove blank entries in the backed list
     eventList.removeIf(x -> x.isBlank());
 

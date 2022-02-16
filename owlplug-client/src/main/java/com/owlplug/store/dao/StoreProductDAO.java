@@ -69,6 +69,7 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
    * @param platformTag - The platformTag to find
    * @return The JPA Specification
    */
+  @SuppressWarnings("unchecked")
   static Specification<StoreProduct> hasPlatformTag(String platformTag) {
     return (product, cq, cb) -> {
       Join<Object, Object> bundles = (Join<Object, Object>) product.fetch("bundles");
@@ -83,6 +84,7 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
    * @param platformTagList - The compatible platformTagList to find
    * @return The JPA Specification
    */
+  @SuppressWarnings("unchecked")
   static Specification<StoreProduct> hasPlatformTag(List<String> platformTagList) {
     return (product, cq, cb) -> {
       Join<Object, Object> bundles = (Join<Object, Object>) product.fetch("bundles", JoinType.INNER);
@@ -101,6 +103,7 @@ public interface StoreProductDAO extends CrudRepository<StoreProduct, Long>, Jpa
    * @param tag - The tag to find
    * @return The JPA Specification
    */
+  @SuppressWarnings("unchecked")
   static Specification<StoreProduct> hasTag(String tag) {
     return (product, cq, cb) -> {
       Join<Object, Object> groupPath = (Join<Object, Object>) product.fetch("tags", JoinType.INNER);

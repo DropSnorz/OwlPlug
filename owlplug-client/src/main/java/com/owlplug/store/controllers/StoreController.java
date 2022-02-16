@@ -187,7 +187,7 @@ public class StoreController extends BaseController {
     HBox.setHgrow(storeChipView, Priority.ALWAYS);
     storeChipViewContainer.getChildren().add(storeChipView);
 
-    storeChipView.getChips().addListener((ListChangeListener) change -> {
+    storeChipView.getChips().addListener((ListChangeListener<StoreFilterCriteria>) change -> {
       performProductSearch();
     });
 

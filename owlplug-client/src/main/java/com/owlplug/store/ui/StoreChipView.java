@@ -117,7 +117,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
     }
 
     this.getSuggestions().addAll(suggestions.values());
-    this.setConverter(new StringConverter<StoreFilterCriteria>() {
+    this.setConverter(new StringConverter<>() {
       @Override
       public String toString(StoreFilterCriteria object) {
         return object.toString();
@@ -131,7 +131,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
       }
     });
 
-    this.setChipFactory((chipView, criteria) -> new JFXDefaultChip<StoreFilterCriteria>(chipView, criteria) {
+    this.setChipFactory((chipView, criteria) -> new JFXDefaultChip<>(chipView, criteria) {
       {
         if (getItem().getFilterType() == StoreFilterCriteriaType.TYPE) {
           root.getStyleClass().add("chip-brown");
@@ -145,7 +145,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
       }
     });
 
-    this.getChips().addListener((ListChangeListener) change -> {
+    this.getChips().addListener((ListChangeListener<StoreFilterCriteria>) change -> {
       // Only display prompt text if any chips is selected
       if (getChips().size() == 0) {
         displayPromptText();
@@ -154,7 +154,7 @@ public class StoreChipView extends JFXChipView<StoreFilterCriteria> {
       }
     });
 
-    this.setSuggestionsCellFactory(param -> new ListCell<StoreFilterCriteria>() {
+    this.setSuggestionsCellFactory(param -> new ListCell<>() {
       protected void updateItem(StoreFilterCriteria item, boolean empty) {
         super.updateItem(item, empty);
         if (item != null && !empty) {

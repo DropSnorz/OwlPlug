@@ -35,7 +35,8 @@ public class JPADataStoreFactory implements DataStoreFactory {
   }
 
   @Override
-  public JPADataStore getDataStore(String id) throws IOException {
+  @SuppressWarnings("unchecked")
+  public JPADataStore getDataStore(String id) {
     return new JPADataStore(this, id, repository);
   }
 
