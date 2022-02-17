@@ -74,7 +74,7 @@ public class SymlinkInfoController extends BaseController {
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
 
     deleteLinkButton.setOnAction(e -> {
-      JFXDialog dialog = this.getDialogController().newDialog();
+      JFXDialog dialog = this.getDialogManager().newDialog();
       JFXDialogLayout layout = new JFXDialogLayout();
 
       layout.setHeading(new Label("Remove directory"));

@@ -208,7 +208,7 @@ public class PluginInfoController extends BaseController {
   
   private void showUninstallDialog() {
     
-    JFXDialog dialog = this.getDialogController().newDialog();
+    JFXDialog dialog = this.getDialogManager().newDialog();
 
     JFXDialogLayout layout = new JFXDialogLayout();
 
@@ -261,7 +261,7 @@ public class PluginInfoController extends BaseController {
     vbox.getChildren().add(displayDialog);
     layout.setBody(vbox);
     
-    JFXDialog dialog = this.getDialogController().newDialog();
+    JFXDialog dialog = this.getDialogManager().newDialog();
 
     JFXButton cancelButton = new JFXButton("Cancel");
     cancelButton.setOnAction(cancelEvent -> {

@@ -249,7 +249,7 @@ public class OptionsController extends BaseController {
     });
 
     removeDataButton.setOnAction(e -> {
-      JFXDialog dialog = this.getDialogController().newDialog();
+      JFXDialog dialog = this.getDialogManager().newDialog();
       JFXDialogLayout layout = new JFXDialogLayout();
       layout.setHeading(new Label("Remove plugin"));
       layout.setBody(new Label("Do you really want to remove all user data including accounts, "

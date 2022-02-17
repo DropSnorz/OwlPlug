@@ -20,7 +20,7 @@ package com.owlplug.core.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
-import com.owlplug.core.controllers.dialogs.DialogController;
+import com.owlplug.core.components.DialogManager;
 import com.owlplug.core.services.AnalyticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,7 +33,7 @@ public class BaseController {
   @Autowired
   private AnalyticsService analyticsService;
   @Autowired
-  private DialogController dialogController;
+  private DialogManager dialogManager;
   
   
   public ApplicationDefaults getApplicationDefaults() {
@@ -48,8 +48,8 @@ public class BaseController {
     return analyticsService;
   }
 
-  public DialogController getDialogController() {
-    return dialogController;
+  public DialogManager getDialogManager() {
+    return dialogManager;
   }
   
 

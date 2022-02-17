@@ -56,19 +56,19 @@ public abstract class AbstractDialogController extends BaseController {
 
     if (width != -1 && height != -1) {
       if (this.getHeading() != null) {
-        this.getDialogController().newDialog(width, height, this.getBody(), this.getHeading());
+        this.getDialogManager().newDialog(width, height, this.getBody(), this.getHeading());
       } else {
-        this.getDialogController().newDialog(width, height, this.getBody());
+        this.getDialogManager().newDialog(width, height, this.getBody());
       }
     } else {
       if (this.getHeading() != null) {
-        this.getDialogController().newDialog(this.getBody(), this.getHeading());
+        this.getDialogManager().newDialog(this.getBody(), this.getHeading());
       } else {
-        this.getDialogController().newDialog(this.getBody());
+        this.getDialogManager().newDialog(this.getBody());
       }
     }
-    this.getDialogController().getDialog().setOverlayClose(overlayClose);
-    this.getDialogController().getDialog().show();
+    this.getDialogManager().getDialog().setOverlayClose(overlayClose);
+    this.getDialogManager().getDialog().show();
 
   }
 
@@ -77,7 +77,7 @@ public abstract class AbstractDialogController extends BaseController {
    */
   public void close() {
     onDialogClose();
-    this.getDialogController().getDialog().close();
+    this.getDialogManager().getDialog().close();
 
   }
 

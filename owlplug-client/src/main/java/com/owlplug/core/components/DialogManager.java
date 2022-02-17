@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.core.controllers.dialogs;
+package com.owlplug.core.components;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -25,10 +25,11 @@ import com.owlplug.core.controllers.MainController;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
-@Controller
-public class DialogController {
+@Component
+public class DialogManager {
 
   @Autowired
   private MainController mainController;

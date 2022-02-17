@@ -395,7 +395,7 @@ public class StoreController extends BaseController {
           FileUtils.sanitizeFileName(bundle.getProduct().getName()));
       // If directory exists, asks the user for overwrite permission
       if (subSelectedDirectory.exists()) {
-        JFXDialog dialog = this.getDialogController().newDialog();
+        JFXDialog dialog = this.getDialogManager().newDialog();
 
         JFXDialogLayout layout = new JFXDialogLayout();
 
