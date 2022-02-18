@@ -18,53 +18,26 @@
 
 package com.owlplug.core.services;
 
-import com.brsanthu.googleanalytics.GoogleAnalytics;
-import com.brsanthu.googleanalytics.request.PageViewHit;
-import com.owlplug.core.components.ApplicationDefaults;
+
 import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AnalyticsService extends BaseService {
-  
-  private GoogleAnalytics ga;
-    
+
   @PostConstruct
   private void initialize() {
-    
-    ga = GoogleAnalytics.builder()
-        .withTrackingId(this.getApplicationDefaults().getAnalyticsTrackingId())
-        .build();
-    
-    // Ignore session UUID for now.
-    //sessionUUID = UUID.randomUUID().toString();
+    // All analytics features has been decommissioned
     
   }
   
   public void pageView(String name) {
-    ga.pageView()
-      .documentTitle(name)
-      .documentPath(name)
-      .applicationName(ApplicationDefaults.APPLICATION_NAME)
-      .applicationVersion(this.getApplicationDefaults().getVersion())
-      .sendAsync();
+    // All analytics features has been decommissioned
     
   }
   
   public void pageView(String name, String... parameters) {
-    
-    PageViewHit pvh = ga.pageView()
-        .documentTitle(name)
-        .documentPath(name)
-        .applicationName(ApplicationDefaults.APPLICATION_NAME)
-        .applicationVersion(this.getApplicationDefaults().getVersion());
-    
-    int customDimensionId = 1;
-    for (String dimension : parameters) {
-      pvh.customDimension(customDimensionId, dimension);
-      customDimensionId = customDimensionId++;
-    }
-    pvh.sendAsync();
+    // All analytics features has been decommissioned
         
   }
   

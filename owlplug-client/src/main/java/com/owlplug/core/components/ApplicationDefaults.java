@@ -177,10 +177,6 @@ public class ApplicationDefaults {
     return env.getProperty("owlplug.hub.updateDownloadUrl");
   }
 
-  public String getAnalyticsTrackingId() {
-    return env.getProperty("owlplug.analytics.trackingId");
-  }
-
   public String getEnvProperty(String property) {
     return env.getProperty(property);
   }
