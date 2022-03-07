@@ -18,12 +18,17 @@
 
 package com.owlplug.host.loaders;
 
+import com.owlplug.host.utils.FileSystemUtils;
 import com.owlplug.host.JuceXMLPlugin;
 import com.owlplug.host.NativePlugin;
 import com.owlplug.host.io.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -81,11 +86,21 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
       } catch (IOException e) {
         log.error("Scanner executable can't be extracted to " + scannerFile.getAbsolutePath());
       }
-
     }
 
     if (scannerFile.exists()) {
       available = true;
+
+      // Apply executable permissions on POSIX filesystem
+      if(FileSystemUtils.isPosix()) {
+        try {
+          Set<PosixFilePermission> executablePermission = PosixFilePermissions.fromString("rwxr-xr--");
+          Files.setPosixFilePermissions(scannerFile.toPath(), executablePermission);
+        } catch (IOException e) {
+          log.error("Permissions can't be applied on file {}", scannerFile.getPath(), e);
+        }
+      }
+
     } else {
       log.error("Can't find owlplug scanner executable at {}", scannerFile.getPath());
     }
