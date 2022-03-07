@@ -106,7 +106,10 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
     }
 
     try {
-      CommandResult result = CommandRunner.run(scannerDirectory + SEPARATOR +  scannerId, path);
+      CommandRunner commandRunner = new CommandRunner();
+      commandRunner.setTimeoutActivated(true);
+      commandRunner.setTimeout(10000); // 10 seconds timeout
+      CommandResult result = commandRunner.run(scannerDirectory + SEPARATOR +  scannerId, path);
       log.trace("Response received from scanner");
       log.trace(result.getOutput());
 
