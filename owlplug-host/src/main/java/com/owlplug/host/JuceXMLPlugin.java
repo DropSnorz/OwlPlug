@@ -64,7 +64,7 @@ public class JuceXMLPlugin {
     plugin.setManufacturerName(this.manufacturer);
     plugin.setVersion(this.version);
     plugin.setFileOrIdentifier(this.file);
-    plugin.setUid(Integer.parseInt(this.uid, 16));
+    plugin.setUid((int) Long.parseLong(this.uid, 16)); // / Parse signed int from HEX
     plugin.setInstrument(this.isInstrument);
     plugin.setNumInputChannels(this.numInputs);
     plugin.setNumOutputChannels(this.numOutputs);
