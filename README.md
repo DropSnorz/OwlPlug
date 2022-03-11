@@ -36,13 +36,23 @@ All kinds of feedbacks are greatly welcomed.
 
 ## Installation
 
-### Windows & MacOS
+### Direct download (latest version)
 
 **Requirements**: Windows 7 (64 bit) or later, macOS Sierra or later.
 
-1. Download binaries [here](http://github.com/dropsnorz/owlplug/releases)
+1. Download binaries from [the release section](http://github.com/dropsnorz/owlplug/releases)
 2. Run the `.msi` installer on Windows or the `.dmg` file on Mac.
-3. OwlPlug is ready ;)
+3. Run OwlPlug application
+
+:warning: Mac users, depending on your OS version, you may face an error mentioning that OwlPlug is damaged. You can fix this problem using a single command described on [the wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Troubleshooting).
+
+### Package managers
+
+#### Windows
+
+```sh
+winget install owlplug
+```
 
 
 ## How to help
