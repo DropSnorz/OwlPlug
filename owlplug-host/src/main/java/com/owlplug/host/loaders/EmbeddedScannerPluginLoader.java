@@ -125,13 +125,18 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
       commandRunner.setTimeoutActivated(true);
       commandRunner.setTimeout(10000); // 10 seconds timeout
       CommandResult result = commandRunner.run(scannerDirectory + SEPARATOR +  scannerId, path);
-      log.trace("Response received from scanner");
+      log.debug("Response received from scanner");
       log.trace(result.getOutput());
 
       if (result.getExitValue() >= 0) {
+
+        log.debug("Extract XML from content received by the scanner");
+        String outputXML = result.getOutput().substring(result.getOutput().indexOf("<?xml"));
+        log.debug(outputXML);
+
         JAXBContext jaxbContext = JAXBContext.newInstance(JuceXMLPlugin.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(result.getOutput()));
+        JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(outputXML));
 
         return juceXmlPlugin.toNativePlugin();
 
