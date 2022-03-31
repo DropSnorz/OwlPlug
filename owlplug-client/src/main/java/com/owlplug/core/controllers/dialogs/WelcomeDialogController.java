@@ -78,9 +78,7 @@ public class WelcomeDialogController extends AbstractDialogController {
    * FXML initialize.
    */
   public void initialize() {
-    
-    vst2ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
-    vst2DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+
 
     vst2DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -93,9 +91,6 @@ public class WelcomeDialogController extends AbstractDialogController {
       }
     });
     
-    vst3ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
-    vst3DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
-    
     vst3DirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
       Window mainWindow = vst3DirectoryButton.getScene().getWindow();
@@ -107,9 +102,6 @@ public class WelcomeDialogController extends AbstractDialogController {
       }
     });
     
-    auToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
-    auDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
-    
     auDirectoryButton.setOnAction(e -> {
       DirectoryChooser directoryChooser = new DirectoryChooser();
       Window mainWindow = auDirectoryButton.getScene().getWindow();
@@ -120,18 +112,6 @@ public class WelcomeDialogController extends AbstractDialogController {
         auDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
       }
     });
-    
-    
-    // Disable AU options for non MAC users
-    if (!this.getApplicationDefaults().getRuntimePlatform()
-        .getOperatingSystem().equals(OperatingSystem.MAC)) {
-      //auToggleButton.setSelected(true);
-      auToggleButton.setSelected(false);
-      auDirectoryTextField.setDisable(true);
-      auDirectoryButton.setDisable(true);
-      auToggleButton.setDisable(true);
-    }
-
 
     okButton.setOnAction(e -> {
       this.close();
@@ -148,6 +128,36 @@ public class WelcomeDialogController extends AbstractDialogController {
       this.close();
     });
 
+    this.refreshView();
+
+  }
+
+  public void refreshView() {
+
+    vst2ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+    vst2DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+
+    vst3ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+    vst3DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+
+    auToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
+    auDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
+
+    // Disable AU options for non MAC users
+    if (!this.getApplicationDefaults().getRuntimePlatform()
+      .getOperatingSystem().equals(OperatingSystem.MAC)) {
+      //auToggleButton.setSelected(true);
+      auToggleButton.setSelected(false);
+      auDirectoryTextField.setDisable(true);
+      auDirectoryButton.setDisable(true);
+      auToggleButton.setDisable(true);
+    }
+
+  }
+
+  @Override
+  protected void onDialogShow() {
+     this.refreshView();
   }
 
   @Override

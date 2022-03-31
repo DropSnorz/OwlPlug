@@ -265,6 +265,10 @@ public class OptionsController extends BaseController {
         dialog.close();
         optionsService.clearAllUserData();
         this.refreshView();
+
+        // User data cleared twice because the refreshView() triggers UI changes that may be replicated in data
+        optionsService.clearAllUserData();
+
       });
       removeButton.getStyleClass().add("button-danger");
 
