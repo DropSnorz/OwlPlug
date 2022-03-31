@@ -251,9 +251,9 @@ public class OptionsController extends BaseController {
     removeDataButton.setOnAction(e -> {
       JFXDialog dialog = this.getDialogManager().newDialog();
       JFXDialogLayout layout = new JFXDialogLayout();
-      layout.setHeading(new Label("Remove plugin"));
+      layout.setHeading(new Label("Remove user data"));
       layout.setBody(new Label("Do you really want to remove all user data including accounts, "
-          + "stores and custom settings ?"));
+          + "stores and custom settings ? \n\nYou must restart OwlPlug for a complete reset."));
 
       JFXButton cancelButton = new JFXButton("Cancel");
       cancelButton.setOnAction(cancelEvent -> {
@@ -264,6 +264,7 @@ public class OptionsController extends BaseController {
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         optionsService.clearAllUserData();
+        this.refreshView();
       });
       removeButton.getStyleClass().add("button-danger");
 
