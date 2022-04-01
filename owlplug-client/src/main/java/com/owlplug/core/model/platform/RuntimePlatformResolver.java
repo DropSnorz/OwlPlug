@@ -31,6 +31,8 @@ public class RuntimePlatformResolver {
     platforms.put("win64", win64);
     RuntimePlatform osx = new RuntimePlatform("osx", OperatingSystem.MAC, "64");
     platforms.put("osx", osx);
+    RuntimePlatform linux = new RuntimePlatform("linux", OperatingSystem.LINUX, "64");
+    platforms.put("linux", linux);
 
     win64.getCompatiblePlatforms().add(win32);
 
@@ -40,14 +42,16 @@ public class RuntimePlatformResolver {
 
     String osName = System.getProperty("os.name").toLowerCase();
 
-    if (osName.indexOf("win") >= 0) {
+    if (osName.contains("win")) {
       if (is64bitPlatform()) {
         return platforms.get("win64");
       } else {
         return platforms.get("win32");
       }
-    } else if (osName.indexOf("mac") >= 0) {
+    } else if (osName.contains("mac")) {
       return platforms.get("osx");
+    } else if (osName.contains("nix") || osName.contains("nux")) {
+      return platforms.get("linux");
     }
 
     return new RuntimePlatform("unknown", OperatingSystem.UNKNOWN, "");

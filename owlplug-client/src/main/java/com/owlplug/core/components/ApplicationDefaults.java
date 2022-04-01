@@ -160,6 +160,12 @@ public class ApplicationDefaults {
       } else if (format.equals(PluginFormat.AU)) {
         return "/Library/Audio/Plug-ins/Components";
       }
+    } else if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX)) {
+      if (format.equals(PluginFormat.VST2)) {
+        return "/usr/lib/lxvst";
+      } else if (format.equals(PluginFormat.VST3)) {
+        return "/usr/lib/vst3/";
+      }
     }
 
     return "/path/to/audio/plugins";

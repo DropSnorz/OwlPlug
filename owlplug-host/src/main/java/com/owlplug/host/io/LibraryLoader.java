@@ -131,6 +131,8 @@ public class LibraryLoader {
       return ".dll";
     } else if (osName.contains("mac")) {
       return ".dylib";
+    } else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+      return ".so";
     }
     
     log.warn("No library file extension is defined for current platform");
