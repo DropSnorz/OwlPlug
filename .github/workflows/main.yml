@@ -99,9 +99,11 @@ jobs:
       run: echo ::set-output name=version::$(cat ./owlplug-host/src/main/resources/owlplug-scanner.version)
       id: get-scanner-version
     - name: Download scanner win binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ steps.get-scanner-version.outputs.version }}/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}.exe --output owlplug-host/src/main/resources/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}.exe
+      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ steps.get-scanner-version.outputs.version }}/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-win.exe --output owlplug-host/src/main/resources/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-win.exe
     - name: Download scanner osx binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ steps.get-scanner-version.outputs.version }}/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }} --output owlplug-host/src/main/resources/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}
+      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ steps.get-scanner-version.outputs.version }}/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-osx --output owlplug-host/src/main/resources/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-osx
+    - name: Download scanner linux binary
+      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ steps.get-scanner-version.outputs.version }}/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-linux --output owlplug-host/src/main/resources/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-linux
     - name: Build maven parent project
       run: mvn -B install -DskipTests
     - name: Build runnable Jar
