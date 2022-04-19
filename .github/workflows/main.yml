@@ -10,6 +10,7 @@ on:
       - dev
       - ci/*
       - openjdk/*
+      - linux
 
 jobs:
   build-host-win:
