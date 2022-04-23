@@ -69,8 +69,8 @@ public class PluginFileFormatResolver {
      */
     if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX)
       && pluginFormat.equals(PluginFormat.VST2)
-      && OsxVstFile.formatCheck(file)) {
-      return new OsxVstFile(file);
+      && SoVstFile.formatCheck(file)) {
+      return new SoVstFile(file);
     }
     
     /*
