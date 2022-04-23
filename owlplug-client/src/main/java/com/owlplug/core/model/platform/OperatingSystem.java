@@ -19,7 +19,7 @@
 package com.owlplug.core.model.platform;
 
 public enum OperatingSystem {
-  WIN("win"), MAC("osx"), UNIX("unix"), UNKNOWN("unknown");
+  WIN("win"), MAC("osx"), LINUX("linux"), UNKNOWN("unknown");
 
   private String code;
 

@@ -146,21 +146,14 @@ public class StoreController extends BaseController {
     
     targetFilterCheckBoxes.put("win32", new JFXCheckBox("Windows 32 bits"));
     targetFilterCheckBoxes.put("win64", new JFXCheckBox("Windows 64 bits"));
-    targetFilterCheckBoxes.put("osx", new JFXCheckBox("OSX (any)"));
+    targetFilterCheckBoxes.put("osx", new JFXCheckBox("MacOS (OSX)"));
+    targetFilterCheckBoxes.put("linux32", new JFXCheckBox("Linux 32 bits"));
+    targetFilterCheckBoxes.put("linux64", new JFXCheckBox("Linux 64 bits"));
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
-      entry.getValue().setDisable(true);
       entry.getValue().setSelected(false);
       entry.getValue().setOnAction(e -> {
         performProductSearch();
       });
-    }
-    
-    RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
-    for (String tag : env.getCompatiblePlatformsTags()) {
-      if (targetFilterCheckBoxes.containsKey(tag)) {
-        targetFilterCheckBoxes.get(tag).setDisable(false);
-        targetFilterCheckBoxes.get(tag).setSelected(false);
-      }
     }
     
     VBox vbx = new VBox();

@@ -18,6 +18,7 @@
 
 package com.owlplug.host.io;
 
+import com.owlplug.host.model.OS;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -126,14 +127,15 @@ public class LibraryLoader {
    * @return host default library extension
    */
   private static String getPlatformLibraryExtension() {
-    String osName = System.getProperty("os.name").toLowerCase();
-    if (osName.contains("win")) {
+    if (OS.WINDOWS.isCurrentOs()) {
       return ".dll";
-    } else if (osName.contains("mac")) {
+    } else if (OS.MAC.isCurrentOs()) {
       return ".dylib";
+    } else if (OS.LINUX.isCurrentOs()) {
+      return ".so";
     }
     
-    log.warn("No library file extension is defined for current platform");
+    log.warn("No library file extension is defined for current platform {}", OS.current());
     return "";
   }
   

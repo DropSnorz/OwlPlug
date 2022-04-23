@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.model.platform;
 
 import java.util.HashMap;
@@ -31,8 +31,13 @@ public class RuntimePlatformResolver {
     platforms.put("win64", win64);
     RuntimePlatform osx = new RuntimePlatform("osx", OperatingSystem.MAC, "64");
     platforms.put("osx", osx);
+    RuntimePlatform linux32 = new RuntimePlatform("linux32", OperatingSystem.LINUX, "32");
+    platforms.put("linux32", linux32);
+    RuntimePlatform linux64 = new RuntimePlatform("linux64", OperatingSystem.LINUX, "64");
+    platforms.put("linux64", linux64);
 
     win64.getCompatiblePlatforms().add(win32);
+    linux64.getCompatiblePlatforms().add(linux32);
 
   }
 
@@ -40,24 +45,37 @@ public class RuntimePlatformResolver {
 
     String osName = System.getProperty("os.name").toLowerCase();
 
-    if (osName.indexOf("win") >= 0) {
+    // Windows
+    if (osName.contains("win")) {
       if (is64bitPlatform()) {
         return platforms.get("win64");
       } else {
         return platforms.get("win32");
       }
-    } else if (osName.indexOf("mac") >= 0) {
+    }
+
+    // macOS
+    if (osName.contains("mac")) {
       return platforms.get("osx");
+    }
+
+    // Linux
+    if (osName.contains("nix") || osName.contains("nux")) {
+      if (is64bitPlatform()) {
+        return platforms.get("linux64");
+      } else {
+        return platforms.get("linux32");
+      }
     }
 
     return new RuntimePlatform("unknown", OperatingSystem.UNKNOWN, "");
   }
 
   private boolean is64bitPlatform() {
-    if (System.getProperty("os.name").contains("Windows")) {
+    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
       return System.getenv("ProgramFiles(x86)") != null;
     } else {
-      return System.getProperty("os.arch").indexOf("64") != -1;
+      return System.getProperty("os.arch").contains("64");
     }
   }
 

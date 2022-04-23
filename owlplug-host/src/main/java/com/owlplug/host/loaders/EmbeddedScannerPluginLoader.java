@@ -18,6 +18,7 @@
 
 package com.owlplug.host.loaders;
 
+import com.owlplug.host.model.OS;
 import com.owlplug.host.utils.FileSystemUtils;
 import com.owlplug.host.JuceXMLPlugin;
 import com.owlplug.host.NativePlugin;
@@ -46,8 +47,9 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   private static final String DEFAULT_SCANNER_NAME = "owlplug-scanner";
   private static final String DEFAULT_SCANNER_VERSION = ClassPathVersionUtils.getVersionSafe(DEFAULT_SCANNER_NAME);
   private static String DEFAULT_SCANNER_EXT = getPlatformExecutableExtension();
+  private static String DEFAULT_SCANNER_PLATFORM_TAG = getPlatformTagName();
   private static final String DEFAULT_SCANNER_ID =
-      DEFAULT_SCANNER_NAME + "-" + DEFAULT_SCANNER_VERSION + DEFAULT_SCANNER_EXT;
+      DEFAULT_SCANNER_NAME + "-" + DEFAULT_SCANNER_VERSION + "-" + DEFAULT_SCANNER_PLATFORM_TAG + DEFAULT_SCANNER_EXT;
 
   private boolean available = false;
   private String scannerDirectory;
@@ -188,9 +190,19 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
    * @return host default library extension
    */
   private static String getPlatformExecutableExtension() {
-    String osName = System.getProperty("os.name").toLowerCase();
-    if (osName.indexOf("win") >= 0) {
+    if (OS.WINDOWS.isCurrentOs()) {
       return ".exe";
+    }
+    return "";
+  }
+
+  private static String getPlatformTagName() {
+    if (OS.WINDOWS.isCurrentOs()) {
+      return "win";
+    } else if (OS.MAC.isCurrentOs()) {
+      return "osx";
+    } else if (OS.LINUX.isCurrentOs()) {
+      return "linux";
     }
     return "";
   }
