@@ -23,27 +23,21 @@ public enum OS {
     if (Objects.isNull(osName) || osName.isBlank()) {
       return null;
     }
-    osName = osName.toLowerCase();
+    String osTag = osName.toLowerCase();
 
-    if (osName.contains("aix")) {
+    if (osTag.contains("aix")) {
       return AIX;
-    }
-    if (osName.contains("freebsd")) {
+    } else if (osTag.contains("freebsd")) {
       return FREEBSD;
-    }
-    if (osName.contains("linux")) {
+    } else if (osTag.contains("linux")) {
       return LINUX;
-    }
-    if (osName.contains("mac")) {
+    } else if (osTag.contains("mac")) {
       return MAC;
-    }
-    if (osName.contains("openbsd")) {
+    } else if (osTag.contains("openbsd")) {
       return OPENBSD;
-    }
-    if (osName.contains("sunos") || osName.contains("solaris")) {
+    } else if (osTag.contains("sunos") || osTag.contains("solaris")) {
       return SOLARIS;
-    }
-    if (osName.contains("win")) {
+    } else if (osTag.contains("win")) {
       return WINDOWS;
     }
     return OTHER;

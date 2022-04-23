@@ -164,7 +164,7 @@ public class ApplicationDefaults {
       if (format.equals(PluginFormat.VST2)) {
         return "/usr/lib/lxvst";
       } else if (format.equals(PluginFormat.VST3)) {
-        return "/usr/lib/vst3/";
+        return "/usr/lib/vst3";
       }
     }
 
