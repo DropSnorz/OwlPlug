@@ -132,15 +132,24 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
 
       if (result.getExitValue() >= 0) {
 
-        log.debug("Extract XML from content received by the scanner");
-        String outputXML = result.getOutput().substring(result.getOutput().indexOf("<?xml"));
-        log.debug(outputXML);
+        log.debug("Extracting XML from content received by the scanner");
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(JuceXMLPlugin.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(outputXML));
+        if(result.getOutput().contains("<?xml")) {
+          String outputXML = result.getOutput().substring(result.getOutput().indexOf("<?xml"));
+          log.debug("XML extracted from scanner output");
+          log.debug(outputXML);
 
-        return juceXmlPlugin.toNativePlugin();
+          JAXBContext jaxbContext = JAXBContext.newInstance(JuceXMLPlugin.class);
+          Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+          JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(outputXML));
+
+          return juceXmlPlugin.toNativePlugin();
+
+        } else {
+          log.error("No XML tag can be extracted from scanner output for plugin {}", path);
+          log.debug(result.getOutput());
+        }
+
 
       } else {
         log.debug("Invalid return code {} received from plugin scanner", result.getExitValue());
