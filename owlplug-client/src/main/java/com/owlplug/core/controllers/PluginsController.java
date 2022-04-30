@@ -46,7 +46,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,9 +73,9 @@ public class PluginsController extends BaseController {
   @FXML
   private JFXButton syncButton;
   @FXML
-  private JFXTreeView<Object> treeView;
+  private JFXTreeView<Object> pluginTreeView;
   @FXML
-  private JFXTabPane treeViewTabPane;
+  private JFXTabPane pluginTreeViewTabPane;
   @FXML
   private JFXTextField searchTextField;
   @FXML
@@ -100,18 +99,18 @@ public class PluginsController extends BaseController {
     treePluginNode = new FilterableTreeItem<>("(all)");
     treeFileRootNode = new FilterableTreeItem<>("(all)");
 
-    treeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
+    pluginTreeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
       @Override
       public TreeCell<Object> call(TreeView<Object> p) {
         return new PluginTreeCell(getApplicationDefaults(), pluginService);
       }
     });
-    treeView.setRoot(treePluginNode);
+    pluginTreeView.setRoot(treePluginNode);
     
     clearAndFillPluginTree();
 
     // Dispatches treeView selection event to the nodeInfoController
-    treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+    pluginTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
         TreeItem<Object> selectedItem = newValue;
         nodeInfoController.setNode(selectedItem.getValue());
@@ -119,11 +118,11 @@ public class PluginsController extends BaseController {
     });
 
     // Handles tabPane selection event and toggles displayed treeView
-    treeViewTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+    pluginTreeViewTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
       if (newTab.getId().equals("treeTabAll")) {
-        treeView.setRoot(treePluginNode);
+        pluginTreeView.setRoot(treePluginNode);
       } else {
-        treeView.setRoot(treeFileRootNode);
+        pluginTreeView.setRoot(treeFileRootNode);
       }
     });
 
@@ -153,7 +152,7 @@ public class PluginsController extends BaseController {
   }
   
   public void refreshPluginTree() {
-    treeView.refresh();
+    pluginTreeView.refresh();
   }
 
   /**

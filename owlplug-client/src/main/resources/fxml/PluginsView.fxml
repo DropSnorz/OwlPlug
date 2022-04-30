@@ -18,11 +18,11 @@
    <center>
       <BorderPane BorderPane.alignment="CENTER">
       	<center>
-      		<JFXTreeView fx:id="treeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="SOMETIMES" VBox.vgrow="ALWAYS">
+      		<JFXTreeView fx:id="pluginTreeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="SOMETIMES" VBox.vgrow="ALWAYS">
 		</JFXTreeView>
       	</center>
       	<left>
-      		<JFXTabPane fx:id="treeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
+      		<JFXTabPane fx:id="pluginTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
       			<tabs>
       				<Tab fx:id="treeTabAll" text="All" />
       				<Tab fx:id="treeTabDirectories" text="Directories">
