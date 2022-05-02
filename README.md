@@ -40,8 +40,11 @@ All kinds of feedbacks are greatly welcomed.
 
 **Requirements**: Windows 7 (64 bit) or later, macOS Sierra or later.
 
-1. Download binaries from [the release section](http://github.com/dropsnorz/owlplug/releases)
-2. Run the `.msi` installer on Windows or the `.dmg` file on Mac.
+1. Browse binaries from [the release section](http://github.com/dropsnorz/owlplug/releases)
+2. Download and run the OwlPlug installer for your platform
+    * `.msi` installer on Windows
+    * `.dmg` file on MacOS
+    * `.deb` file on Linux
 3. Run OwlPlug application
 
 :warning: Mac users, depending on your OS version, you may face an error mentioning that OwlPlug is damaged. You can fix this problem using a single command described on [the wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Troubleshooting).
