@@ -86,8 +86,6 @@ public class AuthenticationService extends BaseService {
     String clientId = owlPlugCredentials.getGoogleAppId();
     String clientSecret = owlPlugCredentials.getGoogleSecret();
     ArrayList<String> scopes = new ArrayList<>();
-
-    scopes.add("https://www.googleapis.com/auth/drive");
     scopes.add("https://www.googleapis.com/auth/userinfo.profile");
 
     try {
