@@ -179,6 +179,11 @@ public class PluginSyncTask extends AbstractTask {
             plugin.setManufacturerName(nativePlugin.getManufacturerName());
             plugin.setIdentifier(nativePlugin.getFileOrIdentifier());
             plugin.setUid(String.valueOf(nativePlugin.getUid()));
+            if(nativePlugin.isInstrument()) {
+              plugin.setType(PluginType.INSTRUMENT);
+            } else {
+              plugin.setType(PluginType.EFFECT);
+            }
           }
         }
         
