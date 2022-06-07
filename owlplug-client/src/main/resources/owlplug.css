@@ -87,6 +87,17 @@ JFXTextField{
 	-fx-prompt-text-fill: prompt-text-color;
 }
 
+TextArea {
+    -fx-text-fill: text-color;
+    -fx-background-color: rgb(55,55,55);
+
+}
+
+TextArea .content {
+    -fx-background-color: rgb(55,55,55);
+
+}
+
 
 .jfx-chip-view {
 	-fx-max-height: 45px ;

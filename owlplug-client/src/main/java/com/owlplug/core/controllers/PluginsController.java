@@ -25,6 +25,7 @@ import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.CoreTaskFactory;
+import com.owlplug.core.controllers.dialogs.ExportDialogController;
 import com.owlplug.core.controllers.dialogs.NewLinkController;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.SymlinkDAO;
@@ -68,10 +69,14 @@ public class PluginsController extends BaseController {
   @Autowired
   private NewLinkController newLinkController;
   @Autowired
+  private ExportDialogController exportDialogController;
+  @Autowired
   protected CoreTaskFactory taskFactory;
 
   @FXML
   private JFXButton syncButton;
+  @FXML
+  private JFXButton exportButton;
   @FXML
   private JFXTreeView<Object> pluginTreeView;
   @FXML
@@ -148,6 +153,10 @@ public class PluginsController extends BaseController {
     });
 
     taskFactory.addSyncPluginsListener(() -> clearAndFillPluginTree());
+
+    exportButton.setOnAction( e -> {
+      exportDialogController.show();
+    });
 
   }
   
