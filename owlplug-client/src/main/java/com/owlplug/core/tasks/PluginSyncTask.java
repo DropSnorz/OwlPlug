@@ -24,6 +24,7 @@ import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFootprint;
 import com.owlplug.core.model.PluginFormat;
+import com.owlplug.core.model.PluginType;
 import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.tasks.plugins.discovery.PluginFileCollector;

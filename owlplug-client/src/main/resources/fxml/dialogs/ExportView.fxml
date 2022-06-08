@@ -10,7 +10,7 @@
    <children>
       <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
-            <JFXComboBox fx:id="exportType" prefHeight="25.0" value="CSV" HBox.hgrow="NEVER">
+            <JFXComboBox fx:id="exportComboBox" prefHeight="25.0" value="CSV" HBox.hgrow="NEVER">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="CSV" />

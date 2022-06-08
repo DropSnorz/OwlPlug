@@ -1,11 +1,12 @@
 package com.owlplug.core.controllers.dialogs;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.serializer.PluginCSVSerializer;
+import com.owlplug.core.model.serializer.PluginJsonSerializer;
 import com.owlplug.core.services.PluginService;
-import java.io.OutputStream;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -22,6 +23,8 @@ public class ExportDialogController extends AbstractDialogController {
   private PluginService pluginService;
 
   @FXML
+  private JFXComboBox<String> exportComboBox;
+  @FXML
   private TextArea exportTextArea;
   @FXML
   private JFXButton closeButton;
@@ -30,21 +33,32 @@ public class ExportDialogController extends AbstractDialogController {
     closeButton.setOnAction(e -> {
       this.close();
     });
+
+    exportComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+      refreshView();
+    });
   }
 
   @Override
   public void onDialogShow() {
-    exportTextArea.setText(generateExport());
+    refreshView();
 
   }
 
-  private String generateExport() {
+  private void refreshView() {
     Iterable<Plugin> plugins = pluginService.getAllPlugins();
 
-    StringBuilder output = new StringBuilder(PluginCSVSerializer.getHeader());
-    output.append(PluginCSVSerializer.serialize(plugins));
+    String exportType = exportComboBox.getSelectionModel().getSelectedItem();
 
-    return output.toString();
+    StringBuilder output = new StringBuilder();
+    if("CSV".equals(exportType)) {
+      output.append(PluginCSVSerializer.getHeader());
+      output.append(PluginCSVSerializer.serialize(plugins));
+    } else if ("JSON".equals(exportType)) {
+      output.append(PluginJsonSerializer.serialize(plugins));
+    }
+
+    exportTextArea.setText(output.toString());
   }
 
   @Override
