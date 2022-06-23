@@ -52,10 +52,12 @@ public class ExportDialogController extends AbstractDialogController {
 
     StringBuilder output = new StringBuilder();
     if("CSV".equals(exportType)) {
-      output.append(PluginCSVSerializer.getHeader());
-      output.append(PluginCSVSerializer.serialize(plugins));
+      PluginCSVSerializer serializer = new PluginCSVSerializer();
+      output.append(serializer.getHeader());
+      output.append(serializer.serialize(plugins));
     } else if ("JSON".equals(exportType)) {
-      output.append(PluginJsonSerializer.serialize(plugins));
+      PluginJsonSerializer serializer = new PluginJsonSerializer();
+      output.append(serializer.serialize(plugins));
     }
 
     exportTextArea.setText(output.toString());

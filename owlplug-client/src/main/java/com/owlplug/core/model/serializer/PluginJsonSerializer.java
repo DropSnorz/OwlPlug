@@ -11,7 +11,7 @@ public class PluginJsonSerializer {
 
   private static final Logger log = LoggerFactory.getLogger(PluginJsonSerializer.class);
 
-  public static String serialize(Iterable<Plugin> plugins) {
+  public String serialize(Iterable<Plugin> plugins) {
 
     ObjectMapper objectMapper = new ObjectMapper()
       .enable(SerializationFeature.INDENT_OUTPUT);

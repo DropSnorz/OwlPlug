@@ -7,8 +7,7 @@ public class PluginCSVSerializer {
   private static final String FIELD_SEPARATOR = ";";
   private static final String LINE_SEPARATOR = "\n";
 
-
-  public static String getHeader() {
+  public String getHeader() {
     StringBuilder builder = new StringBuilder("");
     builder.append("name").append(FIELD_SEPARATOR);
     builder.append("descriptiveName").append(FIELD_SEPARATOR);
@@ -25,7 +24,7 @@ public class PluginCSVSerializer {
     return builder.toString();
   };
 
-  public static String serialize(Iterable<Plugin> plugins) {
+  public String serialize(Iterable<Plugin> plugins) {
 
     StringBuilder builder = new StringBuilder("");
     for(Plugin plugin : plugins) {
@@ -35,7 +34,7 @@ public class PluginCSVSerializer {
 
   }
 
-  public static String serialize(Plugin plugin) {
+  public String serialize(Plugin plugin) {
     StringBuilder builder = new StringBuilder("");
     builder.append(plugin.getName()).append(FIELD_SEPARATOR);
     builder.append(plugin.getDescriptiveName()).append(FIELD_SEPARATOR);
