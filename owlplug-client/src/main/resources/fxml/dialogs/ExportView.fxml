@@ -20,7 +20,7 @@
             </JFXComboBox>
          </children>
       </HBox>
-      <TextArea fx:id="exportTextArea" prefHeight="200.0" prefWidth="200.0" />
+      <TextArea fx:id="exportTextArea" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
       <HBox alignment="TOP_RIGHT" spacing="5.0">
          <JFXButton fx:id="saveAsButton" layoutX="365.0" layoutY="10.0" text="Save As..." />
          <JFXButton fx:id="closeButton" text="Close" />
