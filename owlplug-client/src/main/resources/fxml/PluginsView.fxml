@@ -56,8 +56,17 @@
    <right>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0" VBox.vgrow="NEVER">
+            <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0" VBox.vgrow="NEVER" spacing="5.0">
                <children>
+                   <JFXButton fx:id="exportButton" buttonType="RAISED" text="Export">
+                       <graphic>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                               <image>
+                                   <Image url="@../icons/connect-white-16.png" />
+                               </image>
+                           </ImageView>
+                       </graphic>
+                   </JFXButton>
                   <JFXButton fx:id="syncButton" buttonType="RAISED" text="Sync">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -65,7 +74,8 @@
                               <Image url="@../icons/refresh-white-16.png" />
                            </image>
                         </ImageView>
-                     </graphic></JFXButton>
+                     </graphic>
+                  </JFXButton>
                </children>
             </HBox>
             <AnchorPane VBox.vgrow="ALWAYS">

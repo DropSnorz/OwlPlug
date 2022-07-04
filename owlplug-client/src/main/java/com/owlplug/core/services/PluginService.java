@@ -56,6 +56,10 @@ public class PluginService extends BaseService {
     taskFactory.createPluginSyncTask().schedule();
   }
 
+  public Iterable<Plugin> getAllPlugins() {
+    return pluginDAO.findAll();
+  }
+
   /**
    * Returns an url to retrieve plugin screenshots. Url can be retrieved from
    * registered products in store or using OwlPlug Central screenshot API.
