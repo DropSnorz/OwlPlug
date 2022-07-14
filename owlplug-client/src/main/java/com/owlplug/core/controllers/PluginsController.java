@@ -136,15 +136,31 @@ public class PluginsController extends BaseController {
       if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
         return null;
       }
-      return item -> item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
+      return (item) -> {
+        if (item instanceof Plugin) {
+          Plugin plugin = (Plugin) item;
+          return plugin.getName().toLowerCase().contains(searchTextField.getText().toLowerCase())
+            || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(searchTextField.getText().toLowerCase()));
+        } else {
+          return item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
+        }
+      };
     }, searchTextField.textProperty()));
 
-    // Binds search property to plugin tree filter
+    // Binds search property to file tree filter
     treeFileRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
       if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
         return null;
       }
-      return item -> item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
+      return (item) -> {
+        if (item instanceof Plugin) {
+          Plugin plugin = (Plugin) item;
+          return plugin.getName().toLowerCase().contains(searchTextField.getText().toLowerCase())
+            || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(searchTextField.getText().toLowerCase()));
+        } else {
+          return item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
+        }
+      };
     }, searchTextField.textProperty()));
 
     syncButton.setOnAction(e -> {
