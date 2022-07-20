@@ -20,6 +20,7 @@ package com.owlplug.host.loaders.jni;
 
 import com.owlplug.host.NativePlugin;
 import com.owlplug.host.loaders.NativePluginLoader;
+import java.util.List;
 
 public class JNINativePluginLoader implements NativePluginLoader {
 
@@ -49,7 +50,7 @@ public class JNINativePluginLoader implements NativePluginLoader {
   }
 
   @Override
-  public NativePlugin loadPlugin(String path) {
+  public List<NativePlugin> loadPlugin(String path) {
     return nativePluginMapper.mapPlugin(path);
   }
 

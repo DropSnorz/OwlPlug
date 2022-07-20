@@ -21,6 +21,7 @@ package com.owlplug.host.loaders.jni;
 import com.owlplug.host.NativePlugin;
 import com.owlplug.host.io.ClassPathVersionUtils;
 import com.owlplug.host.io.LibraryLoader;
+import java.util.List;
 
 public class JNIPluginMapper {
 
@@ -52,6 +53,6 @@ public class JNIPluginMapper {
     return isNativeLibraryLoaded;
   }
   
-  public native NativePlugin mapPlugin(String path);
+  public native List<NativePlugin> mapPlugin(String path);
 
 }

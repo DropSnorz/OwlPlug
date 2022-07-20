@@ -53,8 +53,8 @@ public class Plugin {
   @OneToOne
   protected PluginFootprint footprint;
 
-  @OneToMany(mappedBy = "plugin", orphanRemoval = true, fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
-    CascadeType.REMOVE })
+  @OneToMany(mappedBy = "plugin", orphanRemoval = true,
+    fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
   private Set<PluginComponent> components = new HashSet<>();
 
   public Plugin() {

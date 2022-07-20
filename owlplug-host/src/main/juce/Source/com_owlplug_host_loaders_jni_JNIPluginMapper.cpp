@@ -87,10 +87,8 @@ jobject buildJNativePluginInstance(JNIEnv* env, PluginDescription* pluginDescrip
 
 /**
  * JNI mapPlugin implementation.
- * Returns a com.owlplug.host.NativePlugin instance based on the given path. 
- * NativePlugins field are filled with plugin description and metadata properties
- * By default, the first plugin instance is used to retrieve descriptions. This must be updated
- * as a single plugin file can contains subcomponents.
+ * Returns an Array List of com.owlplug.host.NativePlugin instances based on the given path.
+ * NativePlugins fields are filled with plugin description and metadata properties
  */
 JNIEXPORT jobject JNICALL Java_com_owlplug_host_loaders_jni_JNIPluginMapper_mapPlugin
   (JNIEnv* env, jobject thisObject, jstring pluginPath) {
@@ -119,9 +117,19 @@ JNIEXPORT jobject JNICALL Java_com_owlplug_host_loaders_jni_JNIPluginMapper_mapP
 		return NULL;
 	}
 
-	// Build native plugin using the first plugin description
-	// TODO: This must be changed to retrieve all subcomponents
-	jobject nativePlugin = buildJNativePluginInstance(env, pluginDescriptions[0]);
+    // Create a Java Array List to hold plugin components
+    jclass java_util_ArrayList = static_cast<jclass>(env->NewGlobalRef(env->FindClass("java/util/ArrayList")));;
+    jmethodID java_util_ArrayList_ = env->GetMethodID(java_util_ArrayList, "<init>", "(I)V");
+	jobject pluginList = env->NewObject(java_util_ArrayList, java_util_ArrayList_, pluginDescriptions.size());
 
-	return nativePlugin;
+    for (int i = 0; i < pluginDescriptions.size(); i++ ) {
+        jobject nativePlugin = buildJNativePluginInstance(env, pluginDescriptions[i]);
+
+        jmethodID java_util_ArrayList_add = env->GetMethodID(java_util_ArrayList, "add", "(Ljava/lang/Object;)Z");
+        env->CallBooleanMethod(pluginList, java_util_ArrayList_add, nativePlugin);
+
+        env->DeleteLocalRef(nativePlugin);
+    }
+
+	return pluginList;
 }

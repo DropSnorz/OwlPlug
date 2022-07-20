@@ -111,7 +111,7 @@ public class NativeHostService extends BaseService {
     this.currentPluginLoader = pluginLoader;
   }
 
-  public NativePlugin loadPlugin(String path) {
+  public List<NativePlugin> loadPlugin(String path) {
     if (currentPluginLoader != null) {
       return currentPluginLoader.loadPlugin(path);
     } else {

@@ -29,6 +29,8 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -115,7 +117,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   }
 
   @Override
-  public NativePlugin loadPlugin(String path) {
+  public List<NativePlugin> loadPlugin(String path) {
 
     log.debug("Load plugin {}", path);
     if (!isAvailable()) {
@@ -143,7 +145,10 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
           Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
           JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(outputXML));
 
-          return juceXmlPlugin.toNativePlugin();
+          // TODO retrieve multiple plugins
+          ArrayList<NativePlugin> plugins = new ArrayList<>();
+          plugins.add(juceXmlPlugin.toNativePlugin());
+          return plugins;
 
         } else {
           log.error("No XML tag can be extracted from scanner output for plugin {}", path);
