@@ -18,6 +18,7 @@
 <?import javafx.scene.text.TextFlow?>
 
 <?import com.owlplug.core.ui.PluginStateView?>
+<?import com.jfoenix.controls.JFXListView?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PluginInfoController">
    <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
@@ -139,6 +140,16 @@
                   <Insets bottom="10.0" left="20.0" right="20.0" top="14.0" />
                </padding>
             </GridPane>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
+               <children>
+                  <Label text="Components" />
+               </children>
+            </HBox>
+            <JFXListView fx:id="pluginComponentListView" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="440.0" VBox.vgrow="SOMETIMES">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </JFXListView>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
                <children>
                   <Label text="Extras" />

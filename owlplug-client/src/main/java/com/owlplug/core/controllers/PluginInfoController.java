@@ -18,21 +18,21 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXToggleButton;
+import com.jfoenix.controls.*;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginComponent;
 import com.owlplug.core.services.PluginService;
+import com.owlplug.core.ui.PluginComponentCellFactory;
 import com.owlplug.core.ui.PluginStateView;
 import com.owlplug.core.utils.PlatformUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -92,6 +92,8 @@ public class PluginInfoController extends BaseController {
   @FXML
   private JFXButton uninstallButton;
   @FXML
+  private JFXListView<PluginComponent> pluginComponentListView;
+  @FXML
   private JFXToggleButton nativeDiscoveryToggleButton;
 
   private Plugin currentPlugin = null;
@@ -134,6 +136,8 @@ public class PluginInfoController extends BaseController {
       pluginsController.refreshPluginTree();
     });
 
+    pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
+
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       if (currentPlugin != null && currentPlugin.getFootprint() != null) {
         currentPlugin.getFootprint().setNativeDiscoveryEnabled(newValue);
@@ -173,6 +177,9 @@ public class PluginInfoController extends BaseController {
     if (plugin.getFootprint() != null) {
       nativeDiscoveryToggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
     }
+
+    ObservableList<PluginComponent> components = FXCollections.observableList(new ArrayList(plugin.getComponents()));
+    pluginComponentListView.setItems(components);
 
     setPluginImage();
   }

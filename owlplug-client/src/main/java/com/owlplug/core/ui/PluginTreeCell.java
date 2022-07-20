@@ -51,75 +51,11 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
       setGraphic(null);
     } else {
       if (item instanceof Plugin) {
-        Plugin plugin = (Plugin) item;
-        HBox hbox = new HBox(4);
-        hbox.setAlignment(Pos.CENTER_LEFT);
-        hbox.getChildren().add(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
-        hbox.getChildren().add(new Label(plugin.getName()));
-        Circle circle = new Circle(0, 0, 2);
-        hbox.getChildren().add(circle);
-
-        PluginState state = pluginService.getPluginState(plugin);
-        if (state.equals(PluginState.UNSTABLE)) {
-          circle.getStyleClass().add("shape-state-unstable");
-        } else if (state.equals(PluginState.ACTIVE)) {
-          circle.getStyleClass().add("shape-state-active");
-        } else if (state.equals(PluginState.DISABLED)) {
-          circle.getStyleClass().add("shape-state-disabled");
-        } else {
-          circle.getStyleClass().add("shape-state-installed");
-        }
-
-        circle.applyCss();
-        
-        if (((Plugin) item).isDisabled()) {
-          Label label = new Label("(disabled)");
-          label.getStyleClass().add("label-disabled");
-          hbox.getChildren().add(label);
-        }
-        setGraphic(hbox);
-        setText(null);
+        renderPlugin((Plugin) item);
+      } else if (item instanceof PluginComponent) {
+        renderComponent((PluginComponent) item );
       } else if (item instanceof IDirectory) {
-        TextFlow textFlow = new TextFlow();
-        IDirectory dir = (IDirectory) item;
-        Text directoryName;
-
-        if (dir.getDisplayName() != null && !dir.getName().equals(dir.getDisplayName())) {
-          String preText = dir.getDisplayName().replaceAll("/" + dir.getName() + "$", "");
-          Text pre = new Text(preText);
-          pre.getStyleClass().add("text-disabled");
-          textFlow.getChildren().add(pre);
-          directoryName = new Text("/" + dir.getName());
-
-        } else {
-          directoryName = new Text(dir.getName());
-        }
-        
-        if (dir.isStale()) {
-          directoryName.getStyleClass().add("text-danger");
-          directoryName.setText(dir.getName() + " (Stale)");
-        }
-
-        textFlow.getChildren().add(directoryName);
-
-        Node icon;
-        if(dir instanceof Symlink) {
-          icon = new ImageView(applicationDefaults.symlinkImage);
-        } else if (dir instanceof PluginDirectory pluginDirectory) {
-          if (pluginDirectory.isRootDirectory()) {
-            icon = new ImageView(applicationDefaults.rootDirectoryImage);
-          } else {
-            icon = new ImageView(applicationDefaults.directoryImage);
-          }
-        } else {
-          icon = new ImageView(applicationDefaults.directoryImage);
-        }
-        HBox hbox = new HBox(5);
-        hbox.getChildren().add(icon);
-        hbox.getChildren().add(textFlow);
-
-        setGraphic(hbox);
-        setText(null);
+        renderDirectory((IDirectory) item);
       } else {
         setText(item.toString());
         setGraphic(getTreeItem().getGraphic());
@@ -130,5 +66,88 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
     // Blinking appears since JavaFX14 migration
     this.applyCss();
   }
+
+  private void renderPlugin(Plugin plugin) {
+    HBox hbox = new HBox(4);
+    hbox.setAlignment(Pos.CENTER_LEFT);
+    hbox.getChildren().add(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
+    hbox.getChildren().add(new Label(plugin.getName()));
+    Circle circle = new Circle(0, 0, 2);
+    hbox.getChildren().add(circle);
+
+    PluginState state = pluginService.getPluginState(plugin);
+    if (state.equals(PluginState.UNSTABLE)) {
+      circle.getStyleClass().add("shape-state-unstable");
+    } else if (state.equals(PluginState.ACTIVE)) {
+      circle.getStyleClass().add("shape-state-active");
+    } else if (state.equals(PluginState.DISABLED)) {
+      circle.getStyleClass().add("shape-state-disabled");
+    } else {
+      circle.getStyleClass().add("shape-state-installed");
+    }
+
+    circle.applyCss();
+
+    if (plugin.isDisabled()) {
+      Label label = new Label("(disabled)");
+      label.getStyleClass().add("label-disabled");
+      hbox.getChildren().add(label);
+    }
+    setGraphic(hbox);
+    setText(null);
+  }
+
+
+  private void renderComponent(PluginComponent pluginComponent) {
+
+    Label label = new Label(pluginComponent.getName());
+    label.setGraphic(new ImageView(applicationDefaults.pluginComponentImage));
+    setGraphic(label);
+    setText(null);
+  }
+
+
+  private void renderDirectory(IDirectory dir) {
+    TextFlow textFlow = new TextFlow();
+    Text directoryName;
+
+    if (dir.getDisplayName() != null && !dir.getName().equals(dir.getDisplayName())) {
+      String preText = dir.getDisplayName().replaceAll("/" + dir.getName() + "$", "");
+      Text pre = new Text(preText);
+      pre.getStyleClass().add("text-disabled");
+      textFlow.getChildren().add(pre);
+      directoryName = new Text("/" + dir.getName());
+
+    } else {
+      directoryName = new Text(dir.getName());
+    }
+
+    if (dir.isStale()) {
+      directoryName.getStyleClass().add("text-danger");
+      directoryName.setText(dir.getName() + " (Stale)");
+    }
+
+    textFlow.getChildren().add(directoryName);
+
+    Node icon;
+    if(dir instanceof Symlink) {
+      icon = new ImageView(applicationDefaults.symlinkImage);
+    } else if (dir instanceof PluginDirectory pluginDirectory) {
+      if (pluginDirectory.isRootDirectory()) {
+        icon = new ImageView(applicationDefaults.rootDirectoryImage);
+      } else {
+        icon = new ImageView(applicationDefaults.directoryImage);
+      }
+    } else {
+      icon = new ImageView(applicationDefaults.directoryImage);
+    }
+    HBox hbox = new HBox(5);
+    hbox.getChildren().add(icon);
+    hbox.getChildren().add(textFlow);
+
+    setGraphic(hbox);
+    setText(null);
+  }
+
 
 }

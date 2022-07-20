@@ -21,11 +21,7 @@ package com.owlplug.core.tasks;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.dao.SymlinkDAO;
-import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginFootprint;
-import com.owlplug.core.model.PluginFormat;
-import com.owlplug.core.model.PluginType;
-import com.owlplug.core.model.Symlink;
+import com.owlplug.core.model.*;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.tasks.plugins.discovery.PluginFileCollector;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
@@ -33,6 +29,7 @@ import com.owlplug.core.tasks.plugins.discovery.SymlinkCollector;
 import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
 import com.owlplug.host.NativePlugin;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -165,6 +162,14 @@ public class PluginSyncTask extends AbstractTask {
           pluginFootprintDAO.save(pluginFootprint);
         }
         plugin.setFootprint(pluginFootprint);
+
+        // Dummy plugin component for testing
+        // TODO implement component extraction
+        PluginComponent pluginComponent = new PluginComponent();
+        pluginComponent.setName(plugin.getName());
+        pluginComponent.setPlugin(plugin);
+        plugin.getComponents().add(pluginComponent);
+
         pluginDAO.save(plugin);
 
         if (nativeHostService.isNativeHostEnabled() && nativeHostService.getCurrentPluginLoader().isAvailable()

@@ -29,10 +29,7 @@ import com.owlplug.core.controllers.dialogs.ExportDialogController;
 import com.owlplug.core.controllers.dialogs.NewLinkController;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.SymlinkDAO;
-import com.owlplug.core.model.IDirectory;
-import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginDirectory;
-import com.owlplug.core.model.Symlink;
+import com.owlplug.core.model.*;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.PluginTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
@@ -190,8 +187,16 @@ public class PluginsController extends BaseController {
 
     for (Plugin plugin : pluginList) {
 
-      TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
+      FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
       treePluginNode.getInternalChildren().add(item);
+
+      // Display subcomponents in the plugin tree
+      if (plugin.getComponents().size() > 1) {
+        for(PluginComponent component : plugin.getComponents()) {
+          FilterableTreeItem<Object> compItem = new FilterableTreeItem<>(component);
+          item.getInternalChildren().add(compItem);
+        }
+      }
     }
 
     treePluginNode.setExpanded(true);
@@ -343,6 +348,15 @@ public class PluginsController extends BaseController {
         Plugin plugin = (Plugin) child.getNodeValue();
         FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
         node.getInternalChildren().add(plugItem);
+
+        // Display subcomponents in the directory tree
+        if (plugin.getComponents().size() > 1) {
+          for(PluginComponent component : plugin.getComponents()) {
+            FilterableTreeItem<Object> compItem = new FilterableTreeItem<>(component);
+            plugItem.getInternalChildren().add(compItem);
+          }
+        }
+
         // If not we are exploring a directory
       } else {
         IDirectory directory;

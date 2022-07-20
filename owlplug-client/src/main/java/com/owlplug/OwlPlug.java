@@ -103,7 +103,7 @@ public class OwlPlug extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     double width = 1020;
-    double height = 700;
+    double height = 750;
 
     Scene scene = new Scene(rootNode, width, height);
     String fontsCss = JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm();
