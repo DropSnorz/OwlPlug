@@ -18,11 +18,15 @@
 
 package com.owlplug.host.loaders;
 
-import com.owlplug.host.model.OS;
-import com.owlplug.host.utils.FileSystemUtils;
 import com.owlplug.host.JuceXMLPlugin;
 import com.owlplug.host.NativePlugin;
-import com.owlplug.host.io.*;
+import com.owlplug.host.io.ClassPathFileExtractor;
+import com.owlplug.host.io.ClassPathVersionUtils;
+import com.owlplug.host.io.CommandResult;
+import com.owlplug.host.io.CommandRunner;
+import com.owlplug.host.io.LibraryLoader;
+import com.owlplug.host.model.OS;
+import com.owlplug.host.utils.FileSystemUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -42,6 +46,9 @@ import org.slf4j.LoggerFactory;
 public class EmbeddedScannerPluginLoader implements NativePluginLoader {
 
   private static final Logger log = LoggerFactory.getLogger(LibraryLoader.class);
+
+  private static final String PLUGIN_COMPONENT_OUTPUT_DELIMITER_BEGIN = "---BEGIN PLUGIN COMPONENT DELIMITER---";
+  private static final String PLUGIN_COMPONENT_OUTPUT_DELIMITER_END = "---END PLUGIN COMPONENT DELIMITER---";
 
   private static EmbeddedScannerPluginLoader INSTANCE;
   private static String SEPARATOR = System.getProperty("file.separator");
@@ -96,7 +103,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
       available = true;
 
       // Apply executable permissions on POSIX filesystem
-      if(FileSystemUtils.isPosix()) {
+      if (FileSystemUtils.isPosix()) {
         try {
           Set<PosixFilePermission> executablePermission = PosixFilePermissions.fromString("rwxr-xr--");
           Files.setPosixFilePermissions(scannerFile.toPath(), executablePermission);
@@ -120,6 +127,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   public List<NativePlugin> loadPlugin(String path) {
 
     log.debug("Load plugin {}", path);
+
     if (!isAvailable()) {
       throw new IllegalStateException("Plugin loader must be available");
     }
@@ -130,43 +138,80 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
       commandRunner.setTimeout(30000); // 30 seconds timeout
       CommandResult result = commandRunner.run(scannerDirectory + SEPARATOR +  scannerId, path);
       log.debug("Response received from scanner");
-      log.trace(result.getOutput());
+      log.debug(result.getOutput());
 
       if (result.getExitValue() >= 0) {
 
         log.debug("Extracting XML from content received by the scanner");
+        String output = result.getOutput();
 
-        if(result.getOutput().contains("<?xml")) {
-          String outputXML = result.getOutput().substring(result.getOutput().indexOf("<?xml"));
-          log.debug("XML extracted from scanner output");
-          log.debug(outputXML);
-
-          JAXBContext jaxbContext = JAXBContext.newInstance(JuceXMLPlugin.class);
-          Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-          JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(outputXML));
-
-          // TODO retrieve multiple plugins
-          ArrayList<NativePlugin> plugins = new ArrayList<>();
-          plugins.add(juceXmlPlugin.toNativePlugin());
-          return plugins;
-
-        } else {
-          log.error("No XML tag can be extracted from scanner output for plugin {}", path);
-          log.debug(result.getOutput());
-        }
-
+        return createPluginsFromCommandOutput(output);
 
       } else {
         log.debug("Invalid return code {} received from plugin scanner", result.getExitValue());
       }
 
-    } catch (JAXBException e) {
-      log.error("Error during XML mapping for native plugin {}", path, e);
     } catch (IOException e) {
       log.error("Error executing plugin scanner {}", path, e);
     }
 
     return null;
+  }
+
+  private List<NativePlugin> createPluginsFromCommandOutput(String output) {
+
+    ArrayList<NativePlugin> plugins = new ArrayList<>();
+    log.trace("Looking for PLUGIN COMPONENT DELIMITER in output");
+
+    if (output.contains(PLUGIN_COMPONENT_OUTPUT_DELIMITER_BEGIN)) {
+
+      String[] componentOutputs = output.split(PLUGIN_COMPONENT_OUTPUT_DELIMITER_BEGIN);
+
+      for (int i = 0; i < componentOutputs.length; i++) {
+
+        if (componentOutputs[i].contains("<?xml")) {
+          // Remove content before xml tag in case plugin logged stuff in the stdout.
+          String outputXML = componentOutputs[i].substring(componentOutputs[i].indexOf("<?xml"));
+
+          // Remove everything after the end delimiter in case plugin logged stuff in the stdout
+          if (outputXML.contains(PLUGIN_COMPONENT_OUTPUT_DELIMITER_END)) {
+            outputXML = outputXML.substring(0,outputXML.indexOf(PLUGIN_COMPONENT_OUTPUT_DELIMITER_END));
+          }
+
+          outputXML = outputXML.strip();
+
+          JuceXMLPlugin plugin = createJucePluginFromRawXml(outputXML);
+          plugins.add(plugin.toNativePlugin());
+
+        } else {
+          log.trace("No XML tag can be extracted from part {} for plugin", i);
+          log.trace(componentOutputs[i]);
+        }
+
+      }
+    } else {
+      log.error("No Plugin delimiter tag can be extracted from scanner output");
+      log.debug(output);
+    }
+
+    return plugins;
+  }
+
+  private JuceXMLPlugin createJucePluginFromRawXml(String xml) {
+    log.debug("Create plugin from raw XML");
+    log.debug(xml);
+
+    try {
+      JAXBContext jaxbContext = JAXBContext.newInstance(JuceXMLPlugin.class);
+      Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+      JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(xml));
+      return juceXmlPlugin;
+
+    } catch (JAXBException e) {
+      log.error("Error during XML mapping", e);
+      log.debug(xml);
+      return null;
+    }
   }
 
   @Override
