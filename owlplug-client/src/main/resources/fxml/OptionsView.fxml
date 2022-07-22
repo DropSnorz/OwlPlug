@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.OptionsController">
+<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.OptionsController">
    <children>
       <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -18,92 +18,26 @@
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin></Label>
-                        <VBox spacing="30.0">
+                        <VBox>
                            <children>
-                              <VBox>
+                              <VBox spacing="20.0">
                                  <children>
-                                    <Label styleClass="heading-2" text="VST 2" />
-                                    <FlowPane prefWidth="200.0">
+                                    <VBox fx:id="pluginPathContainer" spacing="30.0" />
+                                    <VBox spacing="4.0">
                                        <children>
-                                          <JFXToggleButton fx:id="vst2ToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore VST2 plugins" />
-                                          <Label text="(" />
-                                          <Hyperlink fx:id="vst2ExtraDirectoryLink" graphicTextGap="0.0" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
-                                          <Label text=")" />
-                                          <HBox alignment="CENTER_LEFT">
-                                             <FlowPane.margin>
-                                                <Insets />
-                                             </FlowPane.margin>
+                                          <HBox spacing="10.0">
+                                             <children>
+                                                <JFXCheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery using" />
+                                                <JFXComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="NEVER" />
+                                             </children>
                                           </HBox>
-                                       </children>
-                                    </FlowPane>
-                                    <HBox alignment="BASELINE_LEFT" spacing="5.0">
-                                       <children>
-                                          <JFXTextField fx:id="vst2DirectoryTextField" promptText="VST2 plugin directory" HBox.hgrow="ALWAYS" />
-                                          <JFXButton fx:id="vst2DirectoryButton" text="..." />
+                                          <Label styleClass="label-emphase" text="Allow deep plugin metadatas discovery using platform specific features" />
                                        </children>
                                        <VBox.margin>
-                                          <Insets left="15.0" />
+                                          <Insets bottom="16.0" top="16.0" />
                                        </VBox.margin>
-                                    </HBox>
+                                    </VBox>
                                  </children>
-                              </VBox>
-                              <VBox VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <Label styleClass="heading-2" text="VST 3" />
-                                    <FlowPane prefWidth="200.0">
-                                       <children>
-                                          <JFXToggleButton fx:id="vst3ToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore VST3 plugins" />
-                                          <Label text="(" />
-                                          <Hyperlink fx:id="vst3ExtraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
-                                          <Label text=")" />
-                                       </children>
-                                    </FlowPane>
-                                    <HBox alignment="BASELINE_LEFT" spacing="5.0">
-                                       <children>
-                                          <JFXTextField fx:id="vst3DirectoryTextField" promptText="VST3 plugin directory" HBox.hgrow="ALWAYS" />
-                                          <JFXButton fx:id="vst3DirectoryButton" text="..." />
-                                       </children>
-                                       <padding>
-                                          <Insets left="15.0" />
-                                       </padding>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox layoutX="10.0" layoutY="117.0">
-                                 <children>
-                                    <Label styleClass="heading-2" text="AU" />
-                                    <FlowPane prefWidth="200.0">
-                                       <children>
-                                          <JFXToggleButton fx:id="auToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore AU plugins" />
-                                          <Label text="(" />
-                                          <Hyperlink fx:id="auExtraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
-                                          <Label text=")" />
-                                       </children>
-                                    </FlowPane>
-                                    <HBox alignment="BASELINE_LEFT" spacing="5.0">
-                                       <children>
-                                          <JFXTextField fx:id="auDirectoryTextField" promptText="AU plugin directory" HBox.hgrow="ALWAYS" />
-                                          <JFXButton fx:id="auDirectoryButton" text="..." />
-                                       </children>
-                                       <padding>
-                                          <Insets left="15.0" />
-                                       </padding>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox spacing="4.0">
-                                 <children>
-                                    <HBox spacing="10.0">
-                                       <children>
-                                          <JFXCheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery using" />
-                                          <JFXComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="NEVER" />
-                                       </children>
-                                    </HBox>
-                                    <Label styleClass="label-emphase" text="Allow deep plugin metadatas discovery using platform specific features" />
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets bottom="16.0" top="16.0" />
-                                 </VBox.margin>
                               </VBox>
                            </children>
                         </VBox>
@@ -116,13 +50,13 @@
             </VBox>
             <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <VBox prefWidth="200.0" styleClass="pane-card" VBox.vgrow="ALWAYS">
+                  <VBox prefWidth="200.0" styleClass="pane-card" VBox.vgrow="NEVER">
                      <children>
                         <Label styleClass="heading-1" text="Preferences">
                            <VBox.margin>
                               <Insets bottom="20.0" />
                            </VBox.margin></Label>
-                        <VBox spacing="15.0" VBox.vgrow="ALWAYS">
+                        <VBox spacing="15.0" VBox.vgrow="NEVER">
                            <children>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
                                  <children>
@@ -169,7 +103,7 @@
                                     <Insets />
                                  </VBox.margin>
                               </VBox>
-                              <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="145.0" VBox.vgrow="SOMETIMES">
+                              <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="145.0" VBox.vgrow="NEVER">
                                  <children>
                                     <Label styleClass="heading-2" text="About" />
                                     <Hyperlink fx:id="owlplugWebsiteLink" alignment="BASELINE_LEFT" styleClass="hyperlink-disabled" text="https://owlplug.com">

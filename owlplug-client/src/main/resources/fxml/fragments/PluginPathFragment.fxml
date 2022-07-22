@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.HBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.JFXButton?>
+
+<VBox fx:id="mainNode" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label fx:id="headerLabel" styleClass="heading-2" text="VST 3" />
+        <FlowPane prefWidth="200.0">
+            <children>
+                <JFXToggleButton fx:id="activationToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore VST3 plugins" />
+                <Label text="(" />
+                <Hyperlink fx:id="extraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
+                <Label text=")" />
+            </children>
+        </FlowPane>
+        <HBox alignment="BASELINE_LEFT" spacing="5.0">
+            <children>
+                <JFXTextField fx:id="directoryTextField" promptText="VST3 plugin directory" HBox.hgrow="ALWAYS" />
+                <JFXButton fx:id="directoryButton" text="..." />
+            </children>
+            <padding>
+                <Insets left="15.0" />
+            </padding>
+        </HBox>
+    </children>
+</VBox>

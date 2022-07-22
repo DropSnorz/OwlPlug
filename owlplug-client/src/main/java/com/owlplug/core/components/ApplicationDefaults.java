@@ -80,6 +80,9 @@ public class ApplicationDefaults {
   public static final String AU_DIRECTORY_KEY = "AU_DIRECTORY_KEY";
   public static final String AU_DISCOVERY_ENABLED_KEY = "AU_DISCOVERY_ENABLED_KEY";
   public static final String AU_EXTRA_DIRECTORY_KEY = "AU_EXTRA_DIRECTORY_KEY";
+  public static final String LV2_DIRECTORY_KEY = "LV2_DIRECTORY_KEY";
+  public static final String LV2_DISCOVERY_ENABLED_KEY = "LV2_DISCOVERY_ENABLED_KEY";
+  public static final String LV2_EXTRA_DIRECTORY_KEY = "LV2_EXTRA_DIRECTORY_KEY";
   public static final String NATIVE_HOST_ENABLED_KEY = "NATIVE_HOST_ENABLED_KEY";
   public static final String PREFERRED_NATIVE_LOADER = "PREFERRED_NATIVE_LOADER";
   public static final String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";

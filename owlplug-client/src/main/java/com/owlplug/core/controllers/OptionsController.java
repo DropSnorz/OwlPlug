@@ -18,24 +18,26 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
+import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
 import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.OptionsService;
 import com.owlplug.core.utils.PlatformUtils;
-import java.io.File;
-import java.text.MessageFormat;
-
 import com.owlplug.host.loaders.NativePluginLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Window;
+import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -48,31 +50,6 @@ public class OptionsController extends BaseController {
   private NativeHostService nativeHostService;
   @Autowired
   private ListDirectoryDialogController listDirectoryDialogController;
-
-  @FXML
-  private JFXToggleButton vst2ToggleButton;
-  @FXML
-  private JFXTextField vst2DirectoryTextField;
-  @FXML
-  private JFXButton vst2DirectoryButton;
-  @FXML
-  private Hyperlink vst2ExtraDirectoryLink;
-  @FXML
-  private JFXToggleButton vst3ToggleButton;
-  @FXML
-  private JFXTextField vst3DirectoryTextField;
-  @FXML
-  private JFXButton vst3DirectoryButton;
-  @FXML
-  private Hyperlink vst3ExtraDirectoryLink;
-  @FXML
-  private JFXToggleButton auToggleButton;
-  @FXML
-  private JFXTextField auDirectoryTextField;
-  @FXML
-  private JFXButton auDirectoryButton;
-  @FXML
-  private Hyperlink auExtraDirectoryLink;
   @FXML
   private JFXCheckBox pluginNativeCheckbox;
   @FXML
@@ -103,6 +80,13 @@ public class OptionsController extends BaseController {
   private Label storeDirectorySeparator;
   @FXML
   private Hyperlink owlplugWebsiteLink;
+  @FXML
+  private VBox pluginPathContainer;
+
+  private PluginPathFragmentController vst2PluginPathFragment;
+  private PluginPathFragmentController vst3PluginPathFragment;
+  private PluginPathFragmentController auPluginPathFragment;
+  private PluginPathFragmentController lv2PluginPathFragment;
 
   /**
    * FXML initialize method.
@@ -110,94 +94,20 @@ public class OptionsController extends BaseController {
   @FXML
   public void initialize() {
 
-    // Disable all directory options on init
-    vst2DirectoryTextField.setDisable(true);
-    vst2DirectoryButton.setDisable(true);
-    vst2ExtraDirectoryLink.setDisable(true);
-    vst3DirectoryTextField.setDisable(true);
-    vst3DirectoryButton.setDisable(true);
-    vst3ExtraDirectoryLink.setDisable(true);
-    auDirectoryTextField.setDisable(true);
-    auDirectoryButton.setDisable(true);
-    auExtraDirectoryLink.setDisable(true);
+    vst2PluginPathFragment = new PluginPathFragmentController("VST2", ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+
+    vst3PluginPathFragment = new PluginPathFragmentController("VST3", ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST3_DIRECTORY_KEY, ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+
+    auPluginPathFragment = new PluginPathFragmentController("AU", ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, ApplicationDefaults.AU_DIRECTORY_KEY, ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+
+    lv2PluginPathFragment = new PluginPathFragmentController("LV2", ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.LV2_DIRECTORY_KEY, ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+
+    pluginPathContainer.getChildren().add(vst2PluginPathFragment.getNode());
+    pluginPathContainer.getChildren().add(vst3PluginPathFragment.getNode());
+    pluginPathContainer.getChildren().add(auPluginPathFragment.getNode());
+    pluginPathContainer.getChildren().add(lv2PluginPathFragment.getNode());
 
     storeByCreatorLabel.setVisible(false);
-
-
-    vst2ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, newValue);
-      vst2DirectoryTextField.setDisable(!newValue);
-      vst2DirectoryButton.setDisable(!newValue);
-      vst2ExtraDirectoryLink.setDisable(!newValue);
-    });
-
-    vst3ToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, newValue);
-      vst3DirectoryTextField.setDisable(!newValue);
-      vst3DirectoryButton.setDisable(!newValue);
-      vst3ExtraDirectoryLink.setDisable(!newValue);
-    });
-
-    auToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, newValue);
-      auDirectoryTextField.setDisable(!newValue);
-      auDirectoryButton.setDisable(!newValue);
-      auExtraDirectoryLink.setDisable(!newValue);
-    });
-
-    vst2DirectoryButton.setOnAction(e -> {
-      DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = vst2DirectoryButton.getScene().getWindow();
-      File selectedDirectory = directoryChooser.showDialog(mainWindow);
-      if (selectedDirectory != null) {
-        vst2DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
-      }
-    });
-
-    vst2DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().put(ApplicationDefaults.VST_DIRECTORY_KEY, newValue);
-    });
-
-    vst2ExtraDirectoryLink.setOnAction(e -> {
-      listDirectoryDialogController.configure(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY);
-      listDirectoryDialogController.show();
-    });
-
-    vst3DirectoryButton.setOnAction(e -> {
-      DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = vst3DirectoryButton.getScene().getWindow();
-      File selectedDirectory = directoryChooser.showDialog(mainWindow);
-      if (selectedDirectory != null) {
-        vst3DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
-      }
-    });
-
-    vst3DirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().put(ApplicationDefaults.VST3_DIRECTORY_KEY, newValue);
-    });
-
-    vst3ExtraDirectoryLink.setOnAction(e -> {
-      listDirectoryDialogController.configure(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY);
-      listDirectoryDialogController.show();
-    });
-
-    auDirectoryButton.setOnAction(e -> {
-      DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = auDirectoryButton.getScene().getWindow();
-      File selectedDirectory = directoryChooser.showDialog(mainWindow);
-      if (selectedDirectory != null) {
-        auDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
-      }
-    });
-
-    auDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().put(ApplicationDefaults.AU_DIRECTORY_KEY, newValue);
-    });
-
-    auExtraDirectoryLink.setOnAction(e -> {
-      listDirectoryDialogController.configure(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY);
-      listDirectoryDialogController.show();
-    });
 
     pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
@@ -288,12 +198,11 @@ public class OptionsController extends BaseController {
 
   public void refreshView() {
 
-    vst2DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-    vst3DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
-    auDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
-    vst2ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
-    vst3ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
-    auToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
+    vst2PluginPathFragment.refresh();
+    vst3PluginPathFragment.refresh();
+    auPluginPathFragment.refresh();
+    lv2PluginPathFragment.refresh();
+
     pluginNativeCheckbox.setDisable(!nativeHostService.isNativeHostAvailable());
     pluginNativeComboBox.setDisable(!nativeHostService.isNativeHostAvailable());
     pluginNativeCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
@@ -303,25 +212,6 @@ public class OptionsController extends BaseController {
     storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
     storeByCreatorCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false));
     storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
-
-    MessageFormat extraDirectoryMessageFormat = new MessageFormat("+ {0} additional directories");
-    vst2ExtraDirectoryLink.setText(extraDirectoryMessageFormat.format(
-      new Object[] {
-        this.getPreferences().getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY).size()
-      }
-    ));
-
-    vst3ExtraDirectoryLink.setText(extraDirectoryMessageFormat.format(
-      new Object[] {
-        this.getPreferences().getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY).size()
-      }
-    ));
-
-    auExtraDirectoryLink.setText(extraDirectoryMessageFormat.format(
-      new Object[] {
-        this.getPreferences().getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY).size()
-      }
-    ));
 
     NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
     pluginNativeComboBox.getSelectionModel().select(pluginLoader);
@@ -337,11 +227,7 @@ public class OptionsController extends BaseController {
     // Disable AU options for non MAC users
     if (!this.getApplicationDefaults().getRuntimePlatform()
         .getOperatingSystem().equals(OperatingSystem.MAC)) {
-      auToggleButton.setSelected(false);
-      auDirectoryTextField.setDisable(true);
-      auDirectoryButton.setDisable(true);
-      auExtraDirectoryLink.setDisable(true);
-      auToggleButton.setDisable(true);
+      auPluginPathFragment.disable();
     }
 
   }
