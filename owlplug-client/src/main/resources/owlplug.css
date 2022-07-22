@@ -5,7 +5,7 @@
 
 .root{
     -fx-font-family: "Roboto";
-	card-pane-darkshade-color: rgb(48,48,48);
+	card-pane-darkshade-color: rgb(50,50,50);
 	card-pane-color: rgb(66,66,66);
 	card-pane-lightshade-color: rgb(96,96,96);
 	
@@ -283,15 +283,15 @@ JFXTreeView:focused{
 }
 
 .list-view {
-	-fx-background-color: rgb(55,55,55);
+	-fx-background-color: card-pane-color;
 	-fx-text-fill: text-color;
 }
 .list-view .list-cell {
-	-fx-background-color: rgb(44,44,44);
+	-fx-background-color: rgb(56,56,56);
 	-fx-text-fill: text-color;
 }
 .list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:focused {
-    -fx-background-color: rgb(55,55,55);
+    -fx-background-color: rgb(52,52,52);
 }
 
 .autocomplete-list {
