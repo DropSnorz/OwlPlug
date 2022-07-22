@@ -21,15 +21,22 @@ package com.owlplug.core.tasks;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.dao.SymlinkDAO;
-import com.owlplug.core.model.*;
+import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginComponent;
+import com.owlplug.core.model.PluginFootprint;
+import com.owlplug.core.model.PluginFormat;
+import com.owlplug.core.model.PluginType;
+import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.tasks.plugins.discovery.PluginFileCollector;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.tasks.plugins.discovery.SymlinkCollector;
 import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
 import com.owlplug.host.NativePlugin;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +128,7 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindVst2()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst2Directory, PluginFormat.VST2));
           collectedSymlinks.addAll(symlinkCollector.collect(vst2Directory));
-          for(String path : parameters.getVst2ExtraDirectories()) {
+          for (String path : parameters.getVst2ExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.VST2));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
@@ -129,7 +136,7 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
           collectedSymlinks.addAll(symlinkCollector.collect(vst3Directory));
-          for(String path : parameters.getVst3ExtraDirectories()) {
+          for (String path : parameters.getVst3ExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.VST3));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
@@ -137,7 +144,7 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindAu()) {
           collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
           collectedSymlinks.addAll(symlinkCollector.collect(auDirectory));
-          for(String path : parameters.getAuExtraDirectories()) {
+          for (String path : parameters.getAuExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.AU));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
@@ -173,7 +180,7 @@ public class PluginSyncTask extends AbstractTask {
 
             plugin.setNativeCompatible(true);
 
-            for(NativePlugin nativePlugin : nativePlugins) {
+            for (NativePlugin nativePlugin : nativePlugins) {
               PluginComponent component = nativePluginToPluginComponent(nativePlugin);
               component.setPlugin(plugin);
               plugin.getComponents().add(component);
@@ -192,7 +199,7 @@ public class PluginSyncTask extends AbstractTask {
         this.commitProgress(80.0 / collectedPluginFiles.size());
       }
 
-      
+
       this.updateProgress(1, 1);
       this.updateMessage("Plugins synchronized");
       log.info("Plugin Sync task complete");
@@ -231,7 +238,7 @@ public class PluginSyncTask extends AbstractTask {
     plugin.setIdentifier(nativePlugin.getFileOrIdentifier());
     plugin.setUid(String.valueOf(nativePlugin.getUid()));
 
-    if(nativePlugin.isInstrument()) {
+    if (nativePlugin.isInstrument()) {
       plugin.setType(PluginType.INSTRUMENT);
     } else {
       plugin.setType(PluginType.EFFECT);

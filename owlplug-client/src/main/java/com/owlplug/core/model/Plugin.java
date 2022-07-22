@@ -18,10 +18,20 @@
  
 package com.owlplug.core.model;
 
-import com.owlplug.store.model.ProductTag;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Inheritance;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Inheritance
@@ -54,7 +64,7 @@ public class Plugin {
   protected PluginFootprint footprint;
 
   @OneToMany(mappedBy = "plugin", orphanRemoval = true,
-    fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+      fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
   private Set<PluginComponent> components = new HashSet<>();
 
   public Plugin() {

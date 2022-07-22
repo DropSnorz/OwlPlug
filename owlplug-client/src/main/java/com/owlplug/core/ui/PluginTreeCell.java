@@ -20,7 +20,12 @@ package com.owlplug.core.ui;
 
 import com.jfoenix.controls.JFXTreeCell;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.model.*;
+import com.owlplug.core.model.IDirectory;
+import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginComponent;
+import com.owlplug.core.model.PluginDirectory;
+import com.owlplug.core.model.PluginState;
+import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.PluginService;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -36,7 +41,7 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
   private PluginService pluginService;
   private ApplicationDefaults applicationDefaults;
 
-  public PluginTreeCell(ApplicationDefaults applicationDefaults, PluginService pluginService){
+  public PluginTreeCell(ApplicationDefaults applicationDefaults, PluginService pluginService) {
     this.applicationDefaults = applicationDefaults;
     this.pluginService = pluginService;
   }
@@ -53,7 +58,7 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
       if (item instanceof Plugin) {
         renderPlugin((Plugin) item);
       } else if (item instanceof PluginComponent) {
-        renderComponent((PluginComponent) item );
+        renderComponent((PluginComponent) item);
       } else if (item instanceof IDirectory) {
         renderDirectory((IDirectory) item);
       } else {
@@ -99,7 +104,6 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
 
 
   private void renderComponent(PluginComponent pluginComponent) {
-
     Label label = new Label(pluginComponent.getName());
     label.setGraphic(new ImageView(applicationDefaults.pluginComponentImage));
     setGraphic(label);
@@ -130,7 +134,7 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
     textFlow.getChildren().add(directoryName);
 
     Node icon;
-    if(dir instanceof Symlink) {
+    if (dir instanceof Symlink) {
       icon = new ImageView(applicationDefaults.symlinkImage);
     } else if (dir instanceof PluginDirectory pluginDirectory) {
       if (pluginDirectory.isRootDirectory()) {
@@ -148,6 +152,5 @@ public class PluginTreeCell extends JFXTreeCell<Object> {
     setGraphic(hbox);
     setText(null);
   }
-
 
 }
