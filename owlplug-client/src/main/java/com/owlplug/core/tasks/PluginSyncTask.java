@@ -104,7 +104,6 @@ public class PluginSyncTask extends AbstractTask {
         pluginDAO.deleteAll();
         symlinkDAO.deleteAll();
       }
-      
 
       if (parameters.getDirectoryScope() != null) {
         // Plugins are retrieved from a scoped directory
@@ -117,6 +116,9 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindAu()) {
           collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.AU));
         }
+        if (parameters.isFindLv2()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.LV2));
+        }
         collectedSymlinks.addAll(symlinkCollector.collect(parameters.getDirectoryScope()));
 
       } else {
@@ -124,6 +126,7 @@ public class PluginSyncTask extends AbstractTask {
         String vst2Directory = parameters.getVst2Directory();
         String vst3Directory = parameters.getVst3Directory();
         String auDirectory = parameters.getAuDirectory();
+        String lv2Directory = parameters.getLv2Directory();
 
         if (parameters.isFindVst2()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst2Directory, PluginFormat.VST2));
@@ -146,6 +149,14 @@ public class PluginSyncTask extends AbstractTask {
           collectedSymlinks.addAll(symlinkCollector.collect(auDirectory));
           for (String path : parameters.getAuExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.AU));
+            collectedSymlinks.addAll(symlinkCollector.collect(path));
+          }
+        }
+        if (parameters.isFindLv2()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(lv2Directory, PluginFormat.LV2));
+          collectedSymlinks.addAll(symlinkCollector.collect(lv2Directory));
+          for(String path : parameters.getAuExtraDirectories()) {
+            collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.LV2));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
         }

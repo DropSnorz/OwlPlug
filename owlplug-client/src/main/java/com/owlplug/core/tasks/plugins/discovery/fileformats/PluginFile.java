@@ -19,7 +19,9 @@
 package com.owlplug.core.tasks.plugins.discovery.fileformats;
 
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginComponent;
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class PluginFile {
@@ -32,6 +34,9 @@ public abstract class PluginFile {
   
   public abstract Plugin toPlugin();
 
+  public List<PluginComponent> toComponents() {
+    return null;
+  }
 
   public File getPluginFile() {
     return pluginFile;

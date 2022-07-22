@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.tasks.plugins.discovery;
 
 import com.owlplug.core.model.platform.RuntimePlatform;
-
 import java.util.List;
 
 public class PluginSyncTaskParameters {
@@ -29,12 +28,15 @@ public class PluginSyncTaskParameters {
   private String vst2Directory;
   private String vst3Directory;
   private String auDirectory;
+  private String lv2Directory;
   private boolean findVst2;
   private boolean findVst3;
   private boolean findAu;
+  private boolean findLv2;
   private List<String> vst2ExtraDirectories;
   private List<String> vst3ExtraDirectories;
   private List<String> auExtraDirectories;
+  private List<String> lv2ExtraDirectories;
 
   public RuntimePlatform getPlatform() {
     return platform;
@@ -45,15 +47,15 @@ public class PluginSyncTaskParameters {
   }
   
   public String getDirectoryScope() {
-	  return directoryScope;
+    return directoryScope;
   }
 
   public void setDirectoryScope(String directoryScope) {
-	  this.directoryScope = directoryScope;
+    this.directoryScope = directoryScope;
   }
 
   public String getVst2Directory() {
-	  return vst2Directory;
+    return vst2Directory;
   }
 
   public void setVst2Directory(String pluginDirectory) {
@@ -69,11 +71,11 @@ public class PluginSyncTaskParameters {
   }
   
   public String getAuDirectory() {
-	return auDirectory;
+    return auDirectory;
   }
 
   public void setAuDirectory(String auDirectory) {
-	this.auDirectory = auDirectory;
+    this.auDirectory = auDirectory;
   }
 
   public boolean isFindVst2() {
@@ -93,11 +95,11 @@ public class PluginSyncTaskParameters {
   }
 
   public boolean isFindAu() {
-	  return findAu;
+    return findAu;
   }
 
   public void setFindAu(boolean findAu) {
-	  this.findAu = findAu;
+    this.findAu = findAu;
   }
 
   public List<String> getVst2ExtraDirectories() {
@@ -122,6 +124,30 @@ public class PluginSyncTaskParameters {
 
   public void setAuExtraDirectories(List<String> auExtraDirectories) {
     this.auExtraDirectories = auExtraDirectories;
+  }
+
+  public String getLv2Directory() {
+    return lv2Directory;
+  }
+
+  public void setLv2Directory(String lv2Directory) {
+    this.lv2Directory = lv2Directory;
+  }
+
+  public boolean isFindLv2() {
+    return findLv2;
+  }
+
+  public void setFindLv2(boolean findLv2) {
+    this.findLv2 = findLv2;
+  }
+
+  public List<String> getLv2ExtraDirectories() {
+    return lv2ExtraDirectories;
+  }
+
+  public void setLv2ExtraDirectories(List<String> lv2ExtraDirectories) {
+    this.lv2ExtraDirectories = lv2ExtraDirectories;
   }
 
 }
