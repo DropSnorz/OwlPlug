@@ -12,8 +12,11 @@
       <fx:include fx:id="directoryInfoView" source="DirectoryInfoView.fxml" AnchorPane.topAnchor="0.0"
              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
              AnchorPane.bottomAnchor="0.0"/>
-             <fx:include fx:id="symlinkInfoView" source="SymlinkInfoView.fxml" AnchorPane.topAnchor="0.0"
+       <fx:include fx:id="symlinkInfoView" source="SymlinkInfoView.fxml" AnchorPane.topAnchor="0.0"
              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
              AnchorPane.bottomAnchor="0.0"/>
+       <fx:include fx:id="componentInfoView" source="ComponentInfoView.fxml" AnchorPane.topAnchor="0.0"
+                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                   AnchorPane.bottomAnchor="0.0"/>
    </children>
 </AnchorPane>

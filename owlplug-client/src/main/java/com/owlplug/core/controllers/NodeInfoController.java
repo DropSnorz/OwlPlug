@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers;
 
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginComponent;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.model.Symlink;
 import javafx.fxml.FXML;
@@ -35,6 +36,8 @@ public class NodeInfoController extends BaseController {
   private DirectoryInfoController directoryInfoController;
   @Autowired
   private SymlinkInfoController symlinkInfoController;
+  @Autowired
+  private ComponentInfoController componentInfoController;
 
   @FXML
   private Node pluginInfoView;
@@ -42,6 +45,8 @@ public class NodeInfoController extends BaseController {
   private Node directoryInfoView;
   @FXML
   private Node symlinkInfoView;
+  @FXML
+  private Node componentInfoView;
 
   /**
    * FXML initialize.
@@ -51,6 +56,7 @@ public class NodeInfoController extends BaseController {
     pluginInfoView.setVisible(false);
     directoryInfoView.setVisible(false);
     symlinkInfoView.setVisible(false);
+    componentInfoView.setVisible(false);
   }
 
   public void setNode(Object node) {
@@ -58,6 +64,7 @@ public class NodeInfoController extends BaseController {
     pluginInfoView.setVisible(false);
     directoryInfoView.setVisible(false);
     symlinkInfoView.setVisible(false);
+    componentInfoView.setVisible(false);
 
     if (node instanceof Plugin) {
       pluginInfoController.setPlugin((Plugin) node);
@@ -67,11 +74,13 @@ public class NodeInfoController extends BaseController {
       directoryInfoController.setPluginDirectory((PluginDirectory) node);
       directoryInfoView.setVisible(true);
     }
-    
     if (node instanceof Symlink) {
       symlinkInfoController.setSymlink((Symlink) node);
       symlinkInfoView.setVisible(true);
-      
+    }
+    if (node instanceof PluginComponent) {
+      componentInfoController.setComponent((PluginComponent) node);
+      componentInfoView.setVisible(true);
     }
   }
 
