@@ -19,6 +19,7 @@
 package com.owlplug.host.loaders;
 
 import com.owlplug.host.NativePlugin;
+import java.util.List;
 
 public interface NativePluginLoader {
 
@@ -26,7 +27,7 @@ public interface NativePluginLoader {
 
   public void open();
 
-  public NativePlugin loadPlugin(String path);
+  public List<NativePlugin> loadPlugin(String path);
 
   public void close();
 

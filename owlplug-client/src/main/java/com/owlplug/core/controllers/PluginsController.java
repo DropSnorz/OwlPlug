@@ -31,11 +31,12 @@ import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginComponent;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.PluginService;
-import com.owlplug.core.ui.PluginTreeCell;
 import com.owlplug.core.ui.FilterableTreeItem;
+import com.owlplug.core.ui.PluginTreeCell;
 import com.owlplug.core.utils.FileUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,8 +191,16 @@ public class PluginsController extends BaseController {
 
     for (Plugin plugin : pluginList) {
 
-      TreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
+      FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
       treePluginNode.getInternalChildren().add(item);
+
+      // Display subcomponents in the plugin tree
+      if (plugin.getComponents().size() > 1) {
+        for (PluginComponent component : plugin.getComponents()) {
+          FilterableTreeItem<Object> compItem = new FilterableTreeItem<>(component);
+          item.getInternalChildren().add(compItem);
+        }
+      }
     }
 
     treePluginNode.setExpanded(true);
@@ -206,27 +215,21 @@ public class PluginsController extends BaseController {
         && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
-      for(String extraDirectory : prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY)) {
-        userPluginDirectories.add(extraDirectory);
-      }
+      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
     }
 
     if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
-      for(String extraDirectory : prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY)) {
-        userPluginDirectories.add(extraDirectory);
-      }
+      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
     }
     
     if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)
         && !prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
-      for(String extraDirectory : prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY)) {
-        userPluginDirectories.add(extraDirectory);
-      }
+      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
     }
 
     for (String directory : userPluginDirectories) {
@@ -343,6 +346,15 @@ public class PluginsController extends BaseController {
         Plugin plugin = (Plugin) child.getNodeValue();
         FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
         node.getInternalChildren().add(plugItem);
+
+        // Display subcomponents in the directory tree
+        if (plugin.getComponents().size() > 1) {
+          for (PluginComponent component : plugin.getComponents()) {
+            FilterableTreeItem<Object> compItem = new FilterableTreeItem<>(component);
+            plugItem.getInternalChildren().add(compItem);
+          }
+        }
+
         // If not we are exploring a directory
       } else {
         IDirectory directory;

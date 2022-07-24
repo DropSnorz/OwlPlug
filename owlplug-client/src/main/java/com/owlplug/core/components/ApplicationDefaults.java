@@ -52,6 +52,7 @@ public class ApplicationDefaults {
   public final Image vst2Image = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
   public final Image vst3Image = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
   public final Image auImage = new Image(getClass().getResourceAsStream("/icons/au-purple-16.png"));
+  public final Image pluginComponentImage = new Image(getClass().getResourceAsStream("/icons/cube-white-16.png"));
   public final Image taskPendingImage = new Image(getClass().getResourceAsStream("/icons/loading-grey-16.png"));
   public final Image taskSuccessImage = new Image(getClass().getResourceAsStream("/icons/check-green-16.png"));
   public final Image taskFailImage = new Image(getClass().getResourceAsStream("/icons/cross-red-16.png"));

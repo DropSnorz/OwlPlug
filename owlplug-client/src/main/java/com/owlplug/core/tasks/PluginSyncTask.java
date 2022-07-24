@@ -22,6 +22,7 @@ import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginComponent;
 import com.owlplug.core.model.PluginFootprint;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginType;
@@ -34,8 +35,8 @@ import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFile;
 import com.owlplug.host.NativePlugin;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,7 +128,7 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindVst2()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst2Directory, PluginFormat.VST2));
           collectedSymlinks.addAll(symlinkCollector.collect(vst2Directory));
-          for(String path : parameters.getVst2ExtraDirectories()) {
+          for (String path : parameters.getVst2ExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.VST2));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
@@ -135,7 +136,7 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
           collectedSymlinks.addAll(symlinkCollector.collect(vst3Directory));
-          for(String path : parameters.getVst3ExtraDirectories()) {
+          for (String path : parameters.getVst3ExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.VST3));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
@@ -143,7 +144,7 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindAu()) {
           collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
           collectedSymlinks.addAll(symlinkCollector.collect(auDirectory));
-          for(String path : parameters.getAuExtraDirectories()) {
+          for (String path : parameters.getAuExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.AU));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
@@ -169,22 +170,26 @@ public class PluginSyncTask extends AbstractTask {
 
         if (nativeHostService.isNativeHostEnabled() && nativeHostService.getCurrentPluginLoader().isAvailable()
             && pluginFootprint.isNativeDiscoveryEnabled() && !plugin.isDisabled()) {
+
           log.debug("Load plugin using native discovery: " + plugin.getPath());
           this.updateMessage("Exploring plugin " + plugin.getName());
-          NativePlugin nativePlugin = nativeHostService.loadPlugin(plugin.getPath());
-          if (nativePlugin != null) {
+          List<NativePlugin> nativePlugins = nativeHostService.loadPlugin(plugin.getPath());
+
+          if (nativePlugins != null && !nativePlugins.isEmpty()) {
+            log.debug("Found {} components (nativePlugin) for plugin {}", nativePlugins.size(), plugin.getName());
+
             plugin.setNativeCompatible(true);
-            plugin.setDescriptiveName(nativePlugin.getDescriptiveName());
-            plugin.setVersion(nativePlugin.getVersion());
-            plugin.setCategory(nativePlugin.getCategory());
-            plugin.setManufacturerName(nativePlugin.getManufacturerName());
-            plugin.setIdentifier(nativePlugin.getFileOrIdentifier());
-            plugin.setUid(String.valueOf(nativePlugin.getUid()));
-            if(nativePlugin.isInstrument()) {
-              plugin.setType(PluginType.INSTRUMENT);
-            } else {
-              plugin.setType(PluginType.EFFECT);
+
+            for (NativePlugin nativePlugin : nativePlugins) {
+              PluginComponent component = createComponentFromNative(nativePlugin);
+              component.setPlugin(plugin);
+              plugin.getComponents().add(component);
+              log.debug("Created component {} for plugin {}", component.getName(), plugin.getName());
             }
+
+            // Hardcode plugin properties from the first component (nativePlugin) retrieved.
+            mapPluginPropertiesFromNative(plugin, nativePlugins.get(0));
+
           }
         }
         
@@ -194,7 +199,7 @@ public class PluginSyncTask extends AbstractTask {
         this.commitProgress(80.0 / collectedPluginFiles.size());
       }
 
-      
+
       this.updateProgress(1, 1);
       this.updateMessage("Plugins synchronized");
       log.info("Plugin Sync task complete");
@@ -206,6 +211,41 @@ public class PluginSyncTask extends AbstractTask {
       this.updateMessage("Plugins synchronization failed. Check your plugin directory.");
       throw new TaskException("Plugins synchronization failed");
 
+    }
+
+  }
+
+  private PluginComponent createComponentFromNative(NativePlugin nativePlugin) {
+    PluginComponent pluginComponent = new PluginComponent();
+    pluginComponent.setName(nativePlugin.getName());
+    pluginComponent.setDescriptiveName(nativePlugin.getDescriptiveName());
+    pluginComponent.setVersion(nativePlugin.getVersion());
+    pluginComponent.setCategory(nativePlugin.getCategory());
+    pluginComponent.setManufacturerName(nativePlugin.getManufacturerName());
+    pluginComponent.setIdentifier(nativePlugin.getFileOrIdentifier());
+    pluginComponent.setUid(String.valueOf(nativePlugin.getUid()));
+
+    if (nativePlugin.isInstrument()) {
+      pluginComponent.setType(PluginType.INSTRUMENT);
+    } else {
+      pluginComponent.setType(PluginType.EFFECT);
+    }
+
+    return pluginComponent;
+  }
+
+  private void mapPluginPropertiesFromNative(Plugin plugin, NativePlugin nativePlugin) {
+    plugin.setDescriptiveName(nativePlugin.getDescriptiveName());
+    plugin.setVersion(nativePlugin.getVersion());
+    plugin.setCategory(nativePlugin.getCategory());
+    plugin.setManufacturerName(nativePlugin.getManufacturerName());
+    plugin.setIdentifier(nativePlugin.getFileOrIdentifier());
+    plugin.setUid(String.valueOf(nativePlugin.getUid()));
+
+    if (nativePlugin.isInstrument()) {
+      plugin.setType(PluginType.INSTRUMENT);
+    } else {
+      plugin.setType(PluginType.EFFECT);
     }
 
   }
