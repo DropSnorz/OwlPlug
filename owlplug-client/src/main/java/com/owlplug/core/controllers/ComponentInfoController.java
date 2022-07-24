@@ -18,15 +18,11 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginComponent;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.PluginStateView;
-import com.owlplug.core.utils.PlatformUtils;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 import javafx.fxml.FXML;
@@ -47,13 +43,9 @@ import org.springframework.stereotype.Controller;
 public class ComponentInfoController extends BaseController {
 
   @Autowired
-  private PluginsController pluginsController;
-  @Autowired
   private PluginService pluginService;
   @Autowired
   private ImageCache imageCache;
-  @Autowired
-  private CoreTaskFactory coreTaskFactory;
 
   @FXML
   private Pane pluginScreenshotPane;
@@ -76,9 +68,7 @@ public class ComponentInfoController extends BaseController {
   @FXML
   private PluginStateView pluginStateView;
   @FXML
-  private Label pluginPathLabel;
-  @FXML
-  private JFXButton openDirectoryButton;
+  private Label pluginReferenceLabel;
   private PluginComponent currentComponent = null;
   private ArrayList<String> knownPluginImages = new ArrayList<>();
 
@@ -87,15 +77,7 @@ public class ComponentInfoController extends BaseController {
    */
   @FXML
   public void initialize() {
-
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
-
-    openDirectoryButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
-    openDirectoryButton.setText("");
-    openDirectoryButton.setOnAction(e -> {
-      File pluginFile = new File(pluginPathLabel.getText());
-      PlatformUtils.openDirectoryExplorer(pluginFile.getParentFile());
-    });
 
   }
 
@@ -110,7 +92,7 @@ public class ComponentInfoController extends BaseController {
     pluginIdentifierLabel.setText(Optional.ofNullable(component.getUid()).orElse("Unknown"));
     pluginCategoryLabel.setText(Optional.ofNullable(component.getCategory()).orElse("Unknown"));
     pluginStateView.setPluginState(pluginService.getPluginState(component.getPlugin()));
-    pluginPathLabel.setText(component.getPath());
+    pluginReferenceLabel.setText(component.getIdentifier());
 
     setPluginImage();
   }

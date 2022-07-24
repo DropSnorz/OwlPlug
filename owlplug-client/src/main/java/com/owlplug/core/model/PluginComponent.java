@@ -40,9 +40,9 @@ public class PluginComponent {
   protected String category;
   protected String manufacturerName;
   protected String identifier;
-  protected String path;
   protected String bundleId;
   protected String version;
+  protected PluginType type;
 
   @ManyToOne
   private Plugin plugin;
@@ -103,14 +103,6 @@ public class PluginComponent {
     this.identifier = identifier;
   }
 
-  public String getPath() {
-    return path;
-  }
-
-  public void setPath(String path) {
-    this.path = path;
-  }
-
   public String getBundleId() {
     return bundleId;
   }
@@ -127,6 +119,14 @@ public class PluginComponent {
     this.version = version;
   }
 
+  public PluginType getType() {
+    return type;
+  }
+
+  public void setType(PluginType type) {
+    this.type = type;
+  }
+
   public Plugin getPlugin() {
     return plugin;
   }
@@ -134,4 +134,5 @@ public class PluginComponent {
   public void setPlugin(Plugin plugin) {
     this.plugin = plugin;
   }
+
 }

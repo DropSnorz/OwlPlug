@@ -110,12 +110,10 @@
                      <children>
                         <TextFlow GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
                            <children>
-                              <Label text="Path: " />
-                              <Label fx:id="pluginPathLabel" styleClass="label-emphase" text="UNKNOWN" />
+                              <Label text="Ref: " />
+                              <Label fx:id="pluginReferenceLabel" styleClass="label-emphase" text="UNKNOWN" />
                            </children>
                         </TextFlow>
-                        <JFXButton fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" styleClass="label-emphase" text="Open folder">
-                        </JFXButton>
                      </children>
                   </HBox>
                </children>

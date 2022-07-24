@@ -181,7 +181,7 @@ public class PluginSyncTask extends AbstractTask {
             plugin.setNativeCompatible(true);
 
             for (NativePlugin nativePlugin : nativePlugins) {
-              PluginComponent component = nativePluginToPluginComponent(nativePlugin);
+              PluginComponent component = createComponentFromNative(nativePlugin);
               component.setPlugin(plugin);
               plugin.getComponents().add(component);
               log.debug("Created component {} for plugin {}", component.getName(), plugin.getName());
@@ -215,7 +215,7 @@ public class PluginSyncTask extends AbstractTask {
 
   }
 
-  private PluginComponent nativePluginToPluginComponent(NativePlugin nativePlugin) {
+  private PluginComponent createComponentFromNative(NativePlugin nativePlugin) {
     PluginComponent pluginComponent = new PluginComponent();
     pluginComponent.setName(nativePlugin.getName());
     pluginComponent.setDescriptiveName(nativePlugin.getDescriptiveName());
@@ -225,7 +225,11 @@ public class PluginSyncTask extends AbstractTask {
     pluginComponent.setIdentifier(nativePlugin.getFileOrIdentifier());
     pluginComponent.setUid(String.valueOf(nativePlugin.getUid()));
 
-    // TODO add type : instrument or effect
+    if (nativePlugin.isInstrument()) {
+      pluginComponent.setType(PluginType.INSTRUMENT);
+    } else {
+      pluginComponent.setType(PluginType.EFFECT);
+    }
 
     return pluginComponent;
   }
