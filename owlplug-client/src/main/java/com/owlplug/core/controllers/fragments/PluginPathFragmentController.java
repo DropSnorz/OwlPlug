@@ -88,6 +88,7 @@ public class PluginPathFragmentController {
     headerLabel.setText(name);
     directoryTextField.setPromptText(name + " plugin directory");
 
+    activationToggleButton.setText("Explore " + name + " plugins");
     activationToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       prefs.putBoolean(enableOptionKey, newValue);
       directoryTextField.setDisable(!newValue);
@@ -130,7 +131,13 @@ public class PluginPathFragmentController {
   public void refresh() {
 
     directoryTextField.setText(prefs.get(directoryOptionKey, ""));
-    activationToggleButton.setSelected(prefs.getBoolean(enableOptionKey, false));
+
+    boolean enabled = prefs.getBoolean(enableOptionKey, false);
+    directoryTextField.setDisable(!enabled);
+    directoryButton.setDisable(!enabled);
+    extraDirectoryLink.setDisable(!enabled);
+
+    activationToggleButton.setSelected(enabled);
 
     MessageFormat extraDirectoryMessageFormat = new MessageFormat("+ {0} additional directories");
     extraDirectoryLink.setText(extraDirectoryMessageFormat.format(

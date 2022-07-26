@@ -25,12 +25,14 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
+import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
 import com.owlplug.core.model.platform.OperatingSystem;
 import java.io.File;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,29 +47,20 @@ public class WelcomeDialogController extends AbstractDialogController {
   private CoreTaskFactory taskFactory;
   @Autowired
   private OptionsController optionsController;
+  @Autowired
+  private ListDirectoryDialogController listDirectoryDialogController;
 
   @FXML
-  private JFXToggleButton vst2ToggleButton;
-  @FXML
-  private JFXButton vst2DirectoryButton;
-  @FXML
-  private JFXTextField vst2DirectoryTextField;
-  @FXML
-  private JFXToggleButton vst3ToggleButton;
-  @FXML
-  private JFXButton vst3DirectoryButton;
-  @FXML
-  private JFXTextField vst3DirectoryTextField;
-  @FXML
-  private JFXToggleButton auToggleButton;
-  @FXML
-  private JFXButton auDirectoryButton;
-  @FXML
-  private JFXTextField auDirectoryTextField;
+  private VBox pluginPathContainer;
   @FXML
   private JFXButton okButton;
   @FXML
   private JFXButton cancelButton;
+
+  private PluginPathFragmentController vst2PluginPathFragment;
+  private PluginPathFragmentController vst3PluginPathFragment;
+  private PluginPathFragmentController auPluginPathFragment;
+  private PluginPathFragmentController lv2PluginPathFragment;
 
   WelcomeDialogController() {
     super(700, 300);
@@ -79,78 +72,40 @@ public class WelcomeDialogController extends AbstractDialogController {
    */
   public void initialize() {
 
+    vst2PluginPathFragment = new PluginPathFragmentController("VST2", ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+    vst3PluginPathFragment = new PluginPathFragmentController("VST3", ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST3_DIRECTORY_KEY, ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+    auPluginPathFragment = new PluginPathFragmentController("AU", ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, ApplicationDefaults.AU_DIRECTORY_KEY, ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+    lv2PluginPathFragment = new PluginPathFragmentController("LV2", ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.LV2_DIRECTORY_KEY, ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
 
-    vst2DirectoryButton.setOnAction(e -> {
-      DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = vst2DirectoryButton.getScene().getWindow();
-
-      File selectedDirectory = directoryChooser.showDialog(mainWindow);
-
-      if (selectedDirectory != null) {
-        vst2DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
-      }
-    });
-    
-    vst3DirectoryButton.setOnAction(e -> {
-      DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = vst3DirectoryButton.getScene().getWindow();
-
-      File selectedDirectory = directoryChooser.showDialog(mainWindow);
-
-      if (selectedDirectory != null) {
-        vst3DirectoryTextField.setText(selectedDirectory.getAbsolutePath());
-      }
-    });
-    
-    auDirectoryButton.setOnAction(e -> {
-      DirectoryChooser directoryChooser = new DirectoryChooser();
-      Window mainWindow = auDirectoryButton.getScene().getWindow();
-
-      File selectedDirectory = directoryChooser.showDialog(mainWindow);
-
-      if (selectedDirectory != null) {
-        auDirectoryTextField.setText(selectedDirectory.getAbsolutePath());
-      }
-    });
+    pluginPathContainer.getChildren().add(vst2PluginPathFragment.getNode());
+    pluginPathContainer.getChildren().add(vst3PluginPathFragment.getNode());
+    pluginPathContainer.getChildren().add(auPluginPathFragment.getNode());
+    pluginPathContainer.getChildren().add(lv2PluginPathFragment.getNode());
 
     okButton.setOnAction(e -> {
       this.close();
-      this.getPreferences().putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, vst2ToggleButton.isSelected());
-      this.getPreferences().put(ApplicationDefaults.VST_DIRECTORY_KEY, vst2DirectoryTextField.getText());
-      this.getPreferences().putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, vst3ToggleButton.isSelected());
-      this.getPreferences().put(ApplicationDefaults.VST3_DIRECTORY_KEY, vst3DirectoryTextField.getText());
       optionsController.refreshView();
       taskFactory.createPluginSyncTask().schedule();
-
     });
 
     cancelButton.setOnAction(e -> {
       this.close();
     });
 
-    this.refreshView();
+    refreshView();
 
   }
 
   public void refreshView() {
-
-    vst2ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
-    vst2DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-
-    vst3ToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
-    vst3DirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
-
-    auToggleButton.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
-    auDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
+    vst2PluginPathFragment.refresh();
+    vst3PluginPathFragment.refresh();
+    auPluginPathFragment.refresh();
+    lv2PluginPathFragment.refresh();
 
     // Disable AU options for non MAC users
     if (!this.getApplicationDefaults().getRuntimePlatform()
       .getOperatingSystem().equals(OperatingSystem.MAC)) {
-      //auToggleButton.setSelected(true);
-      auToggleButton.setSelected(false);
-      auDirectoryTextField.setDisable(true);
-      auDirectoryButton.setDisable(true);
-      auToggleButton.setDisable(true);
+      auPluginPathFragment.disable();
     }
 
   }

@@ -15,7 +15,7 @@
         <Label fx:id="headerLabel" styleClass="heading-2" text="VST 3" />
         <FlowPane prefWidth="200.0">
             <children>
-                <JFXToggleButton fx:id="activationToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore VST3 plugins" />
+                <JFXToggleButton fx:id="activationToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore plugins" />
                 <Label text="(" />
                 <Hyperlink fx:id="extraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
                 <Label text=")" />
