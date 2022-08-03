@@ -158,6 +158,8 @@ public class ApplicationDefaults {
         return "C:/Program Files/VSTPlugins";
       } else if (format.equals(PluginFormat.VST3)) {
         return "C:/Program Files/Common Files/VST3";
+      } else if (format.equals(PluginFormat.LV2)) {
+        return "C:/Program Files/Common Files/LV2";
       }
     } else if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)) {
       if (format.equals(PluginFormat.VST2)) {
@@ -166,12 +168,16 @@ public class ApplicationDefaults {
         return "/Library/Audio/Plug-ins/VST3";
       } else if (format.equals(PluginFormat.AU)) {
         return "/Library/Audio/Plug-ins/Components";
+      } else if (format.equals(PluginFormat.LV2)) {
+        return "/Library/Audio/Plug-Ins/LV2";
       }
     } else if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX)) {
       if (format.equals(PluginFormat.VST2)) {
         return "/usr/lib/lxvst";
       } else if (format.equals(PluginFormat.VST3)) {
         return "/usr/lib/vst3";
+      } else if (format.equals(PluginFormat.LV2)) {
+        return "/usr/lib/lv2";
       }
     }
 
