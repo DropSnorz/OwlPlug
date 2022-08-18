@@ -106,7 +106,7 @@ Field Name | Type | Description
 ---|:---:|---
 name | `string` | **REQUIRED**. The name of the bundle. 255 characters max.
 targets | `array` | **REQUIRED**. Array of plugin [Target](#Target). Supported environements by the bundle.
-format | `string` | **REQUIRED**. Plugin format. Must be `vst`, `vst3`, `au`, `various` or `unknown`.
+format | `string` | **REQUIRED**. Plugin format. Must be `vst`, `vst3`, `au`, `lv2`, `various` or `unknown`.
 version | `string`| Bundle/Plugin version. Overload parent *store.product.version* property.
 technicalUid | `string` | Bundle/Plugin unique id. Overload parent *store.product.technicalUid* property.
 downloadUrl | `string` | **REQUIRED**. Bundle download url. 255 characters max. Check [Bundle file structure](#Bundle_file_structure)
