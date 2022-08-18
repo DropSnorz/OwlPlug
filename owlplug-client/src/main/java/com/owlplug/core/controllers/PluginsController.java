@@ -233,7 +233,7 @@ public class PluginsController extends BaseController {
     }
 
     if (prefs.getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false)
-      && !prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "").isBlank()) {
+        && !prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "").isBlank()) {
       String path = prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
       userPluginDirectories.add(FileUtils.convertPath(path));
       userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));

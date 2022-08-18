@@ -60,8 +60,9 @@ public class PluginPathFragmentController {
   private ApplicationPreferences prefs;
   private ListDirectoryDialogController listDirectoryDialogController;
 
-  public PluginPathFragmentController(String name, String enableOptionKey, String directoryOptionKey, String extraDirectoryOptionKey, ApplicationPreferences prefs, ListDirectoryDialogController listDirectoryDialogController) {
-
+  public PluginPathFragmentController(String name, String enableOptionKey, String directoryOptionKey,
+                                      String extraDirectoryOptionKey, ApplicationPreferences prefs,
+                                      ListDirectoryDialogController listDirectoryDialogController) {
     this.name = name;
     this.enableOptionKey = enableOptionKey;
     this.directoryOptionKey = directoryOptionKey;
