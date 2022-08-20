@@ -119,7 +119,9 @@ public class StoreModelAdapter {
     if ("vst3".equals(mapper.getFormat())) {
       productBundle.setFormat(PluginFormat.VST3);
     } else if ("au".equals(mapper.getFormat())) {
-    	productBundle.setFormat(PluginFormat.AU);
+      productBundle.setFormat(PluginFormat.AU);
+    } else if ("lv2".equals(mapper.getFormat())) {
+      productBundle.setFormat(PluginFormat.LV2);
     } else {
       productBundle.setFormat(PluginFormat.VST2);
     }

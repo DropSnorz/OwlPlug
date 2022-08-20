@@ -52,6 +52,7 @@ public class ApplicationDefaults {
   public final Image vst2Image = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
   public final Image vst3Image = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
   public final Image auImage = new Image(getClass().getResourceAsStream("/icons/au-purple-16.png"));
+  public final Image lv2Image = new Image(getClass().getResourceAsStream("/icons/lv2-orange-16.png"));
   public final Image pluginComponentImage = new Image(getClass().getResourceAsStream("/icons/cube-white-16.png"));
   public final Image taskPendingImage = new Image(getClass().getResourceAsStream("/icons/loading-grey-16.png"));
   public final Image taskSuccessImage = new Image(getClass().getResourceAsStream("/icons/check-green-16.png"));
@@ -80,6 +81,9 @@ public class ApplicationDefaults {
   public static final String AU_DIRECTORY_KEY = "AU_DIRECTORY_KEY";
   public static final String AU_DISCOVERY_ENABLED_KEY = "AU_DISCOVERY_ENABLED_KEY";
   public static final String AU_EXTRA_DIRECTORY_KEY = "AU_EXTRA_DIRECTORY_KEY";
+  public static final String LV2_DIRECTORY_KEY = "LV2_DIRECTORY_KEY";
+  public static final String LV2_DISCOVERY_ENABLED_KEY = "LV2_DISCOVERY_ENABLED_KEY";
+  public static final String LV2_EXTRA_DIRECTORY_KEY = "LV2_EXTRA_DIRECTORY_KEY";
   public static final String NATIVE_HOST_ENABLED_KEY = "NATIVE_HOST_ENABLED_KEY";
   public static final String PREFERRED_NATIVE_LOADER = "PREFERRED_NATIVE_LOADER";
   public static final String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";
@@ -122,6 +126,8 @@ public class ApplicationDefaults {
       return vst3Image;
     case AU:
       return auImage;
+    case LV2:
+      return lv2Image;
     default:
       return vst2Image;
     }
@@ -152,6 +158,8 @@ public class ApplicationDefaults {
         return "C:/Program Files/VSTPlugins";
       } else if (format.equals(PluginFormat.VST3)) {
         return "C:/Program Files/Common Files/VST3";
+      } else if (format.equals(PluginFormat.LV2)) {
+        return "C:/Program Files/Common Files/LV2";
       }
     } else if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)) {
       if (format.equals(PluginFormat.VST2)) {
@@ -160,12 +168,16 @@ public class ApplicationDefaults {
         return "/Library/Audio/Plug-ins/VST3";
       } else if (format.equals(PluginFormat.AU)) {
         return "/Library/Audio/Plug-ins/Components";
+      } else if (format.equals(PluginFormat.LV2)) {
+        return "/Library/Audio/Plug-Ins/LV2";
       }
     } else if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX)) {
       if (format.equals(PluginFormat.VST2)) {
         return "/usr/lib/lxvst";
       } else if (format.equals(PluginFormat.VST3)) {
         return "/usr/lib/vst3";
+      } else if (format.equals(PluginFormat.LV2)) {
+        return "/usr/lib/lv2";
       }
     }
 

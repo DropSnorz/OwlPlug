@@ -188,6 +188,13 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<!-- Used to read LV2 RDF file -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>4.5.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.ehcache</groupId>
 			<artifactId>ehcache</artifactId>

@@ -46,7 +46,7 @@ namespace ProjectInfo
 {
     const char* const  projectName    = "owlplug-host";
     const char* const  companyName    = "OwlPlug";
-    const char* const  versionString  = "1.2.0";
-    const int          versionNumber  = 0x10200;
+    const char* const  versionString  = "1.3.0";
+    const int          versionNumber  = 0x10300;
 }
 #endif

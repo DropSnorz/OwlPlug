@@ -18,6 +18,7 @@
 
 package com.owlplug.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,6 +46,7 @@ public class PluginComponent {
   protected PluginType type;
 
   @ManyToOne
+  @JsonIgnore
   private Plugin plugin;
 
   public Long getId() {

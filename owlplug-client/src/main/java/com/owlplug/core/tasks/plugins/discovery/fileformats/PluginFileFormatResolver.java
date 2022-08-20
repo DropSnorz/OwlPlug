@@ -68,8 +68,8 @@ public class PluginFileFormatResolver {
      *  Linux SO VST2 plugin
      */
     if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX)
-      && pluginFormat.equals(PluginFormat.VST2)
-      && SoVstFile.formatCheck(file)) {
+        && pluginFormat.equals(PluginFormat.VST2)
+        && SoVstFile.formatCheck(file)) {
       return new SoVstFile(file);
     }
     
@@ -101,8 +101,18 @@ public class PluginFileFormatResolver {
         && Vst3BundleFile.formatCheck(file)) {
       return new Vst3BundleFile(file);
     }
-    
-    
+
+    /*
+     * Window, OSX and Linux VST3 plugin bundle
+     */
+    if ((runtimePlatform.getOperatingSystem().equals(OperatingSystem.MAC)
+        || runtimePlatform.getOperatingSystem().equals(OperatingSystem.WIN)
+        || runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX))
+        && pluginFormat.equals(PluginFormat.LV2)
+        && Lv2BundleFile.formatCheck(file)) {
+      return new Lv2BundleFile(file);
+    }
+
     return null;
   }
 
