@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -30,15 +30,11 @@ import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.SimpleEventListener;
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CoreTaskFactory extends BaseTaskFactory {
-
-  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
   private ApplicationDefaults applicationDefaults;
@@ -59,7 +55,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
   /**
    * Creates a {@link PluginSyncTask} and binds listeners to the success callback.
    * 
-   * @return
+   * @return taskExecutionContext
    */
   public TaskExecutionContext createPluginSyncTask() {
 
@@ -69,8 +65,8 @@ public class CoreTaskFactory extends BaseTaskFactory {
   /**
    * Creates a {@link PluginSyncTask} and binds listeners to the success callback.
    * The task synchronizes plugins in the given directory scope.
-   * @param directoryScope
-   * @return
+   * @param directoryScope directory scope path
+   * @return taskExecutionContext
    */
   public TaskExecutionContext createPluginSyncTask(String directoryScope) {
 
@@ -89,8 +85,8 @@ public class CoreTaskFactory extends BaseTaskFactory {
     parameters.setAuExtraDirectories(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
     parameters.setLv2ExtraDirectories(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
 
-    if(directoryScope != null) {
-        parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
+    if (directoryScope != null) {
+      parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
     }
     
     PluginSyncTask task = new PluginSyncTask(parameters, 

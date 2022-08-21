@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -94,13 +94,33 @@ public class OptionsController extends BaseController {
   @FXML
   public void initialize() {
 
-    vst2PluginPathFragment = new PluginPathFragmentController("VST2", ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST_DIRECTORY_KEY, ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+    vst2PluginPathFragment = new PluginPathFragmentController("VST2",
+      ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY,
+      ApplicationDefaults.VST_DIRECTORY_KEY,
+      ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY,
+      this.getPreferences(),
+      this.listDirectoryDialogController);
 
-    vst3PluginPathFragment = new PluginPathFragmentController("VST3", ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST3_DIRECTORY_KEY, ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+    vst3PluginPathFragment = new PluginPathFragmentController("VST3",
+      ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY,
+      ApplicationDefaults.VST3_DIRECTORY_KEY,
+      ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY,
+      this.getPreferences(),
+      this.listDirectoryDialogController);
 
-    auPluginPathFragment = new PluginPathFragmentController("AU", ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, ApplicationDefaults.AU_DIRECTORY_KEY, ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+    auPluginPathFragment = new PluginPathFragmentController("AU",
+      ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY,
+      ApplicationDefaults.AU_DIRECTORY_KEY,
+      ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY,
+      this.getPreferences(),
+      this.listDirectoryDialogController);
 
-    lv2PluginPathFragment = new PluginPathFragmentController("LV2", ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.LV2_DIRECTORY_KEY, ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY, this.getPreferences(), this.listDirectoryDialogController);
+    lv2PluginPathFragment = new PluginPathFragmentController("LV2",
+      ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY,
+      ApplicationDefaults.LV2_DIRECTORY_KEY,
+      ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY,
+      this.getPreferences(),
+      this.listDirectoryDialogController);
 
     pluginPathContainer.getChildren().add(vst2PluginPathFragment.getNode());
     pluginPathContainer.getChildren().add(vst3PluginPathFragment.getNode());
@@ -115,11 +135,11 @@ public class OptionsController extends BaseController {
     });
 
     ObservableList<NativePluginLoader> pluginLoaders = FXCollections.observableArrayList(
-      nativeHostService.getAvailablePluginLoaders());
+        nativeHostService.getAvailablePluginLoaders());
     pluginNativeComboBox.setItems(pluginLoaders);
 
     pluginNativeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      if(newValue != null) {
+      if (newValue != null) {
         this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER,newValue.getId());
         nativeHostService.setCurrentPluginLoader(newValue);
       }
@@ -138,10 +158,10 @@ public class OptionsController extends BaseController {
 
     storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
-      double width = newValue ? 150 : 0;
       storeDirectoryTextField.setVisible(newValue);
       storeDirectorySeparator.setVisible(newValue);
       storeDirectoryTextField.setDisable(!newValue);
+      double width = newValue ? 150 : 0;
       storeDirectoryTextField.setMaxWidth(width);
     });
 

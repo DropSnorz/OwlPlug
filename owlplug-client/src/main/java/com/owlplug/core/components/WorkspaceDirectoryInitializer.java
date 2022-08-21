@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -20,19 +20,14 @@ package com.owlplug.core.components;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.core.FileAppender;
 import com.vdurmont.semver4j.Semver;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import javax.annotation.PostConstruct;
-
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

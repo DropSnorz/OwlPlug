@@ -4,7 +4,7 @@
  * This file is part of OwlPlug.
  *
  * OwlPlug is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 3 
+ * it under the terms of the GNU General Public License version 3
  * as published by the Free Software Foundation.
  *
  * OwlPlug is distributed in the hope that it will be useful,
@@ -49,15 +49,11 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PluginsController extends BaseController {
-
-  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
   private PluginService pluginService;
@@ -171,7 +167,7 @@ public class PluginsController extends BaseController {
 
     taskFactory.addSyncPluginsListener(() -> clearAndFillPluginTree());
 
-    exportButton.setOnAction( e -> {
+    exportButton.setOnAction(e -> {
       exportDialogController.show();
     });
 
