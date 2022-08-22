@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: owlplug-host-win
-        path: owlplug-host/src/main/juce/Builds/VisualStudio2017/x64/Release/Dynamic Library/owlplug-host-${{ steps.get-version.outputs.version }}.dll
+        path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ steps.get-version.outputs.version }}.dll
   build-host-osx:
     runs-on: macos-10.15
     steps:
