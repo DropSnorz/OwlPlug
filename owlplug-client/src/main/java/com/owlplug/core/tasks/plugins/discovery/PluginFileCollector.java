@@ -73,7 +73,7 @@ public class PluginFileCollector {
           }
         }
 
-        if (!nestedPluginDetected) {
+        if (!nestedPluginDetected && !file.equals(dir)) {
           PluginFile pluginFile = pluginFileResolver.resolve(file);
           if (pluginFile != null) {
             collectedFiles.add(pluginFile);
