@@ -25,6 +25,7 @@ import com.owlplug.core.tasks.plugins.discovery.fileformats.PluginFileFormatReso
 import com.owlplug.core.utils.FileUtils;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,7 @@ public class PluginFileCollector {
     if (dir.isDirectory()) {
       List<File> baseFiles = (List<File>) FileUtils.listUniqueFilesAndDirs(dir);
       PluginFileFormatResolver pluginFileResolver = new PluginFileFormatResolver(runtimePlatform, pluginFormat);
+      baseFiles.sort(Comparator.comparing(File::getAbsolutePath));
 
       for (File file : baseFiles) {
 
