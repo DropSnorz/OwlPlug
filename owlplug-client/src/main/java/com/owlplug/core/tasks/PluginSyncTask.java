@@ -107,18 +107,19 @@ public class PluginSyncTask extends AbstractTask {
 
       if (parameters.getDirectoryScope() != null) {
         // Plugins are retrieved from a scoped directory
-        if (parameters.isFindVst2()) {
-          collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.VST2));
+        if (parameters.isFindLv2()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.LV2));
         }
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.VST3));
         }
+        if (parameters.isFindVst2()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.VST2));
+        }
         if (parameters.isFindAu()) {
           collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.AU));
         }
-        if (parameters.isFindLv2()) {
-          collectedPluginFiles.addAll(pluginCollector.collect(parameters.getDirectoryScope(), PluginFormat.LV2));
-        }
+
         collectedSymlinks.addAll(symlinkCollector.collect(parameters.getDirectoryScope()));
 
       } else {
@@ -128,14 +129,15 @@ public class PluginSyncTask extends AbstractTask {
         String auDirectory = parameters.getAuDirectory();
         String lv2Directory = parameters.getLv2Directory();
 
-        if (parameters.isFindVst2()) {
-          collectedPluginFiles.addAll(pluginCollector.collect(vst2Directory, PluginFormat.VST2));
-          collectedSymlinks.addAll(symlinkCollector.collect(vst2Directory));
-          for (String path : parameters.getVst2ExtraDirectories()) {
-            collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.VST2));
+        if (parameters.isFindLv2()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(lv2Directory, PluginFormat.LV2));
+          collectedSymlinks.addAll(symlinkCollector.collect(lv2Directory));
+          for (String path : parameters.getAuExtraDirectories()) {
+            collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.LV2));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
         }
+
         if (parameters.isFindVst3()) {
           collectedPluginFiles.addAll(pluginCollector.collect(vst3Directory, PluginFormat.VST3));
           collectedSymlinks.addAll(symlinkCollector.collect(vst3Directory));
@@ -144,19 +146,21 @@ public class PluginSyncTask extends AbstractTask {
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
         }
+
+        if (parameters.isFindVst2()) {
+          collectedPluginFiles.addAll(pluginCollector.collect(vst2Directory, PluginFormat.VST2));
+          collectedSymlinks.addAll(symlinkCollector.collect(vst2Directory));
+          for (String path : parameters.getVst2ExtraDirectories()) {
+            collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.VST2));
+            collectedSymlinks.addAll(symlinkCollector.collect(path));
+          }
+        }
+
         if (parameters.isFindAu()) {
           collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
           collectedSymlinks.addAll(symlinkCollector.collect(auDirectory));
           for (String path : parameters.getAuExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.AU));
-            collectedSymlinks.addAll(symlinkCollector.collect(path));
-          }
-        }
-        if (parameters.isFindLv2()) {
-          collectedPluginFiles.addAll(pluginCollector.collect(lv2Directory, PluginFormat.LV2));
-          collectedSymlinks.addAll(symlinkCollector.collect(lv2Directory));
-          for (String path : parameters.getAuExtraDirectories()) {
-            collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.LV2));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
         }

@@ -36,6 +36,8 @@ public class PluginFileCollector {
 
   private RuntimePlatform runtimePlatform;
 
+  private List<PluginFile> collectedFiles = new ArrayList<>();
+
   public PluginFileCollector(RuntimePlatform runtimePlatform) {
     super();
     this.runtimePlatform = runtimePlatform;
@@ -50,8 +52,6 @@ public class PluginFileCollector {
    */
   public List<PluginFile> collect(String directoryPath, PluginFormat pluginFormat) {
 
-    ArrayList<PluginFile> collectedFiles = new ArrayList<>();
-
     File dir = new File(directoryPath);
 
     if (dir.isDirectory()) {
@@ -60,7 +60,6 @@ public class PluginFileCollector {
       baseFiles.sort(Comparator.comparing(File::getAbsolutePath));
 
       for (File file : baseFiles) {
-
         /*
          *  Lookup for nested plugins in bundles and prevent them from being referenced multiple times.
          *  For example a VST3 bundle file can contain a .vst3 file for windows, but we
