@@ -132,7 +132,7 @@ public class PluginSyncTask extends AbstractTask {
         if (parameters.isFindLv2()) {
           collectedPluginFiles.addAll(pluginCollector.collect(lv2Directory, PluginFormat.LV2));
           collectedSymlinks.addAll(symlinkCollector.collect(lv2Directory));
-          for (String path : parameters.getAuExtraDirectories()) {
+          for (String path : parameters.getLv2ExtraDirectories()) {
             collectedPluginFiles.addAll(pluginCollector.collect(path, PluginFormat.LV2));
             collectedSymlinks.addAll(symlinkCollector.collect(path));
           }
