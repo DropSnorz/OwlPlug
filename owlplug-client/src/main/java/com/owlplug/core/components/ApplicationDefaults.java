@@ -173,7 +173,7 @@ public class ApplicationDefaults {
       }
     } else if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX)) {
       if (format.equals(PluginFormat.VST2)) {
-        return "/usr/lib/lxvst";
+        return "/usr/lib/vst";
       } else if (format.equals(PluginFormat.VST3)) {
         return "/usr/lib/vst3";
       } else if (format.equals(PluginFormat.LV2)) {
