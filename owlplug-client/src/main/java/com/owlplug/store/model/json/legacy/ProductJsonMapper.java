@@ -16,8 +16,9 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.store.model.json;
+package com.owlplug.store.model.json.legacy;
 
+import com.owlplug.store.model.json.BundleJsonMapper;
 import java.util.List;
 
 public class ProductJsonMapper {

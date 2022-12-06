@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.store.model.json;
+package com.owlplug.store.model.json.legacy;
 
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginStage;
@@ -26,6 +26,7 @@ import com.owlplug.store.model.ProductBundle;
 import com.owlplug.store.model.ProductTag;
 import com.owlplug.store.model.Store;
 import com.owlplug.store.model.StoreProduct;
+import com.owlplug.store.model.json.BundleJsonMapper;
 import java.util.HashSet;
 
 public class StoreModelAdapter {

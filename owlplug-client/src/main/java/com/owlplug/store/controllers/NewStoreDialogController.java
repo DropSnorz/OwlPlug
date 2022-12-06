@@ -100,7 +100,7 @@ public class NewStoreDialogController extends AbstractDialogController implement
       Task<Store> task = new Task<Store>() {
         @Override
         protected Store call() throws Exception {
-          return pluginStoreService.getPluginStoreFromUrl(storeUrl);
+          return pluginStoreService.getStoreFromRemoteUrl(storeUrl);
         }
       };
 

@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.store.model.json;
+package com.owlplug.store.model.json.legacy;
 
 import java.util.List;
 

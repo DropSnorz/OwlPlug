@@ -35,6 +35,8 @@ public class Store {
   private String name;
   private String url;
   private boolean enabled = true;
+  private StoreType type;
+
   @OneToMany(mappedBy = "store", orphanRemoval = true)
   private List<StoreProduct> products;
 
@@ -78,4 +80,11 @@ public class Store {
     return products;
   }
 
+  public StoreType getType() {
+    return type;
+  }
+
+  public void setType(StoreType type) {
+    this.type = type;
+  }
 }

@@ -29,11 +29,17 @@ import com.owlplug.store.dao.StoreDAO;
 import com.owlplug.store.dao.StoreProductDAO;
 import com.owlplug.store.model.Store;
 import com.owlplug.store.model.StoreProduct;
-import com.owlplug.store.model.json.ProductJsonMapper;
-import com.owlplug.store.model.json.StoreJsonMapper;
-import com.owlplug.store.model.json.StoreModelAdapter;
+import com.owlplug.store.model.StoreType;
+import com.owlplug.store.model.json.PackageJsonMapper;
+import com.owlplug.store.model.json.PackageVersionJsonMapper;
+import com.owlplug.store.model.json.RegistryJsonMapper;
+import com.owlplug.store.model.json.RegistryModelAdapter;
+import com.owlplug.store.model.json.legacy.ProductJsonMapper;
+import com.owlplug.store.model.json.legacy.StoreJsonMapper;
+import com.owlplug.store.model.json.legacy.StoreModelAdapter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -85,7 +91,12 @@ public class StoreSyncTask extends AbstractTask {
         response = httpclient.execute(httpGet);
         HttpEntity entity = response.getEntity();
 
-        processStore(entity, store);
+        if(store.getType() == null || store.getType().equals(StoreType.OWLPLUG_STORE)) {
+          processStore(entity, store);
+        } else if(store.getType().equals(StoreType.OWLPLUG_REGISTRY)) {
+          processRegistry(entity, store);
+        }
+
         EntityUtils.consume(entity);
 
       } catch (IOException e) {
@@ -140,6 +151,38 @@ public class StoreSyncTask extends AbstractTask {
         storeProductDAO.saveAll(storeProductPartition);
       }
       
+    } catch (Exception e) {
+      throw new StoreParsingException(e);
+    }
+  }
+
+  private void processRegistry(HttpEntity entity, Store store) throws StoreParsingException {
+    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    try {
+      RegistryJsonMapper registryMapper = objectMapper.readValue(entity.getContent(), RegistryJsonMapper.class);
+      List<PackageJsonMapper> packages = new ArrayList(registryMapper.getPackages().values());
+      List<List<PackageJsonMapper>> chunks = Lists.partition(packages, 100);
+
+      for (List<PackageJsonMapper> partition : chunks) {
+        List<StoreProduct> storeProductPartition = new ArrayList<>();
+        for (PackageJsonMapper packageMapper : partition) {
+
+          if (packageMapper.getVersions().containsKey(packageMapper.getLatestVersion())) {
+
+            PackageVersionJsonMapper latestPackage = packageMapper.getVersions()
+              .get(packageMapper.getLatestVersion());
+
+            StoreProduct product = RegistryModelAdapter.jsonMapperToEntity(latestPackage);
+            product.setStore(store);
+            storeProductPartition.add(product);
+
+          }
+
+        }
+        storeProductDAO.saveAll(storeProductPartition);
+      }
+
     } catch (Exception e) {
       throw new StoreParsingException(e);
     }
