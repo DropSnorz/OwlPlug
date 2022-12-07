@@ -123,7 +123,7 @@ TextArea .content {
 .chip-blue {
 	-fx-background-color: #657899
 }
-.fake-chip{
+.chip-label{
     -fx-font-family: "Roboto Medium";
     -fx-font-size: 12.0;
     -fx-background-color: #E0E0E0;
@@ -132,8 +132,9 @@ TextArea .content {
     -fx-pref-height: 24px;
     -fx-alignment: center-left;
     -fx-spacing: 8;
+    -fx-text-fill: black;
 }
-.fake-chip Label {
+.chip-label Label {
     -fx-text-fill: black;
 }
 
@@ -357,6 +358,9 @@ ProgressIndicator{
   -fx-text-fill: text-color;
 }
 
+.tooltip {
+    -fx-text-fill: text-color;
+}
 
 /****************************************************************
   App section theme

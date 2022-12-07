@@ -77,6 +77,7 @@ public class StoreService extends BaseService {
     }
     store.setApiUrl("https://central.owlplug.com/store.json");
     store.setUrl("https://central.owlplug.com");
+    store.setType(StoreType.OWLPLUG_STORE);
 
     storeDAO.save(store);
   }

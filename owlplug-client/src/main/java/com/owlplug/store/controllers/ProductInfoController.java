@@ -205,7 +205,7 @@ public class ProductInfoController {
       label.setWrapText(true);
       label.setMaxWidth(100);
       getChildren().add(label);
-      this.getStyleClass().add("fake-chip");
+      this.getStyleClass().add("chip-label");
     }
 
   }

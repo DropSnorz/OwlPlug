@@ -27,12 +27,11 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -83,15 +82,6 @@ public class StoreMenuController extends BaseController {
       this.getStyleClass().add("menu-item");
       this.setAlignment(Pos.CENTER_LEFT);
 
-      // Icon Area
-      String iconChar = "?";
-      if (pluginStore.getName().length() > 0) {
-        iconChar = pluginStore.getName().substring(0, 1);
-      }
-      Label iconLabel = new Label(iconChar);
-      iconLabel.setFont(Font.font(iconLabel.getFont().getFamily(), FontWeight.BOLD, 32));
-      this.getChildren().add(iconLabel);
-
       // Info Area
       VBox infoPane = new VBox();
       infoPane.setAlignment(Pos.CENTER_LEFT);
@@ -109,9 +99,23 @@ public class StoreMenuController extends BaseController {
       });
       namePane.getChildren().add(activeToggleButton);
       infoPane.getChildren().add(namePane);
+
+
+      HBox storeMetadata = new HBox();
+      storeMetadata.setSpacing(5);
+      storeMetadata.setAlignment(Pos.CENTER);
+      if (pluginStore.getType() != null) {
+        Label typeLabel = new Label(pluginStore.getType().getShortLabel());
+        typeLabel.setTooltip(new Tooltip(pluginStore.getType().getLabel()));
+        typeLabel.getStyleClass().add("chip-label");
+        storeMetadata.getChildren().add(typeLabel);
+      }
+
       Label url = new Label(formatUrl(pluginStore.getUrl()));
       url.getStyleClass().add("label-disabled");
-      infoPane.getChildren().add(url);
+      storeMetadata.getChildren().add(url);
+
+      infoPane.getChildren().add(storeMetadata);
       this.getChildren().add(infoPane);
 
       // Empty growing area
