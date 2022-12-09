@@ -37,8 +37,8 @@ public class LazyViewRegistry {
   public static final String NEW_ACCOUNT_VIEW = "NEW_ACCOUNT_VIEW";
   public static final String NEW_LINK_VIEW = "NEW_LINK_VIEW";
   public static final String WELCOME_VIEW = "WELCOME_VIEW";
-  public static final String STORE_MENU_VIEW = "STORE_MENU_VIEW";
-  public static final String NEW_STORE_VIEW = "NEW_STORE_VIEW";
+  public static final String SOURCE_MENU_VIEW = "SOURCE_MENU_VIEW";
+  public static final String NEW_SOURCE_VIEW = "NEW_SOURCE_VIEW";
   public static final String CRASH_RECOVERY_VIEW = "CRASH_RECOVERY_VIEW";
   public static final String LIST_DIRECTORY_VIEW = "LIST_DIRECTORY_VIEW";
   public static final String EXPORT_VIEW = "EXPORT_VIEW";
@@ -61,8 +61,8 @@ public class LazyViewRegistry {
     preloadFxml(NEW_ACCOUNT_VIEW, "/fxml/dialogs/NewAccount.fxml");
     preloadFxml(NEW_LINK_VIEW, "/fxml/dialogs/NewLinkView.fxml");
     preloadFxml(WELCOME_VIEW, "/fxml/dialogs/WelcomeView.fxml");
-    preloadFxml(STORE_MENU_VIEW, "/fxml/menu/StoreMenu.fxml");
-    preloadFxml(NEW_STORE_VIEW, "/fxml/dialogs/NewStoreView.fxml");
+    preloadFxml(SOURCE_MENU_VIEW, "/fxml/menu/SourceMenu.fxml");
+    preloadFxml(NEW_SOURCE_VIEW, "/fxml/dialogs/NewSourceView.fxml");
     preloadFxml(CRASH_RECOVERY_VIEW, "/fxml/dialogs/CrashRecoveryView.fxml");
     preloadFxml(LIST_DIRECTORY_VIEW, "/fxml/dialogs/ListDirectoryView.fxml");
     preloadFxml(EXPORT_VIEW, "/fxml/dialogs/ExportView.fxml");

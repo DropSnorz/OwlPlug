@@ -26,8 +26,8 @@ import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFootprint;
 import com.owlplug.core.model.PluginState;
 import com.owlplug.core.utils.PluginUtils;
-import com.owlplug.store.model.StoreProduct;
-import com.owlplug.store.services.StoreService;
+import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.explore.services.ExploreService;
 import java.io.File;
 import java.util.List;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class PluginService extends BaseService {
   @Autowired
   protected OwlPlugCentralService owlplugCentralService;
   @Autowired
-  protected StoreService pluginStoreService;
+  protected ExploreService exploreService;
   @Autowired
   protected PluginDAO pluginDAO;
   @Autowired
@@ -62,7 +62,7 @@ public class PluginService extends BaseService {
 
   /**
    * Returns an url to retrieve plugin screenshots. Url can be retrieved from
-   * registered products in store or using OwlPlug Central screenshot API.
+   * registered packages in remote sources or using OwlPlug Central screenshot API.
    * 
    * @param plugin the plugin
    * @return screenshot url
@@ -70,16 +70,16 @@ public class PluginService extends BaseService {
   public String resolveImageUrl(Plugin plugin) {
 
     String absoluteName = PluginUtils.absoluteName(plugin.getName());
-    Iterable<StoreProduct> products = pluginStoreService.getProductsByName(absoluteName);
+    Iterable<RemotePackage> packages = exploreService.getPackagesByName(absoluteName);
 
-    if (!Iterables.isEmpty(products)) {
-      return Iterables.get(products, 0).getScreenshotUrl();
+    if (!Iterables.isEmpty(packages)) {
+      return Iterables.get(packages, 0).getScreenshotUrl();
     }
     
     if (plugin.getDescriptiveName() != null) {
-      products = pluginStoreService.getProductsByName(plugin.getDescriptiveName());
-      if (!Iterables.isEmpty(products)) {
-        return Iterables.get(products, 0).getScreenshotUrl();
+      packages = exploreService.getPackagesByName(plugin.getDescriptiveName());
+      if (!Iterables.isEmpty(packages)) {
+        return Iterables.get(packages, 0).getScreenshotUrl();
       }
     }
     

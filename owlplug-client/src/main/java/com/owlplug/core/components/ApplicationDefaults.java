@@ -24,7 +24,7 @@ import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.model.platform.RuntimePlatformResolver;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.store.model.StoreProduct;
+import com.owlplug.explore.model.RemotePackage;
 import java.io.File;
 import javafx.scene.image.Image;
 import org.slf4j.Logger;
@@ -136,12 +136,12 @@ public class ApplicationDefaults {
   /**
    * Returns plugin icon based on plugin format.
    * 
-   * @param product - product
+   * @param remotePackage - package
    * @return Associated icon
    */
-  public Image getProductTypeIcon(StoreProduct product) {
+  public Image getPackageTypeIcon(RemotePackage remotePackage) {
 
-    switch (product.getType()) {
+    switch (remotePackage.getType()) {
     case INSTRUMENT:
       return instrumentImage;
     case EFFECT:

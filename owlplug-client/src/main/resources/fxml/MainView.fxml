@@ -25,7 +25,7 @@
                      <tabs>
                         <Tab disable="true" text="OwlPlug" />
                         <Tab text="Plugins" />
-                        <Tab text="Store" />
+                        <Tab text="Explore" />
                         <Tab text="Options" />
                      </tabs>
                   </JFXTabPane>
@@ -67,9 +67,9 @@
             										<fx:include fx:id="pluginView" source="PluginsView.fxml" />
             									</content>
             								</Tab>
-            								<Tab closable="false" text="Store">
+            								<Tab closable="false" text="Explore">
             									<content>
-            										<fx:include fx:id="storeView" source="StoreView.fxml" />
+            										<fx:include fx:id="exploreView" source="ExploreView.fxml" />
             									</content>
             								</Tab>
             								<Tab closable="false" text="Options">

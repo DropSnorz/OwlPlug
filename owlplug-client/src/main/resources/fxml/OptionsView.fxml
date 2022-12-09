@@ -68,7 +68,7 @@
                                           <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
                                           <VBox spacing="5.0" VBox.vgrow="NEVER">
                                              <children>
-                                                <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from store in a dedicated directory" />
+                                                <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from remoteSource in a dedicated directory" />
                                                 <JFXCheckBox fx:id="storeByCreatorCheckBox" text="Save downloaded plugins grouped by their creator or manufacturer" />
                                                 <HBox alignment="BASELINE_LEFT" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <VBox.margin>

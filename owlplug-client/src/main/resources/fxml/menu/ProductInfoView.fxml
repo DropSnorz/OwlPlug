@@ -17,9 +17,9 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.Tooltip?>
-<HBox fx:id="productInfoContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.store.controllers.ProductInfoController">
+<HBox fx:id="packageInfoContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.PackageInfoController">
    <children>
-      <VBox fx:id="productInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0">
+      <VBox fx:id="packageInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0">
          <children>
             <StackPane maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
                <children>
@@ -33,11 +33,11 @@
                   </VBox>
                   <VBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
                      <children>
-                        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="product-bloc-header">
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="package-bloc-header">
                            <children>
-                              <Label fx:id="productNameLabel" styleClass="heading-1" text="Title" />
+                              <Label fx:id="nameLabel" styleClass="heading-1" text="Title" />
                               <Label styleClass="label-disabled" text="-" />
-                              <Label fx:id="productStoreLabel" styleClass="label-disabled" text="Store" />
+                              <Label fx:id="remoteSourceLabel" styleClass="label-disabled" text="Store" />
                               <Region HBox.hgrow="ALWAYS" />
                               <JFXButton fx:id="installButton" styleClass="button-success" text="Install">
                                  <graphic>
@@ -52,7 +52,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="product-bloc-header" StackPane.alignment="TOP_LEFT">
+                  <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="package-bloc-header" StackPane.alignment="TOP_LEFT">
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
                            <image>

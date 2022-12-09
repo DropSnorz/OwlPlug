@@ -398,7 +398,7 @@ ProgressIndicator{
 }
 
 
-.product-bloc-header{
+.package-bloc-header {
 	-fx-background-color: rgba(0,0,0, 0.85);
 	-fx-padding:10,10,10,10;
 }

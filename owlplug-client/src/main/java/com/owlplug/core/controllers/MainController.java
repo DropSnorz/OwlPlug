@@ -39,8 +39,8 @@ import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.services.UpdateService;
 import com.owlplug.core.utils.PlatformUtils;
-import com.owlplug.store.controllers.StoreController;
-import com.owlplug.store.services.StoreService;
+import com.owlplug.explore.controllers.ExploreController;
+import com.owlplug.explore.services.ExploreService;
 import java.util.ArrayList;
 import java.util.Optional;
 import javafx.application.Platform;
@@ -74,7 +74,7 @@ public class MainController extends BaseController {
   @Autowired
   private OptionsController optionsController;
   @Autowired
-  private StoreController storeController;
+  private ExploreController exploreController;
   @Autowired
   private AuthenticationService authenticationService;
   @Autowired
@@ -82,7 +82,7 @@ public class MainController extends BaseController {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private StoreService storeService;
+  private ExploreService exploreService;
   @Autowired
   private ImageCache imageCache;
   @Autowired
@@ -123,7 +123,7 @@ public class MainController extends BaseController {
       // Force the store masonry pane to render correctly when the user select the
       // store tab.
       if (newValue.intValue() == 2) {
-        storeController.requestLayout();
+        exploreController.requestLayout();
       }
     });
 
@@ -184,7 +184,7 @@ public class MainController extends BaseController {
       crashRecoveryDialogController.show();
     } else if (this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
       welcomeDialogController.show();
-      storeService.syncStores();
+      exploreService.syncSources();
     }
     this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
     optionsController.refreshView();

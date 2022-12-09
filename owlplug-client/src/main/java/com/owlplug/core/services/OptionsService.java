@@ -26,8 +26,8 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.OperatingSystem;
-import com.owlplug.store.dao.StoreDAO;
-import com.owlplug.store.dao.StoreProductDAO;
+import com.owlplug.explore.dao.RemoteSourceDAO;
+import com.owlplug.explore.dao.RemotePackageDAO;
 import java.util.prefs.BackingStoreException;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -47,9 +47,9 @@ public class OptionsService extends BaseService {
   @Autowired
   private GoogleCredentialDAO googleCredentialDAO;
   @Autowired
-  private StoreDAO storeDAO;
+  private RemoteSourceDAO remoteSourceDAO;
   @Autowired
-  private StoreProductDAO productDAO;
+  private RemotePackageDAO productDAO;
   @Autowired
   private ImageCache imageCache;
 
@@ -102,7 +102,7 @@ public class OptionsService extends BaseService {
       googleCredentialDAO.deleteAll();
       userAccountDAO.deleteAll();
       productDAO.deleteAll();
-      storeDAO.deleteAll();
+      remoteSourceDAO.deleteAll();
 
       clearCache();
 
