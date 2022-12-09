@@ -39,7 +39,6 @@ import com.owlplug.store.model.json.legacy.StoreJsonMapper;
 import com.owlplug.store.model.json.legacy.StoreModelAdapter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -91,9 +90,9 @@ public class StoreSyncTask extends AbstractTask {
         response = httpclient.execute(httpGet);
         HttpEntity entity = response.getEntity();
 
-        if(store.getType() == null || store.getType().equals(StoreType.OWLPLUG_STORE)) {
+        if (store.getType() == null || store.getType().equals(StoreType.OWLPLUG_STORE)) {
           processStore(entity, store);
-        } else if(store.getType().equals(StoreType.OWLPLUG_REGISTRY)) {
+        } else if (store.getType().equals(StoreType.OWLPLUG_REGISTRY)) {
           processRegistry(entity, store);
         }
 
@@ -135,7 +134,8 @@ public class StoreSyncTask extends AbstractTask {
 
   private void processStore(HttpEntity entity, Store store) throws StoreParsingException {
 
-    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+        false);
 
     try {
       StoreJsonMapper pluginStoreTO = objectMapper.readValue(entity.getContent(), StoreJsonMapper.class);
@@ -157,7 +157,8 @@ public class StoreSyncTask extends AbstractTask {
   }
 
   private void processRegistry(HttpEntity entity, Store store) throws StoreParsingException {
-    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+        false);
 
     try {
       RegistryJsonMapper registryMapper = objectMapper.readValue(entity.getContent(), RegistryJsonMapper.class);
@@ -174,11 +175,10 @@ public class StoreSyncTask extends AbstractTask {
               .get(packageMapper.getLatestVersion());
 
             StoreProduct product = RegistryModelAdapter.jsonMapperToEntity(latestPackage);
+            product.setSlug(packageMapper.getSlug());
             product.setStore(store);
             storeProductPartition.add(product);
-
           }
-
         }
         storeProductDAO.saveAll(storeProductPartition);
       }

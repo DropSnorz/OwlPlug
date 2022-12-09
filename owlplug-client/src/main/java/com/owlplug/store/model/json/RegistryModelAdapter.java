@@ -1,3 +1,21 @@
+/* OwlPlug
+ * Copyright (C) 2021 Arthur <dropsnorz@gmail.com>
+ *
+ * This file is part of OwlPlug.
+ *
+ * OwlPlug is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3
+ * as published by the Free Software Foundation.
+ *
+ * OwlPlug is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.owlplug.store.model.json;
 
 import com.owlplug.core.model.PluginFormat;
@@ -36,7 +54,6 @@ public class RegistryModelAdapter {
 
     StoreProduct product = new StoreProduct();
     product.setName(packageVersionJsonMapper.getName());
-    //product.setSlug(packageVersionJsonMapper.getSlug());
     product.setPageUrl(packageVersionJsonMapper.getPageUrl());
     product.setScreenshotUrl(UrlUtils.fixSpaces(packageVersionJsonMapper.getScreenshotUrl()));
     product.setDonateUrl(UrlUtils.fixSpaces(packageVersionJsonMapper.getDonateUrl()));
@@ -56,18 +73,6 @@ public class RegistryModelAdapter {
     if (packageVersionJsonMapper.getBundles() != null) {
       for (BundleJsonMapper bundleMapper : packageVersionJsonMapper.getBundles()) {
         ProductBundle bundle = jsonMapperToEntity(bundleMapper);
-
-        //TODO : remove version and technicalUid checks as it's not in the spec ?
-
-        // If bundle version is not defined, apply package version.
-        if (bundle.getVersion() == null) {
-          bundle.setVersion(packageVersionJsonMapper.getVersion());
-        }
-
-        // If bundle technical uid is not defined, apply package technical uId.
-        if (bundle.getTechnicalUid() == null) {
-          bundle.setTechnicalUid(packageVersionJsonMapper.getTechnicalUid());
-        }
         bundle.setProduct(product);
         bundles.add(bundle);
       }
