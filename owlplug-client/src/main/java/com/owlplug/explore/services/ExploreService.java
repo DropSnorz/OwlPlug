@@ -74,8 +74,8 @@ public class ExploreService extends BaseService {
       remoteSource = new RemoteSource();
       remoteSource.setName("OwlPlug Central");
     }
-    remoteSource.setApiUrl("https://central.owlplug.com/store.json");
-    remoteSource.setUrl("https://central.owlplug.com");
+    remoteSource.setUrl("https://central.owlplug.com/store.json");
+    remoteSource.setDisplayUrl("https://central.owlplug.com");
     remoteSource.setType(SourceType.OWLPLUG_STORE);
 
     remoteSourceDAO.save(remoteSource);
@@ -158,7 +158,7 @@ public class ExploreService extends BaseService {
       if(remoteSource != null) {
         EntityUtils.consume(entity);
         response.close();
-        remoteSource.setApiUrl(url);
+        remoteSource.setUrl(url);
         remoteSource.setType(SourceType.OWLPLUG_STORE);
         return remoteSource;
       }
@@ -168,7 +168,7 @@ public class ExploreService extends BaseService {
       if(remoteSource != null) {
         EntityUtils.consume(entity);
         response.close();
-        remoteSource.setApiUrl(url);
+        remoteSource.setUrl(url);
         remoteSource.setType(SourceType.OWLPLUG_REGISTRY);
         return remoteSource;
       }

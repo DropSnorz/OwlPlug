@@ -20,12 +20,14 @@ package com.owlplug.explore.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.owlplug.core.components.ImageCache;
+import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.model.PluginType;
 import com.owlplug.core.ui.SideBar;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.explore.ui.PackageSourceBadgeView;
 import com.owlplug.explore.ui.ProductBundlesView;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -45,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class PackageInfoController {
+public class PackageInfoController extends BaseController {
 
   @Autowired
   private ExploreController exploreController;
@@ -84,6 +86,8 @@ public class PackageInfoController {
   private Label descriptionLabel;
   @FXML
   private Pane bundlesContainer;
+  @FXML
+  private Pane headerContainer;
 
   private ProductBundlesView bundlesView;
 
@@ -113,6 +117,10 @@ public class PackageInfoController {
 
     // Active install buttons
     this.installButton.setDisable(false);
+
+    headerContainer.getChildren().clear();
+    headerContainer.getChildren().add(new PackageSourceBadgeView(remotePackage.getRemoteSource(),
+      this.getApplicationDefaults()));
 
     // Bind remotePackage properties to controls
     this.nameLabel.setText(remotePackage.getName());

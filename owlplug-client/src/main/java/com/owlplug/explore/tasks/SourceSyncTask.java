@@ -87,7 +87,7 @@ public class SourceSyncTask extends AbstractTask {
         log.debug("Exploring source {} - {}", remoteSource.getName(), remoteSource.getType().getLabel());
         this.updateMessage("Exploring source " + remoteSource.getName() +
           " - " + remoteSource.getType().getLabel());
-        HttpGet httpGet = new HttpGet(remoteSource.getApiUrl());
+        HttpGet httpGet = new HttpGet(remoteSource.getUrl());
         response = httpclient.execute(httpGet);
         HttpEntity entity = response.getEntity();
 

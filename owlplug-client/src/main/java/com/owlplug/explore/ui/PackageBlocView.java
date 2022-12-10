@@ -45,8 +45,10 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
@@ -55,6 +57,8 @@ import javafx.scene.text.TextFlow;
 public class PackageBlocView extends AnchorPane {
 
   private ExploreController parentController;
+
+  private ApplicationDefaults applicationDefaults;
 
   /**
    * Creates a new store product bloc view instance.
@@ -68,32 +72,42 @@ public class PackageBlocView extends AnchorPane {
                          ExploreController parentController) {
     super();
     this.parentController = parentController;
+    this.applicationDefaults = applicationDefaults;
 
-    VBox content = new VBox();
+    BorderPane content = new BorderPane();
     this.getChildren().add(content);
     AnchorPane.setBottomAnchor(content, 0.0);
     AnchorPane.setTopAnchor(content, 0.0);
     AnchorPane.setLeftAnchor(content, 0.0);
     AnchorPane.setRightAnchor(content, 0.0);
 
+    // Header section
     HBox header = new HBox();
-    header.setSpacing(5);
-    header.getStyleClass().add("package-bloc-header");
+    Pane growingPane = new Pane();
+    HBox.setHgrow(growingPane, Priority.ALWAYS);
+    header.getChildren().add(growingPane);
+    Node headerContent = new PackageSourceBadgeView(remotePackage.getRemoteSource(), applicationDefaults);
+    header.getChildren().add(headerContent);
+
+    content.setTop(header);
+
+    // Footer section
+    HBox footer = new HBox();
+    footer.setSpacing(5);
+    footer.getStyleClass().add("package-bloc-title");
     if (remotePackage.getType() != null) {
       Image typeIcon = applicationDefaults.getPackageTypeIcon(remotePackage);
       if (typeIcon != null) {
         ImageView typeImageView = new ImageView(typeIcon);
         typeImageView.setFitHeight(16);
         typeImageView.setFitWidth(16);
-        header.getChildren().add(typeImageView);
+        footer.getChildren().add(typeImageView);
       }
     }
-    header.getChildren().add(new Label(remotePackage.getName()));
-    header.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
-    header.setAlignment(Pos.BOTTOM_LEFT);
-    content.getChildren().add(header);
-
-    content.setAlignment(Pos.BOTTOM_LEFT);
+    footer.getChildren().add(new Label(remotePackage.getName()));
+    footer.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);
+    footer.setAlignment(Pos.BOTTOM_LEFT);
+    content.setBottom(footer);
 
     if (remotePackage.getStage() != null && remotePackage.getStage() != PluginStage.RELEASE) {
       this.getChildren().add(createPluginStageFlag(remotePackage));

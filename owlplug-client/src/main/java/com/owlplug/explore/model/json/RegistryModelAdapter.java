@@ -40,7 +40,7 @@ public class RegistryModelAdapter {
 
     RemoteSource remoteSource = new RemoteSource();
     remoteSource.setName(registryJsonMapper.getName());
-    remoteSource.setUrl(registryJsonMapper.getUrl());
+    remoteSource.setDisplayUrl(registryJsonMapper.getUrl());
     return remoteSource;
   }
 

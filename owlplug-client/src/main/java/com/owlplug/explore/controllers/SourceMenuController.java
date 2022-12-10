@@ -111,7 +111,7 @@ public class SourceMenuController extends BaseController {
         storeMetadata.getChildren().add(typeLabel);
       }
 
-      Label url = new Label(formatUrl(pluginRemoteSource.getUrl()));
+      Label url = new Label(formatUrl(pluginRemoteSource.getDisplayUrl()));
       url.getStyleClass().add("label-disabled");
       storeMetadata.getChildren().add(url);
 

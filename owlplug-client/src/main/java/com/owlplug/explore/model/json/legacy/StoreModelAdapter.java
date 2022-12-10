@@ -41,7 +41,7 @@ public class StoreModelAdapter {
 
     RemoteSource remoteSource = new RemoteSource();
     remoteSource.setName(storeJsonMapper.getName());
-    remoteSource.setUrl(storeJsonMapper.getUrl());
+    remoteSource.setDisplayUrl(storeJsonMapper.getUrl());
     return remoteSource;
   }
 

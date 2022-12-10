@@ -31,21 +31,21 @@ public class RemoteSource {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  private String apiUrl;
-  private String name;
   private String url;
+  private String name;
+  private String displayUrl;
   private boolean enabled = true;
   private SourceType type;
 
   @OneToMany(mappedBy = "remoteSource", orphanRemoval = true)
   private List<RemotePackage> packages;
 
-  public String getApiUrl() {
-    return apiUrl;
+  public String getUrl() {
+    return url;
   }
 
-  public void setApiUrl(String apiUrl) {
-    this.apiUrl = apiUrl;
+  public void setUrl(String url) {
+    this.url = url;
   }
 
   public Long getId() {
@@ -60,12 +60,12 @@ public class RemoteSource {
     this.name = name;
   }
 
-  public String getUrl() {
-    return url;
+  public String getDisplayUrl() {
+    return displayUrl;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
+  public void setDisplayUrl(String displayUrl) {
+    this.displayUrl = displayUrl;
   }
 
   public boolean isEnabled() {

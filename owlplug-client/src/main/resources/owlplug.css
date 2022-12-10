@@ -398,11 +398,18 @@ ProgressIndicator{
 }
 
 
-.package-bloc-header {
+.package-bloc-title {
 	-fx-background-color: rgba(0,0,0, 0.85);
 	-fx-padding:10,10,10,10;
 }
 
+.package-bloc-header {
+	-fx-background-color: rgba(245,245,241, 1);
+	-fx-text-fill: disabled-color;
+	-fx-background-radius: 0 0 0 5px;
+	-fx-border-radius: 0 0 0 5px;
+	-fx-padding:5,5,5,5;
+}
 
 .shape-state-active {
 	-fx-fill: success-color;

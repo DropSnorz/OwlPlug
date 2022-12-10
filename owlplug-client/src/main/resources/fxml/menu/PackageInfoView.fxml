@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Tooltip?>
-<HBox fx:id="packageInfoContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.PackageInfoController">
+<HBox fx:id="packageInfoContainer" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.PackageInfoController">
    <children>
       <VBox fx:id="packageInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0">
          <children>
@@ -33,7 +23,7 @@
                   </VBox>
                   <VBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
                      <children>
-                        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="package-bloc-header">
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="package-bloc-title">
                            <children>
                               <Label fx:id="nameLabel" styleClass="heading-1" text="Title" />
                               <Label styleClass="label-disabled" text="-" />
@@ -52,15 +42,21 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="package-bloc-header" StackPane.alignment="TOP_LEFT">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
-                           <image>
-                              <Image url="@../../icons/arrow-ui-white-32.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </JFXButton>
+                  <HBox StackPane.alignment="TOP_LEFT">
+                     <children>
+                        <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="package-bloc-title">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                                 <image>
+                                    <Image url="@../../icons/arrow-ui-white-32.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Pane fx:id="headerContainer" />
+                     </children>
+                  </HBox>
                </children>
             </StackPane>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
