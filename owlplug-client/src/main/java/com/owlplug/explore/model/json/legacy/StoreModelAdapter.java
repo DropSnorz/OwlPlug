@@ -114,6 +114,7 @@ public class StoreModelAdapter {
     PackageBundle packageBundle = new PackageBundle();
     packageBundle.setName(mapper.getName());
     packageBundle.setDownloadUrl(mapper.getDownloadUrl());
+    packageBundle.setDownloadSha256(mapper.getDownloadSha256());
     packageBundle.setTargets(mapper.getTargets());
     packageBundle.setFileSize(mapper.getFileSize());
 

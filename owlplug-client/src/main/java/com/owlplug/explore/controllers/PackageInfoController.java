@@ -59,7 +59,7 @@ public class PackageInfoController extends BaseController {
   @FXML
   private Pane packageInfoContent;
   @FXML
-  private Pane topInfoPane;
+  private Pane screenshotBackgroundPane;
   @FXML
   private JFXButton closeButton;
   @FXML
@@ -130,9 +130,9 @@ public class PackageInfoController extends BaseController {
       BackgroundImage bgImg = new BackgroundImage(screenshot, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
           BackgroundPosition.CENTER,
           new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
-      topInfoPane.setBackground(new Background(bgImg));
+      screenshotBackgroundPane.setBackground(new Background(bgImg));
     }
-    topInfoPane.setEffect(new InnerShadow(25, Color.BLACK));
+    screenshotBackgroundPane.setEffect(new InnerShadow(25, Color.BLACK));
 
     this.remoteSourceLabel.setText(remotePackage.getRemoteSource().getName());
 

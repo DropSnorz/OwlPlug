@@ -25,6 +25,8 @@ public class BundleJsonMapper {
   private String name;
   private List<String> targets;
   private String downloadUrl;
+
+  private String downloadSha256;
   private String format;
   private String version;
   private String technicalUid;
@@ -52,6 +54,14 @@ public class BundleJsonMapper {
 
   public void setDownloadUrl(String downloadUrl) {
     this.downloadUrl = downloadUrl;
+  }
+
+  public String getDownloadSha256() {
+    return downloadSha256;
+  }
+
+  public void setDownloadSha256(String downloadSha256) {
+    this.downloadSha256 = downloadSha256;
   }
 
   public long getFileSize() {

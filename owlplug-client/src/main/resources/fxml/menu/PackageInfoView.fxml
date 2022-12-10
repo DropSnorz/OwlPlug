@@ -13,7 +13,7 @@
          <children>
             <StackPane maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
                <children>
-                  <VBox fx:id="topInfoPane" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
+                  <VBox fx:id="screenshotBackgroundPane" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -21,42 +21,48 @@
                         <Insets />
                      </StackPane.margin>
                   </VBox>
-                  <VBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                     <children>
-                        <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="package-bloc-title">
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <top>
+                        <HBox BorderPane.alignment="CENTER">
                            <children>
-                              <Label fx:id="nameLabel" styleClass="heading-1" text="Title" />
-                              <Label styleClass="label-disabled" text="-" />
-                              <Label fx:id="remoteSourceLabel" styleClass="label-disabled" text="Store" />
-                              <Region HBox.hgrow="ALWAYS" />
-                              <JFXButton fx:id="installButton" styleClass="button-success" text="Install">
+                              <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="package-bloc-title">
                                  <graphic>
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
                                        <image>
-                                          <Image url="@../../icons/download-white-32.png" />
+                                          <Image url="@../../icons/arrow-ui-white-32.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
                               </JFXButton>
+                              <Region maxHeight="10.0" HBox.hgrow="ALWAYS" />
+                              <Pane fx:id="headerContainer" maxHeight="50.0" />
                            </children>
                         </HBox>
-                     </children>
-                  </VBox>
-                  <HBox StackPane.alignment="TOP_LEFT">
-                     <children>
-                        <JFXButton fx:id="closeButton" buttonType="RAISED" styleClass="package-bloc-title">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
-                                 <image>
-                                    <Image url="@../../icons/arrow-ui-white-32.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Pane fx:id="headerContainer" />
-                     </children>
-                  </HBox>
+                     </top>
+                     <bottom>
+                        <VBox alignment="BOTTOM_LEFT" BorderPane.alignment="CENTER">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="package-bloc-title">
+                                 <children>
+                                    <Label fx:id="nameLabel" styleClass="heading-1" text="Title" />
+                                    <Label styleClass="label-disabled" text="-" />
+                                    <Label fx:id="remoteSourceLabel" styleClass="label-disabled" text="Store" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <JFXButton fx:id="installButton" styleClass="button-success" text="Install">
+                                       <graphic>
+                                          <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../icons/download-white-32.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </bottom>
+                  </BorderPane>
                </children>
             </StackPane>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="400.0" VBox.vgrow="ALWAYS">

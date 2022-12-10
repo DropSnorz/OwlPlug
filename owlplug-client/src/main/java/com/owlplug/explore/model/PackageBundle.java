@@ -36,6 +36,8 @@ public class PackageBundle {
   private Long id;
   private String name;
   private String downloadUrl;
+
+  private String downloadSha256;
   private PluginFormat format;
   private String technicalUid;
   private String version;
@@ -68,6 +70,14 @@ public class PackageBundle {
 
   public void setDownloadUrl(String downloadUrl) {
     this.downloadUrl = downloadUrl;
+  }
+
+  public String getDownloadSha256() {
+    return downloadSha256;
+  }
+
+  public void setDownloadSha256(String downloadSha256) {
+    this.downloadSha256 = downloadSha256;
   }
 
   public String getTechnicalUid() {

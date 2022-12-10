@@ -23,6 +23,7 @@ import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
+import com.owlplug.core.utils.CryptoUtils;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.nio.CallbackByteChannel;
 import com.owlplug.explore.model.PackageBundle;
@@ -80,6 +81,19 @@ public class BundleInstallTask extends AbstractTask {
       }
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Downloading files...");
       File archiveFile = downloadInTempDirectory(bundle);
+
+      this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Verifying files...");
+
+      if(bundle.getDownloadSha256() != null && !bundle.getDownloadSha256().isBlank()) {
+        log.debug("Verify downloaded file hash for bundle {}", bundle.getName());
+        if(!verifyHash(archiveFile, bundle.getDownloadSha256())) {
+          String errorMessage = "An error occurred during plugin installation: Downloaded file is invalid, corrupted or can't be verified";
+          this.updateMessage(errorMessage);
+          log.error(errorMessage);
+          this.updateProgress(1, 1);
+          throw new TaskException(errorMessage);
+        }
+      }
 
       this.commitProgress(100);
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Extracting files...");
@@ -225,13 +239,25 @@ public class BundleInstallTask extends AbstractTask {
     return null;
   }
 
-  private File getSubfileByName(File parent, String filename) {
-    for (File f : parent.listFiles()) {
-      if (f.getName().equals(filename)) {
-        return f;
-      }
+  private boolean verifyHash(File file, String hash) {
+
+    String fileHash;
+    try {
+      fileHash = CryptoUtils.getFileSha256Digest(file);
+    } catch (IOException e) {
+      log.error("File hash can't be computed", e);
+      return false;
     }
-    return null;
+    String expectedHash = bundle.getDownloadSha256();
+
+    if (expectedHash.equalsIgnoreCase(fileHash)) {
+      log.debug("Valid SHA256 given: {}, expected: {}", fileHash, expectedHash);
+      return true;
+    } else {
+      log.warn("Invalid SHA256 given: {}, expected: {}", fileHash, expectedHash);
+      return false;
+    }
+
   }
 
   /**

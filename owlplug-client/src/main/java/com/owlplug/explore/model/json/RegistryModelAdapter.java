@@ -101,6 +101,7 @@ public class RegistryModelAdapter {
     PackageBundle packageBundle = new PackageBundle();
     packageBundle.setName(bundleMapper.getName());
     packageBundle.setDownloadUrl(bundleMapper.getDownloadUrl());
+    packageBundle.setDownloadSha256(bundleMapper.getDownloadSha256());
     packageBundle.setTargets(bundleMapper.getTargets());
     packageBundle.setFileSize(bundleMapper.getFileSize());
 
