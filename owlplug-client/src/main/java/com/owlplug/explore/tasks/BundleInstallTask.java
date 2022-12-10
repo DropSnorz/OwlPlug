@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.explore.tasks;
 
 import com.owlplug.core.components.ApplicationDefaults;
@@ -50,7 +50,7 @@ public class BundleInstallTask extends AbstractTask {
 
   /**
    * Creates a new Product Installation task.
-   * 
+   *
    * @param bundle              Bundle to download
    * @param targetDirectory     Target directory where downloaded product is
    *                            stored
@@ -84,12 +84,13 @@ public class BundleInstallTask extends AbstractTask {
 
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Verifying files...");
 
-      if(bundle.getDownloadSha256() != null && !bundle.getDownloadSha256().isBlank()) {
+      if (bundle.getDownloadSha256() != null && !bundle.getDownloadSha256().isBlank()) {
         log.debug("Verify downloaded file hash for bundle {}", bundle.getName());
-        if(!verifyHash(archiveFile, bundle.getDownloadSha256())) {
+        if (!verifyHash(archiveFile, bundle.getDownloadSha256())) {
           String errorMessage = "An error occurred during plugin installation: Downloaded file is invalid, corrupted or can't be verified";
           this.updateMessage(errorMessage);
           log.error(errorMessage);
+          archiveFile.delete();
           this.updateProgress(1, 1);
           throw new TaskException(errorMessage);
         }
@@ -97,8 +98,8 @@ public class BundleInstallTask extends AbstractTask {
 
       this.commitProgress(100);
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Extracting files...");
-      File extractedArchiveFolder = new File(applicationDefaults.getTempDownloadDirectory() + "/" + "temp-"
-          + archiveFile.getName().replace(".owlpack", ""));
+      File extractedArchiveFolder = new File(ApplicationDefaults.getTempDownloadDirectory() + "/" + "temp-"
+                                                 + archiveFile.getName().replace(".owlpack", ""));
       FileUtils.unzip(archiveFile.getAbsolutePath(), extractedArchiveFolder.getAbsolutePath());
 
       this.commitProgress(30);
@@ -172,17 +173,11 @@ public class BundleInstallTask extends AbstractTask {
     // Choose the folder to copy from the downloaded source
     File newSource = source;
     switch (structure) {
-    case NESTED:
-      newSource = source.listFiles()[0];
-      break;
-    case ENV:
-      newSource = getSubfileByPlatformTag(source);
-      break;
-    case NESTED_ENV:
-      newSource = getSubfileByPlatformTag(source.listFiles()[0]);
-      break;
-    default:
-      break;
+      case NESTED -> newSource = source.listFiles()[0];
+      case ENV -> newSource = getSubfileByPlatformTag(source);
+      case NESTED_ENV -> newSource = getSubfileByPlatformTag(source.listFiles()[0]);
+      default -> log.debug("Can't determine owlpack structure type (NESTED, ENV or NESTED_ENV)."
+                               + " Directory will be used as it.");
     }
 
     FileUtils.copyDirectory(newSource, target);
@@ -194,7 +189,7 @@ public class BundleInstallTask extends AbstractTask {
     OwlPackStructureType structure = OwlPackStructureType.DIRECT;
 
     if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory()
-        && !runtimePlatform.getCompatiblePlatformsTags().contains(directory.listFiles()[0].getName())) {
+            && !runtimePlatform.getCompatiblePlatformsTags().contains(directory.listFiles()[0].getName())) {
       structure = OwlPackStructureType.NESTED;
       for (File f : directory.listFiles()[0].listFiles()) {
         if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
@@ -261,13 +256,29 @@ public class BundleInstallTask extends AbstractTask {
   }
 
   /**
-   * Compatible product archive structures -------------- DIRECT plugin.zip/ ├──
-   * plugin.dll └── (other required files...) -------------- NESTED plugin.zip/
-   * └── plugin ├── plugin.dll └── (other required files...) --------------
-   * NESTED_ENV plugin.zip/ └── plugin ├── x86 │ ├── plugin.dll │ └── (other
-   * required files...) └── x64 ├── plugin.dll └── (other required files...)
+   * Compatible product archive structures.
+   * <pre>
+   * -------------- DIRECT
+   * plugin.zip/
+   *   ├── plugin.dll
+   *   └── (other required files...)
    *
+   * -------------- NESTED
+   * plugin.zip/
+   *   └── plugin
+   *         ├── plugin.dll
+   *         └── (other required files...)
    *
+   * -------------- NESTED_ENV
+   * plugin.zip/
+   *   └── plugin
+   *         ├── x86
+   *         │    ├── plugin.dll
+   *         │    └── (other required files...)
+   *         └── x64
+   *              ├── plugin.dll
+   *              └── (other required files...)
+   * </pre>
    */
   private enum OwlPackStructureType {
     DIRECT, ENV, NESTED, NESTED_ENV,

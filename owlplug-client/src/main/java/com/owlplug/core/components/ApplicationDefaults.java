@@ -50,7 +50,7 @@ public class ApplicationDefaults {
       ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo.png"));
 
   public final Image owlplugLogoSmall = new Image(
-    ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo-16.png"));
+      ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo-16.png"));
   public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
   public final Image vst2Image = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
   public final Image vst3Image = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));

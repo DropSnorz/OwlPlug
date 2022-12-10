@@ -69,10 +69,6 @@ public class RemotePackage {
       CascadeType.REMOVE })
   private Set<PackageTag> tags = new HashSet<>();
 
-  public RemotePackage() {
-    super();
-  }
-
   public Long getId() {
     return id;
   }

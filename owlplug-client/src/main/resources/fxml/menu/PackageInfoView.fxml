@@ -193,9 +193,6 @@
                            </children>
                         </VBox>
                      </children>
-                     <padding>
-                        <Insets left="5.0" right="5.0" />
-                     </padding>
                   </VBox>
                </content>
             </ScrollPane>

@@ -85,8 +85,8 @@ public class SourceSyncTask extends AbstractTask {
     for (RemoteSource remoteSource : remoteSourceDAO.findAll()) {
       try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
         log.debug("Exploring source {} - {}", remoteSource.getName(), remoteSource.getType().getLabel());
-        this.updateMessage("Exploring source " + remoteSource.getName() +
-          " - " + remoteSource.getType().getLabel());
+        this.updateMessage("Exploring source " + remoteSource.getName()
+                               + " - " + remoteSource.getType().getLabel());
         HttpGet httpGet = new HttpGet(remoteSource.getUrl());
         response = httpclient.execute(httpGet);
         HttpEntity entity = response.getEntity();
@@ -163,7 +163,7 @@ public class SourceSyncTask extends AbstractTask {
 
     try {
       RegistryJsonMapper registryMapper = objectMapper.readValue(entity.getContent(), RegistryJsonMapper.class);
-      List<PackageJsonMapper> packages = new ArrayList(registryMapper.getPackages().values());
+      List<PackageJsonMapper> packages = new ArrayList<>(registryMapper.getPackages().values());
       List<List<PackageJsonMapper>> chunks = Lists.partition(packages, 100);
 
       for (List<PackageJsonMapper> partition : chunks) {
@@ -173,7 +173,7 @@ public class SourceSyncTask extends AbstractTask {
           if (packageMapper.getVersions().containsKey(packageMapper.getLatestVersion())) {
 
             PackageVersionJsonMapper latestPackage = packageMapper.getVersions()
-              .get(packageMapper.getLatestVersion());
+                .get(packageMapper.getLatestVersion());
 
             RemotePackage product = RegistryModelAdapter.jsonMapperToEntity(latestPackage);
             product.setSlug(packageMapper.getSlug());

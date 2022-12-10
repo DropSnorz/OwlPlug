@@ -63,4 +63,11 @@ public class PackageTag {
     this.name = name;
   }
 
+  public RemotePackage getRemotePackage() {
+    return remotePackage;
+  }
+
+  public void setRemotePackage(RemotePackage remotePackage) {
+    this.remotePackage = remotePackage;
+  }
 }

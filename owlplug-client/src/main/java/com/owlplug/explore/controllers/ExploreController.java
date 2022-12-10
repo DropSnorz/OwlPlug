@@ -316,7 +316,7 @@ public class ExploreController extends BaseController {
   /**
    * Displays full package information.
    * 
-   * @param package - package
+   * @param remotePackage - package
    */
   public void selectPackage(RemotePackage remotePackage) {
     packageInfoController.setPackage(remotePackage);
@@ -344,8 +344,8 @@ public class ExploreController extends BaseController {
     //if the enduser wishes to group plugins by their creator,
     //then we need to include the subdirectory as well.
     if(shouldGroupByCreator) {
-        String creator = FileUtils.sanitizeFileName(bundle.getRemotePackage().getCreator());
-        relativeDirectoryPath = relativeDirectoryPath + File.separator + creator;
+      String creator = FileUtils.sanitizeFileName(bundle.getRemotePackage().getCreator());
+      relativeDirectoryPath = relativeDirectoryPath + File.separator + creator;
     }
 
     File selectedDirectory = null;

@@ -58,8 +58,6 @@ public class PackageBlocView extends AnchorPane {
 
   private ExploreController parentController;
 
-  private ApplicationDefaults applicationDefaults;
-
   /**
    * Creates a new store product bloc view instance.
    * 
@@ -72,7 +70,6 @@ public class PackageBlocView extends AnchorPane {
                          ExploreController parentController) {
     super();
     this.parentController = parentController;
-    this.applicationDefaults = applicationDefaults;
 
     BorderPane content = new BorderPane();
     this.getChildren().add(content);

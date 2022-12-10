@@ -114,18 +114,20 @@ public class PackageInfoController extends BaseController {
   }
 
   public void setPackage(RemotePackage remotePackage) {
+    configureHeader(remotePackage);
+    configureBody(remotePackage);
 
-    // Active install buttons
-    this.installButton.setDisable(false);
+  }
 
+  private void configureHeader(RemotePackage remotePackage) {
+
+    // Header badge configuration
     headerContainer.getChildren().clear();
     headerContainer.getChildren().add(new PackageSourceBadgeView(remotePackage.getRemoteSource(),
-      this.getApplicationDefaults()));
+        this.getApplicationDefaults()));
 
-    // Bind remotePackage properties to controls
-    this.nameLabel.setText(remotePackage.getName());
+    // Screenshot display
     Image screenshot = imageCache.get(remotePackage.getScreenshotUrl());
-
     if (screenshot != null) {
       BackgroundImage bgImg = new BackgroundImage(screenshot, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
           BackgroundPosition.CENTER,
@@ -134,8 +136,11 @@ public class PackageInfoController extends BaseController {
     }
     screenshotBackgroundPane.setEffect(new InnerShadow(25, Color.BLACK));
 
+    // Name and source display
+    this.nameLabel.setText(remotePackage.getName());
     this.remoteSourceLabel.setText(remotePackage.getRemoteSource().getName());
 
+    // Redirect button configuratio
     browsePageButton.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(remotePackage.getPageUrl());
     });
@@ -147,20 +152,31 @@ public class PackageInfoController extends BaseController {
     } else {
       donateButton.setVisible(false);
     }
+
+    // Activate and configure install button
+    this.installButton.setDisable(false);
     installButton.setOnAction(e -> {
       boolean installStarted = exploreController.installProduct(remotePackage);
       if (installStarted) {
         this.installButton.setDisable(true);
       }
     });
+  }
 
+  private void configureBody(RemotePackage remotePackage) {
+
+    // General fields binding
     this.creatorLabel.setText(remotePackage.getCreator());
+    this.descriptionLabel.setText(remotePackage.getDescription());
 
-    if(remotePackage.getLicense() != null ) {
+    // License display
+    if (remotePackage.getLicense() != null) {
       licenseLabel.setText(remotePackage.getLicense());
     } else {
       licenseLabel.setText("Unknown license");
     }
+
+    // Version display
     if (remotePackage.getVersion() != null) {
       versionLabel.setVisible(true);
       versionLabel.setText(remotePackage.getVersion());
@@ -168,22 +184,22 @@ public class PackageInfoController extends BaseController {
       versionLabel.setVisible(false);
     }
 
+    // Type display
     if (remotePackage.getType() == PluginType.INSTRUMENT) {
       this.typeLabel.setText("Instrument (VSTi)");
     } else if (remotePackage.getType() == PluginType.EFFECT) {
       this.typeLabel.setText("Effect (VST)");
     }
 
+    // Tag display
     tagContainer.getChildren().clear();
     for (PackageTag tag : remotePackage.getTags()) {
       Node chip = new FakeChip(tag.getName());
       chip.getStyleClass().add("jfx-chip");
       tagContainer.getChildren().add(chip);
-
     }
 
-    this.descriptionLabel.setText(remotePackage.getDescription());
-
+    // Bundle list display
     bundlesView.clear();
     for (PackageBundle bundle : remotePackage.getBundles()) {
       bundlesView.addProductBundle(bundle, e -> exploreController.installBundle(bundle));

@@ -24,16 +24,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CryptoUtils {
 
-  private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
-
   public static String getFileSha256Digest(File file) throws IOException {
 
-    byte[] buffer= new byte[8192];
+    byte[] buffer = new byte[8192];
     int count;
 
     try {
@@ -57,7 +53,7 @@ public class CryptoUtils {
     StringBuilder hexString = new StringBuilder(2 * hash.length);
     for (int i = 0; i < hash.length; i++) {
       String hex = Integer.toHexString(0xff & hash[i]);
-      if(hex.length() == 1) {
+      if (hex.length() == 1) {
         hexString.append('0');
       }
       hexString.append(hex);

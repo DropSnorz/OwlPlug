@@ -82,7 +82,7 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Triggers Store sync task
+   * Triggers Store sync task.
    */
   public void syncSources() {
     exploreTaskFactory.createSourceSyncTask().schedule();
@@ -103,7 +103,7 @@ public class ExploreService extends BaseService {
     RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
 
     Specification<RemotePackage> spec = RemotePackageDAO.sourceEnabled()
-      .and(RemotePackageDAO.hasPlatformTag(env.getCompatiblePlatformsTags()));
+        .and(RemotePackageDAO.hasPlatformTag(env.getCompatiblePlatformsTags()));
     spec = spec.and(StoreCriteriaAdapter.toSpecification(criteriaList));
 
     return remotePackageDAO.findAll(spec);
@@ -126,7 +126,7 @@ public class ExploreService extends BaseService {
     for (PackageBundle bundle : product.getBundles()) {
       for (String platform : bundle.getTargets()) {
         if (platform.equals(runtimePlatform.getTag())
-          || platform.equals(runtimePlatform.getOperatingSystem().getCode())) {
+            || platform.equals(runtimePlatform.getOperatingSystem().getCode())) {
           return bundle;
         }
       }
@@ -155,7 +155,7 @@ public class ExploreService extends BaseService {
       String responseContent = new String(entity.getContent().readAllBytes(), StandardCharsets.UTF_8);
       RemoteSource remoteSource = getSourceFromStoreSpec(responseContent);
 
-      if(remoteSource != null) {
+      if (remoteSource != null) {
         EntityUtils.consume(entity);
         response.close();
         remoteSource.setUrl(url);
@@ -165,7 +165,7 @@ public class ExploreService extends BaseService {
 
       remoteSource = getSourceFromRegistrySpec(responseContent);
 
-      if(remoteSource != null) {
+      if (remoteSource != null) {
         EntityUtils.consume(entity);
         response.close();
         remoteSource.setUrl(url);
@@ -191,10 +191,11 @@ public class ExploreService extends BaseService {
   private RemoteSource getSourceFromStoreSpec(String content) {
 
     try {
-      ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      ObjectMapper objectMapper = new ObjectMapper().configure(
+          DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
       StoreJsonMapper pluginStoreTO = objectMapper.readValue(content, StoreJsonMapper.class);
 
-      if(pluginStoreTO.getProducts() != null) {
+      if (pluginStoreTO.getProducts() != null) {
         RemoteSource remoteSource = StoreModelAdapter.jsonMapperToEntity(pluginStoreTO);
         return remoteSource;
       } else {
@@ -217,7 +218,8 @@ public class ExploreService extends BaseService {
   private RemoteSource getSourceFromRegistrySpec(String content) {
 
     try {
-      ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      ObjectMapper objectMapper = new ObjectMapper().configure(
+          DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
       RegistryJsonMapper registryMapper = objectMapper.readValue(content, RegistryJsonMapper.class);
       RemoteSource remoteSource = RegistryModelAdapter.jsonMapperToEntity(registryMapper);
       return remoteSource;
