@@ -69,8 +69,11 @@ public class ApplicationDefaults {
   public final Image symlinkImage = new Image(getClass().getResourceAsStream("/icons/folderlink-grey-16.png"));
   public final Image userImage = new Image(getClass().getResourceAsStream("/icons/user-white-32.png"));
   public final Image rootDirectoryImage = new Image(getClass().getResourceAsStream("/icons/foldersearch-grey-16.png"));
-
-  public final Image verifiedImage = new Image(getClass().getResourceAsStream("/icons/verified-black-16.png"));
+  public final Image verifiedSourceImage = new Image(getClass().getResourceAsStream("/icons/doublecheck-grey-16.png"));
+  public final Image suggestedSourceImage = new Image(
+      ApplicationDefaults.class.getResourceAsStream("/icons/check-grey-16.png"));
+  public final Image studiorackLogoSmall = new Image(
+      ApplicationDefaults.class.getResourceAsStream("/media/studiorack-logo-16.png"));
 
 
   public final Image pluginPlaceholderImage = new Image(
