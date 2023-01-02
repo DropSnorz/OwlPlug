@@ -35,7 +35,10 @@
                                  </graphic>
                               </JFXButton>
                               <Region maxHeight="10.0" HBox.hgrow="ALWAYS" />
-                              <Pane fx:id="headerContainer" maxHeight="50.0" />
+                              <Pane fx:id="headerContainer" maxHeight="50.0">
+                                 <HBox.margin>
+                                    <Insets right="5.0" top="5.0" />
+                                 </HBox.margin></Pane>
                            </children>
                         </HBox>
                      </top>

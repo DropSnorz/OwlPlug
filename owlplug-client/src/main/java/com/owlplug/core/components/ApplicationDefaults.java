@@ -62,7 +62,7 @@ public class ApplicationDefaults {
   public final Image taskFailImage = new Image(getClass().getResourceAsStream("/icons/cross-red-16.png"));
   public final Image taskRunningImage = new Image(getClass().getResourceAsStream("/icons/play-green-16.png"));
   public final Image rocketImage = new Image(getClass().getResourceAsStream("/icons/rocket-white-64.png"));
-  public final Image storeImage = new Image(getClass().getResourceAsStream("/icons/bag-white-32.png"));
+  public final Image serverImage = new Image(getClass().getResourceAsStream("/icons/server-white-32.png"));
   public final Image instrumentImage = new Image(getClass().getResourceAsStream("/icons/synth-white-16.png"));
   public final Image effectImage = new Image(getClass().getResourceAsStream("/icons/effect-white-16.png"));
   public final Image tagImage = new Image(getClass().getResourceAsStream("/icons/tag-white-16.png"));

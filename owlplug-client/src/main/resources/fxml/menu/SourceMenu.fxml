@@ -12,21 +12,21 @@
          <children>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../icons/bag-white-32.png" />
+                  <Image url="@../../icons/server-white-32.png" />
                </image>
             </ImageView>
             <Label text="Source List" />
          </children>
       </HBox>
       <Separator prefWidth="200.0" />
-      <VBox fx:id="sourceListHolder" alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER" />
+      <VBox fx:id="sourceListHolder" alignment="CENTER_LEFT" spacing="15.0" VBox.vgrow="NEVER" />
       <VBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
          <children>
             <HBox fx:id="newSourceMenuItem" alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item">
                <children>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/circleplus-grey-240.png" />
+                        <Image url="@../../icons/circleplus-grey-32.png" />
                      </image>
                   </ImageView>
                   <Label text="Add a new source..." />

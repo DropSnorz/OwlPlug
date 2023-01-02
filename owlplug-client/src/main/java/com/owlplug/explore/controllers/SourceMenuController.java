@@ -23,7 +23,9 @@ import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.services.ExploreService;
+import com.owlplug.explore.ui.PackageSourceBadgeView;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -85,9 +87,17 @@ public class SourceMenuController extends BaseController {
       // Info Area
       VBox infoPane = new VBox();
       infoPane.setAlignment(Pos.CENTER_LEFT);
+      infoPane.setSpacing(5);
 
       HBox namePane = new HBox();
-      namePane.setAlignment(Pos.BASELINE_LEFT);
+      namePane.setAlignment(Pos.CENTER_LEFT);
+      VBox.setVgrow(namePane, Priority.NEVER);
+
+      PackageSourceBadgeView badge = new PackageSourceBadgeView(pluginRemoteSource, getApplicationDefaults(), true);
+      badge.setMaxHeight(28);
+      HBox.setMargin(badge, new Insets(0,5,0,0));
+      namePane.getChildren().add(badge);
+
       namePane.getChildren().add(new Label(pluginRemoteSource.getName()));
       JFXToggleButton activeToggleButton = new JFXToggleButton();
       activeToggleButton.setSize(5);
@@ -103,7 +113,7 @@ public class SourceMenuController extends BaseController {
 
       HBox storeMetadata = new HBox();
       storeMetadata.setSpacing(5);
-      storeMetadata.setAlignment(Pos.CENTER);
+      storeMetadata.setAlignment(Pos.CENTER_LEFT);
       if (pluginRemoteSource.getType() != null) {
         Label typeLabel = new Label(pluginRemoteSource.getType().getShortLabel());
         typeLabel.setTooltip(new Tooltip(pluginRemoteSource.getType().getLabel()));

@@ -135,7 +135,7 @@ public class NewSourceDialogController extends AbstractDialogController implemen
     Label title = new Label("Add a new source");
     title.getStyleClass().add("heading-3");
 
-    ImageView iv = new ImageView(this.getApplicationDefaults().storeImage);
+    ImageView iv = new ImageView(this.getApplicationDefaults().serverImage);
     iv.setFitHeight(20);
     iv.setFitWidth(20);
     title.setGraphic(iv);

@@ -23,25 +23,32 @@ import com.owlplug.explore.model.RemoteSource;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 public class PackageSourceBadgeView extends HBox {
 
+  private boolean isRoundBadge;
+
   public PackageSourceBadgeView(RemoteSource remoteSource, ApplicationDefaults applicationDefaults) {
+    this(remoteSource, applicationDefaults, false);
+
+  }
+
+  public PackageSourceBadgeView(RemoteSource remoteSource, ApplicationDefaults applicationDefaults,
+                                boolean isRoundBadge) {
     super();
+    this.isRoundBadge = isRoundBadge;
 
-    if(remoteSource.getUrl() != null &&
-      remoteSource.getUrl().startsWith("https://owlplug.github.io/owlplug-registry/registry")) {
-
+    if (remoteSource.getUrl() != null
+            && remoteSource.getUrl().startsWith("https://owlplug.github.io/owlplug-registry/registry")) {
       String tooltipText = "Official OwlPlug Registry\nPackages content and integrity are verified";
       createContent(applicationDefaults.verifiedSourceImage, applicationDefaults.owlplugLogoSmall, tooltipText);
     }
-
-    if(remoteSource.getUrl() != null &&
-           remoteSource.getUrl().startsWith("https://owlplug.github.io/owlplug-studiorack-registry/registry")) {
-
+    if (remoteSource.getUrl() != null
+            && remoteSource.getUrl().startsWith("https://owlplug.github.io/owlplug-studiorack-registry/registry")) {
       String tooltipText = "Studiorack Registry";
       createContent(applicationDefaults.suggestedSourceImage, applicationDefaults.studiorackLogoSmall, tooltipText);
     }
@@ -50,9 +57,12 @@ public class PackageSourceBadgeView extends HBox {
 
   private void createContent(Image checkIcon, Image logoIcon, String tooltip) {
     this.setSpacing(5);
-    this.getStyleClass().add("package-bloc-header");
+    this.getStyleClass().add("package-source-badge");
+    if (isRoundBadge) {
+      this.getStyleClass().add("badge");
+      this.setEffect(new DropShadow());
+    }
     this.setAlignment(Pos.CENTER);
-
     Label headerLabel = new Label();
     headerLabel.setGraphic(new ImageView(checkIcon));
     this.getChildren().add(headerLabel);
@@ -63,6 +73,7 @@ public class PackageSourceBadgeView extends HBox {
     owlplugLogo.setPreserveRatio(true);
     owlplugLogo.setFitHeight(16);
     this.getChildren().add(owlplugLogo);
+
   }
 
 }

@@ -124,7 +124,7 @@ public class PackageInfoController extends BaseController {
     // Header badge configuration
     headerContainer.getChildren().clear();
     headerContainer.getChildren().add(new PackageSourceBadgeView(remotePackage.getRemoteSource(),
-        this.getApplicationDefaults()));
+        this.getApplicationDefaults(), true));
 
     // Screenshot display
     Image screenshot = imageCache.get(remotePackage.getScreenshotUrl());

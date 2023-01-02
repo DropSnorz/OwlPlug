@@ -403,12 +403,22 @@ ProgressIndicator{
 	-fx-padding:10,10,10,10;
 }
 
-.package-bloc-header {
+
+.package-source-badge {
 	-fx-background-color: rgba(245,245,241, 1);
 	-fx-text-fill: disabled-color;
 	-fx-background-radius: 0 0 0 5px;
 	-fx-border-radius: 0 0 0 5px;
-	-fx-padding:5,5,5,5;
+	-fx-padding: 5;
+	-fx-border-style: solid;
+    -fx-border-color: disabled-color;
+    -fx-border-width: 0 0 1 1;
+}
+
+.badge {
+	-fx-background-radius: 5px 5px 5px 5px;
+	-fx-border-radius: 5px 5px 5px 5px;
+	-fx-border-width: 0;
 }
 
 .shape-state-active {
