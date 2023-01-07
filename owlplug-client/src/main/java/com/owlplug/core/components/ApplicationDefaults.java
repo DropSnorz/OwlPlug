@@ -24,7 +24,7 @@ import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.model.platform.RuntimePlatformResolver;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.store.model.StoreProduct;
+import com.owlplug.explore.model.RemotePackage;
 import java.io.File;
 import javafx.scene.image.Image;
 import org.slf4j.Logger;
@@ -48,6 +48,9 @@ public class ApplicationDefaults {
   // CHECKSTYLE:OFF
   public static final Image owlplugLogo = new Image(
       ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo.png"));
+
+  public final Image owlplugLogoSmall = new Image(
+      ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo-16.png"));
   public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
   public final Image vst2Image = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
   public final Image vst3Image = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
@@ -59,13 +62,18 @@ public class ApplicationDefaults {
   public final Image taskFailImage = new Image(getClass().getResourceAsStream("/icons/cross-red-16.png"));
   public final Image taskRunningImage = new Image(getClass().getResourceAsStream("/icons/play-green-16.png"));
   public final Image rocketImage = new Image(getClass().getResourceAsStream("/icons/rocket-white-64.png"));
-  public final Image storeImage = new Image(getClass().getResourceAsStream("/icons/bag-white-32.png"));
+  public final Image serverImage = new Image(getClass().getResourceAsStream("/icons/server-white-32.png"));
   public final Image instrumentImage = new Image(getClass().getResourceAsStream("/icons/synth-white-16.png"));
   public final Image effectImage = new Image(getClass().getResourceAsStream("/icons/effect-white-16.png"));
   public final Image tagImage = new Image(getClass().getResourceAsStream("/icons/tag-white-16.png"));
   public final Image symlinkImage = new Image(getClass().getResourceAsStream("/icons/folderlink-grey-16.png"));
   public final Image userImage = new Image(getClass().getResourceAsStream("/icons/user-white-32.png"));
   public final Image rootDirectoryImage = new Image(getClass().getResourceAsStream("/icons/foldersearch-grey-16.png"));
+  public final Image verifiedSourceImage = new Image(getClass().getResourceAsStream("/icons/doublecheck-grey-16.png"));
+  public final Image suggestedSourceImage = new Image(
+      ApplicationDefaults.class.getResourceAsStream("/icons/check-grey-16.png"));
+  public final Image studiorackLogoSmall = new Image(
+      ApplicationDefaults.class.getResourceAsStream("/media/studiorack-logo-16.png"));
 
 
   public final Image pluginPlaceholderImage = new Image(
@@ -136,12 +144,12 @@ public class ApplicationDefaults {
   /**
    * Returns plugin icon based on plugin format.
    * 
-   * @param product - product
+   * @param remotePackage - package
    * @return Associated icon
    */
-  public Image getProductTypeIcon(StoreProduct product) {
+  public Image getPackageTypeIcon(RemotePackage remotePackage) {
 
-    switch (product.getType()) {
+    switch (remotePackage.getType()) {
     case INSTRUMENT:
       return instrumentImage;
     case EFFECT:

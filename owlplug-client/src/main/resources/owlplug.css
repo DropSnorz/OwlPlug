@@ -123,7 +123,7 @@ TextArea .content {
 .chip-blue {
 	-fx-background-color: #657899
 }
-.fake-chip{
+.chip-label{
     -fx-font-family: "Roboto Medium";
     -fx-font-size: 12.0;
     -fx-background-color: #E0E0E0;
@@ -132,8 +132,9 @@ TextArea .content {
     -fx-pref-height: 24px;
     -fx-alignment: center-left;
     -fx-spacing: 8;
+    -fx-text-fill: black;
 }
-.fake-chip Label {
+.chip-label Label {
     -fx-text-fill: black;
 }
 
@@ -357,6 +358,9 @@ ProgressIndicator{
   -fx-text-fill: text-color;
 }
 
+.tooltip {
+    -fx-text-fill: text-color;
+}
 
 /****************************************************************
   App section theme
@@ -394,11 +398,28 @@ ProgressIndicator{
 }
 
 
-.product-bloc-header{
+.package-bloc-title {
 	-fx-background-color: rgba(0,0,0, 0.85);
 	-fx-padding:10,10,10,10;
 }
 
+
+.package-source-badge {
+	-fx-background-color: rgba(245,245,241, 1);
+	-fx-text-fill: disabled-color;
+	-fx-background-radius: 0 0 0 5px;
+	-fx-border-radius: 0 0 0 5px;
+	-fx-padding: 5;
+	-fx-border-style: solid;
+    -fx-border-color: disabled-color;
+    -fx-border-width: 0 0 1 1;
+}
+
+.badge {
+	-fx-background-radius: 5px 5px 5px 5px;
+	-fx-border-radius: 5px 5px 5px 5px;
+	-fx-border-width: 0;
+}
 
 .shape-state-active {
 	-fx-fill: success-color;

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.SourceMenuController">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="5.0">
+         <children>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../icons/server-white-32.png" />
+               </image>
+            </ImageView>
+            <Label text="Source List" />
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" />
+      <VBox fx:id="sourceListHolder" alignment="CENTER_LEFT" spacing="15.0" VBox.vgrow="NEVER" />
+      <VBox alignment="CENTER_LEFT" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <HBox fx:id="newSourceMenuItem" alignment="CENTER_LEFT" spacing="5.0" styleClass="menu-item">
+               <children>
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/circleplus-grey-32.png" />
+                     </image>
+                  </ImageView>
+                  <Label text="Add a new source..." />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+   </children>
+   <padding>
+      <Insets bottom="30.0" left="10.0" right="10.0" top="20.0" />
+   </padding>
+</VBox>
