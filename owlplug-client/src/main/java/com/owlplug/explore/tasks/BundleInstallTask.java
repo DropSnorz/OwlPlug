@@ -174,8 +174,8 @@ public class BundleInstallTask extends AbstractTask {
     File newSource = source;
     switch (structure) {
       case NESTED -> newSource = source.listFiles()[0];
-      case ENV -> newSource = getSubfileByPlatformTag(source);
-      case NESTED_ENV -> newSource = getSubfileByPlatformTag(source.listFiles()[0]);
+      case ENV -> newSource = getSubFileByPlatformTag(source);
+      case NESTED_ENV -> newSource = getSubFileByPlatformTag(source.listFiles()[0]);
       default -> log.debug("Can't determine owlpack structure type (NESTED, ENV or NESTED_ENV)."
                                + " Directory will be used as it.");
     }
@@ -219,7 +219,7 @@ public class BundleInstallTask extends AbstractTask {
     return contentLength;
   }
 
-  private File getSubfileByPlatformTag(File parent) {
+  private File getSubFileByPlatformTag(File parent) {
 
     RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
     File[] subFiles = parent.listFiles();
@@ -234,7 +234,7 @@ public class BundleInstallTask extends AbstractTask {
     return null;
   }
 
-  private boolean verifyHash(File file, String hash) {
+  private boolean verifyHash(File file, String expectedHash) {
 
     String fileHash;
     try {
@@ -243,7 +243,6 @@ public class BundleInstallTask extends AbstractTask {
       log.error("File hash can't be computed", e);
       return false;
     }
-    String expectedHash = bundle.getDownloadSha256();
 
     if (expectedHash.equalsIgnoreCase(fileHash)) {
       log.debug("Valid SHA256 given: {}, expected: {}", fileHash, expectedHash);

@@ -37,8 +37,8 @@ import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
-import com.owlplug.explore.model.search.StoreFilterCriteria;
 import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
+import com.owlplug.explore.model.search.StoreFilterCriteria;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
@@ -343,7 +343,7 @@ public class ExploreController extends BaseController {
 
     //if the enduser wishes to group plugins by their creator,
     //then we need to include the subdirectory as well.
-    if(shouldGroupByCreator) {
+    if (shouldGroupByCreator) {
       String creator = FileUtils.sanitizeFileName(bundle.getRemotePackage().getCreator());
       relativeDirectoryPath = relativeDirectoryPath + File.separator + creator;
     }
