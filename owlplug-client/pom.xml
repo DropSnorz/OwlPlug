@@ -153,7 +153,7 @@
 		<dependency>
 			<groupId>com.google.apis</groupId>
 			<artifactId>google-api-services-plus</artifactId>
-			<version>v1-rev530-1.23.0</version>
+			<version>v1-rev20190328-1.30.10</version>
 		</dependency>
 
 		<dependency>
