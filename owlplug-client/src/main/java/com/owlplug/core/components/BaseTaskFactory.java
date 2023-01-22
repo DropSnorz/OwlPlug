@@ -20,7 +20,7 @@ package com.owlplug.core.components;
 
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskExecutionContext;
-import com.owlplug.core.utils.SimpleEventListener;
+import com.owlplug.core.tasks.SimpleEventListener;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 

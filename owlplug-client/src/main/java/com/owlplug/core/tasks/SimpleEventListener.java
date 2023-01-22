@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.core.utils;
+package com.owlplug.core.tasks;
 
 import java.util.EventListener;
 

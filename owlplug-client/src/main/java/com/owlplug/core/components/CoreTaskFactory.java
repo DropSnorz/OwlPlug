@@ -28,7 +28,7 @@ import com.owlplug.core.tasks.PluginSyncTask;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.core.utils.SimpleEventListener;
+import com.owlplug.core.tasks.SimpleEventListener;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -23,7 +23,7 @@ import com.owlplug.core.components.BaseTaskFactory;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.core.utils.SimpleEventListener;
+import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.explore.dao.RemotePackageDAO;
 import com.owlplug.explore.dao.RemoteSourceDAO;
 import com.owlplug.explore.model.PackageBundle;
