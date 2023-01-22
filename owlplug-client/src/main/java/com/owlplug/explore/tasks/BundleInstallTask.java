@@ -23,6 +23,7 @@ import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
+import com.owlplug.core.utils.ArchiveUtils;
 import com.owlplug.core.utils.CryptoUtils;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.nio.CallbackByteChannel;
@@ -100,7 +101,7 @@ public class BundleInstallTask extends AbstractTask {
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Extracting files...");
       File extractedArchiveFolder = new File(ApplicationDefaults.getTempDownloadDirectory() + "/" + "temp-"
                                                  + archiveFile.getName().replace(".owlpack", ""));
-      FileUtils.unzip(archiveFile.getAbsolutePath(), extractedArchiveFolder.getAbsolutePath());
+      ArchiveUtils.extract(archiveFile.getAbsolutePath(), extractedArchiveFolder.getAbsolutePath());
 
       this.commitProgress(30);
 

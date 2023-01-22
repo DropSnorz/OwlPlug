@@ -335,24 +335,25 @@ public class ExploreController extends BaseController {
         bundle.getRemotePackage().getName(),
         bundle.getName());
 
-    
-    String baseDirectoryPath = exploreService.getBundleInstallFolder(bundle);
-    String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
-
-    Boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
-
-    //if the enduser wishes to group plugins by their creator,
-    //then we need to include the subdirectory as well.
-    if (shouldGroupByCreator) {
-      String creator = FileUtils.sanitizeFileName(bundle.getRemotePackage().getCreator());
-      relativeDirectoryPath = relativeDirectoryPath + File.separator + creator;
-    }
 
     File selectedDirectory = null;
+    String baseDirectoryPath = exploreService.getBundleInstallFolder(bundle);
 
-    // A custom root directory to store plugin is defined
-    if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)) {
+    // A custom root directory to store plugin is defined and the base directory for
+    // the bundle type is defined or not blank.
+    if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false) &&
+      baseDirectoryPath != null && !baseDirectoryPath.isBlank()) {
       // Store install target is already defined
+
+      String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
+      Boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
+
+      //if the enduser wishes to group plugins by their creator,
+      //then we need to include the subdirectory as well.
+      if (shouldGroupByCreator) {
+        String creator = FileUtils.sanitizeFileName(bundle.getRemotePackage().getCreator());
+        relativeDirectoryPath = relativeDirectoryPath + File.separator + creator;
+      }
 
       selectedDirectory = new File(baseDirectoryPath, relativeDirectoryPath);
       
@@ -369,7 +370,6 @@ public class ExploreController extends BaseController {
       Window mainWindow = masonryPane.getScene().getWindow();
       selectedDirectory = directoryChooser.showDialog(mainWindow);
     }
-
     
     
     // If any install target directory can be found, abort install
