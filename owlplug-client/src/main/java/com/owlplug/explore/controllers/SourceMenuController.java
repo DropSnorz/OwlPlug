@@ -82,7 +82,6 @@ public class SourceMenuController extends BaseController {
 
     StoreMenuItem(RemoteSource pluginRemoteSource) {
       this.getStyleClass().add("menu-item");
-      this.setAlignment(Pos.CENTER_LEFT);
 
       // Info Area
       VBox infoPane = new VBox();
@@ -136,6 +135,7 @@ public class SourceMenuController extends BaseController {
       // Delete button area
       Hyperlink deleteButton = new Hyperlink("X");
       deleteButton.getStyleClass().add("hyperlink-button");
+      HBox.setMargin(deleteButton, new Insets(6,0,0,0));
       this.getChildren().add(deleteButton);
 
       deleteButton.setOnAction(e -> {

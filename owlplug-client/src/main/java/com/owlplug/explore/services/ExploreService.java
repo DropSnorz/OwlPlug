@@ -68,15 +68,15 @@ public class ExploreService extends BaseService {
   @PostConstruct
   private void init() {
 
-    RemoteSource remoteSource = remoteSourceDAO.findByName("OwlPlug Central");
+    RemoteSource remoteSource = remoteSourceDAO.findByUrl("https://registry.owlplug.com/registry.min.json");
 
     if (remoteSource == null) {
       remoteSource = new RemoteSource();
-      remoteSource.setName("OwlPlug Central");
+      remoteSource.setName("OwlPlug Registry");
     }
-    remoteSource.setUrl("https://central.owlplug.com/store.json");
-    remoteSource.setDisplayUrl("https://central.owlplug.com");
-    remoteSource.setType(SourceType.OWLPLUG_STORE);
+    remoteSource.setUrl("https://registry.owlplug.com/registry.min.json");
+    remoteSource.setDisplayUrl("https://registry.owlplug.com");
+    remoteSource.setType(SourceType.OWLPLUG_REGISTRY);
 
     remoteSourceDAO.save(remoteSource);
   }

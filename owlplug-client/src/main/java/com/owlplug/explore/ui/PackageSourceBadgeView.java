@@ -43,7 +43,7 @@ public class PackageSourceBadgeView extends HBox {
     this.isRoundBadge = isRoundBadge;
 
     if (remoteSource.getUrl() != null
-            && remoteSource.getUrl().startsWith("https://owlplug.github.io/owlplug-registry/registry")) {
+            && remoteSource.getUrl().startsWith("https://registry.owlplug.com/registry")) {
       String tooltipText = "Official OwlPlug Registry\nPackages content and integrity are verified";
       createContent(applicationDefaults.verifiedSourceImage, applicationDefaults.owlplugLogoSmall, tooltipText);
     }

@@ -24,4 +24,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface RemoteSourceDAO extends CrudRepository<RemoteSource, Long> {
 
   public RemoteSource findByName(String name);
+  public RemoteSource findByUrl(String url);
 }
