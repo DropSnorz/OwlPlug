@@ -38,7 +38,7 @@ All kinds of feedbacks are greatly welcomed.
 
 ### Direct download (latest version)
 
-**Requirements**: Windows 7 (64 bit) or later, macOS Sierra or later.
+**Requirements**: Windows 7 (64 bit) or later, macOS High Sierra or later.
 
 1. Browse binaries from [the release section](http://github.com/dropsnorz/owlplug/releases)
 2. Download and run the OwlPlug installer for your platform
@@ -74,36 +74,34 @@ After downloading Owlplug, you can still organize (add, move, delete, ...) your 
 
 A Link allows you to create and manage symlinks across your filesystem and plugin directories. With Links, you can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through a single root plugin directory. For example, you can configure a link named *usb-drive* in `C:/AudioPlugins` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/AudioPlugins/usb-drive`. This feature may be useful for DAW that scans plugins from predefined or limited number directories. On some Windows version, symlinks creation may require admin privileges.
 
-## Stores 
+## Explore and download Plugins
 
-Owlplug is shipped with a plugin store to automate plugin downloads and installations. A Store is a collection of downloadable plugins that can be installed locally. Plugins delivered by OwlPlug Central are available by default. OwlPlug can be configured to use any compatible third party store in *Store* Tab > *Stores* > *Add a new store source...*.
+OwlPlug can be connected to several remote sources to download plugins. A Remote Source is a collection of downloadable plugins that can be installed locally. OwlPlug can be configured to use any compatible third-party store in *Explore* Tab > *Sources* > *Add a new source...*.
 
+Here are some recommended compatible sources.
 
-### OwlPlug Central
+#### OwlPlug Registry ⭐ 
 
-OwlPlug Central is the default store. It's a secure and trusted source to retrieve plugins. OwlPlug Central is a quick proof of concept for the store feature integration. For now, OwlPlug Central is delivering only free open sourced plugins.
+OwlPlug official plugin registry for Free or Open Source plugins
+* kind: `registry`
+* url: `https://registry.owlplug.com/registry.min.json`
 
-* OwlPlug central: `https://central.owlplug.com/store`
+#### StudioRack Registry ⭐ 
 
-### Third party
+Studiorack registry plugins for OwlPlug.
+* kind: `registry`
+* url: `https://owlplug.github.io/studiorack-registry-adapter/registry.min.json` 
 
-Third party stores are maintained by plugin creators, developers or distributors. For security reasons, you should only use stores from trusted sources only.
-
-* Krakli plugins (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `https://getdunne.net/Krakli/owl.php`
-* GyL Synths (By [Shane Dunne](http://getdunne.net/wiki/doku.php)): `https://getdunne.net/GyL/owl.php`
-
-
-### Third party (Central mirror)
-
-Third party store adapters are maintained by OwlPlug Central but plugins binaries are hosted by original creators. (For testing purposes)
-
-* AmVST (By [Angular Momentum](http://www.amvst.com/)): `https://central.owlplug.com/mirrors/amvst/store`
-* [Vst4free](http://vst4free.com): `https://central.owlplug.com/mirrors/vst4free/store`
+**Discover more plugin sources in [this wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Remote-plugin-sources).**
 
 ### How to distribute my plugins on OwlPlug ?
 
-* **OwlPlug Central** - Your plugin will be hosted and distributed by OwlPlug Central. Open an issue or a pull request on the [OwlPlug Central repository](https://github.com/owlplug/central)
-* **Set up your store** - If you provide a complete set of plugins, you can create a store endpoint following the [OwlPlug Store Specification](https://github.com/DropSnorz/OwlPlug/blob/master/doc/ThirdParty_Store_Specification.md). 
+* **(Recomended)** Distribute your plugins using on the official OwlPlug Registry. You can find more information on how to proceed in the [registry github repository](https://github.com/OwlPlug/owlplug-registry).
+
+* Setup and host a custom remote source to distribute multiple plugins, following the registry specification.
+
+* *(Deprecated)* Setup and host a custom remote source to distribute multiple plugins, following the store specification. The store specification is not actively maintained, you should use the registry spec instead.
+
 
 # Development
 
