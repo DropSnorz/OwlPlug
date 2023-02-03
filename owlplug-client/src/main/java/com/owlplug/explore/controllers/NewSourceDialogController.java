@@ -24,6 +24,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
+import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.services.ExploreService;
 import javafx.concurrent.Task;
@@ -43,6 +44,8 @@ public class NewSourceDialogController extends AbstractDialogController implemen
   private ExploreService exploreService;
   @Autowired
   private SourceMenuController sourceMenuController;
+  @Autowired
+  private ExploreTaskFactory exploreTaskFactory;
 
   @FXML
   private JFXTextField sourceUrlTextField;
@@ -50,6 +53,10 @@ public class NewSourceDialogController extends AbstractDialogController implemen
   private JFXSpinner progressSpinner;
   @FXML
   private Label errorLabel;
+  @FXML
+  private JFXButton owlplugSuggestionButton;
+  @FXML
+  private JFXButton studiorackSuggestionButton;
   @FXML
   private JFXButton okButton;
   @FXML
@@ -67,13 +74,37 @@ public class NewSourceDialogController extends AbstractDialogController implemen
     progressSpinner.setVisible(false);
     errorLabel.setVisible(false);
 
+    owlplugSuggestionButton.setOnAction(e -> {
+      sourceUrlTextField.setText(this.getApplicationDefaults().getOwlPlugRegistryUrl());
+      validateAndSaveSource();
+    });
+
+    studiorackSuggestionButton.setOnAction(e -> {
+      sourceUrlTextField.setText(this.getApplicationDefaults().getStudiorackRegistryUrl());
+      validateAndSaveSource();
+    });
+
     okButton.setOnAction(e -> {
-      getPluginStore();
+      validateAndSaveSource();
     });
 
     cancelButton.setOnAction(e -> {
       close();
     });
+
+  }
+
+  @Override
+  public void show() {
+    super.show();
+
+    owlplugSuggestionButton.setDisable(
+        exploreService.getRemoteSourceByUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl()) != null
+    );
+
+    studiorackSuggestionButton.setDisable(
+        exploreService.getRemoteSourceByUrl(this.getApplicationDefaults().getStudiorackRegistryUrl()) != null
+    );
 
   }
 
@@ -91,7 +122,7 @@ public class NewSourceDialogController extends AbstractDialogController implemen
 
   }
 
-  private void getPluginStore() {
+  private void validateAndSaveSource() {
 
     progressSpinner.setVisible(true);
     String sourceUrl = sourceUrlTextField.getText();
@@ -100,7 +131,7 @@ public class NewSourceDialogController extends AbstractDialogController implemen
       Task<RemoteSource> task = new Task<RemoteSource>() {
         @Override
         protected RemoteSource call() throws Exception {
-          return exploreService.getSourceFromRemoteUrl(sourceUrl);
+          return exploreService.fetchSourceFromRemoteUrl(sourceUrl);
         }
       };
 
@@ -115,6 +146,8 @@ public class NewSourceDialogController extends AbstractDialogController implemen
           this.getDialogManager().newSimpleInfoDialog("Success",
               "The plugin store " + pluginRemoteSource.getName() + " has been successfully added !").show();
           this.getAnalyticsService().pageView("/app/store/action/add");
+          this.exploreTaskFactory.createSourceSyncTask().scheduleNow();
+
         } else {
           errorLabel.setVisible(true);
         }

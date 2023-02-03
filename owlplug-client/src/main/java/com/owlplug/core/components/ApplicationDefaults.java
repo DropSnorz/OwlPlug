@@ -204,6 +204,13 @@ public class ApplicationDefaults {
     return env.getProperty("owlplug.hub.updateDownloadUrl");
   }
 
+  public String getOwlPlugRegistryUrl() {
+    return env.getProperty("owlplug.registry.url");
+  }
+
+  public String getStudiorackRegistryUrl() {
+    return env.getProperty("studiorack.registry.url");
+  }
   public String getEnvProperty(String property) {
     return env.getProperty(property);
   }

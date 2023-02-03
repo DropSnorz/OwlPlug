@@ -68,13 +68,13 @@ public class ExploreService extends BaseService {
   @PostConstruct
   private void init() {
 
-    RemoteSource remoteSource = remoteSourceDAO.findByUrl("https://registry.owlplug.com/registry.min.json");
+    RemoteSource remoteSource = remoteSourceDAO.findByUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl());
 
     if (remoteSource == null) {
       remoteSource = new RemoteSource();
       remoteSource.setName("OwlPlug Registry");
     }
-    remoteSource.setUrl("https://registry.owlplug.com/registry.min.json");
+    remoteSource.setUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl());
     remoteSource.setDisplayUrl("https://registry.owlplug.com");
     remoteSource.setType(SourceType.OWLPLUG_REGISTRY);
 
@@ -90,6 +90,10 @@ public class ExploreService extends BaseService {
 
   public Iterable<RemoteSource> getRemoteSources() {
     return remoteSourceDAO.findAll();
+  }
+
+  public RemoteSource getRemoteSourceByUrl(String url) {
+    return remoteSourceDAO.findByUrl(url);
   }
 
   /**
@@ -145,7 +149,7 @@ public class ExploreService extends BaseService {
     return null;
   }
 
-  public RemoteSource getSourceFromRemoteUrl(String url) {
+  public RemoteSource fetchSourceFromRemoteUrl(String url) {
 
     try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 

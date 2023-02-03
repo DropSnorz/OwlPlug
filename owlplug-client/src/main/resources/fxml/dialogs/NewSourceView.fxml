@@ -2,23 +2,54 @@
 
 <?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.NewSourceDialogController">
+<VBox prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.NewSourceDialogController">
    <children>
       <VBox>
          <children>
             <Label text="Plugin source url" wrapText="true" />
+            <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+               <children>
+                  <JFXTextField fx:id="sourceUrlTextField" promptText="http://example.com/source" HBox.hgrow="ALWAYS" />
+                  <JFXSpinner fx:id="progressSpinner" prefHeight="25.0" prefWidth="25.0" />
+               </children>
+            </HBox>
+            <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Invalid source response" />
          </children>
       </VBox>
-      <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+      <VBox spacing="10.0">
          <children>
-            <JFXTextField fx:id="sourceUrlTextField" promptText="http://example.com/source" HBox.hgrow="ALWAYS" />
-            <JFXSpinner fx:id="progressSpinner" prefHeight="25.0" prefWidth="25.0" />
+            <Label text="Plugin source suggestions (2)" />
+            <HBox spacing="5.0">
+               <children>
+                  <JFXButton fx:id="owlplugSuggestionButton" text="OwlPlug Registry">
+                     <graphic>
+                        <Pane style="-fx-background-color: white;">
+                           <children>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../media/owlplug-logo-16.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton fx:id="studiorackSuggestionButton" layoutX="10.0" layoutY="10.0" text="Studiorack Registry">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../media/studiorack-logo-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </HBox>
          </children>
-      </HBox>
-      <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Invalid source response" />
+      </VBox>
       <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
             <JFXButton fx:id="okButton" text="Add source" />
