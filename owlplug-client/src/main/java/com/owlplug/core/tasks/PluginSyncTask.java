@@ -166,7 +166,7 @@ public class PluginSyncTask extends AbstractTask {
         }
       }
       
-      log.debug(collectedPluginFiles.size() + " plugins collected");
+      log.info(collectedPluginFiles.size() + " plugins collected");
       
       //Save all discovered symlinks
       symlinkDAO.saveAll(collectedSymlinks);

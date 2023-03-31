@@ -181,7 +181,9 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
           outputXML = outputXML.strip();
 
           JuceXMLPlugin plugin = createJucePluginFromRawXml(outputXML);
-          plugins.add(plugin.toNativePlugin());
+          if (plugin != null) {
+            plugins.add(plugin.toNativePlugin());
+          }
 
         } else {
           log.trace("No XML tag can be extracted from part {} for plugin", i);
@@ -209,7 +211,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
 
     } catch (JAXBException e) {
       log.error("Error during XML mapping", e);
-      log.debug(xml);
+      log.error(xml);
       return null;
     }
   }
