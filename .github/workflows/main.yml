@@ -32,7 +32,7 @@ jobs:
       env:
         OS: windows
     - name: Get Host Version
-      run: Write-Host ::set-output name=version::$((Select-Xml -Path owlplug-host/src/main/juce/OwlPlugHost.jucer -XPath "//JUCERPROJECT/@version").Node.Value)
+      run: echo "version=$((Select-Xml -Path owlplug-host/src/main/juce/OwlPlugHost.jucer -XPath '//JUCERPROJECT/@version').Node.Value)" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       id: get-version
     - name: "Build Host"
       run: ./build/build-host-win.sh
@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: owlplug-host-win
-        path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ steps.get-version.outputs.version }}.dll
+        path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}.dll
   build-host-osx:
     runs-on: macos-latest
     steps:
@@ -63,7 +63,7 @@ jobs:
     - name: Install XmlStarlet
       run: brew install xmlstarlet
     - name: Get Host Version
-      run: echo ::set-output name=version::$(xmlstarlet sel -t -v 'string(//JUCERPROJECT/@version)' owlplug-host/src/main/juce/OwlPlugHost.jucer)
+      run: echo "version=$(xmlstarlet sel -t -v 'string(//JUCERPROJECT/@version)' owlplug-host/src/main/juce/OwlPlugHost.jucer)" >> $GITHUB_ENV
       id: get-version
     - name: "Build Host"
       run: ./build/build-host-osx.sh
@@ -72,7 +72,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: owlplug-host-osx
-        path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ steps.get-version.outputs.version }}.dylib
+        path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}.dylib
   build-host-linux:
     runs-on: ubuntu-latest
     steps:
@@ -96,18 +96,18 @@ jobs:
     - name: Install XmlStarlet
       run: sudo apt-get install xmlstarlet
     - name: Get Host Version
-      run: echo ::set-output name=version::$(xmlstarlet sel -t -v 'string(//JUCERPROJECT/@version)' owlplug-host/src/main/juce/OwlPlugHost.jucer)
+      run: echo "version=$(xmlstarlet sel -t -v 'string(//JUCERPROJECT/@version)' owlplug-host/src/main/juce/OwlPlugHost.jucer)" >> $GITHUB_ENV
       id: get-version
     - name: "Build Host"
       run: ./build/build-host-linux.sh
       shell: bash
     - name: Add version in binary name
-      run: mv owlplug-host/src/main/juce/Builds/LinuxMakefile/build/libowlplug-host.so owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ steps.get-version.outputs.version }}.so
+      run: mv owlplug-host/src/main/juce/Builds/LinuxMakefile/build/libowlplug-host.so owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}.so
     - name: Upload Host Artifact
       uses: actions/upload-artifact@v3
       with:
         name: owlplug-host-linux
-        path: owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ steps.get-version.outputs.version }}.so
+        path: owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}.so
   build-jar:
     runs-on: ubuntu-latest
     needs: [build-host-win, build-host-osx, build-host-linux]
@@ -119,7 +119,7 @@ jobs:
         distribution: 'adopt'
         java-version: 17
     - name: Get version
-      run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+      run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Windows native Host artifact
       uses: actions/download-artifact@v3
@@ -137,14 +137,14 @@ jobs:
         name: owlplug-host-linux
         path: owlplug-host/src/main/resources
     - name: Get OwlPlug Scanner version
-      run: echo ::set-output name=version::$(cat ./owlplug-host/src/main/resources/owlplug-scanner.version)
+      run: echo "scanner_version=$(cat ./owlplug-host/src/main/resources/owlplug-scanner.version)" >> $GITHUB_ENV
       id: get-scanner-version
     - name: Download scanner win binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ steps.get-scanner-version.outputs.version }}/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-win.exe --output owlplug-host/src/main/resources/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-win.exe
+      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-win.exe --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-win.exe
     - name: Download scanner osx binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ steps.get-scanner-version.outputs.version }}/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-osx --output owlplug-host/src/main/resources/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-osx
+      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-osx --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-osx
     - name: Download scanner linux binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ steps.get-scanner-version.outputs.version }}/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-linux --output owlplug-host/src/main/resources/owlplug-scanner-${{ steps.get-scanner-version.outputs.version }}-linux
+      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-linux --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-linux
     - name: Build maven parent project
       run: mvn -B install -DskipTests
     - name: Build runnable Jar
@@ -153,7 +153,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: owlplug-client-jar
-        path: owlplug-client/target/owlplug-client-${{ steps.get-version.outputs.version }}.jar
+        path: owlplug-client/target/owlplug-client-${{ env.version }}.jar
   package-win:
     runs-on: windows-latest
     needs: [build-jar]
@@ -165,7 +165,7 @@ jobs:
         distribution: 'adopt'
         java-version: 17
     - name: Get version
-      run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+      run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       shell: bash
       id: get-version
     - name: Install Jar artifact
@@ -174,12 +174,12 @@ jobs:
         name: owlplug-client-jar
         path: owlplug-client/target
     - name: Package installer
-      run: cd build && ./package-msi.cmd ${{ steps.get-version.outputs.version }}
+      run: cd build && ./package-msi.cmd ${{ env.version }}
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v3
       with:
         name: owlplug-installer-win
-        path: build/output/OwlPlug-${{ steps.get-version.outputs.version }}.msi
+        path: build/output/OwlPlug-${{ env.version }}.msi
   package-osx:
     runs-on: macos-latest
     needs: [build-jar]
@@ -191,7 +191,7 @@ jobs:
         distribution: 'adopt'
         java-version: 17
     - name: Get version
-      run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+      run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Jar artifact
       uses: actions/download-artifact@v3
@@ -199,12 +199,12 @@ jobs:
         name: owlplug-client-jar
         path: owlplug-client/target
     - name: Package installer
-      run: cd build && ./package-dmg.sh ${{ steps.get-version.outputs.version }}
+      run: cd build && ./package-dmg.sh ${{ env.version }}
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v3
       with:
         name: owlplug-installer-osx
-        path: build/output/OwlPlug-${{ steps.get-version.outputs.version }}.dmg
+        path: build/output/OwlPlug-${{ env.version }}.dmg
   package-linux:
     runs-on: ubuntu-latest
     needs: [build-jar]
@@ -216,7 +216,7 @@ jobs:
         distribution: 'adopt'
         java-version: 17
     - name: Get version
-      run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+      run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Jar artifact
       uses: actions/download-artifact@v3
@@ -224,9 +224,9 @@ jobs:
         name: owlplug-client-jar
         path: owlplug-client/target
     - name: Package installer
-      run: cd build && ./package-deb.sh ${{ steps.get-version.outputs.version }}
+      run: cd build && ./package-deb.sh ${{ env.version }}
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v3
       with:
         name: owlplug-installer-linux
-        path: build/output/OwlPlug-${{ steps.get-version.outputs.version }}.deb
+        path: build/output/OwlPlug-${{ env.version }}.deb
