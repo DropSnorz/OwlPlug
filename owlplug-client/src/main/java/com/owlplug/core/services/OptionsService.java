@@ -29,7 +29,7 @@ import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.explore.dao.RemotePackageDAO;
 import com.owlplug.explore.dao.RemoteSourceDAO;
 import java.util.prefs.BackingStoreException;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
