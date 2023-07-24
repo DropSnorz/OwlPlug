@@ -74,8 +74,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<!-- Override sb managed version. Major performance degradation since 1.4.198-->
-			<version>1.4.197</version>
 			<scope>runtime</scope>
 		</dependency>
 
