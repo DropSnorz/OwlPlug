@@ -20,7 +20,6 @@ package com.owlplug.core.tasks;
 
 import com.owlplug.core.model.PluginDirectory;
 import java.io.File;
-
 import org.apache.commons.io.FileUtils;
 
 public class DirectoryRemoveTask extends AbstractTask {

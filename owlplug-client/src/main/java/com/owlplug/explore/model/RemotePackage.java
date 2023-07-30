@@ -20,8 +20,6 @@ package com.owlplug.explore.model;
 
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.model.PluginType;
-import java.util.HashSet;
-import java.util.Set;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,6 +31,8 @@ import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(indexes = { @Index(name = "IDX_PACKAGE_ID", columnList = "id"),

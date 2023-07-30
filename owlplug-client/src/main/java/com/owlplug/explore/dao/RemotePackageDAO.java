@@ -20,11 +20,11 @@ package com.owlplug.explore.dao;
 
 import com.owlplug.core.model.PluginType;
 import com.owlplug.explore.model.RemotePackage;
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

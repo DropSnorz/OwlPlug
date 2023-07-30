@@ -19,7 +19,6 @@
 package com.owlplug.core.services;
 
 import com.owlplug.core.components.ApplicationDefaults;
-
 import com.owlplug.core.components.ApplicationPreferences;
 import org.springframework.beans.factory.annotation.Autowired;
 

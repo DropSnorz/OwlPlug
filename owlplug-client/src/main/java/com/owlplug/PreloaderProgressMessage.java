@@ -19,7 +19,6 @@
 package com.owlplug;
 
 import java.util.Objects;
-
 import javafx.application.Preloader.PreloaderNotification;
 
 public class PreloaderProgressMessage implements PreloaderNotification {
