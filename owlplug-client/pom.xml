@@ -33,7 +33,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.7.7</version>
+				<version>3.1.2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -74,8 +74,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<!-- Override sb managed version. Major performance degradation since 1.4.198-->
-			<version>1.4.197</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -135,14 +133,19 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<scope>provided</scope>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.2</version>
 		</dependency>
 
 		<dependency>
@@ -198,6 +201,7 @@
 		<dependency>
 			<groupId>org.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
+			<classifier>jakarta</classifier>
 		</dependency>
 
 		<dependency>
