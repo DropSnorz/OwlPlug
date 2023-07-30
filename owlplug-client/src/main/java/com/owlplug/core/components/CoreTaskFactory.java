@@ -18,11 +18,13 @@
  
 package com.owlplug.core.components;
 
+import com.owlplug.core.dao.FileStatDAO;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.NativeHostService;
+import com.owlplug.core.tasks.FileSyncTask;
 import com.owlplug.core.tasks.PluginRemoveTask;
 import com.owlplug.core.tasks.PluginSyncTask;
 import com.owlplug.core.tasks.SimpleEventListener;
@@ -48,6 +50,9 @@ public class CoreTaskFactory extends BaseTaskFactory {
   private SymlinkDAO symlinkDAO;
   @Autowired
   private NativeHostService nativeHostService;
+
+  @Autowired
+  private FileStatDAO fileStatDAO;
 
 
   private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
@@ -89,7 +94,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
       parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
     }
     
-    PluginSyncTask task = new PluginSyncTask(parameters, 
+    PluginSyncTask task = new PluginSyncTask(parameters,
         pluginDAO, 
         pluginFootprintDAO, 
         symlinkDAO, 
@@ -98,6 +103,13 @@ public class CoreTaskFactory extends BaseTaskFactory {
     task.setOnSucceeded(e -> {
       notifyListeners(syncPluginsListeners);
     });
+    return create(task);
+  }
+
+  public TaskExecutionContext createFileStatSyncTask() {
+    String directory = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+    FileSyncTask task = new FileSyncTask(fileStatDAO, directory);
+
     return create(task);
   }
   

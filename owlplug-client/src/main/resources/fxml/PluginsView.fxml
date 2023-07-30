@@ -76,6 +76,15 @@
                         </ImageView>
                      </graphic>
                   </JFXButton>
+                   <JFXButton fx:id="fullSyncButton" buttonType="RAISED" text=" Full Sync">
+                       <graphic>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                               <image>
+                                   <Image url="@../icons/refresh-white-16.png" />
+                               </image>
+                           </ImageView>
+                       </graphic>
+                   </JFXButton>
                </children>
             </HBox>
             <AnchorPane VBox.vgrow="ALWAYS">
