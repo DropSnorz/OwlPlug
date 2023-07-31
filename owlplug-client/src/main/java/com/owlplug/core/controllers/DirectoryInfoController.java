@@ -23,22 +23,31 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
 import com.owlplug.core.components.CoreTaskFactory;
+import com.owlplug.core.dao.FileStatDAO;
+import com.owlplug.core.model.FileStat;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.tasks.DirectoryRemoveTask;
 import com.owlplug.core.ui.PluginListCellFactory;
 import com.owlplug.core.utils.PlatformUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 @Controller
 public class DirectoryInfoController extends BaseController {
 
   @Autowired
   private CoreTaskFactory taskFactory;
+  @Autowired
+  private FileStatDAO fileStatDAO;
 
   @FXML
   private Label directoryPathLabel;
@@ -48,6 +57,8 @@ public class DirectoryInfoController extends BaseController {
   private JFXButton openDirectoryButton;
   @FXML
   private JFXButton deleteDirectoryButton;
+  @FXML
+  private PieChart pieChart;
 
   private PluginDirectory pluginDirectory;
 
@@ -90,12 +101,33 @@ public class DirectoryInfoController extends BaseController {
       dialog.setContent(layout);
       dialog.show();
     });
+
+    pieChart.setLegendVisible(false);
   }
 
   public void setPluginDirectory(PluginDirectory pluginDirectory) {
     this.pluginDirectory = pluginDirectory;
     directoryPathLabel.setText(pluginDirectory.getPath());
     pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());
+
+    String path = pluginDirectory.getPath();
+    if (path.endsWith("/")) {
+      path = path.substring(0,path.length() - 1);
+    }
+
+    List<FileStat> fileStats = fileStatDAO.findByParentPathOrderByLengthDesc(path);
+
+    ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+
+    for (FileStat fileStat : fileStats) {
+      System.out.println(fileStat.getName().toString());
+      chartData.add(new PieChart.Data(fileStat.getName() + " - " + fileStat.getLengthHumanReadable(),
+              fileStat.getLength()));
+    }
+
+    pieChart.setData(chartData);
+    pieChart.layout();
+
   }
 
 }

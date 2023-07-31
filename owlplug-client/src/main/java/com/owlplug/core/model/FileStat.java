@@ -18,14 +18,8 @@
 
 package com.owlplug.core.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,12 +34,14 @@ public class FileStat {
 
   private String path;
 
-  @OneToOne
+  @ManyToOne
   @JoinColumn(name = "parent_id")
   private FileStat parent;
 
   private String parentPath;
   private long length;
+
+  private String lengthHumanReadable;
 
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
   private Set<FileStat> childs = new HashSet<>();
@@ -97,4 +93,13 @@ public class FileStat {
   public void setLength(long length) {
     this.length = length;
   }
+
+  public String getLengthHumanReadable() {
+    return lengthHumanReadable;
+  }
+
+  public void setLengthHumanReadable(String lengthHumanReadable) {
+    this.lengthHumanReadable = lengthHumanReadable;
+  }
+
 }
