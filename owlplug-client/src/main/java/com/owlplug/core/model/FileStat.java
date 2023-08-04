@@ -41,8 +41,6 @@ public class FileStat {
   private String parentPath;
   private long length;
 
-  private String lengthHumanReadable;
-
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
   private Set<FileStat> childs = new HashSet<>();
 
@@ -92,14 +90,6 @@ public class FileStat {
 
   public void setLength(long length) {
     this.length = length;
-  }
-
-  public String getLengthHumanReadable() {
-    return lengthHumanReadable;
-  }
-
-  public void setLengthHumanReadable(String lengthHumanReadable) {
-    this.lengthHumanReadable = lengthHumanReadable;
   }
 
 }

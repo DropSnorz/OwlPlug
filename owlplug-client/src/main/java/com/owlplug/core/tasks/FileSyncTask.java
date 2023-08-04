@@ -86,7 +86,6 @@ public class FileSyncTask extends AbstractTask {
         fileStat.setPath(FileUtils.convertPath(file.getAbsolutePath()));
         fileStat.setParentPath(FileUtils.convertPath(directory.getAbsolutePath()));
         fileStat.setLength(file.length());
-        fileStat.setLengthHumanReadable(FileUtils.humanReadableByteCount(file.length(), true));
         fileStat.setParent(directoryStat);
 
         fileStatDAO.save(fileStat);
@@ -98,7 +97,6 @@ public class FileSyncTask extends AbstractTask {
     }
 
     directoryStat.setLength(length);
-    directoryStat.setLengthHumanReadable(FileUtils.humanReadableByteCount(length, true));
     fileStatDAO.save(directoryStat);
     return length;
 

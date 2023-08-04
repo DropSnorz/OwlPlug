@@ -2,12 +2,11 @@
 
 <?import com.jfoenix.controls.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.DirectoryInfoController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.DirectoryInfoController">
    <children>
       <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="pane-card" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
          <children>
@@ -20,21 +19,22 @@
                   </ImageView>
                </graphic>
             </Label>
-            <HBox>
+            <HBox minHeight="-Infinity" prefHeight="37.0" VBox.vgrow="NEVER">
                <children>
                   <HBox alignment="CENTER_LEFT" HBox.hgrow="SOMETIMES">
                      <children>
-                        <JFXButton fx:id="deleteDirectoryButton" styleClass="button-danger" text="Delete">
+                        <JFXButton fx:id="deleteDirectoryButton" alignment="CENTER" styleClass="button-danger" text="Delete">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../icons/trash-white-16.png" />
                                  </image>
                               </ImageView>
-                           </graphic></JFXButton>
+                           </graphic>
+                        </JFXButton>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="37.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                      <children>
                         <JFXButton fx:id="openDirectoryButton" text="Open directory" />
                      </children>
@@ -44,12 +44,12 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <JFXListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
+            <JFXListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
               </JFXListView>
-            <PieChart fx:id="pieChart" />
+            <VBox fx:id="pieChartContainer" VBox.vgrow="ALWAYS" />
          </children>
          <VBox.margin>
             <Insets left="20.0" right="20.0" />
