@@ -144,11 +144,10 @@ public class DirectoryInfoController extends BaseController {
     }
 
     List<FileStat> fileStats = fileStatDAO.findByParentPathOrderByLengthDesc(path);
-
     ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
 
     int i = 0;
-    int maxBucket = 8;
+    int maxBucket = 7;
     while (i < fileStats.size() && i < maxBucket) {
       chartData.add(new PieChart.Data(fileStats.get(i).getName(), fileStats.get(i).getLength()));
       i = i + 1;
