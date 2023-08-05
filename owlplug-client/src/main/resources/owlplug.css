@@ -472,6 +472,10 @@ ProgressIndicator{
     -fx-background-color: card-pane-color;
 }
 
+.doughnut-inner-circle {
+    -fx-fill: card-pane-color;
+}
+
 /****************************************************************
  * 
  * Utilities

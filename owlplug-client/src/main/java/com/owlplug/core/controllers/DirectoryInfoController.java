@@ -28,6 +28,7 @@ import com.owlplug.core.model.FileStat;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.tasks.DirectoryRemoveTask;
+import com.owlplug.core.ui.DoughnutChart;
 import com.owlplug.core.ui.PluginListCellFactory;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
@@ -110,7 +111,7 @@ public class DirectoryInfoController extends BaseController {
       dialog.show();
     });
 
-    pieChart = new PieChart() {
+    pieChart = new DoughnutChart() {
       @Override
       protected void layoutChartChildren(double top, double left, double contentWidth, double contentHeight) {
         if (getLabelsVisible()) {
