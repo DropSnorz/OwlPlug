@@ -32,6 +32,8 @@ import com.owlplug.core.ui.DoughnutChart;
 import com.owlplug.core.ui.PluginListCellFactory;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
+import java.util.List;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -44,9 +46,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class DirectoryInfoController extends BaseController {
@@ -102,7 +101,7 @@ public class DirectoryInfoController extends BaseController {
         dialog.close();
         taskFactory.create(new DirectoryRemoveTask(pluginDirectory))
             .setOnSucceeded(x -> taskFactory.createPluginSyncTask(pluginDirectory.getPath()).schedule())
-          .schedule();
+            .schedule();
       });
       removeButton.getStyleClass().add("button-danger");
 

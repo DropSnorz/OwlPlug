@@ -20,9 +20,12 @@ package com.owlplug.core.tasks;
 
 import com.owlplug.core.dao.FileStatDAO;
 import com.owlplug.core.model.FileStat;
-import java.io.File;
-
 import com.owlplug.core.utils.FileUtils;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,33 +35,41 @@ public class FileSyncTask extends AbstractTask {
 
   private FileStatDAO fileStatDAO;
 
-  private String directoryPath;
+  private List<String> directories;
 
   public FileSyncTask(FileStatDAO fileStatDAO, String directoryPath) {
     this.fileStatDAO = fileStatDAO;
-    this.directoryPath = directoryPath;
+    directories = Arrays.asList(directoryPath);
+  }
+
+  public FileSyncTask(FileStatDAO fileStatDAO, List<String> directories) {
+    this.fileStatDAO = fileStatDAO;
+    this.directories = directories;
   }
 
 
   @Override
   protected TaskResult call() throws Exception {
 
-    log.info("Starting file sync task on directory {}", directoryPath);
     this.updateProgress(1, 3);
 
     long length = 0;
-    try {
-      File directory = new File(directoryPath);
-      length = extractFolderSize(directory, null);
-    } catch (Exception e) {
-      log.error("An error occurred during file sync task execution", e);
-      throw new TaskException(e);
+    for (String directoryPath : directories) {
+      try {
+        log.info("Starting file sync task on directory {}", directoryPath);
+        File directory = new File(directoryPath);
+        if (directory.exists() && directory.isDirectory()) {
+          length = extractFolderSize(directory, null);
+          log.info("Completed file sync task on directory {}, computed length: {}", directoryPath, length);
+        }
+
+      } catch (Exception e) {
+        log.error("An error occurred during file sync task execution", e);
+        throw new TaskException(e);
+      }
     }
-
-    log.info("Completed file sync task on directory {}, computed length: {}", directoryPath, length);
-    this.updateMessage("File sync task completed");
+    this.updateMessage("Plugin and file sync task completed");
     this.updateProgress(3, 3);
-
     return success();
   }
 
@@ -72,7 +83,7 @@ public class FileSyncTask extends AbstractTask {
     directoryStat.setName(directory.getName());
     directoryStat.setPath(FileUtils.convertPath(directory.getAbsolutePath()));
 
-    if(parent != null) {
+    if (parent != null) {
       directoryStat.setParentPath(parent.getPath());
       directoryStat.setParent(parent);
     }

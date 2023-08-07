@@ -73,8 +73,6 @@ public class PluginsController extends BaseController {
   @FXML
   private JFXButton syncButton;
   @FXML
-  private JFXButton fullSyncButton;
-  @FXML
   private JFXButton exportButton;
   @FXML
   private JFXTreeView<Object> pluginTreeView;
@@ -165,10 +163,6 @@ public class PluginsController extends BaseController {
     syncButton.setOnAction(e -> {
       this.getAnalyticsService().pageView("/app/core/action/syncPlugins");
       pluginService.syncPlugins();
-    });
-
-    fullSyncButton.setOnAction(e -> {
-      pluginService.syncFiles();
     });
 
     taskFactory.addSyncPluginsListener(() -> clearAndFillPluginTree());
