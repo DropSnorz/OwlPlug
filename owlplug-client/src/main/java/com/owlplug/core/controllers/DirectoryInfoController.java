@@ -32,6 +32,7 @@ import com.owlplug.core.ui.DoughnutChart;
 import com.owlplug.core.ui.PluginListCellFactory;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javafx.collections.FXCollections;
@@ -58,6 +59,8 @@ public class DirectoryInfoController extends BaseController {
   @FXML
   private Label directoryPathLabel;
   @FXML
+  private Label directoryMetricsLabel;
+  @FXML
   private JFXListView<Plugin> pluginDirectoryListView;
   @FXML
   private JFXButton openDirectoryButton;
@@ -75,7 +78,6 @@ public class DirectoryInfoController extends BaseController {
    */
   public void initialize() {
 
-    openDirectoryButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openDirectoryButton.setOnAction(e -> {
       PlatformUtils.openDirectoryExplorer(pluginDirectory.getPath());
     });
@@ -138,12 +140,23 @@ public class DirectoryInfoController extends BaseController {
     directoryPathLabel.setText(pluginDirectory.getPath());
     pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());
 
+
     String path = pluginDirectory.getPath();
     if (path.endsWith("/")) {
       path = path.substring(0, path.length() - 1);
     }
 
+    List<String> directoryMetrics = new ArrayList<>();
+    Optional<FileStat> directoryStat = fileStatDAO.findByPath(path);
+    directoryStat.ifPresent(fileStat -> directoryMetrics.add(
+            FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
+    directoryMetrics.add(pluginDirectory.getPluginList().size() + " plugin(s)");
+
     List<FileStat> fileStats = fileStatDAO.findByParentPathOrderByLengthDesc(path);
+    directoryMetrics.add(fileStats.size() + " file(s)");
+
+    directoryMetricsLabel.setText(String.join(" | ", directoryMetrics));
+
     ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
 
     int i = 0;

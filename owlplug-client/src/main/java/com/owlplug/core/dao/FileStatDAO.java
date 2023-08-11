@@ -21,10 +21,12 @@ package com.owlplug.core.dao;
 import com.owlplug.core.model.FileStat;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 public interface FileStatDAO extends CrudRepository<FileStat, Long> {
 
+  Optional<FileStat> findByPath(String path);
   List<FileStat> findByParentPathOrderByLengthDesc(String parentPath);
 
   @Transactional
