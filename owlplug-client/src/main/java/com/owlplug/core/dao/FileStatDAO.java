@@ -27,6 +27,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface FileStatDAO extends CrudRepository<FileStat, Long> {
 
   Optional<FileStat> findByPath(String path);
+
   List<FileStat> findByParentPathOrderByLengthDesc(String parentPath);
 
   @Transactional

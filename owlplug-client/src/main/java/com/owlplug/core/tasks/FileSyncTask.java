@@ -22,10 +22,8 @@ import com.owlplug.core.dao.FileStatDAO;
 import com.owlplug.core.model.FileStat;
 import com.owlplug.core.utils.FileUtils;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +66,7 @@ public class FileSyncTask extends AbstractTask {
         throw new TaskException(e);
       }
     }
-    this.updateMessage("Plugin and file sync task completed");
+    this.updateMessage("Plugins and files metrics synchronized.");
     this.updateProgress(3, 3);
     return success();
   }
@@ -76,7 +74,7 @@ public class FileSyncTask extends AbstractTask {
   public long extractFolderSize(File directory, FileStat parent) {
     long length = 0;
 
-    this.updateMessage("Running file sync on directory: " + directory.getAbsolutePath());
+    this.updateMessage("Collecting file metrics on directory: " + directory.getAbsolutePath());
     fileStatDAO.deleteByPath(FileUtils.convertPath(directory.getAbsolutePath()));
 
     FileStat directoryStat = new FileStat();
@@ -99,7 +97,7 @@ public class FileSyncTask extends AbstractTask {
         fileStat.setLength(file.length());
         fileStat.setParent(directoryStat);
 
-        fileStatDAO.save(fileStat);
+        directoryStat.getChilds().add(fileStat);
         length += fileStat.getLength();
 
       } else {

@@ -46,10 +46,9 @@ public class DoughnutChart extends PieChart {
   private void addInnerCircleIfNotPresent() {
     if (getData().size() > 0) {
       Node pie = getData().get(0).getNode();
-      if (pie.getParent() instanceof Pane parent) {
-        if (!parent.getChildren().contains(innerCircle)) {
-          parent.getChildren().add(innerCircle);
-        }
+      if (pie.getParent() instanceof Pane parent
+              && !parent.getChildren().contains(innerCircle)) {
+        parent.getChildren().add(innerCircle);
       }
     }
   }

@@ -153,12 +153,19 @@ public class DirectoryInfoController extends BaseController {
     directoryMetrics.add(pluginDirectory.getPluginList().size() + " plugin(s)");
 
     List<FileStat> fileStats = fileStatDAO.findByParentPathOrderByLengthDesc(path);
-    directoryMetrics.add(fileStats.size() + " file(s)");
+    if (fileStats.size() > 0) {
+      directoryMetrics.add(fileStats.size() + " file(s)");
+    }
+
+    pieChart.setData(createStatChartBuckets(fileStats));
+    pieChart.layout();
 
     directoryMetricsLabel.setText(String.join(" | ", directoryMetrics));
+    
+  }
 
+  private ObservableList<PieChart.Data> createStatChartBuckets(List<FileStat> fileStats) {
     ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
-
     int i = 0;
     int maxBucket = 7;
     while (i < fileStats.size() && i < maxBucket) {
@@ -175,9 +182,7 @@ public class DirectoryInfoController extends BaseController {
       chartData.add(new PieChart.Data("Others", groupLength));
     }
 
-    pieChart.setData(chartData);
-    pieChart.layout();
-
+    return chartData;
   }
 
   private String ellipsisString(String input, int maxLength, int clearEndLength) {

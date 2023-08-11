@@ -98,4 +98,8 @@ public class FileStat {
     this.length = length;
   }
 
+  public Set<FileStat> getChilds() {
+    return childs;
+  }
+  
 }
