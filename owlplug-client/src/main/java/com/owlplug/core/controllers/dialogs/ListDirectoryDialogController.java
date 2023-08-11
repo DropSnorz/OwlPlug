@@ -39,12 +39,17 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
   @Autowired
   private OptionsController optionsController;
   @Autowired
+  private WelcomeDialogController welcomeDialogController;
+
+  @Autowired
   private LazyViewRegistry lazyViewRegistry;
 
   @FXML
   private JFXButton addDirectoryButton;
   @FXML
   private ListView<String> directoryListView;
+  @FXML
+  private JFXButton closeButton;
 
   private final String newDirectoryItem = "[New directory] (double-click to update)";
   private String currentPreferenceKey;
@@ -56,6 +61,9 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
       observableItems.add(newDirectoryItem);
     });
     directoryListView.setCellFactory(TextFieldListCell.forListView());
+    closeButton.setOnAction(e -> {
+      this.close();
+    });
   }
 
   public void configure (String preferenceKey) {
@@ -87,6 +95,7 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
     this.getPreferences().putList(currentPreferenceKey, prefList);
 
     optionsController.refreshView();
+    welcomeDialogController.refreshView();
   }
 
 
