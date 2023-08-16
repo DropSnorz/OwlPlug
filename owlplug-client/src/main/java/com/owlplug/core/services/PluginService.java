@@ -56,6 +56,10 @@ public class PluginService extends BaseService {
     taskFactory.createPluginSyncTask().schedule();
   }
 
+  public void syncFiles() {
+    taskFactory.createFileStatSyncTask().schedule();
+  }
+
   public Iterable<Plugin> getAllPlugins() {
     return pluginDAO.findAll();
   }

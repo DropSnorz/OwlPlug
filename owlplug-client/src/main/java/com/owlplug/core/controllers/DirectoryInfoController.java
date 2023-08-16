@@ -23,14 +23,28 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXListView;
 import com.owlplug.core.components.CoreTaskFactory;
+import com.owlplug.core.dao.FileStatDAO;
+import com.owlplug.core.model.FileStat;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.tasks.DirectoryRemoveTask;
+import com.owlplug.core.ui.DoughnutChart;
 import com.owlplug.core.ui.PluginListCellFactory;
+import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -39,15 +53,23 @@ public class DirectoryInfoController extends BaseController {
 
   @Autowired
   private CoreTaskFactory taskFactory;
+  @Autowired
+  private FileStatDAO fileStatDAO;
 
   @FXML
   private Label directoryPathLabel;
+  @FXML
+  private Label directoryMetricsLabel;
   @FXML
   private JFXListView<Plugin> pluginDirectoryListView;
   @FXML
   private JFXButton openDirectoryButton;
   @FXML
   private JFXButton deleteDirectoryButton;
+  @FXML
+  private VBox pieChartContainer;
+
+  private PieChart pieChart;
 
   private PluginDirectory pluginDirectory;
 
@@ -56,7 +78,6 @@ public class DirectoryInfoController extends BaseController {
    */
   public void initialize() {
 
-    openDirectoryButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openDirectoryButton.setOnAction(e -> {
       PlatformUtils.openDirectoryExplorer(pluginDirectory.getPath());
     });
@@ -82,7 +103,7 @@ public class DirectoryInfoController extends BaseController {
         dialog.close();
         taskFactory.create(new DirectoryRemoveTask(pluginDirectory))
             .setOnSucceeded(x -> taskFactory.createPluginSyncTask(pluginDirectory.getPath()).schedule())
-          .schedule();
+            .schedule();
       });
       removeButton.getStyleClass().add("button-danger");
 
@@ -90,12 +111,88 @@ public class DirectoryInfoController extends BaseController {
       dialog.setContent(layout);
       dialog.show();
     });
+
+    pieChart = new DoughnutChart() {
+      @Override
+      protected void layoutChartChildren(double top, double left, double contentWidth, double contentHeight) {
+        if (getLabelsVisible()) {
+          getData().forEach(d -> {
+            Optional<Node> opTextNode = this.lookupAll(".chart-pie-label").stream().filter(
+                n -> n instanceof Text && ((Text) n).getText().equals(d.getName())).findAny();
+            if (opTextNode.isPresent()) {
+              String label = ellipsisString(d.getName(), 15, 3)
+                                 + " - " + FileUtils.humanReadableByteCount((long) d.getPieValue(), true);
+              ((Text) opTextNode.get()).setText(label);
+            }
+          });
+        }
+        super.layoutChartChildren(top, left, contentWidth, contentHeight);
+      }
+    };
+
+    pieChartContainer.getChildren().add(pieChart);
+    VBox.setVgrow(pieChart, Priority.ALWAYS);
+
   }
 
   public void setPluginDirectory(PluginDirectory pluginDirectory) {
     this.pluginDirectory = pluginDirectory;
     directoryPathLabel.setText(pluginDirectory.getPath());
     pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());
+
+
+    String path = pluginDirectory.getPath();
+    if (path.endsWith("/")) {
+      path = path.substring(0, path.length() - 1);
+    }
+
+    List<String> directoryMetrics = new ArrayList<>();
+    Optional<FileStat> directoryStat = fileStatDAO.findByPath(path);
+    directoryStat.ifPresent(fileStat -> directoryMetrics.add(
+            FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
+    directoryMetrics.add(pluginDirectory.getPluginList().size() + " plugin(s)");
+
+    List<FileStat> fileStats = fileStatDAO.findByParentPathOrderByLengthDesc(path);
+    if (fileStats.size() > 0) {
+      directoryMetrics.add(fileStats.size() + " file(s)");
+    }
+
+    pieChart.setData(createStatChartBuckets(fileStats));
+    pieChart.layout();
+
+    directoryMetricsLabel.setText(String.join(" | ", directoryMetrics));
+    
+  }
+
+  private ObservableList<PieChart.Data> createStatChartBuckets(List<FileStat> fileStats) {
+    ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+    int i = 0;
+    int maxBucket = 7;
+    while (i < fileStats.size() && i < maxBucket) {
+      chartData.add(new PieChart.Data(fileStats.get(i).getName(), fileStats.get(i).getLength()));
+      i = i + 1;
+    }
+
+    if (i < fileStats.size()) {
+      long groupLength = 0;
+      while (i < fileStats.size()) {
+        groupLength += fileStats.get(i).getLength();
+        i = i + 1;
+      }
+      chartData.add(new PieChart.Data("Others", groupLength));
+    }
+
+    return chartData;
+  }
+
+  private String ellipsisString(String input, int maxLength, int clearEndLength) {
+    if (input == null || input.length() <= maxLength
+        || clearEndLength >= maxLength) {
+      return input;
+    } else {
+      String truncatedString = input.substring(0, maxLength - clearEndLength);
+      return truncatedString + "..." + input.substring(input.length() - clearEndLength);
+    }
   }
 
 }

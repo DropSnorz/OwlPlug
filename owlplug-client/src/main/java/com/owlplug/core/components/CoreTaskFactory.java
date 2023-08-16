@@ -18,11 +18,13 @@
  
 package com.owlplug.core.components;
 
+import com.owlplug.core.dao.FileStatDAO;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.NativeHostService;
+import com.owlplug.core.tasks.FileSyncTask;
 import com.owlplug.core.tasks.PluginRemoveTask;
 import com.owlplug.core.tasks.PluginSyncTask;
 import com.owlplug.core.tasks.SimpleEventListener;
@@ -30,6 +32,8 @@ import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.utils.FileUtils;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +52,9 @@ public class CoreTaskFactory extends BaseTaskFactory {
   private SymlinkDAO symlinkDAO;
   @Autowired
   private NativeHostService nativeHostService;
+
+  @Autowired
+  private FileStatDAO fileStatDAO;
 
 
   private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
@@ -89,7 +96,7 @@ public class CoreTaskFactory extends BaseTaskFactory {
       parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
     }
     
-    PluginSyncTask task = new PluginSyncTask(parameters, 
+    PluginSyncTask task = new PluginSyncTask(parameters,
         pluginDAO, 
         pluginFootprintDAO, 
         symlinkDAO, 
@@ -97,7 +104,41 @@ public class CoreTaskFactory extends BaseTaskFactory {
     
     task.setOnSucceeded(e -> {
       notifyListeners(syncPluginsListeners);
+      if (directoryScope != null) {
+        createFileStatSyncTask(directoryScope).scheduleNow();
+      } else {
+        createFileStatSyncTask().scheduleNow();
+      }
     });
+    return create(task);
+  }
+
+  public TaskExecutionContext createFileStatSyncTask() {
+    Set<String> directorySet = new TreeSet<>();
+
+    if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
+      directorySet.add(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+      directorySet.addAll(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
+    }
+    if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
+      directorySet.add(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+      directorySet.addAll(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
+    }
+    if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)) {
+      directorySet.add(prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
+      directorySet.addAll(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
+    }
+    if (prefs.getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false)) {
+      directorySet.add(prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, ""));
+      directorySet.addAll(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
+    }
+    FileSyncTask task = new FileSyncTask(fileStatDAO, directorySet.stream().toList());
+
+    return create(task);
+  }
+
+  public TaskExecutionContext createFileStatSyncTask(String directoryScope) {
+    FileSyncTask task = new FileSyncTask(fileStatDAO, directoryScope);
     return create(task);
   }
   

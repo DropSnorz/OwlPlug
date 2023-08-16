@@ -450,6 +450,32 @@ ProgressIndicator{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
 
+
+/****************************************************************
+  JavaFx Charts theme
+****************************************************************/
+
+.default-color0.chart-pie { -fx-pie-color: #116A7B; }
+.default-color1.chart-pie { -fx-pie-color: #85586F; }
+.default-color2.chart-pie { -fx-pie-color: #7F8B52; }
+.default-color3.chart-pie { -fx-pie-color: #FFDBA4; }
+.default-color4.chart-pie { -fx-pie-color: #47A992; }
+.default-color5.chart-pie { -fx-pie-color: #C84B31; }
+.default-color6.chart-pie { -fx-pie-color: #BCCC9A; }
+.default-color7.chart-pie { -fx-pie-color: #968C83; }
+
+.chart-pie {
+    -fx-border-width: 0px;
+}
+
+.chart-legend {
+    -fx-background-color: card-pane-color;
+}
+
+.doughnut-inner-circle {
+    -fx-fill: card-pane-color;
+}
+
 /****************************************************************
  * 
  * Utilities
