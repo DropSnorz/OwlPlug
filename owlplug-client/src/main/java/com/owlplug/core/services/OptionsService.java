@@ -23,6 +23,7 @@ import com.owlplug.auth.dao.UserAccountDAO;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.ImageCache;
+import com.owlplug.core.dao.FileStatDAO;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.OperatingSystem;
@@ -50,6 +51,8 @@ public class OptionsService extends BaseService {
   private RemoteSourceDAO remoteSourceDAO;
   @Autowired
   private RemotePackageDAO productDAO;
+  @Autowired
+  private FileStatDAO fileStatDAO;
   @Autowired
   private ImageCache imageCache;
 
@@ -103,6 +106,7 @@ public class OptionsService extends BaseService {
       userAccountDAO.deleteAll();
       productDAO.deleteAll();
       remoteSourceDAO.deleteAll();
+      fileStatDAO.deleteAll();
 
       clearCache();
 
