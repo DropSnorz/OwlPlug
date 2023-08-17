@@ -13,5 +13,10 @@
          </children>
       </HBox>
       <ListView fx:id="directoryListView" editable="true" prefHeight="200.0" prefWidth="200.0" />
+      <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
+         <children>
+            <JFXButton fx:id="closeButton" mnemonicParsing="false" text="Close" />
+         </children>
+      </HBox>
    </children>
 </VBox>

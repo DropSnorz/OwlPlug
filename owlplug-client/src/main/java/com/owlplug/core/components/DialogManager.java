@@ -28,13 +28,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import java.util.Stack;
+
 @Component
 public class DialogManager {
 
   @Autowired
   private MainController mainController;
 
-  private JFXDialog dialog;
+  private Stack<JFXDialog> dialogStack = new Stack<>();
 
   /**
    * Creates a new dialog.
@@ -42,8 +44,13 @@ public class DialogManager {
    * @return
    */
   public JFXDialog newDialog() {
-    dialog = new JFXDialog();
+    JFXDialog dialog = new JFXDialog();
     dialog.setDialogContainer(mainController.getRootPane());
+    dialogStack.push(dialog);
+
+    dialog.setOnDialogClosed(e -> {
+      dialogStack.pop();
+    });
 
     return dialog;
   }
@@ -124,7 +131,7 @@ public class DialogManager {
    */
   public JFXDialog newDialog(JFXDialogLayout layout) {
 
-    newDialog();
+    JFXDialog dialog = newDialog();
     dialog.setContent(layout);
     return dialog;
   }
@@ -143,6 +150,7 @@ public class DialogManager {
    */
   public JFXDialog newSimpleInfoDialog(Node title, Node body) {
     JFXDialogLayout layout = new JFXDialogLayout();
+    JFXDialog dialog = newDialog(layout);
 
     layout.setHeading(title);
     layout.setBody(body);
@@ -154,12 +162,12 @@ public class DialogManager {
     });
 
     layout.setActions(button);
-    return newDialog(layout);
+    return dialog;
 
   }
 
   public JFXDialog getDialog() {
-    return dialog;
+    return dialogStack.peek();
   }
 
 }
