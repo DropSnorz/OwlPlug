@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.core.ui;
+package com.owlplug.controls;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;

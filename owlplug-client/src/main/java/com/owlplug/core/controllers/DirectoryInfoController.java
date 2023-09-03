@@ -26,7 +26,7 @@ import com.owlplug.core.model.FileStat;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.tasks.DirectoryRemoveTask;
-import com.owlplug.core.ui.DoughnutChart;
+import com.owlplug.controls.DoughnutChart;
 import com.owlplug.core.ui.PluginListCellFactory;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
