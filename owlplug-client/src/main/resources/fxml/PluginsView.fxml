@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTabPane?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,31 +18,32 @@
    <center>
       <BorderPane BorderPane.alignment="CENTER">
       	<center>
-      		<JFXTreeView fx:id="pluginTreeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="SOMETIMES" VBox.vgrow="ALWAYS">
-		</JFXTreeView>
+      		<TreeView fx:id="pluginTreeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="SOMETIMES" VBox.vgrow="ALWAYS">
+
+            </TreeView>
       	</center>
       	<left>
-      		<JFXTabPane fx:id="pluginTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
+      		<TabPane fx:id="pluginTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
       			<tabs>
-      				<Tab fx:id="treeTabAll" text="All" />
-      				<Tab fx:id="treeTabDirectories" text="Directories">
+      				<Tab fx:id="treeTabAll" text="All" closable="false" />
+      				<Tab fx:id="treeTabDirectories" text="Directories" closable="false">
       					<content>
       						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
       					</content>
       				</Tab>
       			</tabs>
-      		</JFXTabPane>
+      		</TabPane>
       	</left>
       	<top>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <JFXButton fx:id="newLinkButton" alignment="BASELINE_CENTER" buttonType="RAISED" text="New link">
+                  <Button fx:id="newLinkButton" alignment="BASELINE_CENTER" text="New link">
                      <graphic>
                         <Region prefHeight="15.0" prefWidth="18.0" style="-fx-background-color: white; -fx-shape: &quot; m 19.847458,19.194915 4.152543,-2.943321 -4.152543,-2.870237 v 1.263203 c 0,0 -4.824423,1.072601 -5.813559,5.380864 2.106169,-2.255246 5.813559,-2.166797 5.813559,-2.166797 z M 19.5,13 c -13,7.333333 -6.5,3.666667 0,0 z m -4.68,9 H 0 V 2 h 7 c 1.695,1.942 2.371,3 4,3 h 13 v 7.82 C 22.831,11.696 21.246,11 19.5,11 15.916,11 13,13.916 13,17.5 c 0,1.747 0.695,3.331 1.82,4.5 z&quot;;" />
-                     </graphic></JFXButton>
+                     </graphic></Button>
             		<HBox alignment="CENTER_RIGHT" prefHeight="40.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
             			<children>
-            				<JFXTextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
+            				<TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
             			</children>
             			<padding>
             				<Insets bottom="10.0" left="5.0" top="5.0" />
@@ -58,7 +59,7 @@
          <children>
             <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0" VBox.vgrow="NEVER" spacing="5.0">
                <children>
-                   <JFXButton fx:id="exportButton" buttonType="RAISED" text="Export">
+                   <Button fx:id="exportButton" text="Export">
                        <graphic>
                            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                <image>
@@ -66,8 +67,8 @@
                                </image>
                            </ImageView>
                        </graphic>
-                   </JFXButton>
-                  <JFXButton fx:id="syncButton" buttonType="RAISED" text="Sync">
+                   </Button>
+                  <Button fx:id="syncButton" text="Sync">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -75,7 +76,7 @@
                            </image>
                         </ImageView>
                      </graphic>
-                  </JFXButton>
+                  </Button>
                </children>
             </HBox>
             <AnchorPane VBox.vgrow="ALWAYS">

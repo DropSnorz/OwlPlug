@@ -18,7 +18,6 @@
  
 package com.owlplug.core.ui;
 
-import com.jfoenix.controls.JFXTreeCell;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
@@ -30,13 +29,14 @@ import com.owlplug.core.services.PluginService;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class PluginTreeCell extends JFXTreeCell<Object> {
+public class PluginTreeCell extends TreeCell<Object> {
 
   private PluginService pluginService;
   private ApplicationDefaults applicationDefaults;

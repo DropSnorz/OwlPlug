@@ -18,10 +18,8 @@
  
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXListView;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.FileStatDAO;
 import com.owlplug.core.model.FileStat;
@@ -40,8 +38,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -61,11 +60,11 @@ public class DirectoryInfoController extends BaseController {
   @FXML
   private Label directoryMetricsLabel;
   @FXML
-  private JFXListView<Plugin> pluginDirectoryListView;
+  private ListView<Plugin> pluginDirectoryListView;
   @FXML
-  private JFXButton openDirectoryButton;
+  private Button openDirectoryButton;
   @FXML
-  private JFXButton deleteDirectoryButton;
+  private Button deleteDirectoryButton;
   @FXML
   private VBox pieChartContainer;
 
@@ -92,13 +91,13 @@ public class DirectoryInfoController extends BaseController {
       layout.setBody(new Label("Do you really want to remove " + pluginDirectory.getName()
           + " and all of its content ? This will permanently delete the file from your hard drive."));
 
-      JFXButton cancelButton = new JFXButton("Cancel");
+      Button cancelButton = new Button("Cancel");
 
       cancelButton.setOnAction(cancelEvent -> {
         dialog.close();
       });
 
-      JFXButton removeButton = new JFXButton("Remove");
+      Button removeButton = new Button("Remove");
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         taskFactory.create(new DirectoryRemoveTask(pluginDirectory))

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -12,8 +11,8 @@
             <Label text="Plugin source url" wrapText="true" />
             <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
                <children>
-                  <JFXTextField fx:id="sourceUrlTextField" promptText="http://example.com/source" HBox.hgrow="ALWAYS" />
-                  <JFXSpinner fx:id="progressSpinner" prefHeight="25.0" prefWidth="25.0" />
+                  <TextField fx:id="sourceUrlTextField" promptText="http://example.com/source" HBox.hgrow="ALWAYS" />
+                  <ProgressIndicator fx:id="progressSpinner" prefHeight="25.0" prefWidth="25.0" />
                </children>
             </HBox>
             <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Invalid source response" />
@@ -24,7 +23,7 @@
             <Label text="Plugin source suggestions (2)" />
             <HBox spacing="5.0">
                <children>
-                  <JFXButton fx:id="owlplugSuggestionButton" text="OwlPlug Registry">
+                  <Button fx:id="owlplugSuggestionButton" text="OwlPlug Registry">
                      <graphic>
                         <Pane style="-fx-background-color: white;">
                            <children>
@@ -36,8 +35,8 @@
                            </children>
                         </Pane>
                      </graphic>
-                  </JFXButton>
-                  <JFXButton fx:id="studiorackSuggestionButton" layoutX="10.0" layoutY="10.0" text="Studiorack Registry">
+                  </Button>
+                  <Button fx:id="studiorackSuggestionButton" layoutX="10.0" layoutY="10.0" text="Studiorack Registry">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -45,15 +44,15 @@
                            </image>
                         </ImageView>
                      </graphic>
-                  </JFXButton>
+                  </Button>
                </children>
             </HBox>
          </children>
       </VBox>
       <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <JFXButton fx:id="okButton" text="Add source" />
-            <JFXButton fx:id="cancelButton" text="Later" />
+            <Button fx:id="okButton" text="Add source" />
+            <Button fx:id="cancelButton" text="Later" />
          </children>
       </HBox>
    </children>

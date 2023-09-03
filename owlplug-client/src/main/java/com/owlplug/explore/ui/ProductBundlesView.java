@@ -18,13 +18,13 @@
  
 package com.owlplug.explore.ui;
 
-import com.jfoenix.controls.JFXButton;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.model.PackageBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -72,7 +72,7 @@ public class ProductBundlesView extends VBox {
     filler.setBackground(DOT_BACKGROUND);
     HBox.setHgrow(filler, Priority.ALWAYS);
     hbox.getChildren().add(filler);
-    JFXButton installButton = new JFXButton("Install");
+    Button installButton = new Button("Install");
     installButton.getStyleClass().add("button-info");
     installButton.setOnAction(installHandler);
     hbox.getChildren().add(installButton);

@@ -18,12 +18,8 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
@@ -40,7 +36,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,6 +50,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -89,17 +89,17 @@ public class PluginInfoController extends BaseController {
   @FXML
   private Label pluginPathLabel;
   @FXML
-  private JFXButton openDirectoryButton;
+  private Button openDirectoryButton;
   @FXML
-  private JFXButton enableButton;
+  private Button enableButton;
   @FXML
-  private JFXButton disableButton;
+  private Button disableButton;
   @FXML
-  private JFXButton uninstallButton;
+  private Button uninstallButton;
   @FXML
-  private JFXListView<PluginComponent> pluginComponentListView;
+  private ListView<PluginComponent> pluginComponentListView;
   @FXML
-  private JFXToggleButton nativeDiscoveryToggleButton;
+  private ToggleSwitch nativeDiscoveryToggleButton;
 
   private Plugin currentPlugin = null;
   private ArrayList<String> knownPluginImages = new ArrayList<>();
@@ -228,12 +228,12 @@ public class PluginInfoController extends BaseController {
     layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName()
         + " ? This will permanently delete the file from your hard drive."));
 
-    JFXButton cancelButton = new JFXButton("Cancel");
+    Button cancelButton = new Button("Cancel");
     cancelButton.setOnAction(cancelEvent -> {
       dialog.close();
     });
 
-    JFXButton removeButton = new JFXButton("Remove");
+    Button removeButton = new Button("Remove");
     removeButton.setOnAction(removeEvent -> {
       dialog.close();
       coreTaskFactory.createPluginRemoveTask(currentPlugin)
@@ -264,7 +264,7 @@ public class PluginInfoController extends BaseController {
     noteLabel.getStyleClass().add("label-disabled");
     vbox.getChildren().add(noteLabel);
     
-    JFXCheckBox displayDialog = new JFXCheckBox("Don't show me this message again");
+    CheckBox displayDialog = new CheckBox("Don't show me this message again");
     VBox.setMargin(displayDialog, new Insets(20,0,0,0));
     displayDialog.setSelected(!getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true));
     displayDialog.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -275,12 +275,12 @@ public class PluginInfoController extends BaseController {
     
     JFXDialog dialog = this.getDialogManager().newDialog();
 
-    JFXButton cancelButton = new JFXButton("Cancel");
+    Button cancelButton = new Button("Cancel");
     cancelButton.setOnAction(cancelEvent -> {
       dialog.close();
     });
 
-    JFXButton disableButton = new JFXButton("Disable Plugin");
+    Button disableButton = new Button("Disable Plugin");
     disableButton.setOnAction(removeEvent -> {
       pluginService.disablePlugin(currentPlugin);
       setPlugin(currentPlugin);

@@ -18,15 +18,14 @@
  
 package com.owlplug.core.components;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.owlplug.core.controllers.MainController;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import java.util.Stack;
 
@@ -155,7 +154,7 @@ public class DialogManager {
     layout.setHeading(title);
     layout.setBody(body);
 
-    JFXButton button = new JFXButton("Close");
+    Button button = new Button("Close");
 
     button.setOnAction(e -> {
       dialog.close();

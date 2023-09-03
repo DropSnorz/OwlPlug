@@ -1,6 +1,3 @@
-package com.owlplug.core.ui;
-
-import com.jfoenix.controls.JFXToggleButton;
 /* OwlPlug
  * Copyright (C) 2021 Arthur <dropsnorz@gmail.com>
  *
@@ -18,12 +15,16 @@ import com.jfoenix.controls.JFXToggleButton;
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+package com.owlplug.core.ui;
  
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.PluginService;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -55,7 +56,7 @@ public class RecoveredPluginView extends HBox {
     HBox.setHgrow(transparentPane, Priority.ALWAYS);
     this.getChildren().add(transparentPane);
     
-    JFXToggleButton toggleButton = new JFXToggleButton();
+    ToggleButton toggleButton = new ToggleButton();
     toggleButton.setText("Native Discovery");
     toggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
     

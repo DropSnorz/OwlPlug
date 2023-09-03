@@ -18,11 +18,8 @@
  
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXTabPane;
-import com.jfoenix.skins.JFXComboBoxListViewSkin;
 import com.owlplug.auth.controllers.AccountController;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.services.AuthenticationService;
@@ -41,7 +38,6 @@ import com.owlplug.core.services.UpdateService;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.services.ExploreService;
-import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Optional;
 import javafx.application.Platform;
@@ -49,6 +45,9 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -57,6 +56,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import jakarta.annotation.PreDestroy;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 
 @Controller
 public class MainController extends BaseController {
@@ -94,7 +95,7 @@ public class MainController extends BaseController {
   @FXML
   private BorderPane mainPane;
   @FXML
-  private JFXTabPane tabPaneHeader;
+  private TabPane tabPaneHeader;
   @FXML
   private JFXTabPane tabPaneContent;
   @FXML
@@ -102,11 +103,11 @@ public class MainController extends BaseController {
   @FXML
   private JFXDrawer leftDrawer;
   @FXML
-  private JFXComboBox<AccountItem> accountComboBox;
+  private ComboBox<AccountItem> accountComboBox;
   @FXML
   private Pane updatePane;
   @FXML
-  private JFXButton downloadUpdateButton;
+  private Button downloadUpdateButton;
 
   /**
    * FXML initialize method.
@@ -116,6 +117,7 @@ public class MainController extends BaseController {
     
     viewRegistry.preload();
 
+    this.tabPaneHeader.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
     this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener((options, oldValue, newValue) -> {
       tabPaneContent.getSelectionModel().select(newValue.intValue());
       leftDrawer.close();
@@ -144,10 +146,6 @@ public class MainController extends BaseController {
 
     accountComboBox.setButtonCell(new AccountCellFactory(imageCache, Pos.CENTER_RIGHT).call(null));
     accountComboBox.setCellFactory(new AccountCellFactory(authenticationService, imageCache, true));
-
-    JFXComboBoxListViewSkin<AccountItem> accountCBSkin = new JFXComboBoxListViewSkin<AccountItem>(accountComboBox);
-    accountCBSkin.setHideOnClick(false);
-    accountComboBox.setSkin(accountCBSkin);
 
     refreshAccounts();
     

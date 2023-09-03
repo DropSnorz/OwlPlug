@@ -19,8 +19,6 @@
 package com.owlplug.core.controllers.dialogs;
 
 import com.jfoenix.controls.JFXAutoCompletePopup;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
@@ -31,7 +29,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import org.slf4j.Logger;
@@ -50,19 +50,19 @@ public class NewLinkController extends AbstractDialogController {
   private CoreTaskFactory coreTaskFactory;
 
   @FXML
-  private JFXTextField linkSourceParentTextField; 
+  private TextField linkSourceParentTextField;
   @FXML
-  private JFXTextField linkSourceNameTextField;
+  private TextField linkSourceNameTextField;
   @FXML
-  private JFXTextField linkTargetTextField;
+  private TextField linkTargetTextField;
   @FXML
-  private JFXButton sourceDirectoryButton;
+  private Button sourceDirectoryButton;
   @FXML
-  private JFXButton targetDirectoryButton;
+  private Button targetDirectoryButton;
   @FXML
-  private JFXButton createButton;
+  private Button createButton;
   @FXML
-  private JFXButton cancelButton;
+  private Button cancelButton;
   @FXML
   private Label errorLabel;
   

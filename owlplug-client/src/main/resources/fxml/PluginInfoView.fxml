@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXToggleButton?>
+<?import org.controlsfx.control.ToggleSwitch?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,7 +19,6 @@
 <?import javafx.scene.text.TextFlow?>
 
 <?import com.owlplug.core.ui.PluginStateView?>
-<?import com.jfoenix.controls.JFXListView?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PluginInfoController">
    <children>
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
@@ -48,23 +48,23 @@
                <children>
                   <Label text="General" />
                   <Pane HBox.hgrow="ALWAYS" />
-                  <JFXButton fx:id="enableButton" buttonType="RAISED" layoutX="353.0" layoutY="10.0" text="Enable">
+                  <Button fx:id="enableButton" layoutX="353.0" layoutY="10.0" text="Enable">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/eye-white-16.png" />
                            </image>
                         </ImageView>
-                     </graphic></JFXButton>
-                  <JFXButton fx:id="disableButton" buttonType="RAISED" layoutX="428.0" layoutY="10.0" text="Disable">
+                     </graphic></Button>
+                  <Button fx:id="disableButton" layoutX="428.0" layoutY="10.0" text="Disable">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/eye2-white-16.png" />
                            </image>
                         </ImageView>
-                     </graphic></JFXButton>
-                  <JFXButton fx:id="uninstallButton" buttonType="RAISED" styleClass="button-danger" text="Uninstall">
+                     </graphic></Button>
+                  <Button fx:id="uninstallButton" styleClass="button-danger" text="Uninstall">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -72,7 +72,7 @@
                            </image>
                         </ImageView>
                      </graphic>
-                  </JFXButton>
+                  </Button>
                </children>
             </HBox>
             <GridPane>
@@ -131,8 +131,8 @@
                               <Label fx:id="pluginPathLabel" styleClass="label-emphase" text="UNKNOWN" />
                            </children>
                         </TextFlow>
-                        <JFXButton fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" styleClass="label-emphase" text="Open folder">
-                        </JFXButton>
+                        <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" styleClass="label-emphase" text="Open folder">
+                        </Button>
                      </children>
                   </HBox>
                </children>
@@ -145,24 +145,25 @@
                   <Label text="Components" />
                </children>
             </HBox>
-            <JFXListView fx:id="pluginComponentListView" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="440.0" VBox.vgrow="SOMETIMES">
+            <ListView fx:id="pluginComponentListView" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="440.0" VBox.vgrow="SOMETIMES">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
-            </JFXListView>
+            </ListView>
             <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
                <children>
                   <Label text="Extras" />
                   <Pane HBox.hgrow="ALWAYS" />
-                  <JFXToggleButton fx:id="nativeDiscoveryToggleButton" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" scaleX="0.8" scaleY="0.8" selected="true" text=" Native Discovery">
+                  <ToggleSwitch fx:id="nativeDiscoveryToggleButton" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" scaleX="0.8" scaleY="0.8" selected="true" text=" Native Discovery">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
-                  </JFXToggleButton>
+                  </ToggleSwitch>
                </children>
             </HBox>
          </children>
          <styleClass>
+            <String fx:value="background" />
             <String fx:value="pane-card" />
             <String fx:value="no-padding" />
          </styleClass>

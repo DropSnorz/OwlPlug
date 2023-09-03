@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -10,9 +10,13 @@
    <children>
       <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox HBox.hgrow="SOMETIMES">
                <children>
-                  <VBox styleClass="pane-card">
+                  <VBox>
+                     <styleClass>
+                        <String fx:value="background" />
+                        <String fx:value="pane-card" />
+                     </styleClass>
                      <children>
                         <Label styleClass="heading-1" text="Audio Plugins">
                            <VBox.margin>
@@ -27,8 +31,8 @@
                                        <children>
                                           <HBox spacing="10.0">
                                              <children>
-                                                <JFXCheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery using" />
-                                                <JFXComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="NEVER" />
+                                                <CheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery using" />
+                                                <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="NEVER" />
                                              </children>
                                           </HBox>
                                           <Label styleClass="label-emphase" text="Allow deep plugin metadatas discovery using platform specific features" />
@@ -48,9 +52,13 @@
                   </VBox>
                </children>
             </VBox>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox HBox.hgrow="SOMETIMES">
                <children>
-                  <VBox prefWidth="200.0" styleClass="pane-card" VBox.vgrow="NEVER">
+                  <VBox prefWidth="500.0" VBox.vgrow="NEVER">
+                     <styleClass>
+                        <String fx:value="background" />
+                        <String fx:value="pane-card" />
+                     </styleClass>
                      <children>
                         <Label styleClass="heading-1" text="Preferences">
                            <VBox.margin>
@@ -61,22 +69,22 @@
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
                                  <children>
                                     <Label styleClass="heading-2" text="General" />
-                                    <VBox spacing="20.0" VBox.vgrow="NEVER">
+                                    <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="NEVER">
                                        <children>
-                                          <JFXCheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" />
-                                          <JFXCheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugins in dedicated subdirectories" />
+                                          <CheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" wrapText="true" />
+                                          <CheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugins in dedicated subdirectories" wrapText="true" />
                                           <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
                                           <VBox spacing="5.0" VBox.vgrow="NEVER">
                                              <children>
-                                                <JFXCheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from remoteSource in a dedicated directory" />
-                                                <JFXCheckBox fx:id="storeByCreatorCheckBox" text="Save downloaded plugins grouped by their creator or manufacturer" />
+                                                <CheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from remoteSource in a dedicated directory" wrapText="true" />
+                                                <CheckBox fx:id="storeByCreatorCheckBox" text="Save downloaded plugins grouped by their creator or manufacturer" wrapText="true" />
                                                 <HBox alignment="BASELINE_LEFT" prefWidth="200.0" VBox.vgrow="NEVER">
                                                    <VBox.margin>
                                                       <Insets left="5.0" />
                                                    </VBox.margin>
                                                    <children>
                                                       <Label text="\@plugin-directory/" />
-                                                      <JFXTextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" /><Label fx:id="storeDirectorySeparator" text="/" />
+                                                      <TextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" /><Label fx:id="storeDirectorySeparator" text="/" />
                                                       <Label fx:id="storeByCreatorLabel" text="\@creator/" />
                                                    </children>
                                                 </HBox>
@@ -95,7 +103,7 @@
                                     <VBox spacing="5.0">
                                        <children>
                                           <Label text="Remove all user data including accounts, stores and custom settings. Plugins will not be deleted." wrapText="true" />
-                                          <JFXButton fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="98.0" text="Clear user data" />
+                                          <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" text="Clear user data" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -121,7 +129,7 @@
                                           </TextFlow>
                                           <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <JFXButton fx:id="clearCacheButton" text="Clear cache" />
+                                                <Button fx:id="clearCacheButton" text="Clear cache" />
                                              </children>
                                           </HBox>
                                        </children>

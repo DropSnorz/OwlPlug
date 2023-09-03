@@ -18,9 +18,6 @@
  
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXListCell;
-import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXPopup.PopupHPosition;
 import com.jfoenix.controls.JFXPopup.PopupVPosition;
@@ -29,6 +26,7 @@ import com.owlplug.core.tasks.AbstractTask;
 import java.util.ArrayList;
 import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -51,7 +49,7 @@ public class TaskBarController extends BaseController {
   @FXML
   public ProgressBar taskProgressBar;
   @FXML
-  private JFXButton taskHistoryButton;
+  private Button taskHistoryButton;
 
   /**
    * FXML initialize.
@@ -64,7 +62,7 @@ public class TaskBarController extends BaseController {
   private void openTaskHistory() {
 
     if (!taskRunner.getTaskHistory().isEmpty()) {
-      JFXListView<AbstractTask> list = new JFXListView<>();
+      ListView<AbstractTask> list = new ListView<>();
       list.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
       ArrayList<AbstractTask> tasks = new ArrayList<>(taskRunner.getTaskHistory());
@@ -74,7 +72,7 @@ public class TaskBarController extends BaseController {
       list.setCellFactory(new Callback<ListView<AbstractTask>, ListCell<AbstractTask>>() {
         @Override
         public ListCell<AbstractTask> call(ListView<AbstractTask> param) {
-          return new JFXListCell<AbstractTask>() {
+          return new ListCell<>() {
             @Override
             public void updateItem(AbstractTask item, boolean empty) {
               super.updateItem(item, empty);

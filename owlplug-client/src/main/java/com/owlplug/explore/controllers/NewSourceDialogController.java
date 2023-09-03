@@ -18,9 +18,6 @@
  
 package com.owlplug.explore.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXSpinner;
-import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
@@ -30,7 +27,10 @@ import com.owlplug.explore.services.ExploreService;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,19 +48,19 @@ public class NewSourceDialogController extends AbstractDialogController implemen
   private ExploreTaskFactory exploreTaskFactory;
 
   @FXML
-  private JFXTextField sourceUrlTextField;
+  private TextField sourceUrlTextField;
   @FXML
-  private JFXSpinner progressSpinner;
+  private ProgressIndicator progressSpinner;
   @FXML
   private Label errorLabel;
   @FXML
-  private JFXButton owlplugSuggestionButton;
+  private Button owlplugSuggestionButton;
   @FXML
-  private JFXButton studiorackSuggestionButton;
+  private Button studiorackSuggestionButton;
   @FXML
-  private JFXButton okButton;
+  private Button okButton;
   @FXML
-  private JFXButton cancelButton;
+  private Button cancelButton;
 
   public NewSourceDialogController() {
     super(500, 200);

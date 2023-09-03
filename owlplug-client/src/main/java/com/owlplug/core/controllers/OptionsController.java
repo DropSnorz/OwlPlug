@@ -18,12 +18,8 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXTextField;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
@@ -35,8 +31,12 @@ import com.owlplug.host.loaders.NativePluginLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,31 +51,31 @@ public class OptionsController extends BaseController {
   @Autowired
   private ListDirectoryDialogController listDirectoryDialogController;
   @FXML
-  private JFXCheckBox pluginNativeCheckbox;
+  private CheckBox pluginNativeCheckbox;
   @FXML
-  private JFXComboBox<NativePluginLoader> pluginNativeComboBox;
+  private ComboBox<NativePluginLoader> pluginNativeComboBox;
 
   @FXML
-  private JFXCheckBox syncPluginsCheckBox;
+  private CheckBox syncPluginsCheckBox;
   @FXML
-  private JFXButton removeDataButton;
+  private Button removeDataButton;
   @FXML
   private Label versionLabel;
 
   @FXML
-  private JFXButton clearCacheButton;
+  private Button clearCacheButton;
   @FXML
-  private JFXCheckBox storeSubDirectoryCheckBox;
+  private CheckBox storeSubDirectoryCheckBox;
   @FXML
-  private JFXCheckBox storeByCreatorCheckBox;
+  private CheckBox storeByCreatorCheckBox;
   @FXML
   private Label storeByCreatorLabel;
   @FXML
   private Label warningSubDirectory;
   @FXML
-  private JFXCheckBox storeDirectoryCheckBox;
+  private CheckBox storeDirectoryCheckBox;
   @FXML
-  private JFXTextField storeDirectoryTextField;
+  private TextField storeDirectoryTextField;
   @FXML
   private Label storeDirectorySeparator;
   @FXML
@@ -185,12 +185,12 @@ public class OptionsController extends BaseController {
       layout.setBody(new Label("Do you really want to remove all user data including accounts, "
           + "stores and custom settings ? \n\nYou must restart OwlPlug for a complete reset."));
 
-      JFXButton cancelButton = new JFXButton("Cancel");
+      Button cancelButton = new Button("Cancel");
       cancelButton.setOnAction(cancelEvent -> {
         dialog.close();
       });
 
-      JFXButton removeButton = new JFXButton("Remove data");
+      Button removeButton = new Button("Remove data");
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         optionsService.clearAllUserData();

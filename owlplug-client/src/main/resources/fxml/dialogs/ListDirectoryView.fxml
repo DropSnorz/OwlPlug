@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -9,13 +8,13 @@
       <Label text="Add extra directories to the list. Update items by double-clicking on it and hit the &quot;Enter&quot; key to validate." wrapText="true" />
       <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
          <children>
-            <JFXButton fx:id="addDirectoryButton" mnemonicParsing="false" text="+ Add a directory" />
+            <Button fx:id="addDirectoryButton" text="+ Add a directory" />
          </children>
       </HBox>
       <ListView fx:id="directoryListView" editable="true" prefHeight="200.0" prefWidth="200.0" />
       <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
          <children>
-            <JFXButton fx:id="closeButton" mnemonicParsing="false" text="Close" />
+            <Button fx:id="closeButton" text="Close" />
          </children>
       </HBox>
    </children>

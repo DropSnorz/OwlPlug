@@ -18,7 +18,6 @@
  
 package com.owlplug.explore.controllers;
 
-import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.explore.model.RemoteSource;
@@ -34,6 +33,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -98,8 +98,9 @@ public class SourceMenuController extends BaseController {
       namePane.getChildren().add(badge);
 
       namePane.getChildren().add(new Label(pluginRemoteSource.getName()));
-      JFXToggleButton activeToggleButton = new JFXToggleButton();
-      activeToggleButton.setSize(5);
+      ToggleSwitch activeToggleButton = new ToggleSwitch();
+      activeToggleButton.setScaleX(0.6);
+      activeToggleButton.setScaleY(0.6);
       activeToggleButton.setSelected(pluginRemoteSource.isEnabled());
       activeToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
         exploreService.enableSource(pluginRemoteSource, newValue);

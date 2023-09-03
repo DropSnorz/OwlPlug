@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -123,6 +122,7 @@
             </GridPane>
          </children>
          <styleClass>
+            <String fx:value="background" />
             <String fx:value="pane-card" />
             <String fx:value="no-padding" />
          </styleClass>

@@ -48,6 +48,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.JMetroStyleClass;
+import jfxtras.styles.jmetro.Style;
 
 @SpringBootApplication
 public class OwlPlug extends Application {
@@ -106,11 +109,12 @@ public class OwlPlug extends Application {
     double height = 800;
 
     Scene scene = new Scene(rootNode, width, height);
+    JMetro jMetro = new JMetro(Style.DARK);
+    jMetro.setScene(scene);
     String fontsCss = JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm();
-    scene.getStylesheets().add(fontsCss);
+    jMetro.getOverridingStylesheets().add(fontsCss);
     String owlplugCss = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
-    scene.getStylesheets().add(owlplugCss);
-
+    jMetro.getOverridingStylesheets().add(owlplugCss);
     primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
 
