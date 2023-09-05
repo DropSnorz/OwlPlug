@@ -271,9 +271,9 @@ JFXTreeView:focused{
 }
 
 
-.jfx-popup,
-.jfx-popup .jfx-popup-container,
-.jfx-popup .jfx-list-view{
+.popup,
+.popup .popup-container,
+.popup .list-view{
     -fx-background-color:card-pane-color;
 }
 
@@ -295,15 +295,6 @@ ProgressIndicator{
 .jfx-spinner .arc {
     -fx-stroke: theme-primary-color;
 }
-
-
-.jfx-snackbar-content {
-    -fx-background-color: card-pane-color;
-}
-.jfx-snackbar-toast {
-    -fx-text-fill: text-color;   
-}
-
 
 .context-menu {
   -fx-background-color: card-pane-color;

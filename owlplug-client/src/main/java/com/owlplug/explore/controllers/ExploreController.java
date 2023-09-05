@@ -22,10 +22,8 @@ import com.google.common.collect.Iterables;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXMasonryPane;
-import com.jfoenix.controls.JFXPopup;
-import com.jfoenix.controls.JFXPopup.PopupHPosition;
-import com.jfoenix.controls.JFXPopup.PopupVPosition;
 import com.jfoenix.controls.JFXRippler;
+import com.owlplug.controls.Popup;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
@@ -165,8 +163,8 @@ public class ExploreController extends BaseController {
     }
 
     platformFilterButton.setOnAction(e -> {
-      JFXPopup popup = new JFXPopup(vbx);
-      popup.show(platformFilterButton, PopupVPosition.TOP, PopupHPosition.RIGHT);
+      Popup popup = new Popup(vbx);
+      popup.show(platformFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
     });
 
     syncSourcesButton.setOnAction(e -> {

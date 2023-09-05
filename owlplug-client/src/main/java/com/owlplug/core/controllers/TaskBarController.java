@@ -18,9 +18,7 @@
  
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXPopup;
-import com.jfoenix.controls.JFXPopup.PopupHPosition;
-import com.jfoenix.controls.JFXPopup.PopupVPosition;
+import com.owlplug.controls.Popup;
 import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.tasks.AbstractTask;
 import java.util.ArrayList;
@@ -95,8 +93,8 @@ public class TaskBarController extends BaseController {
         }
       });
 
-      JFXPopup popup = new JFXPopup(list);
-      popup.show(taskHistoryButton, PopupVPosition.BOTTOM, PopupHPosition.RIGHT);
+      Popup popup = new Popup(list);
+      popup.show(taskHistoryButton, Popup.PopupVPosition.BOTTOM, Popup.PopupHPosition.RIGHT);
     }
 
   }
