@@ -25,22 +25,9 @@
 	-fx-background-color: linear-gradient(to top, #c79081 0%, #dfa579 100%);
 }
 
-
-JFXDialog{
-	-fx-background-color: rgba(0,0,0,0.5);
-}
-JFXDialog Label{
-	-fx-text-fill: text-color;
-}
-
-.jfx-dialog .jfx-text-field {
-	-fx-prompt-text-fill: rgb(140, 140, 140);
-}
-
-.jfx-dialog-overlay-pane > StackPane {
+.dialog-overlay-pane > StackPane {
     -fx-background-color: card-pane-color;
 }
-
 
 Label{ 
  	-fx-text-fill: text-color;

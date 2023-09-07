@@ -18,8 +18,8 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
@@ -220,9 +220,8 @@ public class PluginInfoController extends BaseController {
   
   private void showUninstallDialog() {
     
-    JFXDialog dialog = this.getDialogManager().newDialog();
-
-    JFXDialogLayout layout = new JFXDialogLayout();
+    Dialog dialog = this.getDialogManager().newDialog();
+    DialogLayout layout = new DialogLayout();
 
     layout.setHeading(new Label("Remove plugin"));
     layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName()
@@ -248,7 +247,7 @@ public class PluginInfoController extends BaseController {
   
   private void showDisableDialog() {
     
-    JFXDialogLayout layout = new JFXDialogLayout();
+    DialogLayout layout = new DialogLayout();
 
     layout.setHeading(new Label("Disable plugin"));
     
@@ -273,7 +272,7 @@ public class PluginInfoController extends BaseController {
     vbox.getChildren().add(displayDialog);
     layout.setBody(vbox);
     
-    JFXDialog dialog = this.getDialogManager().newDialog();
+    Dialog dialog = this.getDialogManager().newDialog();
 
     Button cancelButton = new Button("Cancel");
     cancelButton.setOnAction(cancelEvent -> {

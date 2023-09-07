@@ -18,8 +18,8 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
@@ -179,8 +179,8 @@ public class OptionsController extends BaseController {
     });
 
     removeDataButton.setOnAction(e -> {
-      JFXDialog dialog = this.getDialogManager().newDialog();
-      JFXDialogLayout layout = new JFXDialogLayout();
+      Dialog dialog = this.getDialogManager().newDialog();
+      DialogLayout layout = new DialogLayout();
       layout.setHeading(new Label("Remove user data"));
       layout.setBody(new Label("Do you really want to remove all user data including accounts, "
           + "stores and custom settings ? \n\nYou must restart OwlPlug for a complete reset."));

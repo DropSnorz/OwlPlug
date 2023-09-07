@@ -19,10 +19,10 @@
 package com.owlplug.explore.controllers;
 
 import com.google.common.collect.Iterables;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.controls.Popup;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
@@ -384,9 +384,9 @@ public class ExploreController extends BaseController {
           FileUtils.sanitizeFileName(bundle.getRemotePackage().getName()));
       // If directory exists, asks the user for overwrite permission
       if (subSelectedDirectory.exists()) {
-        JFXDialog dialog = this.getDialogManager().newDialog();
+        Dialog dialog = this.getDialogManager().newDialog();
 
-        JFXDialogLayout layout = new JFXDialogLayout();
+        DialogLayout layout = new DialogLayout();
 
         layout.setHeading(new Label("Remove plugin"));
         layout.setBody(new Label("A previous installation of " + bundle.getRemotePackage().getName()

@@ -18,8 +18,8 @@
  
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.Symlink;
@@ -74,8 +74,8 @@ public class SymlinkInfoController extends BaseController {
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
 
     deleteLinkButton.setOnAction(e -> {
-      JFXDialog dialog = this.getDialogManager().newDialog();
-      JFXDialogLayout layout = new JFXDialogLayout();
+      Dialog dialog = this.getDialogManager().newDialog();
+      DialogLayout layout = new DialogLayout();
 
       layout.setHeading(new Label("Remove directory"));
       layout.setBody(new Label("Do you really want to delete link " + symlink.getName()

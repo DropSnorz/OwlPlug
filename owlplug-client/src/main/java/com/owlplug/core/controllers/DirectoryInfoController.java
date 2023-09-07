@@ -18,8 +18,8 @@
  
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.FileStatDAO;
 import com.owlplug.core.model.FileStat;
@@ -84,8 +84,8 @@ public class DirectoryInfoController extends BaseController {
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
 
     deleteDirectoryButton.setOnAction(e -> {
-      JFXDialog dialog = this.getDialogManager().newDialog();
-      JFXDialogLayout layout = new JFXDialogLayout();
+      Dialog dialog = this.getDialogManager().newDialog();
+      DialogLayout layout = new DialogLayout();
 
       layout.setHeading(new Label("Remove directory"));
       layout.setBody(new Label("Do you really want to remove " + pluginDirectory.getName()

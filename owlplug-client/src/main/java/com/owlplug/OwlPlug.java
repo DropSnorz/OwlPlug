@@ -19,6 +19,7 @@
 package com.owlplug;
 
 import com.jfoenix.assets.JFoenixResources;
+import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
 import java.beans.PropertyVetoException;
@@ -109,12 +110,14 @@ public class OwlPlug extends Application {
     double height = 800;
 
     Scene scene = new Scene(rootNode, width, height);
-    JMetro jMetro = new JMetro(Style.DARK);
-    jMetro.setScene(scene);
+    JMetro metroTheme = new JMetro(Style.DARK);
+    metroTheme.setScene(scene);
     String fontsCss = JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm();
-    jMetro.getOverridingStylesheets().add(fontsCss);
+    metroTheme.getOverridingStylesheets().add(fontsCss);
+    String owlplugControlsCss = OwlPlugControlsResources.load("/css/owlplug-controls.css").toExternalForm();
+    metroTheme.getOverridingStylesheets().add(owlplugControlsCss);
     String owlplugCss = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
-    jMetro.getOverridingStylesheets().add(owlplugCss);
+    metroTheme.getOverridingStylesheets().add(owlplugCss);
     primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
 

@@ -1,0 +1,29 @@
+.dialog-layout > .dialog-layout-heading {
+    -fx-alignment: center-left;
+    -fx-font-weight: BOLD;
+    -fx-padding: 24 24 20 24;
+}
+
+.dialog-layout > .dialog-layout-actions {
+    -fx-alignment: center-right;
+    -fx-hgap: 8;
+    -fx-padding: 8 8 8 8;
+}
+
+.dialog-layout > .dialog-layout-actions .button {
+    -fx-pref-height: 36;
+    -fx-max-height: 36;
+    -fx-min-width: 64;
+    -fx-padding: 8;
+}
+
+.dialog-layout > .dialog-layout-body {
+    -fx-alignment: center-left;
+    -fx-padding: 0 24 24 24;
+    -fx-pref-width: 400;
+}
+
+.dialog-layout > .dialog-layout-body .label {
+    -fx-font-size: 16.0;
+    -fx-wrap-text: true;
+}
