@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXDrawer?>
-<?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -61,7 +60,7 @@
             			<center>
                         <VBox fx:id="contentPanePlaceholder">
                            <children>
-            						<JFXTabPane fx:id="tabPaneContent" prefHeight="100.0" prefWidth="441.0" styleClass="no-header-tab-pane" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            						<TabPane fx:id="tabPaneContent" prefHeight="100.0" prefWidth="441.0" styleClass="no-header-tab-pane" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
             							<tabs>
             								<Tab closable="false" disable="true" text="OwlPlug">
             									<content>
@@ -84,7 +83,7 @@
             									</content>
             								</Tab>
             							</tabs>
-            						</JFXTabPane>
+            						</TabPane>
                            </children>
                         </VBox>
             			</center>
