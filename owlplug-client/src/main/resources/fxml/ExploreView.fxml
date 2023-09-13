@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXMasonryPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -11,6 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import com.owlplug.controls.MasonryPane?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.ExploreController">
    <children>
@@ -80,7 +80,7 @@
                      <content>
                         <VBox fx:id="masonryWrapper">
                            <children>
-                              <JFXMasonryPane fx:id="masonryPane" VBox.vgrow="ALWAYS" />
+                              <MasonryPane fx:id="masonryPane" VBox.vgrow="ALWAYS" />
                               <HBox fx:id="lazyLoadBar" alignment="CENTER" prefHeight="74.0" prefWidth="783.0" spacing="5.0">
                                  <children>
                                     <Hyperlink fx:id="lazyLoadLink" styleClass="hyperlink-dark" text="Load more..." />

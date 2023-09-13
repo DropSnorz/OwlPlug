@@ -19,10 +19,10 @@
 package com.owlplug.explore.controllers;
 
 import com.google.common.collect.Iterables;
-import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXRippler;
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
+import com.owlplug.controls.MasonryPane;
 import com.owlplug.controls.Popup;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
@@ -98,7 +98,7 @@ public class ExploreController extends BaseController {
   @FXML
   private VBox masonryWrapper;
   @FXML
-  private JFXMasonryPane masonryPane;
+  private MasonryPane masonryPane;
   @FXML
   private ScrollPane scrollPane;
   @FXML
