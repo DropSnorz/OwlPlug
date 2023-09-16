@@ -18,13 +18,13 @@
 
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXDrawer;
 import com.owlplug.auth.controllers.AccountController;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.auth.ui.AccountCellFactory;
 import com.owlplug.auth.ui.AccountItem;
 import com.owlplug.auth.ui.AccountMenuItem;
+import com.owlplug.controls.Drawer;
 import com.owlplug.controls.transitions.AnimatedTabListener;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationMonitor;
@@ -40,14 +40,10 @@ import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.services.ExploreService;
 import java.util.ArrayList;
 import java.util.Optional;
-import javafx.animation.FadeTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.SequentialTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -56,7 +52,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +101,7 @@ public class MainController extends BaseController {
   @FXML
   private VBox contentPanePlaceholder;
   @FXML
-  private JFXDrawer leftDrawer;
+  private Drawer leftDrawer;
   @FXML
   private ComboBox<AccountItem> accountComboBox;
   @FXML
@@ -252,7 +247,7 @@ public class MainController extends BaseController {
     return rootPane;
   }
 
-  public JFXDrawer getLeftDrawer() {
+  public Drawer getLeftDrawer() {
     return leftDrawer;
   }
 

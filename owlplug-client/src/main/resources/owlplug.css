@@ -237,7 +237,7 @@ JFXTreeView:focused{
 	-fx-font-weight: normal;
 }
 
-.jfx-drawer-side-pane {
+.drawer-side-pane {
     -fx-background-color: card-pane-color;
 }
 .menu-item:hover{
