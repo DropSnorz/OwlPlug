@@ -86,16 +86,16 @@ TextArea .content {
 }
 
 
-.jfx-chip-view {
+.chip-view {
 	-fx-max-height: 45px ;
 }
-.jfx-chip-view .chips-pane .text-area {
+.chip-view .chips-pane .text-area {
 	-fx-prompt-text-fill: prompt-text-color;
 	-fx-pref-height: 32px;
 	-fx-height: 32px;
 	-fx-max-height: 32px;
 }
-.jfx-chip-view .jfx-chip Label {
+.chip-view .chip Label {
     -fx-text-fill: black;
 }
 .chip-brown {
