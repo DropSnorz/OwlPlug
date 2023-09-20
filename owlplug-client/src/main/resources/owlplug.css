@@ -5,8 +5,8 @@
 
 .root{
     -fx-font-family: "Roboto";
-	card-pane-darkshade-color: rgb(50,50,50);
-	card-pane-color: rgb(66,66,66);
+	card-pane-darkshade-color: rgb(37,37,37);
+	card-pane-color: rgb(46,46,46);
 	card-pane-lightshade-color: rgb(96,96,96);
 	
 	disabled-color: rgb(160,160,160);
@@ -178,6 +178,10 @@ TextArea .content {
 	-fx-text-fill: disabled-color;
 }
 
+.list-view {
+    list_view_background_color: card-pane-color;
+}
+
 
 JFXToggleButton{
 	-fx-text-fill: text-color;
@@ -200,23 +204,6 @@ JFXComboBox{
 }
 #accountComboBox {
 	-fx-prompt-text-fill: transparent;
-}
- 
- 
-JFXTreeView{
-	-fx-background-color:card-pane-color;
-	-fx-text-fill: text-color;
-	-fx-border-color: transparent;
-	-fx-focus-color: transparent;
-	-fx-faint-focus-color: transparent;
-	-fx-background-insets: 0, 1;
-    -fx-padding: 1;
-}
-JFXTreeView:focused{
-	-fx-border-color: transparent;
-	-fx-focus-color: transparent;
-	-fx-faint-focus-color: transparent;
-	
 }
 
 .jfx-tab-pane *.tab-header-background{
@@ -302,8 +289,12 @@ ProgressIndicator{
   App section theme
 ****************************************************************/
 
-.header .combobox{
-	-fx-background-color:card-pane-color;
+.header {
+	-fx-background-color: card-pane-color;
+}
+
+.header .combo-box-base {
+	-fx-background-color: card-pane-color;
 	-fx-background-radius: 0;
 	-fx-border-radius: 0;
 	-fx-text-fill: text-color;
@@ -311,6 +302,7 @@ ProgressIndicator{
 
 .pane-card {
 	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+	-fx-background-color: card-pane-color;
 	-fx-padding: 10,10,10,10;
 }
 .pane-card .card-title {
@@ -374,15 +366,6 @@ ProgressIndicator{
 	-fx-padding:10,0,10,0;
 }
 
-#pluginTreeView {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-}
-
-#pluginTreeViewTabPane {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-}
-
-
 /****************************************************************
   JavaFx Charts theme
 ****************************************************************/
@@ -402,6 +385,14 @@ ProgressIndicator{
 
 .chart-legend {
     -fx-background-color: card-pane-color;
+}
+
+.chart-legend > .label {
+    -fx-text-fill: text-color;
+}
+
+.chart-pie-label {
+    -fx-fill: text-color;
 }
 
 .doughnut-inner-circle {

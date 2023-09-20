@@ -122,7 +122,6 @@
             </GridPane>
          </children>
          <styleClass>
-            <String fx:value="background" />
             <String fx:value="pane-card" />
             <String fx:value="no-padding" />
          </styleClass>

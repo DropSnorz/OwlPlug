@@ -69,10 +69,10 @@ public class PackageSourceBadgeView extends HBox {
 
     headerLabel.setTooltip(new Tooltip(tooltip));
 
-    ImageView owlplugLogo = new ImageView(logoIcon);
-    owlplugLogo.setPreserveRatio(true);
-    owlplugLogo.setFitHeight(16);
-    this.getChildren().add(owlplugLogo);
+    ImageView logo = new ImageView(logoIcon);
+    logo.setPreserveRatio(true);
+    logo.setFitHeight(16);
+    this.getChildren().add(logo);
 
   }
 

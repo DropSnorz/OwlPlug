@@ -73,7 +73,6 @@
          </padding>
          <styleClass>
             <String fx:value="pane-card" />
-            <String fx:value="background" />
          </styleClass>
       </VBox>
    </children>

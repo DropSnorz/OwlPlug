@@ -23,7 +23,6 @@
             <HBox>
                 <styleClass>
                     <String fx:value="header" />
-                    <String fx:value="background" />
                 </styleClass>
                <children>
                   <TabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
@@ -88,7 +87,7 @@
                         </VBox>
             			</center>
             
-                                                            			<bottom>
+                        <bottom>
             				<fx:include fx:id="taskBarView" source="TaskBarView.fxml" />
             			</bottom>
             		</BorderPane>
