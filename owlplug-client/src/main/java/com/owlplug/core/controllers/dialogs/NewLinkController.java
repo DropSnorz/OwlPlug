@@ -18,6 +18,7 @@
  
 package com.owlplug.core.controllers.dialogs;
 
+import com.owlplug.controls.AutoCompletePopup;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
@@ -27,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import impl.org.controlsfx.skin.AutoCompletePopup;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -116,9 +116,8 @@ public class NewLinkController extends AbstractDialogController {
     });
     
     autoCompletePath = new AutoCompletePopup<>();
-    autoCompletePath.setOnSuggestion(e -> {
-      linkSourceParentTextField.setText(e.getSuggestion());
-      autoCompletePath.hide();
+    autoCompletePath.setSelectionHandler(e -> {
+      linkSourceParentTextField.setText(e.getObject().toString());
     });
     
     linkSourceParentTextField.setOnKeyPressed(e -> {

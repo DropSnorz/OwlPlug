@@ -95,6 +95,22 @@ TextArea .content {
 	-fx-height: 32px;
 	-fx-max-height: 32px;
 }
+
+.chip Button {
+    -fx-background-color: transparent;
+    -fx-max-height: 20px;
+    -fx-max-width: 20px;
+    -fx-text-fill: black;
+    -fx-border-width: 0px;
+}
+.chip Button:pressed {
+    -fx-background-color: transparent;
+    -fx-max-height: 20px;
+    -fx-max-width: 20px;
+    -fx-text-fill: black;
+    -fx-border-width: 0px;
+}
+
 .chip-view .chip Label {
     -fx-text-fill: black;
 }
@@ -239,6 +255,10 @@ JFXComboBox{
 	-fx-text-fill: text-color;
 }
 
+/* ControlsFx Autocomplete Popup */
+.auto-complete-popup > .list-view {
+	-fx-background-color: card-pane-color;
+}
 
 .jfx-rippler {
     -jfx-rippler-fill: theme-secondary-color;
