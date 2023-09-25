@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, #dfa579, #424242 100%);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PreloaderController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0"  styleClass="preloader" style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, #dfa579, #464646 100%);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PreloaderController">
    <children>
       <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="33.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
          <image>

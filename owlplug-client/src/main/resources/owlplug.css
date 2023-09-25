@@ -275,12 +275,8 @@ JFXComboBox{
     -fx-background-color: red;
 }
 
-.progress-bar-link .bar {
-	-fx-background-color: rgb(143,143,143);
-}
-
-.progress-bar-link .track {
-	-fx-background-color: card-pane-color;
+.progress-bar-link {
+	dot_color: rgb(143,143,143);
 }
 
 ProgressIndicator{
@@ -417,6 +413,10 @@ ProgressIndicator{
 
 .doughnut-inner-circle {
     -fx-fill: card-pane-color;
+}
+
+.preloader .progress-bar {
+    dot_color: disabled-color;
 }
 
 /****************************************************************
