@@ -18,7 +18,6 @@
 
 package com.owlplug;
 
-import com.jfoenix.assets.JFoenixResources;
 import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
@@ -112,8 +111,6 @@ public class OwlPlug extends Application {
     Scene scene = new Scene(rootNode, width, height);
     JMetro metroTheme = new JMetro(Style.DARK);
     metroTheme.setScene(scene);
-    String fontsCss = JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm();
-    metroTheme.getOverridingStylesheets().add(fontsCss);
     String owlplugControlsCss = OwlPlugControlsResources.load("/css/owlplug-controls.css").toExternalForm();
     metroTheme.getOverridingStylesheets().add(owlplugControlsCss);
     String owlplugCss = OwlPlug.class.getResource("/owlplug.css").toExternalForm();

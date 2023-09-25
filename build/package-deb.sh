@@ -14,7 +14,6 @@ echo "Generating OwlPlug DEB Install package"
 
 jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.JarLauncher \
 --main-jar owlplug.jar --license-file ./input/LICENSE --dest ./output \
---java-options "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED" \
 --app-version $owlplugversion --icon ./resources/owlplug.png --vendor OwlPlug \
 --linux-package-name owlplug --linux-deb-maintainer contact@owlplug.com \
 --linux-menu-group "AudioVideo;Audio" --linux-shortcut
