@@ -85,19 +85,22 @@ public class SourceMenuController extends BaseController {
 
       // Info Area
       VBox infoPane = new VBox();
-      infoPane.setAlignment(Pos.CENTER_LEFT);
       infoPane.setSpacing(5);
 
       HBox namePane = new HBox();
+      namePane.setSpacing(5);
       namePane.setAlignment(Pos.CENTER_LEFT);
       VBox.setVgrow(namePane, Priority.NEVER);
+      infoPane.getChildren().add(namePane);
 
       PackageSourceBadgeView badge = new PackageSourceBadgeView(pluginRemoteSource, getApplicationDefaults(), true);
       badge.setMaxHeight(28);
-      HBox.setMargin(badge, new Insets(0,5,0,0));
+      HBox.setHgrow(badge, Priority.NEVER);
       namePane.getChildren().add(badge);
 
-      namePane.getChildren().add(new Label(pluginRemoteSource.getName()));
+      Label label = new Label(pluginRemoteSource.getName());
+      HBox.setHgrow(label, Priority.ALWAYS);
+      namePane.getChildren().add(label);
       ToggleSwitch activeToggleButton = new ToggleSwitch();
       activeToggleButton.setScaleX(0.6);
       activeToggleButton.setScaleY(0.6);
@@ -107,9 +110,8 @@ public class SourceMenuController extends BaseController {
         exploreController.refreshView();
 
       });
+      HBox.setHgrow(activeToggleButton, Priority.NEVER);
       namePane.getChildren().add(activeToggleButton);
-      infoPane.getChildren().add(namePane);
-
 
       HBox storeMetadata = new HBox();
       storeMetadata.setSpacing(5);
