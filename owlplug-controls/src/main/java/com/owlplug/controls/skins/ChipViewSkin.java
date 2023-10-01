@@ -299,9 +299,7 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
 
     @Override
     protected double computePrefHeight(double forWidth) {
-      editor.setManaged(true);
       double height = super.computePrefHeight(forWidth);
-      editor.setManaged(false);
       return height;
     }
 
@@ -329,9 +327,9 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
       final double editorVInsets = editor.snappedTopInset() + editor.snappedBottomInset();
 
       final List<Node> managedChildren = getManagedChildren();
-      final int mangedChildrenSize = managedChildren.size();
-      if (mangedChildrenSize > 0) {
-        Region lastChild = (Region) managedChildren.get(mangedChildrenSize - 1);
+      final int managedChildrenSize = managedChildren.size();
+      if (managedChildrenSize > 0) {
+        Region lastChild = (Region) managedChildren.get(managedChildrenSize - 1);
         double contentHeight = lastChild.getHeight() + lastChild.getLayoutY();
         availableWidth = insideWidth - lastChild.getBoundsInParent().getMaxX();
         double minWidth = editor.getMinWidth();
