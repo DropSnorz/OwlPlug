@@ -38,6 +38,7 @@ import com.owlplug.core.services.UpdateService;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.services.ExploreService;
+import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Optional;
 import javafx.application.Platform;
@@ -52,12 +53,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import jakarta.annotation.PreDestroy;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 
 @Controller
 public class MainController extends BaseController {

@@ -54,16 +54,12 @@ import javafx.util.Duration;
 
 /**
  * Dialog class to display content on top of the scene.
- *
  * Simplified version based on JFXDialog from JFoenix library.
  */
 public class Dialog extends StackPane {
-
-  //	public static enum DialogLayout{PLAIN, HEADING, ACTIONS, BACKDROP};
   public enum DialogTransition {
     CENTER, TOP, RIGHT, BOTTOM, LEFT, NONE
   }
-
   private StackPane contentHolder;
 
   private double offsetX = 0;
@@ -92,7 +88,6 @@ public class Dialog extends StackPane {
    * <li>BOTTOM</li>
    * <li>LEFT</li>
    * </ul>
-   *
    * @param dialogContainer is the parent of the dialog, it
    * @param content         the content of dialog
    * @param transitionType  the animation type

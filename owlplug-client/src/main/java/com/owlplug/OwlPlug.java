@@ -30,6 +30,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javax.sql.DataSource;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
@@ -48,9 +50,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.JMetroStyleClass;
-import jfxtras.styles.jmetro.Style;
 
 @SpringBootApplication
 public class OwlPlug extends Application {

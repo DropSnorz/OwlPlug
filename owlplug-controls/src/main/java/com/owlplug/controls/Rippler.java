@@ -18,6 +18,9 @@
 
 package com.owlplug.controls;
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -43,10 +46,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
-
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Rippler inspired by JFXRippler from JFoenix.

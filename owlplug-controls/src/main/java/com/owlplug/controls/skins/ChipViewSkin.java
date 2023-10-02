@@ -278,8 +278,9 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
   private class CustomFlowPane extends FlowPane {
     double initOffset = 8;
 
-    {
+    public CustomFlowPane() {
       addEventHandler(MouseEvent.MOUSE_CLICKED, event -> ensureVisible(editor));
+
     }
 
     private void ensureVisible(Node node) {
@@ -322,7 +323,6 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
       final double bottom = insets.getBottom();
       final double right = insets.getRight();
       final double insideWidth = width - left - right;
-      final double insideHeight = height - top - bottom;
       final double newLineEditorX = right + initOffset;
       final double editorVInsets = editor.snappedTopInset() + editor.snappedBottomInset();
 

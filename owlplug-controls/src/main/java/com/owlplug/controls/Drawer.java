@@ -30,15 +30,12 @@ import javafx.scene.layout.StackPane;
 public class Drawer extends StackPane {
 
   private DoubleProperty defaultSizeProperty = new SimpleDoubleProperty();
-  private StackPane content = new StackPane();
   private StackPane overlayPane = new StackPane();
   private StackPane sidePane = new StackPane();
-
 
   public Drawer() {
     overlayPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> close());
     sidePane.getStyleClass().add("drawer-side-pane");
-    //overlayPane.setMouseTransparent(true);
 
   }
 
@@ -76,6 +73,5 @@ public class Drawer extends StackPane {
   public void setDefaultDrawerSize(double size) {
     defaultSizeProperty.set(size);
   }
-
 
 }

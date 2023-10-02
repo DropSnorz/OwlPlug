@@ -54,7 +54,16 @@ public class AutoCompletePopup<T> extends PopupControl {
   private final FilteredList<T> filteredData = new FilteredList<T>(suggestions, s -> true);
   private final ObjectProperty<Callback<ListView<T>, ListCell<T>>> suggestionsCellFactory = new SimpleObjectProperty<Callback<ListView<T>, ListCell<T>>>();
 
+  /**
+   * limits the number of cells to be shown, used to compute the list size.
+   */
+  private IntegerProperty cellLimit = new SimpleIntegerProperty(
+          AutoCompletePopup.this, "cellLimit", 10);
+
+  private DoubleProperty fixedCellSize = new SimpleDoubleProperty(
+          AutoCompletePopup.this, "fixedCellSize", 40d);
   private static final String DEFAULT_STYLE_CLASS = "autocomplete-popup";
+
 
   public AutoCompletePopup() {
     super();
@@ -114,15 +123,9 @@ public class AutoCompletePopup<T> extends PopupControl {
 
 
   public final void setSuggestionsCellFactory(
-          final javafx.util.Callback<ListView<T>, ListCell<T>> suggestionsCellFactory) {
+          final Callback<ListView<T>, ListCell<T>> suggestionsCellFactory) {
     this.suggestionsCellFactoryProperty().set(suggestionsCellFactory);
   }
-
-  /**
-   * limits the number of cells to be shown, used to compute the list size
-   */
-  private IntegerProperty cellLimit = new SimpleIntegerProperty(
-          AutoCompletePopup.this, "cellLimit", 10);
 
   public final void setCellLimit(int value) {
     cellLimitProperty().set(value);
@@ -135,9 +138,6 @@ public class AutoCompletePopup<T> extends PopupControl {
   public final IntegerProperty cellLimitProperty() {
     return cellLimit;
   }
-
-  private DoubleProperty fixedCellSize = new SimpleDoubleProperty(
-          AutoCompletePopup.this, "fixedCellSize", 40d);
 
   public final void setFixedCellSize(double value) {
     fixedCellSizeProperty().set(value);

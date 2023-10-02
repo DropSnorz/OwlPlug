@@ -96,7 +96,8 @@ public class MasonryPane extends Pane {
   protected void layoutChildren() {
     performingLayout = true;
 
-    int col = (int) Math.floor((getWidth() + getHSpacing() - snappedLeftInset() - snappedRightInset()) / (getCellWidth() + getHSpacing()));
+    int col = (int) Math.floor((getWidth() + getHSpacing() - snappedLeftInset() - snappedRightInset())
+            / (getCellWidth() + getHSpacing()));
     col = getLimitColumn() != -1 && col > getLimitColumn() ? getLimitColumn() : col;
 
     if (matrix != null && col == matrix[0].length) {
@@ -202,7 +203,8 @@ public class MasonryPane extends Pane {
                 new KeyValue(child.opacityProperty(), 0, Interpolator.LINEAR),
                 new KeyValue(child.layoutXProperty(), blockX, Interpolator.LINEAR),
                 new KeyValue(child.layoutYProperty(), blockY, Interpolator.LINEAR));
-            animationMap.put(child, new CachedTransition(child, new Timeline(keyFrame)) {{
+            animationMap.put(child, new CachedTransition(child, new Timeline(keyFrame)) {
+              {
                 setCycleDuration(Duration.seconds(0.320));
                 setDelay(Duration.seconds(0));
                 setOnFinished((finish) -> {
@@ -210,7 +212,8 @@ public class MasonryPane extends Pane {
                   child.setLayoutY(blockY);
                   child.setOpacity(0);
                 });
-            }});
+              }
+            });
           }
         }
 

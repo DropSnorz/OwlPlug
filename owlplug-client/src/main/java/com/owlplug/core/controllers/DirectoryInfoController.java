@@ -20,13 +20,13 @@ package com.owlplug.core.controllers;
 
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
+import com.owlplug.controls.DoughnutChart;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.FileStatDAO;
 import com.owlplug.core.model.FileStat;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginDirectory;
 import com.owlplug.core.tasks.DirectoryRemoveTask;
-import com.owlplug.controls.DoughnutChart;
 import com.owlplug.core.ui.PluginListCellFactory;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;

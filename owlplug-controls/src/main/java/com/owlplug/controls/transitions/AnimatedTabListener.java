@@ -30,8 +30,8 @@ public class AnimatedTabListener implements ChangeListener<Tab> {
 
   @Override
   public void changed(ObservableValue<? extends Tab> obs, Tab oldTab, Tab newTab) {
-    Node oldContent = oldTab.getContent();
-    Node newContent = newTab.getContent();
+    final Node oldContent = oldTab.getContent();
+    final Node newContent = newTab.getContent();
     newTab.setContent(oldContent);
     FadeTransition fadeOut = new FadeTransition(
             Duration.seconds(0.1), oldContent);

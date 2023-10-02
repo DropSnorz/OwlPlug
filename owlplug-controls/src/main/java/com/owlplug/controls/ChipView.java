@@ -42,12 +42,6 @@ import javafx.util.StringConverter;
 @Deprecated
 public class ChipView<T> extends Control {
 
-  /***************************************************************************
-   *                                                                         *
-   * Static properties and methods                                           *
-   *                                                                         *
-   **************************************************************************/
-
   private static <T> StringConverter<T> defaultStringConverter() {
     return new StringConverter<T>() {
       @Override

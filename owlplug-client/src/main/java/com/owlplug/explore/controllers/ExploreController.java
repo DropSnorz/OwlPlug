@@ -38,6 +38,11 @@ import com.owlplug.explore.model.search.StoreFilterCriteria;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -61,12 +66,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
 
 @Controller
 public class ExploreController extends BaseController {

@@ -26,7 +26,6 @@ import javafx.scene.layout.Region;
 public class Chip<T> extends Region {
 
   protected final ChipView<T> view;
-  // --- item
   private ObjectProperty<T> item = new SimpleObjectProperty<T>(this, "item");
 
   public Chip(ChipView<T> view, T item) {
@@ -35,11 +34,17 @@ public class Chip<T> extends Region {
     setItem(item);
   }
 
-  public final ObjectProperty<T> itemProperty() { return item; }
+  public final ObjectProperty<T> itemProperty() {
+    return item;
+  }
 
-  public final void setItem(T value) { item.set(value); }
+  public final void setItem(T value) {
+    item.set(value);
+  }
 
-  public final T getItem() { return item.get(); }
+  public final T getItem() {
+    return item.get();
+  }
 
   public final ChipView getChipView() {
     return view;
