@@ -18,9 +18,6 @@
 
 package com.owlplug.core.controllers.fragments;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import java.io.File;
@@ -29,10 +26,13 @@ import java.text.MessageFormat;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import org.controlsfx.control.ToggleSwitch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +45,13 @@ public class PluginPathFragmentController {
   @FXML
   private Label headerLabel;
   @FXML
-  private JFXToggleButton activationToggleButton;
+  private ToggleSwitch activationToggleButton;
   @FXML
   private Hyperlink extraDirectoryLink;
   @FXML
-  private JFXTextField directoryTextField;
+  private TextField directoryTextField;
   @FXML
-  private JFXButton directoryButton;
+  private Button directoryButton;
 
   private String name;
   private String enableOptionKey;

@@ -18,8 +18,6 @@
  
 package com.owlplug.auth.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXSpinner;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.MainController;
@@ -27,7 +25,9 @@ import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,15 +49,15 @@ public class AccountController extends AbstractDialogController {
   @FXML
   private HBox buttonPane;
   @FXML
-  private JFXButton googleButton;
+  private Button googleButton;
   @FXML
-  private JFXSpinner authProgressIndicator;
+  private ProgressIndicator authProgressIndicator;
   @FXML
   private Label messageLabel;
   @FXML
-  private JFXButton cancelButton;
+  private Button cancelButton;
   @FXML
-  private JFXButton closeButton;
+  private Button closeButton;
 
   /** Indicates if the user has pressed the cancel button. */
   private boolean cancelFlag = false;

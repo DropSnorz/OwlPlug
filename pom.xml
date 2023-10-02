@@ -15,6 +15,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
+		<javafx.version>19.0.2.1</javafx.version>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
@@ -22,6 +23,7 @@
 	<modules>
 		<module>owlplug-client</module>
 		<module>owlplug-host</module>
-	</modules>
+        <module>owlplug-controls</module>
+    </modules>
 
 </project>

@@ -18,7 +18,6 @@
 
 package com.owlplug.core.ui;
 
-import com.jfoenix.controls.JFXListCell;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.PluginComponent;
 import javafx.scene.control.ListCell;
@@ -37,9 +36,9 @@ public class PluginComponentCellFactory implements Callback<ListView<PluginCompo
   }
 
   @Override
-  public JFXListCell<PluginComponent> call(ListView<PluginComponent> arg0) {
+  public ListCell<PluginComponent> call(ListView<PluginComponent> arg0) {
 
-    return new JFXListCell<PluginComponent>() {
+    return new ListCell<>() {
       @Override
       public void updateItem(PluginComponent plugin, boolean empty) {
         super.updateItem(plugin, empty);

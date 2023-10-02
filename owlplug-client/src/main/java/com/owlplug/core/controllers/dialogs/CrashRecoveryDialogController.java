@@ -18,8 +18,6 @@
 
 package com.owlplug.core.controllers.dialogs;
 
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
@@ -35,6 +33,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -60,9 +60,9 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
   
   
   @FXML
-  protected JFXCheckBox nativeDiscoveryCheckbox;
+  protected CheckBox nativeDiscoveryCheckbox;
   @FXML
-  protected JFXComboBox<NativePluginLoader> pluginNativeComboBox;
+  protected ComboBox<NativePluginLoader> pluginNativeComboBox;
   @FXML
   protected Button closeButton;
   @FXML

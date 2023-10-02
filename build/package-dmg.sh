@@ -14,7 +14,6 @@ echo "Generating OwlPlug DMG Install package"
 
 jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.JarLauncher \
 --main-jar owlplug.jar --license-file ./input/LICENSE --dest ./output \
---java-options "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED" \
 --app-version $owlplugversion --icon ./resources/owlplug.icns --vendor OwlPlug \
 --mac-package-identifier owlplug --mac-package-name OwlPlug
 

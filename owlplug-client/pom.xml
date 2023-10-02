@@ -47,6 +47,11 @@
 			<version>1.24.0</version>
 		</dependency>
 		<dependency>
+			<groupId>com.owlplug</groupId>
+			<artifactId>owlplug-controls</artifactId>
+			<version>1.24.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
@@ -90,40 +95,45 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 			<classifier>win</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 			<classifier>linux</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 			<classifier>mac</classifier>
 		</dependency>
 		<dependency>
-			<groupId>com.jfoenix</groupId>
-			<artifactId>jfoenix</artifactId>
-			<version>9.0.10</version>
+			<groupId>org.controlsfx</groupId>
+			<artifactId>controlsfx</artifactId>
+			<version>11.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfxtras</groupId>
+			<artifactId>jmetro</artifactId>
+			<version>11.6.16</version>
 		</dependency>
 
 		<dependency>
@@ -255,10 +265,6 @@
 					<configuration>
 						<mainClass>com.owlplug.Bootstrap</mainClass>
 						<layout>JAR</layout>
-						<!--Arg required to fix illegal reflective access in JFXTextField -->
-						<jvmArguments>
-							--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
-						</jvmArguments>
 					</configuration>
 					<executions>
 						<execution>

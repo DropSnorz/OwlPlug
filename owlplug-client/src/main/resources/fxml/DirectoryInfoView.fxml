@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.DirectoryInfoController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.DirectoryInfoController">
    <children>
-      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" styleClass="pane-card" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
          <children>
             <Label fx:id="directoryPathLabel" text="DirectoryPath">
                <graphic>
@@ -34,15 +34,15 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton fx:id="openDirectoryButton" text="Open directory">
+                        <Button fx:id="openDirectoryButton" text="Open directory">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../icons/share-white-16.png" />
                                  </image>
                               </ImageView>
-                           </graphic></JFXButton>
-                        <JFXButton fx:id="deleteDirectoryButton" alignment="CENTER" styleClass="button-danger" text="Delete All">
+                           </graphic></Button>
+                        <Button fx:id="deleteDirectoryButton" alignment="CENTER" styleClass="button-danger" text="Delete All">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -50,7 +50,7 @@
                                  </image>
                               </ImageView>
                            </graphic>
-                        </JFXButton>
+                        </Button>
                      </children>
                   </HBox>
                </children>
@@ -58,11 +58,11 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <JFXListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
+            <ListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
-              </JFXListView>
+              </ListView>
             <VBox fx:id="pieChartContainer" VBox.vgrow="ALWAYS" />
          </children>
          <VBox.margin>
@@ -71,6 +71,9 @@
          <padding>
             <Insets left="10.0" right="10.0" />
          </padding>
+         <styleClass>
+            <String fx:value="pane-card" />
+         </styleClass>
       </VBox>
    </children>
 </AnchorPane>

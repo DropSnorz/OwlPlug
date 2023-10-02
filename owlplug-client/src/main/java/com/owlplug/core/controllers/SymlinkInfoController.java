@@ -18,10 +18,8 @@
  
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXListView;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.Symlink;
@@ -30,7 +28,9 @@ import com.owlplug.core.ui.PluginListCellFactory;
 import com.owlplug.core.utils.PlatformUtils;
 import java.util.Optional;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,13 +44,13 @@ public class SymlinkInfoController extends BaseController {
   @FXML
   private Label directoryPathLabel;
   @FXML
-  private JFXListView<Plugin> pluginDirectoryListView;
+  private ListView<Plugin> pluginDirectoryListView;
   @FXML
-  private JFXButton openLinkButton;
+  private Button openLinkButton;
   @FXML
-  private JFXButton openTargetButton;
+  private Button openTargetButton;
   @FXML
-  private JFXButton deleteLinkButton;
+  private Button deleteLinkButton;
   @FXML
   private Label targetPathLabel;
 
@@ -74,20 +74,20 @@ public class SymlinkInfoController extends BaseController {
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
 
     deleteLinkButton.setOnAction(e -> {
-      JFXDialog dialog = this.getDialogManager().newDialog();
-      JFXDialogLayout layout = new JFXDialogLayout();
+      Dialog dialog = this.getDialogManager().newDialog();
+      DialogLayout layout = new DialogLayout();
 
       layout.setHeading(new Label("Remove directory"));
       layout.setBody(new Label("Do you really want to delete link " + symlink.getName()
           + " ? Content will NOT be removed from the target folder."));
 
-      JFXButton cancelButton = new JFXButton("Cancel");
+      Button cancelButton = new Button("Cancel");
 
       cancelButton.setOnAction(cancelEvent -> {
         dialog.close();
       });
 
-      JFXButton removeButton = new JFXButton("Delete");
+      Button removeButton = new Button("Delete");
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         taskFactory.create(new SymlinkRemoveTask(symlink))

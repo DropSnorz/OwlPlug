@@ -15,20 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXTabPane;
-import com.jfoenix.skins.JFXComboBoxListViewSkin;
 import com.owlplug.auth.controllers.AccountController;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.auth.ui.AccountCellFactory;
 import com.owlplug.auth.ui.AccountItem;
 import com.owlplug.auth.ui.AccountMenuItem;
+import com.owlplug.controls.Drawer;
+import com.owlplug.controls.transitions.AnimatedTabListener;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationMonitor;
 import com.owlplug.core.components.ImageCache;
@@ -49,10 +46,14 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,28 +95,29 @@ public class MainController extends BaseController {
   @FXML
   private BorderPane mainPane;
   @FXML
-  private JFXTabPane tabPaneHeader;
+  private TabPane tabPaneHeader;
   @FXML
-  private JFXTabPane tabPaneContent;
+  private TabPane tabPaneContent;
   @FXML
   private VBox contentPanePlaceholder;
   @FXML
-  private JFXDrawer leftDrawer;
+  private Drawer leftDrawer;
   @FXML
-  private JFXComboBox<AccountItem> accountComboBox;
+  private ComboBox<AccountItem> accountComboBox;
   @FXML
   private Pane updatePane;
   @FXML
-  private JFXButton downloadUpdateButton;
+  private Button downloadUpdateButton;
 
   /**
    * FXML initialize method.
    */
   @FXML
   public void initialize() {
-    
+
     viewRegistry.preload();
 
+    this.tabPaneHeader.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
     this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener((options, oldValue, newValue) -> {
       tabPaneContent.getSelectionModel().select(newValue.intValue());
       leftDrawer.close();
@@ -145,25 +147,21 @@ public class MainController extends BaseController {
     accountComboBox.setButtonCell(new AccountCellFactory(imageCache, Pos.CENTER_RIGHT).call(null));
     accountComboBox.setCellFactory(new AccountCellFactory(authenticationService, imageCache, true));
 
-    JFXComboBoxListViewSkin<AccountItem> accountCBSkin = new JFXComboBoxListViewSkin<AccountItem>(accountComboBox);
-    accountCBSkin.setHideOnClick(false);
-    accountComboBox.setSkin(accountCBSkin);
-
     refreshAccounts();
-    
+
     downloadUpdateButton.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getUpdateDownloadUrl());
     });
-    
+
     updatePane.setVisible(false);
-    
+
     Task<Boolean> retrieveUpdateStatusTask = new Task<Boolean>() {
         @Override
         protected Boolean call() throws Exception {
           return updateService.isUpToDate();
         }
     };
-    
+
     retrieveUpdateStatusTask.setOnSucceeded(e -> {
       if (!retrieveUpdateStatusTask.getValue()) {
         updatePane.setVisible(true);
@@ -172,6 +170,9 @@ public class MainController extends BaseController {
 
     new Thread(retrieveUpdateStatusTask).start();
 
+    tabPaneContent.getSelectionModel()
+            .selectedItemProperty()
+            .addListener(new AnimatedTabListener());
   }
 
   /**
@@ -188,7 +189,7 @@ public class MainController extends BaseController {
     }
     this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
     optionsController.refreshView();
-    
+
     this.getAnalyticsService().pageView("/app/core/startup");
 
     // Startup plugin sync only triggered if configured and previous application
@@ -236,7 +237,7 @@ public class MainController extends BaseController {
     }
 
   }
-  
+
   @PreDestroy
   private void destroy() {
     this.taskRunner.close();
@@ -246,13 +247,13 @@ public class MainController extends BaseController {
     return rootPane;
   }
 
-  public JFXDrawer getLeftDrawer() {
+  public Drawer getLeftDrawer() {
     return leftDrawer;
   }
 
   /**
    * Set the left drawer content.
-   * 
+   *
    * @param node the content
    */
   public void setLeftDrawer(Parent node) {

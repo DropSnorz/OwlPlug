@@ -18,7 +18,6 @@
  
 package com.owlplug.explore.controllers;
 
-import com.jfoenix.controls.JFXToggleButton;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.explore.model.RemoteSource;
@@ -34,6 +33,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -85,30 +85,33 @@ public class SourceMenuController extends BaseController {
 
       // Info Area
       VBox infoPane = new VBox();
-      infoPane.setAlignment(Pos.CENTER_LEFT);
       infoPane.setSpacing(5);
 
       HBox namePane = new HBox();
+      namePane.setSpacing(5);
       namePane.setAlignment(Pos.CENTER_LEFT);
       VBox.setVgrow(namePane, Priority.NEVER);
+      infoPane.getChildren().add(namePane);
 
       PackageSourceBadgeView badge = new PackageSourceBadgeView(pluginRemoteSource, getApplicationDefaults(), true);
       badge.setMaxHeight(28);
-      HBox.setMargin(badge, new Insets(0,5,0,0));
+      HBox.setHgrow(badge, Priority.NEVER);
       namePane.getChildren().add(badge);
 
-      namePane.getChildren().add(new Label(pluginRemoteSource.getName()));
-      JFXToggleButton activeToggleButton = new JFXToggleButton();
-      activeToggleButton.setSize(5);
+      Label label = new Label(pluginRemoteSource.getName());
+      HBox.setHgrow(label, Priority.ALWAYS);
+      namePane.getChildren().add(label);
+      ToggleSwitch activeToggleButton = new ToggleSwitch();
+      activeToggleButton.setScaleX(0.6);
+      activeToggleButton.setScaleY(0.6);
       activeToggleButton.setSelected(pluginRemoteSource.isEnabled());
       activeToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
         exploreService.enableSource(pluginRemoteSource, newValue);
         exploreController.refreshView();
 
       });
+      HBox.setHgrow(activeToggleButton, Priority.NEVER);
       namePane.getChildren().add(activeToggleButton);
-      infoPane.getChildren().add(namePane);
-
 
       HBox storeMetadata = new HBox();
       storeMetadata.setSpacing(5);

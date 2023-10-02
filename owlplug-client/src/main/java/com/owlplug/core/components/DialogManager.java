@@ -18,15 +18,14 @@
  
 package com.owlplug.core.components;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.controllers.MainController;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import java.util.Stack;
 
@@ -36,15 +35,15 @@ public class DialogManager {
   @Autowired
   private MainController mainController;
 
-  private Stack<JFXDialog> dialogStack = new Stack<>();
+  private Stack<Dialog> dialogStack = new Stack<>();
 
   /**
    * Creates a new dialog.
    * 
    * @return
    */
-  public JFXDialog newDialog() {
-    JFXDialog dialog = new JFXDialog();
+  public Dialog newDialog() {
+    Dialog dialog = new Dialog();
     dialog.setDialogContainer(mainController.getRootPane());
     dialogStack.push(dialog);
 
@@ -61,9 +60,9 @@ public class DialogManager {
    * @param body - dialog body
    * @return
    */
-  public JFXDialog newDialog(Node body) {
+  public Dialog newDialog(Node body) {
 
-    JFXDialogLayout layout = new JFXDialogLayout();
+    DialogLayout layout = new DialogLayout();
     layout.setBody(body);
     return newDialog(layout);
   }
@@ -75,9 +74,9 @@ public class DialogManager {
    * @param heading - dialog header
    * @return
    */
-  public JFXDialog newDialog(Node body, Node heading) {
+  public Dialog newDialog(Node body, Node heading) {
 
-    JFXDialogLayout layout = new JFXDialogLayout();
+    DialogLayout layout = new DialogLayout();
     layout.setBody(body);
     layout.setHeading(heading);
     return newDialog(layout);
@@ -91,9 +90,9 @@ public class DialogManager {
    * @param body   - dialog body
    * @return the dialog
    */
-  public JFXDialog newDialog(double width, double height, Node body) {
+  public Dialog newDialog(double width, double height, Node body) {
 
-    JFXDialogLayout layout = new JFXDialogLayout();
+    DialogLayout layout = new DialogLayout();
     layout.setMaxSize(width, height);
     layout.setPrefSize(width, height);
     layout.setBody(body);
@@ -111,9 +110,9 @@ public class DialogManager {
    * @param heading - dialog header
    * @return the dialog
    */
-  public JFXDialog newDialog(double width, double height, Node body, Node heading) {
+  public Dialog newDialog(double width, double height, Node body, Node heading) {
 
-    JFXDialogLayout layout = new JFXDialogLayout();
+    DialogLayout layout = new DialogLayout();
     layout.setMaxSize(width, height);
     layout.setPrefSize(width, height);
     layout.setBody(body);
@@ -129,14 +128,14 @@ public class DialogManager {
    * @param layout - dialog layout
    * @return the dialog
    */
-  public JFXDialog newDialog(JFXDialogLayout layout) {
+  public Dialog newDialog(DialogLayout layout) {
 
-    JFXDialog dialog = newDialog();
+    Dialog dialog = newDialog();
     dialog.setContent(layout);
     return dialog;
   }
 
-  public JFXDialog newSimpleInfoDialog(String title, String body) {
+  public Dialog newSimpleInfoDialog(String title, String body) {
 
     return newSimpleInfoDialog(new Text(title), new Text(body));
   }
@@ -148,14 +147,14 @@ public class DialogManager {
    * @param body  - dialog body
    * @return the dialog
    */
-  public JFXDialog newSimpleInfoDialog(Node title, Node body) {
-    JFXDialogLayout layout = new JFXDialogLayout();
-    JFXDialog dialog = newDialog(layout);
+  public Dialog newSimpleInfoDialog(Node title, Node body) {
+    DialogLayout layout = new DialogLayout();
+    Dialog dialog = newDialog(layout);
 
     layout.setHeading(title);
     layout.setBody(body);
 
-    JFXButton button = new JFXButton("Close");
+    Button button = new Button("Close");
 
     button.setOnAction(e -> {
       dialog.close();
@@ -166,7 +165,7 @@ public class DialogManager {
 
   }
 
-  public JFXDialog getDialog() {
+  public Dialog getDialog() {
     return dialogStack.peek();
   }
 
