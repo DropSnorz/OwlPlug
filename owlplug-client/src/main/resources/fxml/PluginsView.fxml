@@ -75,6 +75,15 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                   <Button fx:id="projectButton" text="Projects">
+                       <graphic>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                               <image>
+                                   <Image url="@../icons/refresh-white-16.png" />
+                               </image>
+                           </ImageView>
+                       </graphic>
+                   </Button>
                </children>
             </HBox>
             <AnchorPane VBox.vgrow="ALWAYS">
