@@ -18,12 +18,29 @@
 
 package com.owlplug.project.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class ProjectPlugin {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
   private String uid;
   private String name;
   private String fileName;
   private String path;
+
+  @ManyToOne
+  private Project project;
+
+  public Long getId() {
+    return id;
+  }
 
   public String getUid() {
     return uid;

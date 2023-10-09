@@ -18,6 +18,7 @@
 
 package com.owlplug.project.tasks.discovery;
 
+import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.model.ProjectPlugin;
 import java.io.BufferedInputStream;
@@ -36,6 +37,7 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.compress.compressors.CompressorException;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -55,17 +57,15 @@ public class AbletonProjectExplorer {
       Document xmlDocument = createDocument(file);
       XPath xPath = XPathFactory.newInstance().newXPath();
       Project project = new Project();
+      project.setPath(FileUtils.sanitizeFileName(file.getAbsolutePath()));
+      project.setName(FilenameUtils.removeExtension(file.getName()));
       NodeList abletonNode = (NodeList) xPath.compile("/Ableton").evaluate(xmlDocument, XPathConstants.NODESET);
       project.setAppName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
-
+      
       NodeList vstPlugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/VstPluginInfo").evaluate(xmlDocument, XPathConstants.NODESET);
 
-
       for (int i = 0; i < vstPlugins.getLength();i++) {
-        System.out.println(vstPlugins.item(i).toString());
-
         Node node = vstPlugins.item(i);
-
         if (node instanceof Element element) {
           project.getPlugins().add(readPluginElement(element));
         }

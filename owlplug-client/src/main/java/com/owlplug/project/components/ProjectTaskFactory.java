@@ -20,14 +20,35 @@
 package com.owlplug.project.components;
 
 import com.owlplug.core.components.BaseTaskFactory;
+import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
+import com.owlplug.project.dao.ProjectDAO;
 import com.owlplug.project.tasks.ProjectSyncTask;
+import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProjectTaskFactory extends BaseTaskFactory {
 
+  @Autowired
+  private ProjectDAO projectDAO;
+
+  private ArrayList<SimpleEventListener> syncProjectsListeners = new ArrayList<>();
+
   public TaskExecutionContext createSyncTask() {
-    return create(new ProjectSyncTask());
+    ProjectSyncTask task = new ProjectSyncTask(projectDAO);
+    task.setOnSucceeded(e -> {
+      notifyListeners(syncProjectsListeners);
+    });
+    return create(task);
+  }
+
+  public void addSyncPluginsListener(SimpleEventListener eventListener) {
+    syncProjectsListeners.add(eventListener);
+  }
+
+  public void removeSyncPluginsListener(SimpleEventListener eventListener) {
+    syncProjectsListeners.remove(eventListener);
   }
 }

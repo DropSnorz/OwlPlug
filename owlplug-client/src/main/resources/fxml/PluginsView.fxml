@@ -28,11 +28,7 @@
                     <TabPane fx:id="pluginTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
                         <tabs>
                             <Tab fx:id="treeTabAll" text="All" closable="false" />
-                            <Tab fx:id="treeTabDirectories" text="Directories" closable="false">
-                                <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                </content>
-                            </Tab>
+                            <Tab fx:id="treeTabDirectories" text="Directories" closable="false" />
                         </tabs>
                     </TabPane>
                 </children>
@@ -75,15 +71,6 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                   <Button fx:id="projectButton" text="Projects">
-                       <graphic>
-                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                               <image>
-                                   <Image url="@../icons/refresh-white-16.png" />
-                               </image>
-                           </ImageView>
-                       </graphic>
-                   </Button>
                </children>
             </HBox>
             <AnchorPane VBox.vgrow="ALWAYS">

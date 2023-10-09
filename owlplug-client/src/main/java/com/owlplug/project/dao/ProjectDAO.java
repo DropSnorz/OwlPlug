@@ -16,30 +16,11 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.project.services;
+package com.owlplug.project.dao;
 
-import com.owlplug.core.services.BaseService;
-import com.owlplug.project.components.ProjectTaskFactory;
-import com.owlplug.project.dao.ProjectDAO;
 import com.owlplug.project.model.Project;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.repository.CrudRepository;
 
-@Service
-public class ProjectService extends BaseService {
-
-   @Autowired
-  private ProjectDAO projectDAO;
-
-  @Autowired
-  private ProjectTaskFactory taskFactory;
-
-  public void syncProjects() {
-    taskFactory.createSyncTask().schedule();
-  }
-
-  public Iterable<Project> getAllProjects() {
-    return projectDAO.findAll();
-  }
+public interface ProjectDAO extends CrudRepository<Project, Long> {
 
 }

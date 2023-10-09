@@ -39,8 +39,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.owlplug.project.services.ProjectService;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -60,8 +58,6 @@ public class PluginsController extends BaseController {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private ProjectService projectService;
-  @Autowired
   private PluginDAO pluginDAO;
   @Autowired
   private SymlinkDAO symlinkDAO;
@@ -76,8 +72,6 @@ public class PluginsController extends BaseController {
 
   @FXML
   private Button syncButton;
-  @FXML
-  private Button projectButton;
   @FXML
   private Button exportButton;
   @FXML
@@ -172,11 +166,6 @@ public class PluginsController extends BaseController {
       this.getAnalyticsService().pageView("/app/core/action/syncPlugins");
       pluginService.syncPlugins();
     });
-
-    projectButton.setOnAction(e -> {
-      projectService.syncProjects();
-    });
-
 
     taskFactory.addSyncPluginsListener(() -> clearAndFillPluginTree());
 

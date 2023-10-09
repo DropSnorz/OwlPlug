@@ -2,6 +2,7 @@ package com.owlplug.project.tasks;
 
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
+import com.owlplug.project.dao.ProjectDAO;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.model.ProjectPlugin;
 import com.owlplug.project.tasks.discovery.AbletonProjectExplorer;
@@ -13,10 +14,19 @@ public class ProjectSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+  private ProjectDAO projectDAO;
+
+  public ProjectSyncTask(ProjectDAO projectDAO) {
+    this.projectDAO = projectDAO;
+  }
+
+
   @Override
   protected TaskResult call() throws Exception {
 
     log.debug("Starting project sync task");
+
+    projectDAO.deleteAll();
 
     String path = "C:/Users/arthu/Blend/Lone Wanderer Project/DropSnorz - Lone Wanderer.als";
 
@@ -28,6 +38,8 @@ public class ProjectSyncTask extends AbstractTask {
     for (ProjectPlugin p : project.getPlugins()) {
       log.debug(p.getName() + " - " + p.getFileName());
     }
+
+    projectDAO.save(project);
 
     return success();
   }

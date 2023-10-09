@@ -27,10 +27,11 @@
                <children>
                   <TabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
                      <tabs>
-                        <Tab disable="true" text="OwlPlug" closable="false" />
-                        <Tab text="Plugins" closable="false" />
-                        <Tab text="Explore" closable="false" />
-                        <Tab text="Options" closable="false" />
+                         <Tab disable="true" text="OwlPlug" closable="false" />
+                         <Tab text="Plugins" closable="false" />
+                         <Tab text="Explore" closable="false" />
+                         <Tab text="Projects" closable="false" />
+                         <Tab text="Options" closable="false" />
                      </tabs>
                   </TabPane>
                   <HBox fx:id="updatePane" alignment="CENTER_LEFT" prefHeight="45.0" spacing="5.0">
@@ -76,6 +77,11 @@
             										<fx:include fx:id="exploreView" source="ExploreView.fxml" />
             									</content>
             								</Tab>
+                                            <Tab closable="false" text="Projects">
+                                                <content>
+                                                    <fx:include fx:id="projectView" source="ProjectsView.fxml" />
+                                                </content>
+                                            </Tab>
             								<Tab closable="false" text="Options">
             									<content>
             										<fx:include fx:id="optionView" source="OptionsView.fxml" />
