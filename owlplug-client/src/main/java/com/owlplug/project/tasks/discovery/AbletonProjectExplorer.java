@@ -47,10 +47,14 @@ import org.xml.sax.SAXException;
 public class AbletonProjectExplorer {
 
   public boolean canExploreFile(File file) {
-    return file.getAbsolutePath().endsWith(".als");
+    return file.isFile() && file.getAbsolutePath().endsWith(".als");
   }
 
   public Project explore(File file) {
+
+    if (!canExploreFile(file)) {
+      return null;
+    }
 
     try {
 

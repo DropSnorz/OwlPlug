@@ -32,8 +32,17 @@
             <top>
                 <HBox alignment="CENTER_LEFT">
                     <children>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="40.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="40.0" spacing="5" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
                             <children>
+                                <Button fx:id="projectDirectoryButton" text="Project Directories">
+                                    <graphic>
+                                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../icons/folder-grey-16.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
                                 <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
                             </children>
                             <padding>

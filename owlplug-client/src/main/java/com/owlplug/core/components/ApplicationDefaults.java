@@ -103,6 +103,7 @@ public class ApplicationDefaults {
   public static final String FIRST_LAUNCH_KEY = "FIRST_LAUNCH_KEY";
   public static final String APPLICATION_STATE_KEY = "APPLICATION_STATE_KEY";
   public static final String SHOW_DIALOG_DISABLE_PLUGIN_KEY = "SHOW_DIALOG_DISABLE_PLUGIN_KEY";
+  public static final String PROJECT_DIRECTORY_KEY = "PROJECT_DIRECTORY_KEY";
 
   /**
    * Creates a new ApplicationDefaults.

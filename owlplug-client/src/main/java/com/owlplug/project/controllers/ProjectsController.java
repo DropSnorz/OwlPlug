@@ -18,7 +18,9 @@
 
 package com.owlplug.project.controllers;
 
+import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.project.components.ProjectTaskFactory;
 import com.owlplug.project.model.Project;
@@ -26,7 +28,6 @@ import com.owlplug.project.services.ProjectService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,13 @@ public class ProjectsController extends BaseController {
   private ProjectService projectService;
   @Autowired
   private ProjectTaskFactory projectTaskFactory;
+  @Autowired
+  private ListDirectoryDialogController listDirectoryDialogController;
+
   @FXML
   private Button syncProjectButton;
+  @FXML
+  private Button projectDirectoryButton;
   @FXML
   private TabPane projectTreeViewTabPane;
   @FXML
@@ -59,6 +65,11 @@ public class ProjectsController extends BaseController {
     projectTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
 
     refresh();
+
+    projectDirectoryButton.setOnAction(e -> {
+      listDirectoryDialogController.configure(ApplicationDefaults.PROJECT_DIRECTORY_KEY);
+      listDirectoryDialogController.show();
+    });
   }
 
   public void refresh() {
