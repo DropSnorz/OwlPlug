@@ -109,21 +109,6 @@ TextArea .content {
     -fx-border-width: 0px;
 }
 
-.chip-view .chip Label {
-    -fx-text-fill: black;
-}
-.chip-brown {
-	-fx-background-color: #b2675e;
-}
-.chip-red {
-	-fx-background-color: #A1887F;
-}
-.chip-green {
-	-fx-background-color: #C5E1A5;
-}
-.chip-blue {
-	-fx-background-color: #657899
-}
 .chip-label{
     -fx-font-family: "Roboto Medium";
     -fx-font-size: 12.0;
@@ -135,8 +120,23 @@ TextArea .content {
     -fx-spacing: 8;
     -fx-text-fill: black;
 }
-.chip-label Label {
+
+.chip-view .chip Label {
     -fx-text-fill: black;
+}
+
+
+.chip-view .chip-brown {
+	-fx-background-color: #b2675e;
+}
+.chip-view .chip-red {
+	-fx-background-color: #A1887F;
+}
+.chip-view .chip-green {
+	-fx-background-color: #C5E1A5;
+}
+.chip-view .chip-blue {
+	-fx-background-color: #657899
 }
 
 .button-danger{
