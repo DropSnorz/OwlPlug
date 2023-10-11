@@ -38,9 +38,7 @@ Label{
 .label-disabled{
 	-fx-text-fill: disabled-color;
 }
-.label-dark{
-	-fx-text-fill: rgb(40,40,40);
-}
+
 .label-emphase {
 	-fx-text-fill: text-emphase-color;
 }
