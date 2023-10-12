@@ -233,6 +233,11 @@ JFXComboBox{
 .no-header-tab-pane > .tab-header-area {
     visibility: hidden;
 }
+
+.small-tab-pane-container {
+  -fx-background-color: card-pane-color;
+}
+
 .small-tab-pane *.tab *.tab-label{
 	-fx-font-size: 15px;
 	-fx-font-weight: normal;
