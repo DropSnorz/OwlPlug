@@ -246,9 +246,6 @@ JFXComboBox{
 .drawer-side-pane {
     -fx-background-color: card-pane-color;
 }
-.menu-item:hover{
-	-fx-background-color: card-pane-lightshade-color;
-}
 
 .autocomplete-list {
 	-fx-background-color:card-pane-color;
@@ -291,12 +288,6 @@ ProgressIndicator{
 
 .context-menu {
   -fx-background-color: card-pane-color;
-  -fx-text-fill: text-color;
-}
-.context-menu .menu-item:focused {
-  -fx-background-color: card-pane-lightshade-color;
-}
-.context-menu .menu-item .label {
   -fx-text-fill: text-color;
 }
 

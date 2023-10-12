@@ -58,7 +58,7 @@ public class ExportDialogController extends AbstractDialogController {
   private Button saveAsButton;
 
   ExportDialogController() {
-    super(450, 500);
+    super(650, 500);
   }
 
   public void initialize() {
