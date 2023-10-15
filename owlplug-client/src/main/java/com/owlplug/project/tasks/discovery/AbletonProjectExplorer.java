@@ -18,6 +18,7 @@
 
 package com.owlplug.project.tasks.discovery;
 
+import com.owlplug.core.utils.DomUtils;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.model.ProjectPlugin;
@@ -71,7 +72,16 @@ public class AbletonProjectExplorer {
       for (int i = 0; i < vstPlugins.getLength();i++) {
         Node node = vstPlugins.item(i);
         if (node instanceof Element element) {
-          project.getPlugins().add(readPluginElement(element));
+          project.getPlugins().add(readVstPluginElement(element));
+        }
+
+      }
+
+      NodeList vst3Plugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/Vst3PluginInfo").evaluate(xmlDocument, XPathConstants.NODESET);
+      for (int i = 0; i < vst3Plugins.getLength();i++) {
+        Node node = vst3Plugins.item(i);
+        if (node instanceof Element element) {
+          project.getPlugins().add(readVst3PluginElement(element));
         }
 
       }
@@ -84,25 +94,36 @@ public class AbletonProjectExplorer {
 
   }
 
-  private ProjectPlugin readPluginElement(Element pluginElement) {
+  private ProjectPlugin readVstPluginElement(Element pluginElement) {
 
     ProjectPlugin plugin = new ProjectPlugin();
-    NodeList fileNameNodes = pluginElement.getElementsByTagName("FileName");
-
+    NodeList fileNameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "FileName");
     if (fileNameNodes.getLength() >= 1) {
       plugin.setFileName(fileNameNodes.item(0).getAttributes().getNamedItem("Value").getNodeValue());
 
     }
 
-    NodeList nameNodes = pluginElement.getElementsByTagName("PlugName");
+    NodeList nameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "PlugName");
     if (nameNodes.getLength() >= 1) {
       plugin.setName(nameNodes.item(0).getAttributes().getNamedItem("Value").getNodeValue());
 
     }
 
-    NodeList uniqueIdNode = pluginElement.getElementsByTagName("UniqueId");
+    NodeList uniqueIdNode = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "UniqueId");
     if (uniqueIdNode.getLength() >= 1) {
       plugin.setUid(uniqueIdNode.item(0).getAttributes().getNamedItem("Value").getNodeValue());
+
+    }
+
+    return plugin;
+  }
+
+  private ProjectPlugin readVst3PluginElement(Element pluginElement) {
+
+    ProjectPlugin plugin = new ProjectPlugin();
+    NodeList nameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "Name");
+    if (nameNodes.getLength() >= 1) {
+      plugin.setName(nameNodes.item(0).getAttributes().getNamedItem("Value").getNodeValue());
 
     }
 
