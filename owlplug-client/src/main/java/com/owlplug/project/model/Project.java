@@ -20,16 +20,12 @@ package com.owlplug.project.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import org.hibernate.annotations.Fetch;
 
 @Entity
 public class Project {
@@ -40,7 +36,9 @@ public class Project {
 
   private String path;
   private String name;
-  private String appName;
+  private DawApplication application;
+
+  private String appFullName;
 
   @OneToMany(mappedBy = "project", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
   private Set<ProjectPlugin> plugins = new HashSet<>();
@@ -57,6 +55,14 @@ public class Project {
     this.path = path;
   }
 
+  public DawApplication getApplication() {
+    return application;
+  }
+
+  public void setApplication(DawApplication application) {
+    this.application = application;
+  }
+
   public String getName() {
     return name;
   }
@@ -65,12 +71,12 @@ public class Project {
     this.name = name;
   }
 
-  public String getAppName() {
-    return appName;
+  public String getAppFullName() {
+    return appFullName;
   }
 
-  public void setAppName(String appName) {
-    this.appName = appName;
+  public void setAppFullName(String appName) {
+    this.appFullName = appName;
   }
 
   public Set<ProjectPlugin> getPlugins() {

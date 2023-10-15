@@ -19,10 +19,13 @@
 package com.owlplug.project.taks.discovery;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.owlplug.core.model.PluginFormat;
+import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.model.ProjectPlugin;
 import com.owlplug.project.tasks.discovery.AbletonProjectExplorer;
@@ -40,16 +43,19 @@ public class AbletonProjectExplorerTest {
 
     Project project = explorer.explore(file);
     assertEquals("ableton11Schema5",project.getName());
+    assertEquals(DawApplication.ABLETON, project.getApplication());
+    assertEquals("Ableton Live 11.1", project.getAppFullName());
     assertEquals(2, project.getPlugins().size());
 
-    for(ProjectPlugin plug : project.getPlugins()) {
-      System.out.println("p=" + plug.getName());
-    }
-
     assertThat( project.getPlugins(), containsInAnyOrder(
-            hasProperty("name", is("Vital")),
-            hasProperty("name", is("Tunefish4"))
+            allOf(
+                    hasProperty("name", is("Vital")),
+                    hasProperty("format", is(PluginFormat.VST2))
+            ),
+            allOf(
+                    hasProperty("name", is("Tunefish4")),
+                    hasProperty("format", is(PluginFormat.VST3))
+            )
     ));
-
   }
 }

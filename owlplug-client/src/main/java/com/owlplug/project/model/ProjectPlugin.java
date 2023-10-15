@@ -18,6 +18,7 @@
 
 package com.owlplug.project.model;
 
+import com.owlplug.core.model.PluginFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,8 +33,12 @@ public class ProjectPlugin {
   private Long id;
   private String uid;
   private String name;
+
+  @Deprecated
   private String fileName;
   private String path;
+
+  private PluginFormat format;
 
   @ManyToOne
   private Project project;
@@ -58,10 +63,12 @@ public class ProjectPlugin {
     this.name = name;
   }
 
+  @Deprecated
   public String getFileName() {
     return fileName;
   }
 
+  @Deprecated
   public void setFileName(String fileName) {
     this.fileName = fileName;
   }
@@ -73,4 +80,14 @@ public class ProjectPlugin {
   public void setPath(String path) {
     this.path = path;
   }
+
+  public PluginFormat getFormat() {
+    return format;
+  }
+
+  public void setFormat(PluginFormat format) {
+    this.format = format;
+  }
 }
+
+

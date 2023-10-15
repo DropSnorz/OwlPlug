@@ -18,8 +18,10 @@
 
 package com.owlplug.project.tasks.discovery;
 
+import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.utils.DomUtils;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.model.ProjectPlugin;
 import java.io.BufferedInputStream;
@@ -62,10 +64,11 @@ public class AbletonProjectExplorer {
       Document xmlDocument = createDocument(file);
       XPath xPath = XPathFactory.newInstance().newXPath();
       Project project = new Project();
+      project.setApplication(DawApplication.ABLETON);
       project.setPath(FileUtils.sanitizeFileName(file.getAbsolutePath()));
       project.setName(FilenameUtils.removeExtension(file.getName()));
       NodeList abletonNode = (NodeList) xPath.compile("/Ableton").evaluate(xmlDocument, XPathConstants.NODESET);
-      project.setAppName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
+      project.setAppFullName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
       
       NodeList vstPlugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/VstPluginInfo").evaluate(xmlDocument, XPathConstants.NODESET);
 
@@ -85,6 +88,15 @@ public class AbletonProjectExplorer {
         }
 
       }
+
+      NodeList auPlugins = (NodeList) xPath.compile("//AuPluginDevice/PluginDesc/AuPluginInfo").evaluate(xmlDocument, XPathConstants.NODESET);
+      for (int i = 0; i < auPlugins.getLength();i++) {
+        Node node = auPlugins.item(i);
+        if (node instanceof Element element) {
+          project.getPlugins().add(readAuPluginElement(element));
+        }
+
+      }
       return project;
 
     } catch (XPathExpressionException e) {
@@ -97,6 +109,7 @@ public class AbletonProjectExplorer {
   private ProjectPlugin readVstPluginElement(Element pluginElement) {
 
     ProjectPlugin plugin = new ProjectPlugin();
+    plugin.setFormat(PluginFormat.VST2);
     NodeList fileNameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "FileName");
     if (fileNameNodes.getLength() >= 1) {
       plugin.setFileName(fileNameNodes.item(0).getAttributes().getNamedItem("Value").getNodeValue());
@@ -121,6 +134,20 @@ public class AbletonProjectExplorer {
   private ProjectPlugin readVst3PluginElement(Element pluginElement) {
 
     ProjectPlugin plugin = new ProjectPlugin();
+    plugin.setFormat(PluginFormat.VST3);
+    NodeList nameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "Name");
+    if (nameNodes.getLength() >= 1) {
+      plugin.setName(nameNodes.item(0).getAttributes().getNamedItem("Value").getNodeValue());
+
+    }
+
+    return plugin;
+  }
+
+  private ProjectPlugin readAuPluginElement(Element pluginElement) {
+
+    ProjectPlugin plugin = new ProjectPlugin();
+    plugin.setFormat(PluginFormat.AU);
     NodeList nameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "Name");
     if (nameNodes.getLength() >= 1) {
       plugin.setName(nameNodes.item(0).getAttributes().getNamedItem("Value").getNodeValue());
