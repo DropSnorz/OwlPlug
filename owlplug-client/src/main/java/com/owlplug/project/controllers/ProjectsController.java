@@ -25,10 +25,14 @@ import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.project.components.ProjectTaskFactory;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.services.ProjectService;
+import com.owlplug.project.ui.ProjectTreeCell;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.util.Callback;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +46,8 @@ public class ProjectsController extends BaseController {
   private ProjectTaskFactory projectTaskFactory;
   @Autowired
   private ListDirectoryDialogController listDirectoryDialogController;
+  @Autowired
+  private ProjectInfoController projectInfoController;
 
   @FXML
   private Button syncProjectButton;
@@ -64,12 +70,28 @@ public class ProjectsController extends BaseController {
 
     projectTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
 
-    refresh();
+    projectTreeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
+      @Override
+      public TreeCell<Object> call(TreeView<Object> p) {
+        return new ProjectTreeCell();
+      }
+    });
+
+    projectTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue instanceof TreeItem treeItem) {
+        if (treeItem.getValue() instanceof Project project) {
+          projectInfoController.setProject(project);
+        }
+      }
+    });
 
     projectDirectoryButton.setOnAction(e -> {
       listDirectoryDialogController.configure(ApplicationDefaults.PROJECT_DIRECTORY_KEY);
       listDirectoryDialogController.show();
     });
+
+    refresh();
+
   }
 
   public void refresh() {
@@ -78,7 +100,7 @@ public class ProjectsController extends BaseController {
     projectTreeView.setRoot(root);
 
     for (Project p : projects) {
-      root.getInternalChildren().add(new FilterableTreeItem<>(p.getName()));
+      root.getInternalChildren().add(new FilterableTreeItem<>(p));
     }
 
   }

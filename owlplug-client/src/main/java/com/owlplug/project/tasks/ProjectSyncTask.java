@@ -19,7 +19,6 @@ public class ProjectSyncTask extends AbstractTask {
   private ProjectDAO projectDAO;
   private List<String> projectDirectories;
 
-
   public ProjectSyncTask(ProjectDAO projectDAO,
                          List<String> projectDirectories) {
     this.projectDAO = projectDAO;

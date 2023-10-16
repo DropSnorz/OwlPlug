@@ -65,7 +65,7 @@ public class AbletonProjectExplorer {
       XPath xPath = XPathFactory.newInstance().newXPath();
       Project project = new Project();
       project.setApplication(DawApplication.ABLETON);
-      project.setPath(FileUtils.sanitizeFileName(file.getAbsolutePath()));
+      project.setPath(FileUtils.convertPath(file.getAbsolutePath()));
       project.setName(FilenameUtils.removeExtension(file.getName()));
       NodeList abletonNode = (NodeList) xPath.compile("/Ableton").evaluate(xmlDocument, XPathConstants.NODESET);
       project.setAppFullName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
