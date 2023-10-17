@@ -505,7 +505,7 @@ public class Rippler extends StackPane {
     resetClip();
   }
 
-  private static final String DEFAULT_STYLE_CLASS = "jfx-rippler";
+  private static final String DEFAULT_STYLE_CLASS = "rippler";
 
   private void initialize() {
     this.getStyleClass().add(DEFAULT_STYLE_CLASS);

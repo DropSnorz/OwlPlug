@@ -23,32 +23,30 @@
             </TreeView>
       	</center>
       	<left>
-      		<TabPane fx:id="pluginTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
-      			<tabs>
-      				<Tab fx:id="treeTabAll" text="All" closable="false" />
-      				<Tab fx:id="treeTabDirectories" text="Directories" closable="false">
-      					<content>
-      						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-      					</content>
-      				</Tab>
-      			</tabs>
-      		</TabPane>
+            <VBox styleClass="small-tab-pane-container">
+                <children>
+                    <TabPane fx:id="pluginTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
+                        <tabs>
+                            <Tab fx:id="treeTabAll" text="All" closable="false" />
+                            <Tab fx:id="treeTabDirectories" text="Directories" closable="false">
+                                <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                </content>
+                            </Tab>
+                        </tabs>
+                    </TabPane>
+                </children>
+            </VBox>
       	</left>
       	<top>
-            <HBox alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
                <children>
                   <Button fx:id="newLinkButton" alignment="BASELINE_CENTER" text="New link">
                      <graphic>
                         <Region prefHeight="15.0" prefWidth="18.0" style="-fx-background-color: white; -fx-shape: &quot; m 19.847458,19.194915 4.152543,-2.943321 -4.152543,-2.870237 v 1.263203 c 0,0 -4.824423,1.072601 -5.813559,5.380864 2.106169,-2.255246 5.813559,-2.166797 5.813559,-2.166797 z M 19.5,13 c -13,7.333333 -6.5,3.666667 0,0 z m -4.68,9 H 0 V 2 h 7 c 1.695,1.942 2.371,3 4,3 h 13 v 7.82 C 22.831,11.696 21.246,11 19.5,11 15.916,11 13,13.916 13,17.5 c 0,1.747 0.695,3.331 1.82,4.5 z&quot;;" />
-                     </graphic></Button>
-            		<HBox alignment="CENTER_RIGHT" prefHeight="40.0" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
-            			<children>
-            				<TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
-            			</children>
-            			<padding>
-            				<Insets bottom="10.0" left="5.0" top="5.0" />
-            			</padding>
-            		</HBox>
+                     </graphic>
+                  </Button>
+                <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
       	</top>

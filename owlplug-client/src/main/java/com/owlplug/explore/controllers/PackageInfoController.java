@@ -195,7 +195,7 @@ public class PackageInfoController extends BaseController {
     tagContainer.getChildren().clear();
     for (PackageTag tag : remotePackage.getTags()) {
       Node chip = new FakeChip(tag.getName());
-      chip.getStyleClass().add("jfx-chip");
+      chip.getStyleClass().add("chip");
       tagContainer.getChildren().add(chip);
     }
 

@@ -38,9 +38,7 @@ Label{
 .label-disabled{
 	-fx-text-fill: disabled-color;
 }
-.label-dark{
-	-fx-text-fill: rgb(40,40,40);
-}
+
 .label-emphase {
 	-fx-text-fill: text-emphase-color;
 }
@@ -67,11 +65,6 @@ Text{
 }
 .text-danger{
 	-fx-fill: disabled-color;	
-}
-JFXTextField{
-	-fx-text-fill: text-color;
-	-jfx-focus-color: theme-secondary-color;
-	-fx-prompt-text-fill: prompt-text-color;
 }
 
 TextArea {
@@ -111,21 +104,6 @@ TextArea .content {
     -fx-border-width: 0px;
 }
 
-.chip-view .chip Label {
-    -fx-text-fill: black;
-}
-.chip-brown {
-	-fx-background-color: #b2675e;
-}
-.chip-red {
-	-fx-background-color: #A1887F;
-}
-.chip-green {
-	-fx-background-color: #C5E1A5;
-}
-.chip-blue {
-	-fx-background-color: #657899
-}
 .chip-label{
     -fx-font-family: "Roboto Medium";
     -fx-font-size: 12.0;
@@ -137,8 +115,27 @@ TextArea .content {
     -fx-spacing: 8;
     -fx-text-fill: black;
 }
-.chip-label Label {
+
+.chip-view .chip Label {
     -fx-text-fill: black;
+}
+
+/* Used for FakeChip rendering outside of a ChipView */
+.chip Label {
+    -fx-text-fill: black;
+}
+
+.chip-view .chip-brown {
+	-fx-background-color: #b2675e;
+}
+.chip-view .chip-red {
+	-fx-background-color: #A1887F;
+}
+.chip-view .chip-green {
+	-fx-background-color: #C5E1A5;
+}
+.chip-view .chip-blue {
+	-fx-background-color: #657899
 }
 
 .button-danger{
@@ -198,15 +195,6 @@ TextArea .content {
     list_view_background_color: card-pane-color;
 }
 
-
-JFXToggleButton{
-	-fx-text-fill: text-color;
-}
-
-
-JFXComboBox{
-	-jfx-focus-color: theme-secondary-color;
-}
 .combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
     -fx-background-color: card-pane-color;
     -fx-text-fill: white;
@@ -222,19 +210,17 @@ JFXComboBox{
 	-fx-prompt-text-fill: transparent;
 }
 
-.jfx-tab-pane *.tab-header-background{
-	-fx-background-color: card-pane-color;
-}
-.jfx-tab-pane .tab-selected-line {
-    -fx-background-color: theme-primary-color;
-}
-
 .no-header-tab-pane {
     -fx-tab-max-height: 0;
 } 
 .no-header-tab-pane > .tab-header-area {
     visibility: hidden;
 }
+
+.small-tab-pane-container {
+  -fx-background-color: card-pane-color;
+}
+
 .small-tab-pane *.tab *.tab-label{
 	-fx-font-size: 15px;
 	-fx-font-weight: normal;
@@ -242,9 +228,6 @@ JFXComboBox{
 
 .drawer-side-pane {
     -fx-background-color: card-pane-color;
-}
-.menu-item:hover{
-	-fx-background-color: card-pane-lightshade-color;
 }
 
 .autocomplete-list {
@@ -259,11 +242,6 @@ JFXComboBox{
 .auto-complete-popup > .list-view {
 	-fx-background-color: card-pane-color;
 }
-
-.jfx-rippler {
-    -jfx-rippler-fill: theme-secondary-color;
-}
-
 
 .popup,
 .popup .popup-container,
@@ -282,18 +260,9 @@ JFXComboBox{
 ProgressIndicator{
 	-fx-progress-color: theme-primary-color;
 }
-.jfx-spinner .arc {
-    -fx-stroke: theme-primary-color;
-}
 
 .context-menu {
   -fx-background-color: card-pane-color;
-  -fx-text-fill: text-color;
-}
-.context-menu .menu-item:focused {
-  -fx-background-color: card-pane-lightshade-color;
-}
-.context-menu .menu-item .label {
   -fx-text-fill: text-color;
 }
 
@@ -332,11 +301,6 @@ ProgressIndicator{
 	-fx-font-weight: bold;
 	-fx-text-fill: disabled-color;
 }
-
-.pane-card .jfx-text-field {
-	-fx-prompt-text-fill: rgb(140, 140, 140);
-}
-
 
 .package-bloc-title {
 	-fx-background-color: rgba(0,0,0, 0.85);
