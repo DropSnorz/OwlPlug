@@ -155,7 +155,7 @@ public class PluginInfoController extends BaseController {
 
   public void setPlugin(Plugin plugin) {
     this.currentPlugin = plugin;
-    pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(plugin));
+    pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(plugin.getFormat()));
     pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
     pluginTitleLabel.setText(plugin.getName());
     pluginNameLabel.setText(Optional.ofNullable(plugin.getDescriptiveName()).orElse(plugin.getName()));

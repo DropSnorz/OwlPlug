@@ -30,25 +30,18 @@
                 </TabPane>
             </left>
             <top>
-                <HBox alignment="CENTER_LEFT">
+                <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
                     <children>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="40.0" spacing="5" BorderPane.alignment="CENTER" HBox.hgrow="ALWAYS">
-                            <children>
-                                <Button fx:id="projectDirectoryButton" text="Project Directories">
-                                    <graphic>
-                                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                            <image>
-                                                <Image url="@../icons/folder-grey-16.png" />
-                                            </image>
-                                        </ImageView>
-                                    </graphic>
-                                </Button>
-                                <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
-                            </children>
-                            <padding>
-                                <Insets bottom="10.0" left="5.0" top="5.0" />
-                            </padding>
-                        </HBox>
+                        <Button fx:id="projectDirectoryButton" text="Project Directories">
+                            <graphic>
+                                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../icons/folder-grey-16.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
                     </children>
                 </HBox>
             </top>

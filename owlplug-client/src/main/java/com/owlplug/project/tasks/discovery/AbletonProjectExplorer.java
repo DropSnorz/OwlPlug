@@ -75,7 +75,9 @@ public class AbletonProjectExplorer {
       for (int i = 0; i < vstPlugins.getLength();i++) {
         Node node = vstPlugins.item(i);
         if (node instanceof Element element) {
-          project.getPlugins().add(readVstPluginElement(element));
+          ProjectPlugin plug = readVstPluginElement(element);
+          plug.setProject(project);
+          project.getPlugins().add(plug);
         }
 
       }
@@ -84,7 +86,9 @@ public class AbletonProjectExplorer {
       for (int i = 0; i < vst3Plugins.getLength();i++) {
         Node node = vst3Plugins.item(i);
         if (node instanceof Element element) {
-          project.getPlugins().add(readVst3PluginElement(element));
+          ProjectPlugin plug = readVst3PluginElement(element);
+          plug.setProject(project);
+          project.getPlugins().add(plug);
         }
 
       }
@@ -93,7 +97,9 @@ public class AbletonProjectExplorer {
       for (int i = 0; i < auPlugins.getLength();i++) {
         Node node = auPlugins.item(i);
         if (node instanceof Element element) {
-          project.getPlugins().add(readAuPluginElement(element));
+          ProjectPlugin plug = readAuPluginElement(element);
+          plug.setProject(project);
+          project.getPlugins().add(plug);
         }
 
       }

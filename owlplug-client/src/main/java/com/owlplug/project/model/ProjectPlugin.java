@@ -88,6 +88,14 @@ public class ProjectPlugin {
   public void setFormat(PluginFormat format) {
     this.format = format;
   }
+
+  public Project getProject() {
+    return project;
+  }
+
+  public void setProject(Project project) {
+    this.project = project;
+  }
 }
 
 

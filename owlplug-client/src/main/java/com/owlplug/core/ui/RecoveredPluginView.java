@@ -47,7 +47,7 @@ public class RecoveredPluginView extends HBox {
         
     Label label = new Label(plugin.getName());
     ImageView imageView = new ImageView();
-    imageView.setImage(applicationDefaults.getPluginFormatIcon(plugin));
+    imageView.setImage(applicationDefaults.getPluginFormatIcon(plugin.getFormat()));
 
     label.setGraphic(imageView);
     this.getChildren().add(label);

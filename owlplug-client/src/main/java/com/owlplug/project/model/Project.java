@@ -20,6 +20,7 @@ package com.owlplug.project.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,10 +38,11 @@ public class Project {
   private String path;
   private String name;
   private DawApplication application;
-
   private String appFullName;
 
-  @OneToMany(mappedBy = "project", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+  private String formatVersion;
+
+  @OneToMany(mappedBy = "project", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
   private Set<ProjectPlugin> plugins = new HashSet<>();
 
   public Long getId() {
@@ -85,5 +87,13 @@ public class Project {
 
   public void setPlugins(Set<ProjectPlugin> plugins) {
     this.plugins = plugins;
+  }
+
+  public String getFormatVersion() {
+    return formatVersion;
+  }
+
+  public void setFormatVersion(String formatVersion) {
+    this.formatVersion = formatVersion;
   }
 }

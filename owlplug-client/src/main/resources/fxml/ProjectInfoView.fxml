@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.project.controllers.ProjectInfoController">
+<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.project.controllers.ProjectInfoController">
     <children>
         <VBox fx:id="projectInfoPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
             <children>
@@ -111,11 +111,13 @@
                         <Label text="Plugins" />
                     </children>
                 </HBox>
-                <ListView fx:id="pluginListView" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="440.0" VBox.vgrow="SOMETIMES">
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </ListView>
+            <TableView fx:id="pluginTable" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                  <TableColumn fx:id="pluginTableFormatColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0" text="Format" />
+                <TableColumn fx:id="pluginTableNameColumn" editable="false" maxWidth="250.0" minWidth="200.0" prefWidth="-1.0" text="Name" />
+                <TableColumn fx:id="pluginTableStatusColumn" editable="false" maxWidth="150.0" minWidth="100.0" prefWidth="-1.0" resizable="false" text="Status" />
+              </columns>
+            </TableView>
             </children>
             <styleClass>
                 <String fx:value="pane-card" />

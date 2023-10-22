@@ -78,6 +78,9 @@ TextArea .content {
 
 }
 
+.table-view .cell-undefined-link, .table-view .cell-undefined-link:hover  {
+     -fx-background-color: disabled-color;
+ }
 
 .chip-view {
 	-fx-max-height: 45px ;

@@ -83,7 +83,7 @@ public class ComponentInfoController extends BaseController {
 
   public void setComponent(PluginComponent component) {
     this.currentComponent = component;
-    pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(component.getPlugin()));
+    pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(component.getPlugin().getFormat()));
     pluginFormatLabel.setText(component.getPlugin().getFormat().getText() + " Plugin Component");
     pluginTitleLabel.setText(component.getName());
     pluginNameLabel.setText(Optional.ofNullable(component.getDescriptiveName()).orElse(component.getName()));

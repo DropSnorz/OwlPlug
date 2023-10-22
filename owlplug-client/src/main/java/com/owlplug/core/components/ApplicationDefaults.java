@@ -18,7 +18,6 @@
 
 package com.owlplug.core.components;
 
-import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.model.platform.RuntimePlatform;
@@ -123,12 +122,12 @@ public class ApplicationDefaults {
   /**
    * Returns plugin icon based on plugin format.
    * 
-   * @param plugin - plugin
+   * @param format - plugin format
    * @return Associated icon
    */
-  public Image getPluginFormatIcon(Plugin plugin) {
+  public Image getPluginFormatIcon(PluginFormat format) {
 
-    switch (plugin.getFormat()) {
+    switch (format) {
     case VST2:
       return vst2Image;
     case VST3:
