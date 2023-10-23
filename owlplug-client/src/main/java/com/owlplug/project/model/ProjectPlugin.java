@@ -19,11 +19,15 @@
 package com.owlplug.project.model;
 
 import com.owlplug.core.model.PluginFormat;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class ProjectPlugin {
@@ -42,6 +46,10 @@ public class ProjectPlugin {
 
   @ManyToOne
   private Project project;
+
+  @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+  @JoinColumn(name = "lookup_id", referencedColumnName = "id")
+  private PluginLookup lookup;
 
   public Long getId() {
     return id;
@@ -95,6 +103,14 @@ public class ProjectPlugin {
 
   public void setProject(Project project) {
     this.project = project;
+  }
+
+  public PluginLookup getLookup() {
+    return lookup;
+  }
+
+  public void setLookup(PluginLookup lookup) {
+    this.lookup = lookup;
   }
 }
 

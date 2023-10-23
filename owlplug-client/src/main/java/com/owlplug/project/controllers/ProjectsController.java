@@ -64,7 +64,7 @@ public class ProjectsController extends BaseController {
       projectService.syncProjects();
     });
 
-    projectTaskFactory.addSyncPluginsListener(() -> {
+    projectTaskFactory.addSyncProjectsListener(() -> {
       refresh();
     });
 

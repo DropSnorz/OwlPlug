@@ -106,6 +106,9 @@ public class TaskRunner {
         public void onSuccess(TaskResult result) {
           Platform.runLater(() -> {
             if (currentTask.getState().equals(State.FAILED)) {
+              if (currentTask.getException() != null) {
+                log.error("Error while running task", currentTask.getException());
+              }
               triggerOnError();
             }
             removeCurrentTask();
@@ -115,6 +118,7 @@ public class TaskRunner {
 
         @Override
         public void onFailure(Throwable ex) {
+          log.error("Error while running task", ex);
           Platform.runLater(() -> {
             removeCurrentTask();
             scheduleNext();

@@ -76,7 +76,11 @@ public class ProjectInfoController extends BaseController {
       return new SimpleStringProperty(cellData.getValue().getName());
     });
     pluginTableStatusColumn.setCellValueFactory(cellData -> {
-      return new SimpleStringProperty("Undefined");
+      if (cellData.getValue().getLookup() != null
+              && cellData.getValue().getLookup().getResult() != null) {
+        return new SimpleStringProperty(cellData.getValue().getLookup().getResult().getValue());
+      }
+      return new SimpleStringProperty("Unknown");
     });
     pluginTableFormatColumn.setCellValueFactory(cellData -> {
       return new SimpleObjectProperty<>(cellData.getValue().getFormat());

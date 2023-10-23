@@ -24,8 +24,10 @@ import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFootprint;
+import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginState;
 import com.owlplug.core.utils.PluginUtils;
+import com.owlplug.explore.dao.RemotePackageDAO;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.services.ExploreService;
 import java.io.File;
@@ -33,6 +35,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -139,6 +142,13 @@ public class PluginService extends BaseService {
       return PluginState.ACTIVE;
     }
     return PluginState.INSTALLED;
+  }
+
+  public Iterable<Plugin> find(String name, PluginFormat pluginFormat) {
+    Specification<Plugin> spec = PluginDAO.nameContains(name)
+            .and(PluginDAO.hasFormat(pluginFormat));
+
+    return pluginDAO.findAll(spec);
   }
   
   /**

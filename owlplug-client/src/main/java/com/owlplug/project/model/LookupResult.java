@@ -16,11 +16,20 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.project.dao;
+package com.owlplug.project.model;
 
-import com.owlplug.project.model.ProjectPlugin;
-import org.springframework.data.repository.CrudRepository;
+public enum LookupResult {
 
-public interface ProjectPluginDAO extends CrudRepository<ProjectPlugin, Long> {
+  MATCH("MATCH"), FAILED("FAILED");
+
+  private String value;
+
+  LookupResult(String value) {
+    this.value = value;
+  }
+
+  public String getValue() {
+    return value;
+  }
 
 }

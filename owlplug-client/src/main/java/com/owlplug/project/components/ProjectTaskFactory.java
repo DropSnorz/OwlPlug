@@ -25,6 +25,9 @@ import com.owlplug.core.components.BaseTaskFactory;
 import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.project.dao.ProjectDAO;
+import com.owlplug.project.dao.ProjectPluginDAO;
+import com.owlplug.project.services.PluginLookupService;
+import com.owlplug.project.tasks.PluginLookupTask;
 import com.owlplug.project.tasks.ProjectSyncTask;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +41,12 @@ public class ProjectTaskFactory extends BaseTaskFactory {
   private ApplicationPreferences prefs;
 
   @Autowired
+  private PluginLookupService lookupService;
+
+  @Autowired
   private ProjectDAO projectDAO;
+  @Autowired
+  private ProjectPluginDAO projectPluginDAO;
 
   private ArrayList<SimpleEventListener> syncProjectsListeners = new ArrayList<>();
 
@@ -48,16 +56,26 @@ public class ProjectTaskFactory extends BaseTaskFactory {
 
     ProjectSyncTask task = new ProjectSyncTask(projectDAO, directories);
     task.setOnSucceeded(e -> {
+      createLookupTask().scheduleNow();
       notifyListeners(syncProjectsListeners);
     });
     return create(task);
   }
 
-  public void addSyncPluginsListener(SimpleEventListener eventListener) {
+  public TaskExecutionContext createLookupTask() {
+
+    PluginLookupTask task = new PluginLookupTask(projectPluginDAO, lookupService);
+    task.setOnSucceeded(e -> {
+      notifyListeners(syncProjectsListeners);
+    });
+    return create(task);
+  }
+
+  public void addSyncProjectsListener(SimpleEventListener eventListener) {
     syncProjectsListeners.add(eventListener);
   }
 
-  public void removeSyncPluginsListener(SimpleEventListener eventListener) {
+  public void removeSyncProjectsListener(SimpleEventListener eventListener) {
     syncProjectsListeners.remove(eventListener);
   }
 }
