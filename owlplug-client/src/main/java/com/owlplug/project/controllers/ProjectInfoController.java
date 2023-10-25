@@ -21,6 +21,7 @@ package com.owlplug.project.controllers;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.project.model.LookupResult;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.model.ProjectPlugin;
 import java.io.File;
@@ -94,7 +95,13 @@ public class ProjectInfoController extends BaseController {
           this.getStyleClass().remove("cell-undefined-link");
         } else {
           setText(item);
-          this.getStyleClass().add("cell-undefined-link");
+          if (item.equals(LookupResult.FAILED.getValue())) {
+            this.getStyleClass().add("cell-failed-link");
+          } else if (item.equals(LookupResult.MATCH.getValue())) {
+            this.getStyleClass().add("cell-match-link");
+          } else {
+            this.getStyleClass().add("cell-unknown-link");
+          }
         }
       }
     });

@@ -47,7 +47,7 @@ public class ProjectPlugin {
   @ManyToOne
   private Project project;
 
-  @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+  @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
   @JoinColumn(name = "lookup_id", referencedColumnName = "id")
   private PluginLookup lookup;
 
