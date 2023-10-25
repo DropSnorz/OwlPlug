@@ -27,15 +27,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.Project;
-import com.owlplug.project.model.ProjectPlugin;
-import com.owlplug.project.tasks.discovery.AbletonProjectExplorer;
+import com.owlplug.project.tasks.discovery.ProjectExplorerException;
+import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
 import java.io.File;
 import org.junit.jupiter.api.Test;
 
 public class AbletonProjectExplorerTest {
 
   @Test
-  public void Ableton11Schema5ContainingVstAndVst3ValidProject() {
+  public void Ableton11Schema5ContainingVstAndVst3ValidProject() throws ProjectExplorerException {
     AbletonProjectExplorer explorer = new AbletonProjectExplorer();
 
     File file = new File(this.getClass().getClassLoader()

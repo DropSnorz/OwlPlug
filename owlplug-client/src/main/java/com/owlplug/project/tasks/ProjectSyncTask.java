@@ -23,7 +23,7 @@ import com.owlplug.core.tasks.TaskResult;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.dao.ProjectDAO;
 import com.owlplug.project.model.Project;
-import com.owlplug.project.tasks.discovery.AbletonProjectExplorer;
+import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
 import java.io.File;
 import java.util.List;
 import org.slf4j.Logger;

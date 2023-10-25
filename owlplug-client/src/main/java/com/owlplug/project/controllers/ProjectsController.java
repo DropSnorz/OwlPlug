@@ -103,5 +103,7 @@ public class ProjectsController extends BaseController {
       root.getInternalChildren().add(new FilterableTreeItem<>(p));
     }
 
+    root.setExpanded(true);
+
   }
 }
