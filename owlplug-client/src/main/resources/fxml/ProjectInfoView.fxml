@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.project.controllers.ProjectInfoController">
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.project.controllers.ProjectInfoController">
     <children>
         <VBox fx:id="projectInfoPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
             <children>
@@ -62,8 +62,8 @@
                         </TextFlow>
                         <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <children>
-                                <Label text="Identifier: " />
-                                <Label fx:id="pluginIdentifierLabel" styleClass="label-emphase" text="UNKNOWN" />
+                                <Label text="Last Modified: " />
+                                <Label fx:id="projectLastModifiedLabel" styleClass="label-emphase" text="UNKNOWN" />
                             </children>
                         </TextFlow>
                         <HBox prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">

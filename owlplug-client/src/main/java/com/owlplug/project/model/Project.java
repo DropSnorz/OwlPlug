@@ -25,6 +25,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,11 +40,10 @@ public class Project {
   private String name;
   private DawApplication application;
   private String appFullName;
-
   private String formatVersion;
-
   @OneToMany(mappedBy = "project", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
   private Set<ProjectPlugin> plugins = new HashSet<>();
+  private Date lastModified;
 
   public Long getId() {
     return id;
@@ -95,5 +95,13 @@ public class Project {
 
   public void setFormatVersion(String formatVersion) {
     this.formatVersion = formatVersion;
+  }
+
+  public Date getLastModified() {
+    return lastModified;
+  }
+
+  public void setLastModified(Date lastModified) {
+    this.lastModified = lastModified;
   }
 }

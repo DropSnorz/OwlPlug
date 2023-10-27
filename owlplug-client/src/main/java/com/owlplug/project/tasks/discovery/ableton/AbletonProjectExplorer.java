@@ -18,8 +18,6 @@
 
 package com.owlplug.project.tasks.discovery.ableton;
 
-import com.owlplug.core.model.PluginFormat;
-import com.owlplug.core.utils.DomUtils;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.Project;
@@ -31,6 +29,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,8 +45,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -75,6 +72,8 @@ public class AbletonProjectExplorer {
       project.setName(FilenameUtils.removeExtension(file.getName()));
       NodeList abletonNode = (NodeList) xPath.compile("/Ableton").evaluate(xmlDocument, XPathConstants.NODESET);
       project.setAppFullName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
+
+      project.setLastModified(new Date(file.lastModified()));
 
       AbletonSchema5PluginCollector collector = new AbletonSchema5PluginCollector(xmlDocument);
       List<ProjectPlugin> plugins = collector.collectPlugins();

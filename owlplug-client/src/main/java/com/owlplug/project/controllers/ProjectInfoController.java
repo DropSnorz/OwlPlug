@@ -21,6 +21,7 @@ package com.owlplug.project.controllers;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.project.model.LookupResult;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.model.ProjectPlugin;
@@ -49,6 +50,8 @@ public class ProjectInfoController extends BaseController {
   private Label projectAppLabel;
   @FXML
   private Label appFullNameLabel;
+  @FXML
+  private Label projectLastModifiedLabel;
   @FXML
   private Label projectPathLabel;
   @FXML
@@ -90,9 +93,11 @@ public class ProjectInfoController extends BaseController {
       @Override
       public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
+        this.getStyleClass().remove("cell-unknown-link");
+        this.getStyleClass().remove("cell-failed-link");
+        this.getStyleClass().remove("cell-match-link");
         if (item == null || empty) {
           setText(null);
-          this.getStyleClass().remove("cell-undefined-link");
         } else {
           setText(item);
           if (item.equals(LookupResult.FAILED.getValue())) {
@@ -127,6 +132,7 @@ public class ProjectInfoController extends BaseController {
     projectNameLabel.setText(project.getName());
     projectAppLabel.setText(project.getApplication().getName());
     appFullNameLabel.setText(project.getAppFullName());
+    projectLastModifiedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getLastModified()));
     projectPathLabel.setText(project.getPath());
 
     pluginTable.setItems(FXCollections.observableList(project.getPlugins().stream().toList()));
