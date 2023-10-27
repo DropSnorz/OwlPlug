@@ -89,7 +89,7 @@ OwlPlug official plugin registry for Free or Open Source plugins
 
 Studiorack registry plugins for OwlPlug.
 * kind: `registry`
-* url: `https://owlplug.github.io/studiorack-registry-adapter/registry.min.json` 
+* url: `https://owlplug.github.io/owlplug-studiorack-registry/registry.min.json` 
 
 **Discover more plugin sources in [this wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Remote-plugin-sources).**
 
