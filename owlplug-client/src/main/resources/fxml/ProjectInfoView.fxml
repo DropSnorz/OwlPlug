@@ -83,14 +83,10 @@
                                 <Label fx:id="pluginCategoryLabel" styleClass="label-emphase" text="UNKNOWN" />
                             </children>
                         </TextFlow>
-                        <HBox alignment="BASELINE_LEFT" spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
+                        <HBox alignment="CENTER_LEFT" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
                             <children>
-                                <TextFlow GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
-                                    <children>
-                                        <Label text="Path: " />
-                                        <Label fx:id="projectPathLabel" styleClass="label-emphase" text="UNKNOWN" />
-                                    </children>
-                                </TextFlow>
+                                  <Label minHeight="-Infinity" minWidth="-Infinity" text="Path: " />
+                                  <Label fx:id="projectPathLabel" styleClass="label-emphase" text="UNKNOWN" textOverrun="CENTER_ELLIPSIS" wrapText="true" />
                                 <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" styleClass="label-emphase">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -98,7 +94,10 @@
                                     <Image url="@../icons/folder-grey-16.png" />
                                  </image>
                               </ImageView>
-                           </graphic></Button>
+                           </graphic>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Button>
                             </children>
                         </HBox>
                     </children>

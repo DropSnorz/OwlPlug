@@ -28,6 +28,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import java.util.Objects;
 
 @Entity
 public class ProjectPlugin {
@@ -111,6 +112,25 @@ public class ProjectPlugin {
 
   public void setLookup(PluginLookup lookup) {
     this.lookup = lookup;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ProjectPlugin that = (ProjectPlugin) o;
+    return Objects.equals(id, that.id) && Objects.equals(name, that.name)
+            && Objects.equals(fileName, that.fileName) && Objects.equals(path, that.path)
+            && format == that.format && Objects.equals(project, that.project);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, fileName, path, format, project);
   }
 }
 
