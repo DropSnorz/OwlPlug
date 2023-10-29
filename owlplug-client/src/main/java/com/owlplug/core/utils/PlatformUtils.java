@@ -34,15 +34,15 @@ public class PlatformUtils {
   private PlatformUtils() {
   }
 
-  public static void openDirectoryExplorer(String path) {
+  public static void openFromDesktop(String path) {
     if (path != null) {
-      openDirectoryExplorer(new File(path));
+      openFromDesktop(new File(path));
     } else {
       throw new IllegalArgumentException("path can't be null");
     }
   }
 
-  public static void openDirectoryExplorer(File file) {
+  public static void openFromDesktop(File file) {
     try {
       Desktop.getDesktop().open(file);
     } catch (IOException e) {

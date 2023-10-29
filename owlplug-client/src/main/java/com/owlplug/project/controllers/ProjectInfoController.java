@@ -49,6 +49,8 @@ public class ProjectInfoController extends BaseController {
   @FXML
   private Label projectAppLabel;
   @FXML
+  private Button projectOpenButton;
+  @FXML
   private Label appFullNameLabel;
   @FXML
   private Label projectCreatedLabel;
@@ -69,12 +71,22 @@ public class ProjectInfoController extends BaseController {
   @FXML
   private TableColumn<ProjectPlugin, String> pluginTableStatusColumn;
 
+  private Project currentProject = null;
+
 
   @FXML
   public void initialize() {
     openDirectoryButton.setOnAction(e -> {
       File projectFile = new File(projectPathLabel.getText());
-      PlatformUtils.openDirectoryExplorer(projectFile.getParentFile());
+      PlatformUtils.openFromDesktop(projectFile.getParentFile());
+    });
+
+    projectOpenButton.setOnAction(e -> {
+      if (currentProject != null) {
+        PlatformUtils.openFromDesktop(currentProject.getPath());
+        // Disable to prevent opening the project several times.
+        projectOpenButton.setDisable(true);
+      }
     });
 
     // Set invisible by default if no project is selected.
@@ -132,9 +144,11 @@ public class ProjectInfoController extends BaseController {
   }
 
   public void setProject(Project project) {
+    this.currentProject = project;
     projectInfoPane.setVisible(true);
     projectNameLabel.setText(project.getName());
     projectAppLabel.setText(project.getApplication().getName());
+    projectOpenButton.setDisable(false);
     appFullNameLabel.setText(project.getAppFullName());
     projectCreatedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getCreatedAt()));
     projectLastModifiedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getLastModified()));

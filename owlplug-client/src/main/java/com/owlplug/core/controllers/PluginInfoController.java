@@ -116,7 +116,7 @@ public class PluginInfoController extends BaseController {
     openDirectoryButton.setText("");
     openDirectoryButton.setOnAction(e -> {
       File pluginFile = new File(pluginPathLabel.getText());
-      PlatformUtils.openDirectoryExplorer(pluginFile.getParentFile());
+      PlatformUtils.openFromDesktop(pluginFile.getParentFile());
     });
 
     uninstallButton.setOnAction(e -> {
