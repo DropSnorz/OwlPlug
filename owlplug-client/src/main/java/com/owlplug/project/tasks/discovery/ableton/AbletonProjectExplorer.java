@@ -29,6 +29,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.Date;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
@@ -74,6 +77,9 @@ public class AbletonProjectExplorer {
       project.setAppFullName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
 
       project.setLastModified(new Date(file.lastModified()));
+      BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+      FileTime fileTime = attr.creationTime();
+      project.setCreatedAt(Date.from(fileTime.toInstant()));
 
       AbletonSchema5PluginCollector collector = new AbletonSchema5PluginCollector(xmlDocument);
       List<ProjectPlugin> plugins = collector.collectPlugins();
@@ -87,6 +93,8 @@ public class AbletonProjectExplorer {
 
     } catch (XPathExpressionException e) {
       throw new ProjectExplorerException("Error while parsing project file " + file.getAbsolutePath(), e);
+    } catch (IOException e) {
+      throw new ProjectExplorerException("Error while reading file " + file.getAbsolutePath(), e);
     }
 
   }

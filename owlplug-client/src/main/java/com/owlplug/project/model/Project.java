@@ -44,6 +44,7 @@ public class Project {
   @OneToMany(mappedBy = "project", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
   private Set<ProjectPlugin> plugins = new HashSet<>();
   private Date lastModified;
+  private Date createdAt;
 
   public Long getId() {
     return id;
@@ -103,5 +104,13 @@ public class Project {
 
   public void setLastModified(Date lastModified) {
     this.lastModified = lastModified;
+  }
+
+  public Date getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Date createdAt) {
+    this.createdAt = createdAt;
   }
 }

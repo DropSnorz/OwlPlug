@@ -51,7 +51,11 @@ public class ProjectInfoController extends BaseController {
   @FXML
   private Label appFullNameLabel;
   @FXML
+  private Label projectCreatedLabel;
+  @FXML
   private Label projectLastModifiedLabel;
+  @FXML
+  private Label projectPluginsFoundLabel;
   @FXML
   private Label projectPathLabel;
   @FXML
@@ -132,7 +136,9 @@ public class ProjectInfoController extends BaseController {
     projectNameLabel.setText(project.getName());
     projectAppLabel.setText(project.getApplication().getName());
     appFullNameLabel.setText(project.getAppFullName());
+    projectCreatedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getCreatedAt()));
     projectLastModifiedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getLastModified()));
+    projectPluginsFoundLabel.setText(String.valueOf(project.getPlugins().size()));
     projectPathLabel.setText(project.getPath());
 
     pluginTable.setItems(FXCollections.observableList(project.getPlugins().stream().toList()));
