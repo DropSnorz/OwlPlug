@@ -77,7 +77,8 @@ public class ApplicationDefaults {
 
   public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
 
-
+  public final Image errorIconImage = new Image(
+          getClass().getResourceAsStream("/icons/error-red-16.png"));
   public final Image pluginPlaceholderImage = new Image(
       getClass().getResourceAsStream("/media/plugin-placeholder.png"));
   // CHECKSTYLE:ON

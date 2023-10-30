@@ -19,9 +19,14 @@
 package com.owlplug.project.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.project.model.LookupResult;
 import com.owlplug.project.model.Project;
+import com.owlplug.project.model.ProjectPlugin;
+import java.util.List;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 
 public class ProjectTreeCell extends TreeCell<Object> {
 
@@ -40,9 +45,20 @@ public class ProjectTreeCell extends TreeCell<Object> {
       setGraphic(null);
     } else {
       if (item instanceof Project project) {
-        // Spaces can be replaced by a container margin
-        setText("   " + project.getName());
-        setGraphic(new ImageView(applicationDefaults.getDAWApplicationIcon(project.getApplication())));
+        HBox hbox = new HBox(10);
+        ImageView icon = new ImageView(applicationDefaults.getDAWApplicationIcon(project.getApplication()));
+        hbox.getChildren().add(icon);
+        Label label = new Label(project.getName());
+        hbox.getChildren().add(label);
+        List<ProjectPlugin> failedLookups = project.getPluginByLookupResult(LookupResult.FAILED);
+        if (!failedLookups.isEmpty()) {
+          Label missingLabel = new Label(failedLookups.size() + " Missing plugin(s)");
+          missingLabel.setGraphic(new ImageView(applicationDefaults.errorIconImage));
+          missingLabel.getStyleClass().add("label-danger");
+          hbox.getChildren().add(missingLabel);
+        }
+
+        setGraphic(hbox);
       } else {
         setText(item.toString());
         setGraphic(getTreeItem().getGraphic());

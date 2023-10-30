@@ -27,7 +27,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Project {
@@ -112,5 +114,11 @@ public class Project {
 
   public void setCreatedAt(Date createdAt) {
     this.createdAt = createdAt;
+  }
+
+  public List<ProjectPlugin> getPluginByLookupResult(LookupResult result) {
+    return plugins.stream()
+            .filter(p -> p.getLookup().getResult().equals(result))
+                    .collect(Collectors.toList());
   }
 }
