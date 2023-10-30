@@ -24,6 +24,7 @@ import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.model.platform.RuntimePlatformResolver;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.project.model.DawApplication;
 import java.io.File;
 import javafx.scene.image.Image;
 import org.slf4j.Logger;
@@ -73,6 +74,8 @@ public class ApplicationDefaults {
       ApplicationDefaults.class.getResourceAsStream("/icons/check-grey-16.png"));
   public final Image studiorackLogoSmall = new Image(
       ApplicationDefaults.class.getResourceAsStream("/media/studiorack-logo-16.png"));
+
+  public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
 
 
   public final Image pluginPlaceholderImage = new Image(
@@ -157,6 +160,13 @@ public class ApplicationDefaults {
     default:
       return null;
     }
+  }
+
+  public Image getDAWApplicationIcon(DawApplication application) {
+    return switch (application) {
+      case ABLETON -> abletonLogoImage;
+      default -> pluginComponentImage;
+    };
   }
 
   public String getDefaultPluginPath(PluginFormat format) {

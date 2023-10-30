@@ -73,7 +73,7 @@ public class ProjectsController extends BaseController {
     projectTreeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
       @Override
       public TreeCell<Object> call(TreeView<Object> p) {
-        return new ProjectTreeCell();
+        return new ProjectTreeCell(getApplicationDefaults());
       }
     });
 

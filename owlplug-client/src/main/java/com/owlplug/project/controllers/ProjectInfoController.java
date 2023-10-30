@@ -47,6 +47,8 @@ public class ProjectInfoController extends BaseController {
   @FXML
   private Label projectNameLabel;
   @FXML
+  private ImageView projectAppImageView;
+  @FXML
   private Label projectAppLabel;
   @FXML
   private Button projectOpenButton;
@@ -148,6 +150,7 @@ public class ProjectInfoController extends BaseController {
     projectInfoPane.setVisible(true);
     projectNameLabel.setText(project.getName());
     projectAppLabel.setText(project.getApplication().getName());
+    projectAppImageView.setImage(this.getApplicationDefaults().getDAWApplicationIcon(project.getApplication()));
     projectOpenButton.setDisable(false);
     appFullNameLabel.setText(project.getAppFullName());
     projectCreatedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getCreatedAt()));
