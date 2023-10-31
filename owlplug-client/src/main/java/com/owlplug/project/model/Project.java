@@ -118,7 +118,7 @@ public class Project {
 
   public List<ProjectPlugin> getPluginByLookupResult(LookupResult result) {
     return plugins.stream()
-            .filter(p -> p.getLookup().getResult().equals(result))
+            .filter(p -> p.getLookup() != null && p.getLookup().getResult().equals(result))
                     .collect(Collectors.toList());
   }
 }

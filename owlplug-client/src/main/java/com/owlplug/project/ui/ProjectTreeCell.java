@@ -45,6 +45,7 @@ public class ProjectTreeCell extends TreeCell<Object> {
       setGraphic(null);
     } else {
       if (item instanceof Project project) {
+        setText(null);
         HBox hbox = new HBox(10);
         ImageView icon = new ImageView(applicationDefaults.getDAWApplicationIcon(project.getApplication()));
         hbox.getChildren().add(icon);
