@@ -18,11 +18,13 @@
 
 package com.owlplug.project.tasks;
 
+import com.google.common.collect.Iterables;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
 import com.owlplug.project.dao.ProjectPluginDAO;
 import com.owlplug.project.model.ProjectPlugin;
 import com.owlplug.project.services.PluginLookupService;
+import java.text.DecimalFormat;
 
 public class PluginLookupTask extends AbstractTask {
 
@@ -43,11 +45,18 @@ public class PluginLookupTask extends AbstractTask {
 
     Iterable<ProjectPlugin> plugins = projectPluginDAO.findAll();
 
+    this.setMaxProgress(Iterables.size(plugins));
     for (ProjectPlugin plugin : plugins) {
       pluginLookupService.createLookup(plugin);
+      this.commitProgress(1);
+      this.updateMessage("Resolving plugin references from projects ("
+                             + new DecimalFormat("#").format(getCommittedProgress())
+                             + "/"
+                             + new DecimalFormat("#").format(getMaxProgress())
+                             + ")");
     }
 
-    this.updateMessage("All projects are synchronized with plugins");
+    this.updateMessage("All projects and plugins are up-to-date");
     this.updateProgress(1,1);
 
     return success();

@@ -25,6 +25,7 @@ import com.owlplug.project.dao.ProjectDAO;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,23 +52,26 @@ public class ProjectSyncTask extends AbstractTask {
 
     projectDAO.deleteAll();
 
+
+    List<File> baseFiles = new ArrayList<>();
     for (String directory : projectDirectories) {
       File dir = new File(directory);
       this.updateMessage("Syncing projects from: " + dir.getAbsolutePath());
-
-
       if (dir.isDirectory()) {
-        List<File> baseFiles = (List<File>) FileUtils.listUniqueFilesAndDirs(dir);
+        baseFiles.addAll(FileUtils.listUniqueFilesAndDirs(dir));
+      }
+    }
 
-        for (File file : baseFiles) {
-          this.updateMessage("Analyzing file: " + file.getAbsolutePath());
-          AbletonProjectExplorer explorer = new AbletonProjectExplorer();
+    this.setMaxProgress(baseFiles.size());
 
-          if (explorer.canExploreFile(file)) {
-            Project project = explorer.explore(file);
-            projectDAO.save(project);
-          }
-        }
+    for (File file : baseFiles) {
+      this.commitProgress(1);
+      AbletonProjectExplorer explorer = new AbletonProjectExplorer();
+
+      if (explorer.canExploreFile(file)) {
+        this.updateMessage("Analyzing file: " + file.getAbsolutePath());
+        Project project = explorer.explore(file);
+        projectDAO.save(project);
       }
     }
 
