@@ -27,7 +27,6 @@ import com.owlplug.core.model.PluginFootprint;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginState;
 import com.owlplug.core.utils.PluginUtils;
-import com.owlplug.explore.dao.RemotePackageDAO;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.services.ExploreService;
 import java.io.File;
@@ -148,7 +147,16 @@ public class PluginService extends BaseService {
     Specification<Plugin> spec = PluginDAO.nameContains(name)
             .and(PluginDAO.hasFormat(pluginFormat));
 
+
     return pluginDAO.findAll(spec);
+  }
+
+  public Iterable<Plugin> findByComponentName(String name, PluginFormat pluginFormat) {
+    Specification<Plugin> spec = PluginDAO.hasComponentName(name)
+            .and(PluginDAO.hasFormat(pluginFormat));
+
+    return pluginDAO.findAll(spec);
+
   }
   
   /**
