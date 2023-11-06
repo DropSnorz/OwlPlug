@@ -18,6 +18,7 @@
  
 package com.owlplug.core.model;
 
+import com.owlplug.project.model.PluginLookup;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +33,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Inheritance
@@ -66,6 +69,10 @@ public class Plugin {
   @OneToMany(mappedBy = "plugin", orphanRemoval = true,
       fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
   private Set<PluginComponent> components = new HashSet<>();
+
+  @OneToMany(mappedBy = "plugin")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<PluginLookup> lookups;
 
   public Plugin() {
 

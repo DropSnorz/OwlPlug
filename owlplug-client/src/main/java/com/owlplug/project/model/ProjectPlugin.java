@@ -29,6 +29,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.util.Objects;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class ProjectPlugin {
@@ -48,8 +50,8 @@ public class ProjectPlugin {
   @ManyToOne
   private Project project;
 
-  @OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.ALL })
-  @JoinColumn(name = "lookup_id", referencedColumnName = "id")
+  @OneToOne(mappedBy = "projectPlugin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private PluginLookup lookup;
 
   public Long getId() {

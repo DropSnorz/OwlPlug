@@ -19,6 +19,7 @@
 package com.owlplug.project.model;
 
 import com.owlplug.core.model.Plugin;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +36,8 @@ public class PluginLookup {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
-  @OneToOne(mappedBy = "lookup")
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "project_plugin_id", referencedColumnName = "id")
   private ProjectPlugin projectPlugin;
 
   @ManyToOne(fetch = FetchType.LAZY)
