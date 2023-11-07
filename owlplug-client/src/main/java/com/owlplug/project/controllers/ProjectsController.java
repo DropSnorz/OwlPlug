@@ -26,9 +26,11 @@ import com.owlplug.project.components.ProjectTaskFactory;
 import com.owlplug.project.model.Project;
 import com.owlplug.project.services.ProjectService;
 import com.owlplug.project.ui.ProjectTreeCell;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -54,9 +56,13 @@ public class ProjectsController extends BaseController {
   @FXML
   private Button projectDirectoryButton;
   @FXML
+  private TextField searchTextField;
+  @FXML
   private TabPane projectTreeViewTabPane;
   @FXML
   private TreeView projectTreeView;
+
+  private FilterableTreeItem<Object> projectTreeNode;
 
   @FXML
   public void initialize() {
@@ -90,20 +96,37 @@ public class ProjectsController extends BaseController {
       listDirectoryDialogController.show();
     });
 
+    projectTreeNode = new FilterableTreeItem<>("(all)");
+    projectTreeView.setRoot(projectTreeNode);
+
+    // Binds search property to plugin tree filter
+    projectTreeNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+      if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
+        return null;
+      }
+      return (item) -> {
+        if (item instanceof Project project) {
+          return project.getName().toLowerCase().contains(searchTextField.getText().toLowerCase());
+        } else {
+          return item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
+        }
+      };
+    }, searchTextField.textProperty()));
+
+
     refresh();
 
   }
 
   public void refresh() {
     Iterable<Project> projects = projectService.getAllProjects();
-    FilterableTreeItem<Object> root = new FilterableTreeItem<>("(all)");
-    projectTreeView.setRoot(root);
+    projectTreeNode.getInternalChildren().clear();
 
     for (Project p : projects) {
-      root.getInternalChildren().add(new FilterableTreeItem<>(p));
+      projectTreeNode.getInternalChildren().add(new FilterableTreeItem<>(p));
     }
 
-    root.setExpanded(true);
+    projectTreeNode.setExpanded(true);
 
   }
 }

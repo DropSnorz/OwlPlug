@@ -24,8 +24,7 @@
             <left>
                 <TabPane fx:id="projectTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
                     <tabs>
-                        <Tab fx:id="treeTabAll" text="All" closable="false" />
-                        <Tab fx:id="treeTabDirectories" text="Directories" closable="false" />
+                        <Tab fx:id="treeTabAll" closable="false" text="All" />
                     </tabs>
                 </TabPane>
             </left>
@@ -41,7 +40,7 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <TextField fx:id="searchTextField" prefHeight="25.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
                     </children>
                 </HBox>
             </top>
