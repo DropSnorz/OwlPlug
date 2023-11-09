@@ -75,6 +75,7 @@ public class AbletonProjectExplorer {
       project.setName(FilenameUtils.removeExtension(file.getName()));
       NodeList abletonNode = (NodeList) xPath.compile("/Ableton").evaluate(xmlDocument, XPathConstants.NODESET);
       project.setAppFullName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
+      project.setFormatVersion(abletonNode.item(0).getAttributes().getNamedItem("MajorVersion").getNodeValue());
 
       project.setLastModified(new Date(file.lastModified()));
       BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);

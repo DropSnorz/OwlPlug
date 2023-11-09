@@ -45,6 +45,7 @@ public class AbletonProjectExplorerTest {
     assertEquals("ableton11Schema5",project.getName());
     assertEquals(DawApplication.ABLETON, project.getApplication());
     assertEquals("Ableton Live 11.1", project.getAppFullName());
+    assertEquals("5", project.getFormatVersion());
     assertEquals(2, project.getPlugins().size());
 
     assertThat( project.getPlugins(), containsInAnyOrder(
