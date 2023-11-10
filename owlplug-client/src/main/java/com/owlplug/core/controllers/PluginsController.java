@@ -48,6 +48,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
+import org.antlr.v4.runtime.tree.Tree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import jfxtras.styles.jmetro.JMetroStyleClass;
@@ -388,6 +389,30 @@ public class PluginsController extends BaseController {
         }
       }
     }
+  }
+
+  public void selectPluginInTreeById(long id){
+    List<TreeItem> items = getAllChildrens(pluginTreeView.getRoot());
+
+    for (TreeItem item : items) {
+      if (item.getValue() instanceof Plugin plugin
+          && plugin.getId().equals(id)) {
+        int row = pluginTreeView.getRow(item);
+        pluginTreeView.getSelectionModel().select(row);
+      }
+    }
+
+  }
+
+  private List<TreeItem> getAllChildrens(TreeItem item) {
+    List<TreeItem> items = new ArrayList<>();
+    items.add(item);
+
+    List<TreeItem> childs = new ArrayList<>(item.getChildren());
+    for (TreeItem child : childs) {
+      items.addAll(getAllChildrens(child));
+    }
+    return items;
   }
 
   class FileTree extends HashMap<String, FileTree> {

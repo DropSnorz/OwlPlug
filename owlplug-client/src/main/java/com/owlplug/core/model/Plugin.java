@@ -84,6 +84,10 @@ public class Plugin {
     this.format = format;
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public String getName() {
     return name;
   }

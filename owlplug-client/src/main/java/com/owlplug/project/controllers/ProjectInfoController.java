@@ -19,6 +19,9 @@
 package com.owlplug.project.controllers;
 
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.controllers.PluginsController;
+import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.TimeUtils;
@@ -31,16 +34,23 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class ProjectInfoController extends BaseController {
+
+  @Autowired
+  private PluginsController pluginsController;
+  @Autowired
+  private MainController mainController;
 
   @FXML
   private VBox projectInfoPane;
@@ -74,6 +84,8 @@ public class ProjectInfoController extends BaseController {
   private TableColumn<ProjectPlugin, String> pluginTableNameColumn;
   @FXML
   private TableColumn<ProjectPlugin, String> pluginTableStatusColumn;
+  @FXML
+  private TableColumn<ProjectPlugin, Plugin> pluginTableLinkColumn;
 
   private Project currentProject = null;
 
@@ -109,6 +121,7 @@ public class ProjectInfoController extends BaseController {
     pluginTableFormatColumn.setCellValueFactory(cellData -> {
       return new SimpleObjectProperty<>(cellData.getValue().getFormat());
     });
+
     pluginTableStatusColumn.setCellFactory(e -> new TableCell<ProjectPlugin, String>() {
       @Override
       public void updateItem(String item, boolean empty) {
@@ -127,6 +140,32 @@ public class ProjectInfoController extends BaseController {
           } else {
             this.getStyleClass().add("cell-unknown-link");
           }
+        }
+      }
+    });
+
+    pluginTableLinkColumn.setCellValueFactory(cellData -> {
+      if (cellData.getValue().getLookup() != null) {
+        return new SimpleObjectProperty<>(cellData.getValue().getLookup().getPlugin());
+      }
+      return null;
+    });
+
+    pluginTableLinkColumn.setCellFactory(e -> new TableCell<ProjectPlugin, Plugin>() {
+      @Override
+      public void updateItem(Plugin item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item == null || empty) {
+          setText(null);
+          setGraphic(null);
+        } else {
+          Hyperlink link = new Hyperlink();
+          link.setGraphic(new ImageView(getApplicationDefaults().linkIconImage));
+          link.setOnAction(e -> {
+            pluginsController.selectPluginInTreeById(item.getId());
+            mainController.selectMainTab(MainController.PLUGINS_TAB_INDEX);
+          });
+          setGraphic(link);
         }
       }
     });
