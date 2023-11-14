@@ -19,7 +19,6 @@
 package com.owlplug.project.model;
 
 import com.owlplug.core.model.Plugin;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,15 +29,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class PluginLookup {
+public class DawPluginLookup {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "project_plugin_id", referencedColumnName = "id")
-  private ProjectPlugin projectPlugin;
+  @JoinColumn(name = "daw_plugin_id", referencedColumnName = "id")
+  private DawPlugin dawPlugin;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "plugin_id")
@@ -54,12 +53,12 @@ public class PluginLookup {
     this.id = id;
   }
 
-  public ProjectPlugin getProjectPlugin() {
-    return projectPlugin;
+  public DawPlugin getDawPlugin() {
+    return dawPlugin;
   }
 
-  public void setProjectPlugin(ProjectPlugin projectPlugin) {
-    this.projectPlugin = projectPlugin;
+  public void setDawPlugin(DawPlugin dawPlugin) {
+    this.dawPlugin = dawPlugin;
   }
 
   public Plugin getPlugin() {

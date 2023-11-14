@@ -25,7 +25,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.util.Objects;
@@ -33,7 +32,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-public class ProjectPlugin {
+public class DawPlugin {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,11 +47,11 @@ public class ProjectPlugin {
   private PluginFormat format;
 
   @ManyToOne
-  private Project project;
+  private DawProject project;
 
-  @OneToOne(mappedBy = "projectPlugin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToOne(mappedBy = "dawPlugin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private PluginLookup lookup;
+  private DawPluginLookup lookup;
 
   public Long getId() {
     return id;
@@ -100,19 +99,19 @@ public class ProjectPlugin {
     this.format = format;
   }
 
-  public Project getProject() {
+  public DawProject getProject() {
     return project;
   }
 
-  public void setProject(Project project) {
+  public void setProject(DawProject project) {
     this.project = project;
   }
 
-  public PluginLookup getLookup() {
+  public DawPluginLookup getLookup() {
     return lookup;
   }
 
-  public void setLookup(PluginLookup lookup) {
+  public void setLookup(DawPluginLookup lookup) {
     this.lookup = lookup;
   }
 
@@ -124,7 +123,7 @@ public class ProjectPlugin {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ProjectPlugin that = (ProjectPlugin) o;
+    DawPlugin that = (DawPlugin) o;
     return Objects.equals(id, that.id) && Objects.equals(name, that.name)
             && Objects.equals(fileName, that.fileName) && Objects.equals(path, that.path)
             && format == that.format && Objects.equals(project, that.project);

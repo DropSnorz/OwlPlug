@@ -21,18 +21,18 @@ package com.owlplug.project.tasks;
 import com.google.common.collect.Iterables;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.project.dao.ProjectPluginDAO;
-import com.owlplug.project.model.ProjectPlugin;
+import com.owlplug.project.dao.DawPluginDAO;
+import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.services.PluginLookupService;
 import java.text.DecimalFormat;
 
 public class PluginLookupTask extends AbstractTask {
 
   private PluginLookupService pluginLookupService;
-  private ProjectPluginDAO projectPluginDAO;
+  private DawPluginDAO dawPluginDAO;
 
-  public PluginLookupTask(ProjectPluginDAO projectPluginDAO, PluginLookupService pluginLookupService) {
-    this.projectPluginDAO = projectPluginDAO;
+  public PluginLookupTask(DawPluginDAO dawPluginDAO, PluginLookupService pluginLookupService) {
+    this.dawPluginDAO = dawPluginDAO;
     this.pluginLookupService = pluginLookupService;
   }
 
@@ -43,10 +43,10 @@ public class PluginLookupTask extends AbstractTask {
     this.updateMessage("Starting project plugins lookup task");
     this.updateProgress(0,1);
 
-    Iterable<ProjectPlugin> plugins = projectPluginDAO.findAll();
+    Iterable<DawPlugin> plugins = dawPluginDAO.findAll();
 
     this.setMaxProgress(Iterables.size(plugins));
-    for (ProjectPlugin plugin : plugins) {
+    for (DawPlugin plugin : plugins) {
       pluginLookupService.createLookup(plugin);
       this.commitProgress(1);
       this.updateMessage("Resolving plugin references from projects ("

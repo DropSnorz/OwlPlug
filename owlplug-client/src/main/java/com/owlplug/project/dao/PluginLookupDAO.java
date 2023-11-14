@@ -18,8 +18,8 @@
 
 package com.owlplug.project.dao;
 
-import com.owlplug.project.model.PluginLookup;
+import com.owlplug.project.model.DawPluginLookup;
 import org.springframework.data.repository.CrudRepository;
 
-public interface PluginLookupDAO extends CrudRepository<PluginLookup, Long> {
+public interface PluginLookupDAO extends CrudRepository<DawPluginLookup, Long> {
 }

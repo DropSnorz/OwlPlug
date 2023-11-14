@@ -20,7 +20,7 @@ package com.owlplug.project.tasks.discovery.ableton;
 
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.utils.DomUtils;
-import com.owlplug.project.model.ProjectPlugin;
+import com.owlplug.project.model.DawPlugin;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPath;
@@ -44,9 +44,9 @@ public class AbletonSchema5PluginCollector {
     this.document = document;
   }
 
-  public List<ProjectPlugin> collectPlugins() {
+  public List<DawPlugin> collectPlugins() {
 
-    ArrayList<ProjectPlugin> plugins = new ArrayList<>();
+    ArrayList<DawPlugin> plugins = new ArrayList<>();
 
     XPath xPath = XPathFactory.newInstance().newXPath();
     try {
@@ -85,9 +85,9 @@ public class AbletonSchema5PluginCollector {
     return plugins;
   }
 
-  private ProjectPlugin readVstPluginElement(Element pluginElement) {
+  private DawPlugin readVstPluginElement(Element pluginElement) {
 
-    ProjectPlugin plugin = new ProjectPlugin();
+    DawPlugin plugin = new DawPlugin();
     plugin.setFormat(PluginFormat.VST2);
     NodeList fileNameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "FileName");
     if (fileNameNodes.getLength() >= 1) {
@@ -110,9 +110,9 @@ public class AbletonSchema5PluginCollector {
     return plugin;
   }
 
-  private ProjectPlugin readVst3PluginElement(Element pluginElement) {
+  private DawPlugin readVst3PluginElement(Element pluginElement) {
 
-    ProjectPlugin plugin = new ProjectPlugin();
+    DawPlugin plugin = new DawPlugin();
     plugin.setFormat(PluginFormat.VST3);
     NodeList nameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "Name");
     if (nameNodes.getLength() >= 1) {
@@ -123,9 +123,9 @@ public class AbletonSchema5PluginCollector {
     return plugin;
   }
 
-  private ProjectPlugin readAuPluginElement(Element pluginElement) {
+  private DawPlugin readAuPluginElement(Element pluginElement) {
 
-    ProjectPlugin plugin = new ProjectPlugin();
+    DawPlugin plugin = new DawPlugin();
     plugin.setFormat(PluginFormat.AU);
     NodeList nameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "Name");
     if (nameNodes.getLength() >= 1) {

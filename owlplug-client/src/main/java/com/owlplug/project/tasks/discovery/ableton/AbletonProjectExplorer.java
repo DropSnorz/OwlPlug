@@ -20,8 +20,8 @@ package com.owlplug.project.tasks.discovery.ableton;
 
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.DawApplication;
-import com.owlplug.project.model.Project;
-import com.owlplug.project.model.ProjectPlugin;
+import com.owlplug.project.model.DawProject;
+import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -59,7 +59,7 @@ public class AbletonProjectExplorer {
     return file.isFile() && file.getAbsolutePath().endsWith(".als");
   }
 
-  public Project explore(File file) throws ProjectExplorerException {
+  public DawProject explore(File file) throws ProjectExplorerException {
 
     if (!canExploreFile(file)) {
       return null;
@@ -70,7 +70,7 @@ public class AbletonProjectExplorer {
     try {
       Document xmlDocument = createDocument(file);
       XPath xpath = XPathFactory.newInstance().newXPath();
-      Project project = new Project();
+      DawProject project = new DawProject();
       project.setApplication(DawApplication.ABLETON);
       project.setPath(FileUtils.convertPath(file.getAbsolutePath()));
       project.setName(FilenameUtils.removeExtension(file.getName()));
@@ -84,9 +84,9 @@ public class AbletonProjectExplorer {
       project.setCreatedAt(Date.from(fileTime.toInstant()));
 
       AbletonSchema5PluginCollector collector = new AbletonSchema5PluginCollector(xmlDocument);
-      List<ProjectPlugin> plugins = collector.collectPlugins();
+      List<DawPlugin> plugins = collector.collectPlugins();
 
-      for (ProjectPlugin plugin : plugins) {
+      for (DawPlugin plugin : plugins) {
         plugin.setProject(project);
         project.getPlugins().add(plugin);
       }

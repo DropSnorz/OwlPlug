@@ -20,8 +20,8 @@ package com.owlplug.project.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.project.model.LookupResult;
-import com.owlplug.project.model.Project;
-import com.owlplug.project.model.ProjectPlugin;
+import com.owlplug.project.model.DawProject;
+import com.owlplug.project.model.DawPlugin;
 import java.util.List;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
@@ -44,14 +44,14 @@ public class ProjectTreeCell extends TreeCell<Object> {
       setText(null);
       setGraphic(null);
     } else {
-      if (item instanceof Project project) {
+      if (item instanceof DawProject project) {
         setText(null);
         HBox hbox = new HBox(10);
         ImageView icon = new ImageView(applicationDefaults.getDAWApplicationIcon(project.getApplication()));
         hbox.getChildren().add(icon);
         Label label = new Label(project.getName());
         hbox.getChildren().add(label);
-        List<ProjectPlugin> failedLookups = project.getPluginByLookupResult(LookupResult.FAILED);
+        List<DawPlugin> failedLookups = project.getPluginByLookupResult(LookupResult.FAILED);
         if (!failedLookups.isEmpty()) {
           Label missingLabel = new Label(failedLookups.size() + " Missing plugin(s)");
           missingLabel.setGraphic(new ImageView(applicationDefaults.errorIconImage));

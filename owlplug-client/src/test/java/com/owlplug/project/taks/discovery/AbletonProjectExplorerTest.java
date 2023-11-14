@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.project.model.DawApplication;
-import com.owlplug.project.model.Project;
+import com.owlplug.project.model.DawProject;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
 import java.io.File;
@@ -41,7 +41,7 @@ public class AbletonProjectExplorerTest {
     File file = new File(this.getClass().getClassLoader()
             .getResource("projects/ableton/ableton11Schema5.als").getFile());
 
-    Project project = explorer.explore(file);
+    DawProject project = explorer.explore(file);
     assertEquals("ableton11Schema5",project.getName());
     assertEquals(DawApplication.ABLETON, project.getApplication());
     assertEquals("Ableton Live 11.1", project.getAppFullName());

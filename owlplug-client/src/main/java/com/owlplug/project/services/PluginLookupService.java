@@ -22,10 +22,10 @@ import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.BaseService;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.project.dao.PluginLookupDAO;
-import com.owlplug.project.dao.ProjectPluginDAO;
+import com.owlplug.project.dao.DawPluginDAO;
 import com.owlplug.project.model.LookupResult;
-import com.owlplug.project.model.PluginLookup;
-import com.owlplug.project.model.ProjectPlugin;
+import com.owlplug.project.model.DawPluginLookup;
+import com.owlplug.project.model.DawPlugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,19 +37,19 @@ public class PluginLookupService extends BaseService {
   @Autowired
   private PluginLookupDAO pluginLookupDAO;
   @Autowired
-  private ProjectPluginDAO projectPluginDAO;
+  private DawPluginDAO dawPluginDAO;
 
-  public void createLookup(ProjectPlugin projectPlugin) {
+  public void createLookup(DawPlugin projectPlugin) {
 
     projectPlugin.setLookup(lookup(projectPlugin));
-    projectPluginDAO.save(projectPlugin);
+    dawPluginDAO.save(projectPlugin);
 
   }
 
-  public PluginLookup lookup(ProjectPlugin projectPlugin) {
+  public DawPluginLookup lookup(DawPlugin projectPlugin) {
 
-    PluginLookup lookup = new PluginLookup();
-    lookup.setProjectPlugin(projectPlugin);
+    DawPluginLookup lookup = new DawPluginLookup();
+    lookup.setDawPlugin(projectPlugin);
     lookup.setResult(LookupResult.FAILED);
 
     Iterable<Plugin> plugins = pluginService.find(projectPlugin.getName(), projectPlugin.getFormat());

@@ -21,8 +21,8 @@ package com.owlplug.project.tasks;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.project.dao.ProjectDAO;
-import com.owlplug.project.model.Project;
+import com.owlplug.project.dao.DawProjectDAO;
+import com.owlplug.project.model.DawProject;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
 import java.io.File;
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ public class ProjectSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private ProjectDAO projectDAO;
+  private DawProjectDAO projectDAO;
   private List<String> projectDirectories;
 
-  public ProjectSyncTask(ProjectDAO projectDAO,
+  public ProjectSyncTask(DawProjectDAO projectDAO,
                          List<String> projectDirectories) {
     this.projectDAO = projectDAO;
     this.projectDirectories = projectDirectories;
@@ -70,7 +70,7 @@ public class ProjectSyncTask extends AbstractTask {
 
       if (explorer.canExploreFile(file)) {
         this.updateMessage("Analyzing file: " + file.getAbsolutePath());
-        Project project = explorer.explore(file);
+        DawProject project = explorer.explore(file);
         projectDAO.save(project);
       }
     }

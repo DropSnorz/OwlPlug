@@ -20,8 +20,8 @@ package com.owlplug.project.services;
 
 import com.owlplug.core.services.BaseService;
 import com.owlplug.project.components.ProjectTaskFactory;
-import com.owlplug.project.dao.ProjectDAO;
-import com.owlplug.project.model.Project;
+import com.owlplug.project.dao.DawProjectDAO;
+import com.owlplug.project.model.DawProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 public class ProjectService extends BaseService {
 
   @Autowired
-  private ProjectDAO projectDAO;
+  private DawProjectDAO projectDAO;
   @Autowired
   private ProjectTaskFactory taskFactory;
 
@@ -37,7 +37,7 @@ public class ProjectService extends BaseService {
     taskFactory.createSyncTask().schedule();
   }
 
-  public Iterable<Project> getAllProjects() {
+  public Iterable<DawProject> getAllProjects() {
     return projectDAO.findAll();
   }
 

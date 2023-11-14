@@ -18,7 +18,7 @@
  
 package com.owlplug.core.model;
 
-import com.owlplug.project.model.PluginLookup;
+import com.owlplug.project.model.DawPluginLookup;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -72,7 +72,7 @@ public class Plugin {
 
   @OneToMany(mappedBy = "plugin")
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private Set<PluginLookup> lookups;
+  private Set<DawPluginLookup> lookups;
 
   public Plugin() {
 

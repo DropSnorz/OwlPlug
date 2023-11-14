@@ -26,8 +26,8 @@ import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.project.model.LookupResult;
-import com.owlplug.project.model.Project;
-import com.owlplug.project.model.ProjectPlugin;
+import com.owlplug.project.model.DawProject;
+import com.owlplug.project.model.DawPlugin;
 import java.io.File;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -77,17 +77,17 @@ public class ProjectInfoController extends BaseController {
   @FXML
   private Button openDirectoryButton;
   @FXML
-  private TableView<ProjectPlugin> pluginTable;
+  private TableView<DawPlugin> pluginTable;
   @FXML
-  private TableColumn<ProjectPlugin, PluginFormat> pluginTableFormatColumn;
+  private TableColumn<DawPlugin, PluginFormat> pluginTableFormatColumn;
   @FXML
-  private TableColumn<ProjectPlugin, String> pluginTableNameColumn;
+  private TableColumn<DawPlugin, String> pluginTableNameColumn;
   @FXML
-  private TableColumn<ProjectPlugin, String> pluginTableStatusColumn;
+  private TableColumn<DawPlugin, String> pluginTableStatusColumn;
   @FXML
-  private TableColumn<ProjectPlugin, Plugin> pluginTableLinkColumn;
+  private TableColumn<DawPlugin, Plugin> pluginTableLinkColumn;
 
-  private Project currentProject = null;
+  private DawProject currentProject = null;
 
 
   @FXML
@@ -122,7 +122,7 @@ public class ProjectInfoController extends BaseController {
       return new SimpleObjectProperty<>(cellData.getValue().getFormat());
     });
 
-    pluginTableStatusColumn.setCellFactory(e -> new TableCell<ProjectPlugin, String>() {
+    pluginTableStatusColumn.setCellFactory(e -> new TableCell<DawPlugin, String>() {
       @Override
       public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
@@ -151,7 +151,7 @@ public class ProjectInfoController extends BaseController {
       return null;
     });
 
-    pluginTableLinkColumn.setCellFactory(e -> new TableCell<ProjectPlugin, Plugin>() {
+    pluginTableLinkColumn.setCellFactory(e -> new TableCell<DawPlugin, Plugin>() {
       @Override
       public void updateItem(Plugin item, boolean empty) {
         super.updateItem(item, empty);
@@ -170,7 +170,7 @@ public class ProjectInfoController extends BaseController {
       }
     });
 
-    pluginTableFormatColumn.setCellFactory(e -> new TableCell<ProjectPlugin, PluginFormat>() {
+    pluginTableFormatColumn.setCellFactory(e -> new TableCell<DawPlugin, PluginFormat>() {
       @Override
       public void updateItem(PluginFormat item, boolean empty) {
         super.updateItem(item, empty);
@@ -186,7 +186,7 @@ public class ProjectInfoController extends BaseController {
 
   }
 
-  public void setProject(Project project) {
+  public void setProject(DawProject project) {
     this.currentProject = project;
     projectInfoPane.setVisible(true);
     projectNameLabel.setText(project.getName());

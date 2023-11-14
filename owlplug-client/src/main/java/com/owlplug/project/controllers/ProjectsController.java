@@ -23,7 +23,7 @@ import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.project.components.ProjectTaskFactory;
-import com.owlplug.project.model.Project;
+import com.owlplug.project.model.DawProject;
 import com.owlplug.project.services.ProjectService;
 import com.owlplug.project.ui.ProjectTreeCell;
 import javafx.beans.binding.Bindings;
@@ -85,7 +85,7 @@ public class ProjectsController extends BaseController {
 
     projectTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue instanceof TreeItem treeItem
-           && treeItem.getValue() instanceof Project project) {
+           && treeItem.getValue() instanceof DawProject project) {
         projectInfoController.setProject(project);
       }
     });
@@ -104,7 +104,7 @@ public class ProjectsController extends BaseController {
         return null;
       }
       return (item) -> {
-        if (item instanceof Project project) {
+        if (item instanceof DawProject project) {
           return project.getName().toLowerCase().contains(searchTextField.getText().toLowerCase());
         } else {
           return item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
@@ -118,10 +118,10 @@ public class ProjectsController extends BaseController {
   }
 
   public void refresh() {
-    Iterable<Project> projects = projectService.getAllProjects();
+    Iterable<DawProject> projects = projectService.getAllProjects();
     projectTreeNode.getInternalChildren().clear();
 
-    for (Project p : projects) {
+    for (DawProject p : projects) {
       projectTreeNode.getInternalChildren().add(new FilterableTreeItem<>(p));
     }
 

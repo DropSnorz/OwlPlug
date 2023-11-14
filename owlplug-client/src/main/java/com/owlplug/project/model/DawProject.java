@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-public class Project {
+public class DawProject {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,7 +45,7 @@ public class Project {
   private String formatVersion;
   @OneToMany(mappedBy = "project", fetch = FetchType.EAGER, orphanRemoval = true,
           cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
-  private Set<ProjectPlugin> plugins = new HashSet<>();
+  private Set<DawPlugin> plugins = new HashSet<>();
   private Date lastModified;
   private Date createdAt;
 
@@ -85,11 +85,11 @@ public class Project {
     this.appFullName = appName;
   }
 
-  public Set<ProjectPlugin> getPlugins() {
+  public Set<DawPlugin> getPlugins() {
     return plugins;
   }
 
-  public void setPlugins(Set<ProjectPlugin> plugins) {
+  public void setPlugins(Set<DawPlugin> plugins) {
     this.plugins = plugins;
   }
 
@@ -117,7 +117,7 @@ public class Project {
     this.createdAt = createdAt;
   }
 
-  public List<ProjectPlugin> getPluginByLookupResult(LookupResult result) {
+  public List<DawPlugin> getPluginByLookupResult(LookupResult result) {
     return plugins.stream()
             .filter(p -> p.getLookup() != null && p.getLookup().getResult().equals(result))
                     .collect(Collectors.toList());
