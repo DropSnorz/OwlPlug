@@ -83,14 +83,14 @@
                         </TextFlow>
                         <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                             <children>
-                                <Label text="Plugins found: " />
+                                <Label text="Plugins detected: " />
                                 <Label fx:id="projectPluginsFoundLabel" styleClass="label-emphase" text="UNKNOWN" />
                             </children>
                         </TextFlow>
                         <HBox alignment="CENTER_LEFT" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
                             <children>
-                                  <Label minHeight="-Infinity" minWidth="-Infinity" text="Path: " />
-                                  <Label fx:id="projectPathLabel" styleClass="label-emphase" text="UNKNOWN" textOverrun="CENTER_ELLIPSIS" wrapText="true" />
+                                <Label minHeight="-Infinity" minWidth="-Infinity" text="Path: " />
+                                <Label fx:id="projectPathLabel" styleClass="label-emphase" text="UNKNOWN" textOverrun="CENTER_ELLIPSIS" wrapText="true" />
                                 <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" styleClass="label-emphase">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">

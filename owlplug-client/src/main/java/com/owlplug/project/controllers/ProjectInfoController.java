@@ -127,16 +127,16 @@ public class ProjectInfoController extends BaseController {
       public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
         this.getStyleClass().remove("cell-unknown-link");
-        this.getStyleClass().remove("cell-failed-link");
-        this.getStyleClass().remove("cell-match-link");
+        this.getStyleClass().remove("cell-missing-link");
+        this.getStyleClass().remove("cell-found-link");
         if (item == null || empty) {
           setText(null);
         } else {
           setText(item);
-          if (item.equals(LookupResult.FAILED.getValue())) {
-            this.getStyleClass().add("cell-failed-link");
-          } else if (item.equals(LookupResult.MATCH.getValue())) {
-            this.getStyleClass().add("cell-match-link");
+          if (item.equals(LookupResult.MISSING.getValue())) {
+            this.getStyleClass().add("cell-missing-link");
+          } else if (item.equals(LookupResult.FOUND.getValue())) {
+            this.getStyleClass().add("cell-found-link");
           } else {
             this.getStyleClass().add("cell-unknown-link");
           }

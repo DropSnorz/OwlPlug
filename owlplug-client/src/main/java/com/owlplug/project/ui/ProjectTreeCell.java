@@ -51,7 +51,7 @@ public class ProjectTreeCell extends TreeCell<Object> {
         hbox.getChildren().add(icon);
         Label label = new Label(project.getName());
         hbox.getChildren().add(label);
-        List<DawPlugin> failedLookups = project.getPluginByLookupResult(LookupResult.FAILED);
+        List<DawPlugin> failedLookups = project.getPluginByLookupResult(LookupResult.MISSING);
         if (!failedLookups.isEmpty()) {
           Label missingLabel = new Label(failedLookups.size() + " Missing plugin(s)");
           missingLabel.setGraphic(new ImageView(applicationDefaults.errorIconImage));

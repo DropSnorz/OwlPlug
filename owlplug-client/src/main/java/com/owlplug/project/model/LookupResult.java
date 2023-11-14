@@ -20,7 +20,7 @@ package com.owlplug.project.model;
 
 public enum LookupResult {
 
-  MATCH("Match"), FAILED("Failed");
+  FOUND("Found"), MISSING("Missing");
 
   private String value;
 

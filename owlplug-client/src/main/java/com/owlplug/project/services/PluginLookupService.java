@@ -50,20 +50,20 @@ public class PluginLookupService extends BaseService {
 
     DawPluginLookup lookup = new DawPluginLookup();
     lookup.setDawPlugin(projectPlugin);
-    lookup.setResult(LookupResult.FAILED);
+    lookup.setResult(LookupResult.MISSING);
 
     Iterable<Plugin> plugins = pluginService.find(projectPlugin.getName(), projectPlugin.getFormat());
 
     if (plugins.iterator().hasNext()) {
       lookup.setPlugin(plugins.iterator().next());
-      lookup.setResult(LookupResult.MATCH);
+      lookup.setResult(LookupResult.FOUND);
     } else {
       // Resolve the Plugin file (based on known subcomponents)
       plugins = pluginService.findByComponentName(projectPlugin.getName(), projectPlugin.getFormat());
 
       if (plugins.iterator().hasNext()) {
         lookup.setPlugin(plugins.iterator().next());
-        lookup.setResult(LookupResult.MATCH);
+        lookup.setResult(LookupResult.FOUND);
       }
 
     }
