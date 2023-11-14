@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 public class AbletonProjectExplorerTest {
 
   @Test
-  public void Ableton11Schema5ContainingVstAndVst3ValidProject() throws ProjectExplorerException {
+  public void ableton11Schema5ContainingVstAndVst3ValidProject() throws ProjectExplorerException {
     AbletonProjectExplorer explorer = new AbletonProjectExplorer();
 
     File file = new File(this.getClass().getClassLoader()
@@ -48,7 +48,7 @@ public class AbletonProjectExplorerTest {
     assertEquals("5", project.getFormatVersion());
     assertEquals(2, project.getPlugins().size());
 
-    assertThat( project.getPlugins(), containsInAnyOrder(
+    assertThat(project.getPlugins(), containsInAnyOrder(
             allOf(
                     hasProperty("name", is("Vital")),
                     hasProperty("format", is(PluginFormat.VST2))

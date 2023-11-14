@@ -43,7 +43,8 @@ public class Project {
   private DawApplication application;
   private String appFullName;
   private String formatVersion;
-  @OneToMany(mappedBy = "project", fetch = FetchType.EAGER, orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+  @OneToMany(mappedBy = "project", fetch = FetchType.EAGER, orphanRemoval = true,
+          cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
   private Set<ProjectPlugin> plugins = new HashSet<>();
   private Date lastModified;
   private Date createdAt;

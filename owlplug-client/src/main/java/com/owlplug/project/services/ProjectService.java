@@ -28,9 +28,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectService extends BaseService {
 
-   @Autowired
+  @Autowired
   private ProjectDAO projectDAO;
-
   @Autowired
   private ProjectTaskFactory taskFactory;
 

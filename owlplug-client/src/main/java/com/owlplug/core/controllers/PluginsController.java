@@ -391,7 +391,7 @@ public class PluginsController extends BaseController {
     }
   }
 
-  public void selectPluginInTreeById(long id){
+  public void selectPluginInTreeById(long id) {
     List<TreeItem> items = getAllChildrens(pluginTreeView.getRoot());
 
     for (TreeItem item : items) {

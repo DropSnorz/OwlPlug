@@ -65,15 +65,16 @@ public class AbletonProjectExplorer {
       return null;
     }
 
-    try {
+    log.debug("Starting exploring file {}", file.getAbsoluteFile());
 
+    try {
       Document xmlDocument = createDocument(file);
-      XPath xPath = XPathFactory.newInstance().newXPath();
+      XPath xpath = XPathFactory.newInstance().newXPath();
       Project project = new Project();
       project.setApplication(DawApplication.ABLETON);
       project.setPath(FileUtils.convertPath(file.getAbsolutePath()));
       project.setName(FilenameUtils.removeExtension(file.getName()));
-      NodeList abletonNode = (NodeList) xPath.compile("/Ableton").evaluate(xmlDocument, XPathConstants.NODESET);
+      NodeList abletonNode = (NodeList) xpath.compile("/Ableton").evaluate(xmlDocument, XPathConstants.NODESET);
       project.setAppFullName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
       project.setFormatVersion(abletonNode.item(0).getAttributes().getNamedItem("MajorVersion").getNodeValue());
 

@@ -31,7 +31,7 @@ public class TimeUtils {
           TimeUnit.DAYS.toMillis(1),
           TimeUnit.HOURS.toMillis(1),
           TimeUnit.MINUTES.toMillis(1),
-          TimeUnit.SECONDS.toMillis(1) );
+          TimeUnit.SECONDS.toMillis(1));
   public static final List<String> timesString = Arrays.asList("year","month","day","hour","minute","second");
 
   public static String getHumanReadableDurationFrom(Date date) {
@@ -46,7 +46,7 @@ public class TimeUtils {
     for (int i = 0; i < times.size(); i++) {
       Long current = times.get(i);
       long temp = duration / current;
-      if (temp>0) {
+      if (temp > 0) {
         res.append(temp).append(" ").append(timesString.get(i)).append(temp != 1 ? "s" : "").append(" ago");
         break;
       }

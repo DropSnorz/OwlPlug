@@ -50,7 +50,8 @@ public class AbletonSchema5PluginCollector {
 
     XPath xPath = XPathFactory.newInstance().newXPath();
     try {
-      NodeList vstPlugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/VstPluginInfo").evaluate(document, XPathConstants.NODESET);
+      NodeList vstPlugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/VstPluginInfo")
+              .evaluate(document, XPathConstants.NODESET);
 
       for (int i = 0; i < vstPlugins.getLength();i++) {
         Node node = vstPlugins.item(i);
@@ -59,7 +60,8 @@ public class AbletonSchema5PluginCollector {
         }
       }
 
-      NodeList vst3Plugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/Vst3PluginInfo").evaluate(document, XPathConstants.NODESET);
+      NodeList vst3Plugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/Vst3PluginInfo")
+              .evaluate(document, XPathConstants.NODESET);
       for (int i = 0; i < vst3Plugins.getLength();i++) {
         Node node = vst3Plugins.item(i);
         if (node instanceof Element element) {
@@ -67,7 +69,8 @@ public class AbletonSchema5PluginCollector {
         }
       }
 
-      NodeList auPlugins = (NodeList) xPath.compile("//AuPluginDevice/PluginDesc/AuPluginInfo").evaluate(document, XPathConstants.NODESET);
+      NodeList auPlugins = (NodeList) xPath.compile("//AuPluginDevice/PluginDesc/AuPluginInfo")
+              .evaluate(document, XPathConstants.NODESET);
       for (int i = 0; i < auPlugins.getLength();i++) {
         Node node = auPlugins.item(i);
         if (node instanceof Element element) {
@@ -80,7 +83,6 @@ public class AbletonSchema5PluginCollector {
     }
 
     return plugins;
-
   }
 
   private ProjectPlugin readVstPluginElement(Element pluginElement) {
