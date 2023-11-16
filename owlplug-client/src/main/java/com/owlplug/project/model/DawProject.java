@@ -46,7 +46,7 @@ public class DawProject {
   @OneToMany(mappedBy = "project", fetch = FetchType.EAGER, orphanRemoval = true,
           cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
   private Set<DawPlugin> plugins = new HashSet<>();
-  private Date lastModified;
+  private Date lastModifiedAt;
   private Date createdAt;
 
   public Long getId() {
@@ -101,12 +101,12 @@ public class DawProject {
     this.formatVersion = formatVersion;
   }
 
-  public Date getLastModified() {
-    return lastModified;
+  public Date getLastModifiedAt() {
+    return lastModifiedAt;
   }
 
-  public void setLastModified(Date lastModified) {
-    this.lastModified = lastModified;
+  public void setLastModifiedAt(Date lastModifiedAt) {
+    this.lastModifiedAt = lastModifiedAt;
   }
 
   public Date getCreatedAt() {

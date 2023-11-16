@@ -78,7 +78,7 @@ public class AbletonProjectExplorer {
       project.setAppFullName(abletonNode.item(0).getAttributes().getNamedItem("Creator").getNodeValue());
       project.setFormatVersion(abletonNode.item(0).getAttributes().getNamedItem("MajorVersion").getNodeValue());
 
-      project.setLastModified(new Date(file.lastModified()));
+      project.setLastModifiedAt(new Date(file.lastModified()));
       BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
       FileTime fileTime = attr.creationTime();
       project.setCreatedAt(Date.from(fileTime.toInstant()));

@@ -22,7 +22,6 @@ import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import java.util.List;
-import java.util.prefs.Preferences;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BaseTaskFactory {

@@ -195,7 +195,7 @@ public class ProjectInfoController extends BaseController {
     projectOpenButton.setDisable(false);
     appFullNameLabel.setText(project.getAppFullName());
     projectCreatedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getCreatedAt()));
-    projectLastModifiedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getLastModified()));
+    projectLastModifiedLabel.setText(TimeUtils.getHumanReadableDurationFrom(project.getLastModifiedAt()));
     projectPluginsFoundLabel.setText(String.valueOf(project.getPlugins().size()));
     projectFormatVersionLabel.setText("v" + project.getFormatVersion());
     projectPathLabel.setText(project.getPath());
