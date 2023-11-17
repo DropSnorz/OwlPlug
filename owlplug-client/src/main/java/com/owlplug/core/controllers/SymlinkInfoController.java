@@ -63,12 +63,12 @@ public class SymlinkInfoController extends BaseController {
 
     openLinkButton.setGraphic(new ImageView(this.getApplicationDefaults().symlinkImage));
     openLinkButton.setOnAction(e -> {
-      PlatformUtils.openDirectoryExplorer(symlink.getPath());
+      PlatformUtils.openFromDesktop(symlink.getPath());
     });
     
     openTargetButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openTargetButton.setOnAction(e -> {
-      PlatformUtils.openDirectoryExplorer(symlink.getTargetPath());
+      PlatformUtils.openFromDesktop(symlink.getTargetPath());
     });
 
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));

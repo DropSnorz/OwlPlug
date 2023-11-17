@@ -75,7 +75,7 @@ public class PluginTreeCell extends TreeCell<Object> {
   private void renderPlugin(Plugin plugin) {
     HBox hbox = new HBox(4);
     hbox.setAlignment(Pos.CENTER_LEFT);
-    hbox.getChildren().add(new ImageView(applicationDefaults.getPluginFormatIcon(plugin)));
+    hbox.getChildren().add(new ImageView(applicationDefaults.getPluginFormatIcon(plugin.getFormat())));
     hbox.getChildren().add(new Label(plugin.getName()));
     Circle circle = new Circle(0, 0, 2);
     hbox.getChildren().add(circle);

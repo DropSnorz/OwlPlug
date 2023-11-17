@@ -28,11 +28,7 @@
                     <TabPane fx:id="pluginTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
                         <tabs>
                             <Tab fx:id="treeTabAll" text="All" closable="false" />
-                            <Tab fx:id="treeTabDirectories" text="Directories" closable="false">
-                                <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                </content>
-                            </Tab>
+                            <Tab fx:id="treeTabDirectories" text="Directories" closable="false" />
                         </tabs>
                     </TabPane>
                 </children>

@@ -78,6 +78,17 @@ TextArea .content {
 
 }
 
+.table-view .cell-unknown-link, .table-view .cell-unknown-link:hover  {
+     -fx-background-color: disabled-color;
+}
+
+.table-view .cell-found-link, .table-view .cell-found-link:hover  {
+     -fx-background-color: success-color;
+}
+
+.table-view .cell-missing-link, .table-view .cell-missing-link:hover  {
+     -fx-background-color: danger-color;
+}
 
 .chip-view {
 	-fx-max-height: 45px ;

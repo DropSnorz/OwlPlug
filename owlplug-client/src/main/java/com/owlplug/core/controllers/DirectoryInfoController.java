@@ -78,7 +78,7 @@ public class DirectoryInfoController extends BaseController {
   public void initialize() {
 
     openDirectoryButton.setOnAction(e -> {
-      PlatformUtils.openDirectoryExplorer(pluginDirectory.getPath());
+      PlatformUtils.openFromDesktop(pluginDirectory.getPath());
     });
 
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));

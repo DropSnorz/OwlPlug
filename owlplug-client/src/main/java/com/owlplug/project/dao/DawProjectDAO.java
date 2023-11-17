@@ -15,38 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
-package com.owlplug;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+package com.owlplug.project.dao;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest extends TestCase {
-  /**
-   * Create the test case.
-   *
-   * @param testName name of the test case
-   */
-  public AppTest(String testName) {
-    super(testName);
-  }
+import com.owlplug.project.model.DawProject;
+import org.springframework.data.repository.CrudRepository;
 
-  /** Test case step2.
-   * @return the suite of tests being tested
-   */
-  public static Test suite() {
-    return new TestSuite(AppTest.class);
-  }
+public interface DawProjectDAO extends CrudRepository<DawProject, Long> {
 
-  /**
-   * Empty test.
-   * Rigourous Test :-)
-   */
-  public void testApp() {
-    assertTrue(true);
-  }
 }

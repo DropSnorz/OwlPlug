@@ -109,6 +109,8 @@ public class MainController extends BaseController {
   @FXML
   private Button downloadUpdateButton;
 
+  public static int PLUGINS_TAB_INDEX = 1;
+
   /**
    * FXML initialize method.
    */
@@ -200,6 +202,10 @@ public class MainController extends BaseController {
       pluginService.syncPlugins();
     }
 
+  }
+
+  public void selectMainTab(int index) {
+    this.tabPaneHeader.getSelectionModel().select(index);
   }
 
   /**
