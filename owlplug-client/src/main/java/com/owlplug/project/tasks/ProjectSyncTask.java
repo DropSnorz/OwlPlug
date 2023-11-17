@@ -41,6 +41,7 @@ public class ProjectSyncTask extends AbstractTask {
                          List<String> projectDirectories) {
     this.projectDAO = projectDAO;
     this.projectDirectories = projectDirectories;
+    setName("Sync DAW projects");
   }
 
 

@@ -31,6 +31,7 @@ import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.tasks.plugins.discovery.PluginSyncTaskParameters;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.project.components.ProjectTaskFactory;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -52,6 +53,8 @@ public class CoreTaskFactory extends BaseTaskFactory {
   private SymlinkDAO symlinkDAO;
   @Autowired
   private NativeHostService nativeHostService;
+  @Autowired
+  private ProjectTaskFactory projectTaskFactory;
 
   @Autowired
   private FileStatDAO fileStatDAO;
@@ -96,21 +99,26 @@ public class CoreTaskFactory extends BaseTaskFactory {
       parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
     }
     
-    PluginSyncTask task = new PluginSyncTask(parameters,
+    PluginSyncTask syncTask = new PluginSyncTask(parameters,
         pluginDAO, 
         pluginFootprintDAO, 
         symlinkDAO, 
         nativeHostService);
     
-    task.setOnSucceeded(e -> {
+    syncTask.setOnSucceeded(syncEvent -> {
       notifyListeners(syncPluginsListeners);
-      if (directoryScope != null) {
-        createFileStatSyncTask(directoryScope).scheduleNow();
-      } else {
-        createFileStatSyncTask().scheduleNow();
-      }
+      TaskExecutionContext lookupTask = projectTaskFactory.createLookupTask();
+      lookupTask.getTask().setOnScheduled(lookupEvent -> {
+        if (directoryScope != null) {
+          createFileStatSyncTask(directoryScope).scheduleNow();
+        } else {
+          createFileStatSyncTask().scheduleNow();
+        }
+      });
+      lookupTask.scheduleNow();
     });
-    return create(task);
+
+    return create(syncTask);
   }
 
   public TaskExecutionContext createFileStatSyncTask() {

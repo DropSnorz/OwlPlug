@@ -34,6 +34,7 @@ public class PluginLookupTask extends AbstractTask {
   public PluginLookupTask(DawPluginDAO dawPluginDAO, PluginLookupService pluginLookupService) {
     this.dawPluginDAO = dawPluginDAO;
     this.pluginLookupService = pluginLookupService;
+    setName("Lookup DAW Plugins");
   }
 
 
@@ -43,6 +44,7 @@ public class PluginLookupTask extends AbstractTask {
     this.updateMessage("Starting project plugins lookup task");
     this.updateProgress(0,1);
 
+    pluginLookupService.deleteAllLookups();
     Iterable<DawPlugin> plugins = dawPluginDAO.findAll();
 
     this.setMaxProgress(Iterables.size(plugins));

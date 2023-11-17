@@ -72,4 +72,8 @@ public class PluginLookupService extends BaseService {
 
   }
 
+  public void deleteAllLookups() {
+    pluginLookupDAO.deleteAll();
+  }
+
 }
