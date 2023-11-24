@@ -3,6 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<properties>
+		<springboot.version>3.1.2</springboot.version>
+	</properties>
+	
 	<parent>
 		<groupId>com.owlplug</groupId>
 		<artifactId>owlplug</artifactId>
@@ -33,7 +37,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>3.1.2</version>
+				<version>${springboot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -262,6 +266,7 @@
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${springboot.version}</version>
 					<configuration>
 						<mainClass>com.owlplug.Bootstrap</mainClass>
 						<layout>JAR</layout>
