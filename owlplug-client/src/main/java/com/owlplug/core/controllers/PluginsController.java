@@ -18,10 +18,6 @@
  
 package com.owlplug.core.controllers;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTabPane;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeView;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.CoreTaskFactory;
@@ -45,12 +41,16 @@ import java.util.List;
 import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 
 @Controller
 public class PluginsController extends BaseController {
@@ -71,17 +71,17 @@ public class PluginsController extends BaseController {
   protected CoreTaskFactory taskFactory;
 
   @FXML
-  private JFXButton syncButton;
+  private Button syncButton;
   @FXML
-  private JFXButton exportButton;
+  private Button exportButton;
   @FXML
-  private JFXTreeView<Object> pluginTreeView;
+  private TreeView<Object> pluginTreeView;
   @FXML
-  private JFXTabPane pluginTreeViewTabPane;
+  private TabPane pluginTreeViewTabPane;
   @FXML
-  private JFXTextField searchTextField;
+  private TextField searchTextField;
   @FXML
-  private JFXButton newLinkButton;
+  private Button newLinkButton;
 
   private Iterable<Plugin> pluginList;
   private FileTree pluginTree;
@@ -118,6 +118,8 @@ public class PluginsController extends BaseController {
         nodeInfoController.setNode(selectedItem.getValue());
       }
     });
+
+    pluginTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
 
     // Handles tabPane selection event and toggles displayed treeView
     pluginTreeViewTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
@@ -386,6 +388,30 @@ public class PluginsController extends BaseController {
         }
       }
     }
+  }
+
+  public void selectPluginInTreeById(long id) {
+    List<TreeItem> items = getAllChildrens(pluginTreeView.getRoot());
+
+    for (TreeItem item : items) {
+      if (item.getValue() instanceof Plugin plugin
+          && plugin.getId().equals(id)) {
+        int row = pluginTreeView.getRow(item);
+        pluginTreeView.getSelectionModel().select(row);
+      }
+    }
+
+  }
+
+  private List<TreeItem> getAllChildrens(TreeItem item) {
+    List<TreeItem> items = new ArrayList<>();
+    items.add(item);
+
+    List<TreeItem> childs = new ArrayList<>(item.getChildren());
+    for (TreeItem child : childs) {
+      items.addAll(getAllChildrens(child));
+    }
+    return items;
   }
 
   class FileTree extends HashMap<String, FileTree> {

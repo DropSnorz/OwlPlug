@@ -19,15 +19,11 @@
 package com.owlplug.explore.controllers;
 
 import com.google.common.collect.Iterables;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXMasonryPane;
-import com.jfoenix.controls.JFXPopup;
-import com.jfoenix.controls.JFXPopup.PopupHPosition;
-import com.jfoenix.controls.JFXPopup.PopupVPosition;
-import com.jfoenix.controls.JFXRippler;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
+import com.owlplug.controls.MasonryPane;
+import com.owlplug.controls.Popup;
+import com.owlplug.controls.Rippler;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
@@ -54,6 +50,7 @@ import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -91,17 +88,17 @@ public class ExploreController extends BaseController {
   private ExploreTaskFactory exploreTaskFactory;
 
   @FXML
-  private JFXButton sourcesButton;
+  private Button sourcesButton;
   @FXML
-  private JFXButton platformFilterButton;
+  private Button platformFilterButton;
   @FXML
-  private JFXButton syncSourcesButton;
+  private Button syncSourcesButton;
   @FXML
   private Label resultCounter;
   @FXML
   private VBox masonryWrapper;
   @FXML
-  private JFXMasonryPane masonryPane;
+  private MasonryPane masonryPane;
   @FXML
   private ScrollPane scrollPane;
   @FXML
@@ -143,11 +140,11 @@ public class ExploreController extends BaseController {
 
     });
     
-    targetFilterCheckBoxes.put("win32", new JFXCheckBox("Windows 32 bits"));
-    targetFilterCheckBoxes.put("win64", new JFXCheckBox("Windows 64 bits"));
-    targetFilterCheckBoxes.put("osx", new JFXCheckBox("MacOS (OSX)"));
-    targetFilterCheckBoxes.put("linux32", new JFXCheckBox("Linux 32 bits"));
-    targetFilterCheckBoxes.put("linux64", new JFXCheckBox("Linux 64 bits"));
+    targetFilterCheckBoxes.put("win32", new CheckBox("Windows 32 bits"));
+    targetFilterCheckBoxes.put("win64", new CheckBox("Windows 64 bits"));
+    targetFilterCheckBoxes.put("osx", new CheckBox("MacOS (OSX)"));
+    targetFilterCheckBoxes.put("linux32", new CheckBox("Linux 32 bits"));
+    targetFilterCheckBoxes.put("linux64", new CheckBox("Linux 64 bits"));
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
       entry.getValue().setSelected(false);
       entry.getValue().setOnAction(e -> {
@@ -166,8 +163,8 @@ public class ExploreController extends BaseController {
     }
 
     platformFilterButton.setOnAction(e -> {
-      JFXPopup popup = new JFXPopup(vbx);
-      popup.show(platformFilterButton, PopupVPosition.TOP, PopupHPosition.RIGHT);
+      Popup popup = new Popup(vbx);
+      popup.show(platformFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
     });
 
     syncSourcesButton.setOnAction(e -> {
@@ -264,7 +261,7 @@ public class ExploreController extends BaseController {
 
     if (Iterables.size(loadedPackagePartitions) > displayedPartitions) {
       for (RemotePackage remotePackage : Iterables.get(loadedPackagePartitions, displayedPartitions)) {
-        JFXRippler rippler = new JFXRippler(packageBlocViewBuilder.build(remotePackage));
+        Rippler rippler = new Rippler(packageBlocViewBuilder.build(remotePackage));
         rippler.setOnMouseClicked(e -> {
           if (e.getButton().equals(MouseButton.PRIMARY)) {
             selectPackage(remotePackage);
@@ -387,20 +384,20 @@ public class ExploreController extends BaseController {
           FileUtils.sanitizeFileName(bundle.getRemotePackage().getName()));
       // If directory exists, asks the user for overwrite permission
       if (subSelectedDirectory.exists()) {
-        JFXDialog dialog = this.getDialogManager().newDialog();
+        Dialog dialog = this.getDialogManager().newDialog();
 
-        JFXDialogLayout layout = new JFXDialogLayout();
+        DialogLayout layout = new DialogLayout();
 
         layout.setHeading(new Label("Remove plugin"));
         layout.setBody(new Label("A previous installation of " + bundle.getRemotePackage().getName()
             + " exists. Do you want to overwrite it ? \nOnly files in conflict will be replaced."));
 
-        JFXButton cancelButton = new JFXButton("No, do nothing");
+        Button cancelButton = new Button("No, do nothing");
         cancelButton.setOnAction(cancelEvent -> {
           dialog.close();
         });
 
-        JFXButton overwriteButton = new JFXButton("Yes, overwrite");
+        Button overwriteButton = new Button("Yes, overwrite");
         overwriteButton.setOnAction(removeEvent -> {
           dialog.close();
           exploreTaskFactory.createBundleInstallTask(bundle, subSelectedDirectory).schedule();

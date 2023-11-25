@@ -18,7 +18,6 @@
  
 package com.owlplug.explore.controllers;
 
-import com.jfoenix.controls.JFXButton;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.model.PluginType;
@@ -31,6 +30,7 @@ import com.owlplug.explore.ui.PackageSourceBadgeView;
 import com.owlplug.explore.ui.ProductBundlesView;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -61,17 +61,17 @@ public class PackageInfoController extends BaseController {
   @FXML
   private Pane screenshotBackgroundPane;
   @FXML
-  private JFXButton closeButton;
+  private Button closeButton;
   @FXML
   private Label nameLabel;
   @FXML
   private Label remoteSourceLabel;
   @FXML
-  private JFXButton donateButton;
+  private Button donateButton;
   @FXML
-  private JFXButton browsePageButton;
+  private Button browsePageButton;
   @FXML
-  private JFXButton installButton;
+  private Button installButton;
   @FXML
   private Label creatorLabel;
   @FXML
@@ -195,7 +195,7 @@ public class PackageInfoController extends BaseController {
     tagContainer.getChildren().clear();
     for (PackageTag tag : remotePackage.getTags()) {
       Node chip = new FakeChip(tag.getName());
-      chip.getStyleClass().add("jfx-chip");
+      chip.getStyleClass().add("chip");
       tagContainer.getChildren().add(chip);
     }
 

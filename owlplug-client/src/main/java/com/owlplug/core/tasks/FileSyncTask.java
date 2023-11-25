@@ -38,11 +38,13 @@ public class FileSyncTask extends AbstractTask {
   public FileSyncTask(FileStatDAO fileStatDAO, String directoryPath) {
     this.fileStatDAO = fileStatDAO;
     directories = Arrays.asList(directoryPath);
+    setName("Sync files metrics");
   }
 
   public FileSyncTask(FileStatDAO fileStatDAO, List<String> directories) {
     this.fileStatDAO = fileStatDAO;
     this.directories = directories;
+    setName("Sync files metrics");
   }
 
 

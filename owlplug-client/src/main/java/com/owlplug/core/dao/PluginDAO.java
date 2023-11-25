@@ -19,11 +19,34 @@
 package com.owlplug.core.dao;
 
 import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginFormat;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import java.util.List;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface PluginDAO extends CrudRepository<Plugin, Long> {
+public interface PluginDAO extends CrudRepository<Plugin, Long>, JpaSpecificationExecutor<Plugin> {
+
+  static Specification<Plugin> nameContains(String name) {
+    return (plugin, cq, cb) -> cb.like(cb.lower(plugin.get("name")), "%" + name.toLowerCase() + "%");
+  }
+
+  static Specification<Plugin> hasFormat(PluginFormat format) {
+    return (plugin, cq, cb) -> cb.equal(plugin.get("format"), format);
+  }
+
+  static Specification<Plugin> hasComponentName(String name) {
+    return (plugin, cq, cb) -> {
+      Join<Object, Object> component = (Join<Object, Object>) plugin.fetch("components", JoinType.INNER);
+      return cb.equal(cb.lower(component.get("name")), name.toLowerCase());
+
+    };
+  }
+
+
 
   Plugin findByPath(String path);
   

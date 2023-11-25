@@ -27,6 +27,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 public class PackageSourceBadgeView extends HBox {
 
@@ -41,13 +42,11 @@ public class PackageSourceBadgeView extends HBox {
                                 boolean isRoundBadge) {
     super();
     this.isRoundBadge = isRoundBadge;
-
     if (remoteSource.getUrl() != null
             && remoteSource.getUrl().startsWith("https://registry.owlplug.com/registry")) {
       String tooltipText = "Official OwlPlug Registry\nPackages content and integrity are verified";
       createContent(applicationDefaults.verifiedSourceImage, applicationDefaults.owlplugLogoSmall, tooltipText);
-    }
-    if (remoteSource.getUrl() != null
+    } else if (remoteSource.getUrl() != null
             && remoteSource.getUrl().startsWith("https://owlplug.github.io/owlplug-studiorack-registry/registry")) {
       String tooltipText = "Studiorack Registry";
       createContent(applicationDefaults.suggestedSourceImage, applicationDefaults.studiorackLogoSmall, tooltipText);
@@ -63,16 +62,16 @@ public class PackageSourceBadgeView extends HBox {
       this.setEffect(new DropShadow());
     }
     this.setAlignment(Pos.CENTER);
-    Label headerLabel = new Label();
-    headerLabel.setGraphic(new ImageView(checkIcon));
-    this.getChildren().add(headerLabel);
+    ImageView checkImage  = new ImageView(checkIcon);
+    checkImage.setPreserveRatio(true);
+    checkImage.setFitHeight(16);
+    Tooltip.install(checkImage, new Tooltip(tooltip));
+    this.getChildren().add(checkImage);
 
-    headerLabel.setTooltip(new Tooltip(tooltip));
-
-    ImageView owlplugLogo = new ImageView(logoIcon);
-    owlplugLogo.setPreserveRatio(true);
-    owlplugLogo.setFitHeight(16);
-    this.getChildren().add(owlplugLogo);
+    ImageView logo = new ImageView(logoIcon);
+    logo.setPreserveRatio(true);
+    logo.setFitHeight(16);
+    this.getChildren().add(logo);
 
   }
 

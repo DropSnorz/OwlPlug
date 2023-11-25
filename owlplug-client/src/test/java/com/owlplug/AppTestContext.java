@@ -22,7 +22,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import java.io.File;
 import java.util.prefs.Preferences;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,7 +33,7 @@ public class AppTestContext {
   @MockBean
   protected Preferences preferences;
 
-  @Before
+  @BeforeAll
   public void setUp() {
 
     ClassLoader classLoader = getClass().getClassLoader();

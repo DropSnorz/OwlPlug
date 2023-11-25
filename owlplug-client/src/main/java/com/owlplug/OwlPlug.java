@@ -18,7 +18,7 @@
 
 package com.owlplug;
 
-import com.jfoenix.assets.JFoenixResources;
+import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
 import java.beans.PropertyVetoException;
@@ -30,6 +30,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javax.sql.DataSource;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
@@ -106,11 +108,12 @@ public class OwlPlug extends Application {
     double height = 800;
 
     Scene scene = new Scene(rootNode, width, height);
-    String fontsCss = JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm();
-    scene.getStylesheets().add(fontsCss);
+    JMetro metroTheme = new JMetro(Style.DARK);
+    metroTheme.setScene(scene);
+    String owlplugControlsCss = OwlPlugControlsResources.load("/css/owlplug-controls.css").toExternalForm();
+    metroTheme.getOverridingStylesheets().add(owlplugControlsCss);
     String owlplugCss = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
-    scene.getStylesheets().add(owlplugCss);
-
+    metroTheme.getOverridingStylesheets().add(owlplugCss);
     primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
 

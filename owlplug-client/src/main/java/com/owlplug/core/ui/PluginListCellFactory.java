@@ -18,7 +18,6 @@
  
 package com.owlplug.core.ui;
 
-import com.jfoenix.controls.JFXListCell;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.Plugin;
 import javafx.scene.control.ListCell;
@@ -36,8 +35,8 @@ public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCel
   }
 
   @Override
-  public JFXListCell<Plugin> call(ListView<Plugin> arg0) {
-    return new JFXListCell<Plugin>() {
+  public ListCell<Plugin> call(ListView<Plugin> arg0) {
+    return new ListCell<Plugin>() {
       private ImageView imageView = new ImageView();
 
       @Override
@@ -47,7 +46,7 @@ public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCel
           setText(null);
           setGraphic(null);
         } else {
-          imageView.setImage(applicationDefaults.getPluginFormatIcon(plugin));
+          imageView.setImage(applicationDefaults.getPluginFormatIcon(plugin.getFormat()));
           setText(plugin.getName());
           setGraphic(imageView);
         }

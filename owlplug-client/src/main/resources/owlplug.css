@@ -5,8 +5,8 @@
 
 .root{
     -fx-font-family: "Roboto";
-	card-pane-darkshade-color: rgb(50,50,50);
-	card-pane-color: rgb(66,66,66);
+	card-pane-darkshade-color: rgb(37,37,37);
+	card-pane-color: rgb(46,46,46);
 	card-pane-lightshade-color: rgb(96,96,96);
 	
 	disabled-color: rgb(160,160,160);
@@ -25,22 +25,9 @@
 	-fx-background-color: linear-gradient(to top, #c79081 0%, #dfa579 100%);
 }
 
-
-JFXDialog{
-	-fx-background-color: rgba(0,0,0,0.5);
-}
-JFXDialog Label{
-	-fx-text-fill: text-color;
-}
-
-.jfx-dialog .jfx-text-field {
-	-fx-prompt-text-fill: rgb(140, 140, 140);
-}
-
-.jfx-dialog-overlay-pane > StackPane {
+.dialog-overlay-pane > StackPane {
     -fx-background-color: card-pane-color;
 }
-
 
 Label{ 
  	-fx-text-fill: text-color;
@@ -51,9 +38,7 @@ Label{
 .label-disabled{
 	-fx-text-fill: disabled-color;
 }
-.label-dark{
-	-fx-text-fill: rgb(40,40,40);
-}
+
 .label-emphase {
 	-fx-text-fill: text-emphase-color;
 }
@@ -81,11 +66,6 @@ Text{
 .text-danger{
 	-fx-fill: disabled-color;	
 }
-JFXTextField{
-	-fx-text-fill: text-color;
-	-jfx-focus-color: theme-secondary-color;
-	-fx-prompt-text-fill: prompt-text-color;
-}
 
 TextArea {
     -fx-text-fill: text-color;
@@ -98,31 +78,43 @@ TextArea .content {
 
 }
 
+.table-view .cell-unknown-link, .table-view .cell-unknown-link:hover  {
+     -fx-background-color: disabled-color;
+}
 
-.jfx-chip-view {
+.table-view .cell-found-link, .table-view .cell-found-link:hover  {
+     -fx-background-color: success-color;
+}
+
+.table-view .cell-missing-link, .table-view .cell-missing-link:hover  {
+     -fx-background-color: danger-color;
+}
+
+.chip-view {
 	-fx-max-height: 45px ;
 }
-.jfx-chip-view .chips-pane .text-area {
+.chip-view .chips-pane .text-area {
 	-fx-prompt-text-fill: prompt-text-color;
 	-fx-pref-height: 32px;
 	-fx-height: 32px;
 	-fx-max-height: 32px;
 }
-.jfx-chip-view .jfx-chip Label {
+
+.chip Button {
+    -fx-background-color: transparent;
+    -fx-max-height: 20px;
+    -fx-max-width: 20px;
     -fx-text-fill: black;
+    -fx-border-width: 0px;
 }
-.chip-brown {
-	-fx-background-color: #b2675e;
+.chip Button:pressed {
+    -fx-background-color: transparent;
+    -fx-max-height: 20px;
+    -fx-max-width: 20px;
+    -fx-text-fill: black;
+    -fx-border-width: 0px;
 }
-.chip-red {
-	-fx-background-color: #A1887F;
-}
-.chip-green {
-	-fx-background-color: #C5E1A5;
-}
-.chip-blue {
-	-fx-background-color: #657899
-}
+
 .chip-label{
     -fx-font-family: "Roboto Medium";
     -fx-font-size: 12.0;
@@ -134,15 +126,29 @@ TextArea .content {
     -fx-spacing: 8;
     -fx-text-fill: black;
 }
-.chip-label Label {
+
+.chip-view .chip Label {
     -fx-text-fill: black;
 }
 
-
-JFXButton{
-	-fx-text-fill: text-color;
-	-fx-background-color: rgba(0,0,0,0.1);
+/* Used for FakeChip rendering outside of a ChipView */
+.chip Label {
+    -fx-text-fill: black;
 }
+
+.chip-view .chip-brown {
+	-fx-background-color: #b2675e;
+}
+.chip-view .chip-red {
+	-fx-background-color: #A1887F;
+}
+.chip-view .chip-green {
+	-fx-background-color: #C5E1A5;
+}
+.chip-view .chip-blue {
+	-fx-background-color: #657899
+}
+
 .button-danger{
 	-fx-background-color: danger-color;
 	
@@ -196,15 +202,10 @@ JFXButton{
 	-fx-text-fill: disabled-color;
 }
 
-
-JFXToggleButton{
-	-fx-text-fill: text-color;
+.list-view {
+    list_view_background_color: card-pane-color;
 }
 
-
-JFXComboBox{
-	-jfx-focus-color: theme-secondary-color;
-}
 .combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
     -fx-background-color: card-pane-color;
     -fx-text-fill: white;
@@ -220,79 +221,24 @@ JFXComboBox{
 	-fx-prompt-text-fill: transparent;
 }
 
-
-JFXCheckBox {
-     -fx-text-fill: text-color; 
-}
-JFXCheckBox .box {
-     -fx-border-color: white;
-}
-JFXCheckBox:selected .box{
-	-fx-border-color: transparent;
-}
- 
- 
-JFXTreeView{
-	-fx-background-color:card-pane-color;
-	-fx-text-fill: text-color;
-	-fx-border-color: transparent;
-	-fx-focus-color: transparent;
-	-fx-faint-focus-color: transparent;
-	-fx-background-insets: 0, 1;
-    -fx-padding: 1;
-}
-JFXTreeView:focused{
-	-fx-border-color: transparent;
-	-fx-focus-color: transparent;
-	-fx-faint-focus-color: transparent;
-	
-}
-
-.tree-view, .tree-cell {
-    -fx-background-color: card-pane-color;
-    -fx-text-fill: text-color;
-}
-.tree-cell > .tree-disclosure-node > .arrow  {
-    -fx-background-color: white;
-}
-.tree-cell .selection-bar {
-    -fx-background-color: theme-primary-color;
-}
-.jfx-tab-pane *.tab-header-background{
-	-fx-background-color: card-pane-color;
-}
-.jfx-tab-pane .tab-selected-line {
-    -fx-background-color: theme-primary-color;
-}
-
 .no-header-tab-pane {
     -fx-tab-max-height: 0;
 } 
 .no-header-tab-pane > .tab-header-area {
     visibility: hidden;
 }
+
+.small-tab-pane-container {
+  -fx-background-color: card-pane-color;
+}
+
 .small-tab-pane *.tab *.tab-label{
 	-fx-font-size: 15px;
 	-fx-font-weight: normal;
 }
 
-.jfx-drawer-side-pane {
+.drawer-side-pane {
     -fx-background-color: card-pane-color;
-}
-.menu-item:hover{
-	-fx-background-color: card-pane-lightshade-color;
-}
-
-.list-view {
-	-fx-background-color: card-pane-color;
-	-fx-text-fill: text-color;
-}
-.list-view .list-cell {
-	-fx-background-color: rgb(56,56,56);
-	-fx-text-fill: text-color;
-}
-.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:focused {
-    -fx-background-color: rgb(52,52,52);
 }
 
 .autocomplete-list {
@@ -303,58 +249,31 @@ JFXTreeView:focused{
 	-fx-text-fill: text-color;
 }
 
-
-.jfx-rippler {
-    -jfx-rippler-fill: theme-secondary-color;
+/* ControlsFx Autocomplete Popup */
+.auto-complete-popup > .list-view {
+	-fx-background-color: card-pane-color;
 }
 
-
-.jfx-popup,
-.jfx-popup .jfx-popup-container,
-.jfx-popup .jfx-list-view{
+.popup,
+.popup .popup-container,
+.popup .list-view{
     -fx-background-color:card-pane-color;
-}
-
-JFXProgressBar {
-    -fx-skin: "com.owlplug.core.ui.skins.OwlPlugProgressBarSkin"
 }
 
 .progress-bar-error > .bar {
     -fx-background-color: red;
 }
 
-.progress-bar-link .bar {
-	-fx-background-color: rgb(143,143,143);
-}
-
-.progress-bar-link .track {
-	-fx-background-color: card-pane-color;
+.progress-bar-link {
+	dot_color: rgb(143,143,143);
 }
 
 ProgressIndicator{
 	-fx-progress-color: theme-primary-color;
 }
-.jfx-spinner .arc {
-    -fx-stroke: theme-primary-color;
-}
-
-
-.jfx-snackbar-content {
-    -fx-background-color: card-pane-color;
-}
-.jfx-snackbar-toast {
-    -fx-text-fill: text-color;   
-}
-
 
 .context-menu {
   -fx-background-color: card-pane-color;
-  -fx-text-fill: text-color;
-}
-.context-menu .menu-item:focused {
-  -fx-background-color: card-pane-lightshade-color;
-}
-.context-menu .menu-item .label {
   -fx-text-fill: text-color;
 }
 
@@ -369,16 +288,17 @@ ProgressIndicator{
 .header {
 	-fx-background-color: card-pane-color;
 }
-.header .combobox{
-	-fx-background-color:card-pane-color;
+
+.header .combo-box-base {
+	-fx-background-color: card-pane-color;
 	-fx-background-radius: 0;
 	-fx-border-radius: 0;
 	-fx-text-fill: text-color;
 }
 
 .pane-card {
-	-fx-background-color: card-pane-color;
 	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+	-fx-background-color: card-pane-color;
 	-fx-padding: 10,10,10,10;
 }
 .pane-card .card-title {
@@ -392,11 +312,6 @@ ProgressIndicator{
 	-fx-font-weight: bold;
 	-fx-text-fill: disabled-color;
 }
-
-.pane-card .jfx-text-field {
-	-fx-prompt-text-fill: rgb(140, 140, 140);
-}
-
 
 .package-bloc-title {
 	-fx-background-color: rgba(0,0,0, 0.85);
@@ -442,15 +357,6 @@ ProgressIndicator{
 	-fx-padding:10,0,10,0;
 }
 
-#pluginTreeView {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-}
-
-#pluginTreeViewTabPane {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-}
-
-
 /****************************************************************
   JavaFx Charts theme
 ****************************************************************/
@@ -472,8 +378,20 @@ ProgressIndicator{
     -fx-background-color: card-pane-color;
 }
 
+.chart-legend > .label {
+    -fx-text-fill: text-color;
+}
+
+.chart-pie-label {
+    -fx-fill: text-color;
+}
+
 .doughnut-inner-circle {
     -fx-fill: card-pane-color;
+}
+
+.preloader .progress-bar {
+    dot_color: disabled-color;
 }
 
 /****************************************************************
@@ -481,102 +399,12 @@ ProgressIndicator{
  * Utilities
  * 
  * **************************************************************/
- 
+
+ .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+ }
+
  .no-padding {
  	-fx-padding: 0;
  }
 
-/****************************************************************
- 
-  ScrollBar Skin | inspired by farrukhobaid work
- 
-****************************************************************/
-.scroll-pane{
- -fx-background-color: transparent;
-}
-.scroll-pane > .viewport {
-   -fx-background-color: transparent;
-}
-.scroll-bar{
- -fx-background-color: transparent;
- -fx-background-radius: 1em;
-}
-.scroll-bar:horizontal .track,
-.scroll-bar:vertical .track {
- -fx-background-color: transparent;
- -fx-border-color:transparent;
- -fx-background-radius: 1em;
-}
-.scroll-bar:vertical .track-background,
-.scroll-bar:horizontal .track-background {
- -fx-background-color: transparent;
- -fx-background-insets: 0;
- -fx-background-radius: 1em;
-}
-.scroll-bar:horizontal .thumb {
- -fx-background-color: rgb(211,211,211);
- -fx-background-insets: 4 0 4 0;
- -fx-background-radius: 2px;
-}
-.scroll-bar:vertical .thumb {
- -fx-background-color: rgb(211,211,211);
- -fx-background-insets: 0 4 0 4;
- -fx-background-radius: 2px;
-}
-.scroll-bar:horizontal .thumb:hover,
-.scroll-bar:vertical .thumb:hover {
- -fx-background-color: rgb(231,231,231);
-}
-.scroll-bar:horizontal .thumb:pressed,
-.scroll-bar:vertical .thumb:pressed {
- -fx-background-color: rgb(250,250,250);
-}
-.scroll-bar:vertical .increment-button, .scroll-bar:vertical .decrement-button {
- -fx-background-color:transparent;
- -fx-background-radius: 1em;
- -fx-padding: 5;
-}
-.scroll-bar:horizontal .increment-button, .scroll-bar:horizontal .decrement-button {
- -fx-background-color:transparent;
- -fx-background-radius: 1em;
- -fx-padding: 5;
-}
-.scroll-bar:horizontal .increment-arrow {
- -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
- -fx-background-color: rgb(211,211,211);
- -fx-padding: 0.25em;
- -fx-rotate: -90;
-}
-.scroll-bar:vertical .increment-arrow {
- -fx-background-color: rgb(211,211,211);
- -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
- -fx-padding: 0.25em;
- -fx-rotate: 0;
-}
-.scroll-bar:horizontal .decrement-arrow {
- -fx-background-color: rgb(211,211,211);
- -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
- -fx-padding: 0.25em;
- -fx-rotate: 90;
-}
-.scroll-bar:vertical .decrement-arrow {
- -fx-background-color: rgb(211,211,211);
- -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
- -fx-padding: 0.25em;
- -fx-rotate: -180;
-}
-
-.scroll-bar .increment-arrow:pressed{
- -fx-background-color: rgb(250,250,250);
-	
-}
-
-.scroll-bar .decrement-arrow:pressed{
- -fx-background-color: rgb(250,250,250);
-	
-}
-
-.scroll-bar:vertical:focused,
-.scroll-bar:horizontal:focused {
- -fx-background-color: transparent,rgb(96,96,96),rgb(96,96,96);
-}

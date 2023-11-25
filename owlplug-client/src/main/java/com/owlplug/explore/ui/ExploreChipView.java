@@ -18,8 +18,8 @@
  
 package com.owlplug.explore.ui;
 
-import com.jfoenix.controls.JFXChipView;
-import com.jfoenix.controls.JFXDefaultChip;
+import com.owlplug.controls.ChipView;
+import com.owlplug.controls.DefaultChip;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.PluginType;
 import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
@@ -28,16 +28,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import javafx.collections.ListChangeListener;
-import javafx.scene.Node;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.util.StringConverter;
 
-public class ExploreChipView extends JFXChipView<StoreFilterCriteria> {
+public class ExploreChipView extends ChipView<StoreFilterCriteria> {
 
   private ApplicationDefaults applicationDefaults;
   private List<String> pluginCreators;
+
+  private static final String PROMPT_TEXT = "Enter your search query by Name, Authors, Category...";
 
   /**
    * Creates a StoreChipView.
@@ -48,6 +48,7 @@ public class ExploreChipView extends JFXChipView<StoreFilterCriteria> {
     super();
     this.applicationDefaults = applicationDefaults;
     this.pluginCreators = pluginCreators;
+    this.setPromptText(PROMPT_TEXT);
     init();
   }
 
@@ -131,7 +132,7 @@ public class ExploreChipView extends JFXChipView<StoreFilterCriteria> {
       }
     });
 
-    this.setChipFactory((chipView, criteria) -> new JFXDefaultChip<>(chipView, criteria) {
+    this.setChipFactory((chipView, criteria) -> new DefaultChip<>(chipView, criteria) {
       {
         if (getItem().getFilterType() == ExploreFilterCriteriaType.TYPE) {
           root.getStyleClass().add("chip-brown");
@@ -148,9 +149,9 @@ public class ExploreChipView extends JFXChipView<StoreFilterCriteria> {
     this.getChips().addListener((ListChangeListener<StoreFilterCriteria>) change -> {
       // Only display prompt text if any chips is selected
       if (getChips().size() == 0) {
-        displayPromptText();
+        this.setPromptText(PROMPT_TEXT);
       } else {
-        hidePromptText();
+        this.setPromptText("");
       }
     });
 
@@ -169,25 +170,7 @@ public class ExploreChipView extends JFXChipView<StoreFilterCriteria> {
         }
       }
     });
-    
-    displayPromptText();
-  }
-  
 
-  private void displayPromptText() {
-    Node textAreaNode = this.lookup(".text-area");
-    if (textAreaNode instanceof TextArea) {
-      TextArea textArea = (TextArea) textAreaNode;
-      textArea.setPromptText("Enter your search query");
-    }
-  }
-
-  private void hidePromptText() {
-    Node textAreaNode = this.lookup(".text-area");
-    if (textAreaNode instanceof TextArea) {
-      TextArea textArea = (TextArea) textAreaNode;
-      textArea.setPromptText("");
-    }
   }
 
 }

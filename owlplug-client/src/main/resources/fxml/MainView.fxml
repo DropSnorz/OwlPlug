@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXDrawer?>
-<?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,25 +12,32 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ComboBox?>
 
+<?import java.lang.String?>
+<?import com.owlplug.controls.Drawer?>
 <StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.MainController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox styleClass="header">
+            <HBox>
+                <styleClass>
+                    <String fx:value="header" />
+                </styleClass>
                <children>
-                  <JFXTabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
+                  <TabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;" HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
                      <tabs>
-                        <Tab disable="true" text="OwlPlug" />
-                        <Tab text="Plugins" />
-                        <Tab text="Explore" />
-                        <Tab text="Options" />
+                         <Tab disable="true" text="OwlPlug" closable="false" />
+                         <Tab text="Plugins" closable="false" />
+                         <Tab text="Explore" closable="false" />
+                         <Tab text="Projects" closable="false" />
+                         <Tab text="Options" closable="false" />
                      </tabs>
-                  </JFXTabPane>
+                  </TabPane>
                   <HBox fx:id="updatePane" alignment="CENTER_LEFT" prefHeight="45.0" spacing="5.0">
                      <children>
                         <Label text="New OwlPlug version available" />
-                        <JFXButton fx:id="downloadUpdateButton" text="Download">
+                        <Button fx:id="downloadUpdateButton" text="Download">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -40,22 +45,22 @@
                                  </image>
                               </ImageView>
                            </graphic>
-                        </JFXButton>
+                        </Button>
                      </children>
                      <padding>
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </HBox>
-                  <JFXComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts" />
+                  <ComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts" />
                </children>
             </HBox>
-            <JFXDrawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <Drawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <content>
             		<BorderPane fx:id="mainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0">
             			<center>
                         <VBox fx:id="contentPanePlaceholder">
                            <children>
-            						<JFXTabPane fx:id="tabPaneContent" prefHeight="100.0" prefWidth="441.0" styleClass="no-header-tab-pane" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            						<TabPane fx:id="tabPaneContent" prefHeight="100.0" prefWidth="441.0" styleClass="no-header-tab-pane" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
             							<tabs>
             								<Tab closable="false" disable="true" text="OwlPlug">
             									<content>
@@ -72,23 +77,28 @@
             										<fx:include fx:id="exploreView" source="ExploreView.fxml" />
             									</content>
             								</Tab>
+                                            <Tab closable="false" text="Projects">
+                                                <content>
+                                                    <fx:include fx:id="projectView" source="ProjectsView.fxml" />
+                                                </content>
+                                            </Tab>
             								<Tab closable="false" text="Options">
             									<content>
             										<fx:include fx:id="optionView" source="OptionsView.fxml" />
             									</content>
             								</Tab>
             							</tabs>
-            						</JFXTabPane>
+            						</TabPane>
                            </children>
                         </VBox>
             			</center>
             
-                                                            			<bottom>
+                        <bottom>
             				<fx:include fx:id="taskBarView" source="TaskBarView.fxml" />
             			</bottom>
             		</BorderPane>
                </content>
-            </JFXDrawer>
+            </Drawer>
          </children>
       </VBox>
    </children>

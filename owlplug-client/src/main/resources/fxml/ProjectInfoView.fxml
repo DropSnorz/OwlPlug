@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.project.controllers.ProjectInfoController">
+    <children>
+        <VBox fx:id="projectInfoPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
+            <children>
+                <StackPane maxHeight="180.0" prefHeight="180.0" prefWidth="500.0">
+                    <children>
+                        <VBox alignment="CENTER_LEFT" spacing="5.0">
+                            <children>
+                                <Label fx:id="projectNameLabel" styleClass="heading-title" text="UNKNOWN" />
+                                <Label fx:id="projectAppLabel" text="Project App">
+                                    <graphic>
+                                        <ImageView fx:id="projectAppImageView" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
+                                    </graphic>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets />
+                            </opaqueInsets>
+                            <padding>
+                                <Insets left="20.0" />
+                            </padding>
+                        </VBox>
+                    </children>
+                </StackPane>
+                <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="card-title">
+                    <children>
+                        <Label text="General" />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Button fx:id="projectOpenButton" layoutX="353.0" layoutY="10.0" text="Open Project">
+                            <graphic>
+                                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../icons/share-white-16.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic></Button>
+                    </children>
+                </HBox>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="230.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="230.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TextFlow prefWidth="200.0">
+                            <children>
+                                <Label text="Application : " />
+                                <Label fx:id="appFullNameLabel" styleClass="label-emphase" text="UNKNOWN" />
+                            </children>
+                        </TextFlow>
+                        <TextFlow prefWidth="200.0" GridPane.columnIndex="1">
+                            <children>
+                                <Label text="Format Version: " />
+                                <Label fx:id="projectFormatVersionLabel" styleClass="label-emphase" text="UNKNOWN" />
+                            </children>
+                        </TextFlow>
+                        <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <children>
+                                <Label text="Last Modified: " />
+                                <Label fx:id="projectLastModifiedLabel" styleClass="label-emphase" text="UNKNOWN" />
+                            </children>
+                        </TextFlow>
+                        <TextFlow prefWidth="200.0" GridPane.rowIndex="1">
+                            <children>
+                                <Label text="Created: " />
+                                <Label fx:id="projectCreatedLabel" styleClass="label-emphase" text="UNKNOWN" />
+                            </children>
+                        </TextFlow>
+                        <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                            <children>
+                                <Label text="Plugins detected: " />
+                                <Label fx:id="projectPluginsFoundLabel" styleClass="label-emphase" text="UNKNOWN" />
+                            </children>
+                        </TextFlow>
+                        <HBox alignment="CENTER_LEFT" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
+                            <children>
+                                <Label minHeight="-Infinity" minWidth="-Infinity" text="Path: " />
+                                <Label fx:id="projectPathLabel" styleClass="label-emphase" text="UNKNOWN" textOverrun="CENTER_ELLIPSIS" wrapText="true" />
+                                <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0" styleClass="label-emphase">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/folder-grey-16.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Button>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="14.0" />
+                    </padding>
+                </GridPane>
+                <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
+                    <children>
+                        <Label text="Plugins" />
+                    </children>
+                </HBox>
+            <TableView fx:id="pluginTable" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                  <TableColumn fx:id="pluginTableFormatColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0" text="Format" />
+                  <TableColumn fx:id="pluginTableNameColumn" editable="false" maxWidth="250.0" minWidth="200.0" prefWidth="-1.0" text="Name" />
+                  <TableColumn fx:id="pluginTableStatusColumn" editable="false" maxWidth="150.0" minWidth="100.0" prefWidth="-1.0" resizable="false" text="Status" />
+                  <TableColumn fx:id="pluginTableLinkColumn" editable="false" resizable="false" text="Link" />
+              </columns>
+            </TableView>
+            </children>
+            <styleClass>
+                <String fx:value="pane-card" />
+                <String fx:value="no-padding" />
+            </styleClass>
+        </VBox>
+    </children>
+</AnchorPane>

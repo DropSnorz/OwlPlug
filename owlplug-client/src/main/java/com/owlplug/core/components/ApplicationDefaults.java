@@ -18,13 +18,13 @@
 
 package com.owlplug.core.components;
 
-import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.model.platform.RuntimePlatformResolver;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.project.model.DawApplication;
 import java.io.File;
 import javafx.scene.image.Image;
 import org.slf4j.Logger;
@@ -75,7 +75,13 @@ public class ApplicationDefaults {
   public final Image studiorackLogoSmall = new Image(
       ApplicationDefaults.class.getResourceAsStream("/media/studiorack-logo-16.png"));
 
+  public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
 
+  public final Image errorIconImage = new Image(
+          getClass().getResourceAsStream("/icons/error-red-16.png"));
+
+  public final Image linkIconImage = new Image(
+          getClass().getResourceAsStream("/icons/link-grey-16.png"));
   public final Image pluginPlaceholderImage = new Image(
       getClass().getResourceAsStream("/media/plugin-placeholder.png"));
   // CHECKSTYLE:ON
@@ -103,6 +109,7 @@ public class ApplicationDefaults {
   public static final String FIRST_LAUNCH_KEY = "FIRST_LAUNCH_KEY";
   public static final String APPLICATION_STATE_KEY = "APPLICATION_STATE_KEY";
   public static final String SHOW_DIALOG_DISABLE_PLUGIN_KEY = "SHOW_DIALOG_DISABLE_PLUGIN_KEY";
+  public static final String PROJECT_DIRECTORY_KEY = "PROJECT_DIRECTORY_KEY";
 
   /**
    * Creates a new ApplicationDefaults.
@@ -122,12 +129,12 @@ public class ApplicationDefaults {
   /**
    * Returns plugin icon based on plugin format.
    * 
-   * @param plugin - plugin
+   * @param format - plugin format
    * @return Associated icon
    */
-  public Image getPluginFormatIcon(Plugin plugin) {
+  public Image getPluginFormatIcon(PluginFormat format) {
 
-    switch (plugin.getFormat()) {
+    switch (format) {
     case VST2:
       return vst2Image;
     case VST3:
@@ -157,6 +164,13 @@ public class ApplicationDefaults {
     default:
       return null;
     }
+  }
+
+  public Image getDAWApplicationIcon(DawApplication application) {
+    return switch (application) {
+      case ABLETON -> abletonLogoImage;
+      default -> pluginComponentImage;
+    };
   }
 
   public String getDefaultPluginPath(PluginFormat format) {

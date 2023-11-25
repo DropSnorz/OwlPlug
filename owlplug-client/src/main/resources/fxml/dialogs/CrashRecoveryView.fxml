@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -35,8 +34,8 @@
             <Label text="You can try to change the scanner implementation or disable native discovery globally in OwlPlug Options." wrapText="true" />
             <HBox>
                <children>
-                  <JFXCheckBox fx:id="nativeDiscoveryCheckbox" text="Use Native Discovery (Global)" />
-                  <JFXComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="SOMETIMES" />
+                  <CheckBox fx:id="nativeDiscoveryCheckbox" text="Use Native Discovery (Global)" />
+                  <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="SOMETIMES" />
                </children>
             </HBox>
          </children>
@@ -58,7 +57,7 @@
       </HBox>
       <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <JFXButton fx:id="closeButton" text="Close" />
+            <Button fx:id="closeButton" text="Close" />
          </children>
       </HBox>
    </children>

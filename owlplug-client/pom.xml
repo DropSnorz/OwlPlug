@@ -3,10 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<properties>
+		<springboot.version>3.1.2</springboot.version>
+	</properties>
+	
 	<parent>
 		<groupId>com.owlplug</groupId>
 		<artifactId>owlplug</artifactId>
-		<version>1.24.0</version>
+		<version>1.25.0</version>
 	</parent>
 
 	<artifactId>owlplug-client</artifactId>
@@ -33,7 +37,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>3.1.2</version>
+				<version>${springboot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -44,7 +48,12 @@
 		<dependency>
 			<groupId>com.owlplug</groupId>
 			<artifactId>owlplug-host</artifactId>
-			<version>1.24.0</version>
+			<version>1.25.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.owlplug</groupId>
+			<artifactId>owlplug-controls</artifactId>
+			<version>1.25.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -90,40 +99,45 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 			<classifier>win</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 			<classifier>linux</classifier>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-graphics</artifactId>
-			<version>19.0.2.1</version>
+			<version>${javafx.version}</version>
 			<classifier>mac</classifier>
 		</dependency>
 		<dependency>
-			<groupId>com.jfoenix</groupId>
-			<artifactId>jfoenix</artifactId>
-			<version>9.0.10</version>
+			<groupId>org.controlsfx</groupId>
+			<artifactId>controlsfx</artifactId>
+			<version>11.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jfxtras</groupId>
+			<artifactId>jmetro</artifactId>
+			<version>11.6.16</version>
 		</dependency>
 
 		<dependency>
@@ -213,12 +227,12 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>1.22</version>
+			<version>1.24.0</version>
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 
@@ -252,13 +266,10 @@
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${springboot.version}</version>
 					<configuration>
 						<mainClass>com.owlplug.Bootstrap</mainClass>
 						<layout>JAR</layout>
-						<!--Arg required to fix illegal reflective access in JFXTextField -->
-						<jvmArguments>
-							--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
-						</jvmArguments>
 					</configuration>
 					<executions>
 						<execution>

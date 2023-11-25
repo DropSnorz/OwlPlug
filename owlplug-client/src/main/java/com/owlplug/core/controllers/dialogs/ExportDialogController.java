@@ -1,7 +1,23 @@
+/* OwlPlug
+ * Copyright (C) 2021 Arthur <dropsnorz@gmail.com>
+ *
+ * This file is part of OwlPlug.
+ *
+ * OwlPlug is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3
+ * as published by the Free Software Foundation.
+ *
+ * OwlPlug is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.owlplug.core.controllers.dialogs;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.serializer.PluginCSVSerializer;
@@ -12,6 +28,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
@@ -31,16 +49,16 @@ public class ExportDialogController extends AbstractDialogController {
   private PluginService pluginService;
 
   @FXML
-  private JFXComboBox<String> exportComboBox;
+  private ComboBox<String> exportComboBox;
   @FXML
   private TextArea exportTextArea;
   @FXML
-  private JFXButton closeButton;
+  private Button closeButton;
   @FXML
-  private JFXButton saveAsButton;
+  private Button saveAsButton;
 
   ExportDialogController() {
-    super(450, 500);
+    super(650, 500);
   }
 
   public void initialize() {

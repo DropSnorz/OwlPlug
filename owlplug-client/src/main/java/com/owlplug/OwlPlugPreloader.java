@@ -18,7 +18,6 @@
  
 package com.owlplug;
 
-import com.jfoenix.assets.JFoenixResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import javafx.application.Preloader;
 import javafx.application.Preloader.StateChangeNotification.Type;
@@ -29,6 +28,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 
 public class OwlPlugPreloader extends Preloader {
 
@@ -42,8 +43,8 @@ public class OwlPlugPreloader extends Preloader {
     Parent root = loader.load();
 
     Scene scene = new Scene(root);
-    String fontsCss = JFoenixResources.load("css/jfoenix-fonts.css").toExternalForm();
-    scene.getStylesheets().add(fontsCss);
+    JMetro jMetro = new JMetro(Style.DARK);
+    jMetro.setScene(scene);
     String owlplugCss = OwlPlugPreloader.class.getResource("/owlplug.css").toExternalForm();
     scene.getStylesheets().add(owlplugCss);
 

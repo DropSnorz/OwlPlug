@@ -18,7 +18,6 @@
 
 package com.owlplug.core.controllers.dialogs;
 
-import com.jfoenix.controls.JFXButton;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +45,11 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
   private LazyViewRegistry lazyViewRegistry;
 
   @FXML
-  private JFXButton addDirectoryButton;
+  private Button addDirectoryButton;
   @FXML
   private ListView<String> directoryListView;
   @FXML
-  private JFXButton closeButton;
+  private Button closeButton;
 
   private final String newDirectoryItem = "[New directory] (double-click to update)";
   private String currentPreferenceKey;

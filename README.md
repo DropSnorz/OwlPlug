@@ -14,7 +14,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e6b8ee875daa4f74b5bf1cc8fee6df63)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DropSnorz/OwlPlug&amp;utm_campaign=Badge_Grade_Dashboard)
 ![Last Pre release](https://img.shields.io/github/release-date/dropsnorz/owlplug.svg)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-%237289DA.svg)](https://discord.gg/nEdHAMB)
-[![Patreon](https://img.shields.io/badge/donate-%E2%99%A5-%23253b80)](https://www.paypal.com/donate?hosted_button_id=7MJGDTQXAPJ22)
+[![Donate](https://img.shields.io/badge/donate-%E2%99%A5-%23253b80)](https://www.paypal.com/donate?hosted_button_id=7MJGDTQXAPJ22)
 
 
 # Overview
@@ -42,7 +42,7 @@ All kinds of feedbacks are greatly welcomed.
 1. Browse binaries from [the release section](http://github.com/dropsnorz/owlplug/releases)
 2. Download and run the OwlPlug installer for your platform
     * `.msi` installer on Windows
-    * `.dmg` file on MacOS
+    * `.dmg` file on macOS
     * `.deb` file on Linux
 3. Run OwlPlug application
 
@@ -63,15 +63,21 @@ winget install owlplug
 
 # Features
 
-## Plugins
+## Plugins discovery
 
 OwlPlug can discover VST2, VST3 and AU Plugins. OwlPlug is compatible with all previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. Additional directories can be configured if your plugin setup is fragmented on the filesystem.
 
 After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
 
-## Links
+## Links creation
 
 A Link allows you to create and manage symlinks across your filesystem and plugin directories. With Links, you can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through a single root plugin directory. For example, you can configure a link named *usb-drive* in `C:/AudioPlugins` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/AudioPlugins/usb-drive`. This feature may be useful for DAW that scans plugins from predefined or limited number directories. On some Windows version, symlinks creation may require admin privileges.
+
+## DAW Projects analysis
+
+OwlPlug can scan DAW projects to extract referenced plugins. Plugins references in project files are compared to plugins installed in configured directories. This way, users can quickly identify missing plugins required to open projects.
+
+The list of compatible DAWs is available in the [documentation](https://github.com/DropSnorz/OwlPlug/wiki/Projects-and-DAW-Support)
 
 ## Explore and download Plugins
 
@@ -95,7 +101,7 @@ Studiorack registry plugins for OwlPlug.
 
 ### How to distribute my plugins on OwlPlug ?
 
-* **(Recomended)** Distribute your plugins using on the official OwlPlug Registry. You can find more information on how to proceed in the [registry github repository](https://github.com/OwlPlug/owlplug-registry).
+* **(Recommended)** Distribute your plugins using on the official OwlPlug Registry. You can find more information on how to proceed in the [registry github repository](https://github.com/OwlPlug/owlplug-registry).
 
 * Setup and host a custom remote source to distribute multiple plugins, following the registry specification.
 
@@ -107,7 +113,7 @@ Studiorack registry plugins for OwlPlug.
 ## Stack
 
 * Spring boot
-* JavaFx & JFoenix
+* JavaFx
 * Hibernate & H2
 * Maven
 * Juce
