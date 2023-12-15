@@ -122,17 +122,17 @@ jobs:
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Windows native Host artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: owlplug-host-win
         path: owlplug-host/src/main/resources
     - name: Install OSX native Host artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: owlplug-host-osx
         path: owlplug-host/src/main/resources
     - name: Install Linux native Host artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: owlplug-host-linux
         path: owlplug-host/src/main/resources
@@ -169,7 +169,7 @@ jobs:
       shell: bash
       id: get-version
     - name: Install Jar artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: owlplug-client-jar
         path: owlplug-client/target
@@ -194,7 +194,7 @@ jobs:
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Jar artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: owlplug-client-jar
         path: owlplug-client/target
@@ -219,7 +219,7 @@ jobs:
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Jar artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: owlplug-client-jar
         path: owlplug-client/target
