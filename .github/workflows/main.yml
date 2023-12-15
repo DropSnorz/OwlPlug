@@ -38,7 +38,7 @@ jobs:
       run: ./build/build-host-win.sh
       shell: bash
     - name: Upload Host Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: owlplug-host-win
         path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}.dll
@@ -69,7 +69,7 @@ jobs:
       run: ./build/build-host-osx.sh
       shell: bash
     - name: Upload Host Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: owlplug-host-osx
         path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}.dylib
@@ -104,7 +104,7 @@ jobs:
     - name: Add version in binary name
       run: mv owlplug-host/src/main/juce/Builds/LinuxMakefile/build/libowlplug-host.so owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}.so
     - name: Upload Host Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: owlplug-host-linux
         path: owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}.so
@@ -150,7 +150,7 @@ jobs:
     - name: Build runnable Jar
       run: cd owlplug-client && mvn -B install spring-boot:repackage -DskipTests
     - name: Upload Jar Build Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: owlplug-client-jar
         path: owlplug-client/target/owlplug-client-${{ env.version }}.jar
@@ -176,7 +176,7 @@ jobs:
     - name: Package installer
       run: cd build && ./package-msi.cmd ${{ env.version }}
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: owlplug-installer-win
         path: build/output/OwlPlug-${{ env.version }}.msi
@@ -201,7 +201,7 @@ jobs:
     - name: Package installer
       run: cd build && ./package-dmg.sh ${{ env.version }}
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: owlplug-installer-osx
         path: build/output/OwlPlug-${{ env.version }}.dmg
@@ -226,7 +226,7 @@ jobs:
     - name: Package installer
       run: cd build && ./package-deb.sh ${{ env.version }}
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: owlplug-installer-linux
         path: build/output/OwlPlug-${{ env.version }}.deb
