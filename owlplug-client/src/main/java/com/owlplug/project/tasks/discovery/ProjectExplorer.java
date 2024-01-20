@@ -16,20 +16,15 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.project.model;
 
-public enum DawApplication {
-  ABLETON("Ableton"),
-  REAPER("Reaper");
-  private String name;
+package com.owlplug.project.tasks.discovery;
 
-  DawApplication(String name) {
-    this.name = name;
-  }
+import com.owlplug.project.model.DawProject;
+import java.io.File;
 
-  public String getName() {
-    return name;
-  }
+public interface ProjectExplorer {
 
+  boolean canExploreFile(File file);
+  DawProject explore(File file) throws ProjectExplorerException;
 
 }

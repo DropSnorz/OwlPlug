@@ -22,6 +22,7 @@ import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.DawPlugin;
+import com.owlplug.project.tasks.discovery.ProjectExplorer;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -51,7 +52,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class AbletonProjectExplorer {
+public class AbletonProjectExplorer implements ProjectExplorer {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 

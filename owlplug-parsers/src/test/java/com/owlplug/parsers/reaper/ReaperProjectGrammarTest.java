@@ -24,11 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,7 +43,9 @@ public class ReaperProjectGrammarTest {
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     ReaperProjectParser parser = new ReaperProjectParser(tokens);
 
-    ParseTree pt = parser.node();
+    ReaperProjectParser.NodeContext pt = parser.node();
+
+    assertEquals("NODE1", pt.NAME().getText());
 
   }
 
@@ -63,6 +62,12 @@ public class ReaperProjectGrammarTest {
     ReaperProjectParser parser = new ReaperProjectParser(tokens);
 
     ParseTree pt = parser.node();
+
+    ParseTreeWalker walker = new ParseTreeWalker();
+    PluginNodeListener pluginListener = new PluginNodeListener();
+    walker.walk(pluginListener, pt);
+
+    assertEquals(2, pluginListener.getReaperPlugins().size());
 
   }
 }

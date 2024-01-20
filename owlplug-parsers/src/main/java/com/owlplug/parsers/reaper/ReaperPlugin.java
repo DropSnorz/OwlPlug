@@ -16,20 +16,36 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.project.model;
 
-public enum DawApplication {
-  ABLETON("Ableton"),
-  REAPER("Reaper");
+package com.owlplug.parsers.reaper;
+
+public class ReaperPlugin {
+
   private String name;
-
-  DawApplication(String name) {
-    this.name = name;
-  }
+  private String filename;
+  private String rawId;
 
   public String getName() {
     return name;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
 
+  public String getFilename() {
+    return filename;
+  }
+
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
+
+  public String getRawId() {
+    return rawId;
+  }
+
+  public void setRawId(String rawId) {
+    this.rawId = rawId;
+  }
 }

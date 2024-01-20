@@ -24,6 +24,7 @@ import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.dao.DawProjectDAO;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
+import com.owlplug.project.tasks.discovery.reaper.ReaperProjectExplorer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,11 +68,16 @@ public class ProjectSyncTask extends AbstractTask {
 
     for (File file : baseFiles) {
       this.commitProgress(1);
-      AbletonProjectExplorer explorer = new AbletonProjectExplorer();
+      AbletonProjectExplorer abletonExplorer = new AbletonProjectExplorer();
+      ReaperProjectExplorer reaperExplorer = new ReaperProjectExplorer();
 
-      if (explorer.canExploreFile(file)) {
-        this.updateMessage("Analyzing file: " + file.getAbsolutePath());
-        DawProject project = explorer.explore(file);
+      if (abletonExplorer.canExploreFile(file)) {
+        this.updateMessage("Analyzing Ableton file: " + file.getAbsolutePath());
+        DawProject project = abletonExplorer.explore(file);
+        projectDAO.save(project);
+      } else if (reaperExplorer.canExploreFile(file)) {
+        this.updateMessage("Analyzing Reaper file: " + file.getAbsolutePath());
+        DawProject project = reaperExplorer.explore(file);
         projectDAO.save(project);
       }
     }

@@ -14,13 +14,14 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <antlr.version>4.11.1</antlr.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.7.1</version>
+            <version>${antlr.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -35,7 +36,7 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.7.1</version>
+                <version>${antlr.version}</version>
                 <executions>
                     <execution>
                         <goals>
