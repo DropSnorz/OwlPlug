@@ -56,6 +56,7 @@ public class ReaperProjectExplorer implements ProjectExplorer {
 
     DawProject project = new DawProject();
     project.setApplication(DawApplication.REAPER);
+    project.setAppFullName("Reaper");
     project.setPath(FileUtils.convertPath(file.getAbsolutePath()));
     project.setName(FilenameUtils.removeExtension(file.getName()));
 
