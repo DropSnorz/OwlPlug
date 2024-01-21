@@ -21,6 +21,8 @@ package com.owlplug.explore.model;
 import com.owlplug.core.model.PluginFormat;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,6 +40,7 @@ public class PackageBundle {
   private String downloadUrl;
 
   private String downloadSha256;
+  @Enumerated(EnumType.STRING)
   private PluginFormat format;
   private String technicalUid;
   private String version;

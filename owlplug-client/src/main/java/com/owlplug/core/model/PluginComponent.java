@@ -20,6 +20,8 @@ package com.owlplug.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,6 +45,7 @@ public class PluginComponent {
   protected String identifier;
   protected String bundleId;
   protected String version;
+  @Enumerated(EnumType.STRING)
   protected PluginType type;
 
   @ManyToOne

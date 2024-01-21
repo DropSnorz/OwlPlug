@@ -55,8 +55,7 @@ public class ReaperProjectExplorer implements ProjectExplorer {
   public DawProject explore(File file) throws ProjectExplorerException {
 
     DawProject project = new DawProject();
-    // TODO: Must be updated to reaper once enumerations are fixed
-    project.setApplication(DawApplication.ABLETON);
+    project.setApplication(DawApplication.REAPER);
     project.setPath(FileUtils.convertPath(file.getAbsolutePath()));
     project.setName(FilenameUtils.removeExtension(file.getName()));
 
