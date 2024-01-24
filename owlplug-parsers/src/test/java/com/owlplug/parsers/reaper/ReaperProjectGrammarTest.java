@@ -43,9 +43,9 @@ public class ReaperProjectGrammarTest {
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     ReaperProjectParser parser = new ReaperProjectParser(tokens);
 
-    ReaperProjectParser.NodeContext pt = parser.node();
+    ReaperProjectParser.RootContext pt = parser.root();
 
-    assertEquals("NODE1", pt.NAME().getText());
+    assertEquals("NODE1", pt.name().getText());
 
   }
 
@@ -61,13 +61,38 @@ public class ReaperProjectGrammarTest {
     CommonTokenStream tokens = new CommonTokenStream(lexer);
     ReaperProjectParser parser = new ReaperProjectParser(tokens);
 
-    ParseTree pt = parser.node();
+    ParseTree pt = parser.root();
 
     ParseTreeWalker walker = new ParseTreeWalker();
     PluginNodeListener pluginListener = new PluginNodeListener();
     walker.walk(pluginListener, pt);
 
     assertEquals(2, pluginListener.getReaperPlugins().size());
+    assertEquals("VST3i: Tunefish4 (Brain Control)", pluginListener.getReaperPlugins().get(0).getName());
+    assertEquals("VSTi: Dexed (Digital Suburban)", pluginListener.getReaperPlugins().get(1).getName());
 
+  }
+
+  @Test
+  public void parseAdvancedReaperFile() throws IOException {
+
+    File file = new File(this.getClass().getClassLoader()
+            .getResource("reaper/advanced.rpp").getFile());
+
+    InputStream is = new FileInputStream(file);
+
+    ReaperProjectLexer lexer = new ReaperProjectLexer(CharStreams.fromStream(is));
+    CommonTokenStream tokens = new CommonTokenStream(lexer);
+    ReaperProjectParser parser = new ReaperProjectParser(tokens);
+
+    ParseTree pt = parser.root();
+
+    ParseTreeWalker walker = new ParseTreeWalker();
+    PluginNodeListener pluginListener = new PluginNodeListener();
+    walker.walk(pluginListener, pt);
+
+    assertEquals(2, pluginListener.getReaperPlugins().size());
+    assertEquals("VST: ReaComp (Cockos)", pluginListener.getReaperPlugins().get(0).getName());
+    assertEquals("VSTi: ReaSynth (Cockos)", pluginListener.getReaperPlugins().get(1).getName());
   }
 }

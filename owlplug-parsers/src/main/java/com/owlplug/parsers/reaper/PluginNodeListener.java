@@ -33,15 +33,25 @@ public class PluginNodeListener implements ReaperProjectListener{
   }
 
   @Override
+  public void enterRoot(ReaperProjectParser.RootContext ctx) {
+
+  }
+
+  @Override
+  public void exitRoot(ReaperProjectParser.RootContext ctx) {
+
+  }
+
+  @Override
   public void enterNode(ReaperProjectParser.NodeContext ctx) {
 
-    if (!ctx.NAME().getText().equals("VST")) {
+    if (!ctx.name().getText().equals("VST")) {
       return;
     }
 
     ReaperPlugin plugin = new ReaperPlugin();
     if (ctx.value().size() > 0) {
-      plugin.setName(ctx.value(0).getText());
+      plugin.setName(ctx.value(0).getText().replaceAll("\"", ""));
     }
     if (ctx.value().size() > 1) {
       plugin.setFilename(ctx.value(1).getText());
@@ -56,6 +66,16 @@ public class PluginNodeListener implements ReaperProjectListener{
 
   @Override
   public void exitNode(ReaperProjectParser.NodeContext ctx) {
+
+  }
+
+  @Override
+  public void enterName(ReaperProjectParser.NameContext ctx) {
+
+  }
+
+  @Override
+  public void exitName(ReaperProjectParser.NameContext ctx) {
 
   }
 
@@ -86,6 +106,16 @@ public class PluginNodeListener implements ReaperProjectListener{
 
   @Override
   public void exitValue(ReaperProjectParser.ValueContext ctx) {
+
+  }
+
+  @Override
+  public void enterProp(ReaperProjectParser.PropContext ctx) {
+
+  }
+
+  @Override
+  public void exitProp(ReaperProjectParser.PropContext ctx) {
 
   }
 

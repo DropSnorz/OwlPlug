@@ -84,7 +84,7 @@ public class ReaperProjectExplorer implements ProjectExplorer {
         dawPlugin.setName(FilenameUtils.removeExtension(reaperPlugin.getFilename()));
         dawPlugin.setPath(reaperPlugin.getFilename());
 
-        if (reaperPlugin.getName().contains("VST3i")) {
+        if (reaperPlugin.getName().contains("VST3")) {
           dawPlugin.setFormat(PluginFormat.VST3);
         } else {
           dawPlugin.setFormat(PluginFormat.VST2);
