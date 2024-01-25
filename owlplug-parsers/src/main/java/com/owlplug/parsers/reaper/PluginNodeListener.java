@@ -24,7 +24,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class PluginNodeListener implements ReaperProjectListener{
+public class PluginNodeListener implements ReaperProjectListener {
 
   private List<ReaperPlugin> reaperPlugins = new ArrayList<>();
 
@@ -34,12 +34,12 @@ public class PluginNodeListener implements ReaperProjectListener{
 
   @Override
   public void enterRoot(ReaperProjectParser.RootContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void exitRoot(ReaperProjectParser.RootContext ctx) {
-
+    // Not implemented
   }
 
   @Override
@@ -66,76 +66,76 @@ public class PluginNodeListener implements ReaperProjectListener{
 
   @Override
   public void exitNode(ReaperProjectParser.NodeContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void enterName(ReaperProjectParser.NameContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void exitName(ReaperProjectParser.NameContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void enterElement(ReaperProjectParser.ElementContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void exitElement(ReaperProjectParser.ElementContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void enterLeaf(ReaperProjectParser.LeafContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void exitLeaf(ReaperProjectParser.LeafContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void enterValue(ReaperProjectParser.ValueContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void exitValue(ReaperProjectParser.ValueContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void enterProp(ReaperProjectParser.PropContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void exitProp(ReaperProjectParser.PropContext ctx) {
-
+    // Not implemented
   }
 
   @Override
   public void visitTerminal(TerminalNode terminalNode) {
-
+    // Not implemented
   }
 
   @Override
   public void visitErrorNode(ErrorNode errorNode) {
-
+    // Not implemented
   }
 
   @Override
   public void enterEveryRule(ParserRuleContext parserRuleContext) {
-
+    // Not implemented
   }
 
   @Override
   public void exitEveryRule(ParserRuleContext parserRuleContext) {
-
+    // Not implemented
   }
 }

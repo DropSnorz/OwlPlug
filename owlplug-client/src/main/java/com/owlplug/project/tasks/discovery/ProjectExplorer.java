@@ -25,6 +25,7 @@ import java.io.File;
 public interface ProjectExplorer {
 
   boolean canExploreFile(File file);
+
   DawProject explore(File file) throws ProjectExplorerException;
 
 }
