@@ -76,6 +76,7 @@ public class ApplicationDefaults {
       ApplicationDefaults.class.getResourceAsStream("/media/studiorack-logo-16.png"));
 
   public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
+  public final Image reaperLogoImage = new Image(getClass().getResourceAsStream("/icons/reaper-white-16.png"));
 
   public final Image errorIconImage = new Image(
           getClass().getResourceAsStream("/icons/error-red-16.png"));
@@ -169,6 +170,7 @@ public class ApplicationDefaults {
   public Image getDAWApplicationIcon(DawApplication application) {
     return switch (application) {
       case ABLETON -> abletonLogoImage;
+      case REAPER -> reaperLogoImage;
       default -> pluginComponentImage;
     };
   }

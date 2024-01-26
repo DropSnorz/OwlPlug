@@ -23,6 +23,8 @@ import com.owlplug.core.model.PluginType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -57,7 +59,9 @@ public class RemotePackage {
   private String version;
   @Column(columnDefinition = "text")
   private String description;
+  @Enumerated(EnumType.STRING)
   private PluginType type;
+  @Enumerated(EnumType.STRING)
   private PluginStage stage;
 
   @ManyToOne
