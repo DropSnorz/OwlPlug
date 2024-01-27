@@ -20,6 +20,7 @@ package com.owlplug.core.tasks;
 
 import java.util.ArrayList;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +100,7 @@ public abstract class AbstractTask extends Task<TaskResult> {
     if (this.isDone()) {
       prefix = "D";
     }
-    if (this.getState().equals(State.FAILED)) {
+    if (this.getState().equals(Worker.State.FAILED)) {
       prefix = "F";
     }
     return prefix + " - " + this.getName();
