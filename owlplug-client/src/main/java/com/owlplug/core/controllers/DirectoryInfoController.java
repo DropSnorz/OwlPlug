@@ -33,6 +33,7 @@ import com.owlplug.core.utils.PlatformUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -41,6 +42,10 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -56,9 +61,9 @@ public class DirectoryInfoController extends BaseController {
   private FileStatDAO fileStatDAO;
 
   @FXML
-  private Label directoryPathLabel;
+  private Label directoryNameLabel;
   @FXML
-  private Label directoryMetricsLabel;
+  private TextField directoryPathTextField;
   @FXML
   private ListView<Plugin> pluginDirectoryListView;
   @FXML
@@ -67,7 +72,18 @@ public class DirectoryInfoController extends BaseController {
   private Button deleteDirectoryButton;
   @FXML
   private VBox pieChartContainer;
-
+  @FXML
+  private Tab directoryMetricsTab;
+  @FXML
+  private Tab directoryPluginsTab;
+  @FXML
+  private Tab directoryFilesTab;
+  @FXML
+  private TableView<FileStat> directoryFilesTableView;
+  @FXML
+  private TableColumn<FileStat, String> fileNameColumn;
+  @FXML
+  private TableColumn<FileStat, String> fileSizeColumn;
   private PieChart pieChart;
 
   private PluginDirectory pluginDirectory;
@@ -132,12 +148,22 @@ public class DirectoryInfoController extends BaseController {
     pieChartContainer.getChildren().add(pieChart);
     VBox.setVgrow(pieChart, Priority.ALWAYS);
 
+    fileNameColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(cellData.getValue().getName()));
+
+    fileSizeColumn.setCellValueFactory(cellData ->
+            new SimpleStringProperty(
+                    FileUtils.humanReadableByteCount(
+                            cellData.getValue().getLength(), true)));
+
   }
 
   public void setPluginDirectory(PluginDirectory pluginDirectory) {
     this.pluginDirectory = pluginDirectory;
-    directoryPathLabel.setText(pluginDirectory.getPath());
+    directoryPathTextField.setText(pluginDirectory.getPath());
+    directoryNameLabel.setText(pluginDirectory.getName());
     pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());
+    directoryMetricsTab.setText("0 KB");
 
 
     String path = pluginDirectory.getPath();
@@ -145,22 +171,22 @@ public class DirectoryInfoController extends BaseController {
       path = path.substring(0, path.length() - 1);
     }
 
-    List<String> directoryMetrics = new ArrayList<>();
     Optional<FileStat> directoryStat = fileStatDAO.findByPath(path);
-    directoryStat.ifPresent(fileStat -> directoryMetrics.add(
+    directoryStat.ifPresent(fileStat -> directoryMetricsTab.setText(
             FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
-    directoryMetrics.add(pluginDirectory.getPluginList().size() + " plugin(s)");
+
+    directoryPluginsTab.setText("Plugins (" + pluginDirectory.getPluginList().size() + ")");
 
     List<FileStat> fileStats = fileStatDAO.findByParentPathOrderByLengthDesc(path);
-    if (fileStats.size() > 0) {
-      directoryMetrics.add(fileStats.size() + " file(s)");
-    }
+    directoryFilesTab.setText("Files (" + fileStats.size() + ")");
+
+    ObservableList<FileStat> obsStats = FXCollections.observableArrayList();
+    obsStats.addAll(fileStats);
+    directoryFilesTableView.setItems(obsStats);
 
     pieChart.setData(createStatChartBuckets(fileStats));
     pieChart.layout();
 
-    directoryMetricsLabel.setText(String.join(" | ", directoryMetrics));
-    
   }
 
   private ObservableList<PieChart.Data> createStatChartBuckets(List<FileStat> fileStats) {

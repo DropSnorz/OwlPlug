@@ -6,63 +6,83 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.DirectoryInfoController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.DirectoryInfoController">
    <children>
-      <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
          <children>
-            <Label fx:id="directoryPathLabel" text="DirectoryPath">
-               <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/folder-grey-16.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Label>
-            <HBox minHeight="-Infinity" prefHeight="37.0" VBox.vgrow="NEVER">
+            <HBox alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER_LEFT" HBox.hgrow="SOMETIMES">
-                     <children>
-                        <Label fx:id="directoryMetricsLabel" text="METRICS">
-                           <graphic>
-                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/chart-white-16.png" />
-                                 </image></ImageView>
-                           </graphic></Label>
-                     </children>
+                  <Label fx:id="directoryNameLabel" text="DirectoryName">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/folder-grey-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+                  <HBox HBox.hgrow="ALWAYS">
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Button fx:id="openDirectoryButton" text="Open directory">
-                           <graphic>
-                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/share-white-16.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic></Button>
-                        <Button fx:id="deleteDirectoryButton" alignment="CENTER" styleClass="button-danger" text="Delete All">
-                           <graphic>
-                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/trash-white-16.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </children>
-                  </HBox>
+                  <Button fx:id="openDirectoryButton" text="Open directory">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/share-white-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="deleteDirectoryButton" alignment="CENTER" styleClass="button-danger" text="Delete All">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/trash-white-16.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
             </HBox>
-            <ListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="SOMETIMES">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-              </ListView>
+            <TextField fx:id="directoryPathTextField" editable="false" />
+            <TabPane prefHeight="270.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                 <Tab fx:id="directoryMetricsTab" disable="true" text="Metrics">
+                    <graphic>
+                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                             <Image url="@../icons/chart-white-16.png" />
+                          </image></ImageView>
+                    </graphic>
+                    <content>
+                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                 </Tab>
+                <Tab fx:id="directoryPluginsTab" text="Plugins">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <ListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                </ListView>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="directoryFilesTab" text="Files">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0">
+                       <TableView fx:id="directoryFilesTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                             <TableColumn fx:id="fileNameColumn" minWidth="250.0" prefWidth="250.0" text="Name" />
+                             <TableColumn fx:id="fileSizeColumn" editable="false" minWidth="100.0" prefWidth="100.0" sortType="DESCENDING" text="Size" />
+                          </columns>
+                       </TableView>
+                    </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
             <VBox fx:id="pieChartContainer" VBox.vgrow="ALWAYS" />
          </children>
          <VBox.margin>
