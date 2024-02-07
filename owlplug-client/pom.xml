@@ -143,6 +143,13 @@
 			<groupId>org.jfxtras</groupId>
 			<artifactId>jmetro</artifactId>
 			<version>11.6.16</version>
+			<exclusions>
+				<exclusion>
+					<!-- Exclude embedded javafx -->
+					<groupId>org.openjfx</groupId>
+					<artifactId>javafx-base</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
