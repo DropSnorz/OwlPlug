@@ -23,13 +23,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(indexes = { @Index(name = "IDX_FILESTAT_ID", columnList = "id"),
+        @Index(name = "IDX_FILESTAT_PARENT_PATH", columnList = "parentPath") })
 public class FileStat {
 
   @Id
