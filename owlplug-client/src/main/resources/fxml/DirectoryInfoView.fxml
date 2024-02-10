@@ -43,7 +43,7 @@
                </children>
             </HBox>
             <TextField fx:id="directoryPathTextField" editable="false" />
-            <TabPane prefHeight="270.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
               <tabs>
                  <Tab fx:id="directoryMetricsTab" disable="true" text="Metrics">
                     <graphic>
@@ -53,7 +53,7 @@
                           </image></ImageView>
                     </graphic>
                     <content>
-                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                       <AnchorPane minHeight="0.0" minWidth="0.0" />
                     </content>
                  </Tab>
                 <Tab fx:id="directoryPluginsTab" text="Plugins">
