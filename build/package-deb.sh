@@ -18,7 +18,7 @@ jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.l
 --linux-package-name owlplug --linux-deb-maintainer contact@owlplug.com \
 --linux-menu-group "AudioVideo;Audio" --linux-shortcut
 
-mv ./output/owlplug_$owlplugversion-1_amd64.deb ./output/OwlPlug-$owlplugversion.deb
+mv ./output/owlplug_${owlplugversion}_amd64.deb ./output/OwlPlug-$owlplugversion.deb
 
 ls ./output
 
