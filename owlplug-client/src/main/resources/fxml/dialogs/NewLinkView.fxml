@@ -1,72 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.SVGPath?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.NewLinkController">
+<VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.NewLinkController">
    <children>
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="4.0">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <VBox alignment="CENTER">
+            <VBox alignment="BOTTOM_CENTER" spacing="5.0">
                <children>
-                  <SVGPath content="m 19.847458,19.194915 4.152543,-2.943321 -4.152543,-2.870237 v 1.263203 c 0,0 -4.824423,1.072601 -5.813559,5.380864 2.106169,-2.255246 5.813559,-2.166797 5.813559,-2.166797 z M 19.5,13 c -13,7.333333 -6.5,3.666667 0,0 z m -4.68,9 H 0 V 2 h 7 c 1.695,1.942 2.371,3 4,3 h 13 v 7.82 C 22.831,11.696 21.246,11 19.5,11 15.916,11 13,13.916 13,17.5 c 0,1.747 0.695,3.331 1.82,4.5 z" fill="#949494" />
-                  <Label styleClass="label-small" text="/vst/link" />
+                  <Label text="Links enables the creation of symbolic links across file-system and plugin directories." wrapText="true" />
+                  <TextFlow>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="For example, a link can be configured from directory" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/path/to/plugins/extra">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" to target an usb hard drive on " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/mnt/extra">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=". All plugins in " />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/mnt/extra">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" will be accessible from" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/path/to/plugins/extra">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=". Some systems may require admin privileges to create symlinks." />
+                     </children>
+                  </TextFlow>
                </children>
             </VBox>
-            <ProgressBar styleClass="progress-bar-link" />
-            <VBox alignment="CENTER">
-               <children>
-                  <SVGPath content="M11 5c-1.629 0-2.305-1.058-4-3h-7v20h24v-17h-13z" fill="#8f8f8f" />
-                  <Label styleClass="label-small" text="/target" />
-               </children>
-            </VBox>
+            <ImageView pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../media/symlinks.png" />
+               </image>
+            </ImageView>
          </children>
       </HBox>
-      <VBox>
-         <children>
-            <Label text="Links allows you to create and manage symlinks across your file-system and plugin directories." wrapText="true" />
-            <TextFlow>
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="For example, you can configure a link named hard-drive in " />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="C:/VST">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" to target your usb hard drive " />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="D:/myPlugins">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=". All plugins in " />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="D:/myPlugins">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" will be accessible using " />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="C:/VST/hard-drive. ">
-                     <font>
-                        <Font name="System Italic" size="12.0" />
-                     </font>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Some systems may require admin privileges to create symlinks." />
-               </children>
-            </TextFlow>
-         </children>
-      </VBox>
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
             <VBox fillWidth="false" prefHeight="100.0" prefWidth="25.0" spacing="9.0">
