@@ -31,6 +31,7 @@ import com.owlplug.explore.ui.ProductBundlesView;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -73,7 +74,7 @@ public class PackageInfoController extends BaseController {
   @FXML
   private Button installButton;
   @FXML
-  private Label creatorLabel;
+  private Hyperlink creatorLink;
   @FXML
   private Label licenseLabel;
   @FXML
@@ -103,6 +104,10 @@ public class PackageInfoController extends BaseController {
     sidebar = new SideBar(400, packageInfoContent);
     sidebar.collapse();
     packageInfoContainer.getChildren().add(sidebar);
+
+    creatorLink.setOnAction(e -> {
+      exploreController.addSearchChip(creatorLink.getText());
+    });
 
     closeButton.setOnAction(e -> {
       sidebar.collapse();
@@ -166,7 +171,7 @@ public class PackageInfoController extends BaseController {
   private void configureBody(RemotePackage remotePackage) {
 
     // General fields binding
-    this.creatorLabel.setText(remotePackage.getCreator());
+    this.creatorLink.setText(remotePackage.getCreator());
     this.descriptionLabel.setText(remotePackage.getDescription());
 
     // License display
@@ -196,6 +201,10 @@ public class PackageInfoController extends BaseController {
     for (PackageTag tag : remotePackage.getTags()) {
       Node chip = new FakeChip(tag.getName());
       chip.getStyleClass().add("chip");
+      chip.getStyleClass().add("fake-chip");
+      chip.setOnMouseClicked(e -> {
+        exploreController.addSearchChip(tag.getName());
+      });
       tagContainer.getChildren().add(chip);
     }
 

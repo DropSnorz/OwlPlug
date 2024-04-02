@@ -149,6 +149,11 @@ TextArea .content {
 	-fx-background-color: #657899
 }
 
+.fake-chip:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #D4D4D4;
+}
+
 .button-danger{
 	-fx-background-color: danger-color;
 	

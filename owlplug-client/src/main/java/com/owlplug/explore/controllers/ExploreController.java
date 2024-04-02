@@ -320,6 +320,12 @@ public class ExploreController extends BaseController {
     packageInfoController.show();
   }
 
+  public void addSearchChip(String chip) {
+    if (chip != null && !chip.trim().isEmpty()) {
+      exploreChipView.getChips().add(exploreChipView.getConverter().fromString(chip));
+    }
+  }
+
   /**
    * Trigger bundle installation sequence.
    * 
