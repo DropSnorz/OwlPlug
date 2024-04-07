@@ -6,7 +6,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox fx:id="packageInfoContainer" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.PackageInfoController">
+<HBox fx:id="packageInfoContainer" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.PackageInfoController">
    <children>
       <VBox fx:id="packageInfoContent" maxWidth="-Infinity" minWidth="400.0" prefWidth="400.0">
          <children>
@@ -108,7 +108,7 @@
                                   <RowConstraints maxHeight="1.7976931348623157E308" minHeight="24.0" valignment="CENTER" vgrow="ALWAYS" />
                                 </rowConstraints>
                                  <children>
-                                    <Label fx:id="creatorLabel" text="CREATOR">
+                                    <Hyperlink fx:id="creatorLink" styleClass="hyperlink-disabled" text="CREATOR">
                                        <graphic>
                                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -117,7 +117,7 @@
                                           </ImageView>
                                        </graphic>
                                        <tooltip><Tooltip text="Creator" /></tooltip>
-                                    </Label>
+                                    </Hyperlink>
                                     <Label fx:id="typeLabel" text="TYPE" GridPane.rowIndex="1">
                                        <graphic>
                                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
