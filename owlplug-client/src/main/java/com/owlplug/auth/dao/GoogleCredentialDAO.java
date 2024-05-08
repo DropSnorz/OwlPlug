@@ -19,11 +19,12 @@
 package com.owlplug.auth.dao;
 
 import com.owlplug.auth.model.GoogleCredential;
-import java.util.Set;
-import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Set;
+import java.util.stream.Stream;
 
 @Repository
 public interface GoogleCredentialDAO extends CrudRepository<GoogleCredential, Long> {
@@ -32,7 +33,7 @@ public interface GoogleCredentialDAO extends CrudRepository<GoogleCredential, Lo
 
   GoogleCredential findByAccessToken(String key);
 
-  @Query(value = "select key from GOOGLE_CREDENTIAL", nativeQuery = true)
+  @Query(value = "select credential_key from GOOGLE_CREDENTIAL", nativeQuery = true)
   Set<String> findAllKeys();
 
   @Query("select c from GoogleCredential c")
