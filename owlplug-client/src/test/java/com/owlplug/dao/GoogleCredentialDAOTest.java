@@ -30,7 +30,7 @@ import com.owlplug.auth.dao.GoogleCredentialDAO;
 import com.owlplug.auth.model.GoogleCredential;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -45,7 +45,7 @@ public class GoogleCredentialDAOTest {
   @Autowired
   private GoogleCredentialDAO googleCredentialDAO;
 
-  @BeforeAll
+  @BeforeEach
   public void beforeTest() {
     GoogleCredential gc = new GoogleCredential();
     gc.setKey("TEST-KEY-1");
