@@ -38,7 +38,7 @@ public class GoogleCredential {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  @Column(unique = true)
+  @Column(unique = true, name = "credential_key")
   private String key;
   private String accessToken;
   private Long expirationTimeMilliseconds;

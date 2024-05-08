@@ -32,7 +32,7 @@ public interface GoogleCredentialDAO extends CrudRepository<GoogleCredential, Lo
 
   GoogleCredential findByAccessToken(String key);
 
-  @Query(value = "select key from GOOGLE_CREDENTIAL", nativeQuery = true)
+  @Query(value = "select credential_key from GOOGLE_CREDENTIAL", nativeQuery = true)
   Set<String> findAllKeys();
 
   @Query("select c from GoogleCredential c")
