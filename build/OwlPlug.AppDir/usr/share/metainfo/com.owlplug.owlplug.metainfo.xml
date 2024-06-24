@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.owlplug.owlplug</id>
+  
+  <name>OwlPlug</name>
+  <summary>Audio plugin manager. Small tool to manage VST / AU / LV2 plugins.</summary>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  
+  <description>
+    <p>
+      OwlPlug is a desktop application for Windows, Mac and Linux, that simplifies Audio Plugins management and installation. User installed plugins are automatically discovered and new plugins can be installed through Registries. The default registry delivers quality plugins made by the community. Any third party plugin distributors can set up a compatible registry and let Owlplug interract with it. OwlPlug is still in development, all kind of feedbacks are welcomed.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">owlplug.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://owlplug.com/static-assets/owlplug-appimage-screenshot.png</image>
+    </screenshot>
+  </screenshots>
+</component>
