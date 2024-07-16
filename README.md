@@ -103,9 +103,9 @@ Studiorack registry plugins for OwlPlug.
 
 * **(Recommended)** Distribute your plugins using on the official OwlPlug Registry. You can find more information on how to proceed in the [registry github repository](https://github.com/OwlPlug/owlplug-registry).
 
-* Setup and host a custom remote source to distribute multiple plugins, following the registry specification.
+* Setup and host a custom remote source to distribute multiple plugins, following the [registry specification](https://github.com/OwlPlug/owlplug-registry/blob/master/doc/Registry-specification.md).
 
-* *(Deprecated)* Setup and host a custom remote source to distribute multiple plugins, following the store specification. The store specification is not actively maintained, you should use the registry spec instead.
+* *(Deprecated)* Setup and host a custom remote source to distribute multiple plugins, following the store specification. The store specification is not actively maintained, you should use the [registry specification](https://github.com/OwlPlug/owlplug-registry/blob/master/doc/Registry-specification.md) instead.
 
 
 # Development

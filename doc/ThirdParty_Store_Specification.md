@@ -1,6 +1,8 @@
 # OwlPlug Store Endpoint Specification
 **Version 1.2.0**
 
+:warning: **Deprecated**: Store specification is not actively maintained and won't receive updates in the future, prefer usage of the [Registry specification](https://github.com/OwlPlug/owlplug-registry/blob/master/doc/Registry-specification.md)
+
 ## Introduction
 
 An OwlPlug Store is a single remote resource providing a list of available Products. 
