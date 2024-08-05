@@ -247,20 +247,25 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Returns the bundle installation folder based on the plugin type.
+   * Returns the bundle installation folder based on the plugin format.
+   * Multiple formats can be embedded in the same bundle, in this case
+   * an arbitrary path will be selected between formats.
    *
    * @param bundle - bundle to install
    * @return path to install directory
    */
   public String getBundleInstallFolder(PackageBundle bundle) {
 
-    if (bundle.getFormat().equals(PluginFormat.VST2)) {
+    String formatValue = bundle.getFormats().getFirst();
+    PluginFormat format = PluginFormat.valueOf(formatValue.toLowerCase());
+
+    if (format.equals(PluginFormat.VST2)) {
       return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-    } else if (bundle.getFormat().equals(PluginFormat.VST3)) {
+    } else if (format.equals(PluginFormat.VST3)) {
       return this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
-    } else if (bundle.getFormat().equals(PluginFormat.AU)) {
+    } else if (format.equals(PluginFormat.AU)) {
       return this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
-    } else if (bundle.getFormat().equals(PluginFormat.LV2)) {
+    } else if (format.equals(PluginFormat.LV2)) {
       return this.getPreferences().get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
     }
 

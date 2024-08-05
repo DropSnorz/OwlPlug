@@ -27,13 +27,25 @@ public class BundleJsonMapper {
   private String downloadUrl;
 
   private String downloadSha256;
+
+  @Deprecated
   private String format;
+
+  private List<String> formats;
   private String version;
   private String technicalUid;
   private long fileSize;
 
   public String getName() {
     return name;
+  }
+
+  public List<String> getFormats() {
+    return formats;
+  }
+
+  public void setFormats(List<String> formats) {
+    this.formats = formats;
   }
 
   public void setName(String name) {
@@ -72,6 +84,7 @@ public class BundleJsonMapper {
     this.fileSize = fileSize;
   }
 
+  @Deprecated
   public String getFormat() {
     return format;
   }
@@ -92,6 +105,7 @@ public class BundleJsonMapper {
     this.technicalUid = technicalUid;
   }
 
+  @Deprecated
   public void setFormat(String format) {
     this.format = format;
   }

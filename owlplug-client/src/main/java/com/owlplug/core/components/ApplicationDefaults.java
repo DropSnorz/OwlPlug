@@ -149,6 +149,7 @@ public class ApplicationDefaults {
     }
   }
 
+
   /**
    * Returns plugin icon based on plugin format.
    * 
