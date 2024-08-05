@@ -113,7 +113,7 @@ public class RegistryModelAdapter {
     } else if (bundleMapper.getFormat() != null) {
       List<String> formats = new ArrayList<>();
       formats.add(bundleMapper.getFormat());
-      packageBundle.setFormats(new ArrayList<>());
+      packageBundle.setFormats(formats);
     } else {
       packageBundle.setFormats(new ArrayList<>(List.of("vst")));
     }

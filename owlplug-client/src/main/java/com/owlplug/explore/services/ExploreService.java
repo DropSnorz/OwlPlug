@@ -257,15 +257,15 @@ public class ExploreService extends BaseService {
   public String getBundleInstallFolder(PackageBundle bundle) {
 
     String formatValue = bundle.getFormats().getFirst();
-    PluginFormat format = PluginFormat.valueOf(formatValue.toLowerCase());
+    PluginFormat format = PluginFormat.fromBundleString(formatValue);
 
-    if (format.equals(PluginFormat.VST2)) {
+    if (PluginFormat.VST2.equals(format)) {
       return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-    } else if (format.equals(PluginFormat.VST3)) {
+    } else if (PluginFormat.VST3.equals(format)) {
       return this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
-    } else if (format.equals(PluginFormat.AU)) {
+    } else if (PluginFormat.AU.equals(format)) {
       return this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
-    } else if (format.equals(PluginFormat.LV2)) {
+    } else if (PluginFormat.LV2.equals(format)) {
       return this.getPreferences().get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
     }
 

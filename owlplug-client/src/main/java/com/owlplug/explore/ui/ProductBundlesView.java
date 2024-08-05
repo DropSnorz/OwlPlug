@@ -18,6 +18,8 @@
  
 package com.owlplug.explore.ui;
 
+import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.model.PackageBundle;
 import javafx.event.ActionEvent;
@@ -26,6 +28,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -41,6 +45,8 @@ import javafx.scene.paint.Stop;
 
 public class ProductBundlesView extends VBox {
 
+  private ApplicationDefaults applicationDefaults;
+
   private static final Paint FILL = new LinearGradient(0, 0, 6, 0, false, CycleMethod.REPEAT, new Stop(0, Color.GRAY),
       new Stop(0.5, Color.GRAY), new Stop(0.5, Color.TRANSPARENT));
 
@@ -48,9 +54,9 @@ public class ProductBundlesView extends VBox {
   private static final Background DOT_BACKGROUND = new Background(
       new BackgroundFill(FILL, CornerRadii.EMPTY, Insets.EMPTY));
 
-  public ProductBundlesView() {
+  public ProductBundlesView(ApplicationDefaults applicationDefaults) {
     super();
-
+    this.applicationDefaults = applicationDefaults;
     this.setSpacing(5);
 
   }
@@ -64,6 +70,19 @@ public class ProductBundlesView extends VBox {
     HBox hbox = new HBox(5);
     hbox.setAlignment(Pos.CENTER_LEFT);
     hbox.setFillHeight(false);
+
+    HBox formatsContainer = new HBox(2);
+    for (String formatValue : bundle.getFormats()) {
+      PluginFormat format = PluginFormat.fromBundleString(formatValue);
+      if (format != null) {
+        ImageView iv = new ImageView(this.applicationDefaults.getPluginFormatIcon(format));
+        Label labelIv = new Label();
+        labelIv.setGraphic(iv);
+        labelIv.setTooltip(new Tooltip(format.toString()));
+        formatsContainer.getChildren().add(labelIv);
+      }
+    }
+    hbox.getChildren().add(formatsContainer);
 
     Label bundleName = new Label(bundle.getName());
     hbox.getChildren().add(bundleName);
