@@ -49,6 +49,18 @@
                         <Insets top="10.0" />
                      </padding>
                   </HBox>
+                   <Button fx:id="formatFilterButton" contentDisplay="GRAPHIC_ONLY">
+                       <HBox.margin>
+                           <Insets top="5.0" />
+                       </HBox.margin>
+                       <graphic>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                               <image>
+                                   <Image url="@../icons/format-white-16.png" />
+                               </image>
+                           </ImageView>
+                       </graphic>
+                   </Button>
                    <Button fx:id="platformFilterButton" contentDisplay="GRAPHIC_ONLY">
                      <HBox.margin>
                         <Insets top="5.0" />

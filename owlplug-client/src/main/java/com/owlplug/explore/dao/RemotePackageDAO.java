@@ -62,8 +62,21 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
 
 
   /**
-   * Platform filtering JPA Specification Filter products matching the given
-   * platformTag or products without platform assignment.
+   * Bundle format filtering JPA Specification to filter packages matching the given format.
+   *
+   * @param format - The platformTag to find
+   * @return The JPA Specification
+   */
+  @SuppressWarnings("unchecked")
+  static Specification<RemotePackage> hasFormat(String format) {
+    return (remotePackage, cq, cb) -> {
+      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles");
+      return cb.isMember(format, bundles.get("formats"));
+    };
+  }
+
+  /**
+   * Platform filtering JPA Specification Filter packages matching the given platformTag.
    * 
    * @param platformTag - The platformTag to find
    * @return The JPA Specification
@@ -77,8 +90,8 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   }
 
   /**
-   * Platform filtering JPA Specification Filter products matching the given
-   * platformTag or products without platform assignment.
+   * Platform filtering JPA Specification Filter packages matching the given
+   * platformTag or packages without platform assignment.
    * 
    * @param platformTagList - The compatible platformTagList to find
    * @return The JPA Specification
@@ -97,7 +110,7 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   }
 
   /**
-   * Product tag filtering specification. Filter products matching the given tags
+   * Product tag filtering specification. Filter packages matching the given tags
    * 
    * @param tag - The tag to find
    * @return The JPA Specification
@@ -112,7 +125,7 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   }
 
   /**
-   * Product tag filtering specification. Filter products matching the given tags
+   * Product tag filtering specification. Filter packages matching the given tags
    * 
    * @param type - The type to find
    * @return The JPA Specification

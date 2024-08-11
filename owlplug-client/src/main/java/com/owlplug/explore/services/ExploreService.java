@@ -97,7 +97,7 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Retrieves products from store with name matching the given criteria and
+   * Retrieves packages from store with name matching the given criteria and
    * compatible with the current platform.
    *
    * @param criteriaList criteria list

@@ -53,6 +53,9 @@ public class StoreCriteriaAdapter {
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.PLATFORM)) {
       return RemotePackageDAO.hasPlatformTag(String.valueOf(criteria.getValue()));
     }
+    if (criteria.getFilterType().equals(ExploreFilterCriteriaType.FORMAT)) {
+      return RemotePackageDAO.hasFormat(String.valueOf(criteria.getValue()));
+    }
     return Specification.where(null);
 
   }
