@@ -243,10 +243,14 @@ public class ExploreController extends BaseController {
       }
     }
 
+    List<String> formats = new ArrayList<>();
     for (Entry<String, CheckBox> entry : formatsFilterCheckBoxes.entrySet()) {
       if (entry.getValue().isSelected()) {
-        criteriaList.add(new StoreFilterCriteria(entry.getKey(), ExploreFilterCriteriaType.FORMAT));
+        formats.add(entry.getKey());
       }
+    }
+    if (formats.size() > 0) {
+      criteriaList.add(new StoreFilterCriteria(formats, ExploreFilterCriteriaType.FORMAT_LIST));
     }
 
     Task<Iterable<RemotePackage>> task = new Task<Iterable<RemotePackage>>() {
