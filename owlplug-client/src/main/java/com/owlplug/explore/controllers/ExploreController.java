@@ -35,7 +35,7 @@ import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
-import com.owlplug.explore.model.search.StoreFilterCriteria;
+import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
@@ -204,7 +204,7 @@ public class ExploreController extends BaseController {
     HBox.setHgrow(exploreChipView, Priority.ALWAYS);
     exploreChipViewContainer.getChildren().add(exploreChipView);
 
-    exploreChipView.getChips().addListener((ListChangeListener<StoreFilterCriteria>) change -> {
+    exploreChipView.getChips().addListener((ListChangeListener<ExploreFilterCriteria>) change -> {
       performPackageSearch();
     });
 
@@ -234,12 +234,12 @@ public class ExploreController extends BaseController {
   }
   
   private void performPackageSearch() {
-    final List<StoreFilterCriteria> criteriaChipList = exploreChipView.getChips();
-    List<StoreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
+    final List<ExploreFilterCriteria> criteriaChipList = exploreChipView.getChips();
+    List<ExploreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
     
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
       if (entry.getValue().isSelected()) {
-        criteriaList.add(new StoreFilterCriteria(entry.getKey(), ExploreFilterCriteriaType.PLATFORM));
+        criteriaList.add(new ExploreFilterCriteria(entry.getKey(), ExploreFilterCriteriaType.PLATFORM));
       }
     }
 
@@ -250,7 +250,7 @@ public class ExploreController extends BaseController {
       }
     }
     if (formats.size() > 0) {
-      criteriaList.add(new StoreFilterCriteria(formats, ExploreFilterCriteriaType.FORMAT_LIST));
+      criteriaList.add(new ExploreFilterCriteria(formats, ExploreFilterCriteriaType.FORMAT_LIST));
     }
 
     Task<Iterable<RemotePackage>> task = new Task<Iterable<RemotePackage>>() {

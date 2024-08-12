@@ -24,19 +24,19 @@ import com.owlplug.explore.model.RemotePackage;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
-public class StoreCriteriaAdapter {
+public class ExploreCriteriaAdapter {
 
-  public static Specification<RemotePackage> toSpecification(List<StoreFilterCriteria> criteriaList) {
+  public static Specification<RemotePackage> toSpecification(List<ExploreFilterCriteria> criteriaList) {
 
     Specification<RemotePackage> spec = Specification.where(null);
-    for (StoreFilterCriteria criteria : criteriaList) {
+    for (ExploreFilterCriteria criteria : criteriaList) {
       spec = spec.and(toSpecification(criteria));
     }
     return spec;
 
   }
 
-  public static Specification<RemotePackage> toSpecification(StoreFilterCriteria criteria) {
+  public static Specification<RemotePackage> toSpecification(ExploreFilterCriteria criteria) {
 
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.NAME)) {
       return RemotePackageDAO.nameContains(String.valueOf(criteria.getValue()));

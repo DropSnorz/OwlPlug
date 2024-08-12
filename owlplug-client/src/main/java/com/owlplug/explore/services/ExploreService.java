@@ -36,8 +36,8 @@ import com.owlplug.explore.model.json.RegistryJsonMapper;
 import com.owlplug.explore.model.json.RegistryModelAdapter;
 import com.owlplug.explore.model.json.legacy.StoreJsonMapper;
 import com.owlplug.explore.model.json.legacy.StoreModelAdapter;
-import com.owlplug.explore.model.search.StoreCriteriaAdapter;
-import com.owlplug.explore.model.search.StoreFilterCriteria;
+import com.owlplug.explore.model.search.ExploreCriteriaAdapter;
+import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -103,12 +103,12 @@ public class ExploreService extends BaseService {
    * @param criteriaList criteria list
    * @return list of store products
    */
-  public Iterable<RemotePackage> getRemotePackages(List<StoreFilterCriteria> criteriaList) {
+  public Iterable<RemotePackage> getRemotePackages(List<ExploreFilterCriteria> criteriaList) {
     RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
 
     Specification<RemotePackage> spec = RemotePackageDAO.sourceEnabled()
         .and(RemotePackageDAO.hasPlatformTag(env.getCompatiblePlatformsTags()));
-    spec = spec.and(StoreCriteriaAdapter.toSpecification(criteriaList));
+    spec = spec.and(ExploreCriteriaAdapter.toSpecification(criteriaList));
 
     return remotePackageDAO.findAll(spec);
   }

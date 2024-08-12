@@ -21,7 +21,7 @@ package com.owlplug.explore.model.search;
 import java.util.Objects;
 import javafx.scene.image.Image;
 
-public class StoreFilterCriteria {
+public class ExploreFilterCriteria {
 
   private Object value;
   private String textValue;
@@ -34,7 +34,7 @@ public class StoreFilterCriteria {
    * @param value      - criteria value
    * @param filterType - criteria type
    */
-  public StoreFilterCriteria(Object value, ExploreFilterCriteriaType filterType) {
+  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType) {
     super();
     this.value = value;
     this.filterType = filterType;
@@ -47,7 +47,7 @@ public class StoreFilterCriteria {
    * @param filterType - criteria type
    * @param icon       - criteria icon displayed
    */
-  public StoreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, Image icon) {
+  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, Image icon) {
     super();
     this.value = value;
     this.filterType = filterType;
@@ -63,7 +63,7 @@ public class StoreFilterCriteria {
    * @param textValue  - custom text value overwriting original value toString()
    *                   conversion.
    */
-  public StoreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, Image icon, String textValue) {
+  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, Image icon, String textValue) {
     super();
     this.value = value;
     this.icon = icon;
@@ -111,7 +111,7 @@ public class StoreFilterCriteria {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StoreFilterCriteria criteria = (StoreFilterCriteria) o;
+    ExploreFilterCriteria criteria = (ExploreFilterCriteria) o;
     return Objects.equals(value, criteria.getValue());
   }
 
