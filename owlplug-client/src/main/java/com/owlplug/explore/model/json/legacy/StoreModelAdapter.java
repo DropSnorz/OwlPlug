@@ -18,7 +18,6 @@
  
 package com.owlplug.explore.model.json.legacy;
 
-import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.model.PluginType;
 import com.owlplug.core.utils.UrlUtils;
@@ -28,6 +27,7 @@ import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.json.BundleJsonMapper;
 import java.util.HashSet;
+import java.util.List;
 
 public class StoreModelAdapter {
 
@@ -119,13 +119,13 @@ public class StoreModelAdapter {
     packageBundle.setFileSize(mapper.getFileSize());
 
     if ("vst3".equals(mapper.getFormat())) {
-      packageBundle.setFormat(PluginFormat.VST3);
+      packageBundle.setFormats(List.of("vst3"));
     } else if ("au".equals(mapper.getFormat())) {
-      packageBundle.setFormat(PluginFormat.AU);
+      packageBundle.setFormats(List.of("au"));
     } else if ("lv2".equals(mapper.getFormat())) {
-      packageBundle.setFormat(PluginFormat.LV2);
+      packageBundle.setFormats(List.of("lv2"));
     } else {
-      packageBundle.setFormat(PluginFormat.VST2);
+      packageBundle.setFormats(List.of("vst"));
     }
 
     return packageBundle;

@@ -116,7 +116,7 @@ public class RegistryModelAdapter {
       formats.replaceAll(e -> e.equals("vst") ? "vst2" : e.toLowerCase());
       packageBundle.setFormats(formats);
     } else {
-      packageBundle.setFormats(new ArrayList<>(List.of("vst2")));
+      packageBundle.setFormats(List.of("vst2"));
     }
 
     return packageBundle;
