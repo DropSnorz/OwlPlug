@@ -19,6 +19,7 @@
 package com.owlplug.core.services;
 
 import com.google.common.collect.Iterables;
+import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.dao.PluginFootprintDAO;
@@ -157,6 +158,46 @@ public class PluginService extends BaseService {
 
     return pluginDAO.findAll(spec);
 
+  }
+
+  /**
+   * Get the plugin path based on plugin format.
+   * @param format plugin format
+   * @return the directory path
+   */
+  public String getPluginPathByFormat(PluginFormat format) {
+
+    if (PluginFormat.VST2.equals(format)) {
+      return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+    } else if (PluginFormat.VST3.equals(format)) {
+      return this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
+    } else if (PluginFormat.AU.equals(format)) {
+      return this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
+    } else if (PluginFormat.LV2.equals(format)) {
+      return this.getPreferences().get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
+    }
+
+    return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+  }
+
+  /**
+   * Check if format discovery is enabled.
+   * @param format pluginFormat
+   * @return true if discovery is enabled.
+   */
+  public boolean isFormatEnabled(PluginFormat format) {
+
+    if (PluginFormat.VST2.equals(format)) {
+      return this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false);
+    } else if (PluginFormat.VST3.equals(format)) {
+      return this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false);
+    } else if (PluginFormat.AU.equals(format)) {
+      return this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false);
+    } else if (PluginFormat.LV2.equals(format)) {
+      return this.getPreferences().getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false);
+    }
+
+    return false;
   }
   
   /**

@@ -378,18 +378,22 @@ public class ExploreController extends BaseController {
 
 
     File selectedDirectory = null;
-    String baseDirectoryPath = exploreService.getBundleInstallFolder(bundle);
+    String baseDirectoryPath = null;
+
+    // Compute base directory using format if possible
+    if (exploreService.canDeterminateBundleInstallFolder(bundle)) {
+      baseDirectoryPath = exploreService.getBundleInstallFolder(bundle);
+    }
 
     // A custom root directory to store plugin is defined and the base directory for
-    // the bundle type is defined or not blank.
+    // the bundle format is defined or not blank.
     if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false) &&
       baseDirectoryPath != null && !baseDirectoryPath.isBlank()) {
       // Store install target is already defined
-
       String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
       Boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
 
-      //if the enduser wishes to group plugins by their creator,
+      //if the user wishes to group plugins by their creator,
       //then we need to include the subdirectory as well.
       if (shouldGroupByCreator) {
         String creator = FileUtils.sanitizeFileName(bundle.getRemotePackage().getCreator());
@@ -403,7 +407,9 @@ public class ExploreController extends BaseController {
       // Open dialog chooser to define store installation target
       DirectoryChooser directoryChooser = new DirectoryChooser();
       // Open the VST directory
-      File initialDirectory = new File(baseDirectoryPath);
+      String vstDirectory = this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY,
+              this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.VST2));
+      File initialDirectory = new File(vstDirectory);
       if (initialDirectory.isDirectory()) {
         directoryChooser.setInitialDirectory(initialDirectory);
       }
