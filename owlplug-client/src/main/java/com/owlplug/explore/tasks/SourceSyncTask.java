@@ -171,14 +171,15 @@ public class SourceSyncTask extends AbstractTask {
         for (PackageJsonMapper packageMapper : partition) {
 
           if (packageMapper.getVersions().containsKey(packageMapper.getLatestVersion())) {
-
+            String version = packageMapper.getLatestVersion();
             PackageVersionJsonMapper latestPackage = packageMapper.getVersions()
-                .get(packageMapper.getLatestVersion());
+                .get(version);
 
-            RemotePackage product = RegistryModelAdapter.jsonMapperToEntity(latestPackage);
-            product.setSlug(packageMapper.getSlug());
-            product.setRemoteSource(remoteSource);
-            remotePackagePartition.add(product);
+            RemotePackage remotePackage = RegistryModelAdapter.jsonMapperToEntity(latestPackage);
+            remotePackage.setSlug(packageMapper.getSlug());
+            remotePackage.setRemoteSource(remoteSource);
+            remotePackage.setVersion(version);
+            remotePackagePartition.add(remotePackage);
           }
         }
         remotePackageDAO.saveAll(remotePackagePartition);

@@ -53,24 +53,24 @@ public class StoreModelAdapter {
    */
   public static RemotePackage jsonMapperToEntity(ProductJsonMapper productJsonMapper) {
 
-    RemotePackage product = new RemotePackage();
-    product.setName(productJsonMapper.getName());
-    product.setSlug(productJsonMapper.getSlug());
-    product.setPageUrl(productJsonMapper.getPageUrl());
-    product.setDownloadUrl(UrlUtils.fixSpaces(productJsonMapper.getDownloadUrl()));
-    product.setScreenshotUrl(UrlUtils.fixSpaces(productJsonMapper.getScreenshotUrl()));
-    product.setDonateUrl(UrlUtils.fixSpaces(productJsonMapper.getDonateUrl()));
-    product.setCreator(productJsonMapper.getCreator());
-    product.setLicense(productJsonMapper.getLicense());
-    product.setVersion(productJsonMapper.getVersion());
-    product.setDescription(productJsonMapper.getDescription());
+    RemotePackage remotePackage = new RemotePackage();
+    remotePackage.setName(productJsonMapper.getName());
+    remotePackage.setSlug(productJsonMapper.getSlug());
+    remotePackage.setPageUrl(productJsonMapper.getPageUrl());
+    remotePackage.setDownloadUrl(UrlUtils.fixSpaces(productJsonMapper.getDownloadUrl()));
+    remotePackage.setScreenshotUrl(UrlUtils.fixSpaces(productJsonMapper.getScreenshotUrl()));
+    remotePackage.setDonateUrl(UrlUtils.fixSpaces(productJsonMapper.getDonateUrl()));
+    remotePackage.setCreator(productJsonMapper.getCreator());
+    remotePackage.setLicense(productJsonMapper.getLicense());
+    remotePackage.setVersion(productJsonMapper.getVersion());
+    remotePackage.setDescription(productJsonMapper.getDescription());
 
     if (productJsonMapper.getType() != null) {
-      product.setType(PluginType.fromString(productJsonMapper.getType()));
+      remotePackage.setType(PluginType.fromString(productJsonMapper.getType()));
     }
 
     if (productJsonMapper.getStage() != null) {
-      product.setStage(PluginStage.fromString(productJsonMapper.getStage()));
+      remotePackage.setStage(PluginStage.fromString(productJsonMapper.getStage()));
     }
 
     HashSet<PackageBundle> bundles = new HashSet<>();
@@ -86,21 +86,21 @@ public class StoreModelAdapter {
         if (bundle.getTechnicalUid() == null) {
           bundle.setTechnicalUid(productJsonMapper.getTechnicalUid());
         }
-        bundle.setRemotePackage(product);
+        bundle.setRemotePackage(remotePackage);
         bundles.add(bundle);
       }
     }
-    product.setBundles(bundles);
+    remotePackage.setBundles(bundles);
 
     HashSet<PackageTag> tags = new HashSet<>();
     if (productJsonMapper.getTags() != null) {
       for (String tag : productJsonMapper.getTags()) {
-        tags.add(new PackageTag(tag, product));
+        tags.add(new PackageTag(tag, remotePackage));
       }
     }
-    product.setTags(tags);
+    remotePackage.setTags(tags);
 
-    return product;
+    return remotePackage;
   }
 
   /**

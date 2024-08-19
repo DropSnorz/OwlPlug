@@ -18,7 +18,6 @@
 
 package com.owlplug.explore.model.json;
 
-import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.model.PluginType;
 import com.owlplug.core.utils.UrlUtils;
