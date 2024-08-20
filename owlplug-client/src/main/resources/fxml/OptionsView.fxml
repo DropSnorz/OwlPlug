@@ -100,7 +100,7 @@
                                     <Label styleClass="heading-2" text="Danger Zone" />
                                     <VBox spacing="5.0">
                                        <children>
-                                          <Label text="Remove all user data including accounts, stores and custom settings. Plugins will not be deleted." wrapText="true" />
+                                          <Label text="Remove all stored user data including settings, remote sources and accounts. Plugins and projects files will not be deleted." wrapText="true" />
                                           <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" text="Clear user data" />
                                        </children>
                                     </VBox>
