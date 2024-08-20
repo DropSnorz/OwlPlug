@@ -25,6 +25,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.services.BaseService;
+import com.owlplug.core.services.PluginService;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.dao.RemotePackageDAO;
 import com.owlplug.explore.dao.RemoteSourceDAO;
@@ -36,11 +37,12 @@ import com.owlplug.explore.model.json.RegistryJsonMapper;
 import com.owlplug.explore.model.json.RegistryModelAdapter;
 import com.owlplug.explore.model.json.legacy.StoreJsonMapper;
 import com.owlplug.explore.model.json.legacy.StoreModelAdapter;
-import com.owlplug.explore.model.search.StoreCriteriaAdapter;
-import com.owlplug.explore.model.search.StoreFilterCriteria;
+import com.owlplug.explore.model.search.ExploreCriteriaAdapter;
+import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -64,6 +66,8 @@ public class ExploreService extends BaseService {
   private RemotePackageDAO remotePackageDAO;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
+  @Autowired
+  private PluginService pluginService;
 
   @PostConstruct
   private void init() {
@@ -97,18 +101,18 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Retrieves products from store with name matching the given criteria and
+   * Retrieves packages from store with name matching the given criteria and
    * compatible with the current platform.
    *
    * @param criteriaList criteria list
    * @return list of store products
    */
-  public Iterable<RemotePackage> getRemotePackages(List<StoreFilterCriteria> criteriaList) {
+  public Iterable<RemotePackage> getRemotePackages(List<ExploreFilterCriteria> criteriaList) {
     RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
 
     Specification<RemotePackage> spec = RemotePackageDAO.sourceEnabled()
         .and(RemotePackageDAO.hasPlatformTag(env.getCompatiblePlatformsTags()));
-    spec = spec.and(StoreCriteriaAdapter.toSpecification(criteriaList));
+    spec = spec.and(ExploreCriteriaAdapter.toSpecification(criteriaList));
 
     return remotePackageDAO.findAll(spec);
   }
@@ -246,26 +250,47 @@ public class ExploreService extends BaseService {
     remoteSourceDAO.delete(remoteSource);
   }
 
+  public boolean canDeterminateBundleInstallFolder(PackageBundle bundle) {
+
+    List<PluginFormat> formats = filterEnabledFormats(bundle.getFormats());
+    if (formats.size() == 1) {
+      return true;
+    } else if (formats.size() > 1) {
+      List<String> paths = new ArrayList<>();
+      for (PluginFormat format : formats) {
+        paths.add(this.pluginService.getPluginPathByFormat(format));
+      }
+      // check if all path are equals
+      return paths.stream().allMatch(s -> s.equals(paths.get(0)));
+    }
+
+    return false;
+  }
+
   /**
-   * Returns the bundle installation folder based on the plugin type.
+   * Returns the bundle installation folder based on the plugin format.
+   * Multiple formats can be embedded in the same bundle, in this case
+   * an arbitrary path will be selected between formats.
    *
    * @param bundle - bundle to install
    * @return path to install directory
    */
   public String getBundleInstallFolder(PackageBundle bundle) {
 
-    if (bundle.getFormat().equals(PluginFormat.VST2)) {
-      return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-    } else if (bundle.getFormat().equals(PluginFormat.VST3)) {
-      return this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
-    } else if (bundle.getFormat().equals(PluginFormat.AU)) {
-      return this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
-    } else if (bundle.getFormat().equals(PluginFormat.LV2)) {
-      return this.getPreferences().get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
+    PluginFormat format = filterEnabledFormats(bundle.getFormats()).getFirst();
+    return pluginService.getPluginPathByFormat(format);
+
+  }
+
+  private List<PluginFormat> filterEnabledFormats(List<String> formats) {
+    List<PluginFormat> filtered = new ArrayList<>();
+    for (String formatVal : formats) {
+      PluginFormat format = PluginFormat.fromBundleString(formatVal);
+      if (this.pluginService.isFormatEnabled(format)) {
+        filtered.add(format);
+      }
     }
-
-    return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-
+    return filtered;
   }
 
   /**

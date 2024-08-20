@@ -18,6 +18,8 @@
  
 package com.owlplug.core.model;
 
+import java.util.Arrays;
+
 public enum PluginFormat {
   VST2("VST2"), VST3("VST3"), AU("AU"), LV2("LV2");
 
@@ -29,6 +31,25 @@ public enum PluginFormat {
 
   public String getText() {
     return text;
+  }
+
+  /**
+   * Retrieves an enum instance matching a text string. Returns null if the given
+   * string doesn't match any defined enum instance.
+   *
+   * @param text enum unique text
+   * @return
+   */
+  public static PluginFormat fromBundleString(String text) {
+    if (text.equalsIgnoreCase("vst")) {
+      return PluginFormat.VST2;
+    }
+    for (PluginFormat f : PluginFormat.values()) {
+      if (f.text.equalsIgnoreCase(text)) {
+        return f;
+      }
+    }
+    return null;
   }
 
 }

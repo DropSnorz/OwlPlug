@@ -54,8 +54,7 @@ public class RemotePackage {
   private String donateUrl;
   private String creator;
   private String license;
-  @Deprecated
-  // Version must be hold by bundles
+
   private String version;
   @Column(columnDefinition = "text")
   private String description;
@@ -147,12 +146,10 @@ public class RemotePackage {
     this.license = license;
   }
 
-  @Deprecated
   public String getVersion() {
     return version;
   }
 
-  @Deprecated
   public void setVersion(String version) {
     this.version = version;
   }

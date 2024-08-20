@@ -113,7 +113,7 @@ public class PackageInfoController extends BaseController {
       sidebar.collapse();
     });
 
-    bundlesView = new ProductBundlesView();
+    bundlesView = new ProductBundlesView(this.getApplicationDefaults());
     bundlesContainer.getChildren().add(bundlesView);
 
   }

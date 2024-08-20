@@ -40,6 +40,7 @@ public class PackageBundle {
   private String downloadUrl;
 
   private String downloadSha256;
+  @Deprecated
   @Enumerated(EnumType.STRING)
   private PluginFormat format;
   private String technicalUid;
@@ -47,6 +48,9 @@ public class PackageBundle {
   private long fileSize;
   @ElementCollection(fetch = FetchType.EAGER)
   private List<String> targets;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  private List<String> formats;
 
   @ManyToOne
   private RemotePackage remotePackage;
@@ -123,13 +127,21 @@ public class PackageBundle {
     this.remotePackage = remotePackage;
   }
 
+  @Deprecated
   public PluginFormat getFormat() {
     return format;
   }
 
+  @Deprecated
   public void setFormat(PluginFormat format) {
     this.format = format;
   }
-  
 
+  public List<String> getFormats() {
+    return formats;
+  }
+
+  public void setFormats(List<String> formats) {
+    this.formats = formats;
+  }
 }

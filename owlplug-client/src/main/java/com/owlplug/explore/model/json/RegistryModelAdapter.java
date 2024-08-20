@@ -18,7 +18,6 @@
 
 package com.owlplug.explore.model.json;
 
-import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.model.PluginType;
 import com.owlplug.core.utils.UrlUtils;
@@ -26,7 +25,9 @@ import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class RegistryModelAdapter {
   /**
@@ -104,14 +105,19 @@ public class RegistryModelAdapter {
     packageBundle.setTargets(bundleMapper.getTargets());
     packageBundle.setFileSize(bundleMapper.getFileSize());
 
-    if ("vst3".equals(bundleMapper.getFormat())) {
-      packageBundle.setFormat(PluginFormat.VST3);
-    } else if ("au".equals(bundleMapper.getFormat())) {
-      packageBundle.setFormat(PluginFormat.AU);
-    } else if ("lv2".equals(bundleMapper.getFormat())) {
-      packageBundle.setFormat(PluginFormat.LV2);
+    if (bundleMapper.getFormats() != null && bundleMapper.getFormats().size() > 0) {
+      List<String> formats = new ArrayList<>(bundleMapper.getFormats());
+      formats.replaceAll(e -> e.equals("vst") ? "vst2" : e.toLowerCase());
+      packageBundle.setFormats(formats);
+
+    // Support undefined formats field with fallback to format
+    } else if (bundleMapper.getFormat() != null) {
+      List<String> formats = new ArrayList<>();
+      formats.add(bundleMapper.getFormat());
+      formats.replaceAll(e -> e.equals("vst") ? "vst2" : e.toLowerCase());
+      packageBundle.setFormats(formats);
     } else {
-      packageBundle.setFormat(PluginFormat.VST2);
+      packageBundle.setFormats(List.of("vst2"));
     }
 
     return packageBundle;

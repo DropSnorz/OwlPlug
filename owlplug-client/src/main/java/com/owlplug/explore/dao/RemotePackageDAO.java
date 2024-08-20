@@ -19,7 +19,9 @@
 package com.owlplug.explore.dao;
 
 import com.owlplug.core.model.PluginType;
+import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
+import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -62,8 +64,37 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
 
 
   /**
-   * Platform filtering JPA Specification Filter products matching the given
-   * platformTag or products without platform assignment.
+   * Bundle format filtering JPA Specification to filter packages matching the given format.
+   *
+   * @param format - The platformTag to find
+   * @return The JPA Specification
+   */
+  @SuppressWarnings("unchecked")
+  static Specification<RemotePackage> hasFormat(String format) {
+    return (remotePackage, cq, cb) -> {
+      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
+      return bundles.join("formats").in(format);
+    };
+  }
+
+  /**
+   * Platform filtering JPA Specification Filter packages matching the given
+   * platformTag or packages without platform assignment.
+   *
+   * @param formatList - The compatible platformTagList to find
+   * @return The JPA Specification
+   */
+  @SuppressWarnings("unchecked")
+  static Specification<RemotePackage> hasFormat(List<String> formatList) {
+    return (remotePackage, cq, cb) -> {
+      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
+      return bundles.join("formats").in(formatList);
+
+    };
+  }
+
+  /**
+   * Platform filtering JPA Specification Filter packages matching the given platformTag.
    * 
    * @param platformTag - The platformTag to find
    * @return The JPA Specification
@@ -71,14 +102,14 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   @SuppressWarnings("unchecked")
   static Specification<RemotePackage> hasPlatformTag(String platformTag) {
     return (remotePackage, cq, cb) -> {
-      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles");
-      return cb.isMember(platformTag, bundles.get("targets"));
+      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
+      return bundles.join("targets").in(platformTag);
     };
   }
 
   /**
-   * Platform filtering JPA Specification Filter products matching the given
-   * platformTag or products without platform assignment.
+   * Platform filtering JPA Specification Filter packages matching the given
+   * platformTag or packages without platform assignment.
    * 
    * @param platformTagList - The compatible platformTagList to find
    * @return The JPA Specification
@@ -87,17 +118,13 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   static Specification<RemotePackage> hasPlatformTag(List<String> platformTagList) {
     return (remotePackage, cq, cb) -> {
       Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
-      List<Predicate> predicates = new ArrayList<>();
-      for (String platformTag : platformTagList) {
-        predicates.add(cb.or(cb.isMember(platformTag, bundles.get("targets"))));
-      }
-      cq.distinct(true);
-      return cb.or(predicates.toArray(new Predicate[predicates.size()]));
+      return bundles.join("targets").in(platformTagList);
+
     };
   }
 
   /**
-   * Product tag filtering specification. Filter products matching the given tags
+   * Product tag filtering specification. Filter packages matching the given tags
    * 
    * @param tag - The tag to find
    * @return The JPA Specification
@@ -112,7 +139,7 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   }
 
   /**
-   * Product tag filtering specification. Filter products matching the given tags
+   * Product tag filtering specification. Filter packages matching the given tags
    * 
    * @param type - The type to find
    * @return The JPA Specification

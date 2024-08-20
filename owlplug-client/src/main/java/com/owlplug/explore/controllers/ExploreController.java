@@ -29,12 +29,13 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
-import com.owlplug.explore.model.search.StoreFilterCriteria;
+import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
@@ -90,13 +91,13 @@ public class ExploreController extends BaseController {
   @FXML
   private Button sourcesButton;
   @FXML
+  private Button formatFilterButton;
+  @FXML
   private Button platformFilterButton;
   @FXML
   private Button syncSourcesButton;
   @FXML
   private Label resultCounter;
-  @FXML
-  private VBox masonryWrapper;
   @FXML
   private MasonryPane masonryPane;
   @FXML
@@ -108,7 +109,9 @@ public class ExploreController extends BaseController {
   @FXML
   private Pane exploreChipViewContainer;
   
-  private HashMap<String, CheckBox> targetFilterCheckBoxes = new HashMap<>();
+  private final HashMap<String, CheckBox> targetFilterCheckBoxes = new HashMap<>();
+
+  private final HashMap<String, CheckBox> formatsFilterCheckBoxes = new HashMap<>();
   
 
   private ExploreChipView exploreChipView;
@@ -139,6 +142,31 @@ public class ExploreController extends BaseController {
       mainController.getLeftDrawer().open();
 
     });
+
+    for (PluginFormat format : PluginFormat.values()) {
+      CheckBox checkbox = new CheckBox(format.getText());
+      formatsFilterCheckBoxes.put(format.getText().toLowerCase(), checkbox);
+      checkbox.setSelected(false);
+      checkbox.setOnAction(e -> {
+        performPackageSearch();
+      });
+    }
+
+    VBox formatFilterVbox = new VBox();
+    formatFilterVbox.setSpacing(5);
+    formatFilterVbox.setPadding(new Insets(5,10,5,10));
+    Label formatLabel = new Label("Plugin format");
+    formatLabel.getStyleClass().add("label-disabled");
+    formatFilterVbox.getChildren().add(formatLabel);
+    for (Entry<String, CheckBox> entry : formatsFilterCheckBoxes.entrySet()) {
+      formatFilterVbox.getChildren().add(entry.getValue());
+    }
+
+    formatFilterButton.setOnAction(e -> {
+      Popup popup = new Popup(formatFilterVbox);
+      popup.show(formatFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
+    });
+
     
     targetFilterCheckBoxes.put("win32", new CheckBox("Windows 32 bits"));
     targetFilterCheckBoxes.put("win64", new CheckBox("Windows 64 bits"));
@@ -152,18 +180,18 @@ public class ExploreController extends BaseController {
       });
     }
     
-    VBox vbx = new VBox();
-    vbx.setSpacing(5);
-    vbx.setPadding(new Insets(5,10,5,10));
+    VBox platformFilterVbox = new VBox();
+    platformFilterVbox.setSpacing(5);
+    platformFilterVbox.setPadding(new Insets(5,10,5,10));
     Label popupLabel = new Label("Target environment contains");
     popupLabel.getStyleClass().add("label-disabled");
-    vbx.getChildren().add(popupLabel);
+    platformFilterVbox.getChildren().add(popupLabel);
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
-      vbx.getChildren().add(entry.getValue());
+      platformFilterVbox.getChildren().add(entry.getValue());
     }
 
     platformFilterButton.setOnAction(e -> {
-      Popup popup = new Popup(vbx);
+      Popup popup = new Popup(platformFilterVbox);
       popup.show(platformFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
     });
 
@@ -176,7 +204,7 @@ public class ExploreController extends BaseController {
     HBox.setHgrow(exploreChipView, Priority.ALWAYS);
     exploreChipViewContainer.getChildren().add(exploreChipView);
 
-    exploreChipView.getChips().addListener((ListChangeListener<StoreFilterCriteria>) change -> {
+    exploreChipView.getChips().addListener((ListChangeListener<ExploreFilterCriteria>) change -> {
       performPackageSearch();
     });
 
@@ -206,13 +234,23 @@ public class ExploreController extends BaseController {
   }
   
   private void performPackageSearch() {
-    final List<StoreFilterCriteria> criteriaChipList = exploreChipView.getChips();
-    List<StoreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
+    final List<ExploreFilterCriteria> criteriaChipList = exploreChipView.getChips();
+    List<ExploreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
     
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
       if (entry.getValue().isSelected()) {
-        criteriaList.add(new StoreFilterCriteria(entry.getKey(), ExploreFilterCriteriaType.PLATFORM));
+        criteriaList.add(new ExploreFilterCriteria(entry.getKey(), ExploreFilterCriteriaType.PLATFORM));
       }
+    }
+
+    List<String> formats = new ArrayList<>();
+    for (Entry<String, CheckBox> entry : formatsFilterCheckBoxes.entrySet()) {
+      if (entry.getValue().isSelected()) {
+        formats.add(entry.getKey());
+      }
+    }
+    if (formats.size() > 0) {
+      criteriaList.add(new ExploreFilterCriteria(formats, ExploreFilterCriteriaType.FORMAT_LIST));
     }
 
     Task<Iterable<RemotePackage>> task = new Task<Iterable<RemotePackage>>() {
@@ -340,18 +378,22 @@ public class ExploreController extends BaseController {
 
 
     File selectedDirectory = null;
-    String baseDirectoryPath = exploreService.getBundleInstallFolder(bundle);
+    String baseDirectoryPath = null;
+
+    // Compute base directory using format if possible
+    if (exploreService.canDeterminateBundleInstallFolder(bundle)) {
+      baseDirectoryPath = exploreService.getBundleInstallFolder(bundle);
+    }
 
     // A custom root directory to store plugin is defined and the base directory for
-    // the bundle type is defined or not blank.
+    // the bundle format is defined or not blank.
     if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false) &&
       baseDirectoryPath != null && !baseDirectoryPath.isBlank()) {
       // Store install target is already defined
-
       String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
       Boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
 
-      //if the enduser wishes to group plugins by their creator,
+      //if the user wishes to group plugins by their creator,
       //then we need to include the subdirectory as well.
       if (shouldGroupByCreator) {
         String creator = FileUtils.sanitizeFileName(bundle.getRemotePackage().getCreator());
@@ -365,7 +407,9 @@ public class ExploreController extends BaseController {
       // Open dialog chooser to define store installation target
       DirectoryChooser directoryChooser = new DirectoryChooser();
       // Open the VST directory
-      File initialDirectory = new File(baseDirectoryPath);
+      String vstDirectory = this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY,
+              this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.VST2));
+      File initialDirectory = new File(vstDirectory);
       if (initialDirectory.isDirectory()) {
         directoryChooser.setInitialDirectory(initialDirectory);
       }
