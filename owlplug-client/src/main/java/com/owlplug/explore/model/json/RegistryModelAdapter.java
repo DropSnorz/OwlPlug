@@ -106,7 +106,9 @@ public class RegistryModelAdapter {
     packageBundle.setFileSize(bundleMapper.getFileSize());
 
     if (bundleMapper.getFormats() != null && bundleMapper.getFormats().size() > 0) {
-      packageBundle.setFormats(bundleMapper.getFormats());
+      List<String> formats = new ArrayList<>(bundleMapper.getFormats());
+      formats.replaceAll(e -> e.equals("vst") ? "vst2" : e.toLowerCase());
+      packageBundle.setFormats(formats);
 
     // Support undefined formats field with fallback to format
     } else if (bundleMapper.getFormat() != null) {
