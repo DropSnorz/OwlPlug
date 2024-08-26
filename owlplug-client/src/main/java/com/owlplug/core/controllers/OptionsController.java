@@ -21,6 +21,7 @@ package com.owlplug.core.controllers;
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.controllers.dialogs.DonateDialogController;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
 import com.owlplug.core.model.platform.OperatingSystem;
@@ -50,11 +51,12 @@ public class OptionsController extends BaseController {
   private NativeHostService nativeHostService;
   @Autowired
   private ListDirectoryDialogController listDirectoryDialogController;
+  @Autowired
+  private DonateDialogController donateDialogController;
   @FXML
   private CheckBox pluginNativeCheckbox;
   @FXML
   private ComboBox<NativePluginLoader> pluginNativeComboBox;
-
   @FXML
   private CheckBox syncPluginsCheckBox;
   @FXML
@@ -82,6 +84,8 @@ public class OptionsController extends BaseController {
   private Hyperlink owlplugWebsiteLink;
   @FXML
   private VBox pluginPathContainer;
+  @FXML
+  private Button moreFeaturesButton;
 
   private PluginPathFragmentController vst2PluginPathFragment;
   private PluginPathFragmentController vst3PluginPathFragment;
@@ -211,6 +215,10 @@ public class OptionsController extends BaseController {
 
     owlplugWebsiteLink.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(owlplugWebsiteLink.getText());
+    });
+
+    moreFeaturesButton.setOnAction(e -> {
+      donateDialogController.show();
     });
 
     refreshView();

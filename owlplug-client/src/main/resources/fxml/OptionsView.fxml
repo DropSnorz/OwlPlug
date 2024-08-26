@@ -3,10 +3,11 @@
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.OptionsController">
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.OptionsController">
    <children>
       <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -100,8 +101,10 @@
                                     <Label styleClass="heading-2" text="Danger Zone" />
                                     <VBox spacing="5.0">
                                        <children>
-                                          <Label text="Remove all stored user data including settings, remote sources and accounts. Plugins and projects files will not be deleted." wrapText="true" />
-                                          <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" text="Clear user data" />
+                                          <Label text="Permanently delete all stored user data including settings, remote sources and accounts. Plugins and projects files will not be deleted." wrapText="true" />
+                                          <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" text="Remove user data" />
+                                          <Label text="Remove the data cached by OwlPlug (screenshots, remote metadata, ...)" wrapText="true" />
+                                          <Button fx:id="clearCacheButton" minHeight="-Infinity" minWidth="-Infinity" text="Clear cache" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -127,7 +130,14 @@
                                           </TextFlow>
                                           <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Button fx:id="clearCacheButton" text="Clear cache" />
+                                                <Button fx:id="moreFeaturesButton" text="Get more features ...">
+                                                   <graphic>
+                                                      <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../icons/rocket-white-64.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic></Button>
                                              </children>
                                           </HBox>
                                        </children>

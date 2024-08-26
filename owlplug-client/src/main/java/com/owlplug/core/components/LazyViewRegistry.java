@@ -42,6 +42,7 @@ public class LazyViewRegistry {
   public static final String CRASH_RECOVERY_VIEW = "CRASH_RECOVERY_VIEW";
   public static final String LIST_DIRECTORY_VIEW = "LIST_DIRECTORY_VIEW";
   public static final String EXPORT_VIEW = "EXPORT_VIEW";
+  public static final String DONATE_VIEW = "DONATE_VIEW";
 
 
   @Autowired
@@ -66,7 +67,7 @@ public class LazyViewRegistry {
     preloadFxml(CRASH_RECOVERY_VIEW, "/fxml/dialogs/CrashRecoveryView.fxml");
     preloadFxml(LIST_DIRECTORY_VIEW, "/fxml/dialogs/ListDirectoryView.fxml");
     preloadFxml(EXPORT_VIEW, "/fxml/dialogs/ExportView.fxml");
-
+    preloadFxml(DONATE_VIEW, "/fxml/dialogs/DonateView.fxml");
 
   }
 
