@@ -27,6 +27,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +60,12 @@ public class PluginFileCollector {
       PluginFileFormatResolver pluginFileResolver = new PluginFileFormatResolver(runtimePlatform, pluginFormat);
       baseFiles.sort(Comparator.comparing(File::getAbsolutePath));
 
-      for (File file : baseFiles) {
+      List<File> filteredFiles = baseFiles.stream()
+                                     // Filter out HFS metadata files starting with "._"
+                                     .filter(file -> !file.getName().startsWith("._"))
+                                     .toList();
+
+      for (File file : filteredFiles) {
         /*
          *  Lookup for nested plugins in bundles and prevent them from being referenced multiple times.
          *  For example a VST3 bundle file can contain a .vst3 file for windows, but we

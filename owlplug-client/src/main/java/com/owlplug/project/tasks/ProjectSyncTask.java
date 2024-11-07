@@ -54,7 +54,7 @@ public class ProjectSyncTask extends AbstractTask {
 
     projectDAO.deleteAll();
 
-
+    // Collect files from all project directories
     List<File> baseFiles = new ArrayList<>();
     for (String directory : projectDirectories) {
       File dir = new File(directory);
@@ -64,9 +64,15 @@ public class ProjectSyncTask extends AbstractTask {
       }
     }
 
-    this.setMaxProgress(baseFiles.size());
+    // Filter collected files
+    List<File> filteredFiles = baseFiles.stream()
+                                   // Filter out HFS metadata files starting with "._"
+                                   .filter(file -> !file.getName().startsWith("._"))
+                                   .toList();
 
-    for (File file : baseFiles) {
+    this.setMaxProgress(filteredFiles.size());
+
+    for (File file : filteredFiles) {
       this.commitProgress(1);
       AbletonProjectExplorer abletonExplorer = new AbletonProjectExplorer();
       ReaperProjectExplorer reaperExplorer = new ReaperProjectExplorer();
