@@ -12,7 +12,7 @@ cp ../owlplug-client/target/owlplug-client-$owlplugversion.jar ./input/owlplug.j
 
 echo "Generating OwlPlug DMG Install package"
 
-jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.JarLauncher \
+jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.launch.JarLauncher \
 --main-jar owlplug.jar --license-file ./input/LICENSE --dest ./output \
 --app-version $owlplugversion --icon ./resources/owlplug.icns --vendor OwlPlug \
 --mac-package-identifier owlplug --mac-package-name OwlPlug

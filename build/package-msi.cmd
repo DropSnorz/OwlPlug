@@ -13,7 +13,7 @@ copy "..\owlplug-client\target\owlplug-client-%owlplug-version%.jar" ".\input\ow
 
 echo ** Generating OwlPlug MSI Install package **
 
-jpackage --type msi --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.JarLauncher ^
+jpackage --type msi --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.launch.JarLauncher ^
 --main-jar owlplug.jar --license-file .\input\LICENSE --dest ./output ^
 --app-version %owlplug-version% --icon .\resources\owlplug.ico --vendor OwlPlug ^
 --win-dir-chooser --win-menu --win-shortcut
