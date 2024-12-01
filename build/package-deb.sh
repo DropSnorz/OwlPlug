@@ -12,7 +12,7 @@ cp ../owlplug-client/target/owlplug-client-$owlplugversion.jar ./input/owlplug.j
 
 echo "Generating OwlPlug DEB Install package"
 
-jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.JarLauncher \
+jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.launch.JarLauncher \
 --main-jar owlplug.jar --license-file ./input/LICENSE --dest ./output \
 --app-version $owlplugversion --icon ./resources/owlplug.png --vendor OwlPlug \
 --linux-package-name owlplug --linux-deb-maintainer contact@owlplug.com \
