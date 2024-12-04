@@ -24,14 +24,12 @@ import com.owlplug.core.controllers.dialogs.NewLinkController;
 import com.owlplug.core.dao.PluginDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.PluginService;
-import com.owlplug.core.ui.FilterableTreeItem;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
-import org.controlsfx.control.tableview2.FilteredTableView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import jfxtras.styles.jmetro.JMetroStyleClass;
@@ -53,6 +51,8 @@ public class PluginsController extends BaseController {
   protected CoreTaskFactory taskFactory;
   @Autowired
   protected PluginTreeViewController treeViewController;
+  @Autowired
+  protected PluginTableController tableController;
 
   @FXML
   private Button syncButton;
@@ -68,8 +68,6 @@ public class PluginsController extends BaseController {
   private VBox pluginInfoPane;
   @FXML
   private VBox pluginsContainer;
-  @FXML
-  private FilteredTableView<Plugin> pluginTableView;
 
   /**
    * FXML initialize method.
@@ -82,6 +80,7 @@ public class PluginsController extends BaseController {
     });
 
     pluginsContainer.getChildren().add(treeViewController.getTreeViewNode());
+    pluginsContainer.getChildren().add(tableController.getTableView());
 
     // Dispatches treeView selection event to the nodeInfoController
     treeViewController.getTreeViewNode().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -104,8 +103,8 @@ public class PluginsController extends BaseController {
         treeViewController.getTreeViewNode().setManaged(true);
         pluginInfoPane.setManaged(true);
         pluginInfoPane.setVisible(true);
-        pluginTableView.setManaged(false);
-        pluginTableView.setVisible(false);
+        tableController.getTableView().setManaged(false);
+        tableController.getTableView().setVisible(false);
       } else if (newTab.getId().equals("treeTabDirectories")) {
         treeViewController.setDisplay(PluginTreeViewController.Display.DirectoryTree);
         // TODO setVisible / managed in subcontroller
@@ -113,15 +112,15 @@ public class PluginsController extends BaseController {
         treeViewController.getTreeViewNode().setVisible(true);
         pluginInfoPane.setManaged(true);
         pluginInfoPane.setVisible(true);
-        pluginTableView.setManaged(false);
-        pluginTableView.setVisible(false);
+        tableController.getTableView().setManaged(false);
+        tableController.getTableView().setVisible(false);
       } else {
         treeViewController.getTreeViewNode().setManaged(false);
         treeViewController.getTreeViewNode().setVisible(false);
         pluginInfoPane.setManaged(false);
         pluginInfoPane.setVisible(false);
-        pluginTableView.setManaged(true);
-        pluginTableView.setVisible(true);
+        tableController.getTableView().setManaged(true);
+        tableController.getTableView().setVisible(true);
       }
     });
 
@@ -143,6 +142,7 @@ public class PluginsController extends BaseController {
   public void clearAndFillPluginTree() {
     Iterable<Plugin> plugins = pluginDAO.findAll();
     treeViewController.clearAndFillPluginTree(plugins);
+    tableController.displayPlugins(plugins);
   }
 
   public void selectPluginInTreeById(long id) {
@@ -151,6 +151,7 @@ public class PluginsController extends BaseController {
   
   public void refreshPluginTree() {
     treeViewController.refresh();
+    tableController.refresh();
   }
 
 }

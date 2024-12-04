@@ -52,9 +52,6 @@
       <BorderPane BorderPane.alignment="CENTER">
       	<center>
             <VBox fx:id="pluginsContainer">
-                <FilteredTableView fx:id="pluginTableView">
-
-                </FilteredTableView>
             </VBox>
       	</center>
       	<left>
