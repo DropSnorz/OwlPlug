@@ -20,7 +20,6 @@ package com.owlplug.core.controllers;
 
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFormat;
-import com.owlplug.project.model.DawPlugin;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -29,8 +28,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
-import org.controlsfx.control.tableview2.FilteredTableView;
-import org.controlsfx.control.tableview2.TableColumn2;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -75,7 +72,7 @@ public class PluginTableController extends BaseController {
 
   }
 
-  public void displayPlugins(Iterable<Plugin> plugins) {
+  public void setPlugins(Iterable<Plugin> plugins) {
     pluginList.removeAll();
     plugins.forEach(pluginList::add);
   }

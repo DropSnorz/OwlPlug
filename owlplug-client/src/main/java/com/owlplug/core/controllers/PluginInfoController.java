@@ -130,7 +130,7 @@ public class PluginInfoController extends BaseController {
       } else {
         pluginService.disablePlugin(currentPlugin);
         setPlugin(currentPlugin);
-        pluginsController.refreshPluginTree();
+        pluginsController.refresh();
       }
 
     });
@@ -138,7 +138,7 @@ public class PluginInfoController extends BaseController {
     enableButton.setOnAction(e -> {
       pluginService.enablePlugin(currentPlugin);
       setPlugin(currentPlugin);
-      pluginsController.refreshPluginTree();
+      pluginsController.refresh();
     });
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
@@ -236,7 +236,7 @@ public class PluginInfoController extends BaseController {
     removeButton.setOnAction(removeEvent -> {
       dialog.close();
       coreTaskFactory.createPluginRemoveTask(currentPlugin)
-          .setOnSucceeded(x -> pluginsController.clearAndFillPluginTree()).schedule();
+          .setOnSucceeded(x -> pluginsController.displayPlugins()).schedule();
     });
     removeButton.getStyleClass().add("button-danger");
 
@@ -283,7 +283,7 @@ public class PluginInfoController extends BaseController {
     disableButton.setOnAction(removeEvent -> {
       pluginService.disablePlugin(currentPlugin);
       setPlugin(currentPlugin);
-      pluginsController.refreshPluginTree();
+      pluginsController.refresh();
       dialog.close();
     });
 

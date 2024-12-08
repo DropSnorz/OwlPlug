@@ -79,11 +79,11 @@ public class PluginsController extends BaseController {
       newLinkController.show();
     });
 
-    pluginsContainer.getChildren().add(treeViewController.getTreeViewNode());
+    pluginsContainer.getChildren().add(treeViewController.getTreeView());
     pluginsContainer.getChildren().add(tableController.getTableView());
 
     // Dispatches treeView selection event to the nodeInfoController
-    treeViewController.getTreeViewNode().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+    treeViewController.getTreeView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
         TreeItem<Object> selectedItem = newValue;
         nodeInfoController.setNode(selectedItem.getValue());
@@ -97,26 +97,26 @@ public class PluginsController extends BaseController {
     // Handles tabPane selection event and toggles displayed treeView
     pluginTreeViewTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
       if (newTab.getId().equals("treeTabAll")) {
-        treeViewController.setDisplay(PluginTreeViewController.Display.FlatTree);
+        treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
         // TODO setVisible / managed in subcontroller
-        treeViewController.getTreeViewNode().setVisible(true);
-        treeViewController.getTreeViewNode().setManaged(true);
+        treeViewController.getTreeView().setVisible(true);
+        treeViewController.getTreeView().setManaged(true);
         pluginInfoPane.setManaged(true);
         pluginInfoPane.setVisible(true);
         tableController.getTableView().setManaged(false);
         tableController.getTableView().setVisible(false);
       } else if (newTab.getId().equals("treeTabDirectories")) {
-        treeViewController.setDisplay(PluginTreeViewController.Display.DirectoryTree);
+        treeViewController.setDisplayMode(PluginTreeViewController.Display.DirectoryTree);
         // TODO setVisible / managed in subcontroller
-        treeViewController.getTreeViewNode().setManaged(true);
-        treeViewController.getTreeViewNode().setVisible(true);
+        treeViewController.getTreeView().setManaged(true);
+        treeViewController.getTreeView().setVisible(true);
         pluginInfoPane.setManaged(true);
         pluginInfoPane.setVisible(true);
         tableController.getTableView().setManaged(false);
         tableController.getTableView().setVisible(false);
       } else {
-        treeViewController.getTreeViewNode().setManaged(false);
-        treeViewController.getTreeViewNode().setVisible(false);
+        treeViewController.getTreeView().setManaged(false);
+        treeViewController.getTreeView().setVisible(false);
         pluginInfoPane.setManaged(false);
         pluginInfoPane.setVisible(false);
         tableController.getTableView().setManaged(true);
@@ -129,27 +129,27 @@ public class PluginsController extends BaseController {
       pluginService.syncPlugins();
     });
 
-    taskFactory.addSyncPluginsListener(() -> clearAndFillPluginTree());
+    taskFactory.addSyncPluginsListener(this::displayPlugins);
 
     exportButton.setOnAction(e -> {
       exportDialogController.show();
     });
 
-    this.clearAndFillPluginTree();
+    this.displayPlugins();
 
   }
 
-  public void clearAndFillPluginTree() {
+  public void displayPlugins() {
     Iterable<Plugin> plugins = pluginDAO.findAll();
-    treeViewController.clearAndFillPluginTree(plugins);
-    tableController.displayPlugins(plugins);
+    treeViewController.setPlugins(plugins);
+    tableController.setPlugins(plugins);
   }
 
   public void selectPluginInTreeById(long id) {
     treeViewController.selectPluginInTreeById(id);
   }
   
-  public void refreshPluginTree() {
+  public void refresh() {
     treeViewController.refresh();
     tableController.refresh();
   }

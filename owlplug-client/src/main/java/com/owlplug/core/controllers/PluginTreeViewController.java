@@ -52,11 +52,13 @@ public class PluginTreeViewController extends BaseController {
   @Autowired
   private SymlinkDAO symlinkDAO;
 
-  private SimpleStringProperty search = new SimpleStringProperty();
-  private TreeView<Object> pluginTreeView;
+  private final SimpleStringProperty search = new SimpleStringProperty();
+  private final TreeView<Object> pluginTreeView;
+  private final FilterableTreeItem<Object> treePluginNode;
+  private final FilterableTreeItem<Object> treeFileRootNode;
+
   private PluginTreeViewController.FileTree pluginTree;
-  private FilterableTreeItem<Object> treePluginNode;
-  private FilterableTreeItem<Object> treeFileRootNode;
+
 
   public PluginTreeViewController() {
     pluginTreeView = new TreeView<>();
@@ -106,19 +108,19 @@ public class PluginTreeViewController extends BaseController {
 
   }
 
-  public void refresh() {
-    pluginTreeView.refresh();
-  }
-
   public SimpleStringProperty searchProperty() {
     return this.search;
   }
 
-  public TreeView<Object> getTreeViewNode() {
+  public TreeView<Object> getTreeView() {
     return pluginTreeView;
   }
 
-  public void setDisplay(Display display) {
+  public void refresh() {
+    pluginTreeView.refresh();
+  }
+
+  public void setDisplayMode(Display display) {
     if (Display.DirectoryTree.equals(display)) {
       pluginTreeView.setRoot(treeFileRootNode);
     } else if (Display.FlatTree.equals(display)) {
@@ -126,10 +128,14 @@ public class PluginTreeViewController extends BaseController {
     }
   }
 
+  public void setPlugins(Iterable<Plugin> plugins) {
+    this.clearAndFillPluginTree(plugins);
+  }
+
   /**
    * Refreshes displayed plugins in tree views.
    */
-  public void clearAndFillPluginTree(Iterable<Plugin> plugins) {
+  private void clearAndFillPluginTree(Iterable<Plugin> plugins) {
 
     treePluginNode.getInternalChildren().clear();
 
@@ -193,8 +199,14 @@ public class PluginTreeViewController extends BaseController {
   }
 
   /**
-   * Generates a PluginTree representation. [rootDir -> [ subDir1 -> [ plugin1 ->
-   * [ ] ], subDir2 -> [ plugin2 -> [] , plugin3 -> [] ]] ]
+   * Generates a PluginTree representation.
+   * <pre>
+   * [rootDir ->
+   *   [ subDir1 -> [ plugin1 -> [] ],
+   *     subDir2 -> [ plugin2 -> [] , plugin3 -> [] ]
+   *   ]
+   * ]
+   * </pre>
    *
    */
   private void generatePluginTree(Iterable<Plugin> plugins) {
@@ -338,7 +350,7 @@ public class PluginTreeViewController extends BaseController {
   }
 
   public void selectPluginInTreeById(long id) {
-    List<TreeItem> items = getAllChildrens(pluginTreeView.getRoot());
+    List<TreeItem> items = getNestedChildren(pluginTreeView.getRoot());
 
     for (TreeItem item : items) {
       if (item.getValue() instanceof Plugin plugin
@@ -350,13 +362,13 @@ public class PluginTreeViewController extends BaseController {
 
   }
 
-  private List<TreeItem> getAllChildrens(TreeItem item) {
+  private List<TreeItem> getNestedChildren(TreeItem item) {
     List<TreeItem> items = new ArrayList<>();
     items.add(item);
 
-    List<TreeItem> childs = new ArrayList<>(item.getChildren());
-    for (TreeItem child : childs) {
-      items.addAll(getAllChildrens(child));
+    List<TreeItem> children = new ArrayList<>(item.getChildren());
+    for (TreeItem child : children) {
+      items.addAll(getNestedChildren(child));
     }
     return items;
   }
