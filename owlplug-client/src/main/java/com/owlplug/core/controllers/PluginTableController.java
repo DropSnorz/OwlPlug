@@ -28,6 +28,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -39,6 +41,7 @@ public class PluginTableController extends BaseController {
 
   public PluginTableController() {
     tableView = new TableView<>();
+    VBox.setVgrow(tableView, Priority.ALWAYS);
 
     TableColumn<Plugin, String> nameColumn = new TableColumn<>("Name");
     nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));

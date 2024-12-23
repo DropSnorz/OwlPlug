@@ -40,6 +40,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,6 +64,7 @@ public class PluginTreeViewController extends BaseController {
 
   public PluginTreeViewController() {
     pluginTreeView = new TreeView<>();
+    VBox.setVgrow(pluginTreeView, Priority.ALWAYS);
     treePluginNode = new FilterableTreeItem<>("(all)");
     treeFileRootNode = new FilterableTreeItem<>("(all)");
 
