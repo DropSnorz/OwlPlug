@@ -54,11 +54,8 @@ public class Lv2BundleFile extends PluginFile {
   @Override
   public Plugin toPlugin() {
 
-    String pluginName = FilenameUtils.removeExtension(this.getPluginFile().getName());
-    String pluginPath = this.getPluginFile().getAbsolutePath().replace("\\", "/");
-    Plugin plugin = new Plugin(pluginName, pluginPath, PluginFormat.LV2);
-
-    plugin.setDisabled(this.isDisabled());
+    Plugin plugin = createPlugin();
+    plugin.setFormat(PluginFormat.LV2);
 
     return plugin;
   }

@@ -43,11 +43,8 @@ public class Vst3DllFile extends PluginFile {
   @Override
   public Plugin toPlugin() {
     
-    String pluginName = FilenameUtils.removeExtension(this.getPluginFile().getName());
-    String pluginPath = this.getPluginFile().getAbsolutePath().replace("\\", "/");
-    Plugin plugin = new  Plugin(pluginName, pluginPath, PluginFormat.VST3);
-    
-    plugin.setDisabled(this.isDisabled());
+    Plugin plugin = createPlugin();
+    plugin.setFormat(PluginFormat.VST3);
     
     return plugin;
     

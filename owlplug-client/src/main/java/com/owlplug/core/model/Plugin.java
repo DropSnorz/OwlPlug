@@ -55,6 +55,7 @@ public class Plugin {
   protected String manufacturerName;
   protected String identifier;
   protected String path;
+  protected String scanDirectoryPath;
   protected String bundleId;
   protected String version;
   protected String screenshotUrl;
@@ -82,12 +83,6 @@ public class Plugin {
 
   }
 
-  public Plugin(String name, String path, PluginFormat format) {
-    this.name = name;
-    this.path = path;
-    this.format = format;
-  }
-
   public Long getId() {
     return id;
   }
@@ -106,6 +101,14 @@ public class Plugin {
 
   public void setPath(String path) {
     this.path = path;
+  }
+
+  public String getScanDirectoryPath() {
+    return scanDirectoryPath;
+  }
+
+  public void setScanDirectoryPath(String scanDirectoryPath) {
+    this.scanDirectoryPath = scanDirectoryPath;
   }
 
   public String getBundleId() {

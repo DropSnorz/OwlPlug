@@ -32,6 +32,8 @@ import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.services.ExploreService;
 import java.io.File;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,11 +163,11 @@ public class PluginService extends BaseService {
   }
 
   /**
-   * Get the plugin path based on plugin format.
+   * Get the primary plugin path defined in preferences based on plugin format.
    * @param format plugin format
    * @return the directory path
    */
-  public String getPluginPathByFormat(PluginFormat format) {
+  public String getPrimaryPluginPathByFormat(PluginFormat format) {
 
     if (PluginFormat.VST2.equals(format)) {
       return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
@@ -178,6 +180,33 @@ public class PluginService extends BaseService {
     }
 
     return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+  }
+
+  /**
+   * Returns full list of explored directories during sync
+   * based on user preferences.
+   * @return the set of explored directories
+   */
+  public Set<String> getDirectoriesExplorationSet() {
+    Set<String> directorySet = new TreeSet<>();
+
+    if (this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
+      directorySet.add(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
+      directorySet.addAll(this.getPreferences().getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
+    }
+    if (this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
+      directorySet.add(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
+      directorySet.addAll(this.getPreferences().getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
+    }
+    if (this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)) {
+      directorySet.add(this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
+      directorySet.addAll(this.getPreferences().getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
+    }
+    if (this.getPreferences().getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false)) {
+      directorySet.add(this.getPreferences().get(ApplicationDefaults.LV2_DIRECTORY_KEY, ""));
+      directorySet.addAll(this.getPreferences().getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
+    }
+    return directorySet;
   }
 
   /**

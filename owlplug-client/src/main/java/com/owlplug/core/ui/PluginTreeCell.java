@@ -138,7 +138,7 @@ public class PluginTreeCell extends TreeCell<Object> {
       icon = new ImageView(applicationDefaults.symlinkImage);
     } else if (dir instanceof PluginDirectory pluginDirectory) {
       if (pluginDirectory.isRootDirectory()) {
-        icon = new ImageView(applicationDefaults.rootDirectoryImage);
+        icon = new ImageView(applicationDefaults.scanDirectoryImage);
       } else {
         icon = new ImageView(applicationDefaults.directoryImage);
       }
