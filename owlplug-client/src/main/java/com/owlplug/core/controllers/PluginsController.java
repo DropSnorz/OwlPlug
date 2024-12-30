@@ -87,12 +87,36 @@ public class PluginsController extends BaseController {
       if (newValue != null) {
         TreeItem<Object> selectedItem = newValue;
         nodeInfoController.setNode(selectedItem.getValue());
+        setInfoPaneDisplay(true);
+      }
+    });
+    treeViewController.getTreeView().setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getClickCount() == 2) {
+        toggleInfoPaneDisplay();
+      }
+    });
+    treeViewController.searchProperty().bind(searchTextField.textProperty());
+
+    tableController.getTableView().setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getClickCount() == 2) {
+        toggleInfoPaneDisplay();
+      }
+    });
+    tableController.getTableView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue != null) {
+        nodeInfoController.setNode(newValue);
       }
     });
 
-    treeViewController.searchProperty().bind(searchTextField.textProperty());
-
     pluginTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
+
+    // Default display (flat tree)
+    treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
+    treeViewController.getTreeView().setVisible(true);
+    treeViewController.getTreeView().setManaged(true);
+    tableController.getTableView().setManaged(false);
+    tableController.getTableView().setVisible(false);
+    setInfoPaneDisplay(true);
 
     // Handles tabPane selection event and toggles displayed treeView
     pluginTreeViewTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
@@ -101,26 +125,23 @@ public class PluginsController extends BaseController {
         // TODO setVisible / managed in subcontroller
         treeViewController.getTreeView().setVisible(true);
         treeViewController.getTreeView().setManaged(true);
-        pluginInfoPane.setManaged(true);
-        pluginInfoPane.setVisible(true);
         tableController.getTableView().setManaged(false);
         tableController.getTableView().setVisible(false);
+        setInfoPaneDisplay(true);
       } else if (newTab.getId().equals("treeTabDirectories")) {
         treeViewController.setDisplayMode(PluginTreeViewController.Display.DirectoryTree);
         // TODO setVisible / managed in subcontroller
         treeViewController.getTreeView().setManaged(true);
         treeViewController.getTreeView().setVisible(true);
-        pluginInfoPane.setManaged(true);
-        pluginInfoPane.setVisible(true);
         tableController.getTableView().setManaged(false);
         tableController.getTableView().setVisible(false);
+        setInfoPaneDisplay(true);
       } else {
         treeViewController.getTreeView().setManaged(false);
         treeViewController.getTreeView().setVisible(false);
-        pluginInfoPane.setManaged(false);
-        pluginInfoPane.setVisible(false);
         tableController.getTableView().setManaged(true);
         tableController.getTableView().setVisible(true);
+        setInfoPaneDisplay(false);
       }
     });
 
@@ -152,6 +173,16 @@ public class PluginsController extends BaseController {
   public void refresh() {
     treeViewController.refresh();
     tableController.refresh();
+  }
+
+  private void setInfoPaneDisplay(boolean display) {
+    pluginInfoPane.setManaged(display);
+    pluginInfoPane.setVisible(display);
+  }
+
+  private void toggleInfoPaneDisplay() {
+    pluginInfoPane.setManaged(!pluginInfoPane.isManaged());
+    pluginInfoPane.setVisible(!pluginInfoPane.isVisible());
   }
 
 }
