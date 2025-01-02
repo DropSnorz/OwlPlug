@@ -57,7 +57,7 @@
       	<left>
             <VBox styleClass="small-tab-pane-container">
                 <children>
-                    <TabPane fx:id="pluginTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
+                    <TabPane fx:id="displaySwitchTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
                         <tabs>
                             <Tab fx:id="treeTabAll" text="All" closable="false" />
                             <Tab fx:id="treeTabDirectories" text="Directories" closable="false" />

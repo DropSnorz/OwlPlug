@@ -131,6 +131,11 @@ public class PluginTreeViewController extends BaseController {
     }
   }
 
+  public void setNodeManaged(boolean isManaged) {
+    this.pluginTreeView.setManaged(isManaged);
+    this.pluginTreeView.setVisible(isManaged);
+  }
+
   public void setPlugins(Iterable<Plugin> plugins) {
     this.clearAndFillPluginTree(plugins);
   }

@@ -59,7 +59,7 @@ public class PluginsController extends BaseController {
   @FXML
   private Button exportButton;
   @FXML
-  private TabPane pluginTreeViewTabPane;
+  private TabPane displaySwitchTabPane;
   @FXML
   private TextField searchTextField;
   @FXML
@@ -79,8 +79,14 @@ public class PluginsController extends BaseController {
       newLinkController.show();
     });
 
+    // Add Plugin Table and TreeView to the scene graph
     pluginsContainer.getChildren().add(treeViewController.getTreeView());
     pluginsContainer.getChildren().add(tableController.getTableView());
+
+    /* ===================
+     * Plugins TreeView properties init and bindings
+     * ===================
+     */
 
     // Dispatches treeView selection event to the nodeInfoController
     treeViewController.getTreeView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -97,6 +103,11 @@ public class PluginsController extends BaseController {
     });
     treeViewController.searchProperty().bind(searchTextField.textProperty());
 
+    /* ===================
+     * Plugins Table properties init and bindings
+     * ===================
+     */
+
     tableController.getTableView().setOnMouseClicked(mouseEvent -> {
       if (mouseEvent.getClickCount() == 2) {
         toggleInfoPaneDisplay();
@@ -108,9 +119,17 @@ public class PluginsController extends BaseController {
       }
     });
 
-    pluginTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
+    tableController.searchProperty().bind(searchTextField.textProperty());
 
-    // Default display (flat tree)
+
+    /* ===================
+     * Controller and node graph initialization
+     * ===================
+     */
+
+    displaySwitchTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
+
+    // Set default display (flat plugin tree)
     treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
     treeViewController.getTreeView().setVisible(true);
     treeViewController.getTreeView().setManaged(true);
@@ -119,28 +138,20 @@ public class PluginsController extends BaseController {
     setInfoPaneDisplay(true);
 
     // Handles tabPane selection event and toggles displayed treeView
-    pluginTreeViewTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+    displaySwitchTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
       if (newTab.getId().equals("treeTabAll")) {
         treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
-        // TODO setVisible / managed in subcontroller
-        treeViewController.getTreeView().setVisible(true);
-        treeViewController.getTreeView().setManaged(true);
-        tableController.getTableView().setManaged(false);
-        tableController.getTableView().setVisible(false);
+        treeViewController.setNodeManaged(true);
+        tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
       } else if (newTab.getId().equals("treeTabDirectories")) {
         treeViewController.setDisplayMode(PluginTreeViewController.Display.DirectoryTree);
-        // TODO setVisible / managed in subcontroller
-        treeViewController.getTreeView().setManaged(true);
-        treeViewController.getTreeView().setVisible(true);
-        tableController.getTableView().setManaged(false);
-        tableController.getTableView().setVisible(false);
+        treeViewController.setNodeManaged(true);
+        tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
       } else {
-        treeViewController.getTreeView().setManaged(false);
-        treeViewController.getTreeView().setVisible(false);
-        tableController.getTableView().setManaged(true);
-        tableController.getTableView().setVisible(true);
+        treeViewController.setNodeManaged(false);
+        tableController.setNodeManaged(true);
         setInfoPaneDisplay(false);
       }
     });

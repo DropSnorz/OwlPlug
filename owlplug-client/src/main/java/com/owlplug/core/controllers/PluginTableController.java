@@ -24,10 +24,12 @@ import com.owlplug.core.model.PluginState;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.PluginStateView;
 import com.owlplug.core.utils.FileUtils;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -43,9 +45,14 @@ public class PluginTableController extends BaseController {
   @Autowired
   private PluginService pluginService;
 
+  private final SimpleStringProperty search = new SimpleStringProperty();
   private TableView<Plugin> tableView;
 
   private ObservableList<Plugin> pluginList;
+
+  // Wraps an ObservableList and filters its content using the provided Predicate.
+  // All changes in the ObservableList are propagated immediately to the FilteredList.
+  private FilteredList<Plugin> filteredPluginList;
 
 
   public PluginTableController() {
@@ -131,7 +138,17 @@ public class PluginTableController extends BaseController {
         manufacturerColumn, categoryColumn, directoryColumn, scanDirectoryColumn, stateColumn);
 
     pluginList = FXCollections.observableArrayList();
-    tableView.setItems(pluginList);
+    filteredPluginList = new FilteredList<>(pluginList);
+
+    filteredPluginList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+      if (search.getValue() == null || search.getValue().isEmpty()) {
+        return null;
+      }
+      return (plugin) -> plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
+                 || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(search.getValue().toLowerCase()));
+    }, search));
+
+    tableView.setItems(filteredPluginList);
 
   }
 
@@ -142,7 +159,15 @@ public class PluginTableController extends BaseController {
 
   public TableView<Plugin> getTableView() {
     return tableView;
+  }
 
+  public void setNodeManaged(boolean isManaged) {
+    this.tableView.setManaged(isManaged);
+    this.tableView.setVisible(isManaged);
+  }
+
+  public SimpleStringProperty searchProperty() {
+    return this.search;
   }
 
   public void refresh() {
