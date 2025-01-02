@@ -59,9 +59,9 @@
                 <children>
                     <TabPane fx:id="displaySwitchTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
                         <tabs>
-                            <Tab fx:id="treeTabAll" text="All" closable="false" />
-                            <Tab fx:id="treeTabDirectories" text="Directories" closable="false" />
-                            <Tab fx:id="tableTab" text="Table" closable="false" />
+                            <Tab fx:id="displayListTab" text="List" closable="false" />
+                            <Tab fx:id="displayDirectoriesTab" text="Directories" closable="false" />
+                            <Tab fx:id="displayTableTab" text="Table" closable="false" />
                         </tabs>
                     </TabPane>
                 </children>

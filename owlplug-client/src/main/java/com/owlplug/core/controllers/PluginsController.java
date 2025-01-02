@@ -26,6 +26,7 @@ import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.PluginService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -60,6 +61,13 @@ public class PluginsController extends BaseController {
   private Button exportButton;
   @FXML
   private TabPane displaySwitchTabPane;
+  @FXML
+  private Tab displayListTab;
+  @FXML
+  private Tab displayDirectoriesTab;
+  @FXML
+  private Tab displayTableTab;
+
   @FXML
   private TextField searchTextField;
   @FXML
@@ -139,12 +147,12 @@ public class PluginsController extends BaseController {
 
     // Handles tabPane selection event and toggles displayed treeView
     displaySwitchTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-      if (newTab.getId().equals("treeTabAll")) {
+      if (newTab.equals(displayListTab)) {
         treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
         treeViewController.setNodeManaged(true);
         tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
-      } else if (newTab.getId().equals("treeTabDirectories")) {
+      } else if (newTab.equals(displayDirectoriesTab)) {
         treeViewController.setDisplayMode(PluginTreeViewController.Display.DirectoryTree);
         treeViewController.setNodeManaged(true);
         tableController.setNodeManaged(false);
