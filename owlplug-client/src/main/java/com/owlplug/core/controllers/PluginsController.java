@@ -194,12 +194,12 @@ public class PluginsController extends BaseController {
     tableController.refresh();
   }
 
-  private void setInfoPaneDisplay(boolean display) {
+  public void setInfoPaneDisplay(boolean display) {
     pluginInfoPane.setManaged(display);
     pluginInfoPane.setVisible(display);
   }
 
-  private void toggleInfoPaneDisplay() {
+  public void toggleInfoPaneDisplay() {
     pluginInfoPane.setManaged(!pluginInfoPane.isManaged());
     pluginInfoPane.setVisible(!pluginInfoPane.isVisible());
   }

@@ -24,14 +24,20 @@ import com.owlplug.core.model.PluginState;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.PluginStateView;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.core.utils.PlatformUtils;
+import java.io.File;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
@@ -41,6 +47,9 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class PluginTableController extends BaseController {
+
+  @Autowired
+  private PluginsController pluginsController;
 
   @Autowired
   private PluginService pluginService;
@@ -137,6 +146,20 @@ public class PluginTableController extends BaseController {
     tableView.getColumns().addAll(formatColumn, nameColumn, versionColumn,
         manufacturerColumn, categoryColumn, directoryColumn, scanDirectoryColumn, stateColumn);
 
+
+
+    tableView.setRowFactory(tv -> {
+      TableRow<Plugin> row = new TableRow<>();
+      row.itemProperty().addListener((obs, oldItem, newItem) -> {
+        if (newItem != null) {
+          row.setContextMenu(createPluginContextMenu(newItem));
+        }
+      });
+      return row ;
+    });
+    tableView.setContextMenu(createPluginContextMenu(new Plugin()));
+
+
     pluginList = FXCollections.observableArrayList();
     filteredPluginList = new FilteredList<>(pluginList);
 
@@ -172,6 +195,45 @@ public class PluginTableController extends BaseController {
 
   public void refresh() {
     tableView.refresh();
+  }
+
+  private ContextMenu createPluginContextMenu(Plugin plugin) {
+
+    ContextMenu menu = new ContextMenu();
+    MenuItem openDirItem = new MenuItem("Reveal in File Explorer");
+    openDirItem.setOnAction(e -> {
+        File pluginFile = new File(plugin.getPath());
+        PlatformUtils.openFromDesktop(pluginFile.getParentFile());
+    });
+
+    menu.getItems().addAll(openDirItem, new SeparatorMenuItem());
+
+    if (plugin.isDisabled()) {
+      MenuItem enableItem = new MenuItem ("Enable plugin");
+      enableItem.setOnAction(e -> {
+        pluginService.enablePlugin(plugin);
+        // TODO refresh view + reset plugin info ?
+      });
+      menu.getItems().add(enableItem);
+    } else {
+      MenuItem disableItem = new MenuItem("Disable plugin");
+      disableItem.setOnAction(e -> {
+        // TODO add confirmation for disabling plugin
+        pluginService.disablePlugin(plugin);
+        // TODO refresh view + reset plugin info ?
+      });
+      menu.getItems().add(disableItem);
+    }
+
+    menu.getItems().add(new SeparatorMenuItem());
+
+    MenuItem infoDisplayItem = new MenuItem("Toggle info display");
+    menu.getItems().add(infoDisplayItem);
+    infoDisplayItem.setOnAction(e -> {
+      pluginsController.toggleInfoPaneDisplay();
+    });
+
+    return menu;
   }
 
 
