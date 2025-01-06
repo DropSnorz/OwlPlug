@@ -18,6 +18,8 @@
 
 package com.owlplug.core.controllers;
 
+import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.controllers.dialogs.DisablePluginDialogController;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginState;
@@ -50,18 +52,15 @@ public class PluginTableController extends BaseController {
 
   @Autowired
   private PluginsController pluginsController;
-
+  @Autowired
+  private DisablePluginDialogController disableController;
   @Autowired
   private PluginService pluginService;
 
   private final SimpleStringProperty search = new SimpleStringProperty();
-  private TableView<Plugin> tableView;
+  private final TableView<Plugin> tableView;
 
-  private ObservableList<Plugin> pluginList;
-
-  // Wraps an ObservableList and filters its content using the provided Predicate.
-  // All changes in the ObservableList are propagated immediately to the FilteredList.
-  private FilteredList<Plugin> filteredPluginList;
+  private final ObservableList<Plugin> pluginList;
 
 
   public PluginTableController() {
@@ -146,8 +145,6 @@ public class PluginTableController extends BaseController {
     tableView.getColumns().addAll(formatColumn, nameColumn, versionColumn,
         manufacturerColumn, categoryColumn, directoryColumn, scanDirectoryColumn, stateColumn);
 
-
-
     tableView.setRowFactory(tv -> {
       TableRow<Plugin> row = new TableRow<>();
       row.itemProperty().addListener((obs, oldItem, newItem) -> {
@@ -155,13 +152,15 @@ public class PluginTableController extends BaseController {
           row.setContextMenu(createPluginContextMenu(newItem));
         }
       });
-      return row ;
+      return row;
     });
     tableView.setContextMenu(createPluginContextMenu(new Plugin()));
 
 
     pluginList = FXCollections.observableArrayList();
-    filteredPluginList = new FilteredList<>(pluginList);
+    // Wraps an ObservableList and filters its content using the provided Predicate.
+    // All changes in the ObservableList are propagated immediately to the FilteredList.
+    FilteredList<Plugin> filteredPluginList = new FilteredList<>(pluginList);
 
     filteredPluginList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
       if (search.getValue() == null || search.getValue().isEmpty()) {
@@ -212,15 +211,18 @@ public class PluginTableController extends BaseController {
       MenuItem enableItem = new MenuItem ("Enable plugin");
       enableItem.setOnAction(e -> {
         pluginService.enablePlugin(plugin);
-        // TODO refresh view + reset plugin info ?
+        pluginsController.refresh();
       });
       menu.getItems().add(enableItem);
     } else {
       MenuItem disableItem = new MenuItem("Disable plugin");
       disableItem.setOnAction(e -> {
-        // TODO add confirmation for disabling plugin
-        pluginService.disablePlugin(plugin);
-        // TODO refresh view + reset plugin info ?
+        if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
+          this.disableController.setPlugin(plugin);
+          this.disableController.show();
+        } else {
+          this.disableController.disablePluginWithoutPrompt(plugin);
+        }
       });
       menu.getItems().add(disableItem);
     }
@@ -236,8 +238,4 @@ public class PluginTableController extends BaseController {
     return menu;
   }
 
-
 }
-
-
-
