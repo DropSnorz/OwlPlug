@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers.dialogs;
 
 import com.owlplug.controls.AutoCompletePopup;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
@@ -187,17 +188,14 @@ public class NewLinkController extends AbstractDialogController {
     }
   }
 
-  
   @Override
-  protected Node getBody() {
-    return lazyViewRegistry.get(LazyViewRegistry.NEW_LINK_VIEW);
-  }
-
-  @Override
-  protected Node getHeading() {
+  protected DialogLayout getLayout() {
+    DialogLayout layout = new DialogLayout();
     Label title = new Label("Create a new Link");
     title.getStyleClass().add("heading-3");
-    return title;
+    layout.setHeading(title);
+    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.NEW_LINK_VIEW));
+    return layout;
   }
 
 }

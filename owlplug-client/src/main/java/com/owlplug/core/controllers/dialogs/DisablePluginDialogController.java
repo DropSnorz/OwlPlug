@@ -7,7 +7,6 @@ import com.owlplug.core.controllers.PluginsController;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.PluginService;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -29,12 +28,13 @@ public class DisablePluginDialogController extends AbstractDialogController {
   private Plugin plugin;
 
   public DisablePluginDialogController() {
-    super(600,280);
+    super(600,300);
   }
 
   @Override
-  protected Node getBody() {
+  protected DialogLayout getLayout() {
     DialogLayout layout = new DialogLayout();
+    layout.setHeading(new Label("Disable plugin " + plugin.getName()));
     VBox vbox = new VBox(10);
     Label dialogLabel = new Label(
             "Disabling a plugin will rename the plugin file by updating the extension. "
@@ -70,12 +70,6 @@ public class DisablePluginDialogController extends AbstractDialogController {
 
     layout.setActions(disableButton, cancelButton);
     return layout;
-  }
-
-  @Override
-  protected Node getHeading() {
-    return new Label("Disable plugin " + plugin.getName());
-
   }
 
   public void setPlugin(Plugin plugin) {

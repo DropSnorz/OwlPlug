@@ -18,6 +18,7 @@
  
 package com.owlplug.explore.controllers;
 
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.IEntityCreateOrUpdate;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
@@ -159,12 +160,8 @@ public class NewSourceDialogController extends AbstractDialogController implemen
   }
 
   @Override
-  protected Node getBody() {
-    return lazyViewRegistry.getAsNode(LazyViewRegistry.NEW_SOURCE_VIEW);
-  }
-
-  @Override
-  protected Node getHeading() {
+  protected DialogLayout getLayout() {
+    DialogLayout layout = new DialogLayout();
     Label title = new Label("Add a new source");
     title.getStyleClass().add("heading-3");
 
@@ -172,7 +169,11 @@ public class NewSourceDialogController extends AbstractDialogController implemen
     iv.setFitHeight(20);
     iv.setFitWidth(20);
     title.setGraphic(iv);
-    return title;
+    layout.setHeading(title);
+
+    layout.setBody(lazyViewRegistry.getAsNode(LazyViewRegistry.NEW_SOURCE_VIEW));
+    return layout;
+
   }
 
 }
