@@ -18,6 +18,7 @@
  
 package com.owlplug.core.controllers;
 
+import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.controllers.dialogs.ExportDialogController;
 import com.owlplug.core.controllers.dialogs.NewLinkController;
@@ -152,17 +153,29 @@ public class PluginsController extends BaseController {
         treeViewController.setNodeManaged(true);
         tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
+        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "LIST");
       } else if (newTab.equals(displayDirectoriesTab)) {
         treeViewController.setDisplayMode(PluginTreeViewController.Display.DirectoryTree);
         treeViewController.setNodeManaged(true);
         tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
+        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "DIRECTORIES");
       } else {
         treeViewController.setNodeManaged(false);
         tableController.setNodeManaged(true);
         setInfoPaneDisplay(false);
+        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "TABLE");
       }
     });
+
+    if (this.getPreferences().get(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "").equals("TABLE")) {
+      displaySwitchTabPane.getSelectionModel().select(displayTableTab);
+    } else if (this.getPreferences().get(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "").equals("DIRECTORIES")) {
+      displaySwitchTabPane.getSelectionModel().select(displayDirectoriesTab);
+    } else {
+      displaySwitchTabPane.getSelectionModel().select(displayListTab);
+    }
+
 
     syncButton.setOnAction(e -> {
       this.getAnalyticsService().pageView("/app/core/action/syncPlugins");
@@ -185,8 +198,12 @@ public class PluginsController extends BaseController {
     tableController.setPlugins(plugins);
   }
 
-  public void selectPluginInTreeById(long id) {
-    treeViewController.selectPluginInTreeById(id);
+  public void selectPluginById(long id) {
+    if (displaySwitchTabPane.getSelectionModel().getSelectedItem().equals(displayTableTab)) {
+      tableController.selectPluginById(id);
+    } else {
+      treeViewController.selectPluginInTreeById(id);
+    }
   }
   
   public void refresh() {

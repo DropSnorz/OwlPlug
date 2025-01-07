@@ -28,6 +28,7 @@ import com.owlplug.core.ui.PluginStateView;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
 import java.io.File;
+import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -41,6 +42,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -186,6 +188,15 @@ public class PluginTableController extends BaseController {
   public void setNodeManaged(boolean isManaged) {
     this.tableView.setManaged(isManaged);
     this.tableView.setVisible(isManaged);
+  }
+
+  public void selectPluginById(long id) {
+    for (Plugin plugin : pluginList) {
+      if (plugin.getId().equals(id)) {
+        tableView.getSelectionModel().select(plugin);
+        break;
+      }
+    }
   }
 
   public SimpleStringProperty searchProperty() {
