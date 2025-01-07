@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Button?>
@@ -13,9 +12,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-
-<?import org.controlsfx.control.tableview2.FilteredTableView?>
 <?import javafx.scene.layout.Pane?>
+
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PluginsController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
@@ -27,7 +25,8 @@
             </Button>
             <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search"
                        HBox.hgrow="ALWAYS"/>
-            <Pane HBox.hgrow="ALWAYS" />
+            <!--Fixed size pane to align search box, can be replaced by a V-grow property-->
+            <Pane prefWidth="365.0" />
             <Button fx:id="exportButton" text="Export">
                 <graphic>
                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
