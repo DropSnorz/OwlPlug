@@ -18,8 +18,6 @@
 
 package com.owlplug.core.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
@@ -29,10 +27,8 @@ import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.PluginService;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.core.ui.PluginTreeCell;
-import com.owlplug.core.utils.FileUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javafx.beans.binding.Bindings;
@@ -86,7 +82,8 @@ public class PluginTreeViewController extends BaseController {
         if (item instanceof Plugin) {
           Plugin plugin = (Plugin) item;
           return plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
-                  || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(search.getValue().toLowerCase()));
+                  || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(
+                      search.getValue().toLowerCase()));
         } else {
           return item.toString().toLowerCase().contains(search.getValue().toLowerCase());
         }
@@ -147,9 +144,7 @@ public class PluginTreeViewController extends BaseController {
 
     treePluginNode.getInternalChildren().clear();
 
-
     for (Plugin plugin : plugins) {
-
       FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
       treePluginNode.getInternalChildren().add(item);
 
@@ -163,41 +158,11 @@ public class PluginTreeViewController extends BaseController {
     }
 
     treePluginNode.setExpanded(true);
-
     treeFileRootNode.getInternalChildren().clear();
 
     generatePluginTree(plugins);
 
-    Set<String> userPluginDirectories = new HashSet<>();
-    ApplicationPreferences prefs = this.getPreferences();
-    if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
-            && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-      userPluginDirectories.add(FileUtils.convertPath(path));
-      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
-    }
-
-    if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
-            && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
-      userPluginDirectories.add(FileUtils.convertPath(path));
-      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
-    }
-
-    if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)
-            && !prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
-      userPluginDirectories.add(FileUtils.convertPath(path));
-      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
-    }
-
-    if (prefs.getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false)
-            && !prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
-      userPluginDirectories.add(FileUtils.convertPath(path));
-      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
-    }
-
+    Set<String> userPluginDirectories = pluginService.getDirectoriesExplorationSet();
     for (String directory : userPluginDirectories) {
       treeFileRootNode.getInternalChildren().add(initDirectoryRoot(pluginTree, directory));
     }
@@ -267,12 +232,12 @@ public class PluginTreeViewController extends BaseController {
     }
   }
 
-  private FilterableTreeItem<Object> initDirectoryRoot(PluginTreeViewController.FileTree pluginTree, String directoryPath) {
+  private FilterableTreeItem<Object> initDirectoryRoot(FileTree pluginTree, String directoryPath) {
 
     FilterableTreeItem<Object> item = new FilterableTreeItem<>(null);
     item.setExpanded(true);
 
-    PluginTreeViewController.FileTree treeHead = pluginTree;
+    FileTree treeHead = pluginTree;
     String[] directories = directoryPath.split("/");
 
     for (String dir : directories) {
@@ -301,7 +266,7 @@ public class PluginTreeViewController extends BaseController {
    * @param node         root tree node
    * @param mergedParent Name of merged parent tree
    */
-  private void buildDirectoryTree(PluginTreeViewController.FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent) {
+  private void buildDirectoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent) {
 
     String mergedParentName = mergedParent;
     node.setExpanded(true);
@@ -312,7 +277,7 @@ public class PluginTreeViewController extends BaseController {
 
     // For each subdirectory (aka child nodes)
     for (String dir : pluginTree.keySet()) {
-      PluginTreeViewController.FileTree child = pluginTree.get(dir);
+      FileTree child = pluginTree.get(dir);
       // If child is empty then we have reached a plugin and we can't go deeper
       if (child.values().isEmpty()) {
         Plugin plugin = (Plugin) child.getNodeValue();
@@ -331,7 +296,7 @@ public class PluginTreeViewController extends BaseController {
       } else {
         IDirectory directory;
         // If child node contains only one directory we can merge it with the child node
-        if (child.size() == 1 && ((PluginTreeViewController.FileTree) child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory
+        if (child.size() == 1 && ((FileTree) child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory
                 && !(node.getValue() instanceof Symlink)
                 && !(child.getNodeValue() instanceof Symlink)) {
 
@@ -357,7 +322,7 @@ public class PluginTreeViewController extends BaseController {
     }
   }
 
-  public void selectPluginInTreeById(long id) {
+  public void selectPluginById(long id) {
     List<TreeItem> items = getNestedChildren(pluginTreeView.getRoot());
 
     for (TreeItem item : items) {

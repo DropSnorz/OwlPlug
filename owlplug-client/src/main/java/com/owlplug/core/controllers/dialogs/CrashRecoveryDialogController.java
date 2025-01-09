@@ -145,8 +145,4 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     return layout;
   }
 
-  protected Node getBody() {
-    return lazyViewRegistry.get(LazyViewRegistry.CRASH_RECOVERY_VIEW);
-  }
-
 }

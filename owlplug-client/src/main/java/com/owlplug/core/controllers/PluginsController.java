@@ -32,9 +32,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 
 @Controller
 public class PluginsController extends BaseController {
@@ -98,13 +98,14 @@ public class PluginsController extends BaseController {
      */
 
     // Dispatches treeView selection event to the nodeInfoController
-    treeViewController.getTreeView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue != null) {
-        TreeItem<Object> selectedItem = newValue;
-        nodeInfoController.setNode(selectedItem.getValue());
-        setInfoPaneDisplay(true);
-      }
-    });
+    treeViewController.getTreeView().getSelectionModel()
+        .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+          if (newValue != null) {
+            TreeItem<Object> selectedItem = newValue;
+            nodeInfoController.setNode(selectedItem.getValue());
+            setInfoPaneDisplay(true);
+          }
+        });
     treeViewController.getTreeView().setOnMouseClicked(mouseEvent -> {
       if (mouseEvent.getClickCount() == 2) {
         toggleInfoPaneDisplay();
@@ -122,11 +123,12 @@ public class PluginsController extends BaseController {
         toggleInfoPaneDisplay();
       }
     });
-    tableController.getTableView().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue != null) {
-        nodeInfoController.setNode(newValue);
-      }
-    });
+    tableController.getTableView().getSelectionModel()
+        .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+          if (newValue != null) {
+            nodeInfoController.setNode(newValue);
+          }
+        });
 
     tableController.searchProperty().bind(searchTextField.textProperty());
 
@@ -202,7 +204,7 @@ public class PluginsController extends BaseController {
     if (displaySwitchTabPane.getSelectionModel().getSelectedItem().equals(displayTableTab)) {
       tableController.selectPluginById(id);
     } else {
-      treeViewController.selectPluginInTreeById(id);
+      treeViewController.selectPluginById(id);
     }
   }
   

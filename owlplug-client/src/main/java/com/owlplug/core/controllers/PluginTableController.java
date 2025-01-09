@@ -28,7 +28,6 @@ import com.owlplug.core.ui.PluginStateView;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
 import java.io.File;
-import java.util.List;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -42,7 +41,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -69,6 +67,38 @@ public class PluginTableController extends BaseController {
     tableView = new TableView<>();
     VBox.setVgrow(tableView, Priority.ALWAYS);
 
+    createColumns();
+
+    tableView.setRowFactory(tv -> {
+      TableRow<Plugin> row = new TableRow<>();
+      row.itemProperty().addListener((obs, oldItem, newItem) -> {
+        if (newItem != null) {
+          row.setContextMenu(createPluginContextMenu(newItem));
+        }
+      });
+      return row;
+    });
+
+
+    pluginList = FXCollections.observableArrayList();
+    // Wraps an ObservableList and filters its content using the provided Predicate.
+    // All changes in the ObservableList are propagated immediately to the FilteredList.
+    FilteredList<Plugin> filteredPluginList = new FilteredList<>(pluginList);
+
+    filteredPluginList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+      if (search.getValue() == null || search.getValue().isEmpty()) {
+        return null;
+      }
+      return (plugin) -> plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
+                 || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(
+                     search.getValue().toLowerCase()));
+    }, search));
+
+    tableView.setItems(filteredPluginList);
+
+  }
+
+  private void createColumns() {
     TableColumn<Plugin, String> nameColumn = new TableColumn<>("Name");
     nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     TableColumn<Plugin, PluginFormat> formatColumn = new TableColumn<>("Format");
@@ -88,7 +118,7 @@ public class PluginTableController extends BaseController {
     });
     TableColumn<Plugin, String> manufacturerColumn = new TableColumn<>("Manufacturer");
     manufacturerColumn.setCellValueFactory(cellData ->
-            new SimpleStringProperty(cellData.getValue().getManufacturerName()));
+                                               new SimpleStringProperty(cellData.getValue().getManufacturerName()));
     TableColumn<Plugin, String> versionColumn = new TableColumn<>("Version");
     versionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getVersion()));
     TableColumn<Plugin, String> categoryColumn = new TableColumn<>("Category");
@@ -147,33 +177,6 @@ public class PluginTableController extends BaseController {
     tableView.getColumns().addAll(formatColumn, nameColumn, versionColumn,
         manufacturerColumn, categoryColumn, directoryColumn, scanDirectoryColumn, stateColumn);
 
-    tableView.setRowFactory(tv -> {
-      TableRow<Plugin> row = new TableRow<>();
-      row.itemProperty().addListener((obs, oldItem, newItem) -> {
-        if (newItem != null) {
-          row.setContextMenu(createPluginContextMenu(newItem));
-        }
-      });
-      return row;
-    });
-    tableView.setContextMenu(createPluginContextMenu(new Plugin()));
-
-
-    pluginList = FXCollections.observableArrayList();
-    // Wraps an ObservableList and filters its content using the provided Predicate.
-    // All changes in the ObservableList are propagated immediately to the FilteredList.
-    FilteredList<Plugin> filteredPluginList = new FilteredList<>(pluginList);
-
-    filteredPluginList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (search.getValue() == null || search.getValue().isEmpty()) {
-        return null;
-      }
-      return (plugin) -> plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
-                 || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(search.getValue().toLowerCase()));
-    }, search));
-
-    tableView.setItems(filteredPluginList);
-
   }
 
   public void setPlugins(Iterable<Plugin> plugins) {
@@ -212,14 +215,14 @@ public class PluginTableController extends BaseController {
     ContextMenu menu = new ContextMenu();
     MenuItem openDirItem = new MenuItem("Reveal in File Explorer");
     openDirItem.setOnAction(e -> {
-        File pluginFile = new File(plugin.getPath());
-        PlatformUtils.openFromDesktop(pluginFile.getParentFile());
+      File pluginFile = new File(plugin.getPath());
+      PlatformUtils.openFromDesktop(pluginFile.getParentFile());
     });
 
     menu.getItems().addAll(openDirItem, new SeparatorMenuItem());
 
     if (plugin.isDisabled()) {
-      MenuItem enableItem = new MenuItem ("Enable plugin");
+      MenuItem enableItem = new MenuItem("Enable plugin");
       enableItem.setOnAction(e -> {
         pluginService.enablePlugin(plugin);
         pluginsController.refresh();

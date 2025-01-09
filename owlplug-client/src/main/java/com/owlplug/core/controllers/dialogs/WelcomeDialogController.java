@@ -131,15 +131,14 @@ public class WelcomeDialogController extends AbstractDialogController {
 
   @Override
   protected DialogLayout getLayout() {
-    DialogLayout layout = new DialogLayout();
     Label title = new Label("Owlplug is almost ready !");
     title.getStyleClass().add("heading-3");
     ImageView iv = new ImageView(this.getApplicationDefaults().rocketImage);
     iv.setFitHeight(20);
     iv.setFitWidth(20);
     title.setGraphic(iv);
+    DialogLayout layout = new DialogLayout();
     layout.setHeading(title);
-
     layout.setBody(lazyViewRegistry.get(LazyViewRegistry.WELCOME_VIEW));
 
     return layout;

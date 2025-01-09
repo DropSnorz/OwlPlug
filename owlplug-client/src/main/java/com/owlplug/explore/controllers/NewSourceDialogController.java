@@ -27,7 +27,6 @@ import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.services.ExploreService;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -161,7 +160,6 @@ public class NewSourceDialogController extends AbstractDialogController implemen
 
   @Override
   protected DialogLayout getLayout() {
-    DialogLayout layout = new DialogLayout();
     Label title = new Label("Add a new source");
     title.getStyleClass().add("heading-3");
 
@@ -169,8 +167,9 @@ public class NewSourceDialogController extends AbstractDialogController implemen
     iv.setFitHeight(20);
     iv.setFitWidth(20);
     title.setGraphic(iv);
-    layout.setHeading(title);
 
+    DialogLayout layout = new DialogLayout();
+    layout.setHeading(title);
     layout.setBody(lazyViewRegistry.getAsNode(LazyViewRegistry.NEW_SOURCE_VIEW));
     return layout;
 
