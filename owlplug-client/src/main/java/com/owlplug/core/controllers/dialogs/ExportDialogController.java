@@ -18,6 +18,7 @@
 
 package com.owlplug.core.controllers.dialogs;
 
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.serializer.PluginCSVSerializer;
@@ -27,7 +28,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -76,7 +76,7 @@ public class ExportDialogController extends AbstractDialogController {
       fileChooser.setTitle("Save");
 
       String exportType = exportComboBox.getSelectionModel().getSelectedItem();
-      if("CSV".equals(exportType)) {
+      if ("CSV".equals(exportType)) {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", ".csv"));
       } else if ("JSON".equals(exportType)) {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Json File", ".json"));
@@ -84,7 +84,7 @@ public class ExportDialogController extends AbstractDialogController {
       fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Files", "*.*"));
 
       File file = fileChooser.showSaveDialog(saveAsButton.getScene().getWindow());
-      if(file != null) {
+      if (file != null) {
         try (FileWriter writer = new FileWriter(file)) {
           writer.write(exportTextArea.getText());
           writer.flush();
@@ -107,7 +107,7 @@ public class ExportDialogController extends AbstractDialogController {
     String exportType = exportComboBox.getSelectionModel().getSelectedItem();
 
     StringBuilder output = new StringBuilder();
-    if("CSV".equals(exportType)) {
+    if ("CSV".equals(exportType)) {
       PluginCSVSerializer serializer = new PluginCSVSerializer();
       output.append(serializer.getHeader());
       output.append(serializer.serialize(plugins));
@@ -120,15 +120,15 @@ public class ExportDialogController extends AbstractDialogController {
   }
 
   @Override
-  protected Node getBody() {
-    return lazyViewRegistry.get(LazyViewRegistry.EXPORT_VIEW);
+  protected DialogLayout getLayout() {
 
-  }
-
-  @Override
-  protected Node getHeading() {
+    DialogLayout layout = new DialogLayout();
     Label title = new Label("Export Plugins");
     title.getStyleClass().add("heading-3");
-    return title;
+    layout.setHeading(title);
+
+    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.EXPORT_VIEW));
+
+    return layout;
   }
 }

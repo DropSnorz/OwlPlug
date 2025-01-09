@@ -18,6 +18,7 @@
 
 package com.owlplug.core.controllers.dialogs;
 
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
@@ -99,14 +99,10 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
   }
 
 
-  @Override
-  protected Node getBody() {
-    return lazyViewRegistry.get(LazyViewRegistry.LIST_DIRECTORY_VIEW);
-  }
-
-  @Override
-  protected Node getHeading() {
-    return null;
+  protected DialogLayout getLayout() {
+    DialogLayout layout = new DialogLayout();
+    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.LIST_DIRECTORY_VIEW));
+    return layout;
   }
 
 }

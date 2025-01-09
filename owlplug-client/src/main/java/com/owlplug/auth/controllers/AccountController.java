@@ -19,6 +19,7 @@
 package com.owlplug.auth.controllers;
 
 import com.owlplug.auth.services.AuthenticationService;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
@@ -142,13 +143,10 @@ public class AccountController extends AbstractDialogController {
   }
 
   @Override
-  protected Node getBody() {
-    return viewRegistry.get(LazyViewRegistry.NEW_ACCOUNT_VIEW);
-  }
-
-  @Override
-  protected Node getHeading() {
-    return null;
+  protected DialogLayout getLayout() {
+    DialogLayout layout = new DialogLayout();
+    layout.setBody(viewRegistry.get(LazyViewRegistry.NEW_ACCOUNT_VIEW));
+    return layout;
   }
 
 }

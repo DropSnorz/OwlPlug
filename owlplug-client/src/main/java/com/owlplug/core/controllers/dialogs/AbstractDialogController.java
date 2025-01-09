@@ -18,8 +18,8 @@
  
 package com.owlplug.core.controllers.dialogs;
 
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.controllers.BaseController;
-import javafx.scene.Node;
 
 public abstract class AbstractDialogController extends BaseController {
   
@@ -43,29 +43,17 @@ public abstract class AbstractDialogController extends BaseController {
     this.height = height;
   }
 
-  protected abstract Node getBody();
-
-  protected abstract Node getHeading();
+  protected abstract DialogLayout getLayout();
 
   /**
    * Open and display dialog frame.
    */
   public void show() {
-
     onDialogShow();
-
     if (width != -1 && height != -1) {
-      if (this.getHeading() != null) {
-        this.getDialogManager().newDialog(width, height, this.getBody(), this.getHeading());
-      } else {
-        this.getDialogManager().newDialog(width, height, this.getBody());
-      }
+      this.getDialogManager().newDialog(width, height, this.getLayout());
     } else {
-      if (this.getHeading() != null) {
-        this.getDialogManager().newDialog(this.getBody(), this.getHeading());
-      } else {
-        this.getDialogManager().newDialog(this.getBody());
-      }
+      this.getDialogManager().newDialog(this.getLayout());
     }
     this.getDialogManager().getDialog().setOverlayClose(overlayClose);
     this.getDialogManager().getDialog().show();

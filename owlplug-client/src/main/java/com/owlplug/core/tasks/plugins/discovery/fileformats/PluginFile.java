@@ -20,19 +20,33 @@ package com.owlplug.core.tasks.plugins.discovery.fileformats;
 
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginComponent;
+import com.owlplug.core.utils.FileUtils;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.io.FilenameUtils;
 
 public abstract class PluginFile {
   
   private File pluginFile;
+
+  private File scanDirectory;
   
   public PluginFile(File pluginFile) {
     this.pluginFile = pluginFile;
   }
   
   public abstract Plugin toPlugin();
+
+  Plugin createPlugin() {
+    Plugin plugin = new Plugin();
+    plugin.setScanDirectoryPath(FileUtils.convertPath(this.getScanDirectory().getAbsolutePath()));
+    plugin.setPath(FileUtils.convertPath(this.getPluginFile().getAbsolutePath()));
+    plugin.setName(FilenameUtils.removeExtension(this.getPluginFile().getName()));
+    plugin.setDisabled(this.isDisabled());
+
+    return plugin;
+  }
 
   public List<PluginComponent> toComponents() {
     return null;
@@ -45,7 +59,15 @@ public abstract class PluginFile {
   public void setPluginFile(File pluginFile) {
     this.pluginFile = pluginFile;
   }
-  
+
+  public File getScanDirectory() {
+    return scanDirectory;
+  }
+
+  public void setScanDirectory(File scanDirectory) {
+    this.scanDirectory = scanDirectory;
+  }
+
   public boolean isDisabled() {
     return pluginFile.getAbsolutePath().endsWith(".disabled");
   }

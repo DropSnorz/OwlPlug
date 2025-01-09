@@ -37,17 +37,14 @@ public class AuComponentFile extends PluginFile {
 
   @Override
   public Plugin toPlugin() {
-    String pluginName = FilenameUtils.removeExtension(this.getPluginFile().getName());
-    String pluginPath = this.getPluginFile().getAbsolutePath().replace("\\", "/");
-    Plugin plugin = new Plugin(pluginName, pluginPath, PluginFormat.AU);
+    Plugin plugin = createPlugin();
+    plugin.setFormat(PluginFormat.AU);
 
     File plist = new File(this.getPluginFile().getAbsolutePath() + "/Contents/Info.plist");
     if (plist.exists()) {
       OsxPlistFile plistFile = new OsxPlistFile(plist);
       plistFile.bindProperties(plugin);
     }
-    
-    plugin.setDisabled(this.isDisabled());
 
     return plugin;
   }

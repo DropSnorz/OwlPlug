@@ -90,6 +90,11 @@ TextArea .content {
      -fx-background-color: danger-color;
 }
 
+.table-view {
+    -fx-background-color: card-pane-color;
+    -fx-border-width: 0px;
+}
+
 .chip-view {
 	-fx-max-height: 45px ;
 }

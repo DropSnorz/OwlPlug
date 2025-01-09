@@ -68,7 +68,7 @@ public class ApplicationDefaults {
   public final Image tagImage = new Image(getClass().getResourceAsStream("/icons/tag-white-16.png"));
   public final Image symlinkImage = new Image(getClass().getResourceAsStream("/icons/folderlink-grey-16.png"));
   public final Image userImage = new Image(getClass().getResourceAsStream("/icons/user-white-32.png"));
-  public final Image rootDirectoryImage = new Image(getClass().getResourceAsStream("/icons/foldersearch-grey-16.png"));
+  public final Image scanDirectoryImage = new Image(getClass().getResourceAsStream("/icons/foldersearch-grey-16.png"));
   public final Image verifiedSourceImage = new Image(getClass().getResourceAsStream("/icons/doublecheck-grey-16.png"));
   public final Image suggestedSourceImage = new Image(
       ApplicationDefaults.class.getResourceAsStream("/icons/check-grey-16.png"));
@@ -111,6 +111,8 @@ public class ApplicationDefaults {
   public static final String APPLICATION_STATE_KEY = "APPLICATION_STATE_KEY";
   public static final String SHOW_DIALOG_DISABLE_PLUGIN_KEY = "SHOW_DIALOG_DISABLE_PLUGIN_KEY";
   public static final String PROJECT_DIRECTORY_KEY = "PROJECT_DIRECTORY_KEY";
+
+  public static final String PLUGIN_PREFERRED_DISPLAY_KEY = "PLUGIN_PREFERRED_DISPLAY_KEY";
 
   /**
    * Creates a new ApplicationDefaults.
@@ -228,6 +230,7 @@ public class ApplicationDefaults {
   public String getStudiorackRegistryUrl() {
     return env.getProperty("studiorack.registry.url");
   }
+
   public String getEnvProperty(String property) {
     return env.getProperty(property);
   }

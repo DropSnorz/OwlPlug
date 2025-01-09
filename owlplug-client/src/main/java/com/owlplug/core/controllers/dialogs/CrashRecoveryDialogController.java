@@ -18,6 +18,7 @@
 
 package com.owlplug.core.controllers.dialogs;
 
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
@@ -132,16 +133,16 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     
   }
 
-  @Override
-  protected Node getBody() {
-    return lazyViewRegistry.get(LazyViewRegistry.CRASH_RECOVERY_VIEW);
-  }
+  protected DialogLayout getLayout() {
 
-  @Override
-  protected Node getHeading() {
+    DialogLayout layout = new DialogLayout();
+
     Label title = new Label("Ooh, something wrong happens :(");
     title.getStyleClass().add("heading-3");
-    return title;
+    layout.setHeading(title);
+    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.CRASH_RECOVERY_VIEW));
+
+    return layout;
   }
 
 }
