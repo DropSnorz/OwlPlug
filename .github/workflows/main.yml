@@ -92,7 +92,7 @@ jobs:
       env:
         OS: linux
     - name : Install Juce dev dependencies
-      run: sudo apt update && sudo apt install libasound2-dev libcurl4-openssl-dev libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev
+      run: sudo apt update && sudo apt install libasound2-dev libcurl4-openssl-dev libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libfreetype-dev
     - name: Install XmlStarlet
       run: sudo apt-get install xmlstarlet
     - name: Get Host Version
