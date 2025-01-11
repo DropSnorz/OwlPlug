@@ -21,7 +21,6 @@ package com.owlplug.explore.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.services.BaseService;
@@ -258,7 +257,7 @@ public class ExploreService extends BaseService {
     } else if (formats.size() > 1) {
       List<String> paths = new ArrayList<>();
       for (PluginFormat format : formats) {
-        paths.add(this.pluginService.getPluginPathByFormat(format));
+        paths.add(this.pluginService.getPrimaryPluginPathByFormat(format));
       }
       // check if all path are equals
       return paths.stream().allMatch(s -> s.equals(paths.get(0)));
@@ -278,7 +277,7 @@ public class ExploreService extends BaseService {
   public String getBundleInstallFolder(PackageBundle bundle) {
 
     PluginFormat format = filterEnabledFormats(bundle.getFormats()).getFirst();
-    return pluginService.getPluginPathByFormat(format);
+    return pluginService.getPrimaryPluginPathByFormat(format);
 
   }
 

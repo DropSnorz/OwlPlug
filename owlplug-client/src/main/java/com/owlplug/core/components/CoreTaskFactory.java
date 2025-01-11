@@ -24,6 +24,7 @@ import com.owlplug.core.dao.PluginFootprintDAO;
 import com.owlplug.core.dao.SymlinkDAO;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.services.NativeHostService;
+import com.owlplug.core.services.PluginService;
 import com.owlplug.core.tasks.FileSyncTask;
 import com.owlplug.core.tasks.PluginRemoveTask;
 import com.owlplug.core.tasks.PluginSyncTask;
@@ -47,6 +48,8 @@ public class CoreTaskFactory extends BaseTaskFactory {
   private ApplicationPreferences prefs;
   @Autowired
   private PluginDAO pluginDAO;
+  @Autowired
+  private PluginService pluginService;
   @Autowired
   private PluginFootprintDAO pluginFootprintDAO;
   @Autowired
@@ -122,24 +125,8 @@ public class CoreTaskFactory extends BaseTaskFactory {
   }
 
   public TaskExecutionContext createFileStatSyncTask() {
-    Set<String> directorySet = new TreeSet<>();
 
-    if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
-      directorySet.add(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-      directorySet.addAll(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
-    }
-    if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
-      directorySet.add(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
-      directorySet.addAll(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
-    }
-    if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)) {
-      directorySet.add(prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
-      directorySet.addAll(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
-    }
-    if (prefs.getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false)) {
-      directorySet.add(prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, ""));
-      directorySet.addAll(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
-    }
+    Set<String> directorySet = pluginService.getDirectoriesExplorationSet();
     FileSyncTask task = new FileSyncTask(fileStatDAO, directorySet.stream().toList());
 
     return create(task);

@@ -19,10 +19,10 @@
 package com.owlplug.core.controllers.dialogs;
 
 
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.utils.PlatformUtils;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,15 +81,17 @@ public class DonateDialogController extends AbstractDialogController {
   }
 
   @Override
-  protected Node getBody() {
-    return lazyViewRegistry.get(LazyViewRegistry.DONATE_VIEW);
-  }
+  protected DialogLayout getLayout() {
+    DialogLayout dialogLayout = new DialogLayout();
 
-  @Override
-  protected Node getHeading() {
     Label title = new Label("Owlplug is free !");
     title.getStyleClass().add("heading-3");
-    return title;
+
+    dialogLayout.setHeading(title);
+
+    dialogLayout.setBody(lazyViewRegistry.get(LazyViewRegistry.DONATE_VIEW));
+
+    return dialogLayout;
   }
 
 }

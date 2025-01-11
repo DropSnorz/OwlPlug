@@ -18,6 +18,7 @@
  
 package com.owlplug.core.controllers.dialogs;
 
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
@@ -25,7 +26,6 @@ import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
 import com.owlplug.core.model.platform.OperatingSystem;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -130,19 +130,18 @@ public class WelcomeDialogController extends AbstractDialogController {
   }
 
   @Override
-  protected Node getBody() {
-    return lazyViewRegistry.get(LazyViewRegistry.WELCOME_VIEW);
-  }
-
-  @Override
-  protected Node getHeading() {
+  protected DialogLayout getLayout() {
     Label title = new Label("Owlplug is almost ready !");
     title.getStyleClass().add("heading-3");
     ImageView iv = new ImageView(this.getApplicationDefaults().rocketImage);
     iv.setFitHeight(20);
     iv.setFitWidth(20);
     title.setGraphic(iv);
-    return title;
+    DialogLayout layout = new DialogLayout();
+    layout.setHeading(title);
+    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.WELCOME_VIEW));
+
+    return layout;
   }
 
 }

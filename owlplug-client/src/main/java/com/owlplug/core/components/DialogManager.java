@@ -54,33 +54,6 @@ public class DialogManager {
     return dialog;
   }
 
-  /**
-   * Creates a new dialog.
-   * 
-   * @param body - dialog body
-   * @return
-   */
-  public Dialog newDialog(Node body) {
-
-    DialogLayout layout = new DialogLayout();
-    layout.setBody(body);
-    return newDialog(layout);
-  }
-
-  /**
-   * Creates a new dialog.
-   * 
-   * @param body    - dialog body
-   * @param heading - dialog header
-   * @return
-   */
-  public Dialog newDialog(Node body, Node heading) {
-
-    DialogLayout layout = new DialogLayout();
-    layout.setBody(body);
-    layout.setHeading(heading);
-    return newDialog(layout);
-  }
 
   /**
    * Creates a new dialog.
@@ -90,37 +63,13 @@ public class DialogManager {
    * @param body   - dialog body
    * @return the dialog
    */
-  public Dialog newDialog(double width, double height, Node body) {
-
-    DialogLayout layout = new DialogLayout();
+  public Dialog newDialog(double width, double height, DialogLayout layout) {
     layout.setMaxSize(width, height);
     layout.setPrefSize(width, height);
-    layout.setBody(body);
-
     return newDialog(layout);
 
   }
 
-  /**
-   * Creates a new dialog.
-   * 
-   * @param width   - dialog width
-   * @param height  - dialog height
-   * @param body    - dialog body
-   * @param heading - dialog header
-   * @return the dialog
-   */
-  public Dialog newDialog(double width, double height, Node body, Node heading) {
-
-    DialogLayout layout = new DialogLayout();
-    layout.setMaxSize(width, height);
-    layout.setPrefSize(width, height);
-    layout.setBody(body);
-    layout.setHeading(heading);
-
-    return newDialog(layout);
-
-  }
 
   /**
    * Creates a new dialog based on dialog layout.

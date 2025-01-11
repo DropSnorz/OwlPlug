@@ -162,7 +162,7 @@ public class ProjectInfoController extends BaseController {
           Hyperlink link = new Hyperlink();
           link.setGraphic(new ImageView(getApplicationDefaults().linkIconImage));
           link.setOnAction(e -> {
-            pluginsController.selectPluginInTreeById(item.getId());
+            pluginsController.selectPluginById(item.getId());
             mainController.selectMainTab(MainController.PLUGINS_TAB_INDEX);
           });
           setGraphic(link);

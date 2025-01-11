@@ -19,38 +19,22 @@
 package com.owlplug.core.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.controllers.dialogs.ExportDialogController;
 import com.owlplug.core.controllers.dialogs.NewLinkController;
 import com.owlplug.core.dao.PluginDAO;
-import com.owlplug.core.dao.SymlinkDAO;
-import com.owlplug.core.model.IDirectory;
 import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginComponent;
-import com.owlplug.core.model.PluginDirectory;
-import com.owlplug.core.model.Symlink;
 import com.owlplug.core.services.PluginService;
-import com.owlplug.core.ui.FilterableTreeItem;
-import com.owlplug.core.ui.PluginTreeCell;
-import com.owlplug.core.utils.FileUtils;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.util.Callback;
+import javafx.scene.layout.VBox;
+import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 
 @Controller
 public class PluginsController extends BaseController {
@@ -60,8 +44,6 @@ public class PluginsController extends BaseController {
   @Autowired
   private PluginDAO pluginDAO;
   @Autowired
-  private SymlinkDAO symlinkDAO;
-  @Autowired
   private NodeInfoController nodeInfoController;
   @Autowired
   private NewLinkController newLinkController;
@@ -69,24 +51,32 @@ public class PluginsController extends BaseController {
   private ExportDialogController exportDialogController;
   @Autowired
   protected CoreTaskFactory taskFactory;
+  @Autowired
+  protected PluginTreeViewController treeViewController;
+  @Autowired
+  protected PluginTableController tableController;
 
   @FXML
   private Button syncButton;
   @FXML
   private Button exportButton;
   @FXML
-  private TreeView<Object> pluginTreeView;
+  private TabPane displaySwitchTabPane;
   @FXML
-  private TabPane pluginTreeViewTabPane;
+  private Tab displayListTab;
+  @FXML
+  private Tab displayDirectoriesTab;
+  @FXML
+  private Tab displayTableTab;
+
   @FXML
   private TextField searchTextField;
   @FXML
   private Button newLinkButton;
-
-  private Iterable<Plugin> pluginList;
-  private FileTree pluginTree;
-  private FilterableTreeItem<Object> treePluginNode;
-  private FilterableTreeItem<Object> treeFileRootNode;
+  @FXML
+  private VBox pluginInfoPane;
+  @FXML
+  private VBox pluginsContainer;
 
   /**
    * FXML initialize method.
@@ -98,333 +88,139 @@ public class PluginsController extends BaseController {
       newLinkController.show();
     });
 
-    treePluginNode = new FilterableTreeItem<>("(all)");
-    treeFileRootNode = new FilterableTreeItem<>("(all)");
+    // Add Plugin Table and TreeView to the scene graph
+    pluginsContainer.getChildren().add(treeViewController.getTreeView());
+    pluginsContainer.getChildren().add(tableController.getTableView());
 
-    pluginTreeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
-      @Override
-      public TreeCell<Object> call(TreeView<Object> p) {
-        return new PluginTreeCell(getApplicationDefaults(), pluginService);
-      }
-    });
-    pluginTreeView.setRoot(treePluginNode);
-    
-    clearAndFillPluginTree();
+    /* ===================
+     * Plugins TreeView properties init and bindings
+     * ===================
+     */
 
     // Dispatches treeView selection event to the nodeInfoController
-    pluginTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue != null) {
-        TreeItem<Object> selectedItem = newValue;
-        nodeInfoController.setNode(selectedItem.getValue());
+    treeViewController.getTreeView().getSelectionModel()
+        .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+          if (newValue != null) {
+            TreeItem<Object> selectedItem = newValue;
+            nodeInfoController.setNode(selectedItem.getValue());
+            setInfoPaneDisplay(true);
+          }
+        });
+    treeViewController.getTreeView().setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getClickCount() == 2) {
+        toggleInfoPaneDisplay();
       }
     });
+    treeViewController.searchProperty().bind(searchTextField.textProperty());
 
-    pluginTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
+    /* ===================
+     * Plugins Table properties init and bindings
+     * ===================
+     */
+
+    tableController.getTableView().setOnMouseClicked(mouseEvent -> {
+      if (mouseEvent.getClickCount() == 2) {
+        toggleInfoPaneDisplay();
+      }
+    });
+    tableController.getTableView().getSelectionModel()
+        .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+          if (newValue != null) {
+            nodeInfoController.setNode(newValue);
+          }
+        });
+
+    tableController.searchProperty().bind(searchTextField.textProperty());
+
+
+    /* ===================
+     * Controller and node graph initialization
+     * ===================
+     */
+
+    displaySwitchTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
+
+    // Set default display (flat plugin tree)
+    treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
+    treeViewController.getTreeView().setVisible(true);
+    treeViewController.getTreeView().setManaged(true);
+    tableController.getTableView().setManaged(false);
+    tableController.getTableView().setVisible(false);
+    setInfoPaneDisplay(true);
 
     // Handles tabPane selection event and toggles displayed treeView
-    pluginTreeViewTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-      if (newTab.getId().equals("treeTabAll")) {
-        pluginTreeView.setRoot(treePluginNode);
+    displaySwitchTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+      if (newTab.equals(displayListTab)) {
+        treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
+        treeViewController.setNodeManaged(true);
+        tableController.setNodeManaged(false);
+        setInfoPaneDisplay(true);
+        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "LIST");
+      } else if (newTab.equals(displayDirectoriesTab)) {
+        treeViewController.setDisplayMode(PluginTreeViewController.Display.DirectoryTree);
+        treeViewController.setNodeManaged(true);
+        tableController.setNodeManaged(false);
+        setInfoPaneDisplay(true);
+        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "DIRECTORIES");
       } else {
-        pluginTreeView.setRoot(treeFileRootNode);
+        treeViewController.setNodeManaged(false);
+        tableController.setNodeManaged(true);
+        setInfoPaneDisplay(false);
+        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "TABLE");
       }
     });
 
-    // Binds search property to plugin tree filter
-    treePluginNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
-        return null;
-      }
-      return (item) -> {
-        if (item instanceof Plugin) {
-          Plugin plugin = (Plugin) item;
-          return plugin.getName().toLowerCase().contains(searchTextField.getText().toLowerCase())
-            || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(searchTextField.getText().toLowerCase()));
-        } else {
-          return item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
-        }
-      };
-    }, searchTextField.textProperty()));
+    if (this.getPreferences().get(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "").equals("TABLE")) {
+      displaySwitchTabPane.getSelectionModel().select(displayTableTab);
+    } else if (this.getPreferences().get(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "").equals("DIRECTORIES")) {
+      displaySwitchTabPane.getSelectionModel().select(displayDirectoriesTab);
+    } else {
+      displaySwitchTabPane.getSelectionModel().select(displayListTab);
+    }
 
-    // Binds search property to file tree filter
-    treeFileRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
-        return null;
-      }
-      return (item) -> {
-        if (item instanceof Plugin) {
-          Plugin plugin = (Plugin) item;
-          return plugin.getName().toLowerCase().contains(searchTextField.getText().toLowerCase())
-            || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(searchTextField.getText().toLowerCase()));
-        } else {
-          return item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
-        }
-      };
-    }, searchTextField.textProperty()));
 
     syncButton.setOnAction(e -> {
       this.getAnalyticsService().pageView("/app/core/action/syncPlugins");
       pluginService.syncPlugins();
     });
 
-    taskFactory.addSyncPluginsListener(() -> clearAndFillPluginTree());
+    taskFactory.addSyncPluginsListener(this::displayPlugins);
 
     exportButton.setOnAction(e -> {
       exportDialogController.show();
     });
 
+    this.displayPlugins();
+
+  }
+
+  public void displayPlugins() {
+    Iterable<Plugin> plugins = pluginDAO.findAll();
+    treeViewController.setPlugins(plugins);
+    tableController.setPlugins(plugins);
+  }
+
+  public void selectPluginById(long id) {
+    if (displaySwitchTabPane.getSelectionModel().getSelectedItem().equals(displayTableTab)) {
+      tableController.selectPluginById(id);
+    } else {
+      treeViewController.selectPluginById(id);
+    }
   }
   
-  public void refreshPluginTree() {
-    pluginTreeView.refresh();
+  public void refresh() {
+    treeViewController.refresh();
+    tableController.refresh();
   }
 
-  /**
-   * Refreshes displayed plugins in tree views.
-   */
-  public void clearAndFillPluginTree() {
-
-    treePluginNode.getInternalChildren().clear();
-    this.pluginList = pluginDAO.findAll();
-
-    for (Plugin plugin : pluginList) {
-
-      FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
-      treePluginNode.getInternalChildren().add(item);
-
-      // Display subcomponents in the plugin tree
-      if (plugin.getComponents().size() > 1) {
-        for (PluginComponent component : plugin.getComponents()) {
-          FilterableTreeItem<Object> compItem = new FilterableTreeItem<>(component);
-          item.getInternalChildren().add(compItem);
-        }
-      }
-    }
-
-    treePluginNode.setExpanded(true);
-
-    treeFileRootNode.getInternalChildren().clear();
-
-    generatePluginTree();
-
-    Set<String> userPluginDirectories = new HashSet<>();
-    ApplicationPreferences prefs = this.getPreferences();
-    if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
-        && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-      userPluginDirectories.add(FileUtils.convertPath(path));
-      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
-    }
-
-    if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
-        && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
-      userPluginDirectories.add(FileUtils.convertPath(path));
-      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
-    }
-    
-    if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)
-        && !prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
-      userPluginDirectories.add(FileUtils.convertPath(path));
-      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
-    }
-
-    if (prefs.getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false)
-        && !prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
-      userPluginDirectories.add(FileUtils.convertPath(path));
-      userPluginDirectories.addAll(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
-    }
-
-    for (String directory : userPluginDirectories) {
-      treeFileRootNode.getInternalChildren().add(initDirectoryRoot(pluginTree, directory));
-    }
-
-    treeFileRootNode.setExpanded(true);
-
+  public void setInfoPaneDisplay(boolean display) {
+    pluginInfoPane.setManaged(display);
+    pluginInfoPane.setVisible(display);
   }
 
-  /**
-   * Generates a PluginTree representation. [rootDir -> [ subDir1 -> [ plugin1 ->
-   * [ ] ], subDir2 -> [ plugin2 -> [] , plugin3 -> [] ]] ]
-   * 
-   */
-  private void generatePluginTree() {
-
-    pluginTree = new FileTree();
-
-    for (Plugin plug : pluginList) {
-      FileTree node = pluginTree;
-      String[] subDirs = plug.getPath().split("/");
-      String currentPath = "";
-      for (int i = 0; i < subDirs.length; i++) {
-        currentPath = currentPath + subDirs[i] + "/";
-        String segment = subDirs[i];
-        FileTree ft = new FileTree();
-
-        if (node.get(segment) == null) {
-          // Node is a plugin (End of branch)
-          if (i == subDirs.length - 1) {
-            ft.setNodeValue(plug);
-
-            // Node is a directory
-          } else {
-            // TODO Should be optimized for large plugin set
-            List<Plugin> localPluginList = new ArrayList<Plugin>();
-            for (Plugin p : pluginList) {
-              if (p.getPath().startsWith(currentPath)) {
-                localPluginList.add(p);
-              }
-            }
-            
-            // Retrieve Symlink if exist
-            // TODO: This can be refactored to prevent trailing slash removal
-            Symlink symlink = symlinkDAO.findByPath(currentPath.substring(0, currentPath.length() - 1));
-            if (symlink != null) {
-              symlink.setPluginList(localPluginList);
-              ft.setNodeValue(symlink);
-            } else {
-              PluginDirectory directory = new PluginDirectory();
-              directory.setName(segment);
-              directory.setPath(currentPath);
-              directory.setPluginList(localPluginList);
-              ft.setNodeValue(directory);
-            }
-
-          }
-          node.put(segment, ft);
-        }
-        node = node.get(segment);
-      }
-    }
-  }
-
-  private FilterableTreeItem<Object> initDirectoryRoot(FileTree pluginTree, String directoryPath) {
-
-    FilterableTreeItem<Object> item = new FilterableTreeItem<>(null);
-    item.setExpanded(true);
-
-    FileTree treeHead = pluginTree;
-    String[] directories = directoryPath.split("/");
-
-    for (String dir : directories) {
-      if (treeHead != null) {
-        treeHead = treeHead.get(dir);
-      }
-    }
-
-    if (treeHead != null && treeHead.getNodeValue() instanceof PluginDirectory) {
-      PluginDirectory directory = (PluginDirectory) treeHead.getNodeValue();
-      directory.setRootDirectory(true);
-      item.setValue(directory);
-      buildDirectoryTree(treeHead, item, "");
-    }
-
-    return item;
-
-  }
-
-  /**
-   * Builds the directory tree view using filetree representation. If some
-   * directories contains only one subdirectory and nothing else, they are merged
-   * together in one node.
-   * 
-   * @param pluginTree   File tree representation
-   * @param node         root tree node
-   * @param mergedParent Name of merged parent tree
-   */
-  private void buildDirectoryTree(FileTree pluginTree, FilterableTreeItem<Object> node, String mergedParent) {
-
-    String mergedParentName = mergedParent;
-    node.setExpanded(true);
-
-    if (mergedParentName == null) {
-      mergedParentName = "";
-    }
-
-    // For each subdirectory (aka child nodes)
-    for (String dir : pluginTree.keySet()) {
-      FileTree child = pluginTree.get(dir);
-      // If child is empty then we have reached a plugin and we can't go deeper
-      if (child.values().isEmpty()) {
-        Plugin plugin = (Plugin) child.getNodeValue();
-        FilterableTreeItem<Object> plugItem = new FilterableTreeItem<>(plugin);
-        node.getInternalChildren().add(plugItem);
-
-        // Display subcomponents in the directory tree
-        if (plugin.getComponents().size() > 1) {
-          for (PluginComponent component : plugin.getComponents()) {
-            FilterableTreeItem<Object> compItem = new FilterableTreeItem<>(component);
-            plugItem.getInternalChildren().add(compItem);
-          }
-        }
-
-        // If not we are exploring a directory
-      } else {
-        IDirectory directory;
-        // If child node contains only one directory we can merge it with the child node
-        if (child.size() == 1 && ((FileTree) child.values().toArray()[0]).getNodeValue() instanceof PluginDirectory
-            && !(node.getValue() instanceof Symlink) 
-            && !(child.getNodeValue() instanceof Symlink)) {
-
-          directory = (IDirectory) child.getNodeValue();
-          mergedParentName = mergedParentName + directory.getName() + "/";
-
-          buildDirectoryTree(child, node, mergedParentName);
-          // We don't want to merge next directories in the current iteration
-          mergedParentName = "";
-
-          // In case our child cannot be merged (contains not only one subdirectory)
-        } else {
-          directory = (IDirectory) child.getNodeValue();
-          directory.setDisplayName(mergedParentName + directory.getName());
-
-          // We don't want to merge next directories in the current iteration
-          mergedParentName = "";
-          FilterableTreeItem<Object> item = new FilterableTreeItem<>(directory);
-          node.getInternalChildren().add(item);
-          buildDirectoryTree(child, item, mergedParentName);
-        }
-      }
-    }
-  }
-
-  public void selectPluginInTreeById(long id) {
-    List<TreeItem> items = getAllChildrens(pluginTreeView.getRoot());
-
-    for (TreeItem item : items) {
-      if (item.getValue() instanceof Plugin plugin
-          && plugin.getId().equals(id)) {
-        int row = pluginTreeView.getRow(item);
-        pluginTreeView.getSelectionModel().select(row);
-      }
-    }
-
-  }
-
-  private List<TreeItem> getAllChildrens(TreeItem item) {
-    List<TreeItem> items = new ArrayList<>();
-    items.add(item);
-
-    List<TreeItem> childs = new ArrayList<>(item.getChildren());
-    for (TreeItem child : childs) {
-      items.addAll(getAllChildrens(child));
-    }
-    return items;
-  }
-
-  class FileTree extends HashMap<String, FileTree> {
-
-    private Object nodeValue;
-
-    public void setNodeValue(Object nodeValue) {
-      this.nodeValue = nodeValue;
-    }
-
-    public Object getNodeValue() {
-      return nodeValue;
-    }
+  public void toggleInfoPaneDisplay() {
+    pluginInfoPane.setManaged(!pluginInfoPane.isManaged());
+    pluginInfoPane.setVisible(!pluginInfoPane.isVisible());
   }
 
 }

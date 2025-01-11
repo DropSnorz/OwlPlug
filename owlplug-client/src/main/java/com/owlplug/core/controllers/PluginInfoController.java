@@ -23,6 +23,7 @@ import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.CoreTaskFactory;
 import com.owlplug.core.components.ImageCache;
+import com.owlplug.core.controllers.dialogs.DisablePluginDialogController;
 import com.owlplug.core.model.Plugin;
 import com.owlplug.core.model.PluginComponent;
 import com.owlplug.core.services.PluginService;
@@ -35,9 +36,7 @@ import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.effect.ColorAdjust;
@@ -49,7 +48,6 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,6 +63,8 @@ public class PluginInfoController extends BaseController {
   private ImageCache imageCache;
   @Autowired
   private CoreTaskFactory coreTaskFactory;
+  @Autowired
+  private DisablePluginDialogController disableController;
 
   @FXML
   private Pane pluginScreenshotPane;
@@ -101,7 +101,7 @@ public class PluginInfoController extends BaseController {
   @FXML
   private ToggleSwitch nativeDiscoveryToggleButton;
 
-  private Plugin currentPlugin = null;
+  private Plugin plugin = null;
   private ArrayList<String> knownPluginImages = new ArrayList<>();
 
   /**
@@ -126,35 +126,40 @@ public class PluginInfoController extends BaseController {
 
     disableButton.setOnAction(e -> {
       if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
-        this.showDisableDialog();
+        this.disableController.setPlugin(plugin);
+        this.disableController.show();
       } else {
-        pluginService.disablePlugin(currentPlugin);
-        setPlugin(currentPlugin);
-        pluginsController.refreshPluginTree();
+        this.disableController.disablePluginWithoutPrompt(plugin);
       }
-
     });
 
     enableButton.setOnAction(e -> {
-      pluginService.enablePlugin(currentPlugin);
-      setPlugin(currentPlugin);
-      pluginsController.refreshPluginTree();
+      pluginService.enablePlugin(plugin);
+      setPlugin(plugin);
+      pluginsController.refresh();
     });
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
 
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      if (currentPlugin != null && currentPlugin.getFootprint() != null) {
-        currentPlugin.getFootprint().setNativeDiscoveryEnabled(newValue);
-        pluginService.save(currentPlugin.getFootprint());
+      if (plugin != null && plugin.getFootprint() != null) {
+        plugin.getFootprint().setNativeDiscoveryEnabled(newValue);
+        pluginService.save(plugin.getFootprint());
       }
-
     });
 
   }
 
   public void setPlugin(Plugin plugin) {
-    this.currentPlugin = plugin;
+    this.plugin = plugin;
+    refresh();
+  }
+
+  public void refresh() {
+
+    if (plugin == null) {
+      return;
+    }
     pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(plugin.getFormat()));
     pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
     pluginTitleLabel.setText(plugin.getName());
@@ -190,13 +195,13 @@ public class PluginInfoController extends BaseController {
   }
 
   private void setPluginImage() {
-    if (currentPlugin.getScreenshotUrl() == null || currentPlugin.getScreenshotUrl().isEmpty()) {
-      String url = pluginService.resolveImageUrl(currentPlugin);
-      currentPlugin.setScreenshotUrl(url);
-      pluginService.save(currentPlugin);
+    if (plugin.getScreenshotUrl() == null || plugin.getScreenshotUrl().isEmpty()) {
+      String url = pluginService.resolveImageUrl(plugin);
+      plugin.setScreenshotUrl(url);
+      pluginService.save(plugin);
     }
 
-    String url = currentPlugin.getScreenshotUrl();
+    String url = plugin.getScreenshotUrl();
     if (knownPluginImages.contains(url) && !imageCache.contains(url)) {
 
       BackgroundImage bgImg = new BackgroundImage(this.getApplicationDefaults().pluginPlaceholderImage,
@@ -224,7 +229,7 @@ public class PluginInfoController extends BaseController {
     DialogLayout layout = new DialogLayout();
 
     layout.setHeading(new Label("Remove plugin"));
-    layout.setBody(new Label("Do you really want to remove " + currentPlugin.getName()
+    layout.setBody(new Label("Do you really want to remove " + plugin.getName()
         + " ? This will permanently delete the file from your hard drive."));
 
     Button cancelButton = new Button("Cancel");
@@ -235,60 +240,12 @@ public class PluginInfoController extends BaseController {
     Button removeButton = new Button("Remove");
     removeButton.setOnAction(removeEvent -> {
       dialog.close();
-      coreTaskFactory.createPluginRemoveTask(currentPlugin)
-          .setOnSucceeded(x -> pluginsController.clearAndFillPluginTree()).schedule();
+      coreTaskFactory.createPluginRemoveTask(plugin)
+          .setOnSucceeded(x -> pluginsController.displayPlugins()).schedule();
     });
     removeButton.getStyleClass().add("button-danger");
 
     layout.setActions(removeButton, cancelButton);
-    dialog.setContent(layout);
-    dialog.show();
-  }
-  
-  private void showDisableDialog() {
-    
-    DialogLayout layout = new DialogLayout();
-
-    layout.setHeading(new Label("Disable plugin"));
-    
-    VBox vbox = new VBox(10);
-    Label dialogLabel = new Label(
-        "Disabling a plugin will rename the plugin file by updating the extension. "
-        + "The suffix \".disabled\" will be appended to the filename causing the DAW to ignore the plugin. "
-        + "You can reactivate the plugin at any time from OwlPlug or by renaming the file manually.");
-    dialogLabel.setWrapText(true);
-    vbox.getChildren().add(dialogLabel);
-
-    Label noteLabel = new Label("You may need admin privileges to rename plugins");
-    noteLabel.getStyleClass().add("label-disabled");
-    vbox.getChildren().add(noteLabel);
-    
-    CheckBox displayDialog = new CheckBox("Don't show me this message again");
-    VBox.setMargin(displayDialog, new Insets(20,0,0,0));
-    displayDialog.setSelected(!getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true));
-    displayDialog.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, !newValue);
-    });
-    vbox.getChildren().add(displayDialog);
-    layout.setBody(vbox);
-    
-    Dialog dialog = this.getDialogManager().newDialog();
-
-    Button cancelButton = new Button("Cancel");
-    cancelButton.setOnAction(cancelEvent -> {
-      dialog.close();
-    });
-
-    Button disableButton = new Button("Disable Plugin");
-    disableButton.setOnAction(removeEvent -> {
-      pluginService.disablePlugin(currentPlugin);
-      setPlugin(currentPlugin);
-      pluginsController.refreshPluginTree();
-      dialog.close();
-    });
-
-    layout.setActions(disableButton, cancelButton);
-    layout.setPrefSize(600, 280);
     dialog.setContent(layout);
     dialog.show();
   }

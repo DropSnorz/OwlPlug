@@ -127,6 +127,28 @@ public class FileUtils {
     org.apache.commons.io.FileUtils.deleteDirectory(source);
   }
 
+  public static String getParentDirectoryName(String path) {
+    File file = new File(path);
+    File parentFile = file.getParentFile();
+
+    if (file.exists() && parentFile != null && parentFile.exists()) {
+      return parentFile.getName();
+    }
+
+    return null;
+
+  }
+
+  public static String getFilename(String path) {
+    if (path == null || path.isEmpty()) {
+      return null;
+    }
+
+    File file = new File(path);
+    return file.getName();
+
+  }
+
   public static String humanReadableByteCount(long bytes, boolean si) {
     int unit = si ? 1000 : 1024;
     if (bytes < unit)

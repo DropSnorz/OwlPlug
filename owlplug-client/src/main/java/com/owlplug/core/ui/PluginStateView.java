@@ -12,6 +12,10 @@ public class PluginStateView extends Label {
     super("Unknown");
   }
 
+  public PluginStateView(PluginState pluginState) {
+    setPluginState(pluginState);
+  }
+
   public void setPluginState(PluginState state) {
 
     Circle circle = new Circle(0, 0, 2);
