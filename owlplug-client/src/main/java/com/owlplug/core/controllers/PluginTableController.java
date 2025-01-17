@@ -34,6 +34,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -94,7 +95,9 @@ public class PluginTableController extends BaseController {
                      search.getValue().toLowerCase()));
     }, search));
 
-    tableView.setItems(filteredPluginList);
+    SortedList<Plugin> sortedPluginList = new SortedList<>(filteredPluginList);
+    tableView.setItems(sortedPluginList);
+    sortedPluginList.comparatorProperty().bind(tableView.comparatorProperty());
 
   }
 
