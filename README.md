@@ -81,7 +81,7 @@ The list of compatible DAWs is available in the [documentation](https://github.c
 
 ## Explore and download Plugins
 
-OwlPlug can be connected to several remote sources to download plugins. A Remote Source is a collection of downloadable plugins that can be installed locally. OwlPlug can be configured to use any compatible third-party store in *Explore* Tab > *Sources* > *Add a new source...*.
+OwlPlug can be connected to several remote sources to download plugins. A Remote Source (or Registry) is a collection of downloadable plugins that can be installed locally. OwlPlug can be configured to use any compatible third-party source in *Explore* Tab > *Sources* > *Add a new source*.
 
 Here are some recommended compatible sources.
 
@@ -104,9 +104,6 @@ Studiorack registry plugins for OwlPlug.
 * **(Recommended)** Distribute your plugins using on the official OwlPlug Registry. You can find more information on how to proceed in the [registry github repository](https://github.com/OwlPlug/owlplug-registry).
 
 * Setup and host a custom remote source to distribute multiple plugins, following the [registry specification](https://github.com/OwlPlug/owlplug-registry/blob/master/doc/Registry-specification.md).
-
-* *(Deprecated)* Setup and host a custom remote source to distribute multiple plugins, following the store specification. The store specification is not actively maintained, you should use the [registry specification](https://github.com/OwlPlug/owlplug-registry/blob/master/doc/Registry-specification.md) instead.
-
 
 # Development
 
