@@ -12,7 +12,7 @@ cp ../owlplug-client/target/owlplug-client-$owlplugversion.jar ./input/owlplug.j
 
 echo "Generating OwlPlug AppImage Install package"
 
-jpackage --input ./input/ --type app-image --name OwlPlug --main-class org.springframework.boot.loader.JarLauncher \
+jpackage --input ./input/ --type app-image --name OwlPlug --main-class org.springframework.boot.loader.launch.JarLauncher \
 --main-jar owlplug.jar --dest ./output \
 --app-version $owlplugversion  --vendor OwlPlug
 
