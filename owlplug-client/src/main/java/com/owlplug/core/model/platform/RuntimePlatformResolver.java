@@ -18,65 +18,82 @@
 
 package com.owlplug.core.model.platform;
 
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class RuntimePlatformResolver {
 
-  private static HashMap<String, RuntimePlatform> platforms = new HashMap<>();
+  private static Set<RuntimePlatform> platforms = new HashSet<>();
 
   static {
-    RuntimePlatform win32 = new RuntimePlatform("win32", OperatingSystem.WIN, "32");
-    platforms.put("win32", win32);
-    RuntimePlatform win64 = new RuntimePlatform("win64", OperatingSystem.WIN, "64");
-    platforms.put("win64", win64);
-    RuntimePlatform osx = new RuntimePlatform("osx", OperatingSystem.MAC, "64");
-    platforms.put("osx", osx);
-    RuntimePlatform linux32 = new RuntimePlatform("linux32", OperatingSystem.LINUX, "32");
-    platforms.put("linux32", linux32);
-    RuntimePlatform linux64 = new RuntimePlatform("linux64", OperatingSystem.LINUX, "64");
-    platforms.put("linux64", linux64);
+    RuntimePlatform winX86 = new RuntimePlatform("win-x86", OperatingSystem.WIN, "x86", new String[]{"win32"});
+    platforms.add(winX86);
+    RuntimePlatform winX64 = new RuntimePlatform("win-x64", OperatingSystem.WIN, "x64", new String[]{"win64"});
+    platforms.add(winX64);
+    RuntimePlatform mac = new RuntimePlatform("mac", OperatingSystem.MAC, "x64");
+    platforms.add(mac);
+    RuntimePlatform linuxX86 = new RuntimePlatform("linux-x86", OperatingSystem.LINUX, "x86", new String[]{"linux32"});
+    platforms.add(linuxX86);
+    RuntimePlatform linuxX64 = new RuntimePlatform("linux-x64", OperatingSystem.LINUX, "x64", new String[]{"linux64"});
+    platforms.add(linuxX64);
+    RuntimePlatform linuxArm86 = new RuntimePlatform("linux-arm86", OperatingSystem.LINUX, "arm86");
+    platforms.add(linuxArm86);
+    RuntimePlatform linuxArm64 = new RuntimePlatform("linux-arm64", OperatingSystem.LINUX, "arm64");
+    platforms.add(linuxArm64);
 
-    win64.getCompatiblePlatforms().add(win32);
-    linux64.getCompatiblePlatforms().add(linux32);
+    winX64.getCompatiblePlatforms().add(winX86);
+    linuxX64.getCompatiblePlatforms().add(linuxX86);
+    linuxArm64.getCompatiblePlatforms().add(linuxArm86);
 
   }
 
   public RuntimePlatform resolve() {
 
-    String osName = System.getProperty("os.name").toLowerCase();
+    OperatingSystem os = getOperatingSystem();
+    String arch = getArchitecture();
 
-    // Windows
-    if (osName.contains("win")) {
-      if (is64bitPlatform()) {
-        return platforms.get("win64");
-      } else {
-        return platforms.get("win32");
-      }
-    }
+    Optional<RuntimePlatform> platform = platforms.stream()
+            .filter(p -> p.getOperatingSystem().equals(os))
+            .filter(p -> p.getArch().equals(arch))
+            .findFirst();
 
-    // macOS
-    if (osName.contains("mac")) {
-      return platforms.get("osx");
-    }
-
-    // Linux
-    if (osName.contains("nix") || osName.contains("nux")) {
-      if (is64bitPlatform()) {
-        return platforms.get("linux64");
-      } else {
-        return platforms.get("linux32");
-      }
-    }
-
-    return new RuntimePlatform("unknown", OperatingSystem.UNKNOWN, "");
+    return platform.orElseGet(() -> new RuntimePlatform("unknown", os, arch));
   }
 
-  private boolean is64bitPlatform() {
-    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-      return System.getenv("ProgramFiles(x86)") != null;
-    } else {
-      return System.getProperty("os.arch").contains("64");
+  private static String getArchitecture() {
+    String arch = System.getProperty("os.arch");
+    if (arch == null) {
+      return "Unknown";
     }
+
+    arch = arch.toLowerCase();
+
+    if (arch.matches("^(amd64|x86_64)$")) {
+      return "x64";
+    } else if (arch.matches("^(i[3-6]86|x86)$")) {
+      return "x86";
+    } else if (arch.matches("^(aarch64|arm64)$")) {
+      return "arm64";
+    } else if (arch.matches("^(arm|arm32)$")) {
+      return "arm32";
+    } else {
+      return "unknown";
+    }
+  }
+
+  private OperatingSystem getOperatingSystem() {
+    String osName = System.getProperty("os.name").toLowerCase();
+    if (osName.contains("win")) {
+      return OperatingSystem.WIN;
+    }
+    if (osName.contains("mac")) {
+      return OperatingSystem.MAC;
+    }
+    if (osName.contains("nix") || osName.contains("nux")) {
+      return OperatingSystem.LINUX;
+    }
+    return OperatingSystem.UNKNOWN;
   }
 
 }
