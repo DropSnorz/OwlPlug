@@ -21,7 +21,8 @@ package com.owlplug.explore.model;
 public enum SourceType {
 
   OWLPLUG_REGISTRY("owlplug-registry", "OwlPlug Registry", "R"),
-  OWLPLUG_STORE("owlplug-store", "OwlPlug Store", "S");
+  OWLPLUG_STORE("owlplug-store", "OwlPlug Store", "S"),
+  OAS_REGISTRY("open-audio-stack-registry", "OAS Registry", "O");
 
   private String value;
   private String label;

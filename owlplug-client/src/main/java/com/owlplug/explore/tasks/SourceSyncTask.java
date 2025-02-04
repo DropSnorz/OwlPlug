@@ -30,6 +30,10 @@ import com.owlplug.explore.dao.RemoteSourceDAO;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
+import com.owlplug.explore.model.mappers.oas.OASModelAdapter;
+import com.owlplug.explore.model.mappers.oas.OASPackage;
+import com.owlplug.explore.model.mappers.oas.OASPlugin;
+import com.owlplug.explore.model.mappers.oas.OASRegistry;
 import com.owlplug.explore.model.mappers.registry.PackageMapper;
 import com.owlplug.explore.model.mappers.registry.PackageVersionMapper;
 import com.owlplug.explore.model.mappers.registry.RegistryMapper;
@@ -91,10 +95,10 @@ public class SourceSyncTask extends AbstractTask {
         response = httpclient.execute(httpGet);
         HttpEntity entity = response.getEntity();
 
-        if (remoteSource.getType() == null || remoteSource.getType().equals(SourceType.OWLPLUG_STORE)) {
-          processStoreSource(entity, remoteSource);
-        } else if (remoteSource.getType().equals(SourceType.OWLPLUG_REGISTRY)) {
+        if (remoteSource.getType() == null || remoteSource.getType().equals(SourceType.OWLPLUG_REGISTRY)) {
           processRegistrySource(entity, remoteSource);
+        } else if (remoteSource.getType().equals(SourceType.OAS_REGISTRY)) {
+          processOASSource(entity, remoteSource);
         }
 
         EntityUtils.consume(entity);
@@ -133,30 +137,6 @@ public class SourceSyncTask extends AbstractTask {
     return success();
   }
 
-  private void processStoreSource(HttpEntity entity, RemoteSource remoteSource) throws StoreParsingException {
-
-    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-        false);
-
-    try {
-      StoreJsonMapper pluginStoreTO = objectMapper.readValue(entity.getContent(), StoreJsonMapper.class);
-      List<List<ProductJsonMapper>> chunks = Lists.partition(pluginStoreTO.getProducts(), 100);
-      
-      for (List<ProductJsonMapper> partition : chunks) {
-        List<RemotePackage> remotePackagePartition = new ArrayList<>();
-        for (ProductJsonMapper productMapper : partition) {
-          RemotePackage product = StoreModelAdapter.jsonMapperToEntity(productMapper);
-          product.setRemoteSource(remoteSource);
-          remotePackagePartition.add(product);
-        }
-        remotePackageDAO.saveAll(remotePackagePartition);
-      }
-      
-    } catch (Exception e) {
-      throw new StoreParsingException(e);
-    }
-  }
-
   private void processRegistrySource(HttpEntity entity, RemoteSource remoteSource) throws StoreParsingException {
     ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
         false);
@@ -176,6 +156,36 @@ public class SourceSyncTask extends AbstractTask {
                 .get(version);
 
             RemotePackage remotePackage = RegistryModelAdapter.jsonMapperToEntity(latestPackage);
+            remotePackage.setSlug(packageMapper.getSlug());
+            remotePackage.setRemoteSource(remoteSource);
+            remotePackage.setVersion(version);
+            remotePackagePartition.add(remotePackage);
+          }
+        }
+        remotePackageDAO.saveAll(remotePackagePartition);
+      }
+
+    } catch (Exception e) {
+      throw new StoreParsingException(e);
+    }
+  }
+
+  private void processOASSource(HttpEntity entity, RemoteSource remoteSource) throws StoreParsingException {
+    ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+            false);
+    try {
+      OASRegistry registryMapper = objectMapper.readValue(entity.getContent(), OASRegistry.class);
+      List<OASPackage> packages = new ArrayList<>(registryMapper.getPlugins().values());
+      List<List<OASPackage>> chunks = Lists.partition(packages, 100);
+
+      for (List<OASPackage> partition : chunks) {
+        List<RemotePackage> remotePackagePartition = new ArrayList<>();
+        for (OASPackage packageMapper : partition) {
+
+          if (packageMapper.getVersions().containsKey(packageMapper.getVersion())) {
+            String version = packageMapper.getVersion();
+            OASPlugin latestPlugin = packageMapper.getVersions().get(version);
+            RemotePackage remotePackage = OASModelAdapter.mapperToEntity(latestPlugin);
             remotePackage.setSlug(packageMapper.getSlug());
             remotePackage.setRemoteSource(remoteSource);
             remotePackage.setVersion(version);

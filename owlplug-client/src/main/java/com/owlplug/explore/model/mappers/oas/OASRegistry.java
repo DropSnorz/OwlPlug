@@ -18,7 +18,6 @@
 
 package com.owlplug.explore.model.mappers.oas;
 
-import com.owlplug.explore.model.mappers.registry.PackageMapper;
 import java.util.Map;
 
 public class OASRegistry {
@@ -28,7 +27,7 @@ public class OASRegistry {
 
   private String version;
 
-  private Map<String, PackageMapper> plugins;
+  private Map<String, OASPackage> plugins;
 
   public String getName() {
     return name;
@@ -54,11 +53,11 @@ public class OASRegistry {
     this.version = version;
   }
 
-  public Map<String, PackageMapper> getPlugins() {
+  public Map<String, OASPackage> getPlugins() {
     return plugins;
   }
 
-  public void setPlugins(Map<String, PackageMapper> plugins) {
+  public void setPlugins(Map<String, OASPackage> plugins) {
     this.plugins = plugins;
   }
 }

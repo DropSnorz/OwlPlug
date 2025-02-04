@@ -51,43 +51,42 @@ public class RegistryModelAdapter {
    * @return product entity
    */
   public static RemotePackage jsonMapperToEntity(PackageVersionMapper packageVersionMapper) {
-
-    RemotePackage product = new RemotePackage();
-    product.setName(packageVersionMapper.getName());
-    product.setPageUrl(packageVersionMapper.getPageUrl());
-    product.setScreenshotUrl(UrlUtils.fixSpaces(packageVersionMapper.getScreenshotUrl()));
-    product.setDonateUrl(UrlUtils.fixSpaces(packageVersionMapper.getDonateUrl()));
-    product.setCreator(packageVersionMapper.getCreator());
-    product.setLicense(packageVersionMapper.getLicense());
-    product.setDescription(packageVersionMapper.getDescription());
+    RemotePackage remotePackage = new RemotePackage();
+    remotePackage.setName(packageVersionMapper.getName());
+    remotePackage.setPageUrl(packageVersionMapper.getPageUrl());
+    remotePackage.setScreenshotUrl(UrlUtils.fixSpaces(packageVersionMapper.getScreenshotUrl()));
+    remotePackage.setDonateUrl(UrlUtils.fixSpaces(packageVersionMapper.getDonateUrl()));
+    remotePackage.setCreator(packageVersionMapper.getCreator());
+    remotePackage.setLicense(packageVersionMapper.getLicense());
+    remotePackage.setDescription(packageVersionMapper.getDescription());
 
     if (packageVersionMapper.getType() != null) {
-      product.setType(PluginType.fromString(packageVersionMapper.getType()));
+      remotePackage.setType(PluginType.fromString(packageVersionMapper.getType()));
     }
 
     if (packageVersionMapper.getStage() != null) {
-      product.setStage(PluginStage.fromString(packageVersionMapper.getStage()));
+      remotePackage.setStage(PluginStage.fromString(packageVersionMapper.getStage()));
     }
 
     HashSet<PackageBundle> bundles = new HashSet<>();
     if (packageVersionMapper.getBundles() != null) {
       for (BundleMapper bundleMapper : packageVersionMapper.getBundles()) {
         PackageBundle bundle = jsonMapperToEntity(bundleMapper);
-        bundle.setRemotePackage(product);
+        bundle.setRemotePackage(remotePackage);
         bundles.add(bundle);
       }
     }
-    product.setBundles(bundles);
+    remotePackage.setBundles(bundles);
 
     HashSet<PackageTag> tags = new HashSet<>();
     if (packageVersionMapper.getTags() != null) {
       for (String tag : packageVersionMapper.getTags()) {
-        tags.add(new PackageTag(tag, product));
+        tags.add(new PackageTag(tag, remotePackage));
       }
     }
-    product.setTags(tags);
+    remotePackage.setTags(tags);
 
-    return product;
+    return remotePackage;
   }
 
   /**
