@@ -15,20 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
-package com.owlplug.explore.model.json.legacy;
 
-import com.owlplug.explore.model.json.BundleJsonMapper;
+package com.owlplug.explore.model.mappers.registry;
+
 import java.util.List;
 
-public class ProductJsonMapper {
+public class PackageVersionMapper {
 
   private String name;
-  private String slug;
   private String technicalUid;
   private String pageUrl;
-  @Deprecated
-  private String downloadUrl;
   private String screenshotUrl;
   private String donateUrl;
   private String creator;
@@ -36,7 +32,7 @@ public class ProductJsonMapper {
   private String version;
   private String description;
   private String type;
-  private List<BundleJsonMapper> bundles;
+  private List<BundleMapper> bundles;
   private String stage;
   private List<String> tags;
 
@@ -46,14 +42,6 @@ public class ProductJsonMapper {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getSlug() {
-    return slug;
-  }
-
-  public void setSlug(String slug) {
-    this.slug = slug;
   }
 
   public String getTechnicalUid() {
@@ -72,16 +60,6 @@ public class ProductJsonMapper {
     this.pageUrl = pageUrl;
   }
 
-  @Deprecated
-  public String getDownloadUrl() {
-    return downloadUrl;
-  }
-
-  @Deprecated
-  public void setDownloadUrl(String downloadUrl) {
-    this.downloadUrl = downloadUrl;
-  }
-
   public String getScreenshotUrl() {
     return screenshotUrl;
   }
@@ -94,8 +72,8 @@ public class ProductJsonMapper {
     return donateUrl;
   }
 
-  public void setDonateUrl(String donateURL) {
-    this.donateUrl = donateURL;
+  public void setDonateUrl(String donateUrl) {
+    this.donateUrl = donateUrl;
   }
 
   public String getCreator() {
@@ -126,6 +104,10 @@ public class ProductJsonMapper {
     return description;
   }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
   public String getType() {
     return type;
   }
@@ -134,15 +116,11 @@ public class ProductJsonMapper {
     this.type = type;
   }
 
-  public void setDescription(String version) {
-    this.description = version;
-  }
-
-  public List<BundleJsonMapper> getBundles() {
+  public List<BundleMapper> getBundles() {
     return bundles;
   }
 
-  public void setBundles(List<BundleJsonMapper> bundles) {
+  public void setBundles(List<BundleMapper> bundles) {
     this.bundles = bundles;
   }
 
@@ -161,5 +139,4 @@ public class ProductJsonMapper {
   public void setTags(List<String> tags) {
     this.tags = tags;
   }
-
 }

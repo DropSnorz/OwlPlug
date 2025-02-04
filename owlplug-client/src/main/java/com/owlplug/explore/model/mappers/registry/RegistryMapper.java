@@ -16,37 +16,38 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.explore.model.json.oas;
+package com.owlplug.explore.model.mappers.registry;
 
 import java.util.Map;
 
-public class OASPackage {
+public class RegistryMapper {
 
-  private String slug;
-  private String version;
-  private Map<String, OASPlugin> versions;
+  private String name;
+  private String url;
 
-  public String getSlug() {
-    return slug;
+  private Map<String, PackageMapper> packages;
+
+  public String getName() {
+    return name;
   }
 
-  public void setSlug(String slug) {
-    this.slug = slug;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public String getVersion() {
-    return version;
+  public String getUrl() {
+    return url;
   }
 
-  public void setVersion(String version) {
-    this.version = version;
+  public void setUrl(String url) {
+    this.url = url;
   }
 
-  public Map<String, OASPlugin> getVersions() {
-    return versions;
+  public Map<String, PackageMapper> getPackages() {
+    return packages;
   }
 
-  public void setVersions(Map<String, OASPlugin> versions) {
-    this.versions = versions;
+  public void setPackages(Map<String, PackageMapper> packages) {
+    this.packages = packages;
   }
 }

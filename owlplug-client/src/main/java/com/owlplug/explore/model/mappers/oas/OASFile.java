@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.explore.model.json.oas;
+package com.owlplug.explore.model.mappers.oas;
 
 import java.util.List;
 

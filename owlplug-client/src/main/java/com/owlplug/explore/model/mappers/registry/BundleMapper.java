@@ -16,11 +16,11 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.explore.model.json;
+package com.owlplug.explore.model.mappers.registry;
 
 import java.util.List;
 
-public class BundleJsonMapper {
+public class BundleMapper {
 
   private String name;
   private List<String> targets;

@@ -32,10 +32,10 @@ import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
-import com.owlplug.explore.model.json.RegistryJsonMapper;
-import com.owlplug.explore.model.json.RegistryModelAdapter;
-import com.owlplug.explore.model.json.legacy.StoreJsonMapper;
-import com.owlplug.explore.model.json.legacy.StoreModelAdapter;
+import com.owlplug.explore.model.mappers.registry.RegistryMapper;
+import com.owlplug.explore.model.mappers.registry.RegistryModelAdapter;
+import com.owlplug.explore.model.mappers.legacy.StoreJsonMapper;
+import com.owlplug.explore.model.mappers.legacy.StoreModelAdapter;
 import com.owlplug.explore.model.search.ExploreCriteriaAdapter;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import jakarta.annotation.PostConstruct;
@@ -227,7 +227,7 @@ public class ExploreService extends BaseService {
     try {
       ObjectMapper objectMapper = new ObjectMapper().configure(
           DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-      RegistryJsonMapper registryMapper = objectMapper.readValue(content, RegistryJsonMapper.class);
+      RegistryMapper registryMapper = objectMapper.readValue(content, RegistryMapper.class);
       RemoteSource remoteSource = RegistryModelAdapter.jsonMapperToEntity(registryMapper);
       return remoteSource;
     } catch (JsonProcessingException e) {

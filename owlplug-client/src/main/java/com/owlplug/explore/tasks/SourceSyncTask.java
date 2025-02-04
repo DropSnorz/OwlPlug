@@ -30,13 +30,13 @@ import com.owlplug.explore.dao.RemoteSourceDAO;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
-import com.owlplug.explore.model.json.PackageJsonMapper;
-import com.owlplug.explore.model.json.PackageVersionJsonMapper;
-import com.owlplug.explore.model.json.RegistryJsonMapper;
-import com.owlplug.explore.model.json.RegistryModelAdapter;
-import com.owlplug.explore.model.json.legacy.ProductJsonMapper;
-import com.owlplug.explore.model.json.legacy.StoreJsonMapper;
-import com.owlplug.explore.model.json.legacy.StoreModelAdapter;
+import com.owlplug.explore.model.mappers.registry.PackageMapper;
+import com.owlplug.explore.model.mappers.registry.PackageVersionMapper;
+import com.owlplug.explore.model.mappers.registry.RegistryMapper;
+import com.owlplug.explore.model.mappers.registry.RegistryModelAdapter;
+import com.owlplug.explore.model.mappers.legacy.ProductJsonMapper;
+import com.owlplug.explore.model.mappers.legacy.StoreJsonMapper;
+import com.owlplug.explore.model.mappers.legacy.StoreModelAdapter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,17 +162,17 @@ public class SourceSyncTask extends AbstractTask {
         false);
 
     try {
-      RegistryJsonMapper registryMapper = objectMapper.readValue(entity.getContent(), RegistryJsonMapper.class);
-      List<PackageJsonMapper> packages = new ArrayList<>(registryMapper.getPackages().values());
-      List<List<PackageJsonMapper>> chunks = Lists.partition(packages, 100);
+      RegistryMapper registryMapper = objectMapper.readValue(entity.getContent(), RegistryMapper.class);
+      List<PackageMapper> packages = new ArrayList<>(registryMapper.getPackages().values());
+      List<List<PackageMapper>> chunks = Lists.partition(packages, 100);
 
-      for (List<PackageJsonMapper> partition : chunks) {
+      for (List<PackageMapper> partition : chunks) {
         List<RemotePackage> remotePackagePartition = new ArrayList<>();
-        for (PackageJsonMapper packageMapper : partition) {
+        for (PackageMapper packageMapper : partition) {
 
           if (packageMapper.getVersions().containsKey(packageMapper.getLatestVersion())) {
             String version = packageMapper.getLatestVersion();
-            PackageVersionJsonMapper latestPackage = packageMapper.getVersions()
+            PackageVersionMapper latestPackage = packageMapper.getVersions()
                 .get(version);
 
             RemotePackage remotePackage = RegistryModelAdapter.jsonMapperToEntity(latestPackage);

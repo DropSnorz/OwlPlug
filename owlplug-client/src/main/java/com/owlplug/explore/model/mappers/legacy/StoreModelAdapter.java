@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.explore.model.json.legacy;
+package com.owlplug.explore.model.mappers.legacy;
 
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.model.PluginType;
@@ -25,7 +25,7 @@ import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
-import com.owlplug.explore.model.json.BundleJsonMapper;
+import com.owlplug.explore.model.mappers.registry.BundleMapper;
 import java.util.HashSet;
 import java.util.List;
 
@@ -75,7 +75,7 @@ public class StoreModelAdapter {
 
     HashSet<PackageBundle> bundles = new HashSet<>();
     if (productJsonMapper.getBundles() != null) {
-      for (BundleJsonMapper bundleMapper : productJsonMapper.getBundles()) {
+      for (BundleMapper bundleMapper : productJsonMapper.getBundles()) {
         PackageBundle bundle = jsonMapperToEntity(bundleMapper);
         
         // If bundle version is not defined, apply product version.
@@ -104,12 +104,12 @@ public class StoreModelAdapter {
   }
 
   /**
-   * Creates a {@link PackageBundle} entity from a {@link BundleJsonMapper}.
+   * Creates a {@link PackageBundle} entity from a {@link BundleMapper}.
    * 
    * @param mapper bundle json mapper
    * @return bundle entity
    */
-  public static PackageBundle jsonMapperToEntity(BundleJsonMapper mapper) {
+  public static PackageBundle jsonMapperToEntity(BundleMapper mapper) {
 
     PackageBundle packageBundle = new PackageBundle();
     packageBundle.setName(mapper.getName());

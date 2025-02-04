@@ -15,17 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
+ 
+package com.owlplug.explore.model.mappers.legacy;
 
-package com.owlplug.explore.model.json;
+import java.util.List;
 
-import java.util.Map;
-
-public class RegistryJsonMapper {
+public class StoreJsonMapper {
 
   private String name;
   private String url;
+  private String type;
+  private String version;
 
-  private Map<String, PackageJsonMapper> packages;
+  private List<ProductJsonMapper> products;
 
   public String getName() {
     return name;
@@ -43,11 +45,34 @@ public class RegistryJsonMapper {
     this.url = url;
   }
 
-  public Map<String, PackageJsonMapper> getPackages() {
-    return packages;
+  public String getType() {
+    return type;
   }
 
-  public void setPackages(Map<String, PackageJsonMapper> packages) {
-    this.packages = packages;
+  public void setType(String type) {
+    this.type = type;
   }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public void setVersion(String version) {
+    this.version = version;
+  }
+
+  public List<ProductJsonMapper> getProducts() {
+    return products;
+  }
+
+  public void setProducts(List<ProductJsonMapper> products) {
+    this.products = products;
+  }
+
+  @Override
+  public String toString() {
+    return "PluginStoreTO [name=" + name + ", url=" + url + ", type=" + type + ", version=" + version + ", products="
+        + products + "]";
+  }
+
 }
