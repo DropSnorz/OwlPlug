@@ -20,7 +20,9 @@ package com.owlplug.core.model.platform;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RuntimePlatform {
 
@@ -46,8 +48,8 @@ public class RuntimePlatform {
     this.aliases.addAll(Arrays.stream(aliases).toList());
   }
 
-  public List<String> getCompatiblePlatformsTags() {
-    List<String> platforms = new ArrayList<>();
+  public Set<String> getCompatiblePlatformsTags() {
+    Set<String> platforms = new HashSet<>();
     platforms.add(this.operatingSystem.getCode());
     platforms.addAll(aliases);
     for (RuntimePlatform platform : compatiblePlatforms) {

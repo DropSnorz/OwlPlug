@@ -95,11 +95,9 @@ public class OASFile {
     this.url = url;
   }
 
-  public class System {
+  public static class System {
     private String type;
-    // TODO, number in spec, should be changed ?
     private String min;
-    // TODO, number in spec, should be changed ?
     private String max;
 
     public String getType() {

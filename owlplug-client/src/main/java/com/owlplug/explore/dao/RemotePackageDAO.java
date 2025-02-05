@@ -27,6 +27,7 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -115,7 +116,7 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
    * @return The JPA Specification
    */
   @SuppressWarnings("unchecked")
-  static Specification<RemotePackage> hasPlatformTag(List<String> platformTagList) {
+  static Specification<RemotePackage> hasPlatformTag(Set<String> platformTagList) {
     return (remotePackage, cq, cb) -> {
       Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
       return bundles.join("targets").in(platformTagList);

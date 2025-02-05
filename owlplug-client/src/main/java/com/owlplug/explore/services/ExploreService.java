@@ -32,6 +32,8 @@ import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
+import com.owlplug.explore.model.mappers.oas.OASModelAdapter;
+import com.owlplug.explore.model.mappers.oas.OASRegistry;
 import com.owlplug.explore.model.mappers.registry.RegistryMapper;
 import com.owlplug.explore.model.mappers.registry.RegistryModelAdapter;
 import com.owlplug.explore.model.mappers.legacy.StoreJsonMapper;
@@ -160,25 +162,25 @@ public class ExploreService extends BaseService {
       CloseableHttpResponse response = httpclient.execute(httpGet);
       HttpEntity entity = response.getEntity();
       String responseContent = new String(entity.getContent().readAllBytes(), StandardCharsets.UTF_8);
-      RemoteSource remoteSource = getSourceFromStoreSpec(responseContent);
+
+      RemoteSource remoteSource = getSourceFromRegistrySpec(responseContent);
 
       if (remoteSource != null) {
-        EntityUtils.consume(entity);
-        response.close();
-        remoteSource.setUrl(url);
-        remoteSource.setType(SourceType.OWLPLUG_STORE);
-        return remoteSource;
-      }
-
-      remoteSource = getSourceFromRegistrySpec(responseContent);
-
-      if (remoteSource != null) {
-        EntityUtils.consume(entity);
-        response.close();
         remoteSource.setUrl(url);
         remoteSource.setType(SourceType.OWLPLUG_REGISTRY);
         return remoteSource;
       }
+
+      remoteSource = getSourceFromOASRegistrySpec(responseContent);
+
+      if (remoteSource != null) {
+        remoteSource.setUrl(url);
+        remoteSource.setType(SourceType.OAS_REGISTRY);
+        return remoteSource;
+      }
+
+      EntityUtils.consume(entity);
+      response.close();
 
       return null;
 
@@ -190,37 +192,10 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Creates a PluginStore instance requesting a store url endpoint.
+   * Creates a RemoteSource instance from a raw OwlPlug registry content.
    *
-   * @param content Store content
-   * @return created pluginstore instance, null if an error occurs
-   */
-  private RemoteSource getSourceFromStoreSpec(String content) {
-
-    try {
-      ObjectMapper objectMapper = new ObjectMapper().configure(
-          DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-      StoreJsonMapper pluginStoreTO = objectMapper.readValue(content, StoreJsonMapper.class);
-
-      if (pluginStoreTO.getProducts() != null) {
-        RemoteSource remoteSource = StoreModelAdapter.jsonMapperToEntity(pluginStoreTO);
-        return remoteSource;
-      } else {
-        log.debug("No products defined in store");
-        return null;
-      }
-
-    } catch (JsonProcessingException e) {
-      log.debug("Content don't match the Store spec", e);
-      return null;
-    }
-  }
-
-  /**
-   * Creates a PluginStore instance requesting a store url endpoint.
-   *
-   * @param content Store content
-   * @return created pluginstore instance, null if an error occurs
+   * @param content Registry content
+   * @return created remote source instance, null if an error occurs
    */
   private RemoteSource getSourceFromRegistrySpec(String content) {
 
@@ -228,6 +203,9 @@ public class ExploreService extends BaseService {
       ObjectMapper objectMapper = new ObjectMapper().configure(
           DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
       RegistryMapper registryMapper = objectMapper.readValue(content, RegistryMapper.class);
+      if (registryMapper.getPackages() == null) {
+        return null;
+      }
       RemoteSource remoteSource = RegistryModelAdapter.jsonMapperToEntity(registryMapper);
       return remoteSource;
     } catch (JsonProcessingException e) {
@@ -235,6 +213,33 @@ public class ExploreService extends BaseService {
       return null;
     }
   }
+
+  /**
+   * Creates a RemoteSource instance from a raw OAS registry content.
+   *
+   * @param content Registry content
+   * @return created remote source instance, null if an error occurs
+   */
+  private RemoteSource getSourceFromOASRegistrySpec(String content) {
+
+    try {
+      ObjectMapper objectMapper = new ObjectMapper().configure(
+              DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      OASRegistry registryMapper = objectMapper.readValue(content, OASRegistry.class);
+
+      if (registryMapper.getPlugins() == null) {
+        return null;
+      }
+
+      RemoteSource remoteSource = OASModelAdapter.mapperToEntity(registryMapper);
+
+      return remoteSource;
+    } catch (JsonProcessingException e) {
+      log.debug("Content don't match the Store spec", e);
+      return null;
+    }
+  }
+
 
   public void enableSource(RemoteSource remoteSource, boolean enabled) {
     remoteSource.setEnabled(enabled);

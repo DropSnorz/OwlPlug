@@ -103,11 +103,16 @@ public class OASModelAdapter {
     packageBundle.setDownloadUrl(file.getUrl());
     packageBundle.setDownloadSha256(file.getSha256());
 
-    // TODO: Check target and platform
-    // packageBundle.setTargets(bundleMapper.getTargets());
+    List<String> targets = new ArrayList<>();
+    for (OASFile.System system : file.getSystems()) {
+      for (String arch : file.getArchitectures()) {
+        targets.add(system.getType() + "-" + arch);
+      }
+    }
+    packageBundle.setTargets(targets);
     packageBundle.setFileSize(file.getSize());
 
-    // TODO : Check format binding
+    // TODO: Bind the file format to the Plugin format
     if (file.getContains() != null && file.getContains().size() > 0) {
       List<String> formats = new ArrayList<>(file.getContains());
       packageBundle.setFormats(formats);
