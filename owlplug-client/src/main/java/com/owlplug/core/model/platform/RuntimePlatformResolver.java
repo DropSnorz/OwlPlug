@@ -27,17 +27,17 @@ public class RuntimePlatformResolver {
   private static Set<RuntimePlatform> platforms = new HashSet<>();
 
   static {
-    RuntimePlatform winX86 = new RuntimePlatform("win-x86", OperatingSystem.WIN, "x86", new String[]{"win32"});
+    RuntimePlatform winX86 = new RuntimePlatform("win-x32", OperatingSystem.WIN, "x32", new String[]{"win32"});
     platforms.add(winX86);
     RuntimePlatform winX64 = new RuntimePlatform("win-x64", OperatingSystem.WIN, "x64", new String[]{"win64"});
     platforms.add(winX64);
     RuntimePlatform mac = new RuntimePlatform("mac", OperatingSystem.MAC, "x64");
     platforms.add(mac);
-    RuntimePlatform linuxX86 = new RuntimePlatform("linux-x86", OperatingSystem.LINUX, "x86", new String[]{"linux32"});
+    RuntimePlatform linuxX86 = new RuntimePlatform("linux-x32", OperatingSystem.LINUX, "x32", new String[]{"linux32"});
     platforms.add(linuxX86);
     RuntimePlatform linuxX64 = new RuntimePlatform("linux-x64", OperatingSystem.LINUX, "x64", new String[]{"linux64"});
     platforms.add(linuxX64);
-    RuntimePlatform linuxArm86 = new RuntimePlatform("linux-arm86", OperatingSystem.LINUX, "arm86");
+    RuntimePlatform linuxArm86 = new RuntimePlatform("linux-arm32", OperatingSystem.LINUX, "arm32");
     platforms.add(linuxArm86);
     RuntimePlatform linuxArm64 = new RuntimePlatform("linux-arm64", OperatingSystem.LINUX, "arm64");
     platforms.add(linuxArm64);
@@ -72,7 +72,7 @@ public class RuntimePlatformResolver {
     if (arch.matches("^(amd64|x86_64)$")) {
       return "x64";
     } else if (arch.matches("^(i[3-6]86|x86)$")) {
-      return "x86";
+      return "x32";
     } else if (arch.matches("^(aarch64|arm64)$")) {
       return "arm64";
     } else if (arch.matches("^(arm|arm32)$")) {

@@ -18,6 +18,8 @@
 
 package com.owlplug.explore.model.mappers.oas;
 
+import com.owlplug.core.model.Plugin;
+import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.PluginType;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
@@ -99,26 +101,37 @@ public class OASModelAdapter {
   public static PackageBundle mapperToEntity(OASFile file) {
 
     PackageBundle packageBundle = new PackageBundle();
-    packageBundle.setName(file.getFormat() + " - " + file.getType());
+    packageBundle.setName(file.getType() + " (." + file.getFormat() + ")");
     packageBundle.setDownloadUrl(file.getUrl());
     packageBundle.setDownloadSha256(file.getSha256());
 
     List<String> targets = new ArrayList<>();
     for (OASFile.System system : file.getSystems()) {
       for (String arch : file.getArchitectures()) {
+        System.out.println(system.getType() + "-" + arch);
         targets.add(system.getType() + "-" + arch);
       }
     }
     packageBundle.setTargets(targets);
-    packageBundle.setFileSize(file.getSize());
 
-    // TODO: Bind the file format to the Plugin format
-    if (file.getContains() != null && file.getContains().size() > 0) {
-      List<String> formats = new ArrayList<>(file.getContains());
-      packageBundle.setFormats(formats);
-    }
+    // Size in OAS registry is in bits not in bytes.
+    packageBundle.setFileSize(file.getSize() / 8);
+    packageBundle.setFormats(getPluginFormatsFromFileFormats(file.getContains()));
 
     return packageBundle;
+  }
+
+  private static List<String> getPluginFormatsFromFileFormats(List<String> fileFormats) {
+    HashSet<String> pluginFormats = new HashSet<>();
+    for (String format : fileFormats) {
+      switch (format) {
+        case "component" -> pluginFormats.add("au");
+        case "lv2" -> pluginFormats.add("lv2");
+        case "vst3" -> pluginFormats.add("vst3");
+        case "so", "vst", "dll" -> pluginFormats.add("vst2");
+      }
+    }
+    return pluginFormats.stream().toList();
   }
 
 }
