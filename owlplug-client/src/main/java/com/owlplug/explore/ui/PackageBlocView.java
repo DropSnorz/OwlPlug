@@ -59,12 +59,12 @@ public class PackageBlocView extends AnchorPane {
   private ExploreController parentController;
 
   /**
-   * Creates a new store product bloc view instance.
+   * Creates a new package bloc view instance.
    * 
    * @param applicationDefaults - OwlPlug application defaults
-   * @param remotePackage        - related store product
-   * @param image               - product image
-   * @param parentController    - parent store controller
+   * @param remotePackage        - related package
+   * @param image               - package image
+   * @param parentController    - parent explore controller
    */
   public PackageBlocView(ApplicationDefaults applicationDefaults, RemotePackage remotePackage, Image image,
                          ExploreController parentController) {
@@ -122,9 +122,9 @@ public class PackageBlocView extends AnchorPane {
 
     TextFlow textFlow = new TextFlow();
     textFlow.getChildren().add(new Label("Install"));
-    Text storeSourceText = new Text(" (Auto)");
-    storeSourceText.getStyleClass().add("text-disabled");
-    textFlow.getChildren().add(storeSourceText);
+    Text remoteSourceText = new Text(" (Auto)");
+    remoteSourceText.getStyleClass().add("text-disabled");
+    textFlow.getChildren().add(remoteSourceText);
     CustomMenuItem installMenuItem = new CustomMenuItem(textFlow);
     installMenuItem.setOnAction(e -> {
       this.parentController.installProduct(remotePackage);

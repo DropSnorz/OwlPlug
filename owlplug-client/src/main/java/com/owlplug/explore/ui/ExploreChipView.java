@@ -40,7 +40,7 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
   private static final String PROMPT_TEXT = "Enter your search query by Name, Authors, Category...";
 
   /**
-   * Creates a StoreChipView.
+   * Creates an ExploreChipView.
    * 
    * @param applicationDefaults - OwlPlug application defaults
    */

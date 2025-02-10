@@ -34,7 +34,7 @@ public class RegistryModelAdapter {
    * Creates a {@link RemoteSource} entity from a {@link RegistryMapper}.
    *
    * @param registryMapper registry json mapper
-   * @return pluginStoreEntity
+   * @return remoteSourceEntity
    */
   public static RemoteSource jsonMapperToEntity(RegistryMapper registryMapper) {
 

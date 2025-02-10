@@ -35,7 +35,7 @@ public class OASModelAdapter {
    * Creates a {@link RemoteSource} entity from a {@link OASRegistry}.
    *
    * @param registry registry json mapper
-   * @return pluginStoreEntity
+   * @return RemoteSourceEntity
    */
   public static RemoteSource mapperToEntity(OASRegistry registry) {
 

@@ -36,8 +36,6 @@ import com.owlplug.explore.model.mappers.oas.OASModelAdapter;
 import com.owlplug.explore.model.mappers.oas.OASRegistry;
 import com.owlplug.explore.model.mappers.registry.RegistryMapper;
 import com.owlplug.explore.model.mappers.registry.RegistryModelAdapter;
-import com.owlplug.explore.model.mappers.legacy.StoreJsonMapper;
-import com.owlplug.explore.model.mappers.legacy.StoreModelAdapter;
 import com.owlplug.explore.model.search.ExploreCriteriaAdapter;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import jakarta.annotation.PostConstruct;
