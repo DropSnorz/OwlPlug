@@ -58,6 +58,8 @@ public class NewSourceDialogController extends AbstractDialogController implemen
   @FXML
   private Button studiorackSuggestionButton;
   @FXML
+  private Button openAudioSuggestionButton;
+  @FXML
   private Button okButton;
   @FXML
   private Button cancelButton;
@@ -76,6 +78,11 @@ public class NewSourceDialogController extends AbstractDialogController implemen
 
     owlplugSuggestionButton.setOnAction(e -> {
       sourceUrlTextField.setText(this.getApplicationDefaults().getOwlPlugRegistryUrl());
+      validateAndSaveSource();
+    });
+
+    openAudioSuggestionButton.setOnAction(e -> {
+      sourceUrlTextField.setText(this.getApplicationDefaults().getOpenAudioRegistryUrl());
       validateAndSaveSource();
     });
 
@@ -100,6 +107,10 @@ public class NewSourceDialogController extends AbstractDialogController implemen
 
     owlplugSuggestionButton.setDisable(
         exploreService.getRemoteSourceByUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl()) != null
+    );
+
+    openAudioSuggestionButton.setDisable(
+            exploreService.getRemoteSourceByUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl()) != null
     );
 
     studiorackSuggestionButton.setDisable(

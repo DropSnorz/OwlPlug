@@ -108,7 +108,6 @@ public class OASModelAdapter {
     List<String> targets = new ArrayList<>();
     for (OASFile.System system : file.getSystems()) {
       for (String arch : file.getArchitectures()) {
-        System.out.println(system.getType() + "-" + arch);
         targets.add(system.getType() + "-" + arch);
       }
     }

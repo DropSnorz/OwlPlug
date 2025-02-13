@@ -75,6 +75,7 @@ public class ApplicationDefaults {
   public final Image studiorackLogoSmall = new Image(
       ApplicationDefaults.class.getResourceAsStream("/media/studiorack-logo-16.png"));
 
+  public final Image openAudioLogoSmall = new Image(ApplicationDefaults.class.getResourceAsStream("/media/open-audio-16.png"));
   public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
   public final Image reaperLogoImage = new Image(getClass().getResourceAsStream("/icons/reaper-white-16.png"));
 
@@ -230,6 +231,11 @@ public class ApplicationDefaults {
   public String getStudiorackRegistryUrl() {
     return env.getProperty("studiorack.registry.url");
   }
+
+  public String getOpenAudioRegistryUrl() {
+    return env.getProperty("openaudio.registry.url");
+  }
+
 
   public String getEnvProperty(String property) {
     return env.getProperty(property);
