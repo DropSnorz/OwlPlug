@@ -104,7 +104,7 @@ public class ExploreService extends BaseService {
    * compatible with the current platform.
    *
    * @param criteriaList criteria list
-   * @return list of store products
+   * @return list of remote packages
    */
   public Iterable<RemotePackage> getRemotePackages(List<ExploreFilterCriteria> criteriaList) {
     RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
@@ -121,16 +121,16 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Find the best bundle from a product based on the user current platform.
+   * Find the best bundle from a package based on the user current platform.
    *
-   * @param product - The store product
+   * @param remotePackage - The remote package
    */
-  public PackageBundle findBestBundle(RemotePackage product) {
+  public PackageBundle findBestBundle(RemotePackage remotePackage) {
 
     RuntimePlatform runtimePlatform = this.getApplicationDefaults().getRuntimePlatform();
 
     // Look for bundles matching runtimePlatform
-    for (PackageBundle bundle : product.getBundles()) {
+    for (PackageBundle bundle : remotePackage.getBundles()) {
       for (String platform : bundle.getTargets()) {
         if (platform.equals(runtimePlatform.getTag())
             || platform.equals(runtimePlatform.getOperatingSystem().getCode())) {
@@ -140,7 +140,7 @@ public class ExploreService extends BaseService {
     }
 
     // Look for bundles compatibles with current runtimePlatform
-    for (PackageBundle bundle : product.getBundles()) {
+    for (PackageBundle bundle : remotePackage.getBundles()) {
       for (String platformTag : bundle.getTargets()) {
         for (String compatibleTag : runtimePlatform.getCompatiblePlatformsTags()) {
           if (platformTag.equals(compatibleTag)) {
@@ -296,7 +296,7 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Returns all distinct product creators.
+   * Returns all distinct package creators.
    *
    * @return lit of creators
    */

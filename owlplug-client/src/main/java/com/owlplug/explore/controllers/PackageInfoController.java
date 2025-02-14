@@ -161,7 +161,7 @@ public class PackageInfoController extends BaseController {
     // Activate and configure install button
     this.installButton.setDisable(false);
     installButton.setOnAction(e -> {
-      boolean installStarted = exploreController.installProduct(remotePackage);
+      boolean installStarted = exploreController.installPackage(remotePackage);
       if (installStarted) {
         this.installButton.setDisable(true);
       }

@@ -47,8 +47,8 @@ public class RegistryModelAdapter {
   /**
    * Creates a {@link RemotePackage} entity from a {@link PackageVersionMapper}.
    *
-   * @param packageVersionMapper product json mapper
-   * @return product entity
+   * @param packageVersionMapper package json mapper
+   * @return package entity
    */
   public static RemotePackage jsonMapperToEntity(PackageVersionMapper packageVersionMapper) {
     RemotePackage remotePackage = new RemotePackage();

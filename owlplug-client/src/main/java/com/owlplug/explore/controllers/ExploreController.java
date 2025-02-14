@@ -118,7 +118,7 @@ public class ExploreController extends BaseController {
   private PackageBlocViewBuilder packageBlocViewBuilder = null;
 
   /**
-   * Loaded products from store are displayed by partitions (like pagination).
+   * Loaded packages from remote sources are displayed by partitions (like pagination).
    * When the user scrolls the entire partition, the next one is appended in the
    * UI.
    */
@@ -278,9 +278,9 @@ public class ExploreController extends BaseController {
   }
 
   /**
-   * Display store products list.
+   * Display remote source package list.
    * 
-   * @param remotePackages - Store product list
+   * @param remotePackages - Remote package list
    */
   public synchronized void refreshView(Iterable<RemotePackage> remotePackages) {
 
@@ -477,7 +477,7 @@ public class ExploreController extends BaseController {
    * 
    * @param remotePackage Package to install
    */
-  public boolean installProduct(RemotePackage remotePackage) {
+  public boolean installPackage(RemotePackage remotePackage) {
 
     PackageBundle bundle = exploreService.findBestBundle(remotePackage);
     if (bundle != null) {

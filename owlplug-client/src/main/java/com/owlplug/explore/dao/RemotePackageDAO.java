@@ -19,13 +19,9 @@
 package com.owlplug.explore.dao;
 
 import com.owlplug.core.model.PluginType;
-import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
-import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.jpa.domain.Specification;
@@ -47,7 +43,7 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   /**
    * Name filtering JPA Specification.
    * 
-   * @param name - The product name
+   * @param name - The package name
    * @return The JPA specification
    */
   static Specification<RemotePackage> nameContains(String name) {
@@ -125,7 +121,7 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   }
 
   /**
-   * Product tag filtering specification. Filter packages matching the given tags
+   * Package tag filtering specification. Filter packages matching the given tags
    * 
    * @param tag - The tag to find
    * @return The JPA Specification
@@ -140,7 +136,7 @@ public interface RemotePackageDAO extends CrudRepository<RemotePackage, Long>, J
   }
 
   /**
-   * Product tag filtering specification. Filter packages matching the given tags
+   * Package type filtering specification. Filter packages matching the given type
    * 
    * @param type - The type to find
    * @return The JPA Specification

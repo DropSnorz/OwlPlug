@@ -128,7 +128,7 @@ public class PackageBlocView extends AnchorPane {
     textFlow.getChildren().add(remoteSourceText);
     CustomMenuItem installMenuItem = new CustomMenuItem(textFlow);
     installMenuItem.setOnAction(e -> {
-      this.parentController.installProduct(remotePackage);
+      this.parentController.installPackage(remotePackage);
     });
 
     ContextMenu contextMenu = new ContextMenu();
