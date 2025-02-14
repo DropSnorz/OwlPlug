@@ -101,7 +101,6 @@ public class OASModelAdapter {
   public static PackageBundle mapperToEntity(OASFile file) {
 
     PackageBundle packageBundle = new PackageBundle();
-    packageBundle.setName(file.getType() + " (." + file.getFormat() + ")");
     packageBundle.setDownloadUrl(file.getUrl());
     packageBundle.setDownloadSha256(file.getSha256());
 
@@ -112,6 +111,10 @@ public class OASModelAdapter {
       }
     }
     packageBundle.setTargets(targets);
+
+    String name = file.getType();
+    name = name + " - " + String.join(" ", targets);
+    packageBundle.setName(name);
 
     // Size in OAS registry is in bits not in bytes.
     packageBundle.setFileSize(file.getSize() / 8);

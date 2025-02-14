@@ -25,7 +25,6 @@ public class OASFile {
   private List<System> systems;
   private List<String> architectures;
   private List<String> contains;
-  private String format;
   private String type;
   private int size;
   private String sha256;
@@ -53,14 +52,6 @@ public class OASFile {
 
   public void setContains(List<String> contains) {
     this.contains = contains;
-  }
-
-  public String getFormat() {
-    return format;
-  }
-
-  public void setFormat(String format) {
-    this.format = format;
   }
 
   public String getType() {

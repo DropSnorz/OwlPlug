@@ -43,7 +43,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
 
-public class ProductBundlesView extends VBox {
+public class PackageBundlesView extends VBox {
 
   private ApplicationDefaults applicationDefaults;
 
@@ -54,7 +54,7 @@ public class ProductBundlesView extends VBox {
   private static final Background DOT_BACKGROUND = new Background(
       new BackgroundFill(FILL, CornerRadii.EMPTY, Insets.EMPTY));
 
-  public ProductBundlesView(ApplicationDefaults applicationDefaults) {
+  public PackageBundlesView(ApplicationDefaults applicationDefaults) {
     super();
     this.applicationDefaults = applicationDefaults;
     this.setSpacing(5);
@@ -65,7 +65,7 @@ public class ProductBundlesView extends VBox {
     this.getChildren().clear();
   }
 
-  public void addProductBundle(PackageBundle bundle, EventHandler<ActionEvent> installHandler) {
+  public void addPackageBundle(PackageBundle bundle, EventHandler<ActionEvent> installHandler) {
 
     HBox hbox = new HBox(5);
     hbox.setAlignment(Pos.CENTER_LEFT);
@@ -85,21 +85,25 @@ public class ProductBundlesView extends VBox {
     hbox.getChildren().add(formatsContainer);
 
     Label bundleName = new Label(bundle.getName());
+    bundleName.setWrapText(true);
     hbox.getChildren().add(bundleName);
+    HBox.setHgrow(bundleName, Priority.ALWAYS);
     Region filler = new Region();
     filler.setPrefHeight(1);
     filler.setBackground(DOT_BACKGROUND);
-    HBox.setHgrow(filler, Priority.ALWAYS);
+    HBox.setHgrow(filler, Priority.SOMETIMES);
     hbox.getChildren().add(filler);
     Button installButton = new Button("Install");
     installButton.getStyleClass().add("button-info");
     installButton.setOnAction(installHandler);
+    installButton.setMinWidth(USE_PREF_SIZE);
     hbox.getChildren().add(installButton);
 
     if (bundle.getFileSize() != 0) {
       String sizeText = FileUtils.humanReadableByteCount(bundle.getFileSize(), true);
       final Label sizeLabel = new Label("(" + sizeText + ")");
       sizeLabel.getStyleClass().add("label-disabled");
+      sizeLabel.setMinWidth(USE_PREF_SIZE);
       hbox.getChildren().add(sizeLabel);
     }
 

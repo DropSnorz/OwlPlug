@@ -27,7 +27,7 @@ import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.ui.PackageSourceBadgeView;
-import com.owlplug.explore.ui.ProductBundlesView;
+import com.owlplug.explore.ui.PackageBundlesView;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -90,7 +90,7 @@ public class PackageInfoController extends BaseController {
   @FXML
   private Pane headerContainer;
 
-  private ProductBundlesView bundlesView;
+  private PackageBundlesView bundlesView;
 
   private SideBar sidebar;
 
@@ -113,7 +113,7 @@ public class PackageInfoController extends BaseController {
       sidebar.collapse();
     });
 
-    bundlesView = new ProductBundlesView(this.getApplicationDefaults());
+    bundlesView = new PackageBundlesView(this.getApplicationDefaults());
     bundlesContainer.getChildren().add(bundlesView);
 
   }
@@ -211,7 +211,7 @@ public class PackageInfoController extends BaseController {
     // Bundle list display
     bundlesView.clear();
     for (PackageBundle bundle : remotePackage.getBundles()) {
-      bundlesView.addProductBundle(bundle, e -> exploreController.installBundle(bundle));
+      bundlesView.addPackageBundle(bundle, e -> exploreController.installBundle(bundle));
     }
 
   }

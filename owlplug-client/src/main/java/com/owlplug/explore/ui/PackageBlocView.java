@@ -21,6 +21,7 @@ package com.owlplug.explore.ui;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
@@ -139,7 +140,7 @@ public class PackageBlocView extends AnchorPane {
     for (PackageBundle bundle : remotePackage.getBundles()) {
       TextFlow bundleTextFlow = new TextFlow();
       bundleTextFlow.getChildren().add(new Label("Install"));
-      Text bundleSource = new Text(" (" + bundle.getName() + ")");
+      Text bundleSource = new Text(" (" + StringUtils.truncate(bundle.getName(), 50, "...") + ")");
       bundleSource.getStyleClass().add("text-disabled");
       bundleTextFlow.getChildren().add(bundleSource);
       CustomMenuItem bundleMenuItem = new CustomMenuItem(bundleTextFlow);

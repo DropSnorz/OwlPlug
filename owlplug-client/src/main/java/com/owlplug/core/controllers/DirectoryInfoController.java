@@ -30,6 +30,7 @@ import com.owlplug.core.tasks.DirectoryRemoveTask;
 import com.owlplug.core.ui.PluginListCellFactory;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.core.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -135,7 +136,7 @@ public class DirectoryInfoController extends BaseController {
             Optional<Node> opTextNode = this.lookupAll(".chart-pie-label").stream().filter(
                 n -> n instanceof Text && ((Text) n).getText().equals(d.getName())).findAny();
             if (opTextNode.isPresent()) {
-              String label = ellipsisString(d.getName(), 15, 3)
+              String label = StringUtils.ellipsis(d.getName(), 15, 3)
                                  + " - " + FileUtils.humanReadableByteCount((long) d.getPieValue(), true);
               ((Text) opTextNode.get()).setText(label);
             }
@@ -210,14 +211,5 @@ public class DirectoryInfoController extends BaseController {
     return chartData;
   }
 
-  private String ellipsisString(String input, int maxLength, int clearEndLength) {
-    if (input == null || input.length() <= maxLength
-        || clearEndLength >= maxLength) {
-      return input;
-    } else {
-      String truncatedString = input.substring(0, maxLength - clearEndLength);
-      return truncatedString + "..." + input.substring(input.length() - clearEndLength);
-    }
-  }
 
 }
