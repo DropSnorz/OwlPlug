@@ -72,9 +72,6 @@ public class ApplicationDefaults {
   public final Image verifiedSourceImage = new Image(getClass().getResourceAsStream("/icons/doublecheck-grey-16.png"));
   public final Image suggestedSourceImage = new Image(
       ApplicationDefaults.class.getResourceAsStream("/icons/check-grey-16.png"));
-  public final Image studiorackLogoSmall = new Image(
-      ApplicationDefaults.class.getResourceAsStream("/media/studiorack-logo-16.png"));
-
   public final Image openAudioLogoSmall = new Image(ApplicationDefaults.class.getResourceAsStream("/media/open-audio-16.png"));
   public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
   public final Image reaperLogoImage = new Image(getClass().getResourceAsStream("/icons/reaper-white-16.png"));
@@ -226,10 +223,6 @@ public class ApplicationDefaults {
 
   public String getOwlPlugRegistryUrl() {
     return env.getProperty("owlplug.registry.url");
-  }
-
-  public String getStudiorackRegistryUrl() {
-    return env.getProperty("studiorack.registry.url");
   }
 
   public String getOpenAudioRegistryUrl() {

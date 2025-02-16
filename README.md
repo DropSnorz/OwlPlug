@@ -91,11 +91,11 @@ OwlPlug official plugin registry for Free or Open Source plugins
 * kind: `registry`
 * url: `https://registry.owlplug.com/registry.min.json`
 
-#### StudioRack Registry ⭐ 
+#### Open Audio Stack Registry ⭐ 
 
-Studiorack registry plugins for OwlPlug.
+Open Audio Stack registry plugins maintained by community.
 * kind: `registry`
-* url: `https://owlplug.github.io/owlplug-studiorack-registry/registry.min.json` 
+* url: `https://open-audio-stack.github.io/open-audio-stack-registry` 
 
 **Discover more plugin sources in [this wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Remote-plugin-sources).**
 

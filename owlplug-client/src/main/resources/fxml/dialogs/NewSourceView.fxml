@@ -49,15 +49,6 @@
                         </Pane>
                      </graphic>
                   </Button>
-                  <Button fx:id="studiorackSuggestionButton" layoutX="10.0" layoutY="10.0" text="Studiorack Registry">
-                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../media/studiorack-logo-16.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
                </children>
             </HBox>
          </children>

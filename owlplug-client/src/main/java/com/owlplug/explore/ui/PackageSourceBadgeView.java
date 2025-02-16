@@ -50,10 +50,6 @@ public class PackageSourceBadgeView extends HBox {
             && remoteSource.getUrl().startsWith("https://open-audio-stack.github.io/open-audio-stack-registry")) {
       String tooltipText = "Open Audio Stack Registry";
       createContent(applicationDefaults.verifiedSourceImage, applicationDefaults.openAudioLogoSmall, tooltipText);
-    } else if (remoteSource.getUrl() != null
-            && remoteSource.getUrl().startsWith("https://owlplug.github.io/owlplug-studiorack-registry/registry")) {
-      String tooltipText = "Studiorack Registry";
-      createContent(applicationDefaults.suggestedSourceImage, applicationDefaults.studiorackLogoSmall, tooltipText);
     }
 
   }
