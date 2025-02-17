@@ -20,7 +20,7 @@
       </VBox>
       <VBox spacing="10.0">
          <children>
-            <Label text="Plugin source suggestions (2)" />
+            <Label text="Plugin source suggestions (3)" />
             <HBox spacing="5.0">
                <children>
                   <Button fx:id="owlplugSuggestionButton" text="OwlPlug Registry">
@@ -36,13 +36,17 @@
                         </Pane>
                      </graphic>
                   </Button>
-                  <Button fx:id="studiorackSuggestionButton" layoutX="10.0" layoutY="10.0" text="Studiorack Registry">
+                  <Button fx:id="openAudioSuggestionButton" layoutX="10.0" layoutY="10.0" text="Open Audio Stack">
                      <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../media/studiorack-logo-16.png" />
-                           </image>
-                        </ImageView>
+                        <Pane style="-fx-background-color: white;">
+                           <children>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../media/open-audio-16.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
                      </graphic>
                   </Button>
                </children>

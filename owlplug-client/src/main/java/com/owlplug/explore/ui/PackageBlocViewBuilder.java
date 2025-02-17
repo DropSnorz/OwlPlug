@@ -35,7 +35,7 @@ public class PackageBlocViewBuilder {
    * 
    * @param applicationDefaults - OwlPlug application defaults
    * @param imageCache          - OwlPlug image cache
-   * @param exploreController     - parent store controller
+   * @param exploreController     - parent explore controller
    */
   public PackageBlocViewBuilder(ApplicationDefaults applicationDefaults, ImageCache imageCache,
                                 ExploreController exploreController) {
@@ -48,7 +48,7 @@ public class PackageBlocViewBuilder {
   /**
    * Build a new {@link PackageBlocView} instance.
    * 
-   * @param remotePackage - Related store product
+   * @param remotePackage - Related remotePackage
    * @return A {@link PackageBlocView} instance.
    */
   public PackageBlocView build(RemotePackage remotePackage) {

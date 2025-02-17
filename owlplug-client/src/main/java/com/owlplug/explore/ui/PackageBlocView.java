@@ -21,6 +21,7 @@ package com.owlplug.explore.ui;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
@@ -59,12 +60,12 @@ public class PackageBlocView extends AnchorPane {
   private ExploreController parentController;
 
   /**
-   * Creates a new store product bloc view instance.
+   * Creates a new package bloc view instance.
    * 
    * @param applicationDefaults - OwlPlug application defaults
-   * @param remotePackage        - related store product
-   * @param image               - product image
-   * @param parentController    - parent store controller
+   * @param remotePackage        - related package
+   * @param image               - package image
+   * @param parentController    - parent explore controller
    */
   public PackageBlocView(ApplicationDefaults applicationDefaults, RemotePackage remotePackage, Image image,
                          ExploreController parentController) {
@@ -122,12 +123,12 @@ public class PackageBlocView extends AnchorPane {
 
     TextFlow textFlow = new TextFlow();
     textFlow.getChildren().add(new Label("Install"));
-    Text storeSourceText = new Text(" (Auto)");
-    storeSourceText.getStyleClass().add("text-disabled");
-    textFlow.getChildren().add(storeSourceText);
+    Text remoteSourceText = new Text(" (Auto)");
+    remoteSourceText.getStyleClass().add("text-disabled");
+    textFlow.getChildren().add(remoteSourceText);
     CustomMenuItem installMenuItem = new CustomMenuItem(textFlow);
     installMenuItem.setOnAction(e -> {
-      this.parentController.installProduct(remotePackage);
+      this.parentController.installPackage(remotePackage);
     });
 
     ContextMenu contextMenu = new ContextMenu();
@@ -139,7 +140,7 @@ public class PackageBlocView extends AnchorPane {
     for (PackageBundle bundle : remotePackage.getBundles()) {
       TextFlow bundleTextFlow = new TextFlow();
       bundleTextFlow.getChildren().add(new Label("Install"));
-      Text bundleSource = new Text(" (" + bundle.getName() + ")");
+      Text bundleSource = new Text(" (" + StringUtils.truncate(bundle.getName(), 50, "...") + ")");
       bundleSource.getStyleClass().add("text-disabled");
       bundleTextFlow.getChildren().add(bundleSource);
       CustomMenuItem bundleMenuItem = new CustomMenuItem(bundleTextFlow);

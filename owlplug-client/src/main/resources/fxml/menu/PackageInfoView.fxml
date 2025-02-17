@@ -48,7 +48,7 @@
                                  <children>
                                     <Label fx:id="nameLabel" styleClass="heading-1" text="Title" />
                                     <Label styleClass="label-disabled" text="-" />
-                                    <Label fx:id="remoteSourceLabel" styleClass="label-disabled" text="Store" />
+                                    <Label fx:id="remoteSourceLabel" styleClass="label-disabled" text="RemoteSource" />
                                     <Region HBox.hgrow="ALWAYS" />
                                     <Button fx:id="installButton" styleClass="button-success" text="Install">
                                        <graphic>

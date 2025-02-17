@@ -50,7 +50,7 @@ public class OptionsService extends BaseService {
   @Autowired
   private RemoteSourceDAO remoteSourceDAO;
   @Autowired
-  private RemotePackageDAO productDAO;
+  private RemotePackageDAO packageDAO;
   @Autowired
   private FileStatDAO fileStatDAO;
   @Autowired
@@ -104,7 +104,7 @@ public class OptionsService extends BaseService {
 
       googleCredentialDAO.deleteAll();
       userAccountDAO.deleteAll();
-      productDAO.deleteAll();
+      packageDAO.deleteAll();
       remoteSourceDAO.deleteAll();
       fileStatDAO.deleteAll();
 

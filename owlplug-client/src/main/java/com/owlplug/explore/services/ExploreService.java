@@ -32,10 +32,10 @@ import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
-import com.owlplug.explore.model.json.RegistryJsonMapper;
-import com.owlplug.explore.model.json.RegistryModelAdapter;
-import com.owlplug.explore.model.json.legacy.StoreJsonMapper;
-import com.owlplug.explore.model.json.legacy.StoreModelAdapter;
+import com.owlplug.explore.model.mappers.oas.OASModelAdapter;
+import com.owlplug.explore.model.mappers.oas.OASRegistry;
+import com.owlplug.explore.model.mappers.registry.RegistryMapper;
+import com.owlplug.explore.model.mappers.registry.RegistryModelAdapter;
 import com.owlplug.explore.model.search.ExploreCriteriaAdapter;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import jakarta.annotation.PostConstruct;
@@ -104,7 +104,7 @@ public class ExploreService extends BaseService {
    * compatible with the current platform.
    *
    * @param criteriaList criteria list
-   * @return list of store products
+   * @return list of remote packages
    */
   public Iterable<RemotePackage> getRemotePackages(List<ExploreFilterCriteria> criteriaList) {
     RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
@@ -121,16 +121,16 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Find the best bundle from a product based on the user current platform.
+   * Find the best bundle from a package based on the user current platform.
    *
-   * @param product - The store product
+   * @param remotePackage - The remote package
    */
-  public PackageBundle findBestBundle(RemotePackage product) {
+  public PackageBundle findBestBundle(RemotePackage remotePackage) {
 
     RuntimePlatform runtimePlatform = this.getApplicationDefaults().getRuntimePlatform();
 
     // Look for bundles matching runtimePlatform
-    for (PackageBundle bundle : product.getBundles()) {
+    for (PackageBundle bundle : remotePackage.getBundles()) {
       for (String platform : bundle.getTargets()) {
         if (platform.equals(runtimePlatform.getTag())
             || platform.equals(runtimePlatform.getOperatingSystem().getCode())) {
@@ -140,7 +140,7 @@ public class ExploreService extends BaseService {
     }
 
     // Look for bundles compatibles with current runtimePlatform
-    for (PackageBundle bundle : product.getBundles()) {
+    for (PackageBundle bundle : remotePackage.getBundles()) {
       for (String platformTag : bundle.getTargets()) {
         for (String compatibleTag : runtimePlatform.getCompatiblePlatformsTags()) {
           if (platformTag.equals(compatibleTag)) {
@@ -160,25 +160,25 @@ public class ExploreService extends BaseService {
       CloseableHttpResponse response = httpclient.execute(httpGet);
       HttpEntity entity = response.getEntity();
       String responseContent = new String(entity.getContent().readAllBytes(), StandardCharsets.UTF_8);
-      RemoteSource remoteSource = getSourceFromStoreSpec(responseContent);
+
+      RemoteSource remoteSource = getSourceFromRegistrySpec(responseContent);
 
       if (remoteSource != null) {
-        EntityUtils.consume(entity);
-        response.close();
-        remoteSource.setUrl(url);
-        remoteSource.setType(SourceType.OWLPLUG_STORE);
-        return remoteSource;
-      }
-
-      remoteSource = getSourceFromRegistrySpec(responseContent);
-
-      if (remoteSource != null) {
-        EntityUtils.consume(entity);
-        response.close();
         remoteSource.setUrl(url);
         remoteSource.setType(SourceType.OWLPLUG_REGISTRY);
         return remoteSource;
       }
+
+      remoteSource = getSourceFromOASRegistrySpec(responseContent);
+
+      if (remoteSource != null) {
+        remoteSource.setUrl(url);
+        remoteSource.setType(SourceType.OAS_REGISTRY);
+        return remoteSource;
+      }
+
+      EntityUtils.consume(entity);
+      response.close();
 
       return null;
 
@@ -190,44 +190,20 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Creates a PluginStore instance requesting a store url endpoint.
+   * Creates a RemoteSource instance from a raw OwlPlug registry content.
    *
-   * @param content Store content
-   * @return created pluginstore instance, null if an error occurs
-   */
-  private RemoteSource getSourceFromStoreSpec(String content) {
-
-    try {
-      ObjectMapper objectMapper = new ObjectMapper().configure(
-          DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-      StoreJsonMapper pluginStoreTO = objectMapper.readValue(content, StoreJsonMapper.class);
-
-      if (pluginStoreTO.getProducts() != null) {
-        RemoteSource remoteSource = StoreModelAdapter.jsonMapperToEntity(pluginStoreTO);
-        return remoteSource;
-      } else {
-        log.debug("No products defined in store");
-        return null;
-      }
-
-    } catch (JsonProcessingException e) {
-      log.debug("Content don't match the Store spec", e);
-      return null;
-    }
-  }
-
-  /**
-   * Creates a PluginStore instance requesting a store url endpoint.
-   *
-   * @param content Store content
-   * @return created pluginstore instance, null if an error occurs
+   * @param content Registry content
+   * @return created remote source instance, null if an error occurs
    */
   private RemoteSource getSourceFromRegistrySpec(String content) {
 
     try {
       ObjectMapper objectMapper = new ObjectMapper().configure(
           DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-      RegistryJsonMapper registryMapper = objectMapper.readValue(content, RegistryJsonMapper.class);
+      RegistryMapper registryMapper = objectMapper.readValue(content, RegistryMapper.class);
+      if (registryMapper.getPackages() == null) {
+        return null;
+      }
       RemoteSource remoteSource = RegistryModelAdapter.jsonMapperToEntity(registryMapper);
       return remoteSource;
     } catch (JsonProcessingException e) {
@@ -235,6 +211,33 @@ public class ExploreService extends BaseService {
       return null;
     }
   }
+
+  /**
+   * Creates a RemoteSource instance from a raw OAS registry content.
+   *
+   * @param content Registry content
+   * @return created remote source instance, null if an error occurs
+   */
+  private RemoteSource getSourceFromOASRegistrySpec(String content) {
+
+    try {
+      ObjectMapper objectMapper = new ObjectMapper().configure(
+              DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      OASRegistry registryMapper = objectMapper.readValue(content, OASRegistry.class);
+
+      if (registryMapper.getPlugins() == null) {
+        return null;
+      }
+
+      RemoteSource remoteSource = OASModelAdapter.mapperToEntity(registryMapper);
+
+      return remoteSource;
+    } catch (JsonProcessingException e) {
+      log.debug("Content don't match the Store spec", e);
+      return null;
+    }
+  }
+
 
   public void enableSource(RemoteSource remoteSource, boolean enabled) {
     remoteSource.setEnabled(enabled);
@@ -293,7 +296,7 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Returns all distinct product creators.
+   * Returns all distinct package creators.
    *
    * @return lit of creators
    */

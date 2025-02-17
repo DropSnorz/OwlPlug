@@ -18,8 +18,6 @@
  
 package com.owlplug.core.model;
 
-import java.util.Arrays;
-
 public enum PluginFormat {
   VST2("VST2"), VST3("VST3"), AU("AU"), LV2("LV2");
 

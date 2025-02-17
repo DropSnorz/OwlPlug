@@ -50,10 +50,10 @@ public class BundleInstallTask extends AbstractTask {
   private ApplicationDefaults applicationDefaults;
 
   /**
-   * Creates a new Product Installation task.
+   * Creates a new Package Bundle installation task.
    *
    * @param bundle              Bundle to download
-   * @param targetDirectory     Target directory where downloaded product is
+   * @param targetDirectory     Target directory where downloaded package is
    *                            stored
    * @param applicationDefaults Owlplug ApplicationDefaults
    */
@@ -256,7 +256,7 @@ public class BundleInstallTask extends AbstractTask {
   }
 
   /**
-   * Compatible product archive structures.
+   * Compatible package archive structures.
    * <pre>
    * -------------- DIRECT
    * plugin.zip/

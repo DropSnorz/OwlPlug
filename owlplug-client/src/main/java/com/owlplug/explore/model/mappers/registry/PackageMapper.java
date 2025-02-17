@@ -16,17 +16,17 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.explore.model.json;
+package com.owlplug.explore.model.mappers.registry;
 
 
 import java.util.Map;
 
-public class PackageJsonMapper {
+public class PackageMapper {
 
   private String slug;
   private String latestVersion;
 
-  private Map<String, PackageVersionJsonMapper> versions;
+  private Map<String, PackageVersionMapper> versions;
 
   public String getSlug() {
     return slug;
@@ -44,11 +44,11 @@ public class PackageJsonMapper {
     this.latestVersion = latestVersion;
   }
 
-  public Map<String, PackageVersionJsonMapper> getVersions() {
+  public Map<String, PackageVersionMapper> getVersions() {
     return versions;
   }
 
-  public void setVersions(Map<String, PackageVersionJsonMapper> versions) {
+  public void setVersions(Map<String, PackageVersionMapper> versions) {
     this.versions = versions;
   }
 }

@@ -44,10 +44,10 @@ public class PackageTag {
   }
 
   /**
-   * Creates a ProductTag for a given product.
+   * Creates a PackageTag for a given package.
    * 
    * @param name    - name of the tag
-   * @param remotePackage - related product
+   * @param remotePackage - related package
    */
   public PackageTag(String name, RemotePackage remotePackage) {
     super();
