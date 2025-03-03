@@ -154,10 +154,11 @@ public class ExploreService extends BaseService {
 
   public RemoteSource fetchSourceFromRemoteUrl(String url) {
 
-    try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+    HttpGet httpGet = new HttpGet(url);
 
-      HttpGet httpGet = new HttpGet(url);
-      CloseableHttpResponse response = httpclient.execute(httpGet);
+    try (CloseableHttpClient httpclient = HttpClients.createDefault();
+         CloseableHttpResponse response = httpclient.execute(httpGet)) {
+
       HttpEntity entity = response.getEntity();
       String responseContent = new String(entity.getContent().readAllBytes(), StandardCharsets.UTF_8);
 
@@ -178,8 +179,6 @@ public class ExploreService extends BaseService {
       }
 
       EntityUtils.consume(entity);
-      response.close();
-
       return null;
 
     } catch (IOException e) {

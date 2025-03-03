@@ -33,6 +33,8 @@ OwlPlug came from my hate of installing and managing audio plugins. The process 
 
 All kinds of feedbacks are greatly welcomed.
 
+![powered-by-open-audio-stack](./owlplug-client/src/main/resources/media/powered-by-open-audio-stack.png)
+
 ## Installation
 
 ### Direct download (latest version)
@@ -135,5 +137,3 @@ mvn spring-boot:run
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug?ref=badge_large)
 
-
-![powered-by-open-audio-stack](./owlplug-client/src/main/resources/media/powered-by-open-audio-stack.png)

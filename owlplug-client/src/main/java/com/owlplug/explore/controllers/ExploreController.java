@@ -168,11 +168,13 @@ public class ExploreController extends BaseController {
     });
 
     
-    targetFilterCheckBoxes.put("win32", new CheckBox("Windows 32 bits"));
-    targetFilterCheckBoxes.put("win64", new CheckBox("Windows 64 bits"));
-    targetFilterCheckBoxes.put("osx", new CheckBox("MacOS (OSX)"));
-    targetFilterCheckBoxes.put("linux32", new CheckBox("Linux 32 bits"));
-    targetFilterCheckBoxes.put("linux64", new CheckBox("Linux 64 bits"));
+    targetFilterCheckBoxes.put("win-x32", new CheckBox("Windows x32"));
+    targetFilterCheckBoxes.put("win-x64", new CheckBox("Windows x64"));
+    targetFilterCheckBoxes.put("mac", new CheckBox("MacOS (OSX)"));
+    targetFilterCheckBoxes.put("linux-x32", new CheckBox("Linux x32 / amd32"));
+    targetFilterCheckBoxes.put("linux-x64", new CheckBox("Linux x64 / amd64"));
+    targetFilterCheckBoxes.put("linux-arm32", new CheckBox("Linux arm32"));
+    targetFilterCheckBoxes.put("linux-arm64", new CheckBox("Linux arm64"));
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
       entry.getValue().setSelected(false);
       entry.getValue().setOnAction(e -> {
