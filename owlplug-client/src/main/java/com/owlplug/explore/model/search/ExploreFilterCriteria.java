@@ -29,7 +29,7 @@ public class ExploreFilterCriteria {
   private Image icon;
 
   /**
-   * Creates a StoreFilterCriteria.
+   * Creates a ExploreFilterCriteria.
    * 
    * @param value      - criteria value
    * @param filterType - criteria type
@@ -41,7 +41,7 @@ public class ExploreFilterCriteria {
   }
 
   /**
-   * Creates a StoreFilterCriteria.
+   * Creates a ExploreFilterCriteria.
    * 
    * @param value      - criteria value
    * @param filterType - criteria type
@@ -55,7 +55,7 @@ public class ExploreFilterCriteria {
   }
 
   /**
-   * Creates a StoreFilterCriteria.
+   * Creates a ExploreFilterCriteria.
    * 
    * @param value      - criteria value
    * @param filterType - criteria type

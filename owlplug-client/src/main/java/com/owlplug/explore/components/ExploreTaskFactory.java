@@ -65,9 +65,9 @@ public class ExploreTaskFactory extends BaseTaskFactory {
 
 
   /**
-   * Creates a task to download and installs a product in a directory.
-   * @param bundle - store bundle to retrieve
-   * @param targetDirectory - store bundle to retrieve
+   * Creates a task to download and installs a package in a directory.
+   * @param bundle - package bundle to retrieve
+   * @param targetDirectory - target install directory
    * @return task execution context
    */
   public TaskExecutionContext createBundleInstallTask(PackageBundle bundle, File targetDirectory) {

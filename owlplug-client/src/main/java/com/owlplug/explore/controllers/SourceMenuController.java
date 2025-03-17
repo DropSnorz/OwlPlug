@@ -116,12 +116,6 @@ public class SourceMenuController extends BaseController {
       HBox storeMetadata = new HBox();
       storeMetadata.setSpacing(5);
       storeMetadata.setAlignment(Pos.CENTER_LEFT);
-      if (pluginRemoteSource.getType() != null) {
-        Label typeLabel = new Label(pluginRemoteSource.getType().getShortLabel());
-        typeLabel.setTooltip(new Tooltip(pluginRemoteSource.getType().getLabel()));
-        typeLabel.getStyleClass().add("chip-label");
-        storeMetadata.getChildren().add(typeLabel);
-      }
 
       Label url = new Label(formatUrl(pluginRemoteSource.getDisplayUrl()));
       url.getStyleClass().add("label-disabled");

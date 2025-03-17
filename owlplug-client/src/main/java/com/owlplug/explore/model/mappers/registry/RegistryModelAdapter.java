@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.explore.model.json;
+package com.owlplug.explore.model.mappers.registry;
 
 import com.owlplug.core.model.PluginStage;
 import com.owlplug.core.model.PluginType;
@@ -31,72 +31,71 @@ import java.util.List;
 
 public class RegistryModelAdapter {
   /**
-   * Creates a {@link RemoteSource} entity from a {@link RegistryJsonMapper}.
+   * Creates a {@link RemoteSource} entity from a {@link RegistryMapper}.
    *
-   * @param registryJsonMapper registry json mapper
-   * @return pluginStoreEntity
+   * @param registryMapper registry json mapper
+   * @return remoteSourceEntity
    */
-  public static RemoteSource jsonMapperToEntity(RegistryJsonMapper registryJsonMapper) {
+  public static RemoteSource jsonMapperToEntity(RegistryMapper registryMapper) {
 
     RemoteSource remoteSource = new RemoteSource();
-    remoteSource.setName(registryJsonMapper.getName());
-    remoteSource.setDisplayUrl(registryJsonMapper.getUrl());
+    remoteSource.setName(registryMapper.getName());
+    remoteSource.setDisplayUrl(registryMapper.getUrl());
     return remoteSource;
   }
 
   /**
-   * Creates a {@link RemotePackage} entity from a {@link PackageVersionJsonMapper}.
+   * Creates a {@link RemotePackage} entity from a {@link PackageVersionMapper}.
    *
-   * @param packageVersionJsonMapper product json mapper
-   * @return product entity
+   * @param packageVersionMapper package json mapper
+   * @return package entity
    */
-  public static RemotePackage jsonMapperToEntity(PackageVersionJsonMapper packageVersionJsonMapper) {
+  public static RemotePackage jsonMapperToEntity(PackageVersionMapper packageVersionMapper) {
+    RemotePackage remotePackage = new RemotePackage();
+    remotePackage.setName(packageVersionMapper.getName());
+    remotePackage.setPageUrl(packageVersionMapper.getPageUrl());
+    remotePackage.setScreenshotUrl(UrlUtils.fixSpaces(packageVersionMapper.getScreenshotUrl()));
+    remotePackage.setDonateUrl(UrlUtils.fixSpaces(packageVersionMapper.getDonateUrl()));
+    remotePackage.setCreator(packageVersionMapper.getCreator());
+    remotePackage.setLicense(packageVersionMapper.getLicense());
+    remotePackage.setDescription(packageVersionMapper.getDescription());
 
-    RemotePackage product = new RemotePackage();
-    product.setName(packageVersionJsonMapper.getName());
-    product.setPageUrl(packageVersionJsonMapper.getPageUrl());
-    product.setScreenshotUrl(UrlUtils.fixSpaces(packageVersionJsonMapper.getScreenshotUrl()));
-    product.setDonateUrl(UrlUtils.fixSpaces(packageVersionJsonMapper.getDonateUrl()));
-    product.setCreator(packageVersionJsonMapper.getCreator());
-    product.setLicense(packageVersionJsonMapper.getLicense());
-    product.setDescription(packageVersionJsonMapper.getDescription());
-
-    if (packageVersionJsonMapper.getType() != null) {
-      product.setType(PluginType.fromString(packageVersionJsonMapper.getType()));
+    if (packageVersionMapper.getType() != null) {
+      remotePackage.setType(PluginType.fromString(packageVersionMapper.getType()));
     }
 
-    if (packageVersionJsonMapper.getStage() != null) {
-      product.setStage(PluginStage.fromString(packageVersionJsonMapper.getStage()));
+    if (packageVersionMapper.getStage() != null) {
+      remotePackage.setStage(PluginStage.fromString(packageVersionMapper.getStage()));
     }
 
     HashSet<PackageBundle> bundles = new HashSet<>();
-    if (packageVersionJsonMapper.getBundles() != null) {
-      for (BundleJsonMapper bundleMapper : packageVersionJsonMapper.getBundles()) {
+    if (packageVersionMapper.getBundles() != null) {
+      for (BundleMapper bundleMapper : packageVersionMapper.getBundles()) {
         PackageBundle bundle = jsonMapperToEntity(bundleMapper);
-        bundle.setRemotePackage(product);
+        bundle.setRemotePackage(remotePackage);
         bundles.add(bundle);
       }
     }
-    product.setBundles(bundles);
+    remotePackage.setBundles(bundles);
 
     HashSet<PackageTag> tags = new HashSet<>();
-    if (packageVersionJsonMapper.getTags() != null) {
-      for (String tag : packageVersionJsonMapper.getTags()) {
-        tags.add(new PackageTag(tag, product));
+    if (packageVersionMapper.getTags() != null) {
+      for (String tag : packageVersionMapper.getTags()) {
+        tags.add(new PackageTag(tag, remotePackage));
       }
     }
-    product.setTags(tags);
+    remotePackage.setTags(tags);
 
-    return product;
+    return remotePackage;
   }
 
   /**
-   * Creates a {@link PackageBundle} entity from a {@link BundleJsonMapper}.
+   * Creates a {@link PackageBundle} entity from a {@link BundleMapper}.
    *
    * @param bundleMapper bundle json bundleMapper
    * @return bundle entity
    */
-  public static PackageBundle jsonMapperToEntity(BundleJsonMapper bundleMapper) {
+  public static PackageBundle jsonMapperToEntity(BundleMapper bundleMapper) {
 
     PackageBundle packageBundle = new PackageBundle();
     packageBundle.setName(bundleMapper.getName());

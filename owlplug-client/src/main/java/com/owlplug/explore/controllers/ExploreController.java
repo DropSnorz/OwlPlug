@@ -118,7 +118,7 @@ public class ExploreController extends BaseController {
   private PackageBlocViewBuilder packageBlocViewBuilder = null;
 
   /**
-   * Loaded products from store are displayed by partitions (like pagination).
+   * Loaded packages from remote sources are displayed by partitions (like pagination).
    * When the user scrolls the entire partition, the next one is appended in the
    * UI.
    */
@@ -168,11 +168,13 @@ public class ExploreController extends BaseController {
     });
 
     
-    targetFilterCheckBoxes.put("win32", new CheckBox("Windows 32 bits"));
-    targetFilterCheckBoxes.put("win64", new CheckBox("Windows 64 bits"));
-    targetFilterCheckBoxes.put("osx", new CheckBox("MacOS (OSX)"));
-    targetFilterCheckBoxes.put("linux32", new CheckBox("Linux 32 bits"));
-    targetFilterCheckBoxes.put("linux64", new CheckBox("Linux 64 bits"));
+    targetFilterCheckBoxes.put("win-x32", new CheckBox("Windows x32"));
+    targetFilterCheckBoxes.put("win-x64", new CheckBox("Windows x64"));
+    targetFilterCheckBoxes.put("mac", new CheckBox("MacOS (OSX)"));
+    targetFilterCheckBoxes.put("linux-x32", new CheckBox("Linux x32 / amd32"));
+    targetFilterCheckBoxes.put("linux-x64", new CheckBox("Linux x64 / amd64"));
+    targetFilterCheckBoxes.put("linux-arm32", new CheckBox("Linux arm32"));
+    targetFilterCheckBoxes.put("linux-arm64", new CheckBox("Linux arm64"));
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
       entry.getValue().setSelected(false);
       entry.getValue().setOnAction(e -> {
@@ -278,9 +280,9 @@ public class ExploreController extends BaseController {
   }
 
   /**
-   * Display store products list.
+   * Display remote source package list.
    * 
-   * @param remotePackages - Store product list
+   * @param remotePackages - Remote package list
    */
   public synchronized void refreshView(Iterable<RemotePackage> remotePackages) {
 
@@ -477,7 +479,7 @@ public class ExploreController extends BaseController {
    * 
    * @param remotePackage Package to install
    */
-  public boolean installProduct(RemotePackage remotePackage) {
+  public boolean installPackage(RemotePackage remotePackage) {
 
     PackageBundle bundle = exploreService.findBestBundle(remotePackage);
     if (bundle != null) {

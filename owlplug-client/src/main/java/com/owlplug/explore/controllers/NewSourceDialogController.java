@@ -56,7 +56,7 @@ public class NewSourceDialogController extends AbstractDialogController implemen
   @FXML
   private Button owlplugSuggestionButton;
   @FXML
-  private Button studiorackSuggestionButton;
+  private Button openAudioSuggestionButton;
   @FXML
   private Button okButton;
   @FXML
@@ -79,8 +79,8 @@ public class NewSourceDialogController extends AbstractDialogController implemen
       validateAndSaveSource();
     });
 
-    studiorackSuggestionButton.setOnAction(e -> {
-      sourceUrlTextField.setText(this.getApplicationDefaults().getStudiorackRegistryUrl());
+    openAudioSuggestionButton.setOnAction(e -> {
+      sourceUrlTextField.setText(this.getApplicationDefaults().getOpenAudioRegistryUrl());
       validateAndSaveSource();
     });
 
@@ -102,8 +102,8 @@ public class NewSourceDialogController extends AbstractDialogController implemen
         exploreService.getRemoteSourceByUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl()) != null
     );
 
-    studiorackSuggestionButton.setDisable(
-        exploreService.getRemoteSourceByUrl(this.getApplicationDefaults().getStudiorackRegistryUrl()) != null
+    openAudioSuggestionButton.setDisable(
+            exploreService.getRemoteSourceByUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl()) != null
     );
 
   }
@@ -144,8 +144,8 @@ public class NewSourceDialogController extends AbstractDialogController implemen
           sourceMenuController.refreshView();
           close();
           this.getDialogManager().newSimpleInfoDialog("Success",
-              "The plugin store " + pluginRemoteSource.getName() + " has been successfully added !").show();
-          this.getAnalyticsService().pageView("/app/store/action/add");
+              "The plugin source " + pluginRemoteSource.getName() + " has been successfully added !").show();
+          this.getAnalyticsService().pageView("/app/source/action/add");
           this.exploreTaskFactory.createSourceSyncTask().scheduleNow();
 
         } else {

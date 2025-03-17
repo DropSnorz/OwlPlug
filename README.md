@@ -33,6 +33,8 @@ OwlPlug came from my hate of installing and managing audio plugins. The process 
 
 All kinds of feedbacks are greatly welcomed.
 
+![powered-by-open-audio-stack](./owlplug-client/src/main/resources/media/powered-by-open-audio-stack.png)
+
 ## Installation
 
 ### Direct download (latest version)
@@ -81,7 +83,7 @@ The list of compatible DAWs is available in the [documentation](https://github.c
 
 ## Explore and download Plugins
 
-OwlPlug can be connected to several remote sources to download plugins. A Remote Source is a collection of downloadable plugins that can be installed locally. OwlPlug can be configured to use any compatible third-party store in *Explore* Tab > *Sources* > *Add a new source...*.
+OwlPlug can be connected to several remote sources to download plugins. A Remote Source (or Registry) is a collection of downloadable plugins that can be installed locally. OwlPlug can be configured to use any compatible third-party source in *Explore* Tab > *Sources* > *Add a new source*.
 
 Here are some recommended compatible sources.
 
@@ -91,11 +93,11 @@ OwlPlug official plugin registry for Free or Open Source plugins
 * kind: `registry`
 * url: `https://registry.owlplug.com/registry.min.json`
 
-#### StudioRack Registry ⭐ 
+#### Open Audio Stack Registry ⭐ 
 
-Studiorack registry plugins for OwlPlug.
+Open Audio Stack registry plugins maintained by community.
 * kind: `registry`
-* url: `https://owlplug.github.io/owlplug-studiorack-registry/registry.min.json` 
+* url: `https://open-audio-stack.github.io/open-audio-stack-registry` 
 
 **Discover more plugin sources in [this wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Remote-plugin-sources).**
 
@@ -104,9 +106,6 @@ Studiorack registry plugins for OwlPlug.
 * **(Recommended)** Distribute your plugins using on the official OwlPlug Registry. You can find more information on how to proceed in the [registry github repository](https://github.com/OwlPlug/owlplug-registry).
 
 * Setup and host a custom remote source to distribute multiple plugins, following the [registry specification](https://github.com/OwlPlug/owlplug-registry/blob/master/doc/Registry-specification.md).
-
-* *(Deprecated)* Setup and host a custom remote source to distribute multiple plugins, following the store specification. The store specification is not actively maintained, you should use the [registry specification](https://github.com/OwlPlug/owlplug-registry/blob/master/doc/Registry-specification.md) instead.
-
 
 # Development
 
@@ -137,3 +136,4 @@ mvn spring-boot:run
 # License
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug?ref=badge_large)
+

@@ -16,11 +16,11 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.explore.model.json;
+package com.owlplug.explore.model.mappers.registry;
 
 import java.util.List;
 
-public class PackageVersionJsonMapper {
+public class PackageVersionMapper {
 
   private String name;
   private String technicalUid;
@@ -32,7 +32,7 @@ public class PackageVersionJsonMapper {
   private String version;
   private String description;
   private String type;
-  private List<BundleJsonMapper> bundles;
+  private List<BundleMapper> bundles;
   private String stage;
   private List<String> tags;
 
@@ -116,11 +116,11 @@ public class PackageVersionJsonMapper {
     this.type = type;
   }
 
-  public List<BundleJsonMapper> getBundles() {
+  public List<BundleMapper> getBundles() {
     return bundles;
   }
 
-  public void setBundles(List<BundleJsonMapper> bundles) {
+  public void setBundles(List<BundleMapper> bundles) {
     this.bundles = bundles;
   }
 
