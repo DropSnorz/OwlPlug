@@ -1,33 +1,32 @@
-.dialog-layout > .dialog-layout-heading {
+.dialog-layout>.dialog-layout-heading {
     -fx-alignment: center-left;
     -fx-font-weight: BOLD;
     -fx-padding: 24 24 20 24;
 }
 
-.dialog-layout > .dialog-layout-actions {
+.dialog-layout>.dialog-layout-actions {
     -fx-alignment: center-right;
     -fx-hgap: 8;
     -fx-padding: 8 8 8 8;
 }
 
-.dialog-layout > .dialog-layout-actions .button {
+.dialog-layout>.dialog-layout-actions .button {
     -fx-pref-height: 36;
     -fx-max-height: 36;
     -fx-min-width: 64;
     -fx-padding: 8;
 }
 
-.dialog-layout > .dialog-layout-body {
+.dialog-layout>.dialog-layout-body {
     -fx-alignment: center-left;
     -fx-padding: 0 24 24 24;
     -fx-pref-width: 400;
 }
 
-.dialog-layout > .dialog-layout-body .label {
+.dialog-layout>.dialog-layout-body .label {
     -fx-font-size: 16.0;
     -fx-wrap-text: true;
 }
-
 
 
 .chip-view {
@@ -42,28 +41,27 @@
     -fx-hgap: 6;
 }
 
-.chip-view .chips-pane > .text-area,
-.chip-view .chips-pane > .text-area .scroll-pane,
-.chip-view .chips-pane > .text-area .scroll-pane > .viewport,
-.chip-view .chips-pane > .text-area:focused,
-.chip-view .chips-pane > .text-area:focused .scroll-pane {
+.chip-view .chips-pane>.text-area,
+.chip-view .chips-pane>.text-area .scroll-pane,
+.chip-view .chips-pane>.text-area .scroll-pane>.viewport,
+.chip-view .chips-pane>.text-area:focused,
+.chip-view .chips-pane>.text-area:focused .scroll-pane {
     -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT;
 }
 
-.chip-view .chips-pane > .text-area {
+.chip-view .chips-pane>.text-area {
     -fx-padding: 0.333333em 0 0.333333em 0;
     -fx-min-width: 100px;
     -fx-pref-height: 42;
 }
 
-.chip-view .chips-pane > .text-area .content,
-.chip-view .chips-pane > .text-area:focused .content {
+.chip-view .chips-pane>.text-area .content,
+.chip-view .chips-pane>.text-area:focused .content {
     -fx-background-color: TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT;
     -fx-padding: 0 0 0 0;
 }
 
-.chip-view .chip > HBox {
-    -fx-font-family: "Roboto Medium";
+.chip-view .chip>HBox {
     -fx-font-size: 14.0;
     -fx-background-color: #E0E0E0;
     -fx-background-radius: 40px;
@@ -73,51 +71,51 @@
     -fx-spacing: 8;
 }
 
-.chip-view > .scroll-pane,
-.chip-view > .scroll-pane > .viewport {
+.chip-view>.scroll-pane,
+.chip-view>.scroll-pane>.viewport {
     -fx-background-color: TRANSPARENT;
 }
 
-.chip-view > .scroll-pane > .scroll-bar:horizontal,
-.chip-view > .scroll-pane > .scroll-bar:vertical {
+.chip-view>.scroll-pane>.scroll-bar:horizontal,
+.chip-view>.scroll-pane>.scroll-bar:vertical {
     -fx-background-color: TRANSPARENT;
 }
 
-.chip-view > .scroll-pane > .scroll-bar:horizontal .track,
-.chip-view > .scroll-pane > .scroll-bar:vertical .track {
+.chip-view>.scroll-pane>.scroll-bar:horizontal .track,
+.chip-view>.scroll-pane>.scroll-bar:vertical .track {
     -fx-background-color: TRANSPARENT;
     -fx-border-color: TRANSPARENT;
     -fx-background-radius: 0em;
     -fx-border-radius: 2em;
 }
 
-.chip-view > .scroll-pane > .scroll-bar:horizontal .thumb,
-.chip-view > .scroll-pane > .scroll-bar:vertical .thumb {
+.chip-view>.scroll-pane>.scroll-bar:horizontal .thumb,
+.chip-view>.scroll-pane>.scroll-bar:vertical .thumb {
     -fx-background-color: #898989;
     -fx-background-insets: 2, 0, 0;
     -fx-background-radius: 2em;
 }
 
-.chip-view > .scroll-pane > .corner {
+.chip-view>.scroll-pane>.corner {
     -fx-background-color: TRANSPARENT;
 }
 
-.chip-view > .scroll-pane > .scroll-bar:horizontal .increment-button,
-.chip-view > .scroll-pane > .scroll-bar:horizontal .decrement-button {
+.chip-view>.scroll-pane>.scroll-bar:horizontal .increment-button,
+.chip-view>.scroll-pane>.scroll-bar:horizontal .decrement-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0em;
     -fx-padding: 0 0 10 0;
 }
 
-.chip-view > .scroll-pane > .scroll-bar:vertical .increment-button,
-.chip-view > .scroll-pane > .scroll-bar:vertical .decrement-button {
+.chip-view>.scroll-pane>.scroll-bar:vertical .increment-button,
+.chip-view>.scroll-pane>.scroll-bar:vertical .decrement-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0em;
     -fx-padding: 0 10 0 0;
 }
 
-.chip-view > .scroll-pane > .scroll-bar .increment-arrow,
-.chip-view > .scroll-pane > .scroll-bar .decrement-arrow {
+.chip-view>.scroll-pane>.scroll-bar .increment-arrow,
+.chip-view>.scroll-pane>.scroll-bar .decrement-arrow {
     -fx-shape: " ";
     -fx-padding: 0;
 }

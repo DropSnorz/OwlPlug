@@ -3,91 +3,103 @@
 ****************************************************************/
 
 
-.root{
-    -fx-font-family: "Roboto";
-	card-pane-darkshade-color: rgb(37,37,37);
-	card-pane-color: rgb(46,46,46);
-	card-pane-lightshade-color: rgb(96,96,96);
-	
-	disabled-color: rgb(160,160,160);
-	danger-color: #d9534f;
-	success-color: rgb(40, 167, 69);
-	prompt-text-color: #4D4D4D;
-	
-	theme-primary-color: #e5dd92;
-	theme-secondary-color: #ebc8ae;
-	
-	text-color: #F5F5F1;
-	text-emphase-color: lightgrey;
+.root {
+    -fx-font-family: "Segoe UI";
+    card-pane-darkshade-color: rgb(37, 37, 37);
+    card-pane-color: rgb(46, 46, 46);
+    card-pane-lightshade-color: rgb(96, 96, 96);
+
+    disabled-color: rgb(160, 160, 160);
+    danger-color: #d9534f;
+    success-color: rgb(40, 167, 69);
+    prompt-text-color: #4D4D4D;
+
+    theme-primary-color: #e5dd92;
+    theme-secondary-color: #ebc8ae;
+
+    text-color: #F5F5F1;
+    text-emphase-color: lightgrey;
 }
 
-#mainPane{
-	-fx-background-color: linear-gradient(to top, #c79081 0%, #dfa579 100%);
+#mainPane {
+    -fx-background-color: linear-gradient(to top, #c79081 0%, #dfa579 100%);
 }
 
-.dialog-overlay-pane > StackPane {
+.dialog-overlay-pane>StackPane {
     -fx-background-color: card-pane-color;
 }
 
-Label{ 
- 	-fx-text-fill: text-color;
+Label {
+    -fx-text-fill: text-color;
 }
-.label-danger{
-	-fx-text-fill: danger-color;
+
+.label-danger {
+    -fx-text-fill: danger-color;
 }
-.label-disabled{
-	-fx-text-fill: disabled-color;
+
+.label-disabled {
+    -fx-text-fill: disabled-color;
 }
 
 .label-emphase {
-	-fx-text-fill: text-emphase-color;
+    -fx-text-fill: text-emphase-color;
 }
+
 .label-small {
-	-fx-font-size: 12.0;
+    -fx-font-size: 12.0;
 }
+
 .heading-title {
-	-fx-font-size: 30px;
-	-fx-font-weight: bold;
-	-fx-margin: 0,0,8,0;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-margin: 0, 0, 8, 0;
 }
-.heading-1{
-	-fx-font-size: 22px;
-	-fx-margin: 0,0,8,0;
+
+.heading-1 {
+    -fx-font-size: 22px;
+    -fx-margin: 0, 0, 8, 0;
 }
-.heading-2{
-	-fx-font-size: 20px;
+
+.heading-2 {
+    -fx-font-size: 20px;
 }
-Text{ 
- 	-fx-fill: text-color;
+
+Text {
+    -fx-fill: text-color;
 }
-.text-disabled{
-	-fx-fill: disabled-color;
+
+.text-disabled {
+    -fx-fill: disabled-color;
 }
-.text-danger{
-	-fx-fill: disabled-color;	
+
+.text-danger {
+    -fx-fill: disabled-color;
 }
 
 TextArea {
     -fx-text-fill: text-color;
-    -fx-background-color: rgb(55,55,55);
+    -fx-background-color: rgb(55, 55, 55);
 
 }
 
 TextArea .content {
-    -fx-background-color: rgb(55,55,55);
+    -fx-background-color: rgb(55, 55, 55);
 
 }
 
-.table-view .cell-unknown-link, .table-view .cell-unknown-link:hover  {
-     -fx-background-color: disabled-color;
+.table-view .cell-unknown-link,
+.table-view .cell-unknown-link:hover {
+    -fx-background-color: disabled-color;
 }
 
-.table-view .cell-found-link, .table-view .cell-found-link:hover  {
-     -fx-background-color: success-color;
+.table-view .cell-found-link,
+.table-view .cell-found-link:hover {
+    -fx-background-color: success-color;
 }
 
-.table-view .cell-missing-link, .table-view .cell-missing-link:hover  {
-     -fx-background-color: danger-color;
+.table-view .cell-missing-link,
+.table-view .cell-missing-link:hover {
+    -fx-background-color: danger-color;
 }
 
 .table-view {
@@ -96,13 +108,14 @@ TextArea .content {
 }
 
 .chip-view {
-	-fx-max-height: 45px ;
+    -fx-max-height: 45px;
 }
+
 .chip-view .chips-pane .text-area {
-	-fx-prompt-text-fill: prompt-text-color;
-	-fx-pref-height: 32px;
-	-fx-height: 32px;
-	-fx-max-height: 32px;
+    -fx-prompt-text-fill: prompt-text-color;
+    -fx-pref-height: 32px;
+    -fx-height: 32px;
+    -fx-max-height: 32px;
 }
 
 .chip Button {
@@ -112,6 +125,7 @@ TextArea .content {
     -fx-text-fill: black;
     -fx-border-width: 0px;
 }
+
 .chip Button:pressed {
     -fx-background-color: transparent;
     -fx-max-height: 20px;
@@ -120,8 +134,7 @@ TextArea .content {
     -fx-border-width: 0px;
 }
 
-.chip-label{
-    -fx-font-family: "Roboto Medium";
+.chip-label {
     -fx-font-size: 12.0;
     -fx-background-color: #E0E0E0;
     -fx-background-radius: 40px;
@@ -142,16 +155,19 @@ TextArea .content {
 }
 
 .chip-view .chip-brown {
-	-fx-background-color: #b2675e;
+    -fx-background-color: #b2675e;
 }
+
 .chip-view .chip-red {
-	-fx-background-color: #A1887F;
+    -fx-background-color: #A1887F;
 }
+
 .chip-view .chip-green {
-	-fx-background-color: #C5E1A5;
+    -fx-background-color: #C5E1A5;
 }
+
 .chip-view .chip-blue {
-	-fx-background-color: #657899
+    -fx-background-color: #657899
 }
 
 .fake-chip:hover {
@@ -159,92 +175,105 @@ TextArea .content {
     -fx-background-color: #D4D4D4;
 }
 
-.button-danger{
-	-fx-background-color: danger-color;
-	
-}
-.button-danger:hover{
-	-fx-background-color: #c9302c;
+.button-danger {
+    -fx-background-color: danger-color;
+
 }
 
-.button-danger:pressed{
-	-fx-background-color: #ac2925;
+.button-danger:hover {
+    -fx-background-color: #c9302c;
 }
-.button-success{
-	-fx-background-color: success-color;
+
+.button-danger:pressed {
+    -fx-background-color: #ac2925;
 }
+
+.button-success {
+    -fx-background-color: success-color;
+}
+
 .button-info {
-	-fx-background-color: #2980b9;
+    -fx-background-color: #2980b9;
 }
 
 
-.hyperlink-button{
-	-fx-underline: false;
-	-fx-text-fill: text-color;
+.hyperlink-button {
+    -fx-underline: false;
+    -fx-text-fill: text-color;
 }
-.hyperlink-button:hover{
-	-fx-underline: false;
-	-fx-text-fill: text-color;
+
+.hyperlink-button:hover {
+    -fx-underline: false;
+    -fx-text-fill: text-color;
 }
-.hyperlink-button:visited{
-	-fx-underline: false;
-	-fx-text-fill: text-color;
+
+.hyperlink-button:visited {
+    -fx-underline: false;
+    -fx-text-fill: text-color;
 }
-.hyperlink-dark{
-	-fx-text-fill: rgb(40,40,40);
+
+.hyperlink-dark {
+    -fx-text-fill: rgb(40, 40, 40);
 }
+
 .hyperlink-dark:focused {
-	-fx-border-color: null ;
-	-fx-border-style: solid ;
-	-fx-border-width: 0px;
+    -fx-border-color: null;
+    -fx-border-style: solid;
+    -fx-border-width: 0px;
 }
 
-.hyperlink-disabled{
-	-fx-text-fill: disabled-color;
+.hyperlink-disabled {
+    -fx-text-fill: disabled-color;
 }
+
 .hyperlink-disabled:focused {
-	-fx-border-color: null ;
-	-fx-border-style: solid ;
-	-fx-border-width: 0px;
+    -fx-border-color: null;
+    -fx-border-style: solid;
+    -fx-border-width: 0px;
 }
 
 .hyperlink-web:visited {
-	-fx-text-fill: disabled-color;
+    -fx-text-fill: disabled-color;
 }
 
 .list-view {
     list_view_background_color: card-pane-color;
 }
 
-.combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
+.combo-box .combo-box-popup .list-view,
+.combo-box .combo-box-popup .list-cell {
     -fx-background-color: card-pane-color;
     -fx-text-fill: white;
 }
+
 .combo-box .combo-box-popup .list-cell:hover {
     -fx-text-fill: white;
     -fx-background-color: card-pane-lightshade-color;
 }
-.combo-box .list-cell{
-	-fx-text-fill: white;
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
 }
+
 #accountComboBox {
-	-fx-prompt-text-fill: transparent;
+    -fx-prompt-text-fill: transparent;
 }
 
 .no-header-tab-pane {
     -fx-tab-max-height: 0;
-} 
-.no-header-tab-pane > .tab-header-area {
+}
+
+.no-header-tab-pane>.tab-header-area {
     visibility: hidden;
 }
 
 .small-tab-pane-container {
-  -fx-background-color: card-pane-color;
+    -fx-background-color: card-pane-color;
 }
 
-.small-tab-pane *.tab *.tab-label{
-	-fx-font-size: 15px;
-	-fx-font-weight: normal;
+.small-tab-pane *.tab *.tab-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: normal;
 }
 
 .drawer-side-pane {
@@ -252,39 +281,40 @@ TextArea .content {
 }
 
 .autocomplete-list {
-	-fx-background-color:card-pane-color;
+    -fx-background-color: card-pane-color;
 }
-.autocomplete-list .list-cell{
-	-fx-background-color: card-pane-color;
-	-fx-text-fill: text-color;
+
+.autocomplete-list .list-cell {
+    -fx-background-color: card-pane-color;
+    -fx-text-fill: text-color;
 }
 
 /* ControlsFx Autocomplete Popup */
-.auto-complete-popup > .list-view {
-	-fx-background-color: card-pane-color;
+.auto-complete-popup>.list-view {
+    -fx-background-color: card-pane-color;
 }
 
 .popup,
 .popup .popup-container,
-.popup .list-view{
-    -fx-background-color:card-pane-color;
+.popup .list-view {
+    -fx-background-color: card-pane-color;
 }
 
-.progress-bar-error > .bar {
+.progress-bar-error>.bar {
     -fx-background-color: red;
 }
 
 .progress-bar-link {
-	dot_color: rgb(143,143,143);
+    dot_color: rgb(143, 143, 143);
 }
 
-ProgressIndicator{
-	-fx-progress-color: theme-primary-color;
+ProgressIndicator {
+    -fx-progress-color: theme-primary-color;
 }
 
 .context-menu {
-  -fx-background-color: card-pane-color;
-  -fx-text-fill: text-color;
+    -fx-background-color: card-pane-color;
+    -fx-text-fill: text-color;
 }
 
 .tooltip {
@@ -296,89 +326,114 @@ ProgressIndicator{
 ****************************************************************/
 
 .header {
-	-fx-background-color: card-pane-color;
+    -fx-background-color: card-pane-color;
 }
 
 .header .combo-box-base {
-	-fx-background-color: card-pane-color;
-	-fx-background-radius: 0;
-	-fx-border-radius: 0;
-	-fx-text-fill: text-color;
+    -fx-background-color: card-pane-color;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-text-fill: text-color;
 }
 
 .pane-card {
-	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-	-fx-background-color: card-pane-color;
-	-fx-padding: 10,10,10,10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+    -fx-background-color: card-pane-color;
+    -fx-padding: 10, 10, 10, 10;
 }
+
 .pane-card .card-title {
-	-fx-height: 37;
-	-fx-padding: 5,5,5,5;
-	-fx-background-color: card-pane-darkshade-color; 
-	-fx-margin: 0,0,10,0;
+    -fx-height: 37;
+    -fx-padding: 5, 5, 5, 5;
+    -fx-background-color: card-pane-darkshade-color;
+    -fx-margin: 0, 0, 10, 0;
 }
+
 .pane-card .card-title Label {
-	-fx-font-size: 14px;
-	-fx-font-weight: bold;
-	-fx-text-fill: disabled-color;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: disabled-color;
 }
 
 .package-bloc-title {
-	-fx-background-color: rgba(0,0,0, 0.85);
-	-fx-padding:10,10,10,10;
+    -fx-background-color: rgba(0, 0, 0, 0.85);
+    -fx-padding: 10, 10, 10, 10;
 }
 
 
 .package-source-badge {
-	-fx-background-color: rgba(245,245,241, 1);
-	-fx-text-fill: disabled-color;
-	-fx-background-radius: 0 0 0 5px;
-	-fx-border-radius: 0 0 0 5px;
-	-fx-padding: 5;
-	-fx-border-style: solid;
+    -fx-background-color: rgba(245, 245, 241, 1);
+    -fx-text-fill: disabled-color;
+    -fx-background-radius: 0 0 0 5px;
+    -fx-border-radius: 0 0 0 5px;
+    -fx-padding: 5;
+    -fx-border-style: solid;
     -fx-border-color: disabled-color;
     -fx-border-width: 0 0 1 1;
 }
 
 .badge {
-	-fx-background-radius: 5px 5px 5px 5px;
-	-fx-border-radius: 5px 5px 5px 5px;
-	-fx-border-width: 0;
+    -fx-background-radius: 5px 5px 5px 5px;
+    -fx-border-radius: 5px 5px 5px 5px;
+    -fx-border-width: 0;
 }
 
 .shape-state-active {
-	-fx-fill: success-color;
+    -fx-fill: success-color;
 }
 
 .shape-state-unstable {
-	-fx-fill: danger-color;
+    -fx-fill: danger-color;
 }
 
 .shape-state-installed {
-	-fx-fill: #94d3a3;
+    -fx-fill: #94d3a3;
 }
 
 .shape-state-disabled {
-	-fx-fill: disabled-color;
+    -fx-fill: disabled-color;
 }
 
 .recovered-plugin-view {
-	-fx-background-color: rgba(0,0,0, 0.2);
-	-fx-padding:10,0,10,0;
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-padding: 10, 0, 10, 0;
 }
 
 /****************************************************************
   JavaFx Charts theme
 ****************************************************************/
 
-.default-color0.chart-pie { -fx-pie-color: #116A7B; }
-.default-color1.chart-pie { -fx-pie-color: #85586F; }
-.default-color2.chart-pie { -fx-pie-color: #7F8B52; }
-.default-color3.chart-pie { -fx-pie-color: #FFDBA4; }
-.default-color4.chart-pie { -fx-pie-color: #47A992; }
-.default-color5.chart-pie { -fx-pie-color: #C84B31; }
-.default-color6.chart-pie { -fx-pie-color: #BCCC9A; }
-.default-color7.chart-pie { -fx-pie-color: #968C83; }
+.default-color0.chart-pie {
+    -fx-pie-color: #116A7B;
+}
+
+.default-color1.chart-pie {
+    -fx-pie-color: #85586F;
+}
+
+.default-color2.chart-pie {
+    -fx-pie-color: #7F8B52;
+}
+
+.default-color3.chart-pie {
+    -fx-pie-color: #FFDBA4;
+}
+
+.default-color4.chart-pie {
+    -fx-pie-color: #47A992;
+}
+
+.default-color5.chart-pie {
+    -fx-pie-color: #C84B31;
+}
+
+.default-color6.chart-pie {
+    -fx-pie-color: #BCCC9A;
+}
+
+.default-color7.chart-pie {
+    -fx-pie-color: #968C83;
+}
 
 .chart-pie {
     -fx-border-width: 0px;
@@ -388,7 +443,7 @@ ProgressIndicator{
     -fx-background-color: card-pane-color;
 }
 
-.chart-legend > .label {
+.chart-legend>.label {
     -fx-text-fill: text-color;
 }
 
@@ -405,16 +460,15 @@ ProgressIndicator{
 }
 
 /****************************************************************
- * 
+ *
  * Utilities
- * 
+ *
  * **************************************************************/
 
- .scroll-pane > .viewport {
+.scroll-pane>.viewport {
     -fx-background-color: transparent;
- }
+}
 
- .no-padding {
- 	-fx-padding: 0;
- }
-
+.no-padding {
+    -fx-padding: 0;
+}
