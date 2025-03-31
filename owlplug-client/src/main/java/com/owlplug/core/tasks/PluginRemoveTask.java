@@ -42,7 +42,7 @@ public class PluginRemoveTask extends AbstractTask {
   }
 
   @Override
-  protected TaskResult call() throws Exception {
+  protected TaskResult start() throws Exception {
 
     this.updateProgress(0, 1);
     this.updateMessage("Deleting plugin " + plugin.getName() + " ...");

@@ -31,7 +31,7 @@ public class SymlinkRemoveTask extends AbstractTask {
   }
 
   @Override
-  protected TaskResult call() throws Exception {
+  protected TaskResult start() throws Exception {
 
     this.updateProgress(-1, 1);
     this.updateMessage("Deleting directory " + symlink.getName() + " ...");

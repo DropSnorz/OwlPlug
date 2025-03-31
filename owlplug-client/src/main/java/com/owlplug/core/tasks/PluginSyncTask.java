@@ -83,7 +83,7 @@ public class PluginSyncTask extends AbstractTask {
   }
 
   @Override
-  protected TaskResult call() throws Exception {
+  protected TaskResult start() throws Exception {
 
     log.info("Plugin Sync task started");
     this.updateMessage("Collecting plugins...");
