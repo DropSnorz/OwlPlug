@@ -67,7 +67,7 @@ winget install owlplug
 
 ## Plugins discovery
 
-OwlPlug can discover VST2, VST3 and AU Plugins. OwlPlug is compatible with all previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. Additional directories can be configured if your plugin setup is fragmented on the filesystem.
+OwlPlug can discover VST2, VST3, AU and LV2 Plugins. OwlPlug is compatible with all previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. Additional directories can be configured if your plugin setup is fragmented on the filesystem.
 
 After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
 

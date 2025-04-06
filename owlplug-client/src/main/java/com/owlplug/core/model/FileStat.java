@@ -30,6 +30,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(indexes = { @Index(name = "IDX_FILESTAT_ID", columnList = "id"),
@@ -52,6 +54,7 @@ public class FileStat {
   private long length;
 
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Set<FileStat> childs = new HashSet<>();
 
   public Long getId() {
