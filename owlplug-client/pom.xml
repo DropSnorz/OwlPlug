@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<springboot.version>3.4.0</springboot.version>
+		<springboot.version>3.4.4</springboot.version>
 	</properties>
 	
 	<parent>
