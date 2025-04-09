@@ -39,7 +39,7 @@ public class PluginLookupTask extends AbstractTask {
 
 
   @Override
-  protected TaskResult call() throws Exception {
+  protected TaskResult start() throws Exception {
 
     this.updateMessage("Starting project plugins lookup task");
     this.updateProgress(0,1);

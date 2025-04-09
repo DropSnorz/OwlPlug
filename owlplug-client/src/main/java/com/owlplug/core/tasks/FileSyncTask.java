@@ -49,7 +49,7 @@ public class FileSyncTask extends AbstractTask {
 
 
   @Override
-  protected TaskResult call() throws Exception {
+  protected TaskResult start() throws Exception {
 
     this.updateProgress(1, 3);
 

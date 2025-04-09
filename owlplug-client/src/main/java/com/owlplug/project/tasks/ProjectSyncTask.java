@@ -47,7 +47,7 @@ public class ProjectSyncTask extends AbstractTask {
 
 
   @Override
-  protected TaskResult call() throws Exception {
+  protected TaskResult start() throws Exception {
 
     log.debug("Starting project sync task");
     this.updateProgress(0,1);

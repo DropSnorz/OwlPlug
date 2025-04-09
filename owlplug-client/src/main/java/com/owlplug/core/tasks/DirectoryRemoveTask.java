@@ -33,7 +33,7 @@ public class DirectoryRemoveTask extends AbstractTask {
   }
 
   @Override
-  protected TaskResult call() throws Exception {
+  protected TaskResult start() throws Exception {
 
     this.updateProgress(0, 1);
     this.updateMessage("Deleting directory " + pluginDirectory.getName() + " ...");

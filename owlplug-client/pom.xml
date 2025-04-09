@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<springboot.version>3.1.2</springboot.version>
+		<springboot.version>3.4.4</springboot.version>
 	</properties>
 	
 	<parent>
@@ -171,7 +171,6 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents.client5</groupId>
 			<artifactId>httpclient5</artifactId>
-			<version>5.2</version>
 		</dependency>
 
 		<dependency>

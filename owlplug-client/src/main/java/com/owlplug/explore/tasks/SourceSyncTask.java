@@ -57,6 +57,9 @@ public class SourceSyncTask extends AbstractTask {
   private RemoteSourceDAO remoteSourceDAO;
   private RemotePackageDAO remotePackageDAO;
 
+  private ArrayList<String> warnings = new ArrayList<>();
+
+
   /**
    * Creates a new SourceSync tasks.
    * 
@@ -70,7 +73,7 @@ public class SourceSyncTask extends AbstractTask {
   }
 
   @Override
-  protected TaskResult call() throws TaskException {
+  protected TaskResult start() throws TaskException {
 
     this.updateMessage("Syncing plugins stores");
     this.commitProgress(-1);
@@ -101,12 +104,12 @@ public class SourceSyncTask extends AbstractTask {
         EntityUtils.consume(entity);
 
       } catch (IOException e) {
-        this.getWarnings().add(remoteSource.getName());
+        this.warnings.add(remoteSource.getName());
         this.updateMessage("Error accessing source " + remoteSource.getName() + ". Check your network connectivity");
         log.error("Error accessing source " + remoteSource.getName() + ". Check your network connectivity", e);
 
       } catch (StoreParsingException e) {
-        this.getWarnings().add(remoteSource.getName());
+        this.warnings.add(remoteSource.getName());
         this.updateMessage("Error parsing remote source response");
         log.error("Error parsing remote source response", e);
 
@@ -124,11 +127,11 @@ public class SourceSyncTask extends AbstractTask {
 
     this.commitProgress(1);
 
-    if (this.getWarnings().isEmpty()) {
+    if (this.warnings.isEmpty()) {
       this.updateMessage("Plugin sources synced.");
 
     } else {
-      this.updateMessage("Plugin sources synced. Error accessing sources " + String.join(",", this.getWarnings()));
+      this.updateMessage("Plugin sources synced. Error accessing sources " + String.join(",", this.warnings));
     }
 
     return success();

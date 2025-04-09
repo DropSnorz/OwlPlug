@@ -18,7 +18,8 @@
  
 package com.owlplug.core.tasks;
 
-import java.util.ArrayList;
+import java.time.Duration;
+import java.time.Instant;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import org.slf4j.Logger;
@@ -30,10 +31,12 @@ public abstract class AbstractTask extends Task<TaskResult> {
 
   private String name = "OwlPlug task";
 
+  private Instant taskStarted;
+
+  private Instant taskCompleted;
+
   private double maxProgress = 1;
   private double committedProgress = 0;
-
-  private ArrayList<String> warnings = new ArrayList<>();
 
   public AbstractTask() {
   }
@@ -41,6 +44,20 @@ public abstract class AbstractTask extends Task<TaskResult> {
   public AbstractTask(String name) {
     this.name = name;
   }
+
+  @Override
+  public TaskResult call() throws Exception {
+    taskStarted = Instant.now();
+    TaskResult result = start();
+    taskCompleted = Instant.now();
+
+    Duration elapsed = Duration.between(taskStarted, taskCompleted);
+    log.info("Task {} completed in {}m{}s.", this.name, elapsed.toMinutes(), elapsed.toSecondsPart());
+    return result;
+  }
+
+  protected abstract TaskResult start() throws Exception;
+
 
   protected void commitProgress(double progress) {
     committedProgress = committedProgress + progress;
@@ -80,14 +97,10 @@ public abstract class AbstractTask extends Task<TaskResult> {
   public void setName(String name) {
     this.name = name;
   }
-
-  protected ArrayList<String> getWarnings() {
-    return warnings;
-  }
   
   @Override
   protected void updateMessage(String message) {
-    log.trace("Task status update [" + message + "]");
+    log.trace("Task" + name + " status update [" + message + "]");
     super.updateMessage(message);
   }
 

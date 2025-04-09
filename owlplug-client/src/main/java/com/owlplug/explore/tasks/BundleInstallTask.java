@@ -67,7 +67,7 @@ public class BundleInstallTask extends AbstractTask {
   }
 
   @Override
-  protected TaskResult call() throws Exception {
+  protected TaskResult start() throws Exception {
 
     try {
       boolean created = targetDirectory.mkdirs();
