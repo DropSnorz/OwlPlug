@@ -184,6 +184,7 @@ public class MainController extends BaseController {
   public void dispatchPostInitialize() {
 
     if (!this.applicationMonitor.isPreviousExecutionSafelyTerminated()) {
+      log.info("Previous execution not terminated safely, opening crash recovery dialog");
       crashRecoveryDialogController.show();
     } else if (this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
       welcomeDialogController.show();

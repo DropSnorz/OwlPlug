@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefWidth="500.0" spacing="15.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
+<VBox prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
    <children>
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
@@ -18,23 +18,23 @@
             <VBox>
                <children>
                   <Label text="It's look like OwlPlug has not been terminated properly." wrapText="true" />
-                  <Label text="If a crash happens during plugin Sync, it's probably due to a plugin that can't be loaded. Like some other DAWs, a corrupted plugin may crash the host." wrapText="true" />
+                  <Label text="If a crash occurs during plugin sync, it's likely caused by a plugin that fails to load properly. Similar to other DAWs, a corrupted plugin can potentially crash the host application." wrapText="true" />
                </children>
             </VBox>
          </children>
       </HBox>
       <VBox fx:id="incompleteSyncPane" spacing="5.0">
          <children>
-            <Label text="Following plugins have not been analyzed correctly" />
+            <Label text="Following plugins have not been analyzed completely. For each plugin, you can turn off &quot;Native Discovery&quot; to skip plugin loading during scanning: " />
             <VBox fx:id="pluginListContainer" />
          </children>
       </VBox>
-      <VBox spacing="10.0" VBox.vgrow="SOMETIMES">
+      <VBox spacing="5.0" VBox.vgrow="SOMETIMES">
          <children>
-            <Label text="You can try to change the scanner implementation or disable native discovery globally in OwlPlug Options." wrapText="true" />
-            <HBox>
+            <Label text="You can try to change the scanner implementation or disable native discovery globally in Options:" wrapText="true" />
+            <HBox spacing="5.0">
                <children>
-                  <CheckBox fx:id="nativeDiscoveryCheckbox" text="Use Native Discovery (Global)" />
+                  <CheckBox fx:id="nativeDiscoveryCheckbox" text="Global Native plugin discovery using" />
                   <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="SOMETIMES" />
                </children>
             </HBox>
@@ -47,9 +47,9 @@
          <children>
             <TextFlow>
                <children>
-                  <Label text="For more information, you can check the" wrapText="true" />
+                  <Label text="For more information about scanning plugins, check the " wrapText="true" />
                   <Hyperlink fx:id="troubleshootingLink" text="OwlPlug documentation" />
-                  <Label text="If the problem seems located on OwlPlug, you can" wrapText="true" />
+                  <Label text="If the problem persist and seems related to OwlPlug," wrapText="true" />
                   <Hyperlink fx:id="issuesLink" text="report the issue." />
                </children>
             </TextFlow>

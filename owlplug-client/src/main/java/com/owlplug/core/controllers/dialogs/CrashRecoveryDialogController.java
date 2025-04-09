@@ -32,7 +32,6 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -110,8 +109,12 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
     pluginNativeComboBox.getSelectionModel().select(pluginLoader);
 
-    troubleshootingLink.setOnAction((e) -> PlatformUtils.openDefaultBrowser("https://github.com/DropSnorz/OwlPlug/wiki"));
-    issuesLink.setOnAction((e) -> PlatformUtils.openDefaultBrowser("https://github.com/DropSnorz/OwlPlug/issues"));
+    troubleshootingLink.setOnAction((e) -> PlatformUtils.openDefaultBrowser(
+        this.getApplicationDefaults().getEnvProperty("owlplug.github.wiki.url")
+    ));
+    issuesLink.setOnAction((e) -> PlatformUtils.openDefaultBrowser(
+        this.getApplicationDefaults().getEnvProperty("owlplug.github.issues.url")
+    ));
     
     closeButton.setOnAction(e -> {
       optionsController.refreshView();
@@ -123,7 +126,7 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     if (incompleteSyncPlugins.size() > 0) {
       incompleteSyncPane.setVisible(true);
       for (Plugin p : incompleteSyncPlugins) {
-        log.info("Crash report opened for plugin {}", p.getName());
+        log.info("Last scan for plugin {} is incomplete", p.getName());
         RecoveredPluginView pluginView = new RecoveredPluginView(p, pluginService, this.getApplicationDefaults());
         pluginListContainer.getChildren().add(pluginView);
       }
