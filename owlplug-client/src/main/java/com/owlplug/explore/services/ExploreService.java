@@ -71,17 +71,29 @@ public class ExploreService extends BaseService {
   @PostConstruct
   private void init() {
 
-    RemoteSource remoteSource = remoteSourceDAO.findByUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl());
+    RemoteSource owlplugRegistry = remoteSourceDAO.findByUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl());
 
-    if (remoteSource == null) {
-      remoteSource = new RemoteSource();
-      remoteSource.setName("OwlPlug Registry");
+    if (owlplugRegistry == null) {
+      owlplugRegistry = new RemoteSource();
+      owlplugRegistry.setName("OwlPlug Registry");
     }
-    remoteSource.setUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl());
-    remoteSource.setDisplayUrl("https://registry.owlplug.com");
-    remoteSource.setType(SourceType.OWLPLUG_REGISTRY);
+    owlplugRegistry.setUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl());
+    owlplugRegistry.setDisplayUrl("https://registry.owlplug.com");
+    owlplugRegistry.setType(SourceType.OWLPLUG_REGISTRY);
 
-    remoteSourceDAO.save(remoteSource);
+    remoteSourceDAO.save(owlplugRegistry);
+
+    RemoteSource OASRegistry = remoteSourceDAO.findByUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl());
+
+    if (OASRegistry == null) {
+      OASRegistry = new RemoteSource();
+      OASRegistry.setName("Open Audio Registry");
+    }
+    OASRegistry.setUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl());
+    OASRegistry.setDisplayUrl("https://github.com/open-audio-stack");
+    OASRegistry.setType(SourceType.OAS_REGISTRY);
+
+    remoteSourceDAO.save(OASRegistry);
   }
 
   /**

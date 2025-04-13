@@ -185,11 +185,16 @@ public class SourceSyncTask extends AbstractTask {
           if (packageMapper.getVersions().containsKey(packageMapper.getVersion())) {
             String version = packageMapper.getVersion();
             OASPlugin latestPlugin = packageMapper.getVersions().get(version);
+
             RemotePackage remotePackage = OASModelAdapter.mapperToEntity(latestPlugin);
             remotePackage.setSlug(packageMapper.getSlug());
             remotePackage.setRemoteSource(remoteSource);
             remotePackage.setVersion(version);
-            remotePackagePartition.add(remotePackage);
+
+            // Only add package if at least on bundle is present
+            if (!remotePackage.getBundles().isEmpty()) {
+              remotePackagePartition.add(remotePackage);
+            }
           }
         }
         remotePackageDAO.saveAll(remotePackagePartition);

@@ -67,19 +67,7 @@ public class OASModelAdapter {
       remotePackage.setType(PluginType.fromString(plugin.getType()));
     }
 
-    HashSet<PackageBundle> bundles = new HashSet<>();
-    if (plugin.getFiles() != null) {
-      for (OASFile file : plugin.getFiles()) {
-        // OwlPlug only supports archives
-        if (file.getType().equals("archive")) {
-          PackageBundle bundle = mapperToEntity(file);
-          bundle.setRemotePackage(remotePackage);
-          bundles.add(bundle);
-        }
-      }
-    }
-
-    remotePackage.setBundles(bundles);
+    addBundlesToPackage(remotePackage, plugin.getFiles());
 
     HashSet<PackageTag> tags = new HashSet<>();
     if (plugin.getTags() != null) {
@@ -121,6 +109,30 @@ public class OASModelAdapter {
     packageBundle.setFormats(getPluginFormatsFromFileFormats(file.getContains()));
 
     return packageBundle;
+  }
+
+  private static void addBundlesToPackage(RemotePackage remotePackage, List<OASFile> files) {
+    HashSet<PackageBundle> bundles = new HashSet<>();
+    if (files != null) {
+      for (OASFile file : files) {
+
+        // Skipping. If a file contains only unmappable plugins formats
+        if (getPluginFormatsFromFileFormats(file.getContains()).isEmpty()) {
+          continue;
+        }
+
+        // Skipping. OwlPlug only supports archives (installer not supported)
+        if (!file.getType().equals("archive")) {
+          continue;
+        }
+
+        PackageBundle bundle = mapperToEntity(file);
+        bundle.setRemotePackage(remotePackage);
+        bundles.add(bundle);
+      }
+    }
+
+    remotePackage.setBundles(bundles);
   }
 
   private static List<String> getPluginFormatsFromFileFormats(List<String> fileFormats) {
