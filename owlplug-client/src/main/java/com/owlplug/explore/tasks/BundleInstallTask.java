@@ -99,7 +99,7 @@ public class BundleInstallTask extends AbstractTask {
 
       this.commitProgress(100);
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Extracting files...");
-      File extractedArchiveFolder = new File(ApplicationDefaults.getTempDownloadDirectory() + "/" + "temp-"
+      File extractedArchiveFolder = new File(ApplicationDefaults.getTempDownloadDirectory() + File.separator + "temp-"
                                                  + archiveFile.getName().replace(".owlpack", ""));
       ArchiveUtils.extract(archiveFile.getAbsolutePath(), extractedArchiveFolder.getAbsolutePath());
 

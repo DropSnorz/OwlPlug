@@ -26,6 +26,7 @@ import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.project.model.DawApplication;
 import java.io.File;
+import java.nio.file.Paths;
 import javafx.scene.image.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -235,12 +236,12 @@ public class ApplicationDefaults {
   }
 
   public static String getUserDataDirectory() {
-    return FileUtils.convertPath(System.getProperty("user.home") + File.separator + ".owlplug");
+    return Paths.get(System.getProperty("user.home"), ".owlplug").toString();
 
   }
 
   public static String getTempDownloadDirectory() {
-    return getUserDataDirectory() + "/temp";
+    return Paths.get(getUserDataDirectory(), "temp").toString();
   }
 
 }

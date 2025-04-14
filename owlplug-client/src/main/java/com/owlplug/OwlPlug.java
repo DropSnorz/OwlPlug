@@ -23,6 +23,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
 import java.beans.PropertyVetoException;
 import java.io.File;
+import java.nio.file.Paths;
 import java.time.Duration;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -149,7 +150,9 @@ public class OwlPlug extends Application {
   public CacheManager getCacheManager() {
 
     CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-        .with(CacheManagerBuilder.persistence(ApplicationDefaults.getUserDataDirectory() + File.separator + "cache"))
+        .with(CacheManagerBuilder.persistence(
+                Paths.get(ApplicationDefaults.getUserDataDirectory(),  "cache").toString())
+        )
         .withCache("image-cache", CacheConfigurationBuilder
             .newCacheConfigurationBuilder(String.class, byte[].class,
                 ResourcePoolsBuilder.newResourcePoolsBuilder().heap(100, MemoryUnit.MB).disk(700, MemoryUnit.MB, true))
