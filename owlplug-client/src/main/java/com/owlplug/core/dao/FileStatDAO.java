@@ -22,19 +22,19 @@ import com.owlplug.core.model.FileStat;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface FileStatDAO extends CrudRepository<FileStat, Long> {
+public interface FileStatDAO extends JpaRepository<FileStat, Long> {
 
   Optional<FileStat> findByPath(String path);
 
   List<FileStat> findByParentPathOrderByLengthDesc(String parentPath);
 
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically=true, flushAutomatically=true)
   @Query("delete from FileStat f where f.path=:path")
   int deleteByPath(@Param("path") String path);
 

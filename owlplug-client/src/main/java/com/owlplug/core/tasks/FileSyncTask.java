@@ -78,6 +78,8 @@ public class FileSyncTask extends AbstractTask {
 
     this.updateMessage("Collecting file metrics on directory: " + directory.getAbsolutePath());
     fileStatDAO.deleteByPath(FileUtils.convertPath(directory.getAbsolutePath()));
+    // Flushing context to the database as next queries will recreate entities
+    fileStatDAO.flush();
 
     FileStat directoryStat = new FileStat();
     directoryStat.setName(directory.getName());

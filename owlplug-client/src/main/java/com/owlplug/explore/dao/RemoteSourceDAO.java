@@ -19,10 +19,10 @@
 package com.owlplug.explore.dao;
 
 import com.owlplug.explore.model.RemoteSource;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RemoteSourceDAO extends CrudRepository<RemoteSource, Long> {
+public interface RemoteSourceDAO extends JpaRepository<RemoteSource, Long> {
 
-  public RemoteSource findByName(String name);
-  public RemoteSource findByUrl(String url);
+  RemoteSource findByName(String name);
+  RemoteSource findByUrl(String url);
 }
