@@ -74,7 +74,7 @@ jobs:
         name: owlplug-host-osx
         path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}.dylib
   build-host-linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
       with:
