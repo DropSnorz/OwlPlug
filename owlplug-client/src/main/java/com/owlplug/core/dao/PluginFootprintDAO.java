@@ -19,9 +19,9 @@
 package com.owlplug.core.dao;
 
 import com.owlplug.core.model.PluginFootprint;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PluginFootprintDAO  extends CrudRepository<PluginFootprint, Long> {
+public interface PluginFootprintDAO  extends JpaRepository<PluginFootprint, Long> {
   
   PluginFootprint findByPath(String path);
 

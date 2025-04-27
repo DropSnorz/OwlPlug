@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserAccountDAO extends CrudRepository<UserAccount, Long> {
 
   @Transactional
-  @Modifying
+  @Modifying(clearAutomatically=true, flushAutomatically=true)
   @Query("DELETE FROM UserAccount u WHERE u.accountProvider = NULL")
   public void deleteInvalidAccounts();
 

@@ -82,6 +82,8 @@ public class SourceSyncTask extends AbstractTask {
     this.setMaxProgress(2 + Iterables.size(storeList));
 
     remotePackageDAO.deleteAll();
+    // Flushing context to the database as next queries will recreate entities
+    remotePackageDAO.flush();
 
     this.commitProgress(2);
     CloseableHttpResponse response = null;

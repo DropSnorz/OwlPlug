@@ -105,6 +105,10 @@ public class PluginSyncTask extends AbstractTask {
         symlinkDAO.deleteAll();
       }
 
+      // Flushing context to the database as next queries will recreate entities
+      pluginDAO.flush();
+      symlinkDAO.flush();
+
       if (parameters.getDirectoryScope() != null) {
         // Plugins are retrieved from a scoped directory
         if (parameters.isFindLv2()) {
