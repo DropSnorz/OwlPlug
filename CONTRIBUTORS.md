@@ -5,3 +5,5 @@
 * Kristijonas
 * Benjamin Van Treese
 * Philip Emery
+* Christian Derr
+* Antti Aro
