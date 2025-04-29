@@ -36,7 +36,6 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +96,24 @@ public class PluginService extends BaseService {
     
     return owlplugCentralService.getPluginImageUrl(absoluteName);
     
+  }
+
+  /**
+   * Resolves the screenshot URL for a plugin and saves it in the plugin's footprint.
+   *
+   * @param plugin the plugin to resolve and save the image URL for
+   * @throws IllegalArgumentException if the plugin or its footprint is null
+   */
+  public void resolveAndSaveImageUrl(Plugin plugin) {
+    if (plugin == null) {
+      throw new IllegalArgumentException("Plugin cannot be null");
+    }
+    if (plugin.getFootprint() == null) {
+      throw new IllegalArgumentException("Plugin footprint cannot be null");
+    }
+    String url = this.resolveImageUrl(plugin);
+    plugin.getFootprint().setScreenshotUrl(url);
+    pluginFootprintDAO.save(plugin.getFootprint());
   }
   
   public void disablePlugin(Plugin plugin) {
@@ -251,10 +268,7 @@ public class PluginService extends BaseService {
   public void delete(Plugin plugin) {
     pluginDAO.delete(plugin);
   }
-  
-  public Plugin save(Plugin plugin) {
-    return pluginDAO.save(plugin);
-  }
+
   
   public PluginFootprint save(PluginFootprint pluginFootprint) {
     return pluginFootprintDAO.save(pluginFootprint);

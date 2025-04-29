@@ -35,10 +35,10 @@ public class PluginFootprint {
   protected Long id;
   protected String path;
   protected boolean nativeDiscoveryEnabled = true;
+
+  protected String screenshotUrl;
   
-  
-  public PluginFootprint(){
-    
+  public PluginFootprint() {
   }
   
   public PluginFootprint(String path) {
@@ -59,6 +59,14 @@ public class PluginFootprint {
 
   public void setNativeDiscoveryEnabled(boolean nativeDiscoveryEnabled) {
     this.nativeDiscoveryEnabled = nativeDiscoveryEnabled;
+  }
+
+  public String getScreenshotUrl() {
+    return screenshotUrl;
+  }
+
+  public void setScreenshotUrl(String screenshotUrl) {
+    this.screenshotUrl = screenshotUrl;
   }
 
   public Long getId() {
