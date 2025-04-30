@@ -58,6 +58,8 @@ public class Plugin {
   protected String scanDirectoryPath;
   protected String bundleId;
   protected String version;
+
+  // Suggestion: could be renamed to screenshotURI
   protected String screenshotUrl;
   protected boolean nativeCompatible = false;
   protected boolean syncComplete = false;

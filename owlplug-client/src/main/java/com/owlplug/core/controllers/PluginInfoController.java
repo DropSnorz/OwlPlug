@@ -195,13 +195,17 @@ public class PluginInfoController extends BaseController {
   }
 
   private void setPluginImage() {
-    if (plugin.getScreenshotUrl() == null || plugin.getScreenshotUrl().isEmpty()) {
-      String url = pluginService.resolveImageUrl(plugin);
-      plugin.setScreenshotUrl(url);
-      pluginService.save(plugin);
+    String url = plugin.getScreenshotUrl();
+    if (url == null || url.isEmpty()) {
+      // Fallback to footprint screenshot URL
+      String footprintUrl = plugin.getFootprint().getScreenshotUrl();
+      if (footprintUrl == null || footprintUrl.isEmpty()) {
+        // Resolve and save if footprint URL is also missing
+        pluginService.resolveAndSaveImageUrl(plugin);
+      }
+      url = plugin.getFootprint().getScreenshotUrl();
     }
 
-    String url = plugin.getScreenshotUrl();
     if (knownPluginImages.contains(url) && !imageCache.contains(url)) {
 
       BackgroundImage bgImg = new BackgroundImage(this.getApplicationDefaults().pluginPlaceholderImage,
