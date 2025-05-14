@@ -90,7 +90,7 @@ public class FileSyncTask extends AbstractTask {
       directoryStat.setParent(parent);
     }
     directoryStat.setLength(0);
-    fileStatDAO.save(directoryStat);
+    fileStatDAO.saveAndFlush(directoryStat);
 
     for (File file : directory.listFiles()) {
       if (file.isFile()) {
