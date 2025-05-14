@@ -182,7 +182,7 @@ public class PluginSyncTask extends AbstractTask {
         
         if (pluginFootprint == null) {
           pluginFootprint = new PluginFootprint(plugin.getPath());
-          pluginFootprintDAO.save(pluginFootprint);
+          pluginFootprintDAO.saveAndFlush(pluginFootprint);
         }
         plugin.setFootprint(pluginFootprint);
         pluginDAO.save(plugin);
