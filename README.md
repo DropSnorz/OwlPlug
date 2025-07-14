@@ -33,7 +33,7 @@ OwlPlug came from my hate of installing and managing audio plugins. The process 
 
 All kinds of feedbacks are greatly welcomed.
 
-![powered-by-open-audio-stack](./owlplug-client/src/main/resources/media/powered-by-open-audio-stack.png)
+![powered-by-open-audio-stack](./owlplug-client/src/main/resources/media/powered-by-open-audio-stack.svg)
 
 ## Installation
 
