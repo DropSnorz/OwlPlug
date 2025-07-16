@@ -27,6 +27,7 @@ import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
 import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.services.NativeHostService;
 import com.owlplug.core.services.OptionsService;
+import com.owlplug.core.ui.SlidingLabel;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.host.loaders.NativePluginLoader;
 import javafx.collections.FXCollections;
@@ -39,6 +40,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -86,6 +88,8 @@ public class OptionsController extends BaseController {
   private VBox pluginPathContainer;
   @FXML
   private Button moreFeaturesButton;
+  @FXML
+  private TextFlow versionTextFlow;
 
   private PluginPathFragmentController vst2PluginPathFragment;
   private PluginPathFragmentController vst3PluginPathFragment;
@@ -220,6 +224,8 @@ public class OptionsController extends BaseController {
     moreFeaturesButton.setOnAction(e -> {
       donateDialogController.show();
     });
+
+    versionTextFlow.getChildren().add(new SlidingLabel(ApplicationDefaults.getContributors()));
 
     refreshView();
   }

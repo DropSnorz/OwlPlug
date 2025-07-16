@@ -22,11 +22,15 @@ import com.owlplug.core.model.PluginFormat;
 import com.owlplug.core.model.platform.OperatingSystem;
 import com.owlplug.core.model.platform.RuntimePlatform;
 import com.owlplug.core.model.platform.RuntimePlatformResolver;
-import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.project.model.DawApplication;
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.scene.image.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +47,8 @@ public class ApplicationDefaults {
   private Environment env;
 
   private RuntimePlatform runtimePlatform;
+
+  private static List<String> contributors;
 
   public static final String APPLICATION_NAME = "OwlPlug";
 
@@ -210,6 +216,7 @@ public class ApplicationDefaults {
     return "/path/to/audio/plugins";
   }
 
+
   public String getVersion() {
     return env.getProperty("owlplug.version");
   }
@@ -233,6 +240,33 @@ public class ApplicationDefaults {
 
   public String getEnvProperty(String property) {
     return env.getProperty(property);
+  }
+
+  /**
+   * Returns OwlPlug contributors list.
+   * This method is static as it must be called in the Preloader
+   * before controller been initialization.
+   * @return list of contributors
+   */
+  public static List<String> getContributors() {
+
+    if (contributors != null) {
+      return new ArrayList<>(contributors);
+    }
+    String path = "/included/CONTRIBUTORS";
+    InputStream input = ApplicationDefaults.class.getResourceAsStream(path);
+    if (input == null) {
+      throw new RuntimeException("Resource not found: " + path);
+    }
+
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
+      contributors = reader.lines()
+                 .filter(line -> !line.trim().isEmpty())
+                 .collect(Collectors.toList());
+      return new ArrayList<>(contributors);
+    } catch (Exception e) {
+      throw new RuntimeException("Error reading resource file: " + path, e);
+    }
   }
 
   public static String getUserDataDirectory() {
