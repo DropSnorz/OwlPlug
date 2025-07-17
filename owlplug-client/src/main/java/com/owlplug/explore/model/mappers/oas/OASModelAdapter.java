@@ -60,6 +60,7 @@ public class OASModelAdapter {
     remotePackage.setCreator(plugin.getAuthor());
     remotePackage.setLicense(plugin.getLicense());
     remotePackage.setDescription(plugin.getDescription());
+    remotePackage.setDonateUrl(plugin.getDonate());
 
     // Only supports effect and instrument plugin type
     if (plugin.getType() != null
