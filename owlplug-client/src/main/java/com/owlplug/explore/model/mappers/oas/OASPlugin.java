@@ -25,6 +25,7 @@ public class OASPlugin {
   private String name;
   private String author;
   private String description;
+  private String donate;
   private String license;
   private String type;
   private List<String> tags;
@@ -57,6 +58,14 @@ public class OASPlugin {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public String getDonate() {
+    return donate;
+  }
+
+  public void setDonate(String donate) {
+    this.donate = donate;
   }
 
   public String getLicense() {
