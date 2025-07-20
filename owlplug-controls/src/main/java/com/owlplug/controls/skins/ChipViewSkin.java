@@ -104,8 +104,6 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
     };
     scrollPane.setFitToWidth(true);
 
-    //root.getChildren().add(scrollPane);
-
     // init auto complete
     autoCompletePopup = (ChipsAutoComplete<T>) getSkinnable().getAutoCompletePopup();
     autoCompletePopup.setSelectionHandler(event -> {

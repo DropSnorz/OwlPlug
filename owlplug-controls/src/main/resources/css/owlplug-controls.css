@@ -31,14 +31,13 @@
 
 .chip-view {
     -fx-background-color: TRANSPARENT;
-    -fx-pref-width: 100px;
-    -fx-pref-height: 100px;
 }
 
 .chip-view .chips-pane {
     -fx-background-color: TRANSPARENT;
-    -fx-vgap: 4;
-    -fx-hgap: 6;
+    -fx-padding: 2 0 2 0;
+    -fx-vgap: 2;
+    -fx-hgap: 4;
 }
 
 .chip-view .chips-pane>.text-area,
@@ -52,7 +51,7 @@
 .chip-view .chips-pane>.text-area {
     -fx-padding: 0.333333em 0 0.333333em 0;
     -fx-min-width: 100px;
-    -fx-pref-height: 42;
+    -fx-pref-height: 25;
 }
 
 .chip-view .chips-pane>.text-area .content,
@@ -62,7 +61,7 @@
 }
 
 .chip-view .chip>HBox {
-    -fx-font-size: 14.0;
+    -fx-font-size: 11.0;
     -fx-background-color: #E0E0E0;
     -fx-background-radius: 40px;
     -fx-padding: 5px 8px 5px 12px;
