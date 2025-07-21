@@ -253,7 +253,7 @@ jobs:
     - name: Download FUSE dependency
       run: sudo add-apt-repository universe && sudo apt install libfuse2
     - name: Download AppImage Tool
-      run: wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+      run: wget "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
     - name: Allow AppImage Execution
       run: chmod a+x appimagetool-x86_64.AppImage
     - name: Run AppImage Tool
@@ -265,4 +265,3 @@ jobs:
       with:
         name: owlplug-linux-appimage
         path: OwlPlug-${{ env.version }}-x86_64.AppImage
-
