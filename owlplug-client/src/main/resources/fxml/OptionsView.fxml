@@ -122,15 +122,16 @@
                                     </Hyperlink>
                                     <HBox spacing="5.0">
                                        <children>
-                                          <TextFlow prefWidth="200.0">
+                                          <TextFlow fx:id="versionTextFlow" prefHeight="25.0" prefWidth="335.0">
                                              <children>
                                                 <Label text="OwlPlug -" />
                                                 <Label fx:id="versionLabel" text="?.?.?" wrapText="true" />
+                                                <Label text=" - Thanks to " />
                                              </children>
                                           </TextFlow>
                                           <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
                                              <children>
-                                                <Button fx:id="moreFeaturesButton" text="Get more features ...">
+                                                <Button fx:id="moreFeaturesButton" text="Contribute...">
                                                    <graphic>
                                                       <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>

@@ -233,6 +233,14 @@
 					<include>logback.xml</include>
 				</includes>
 			</resource>
+			<resource>
+				<directory>${project.basedir}/../</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>CONTRIBUTORS</include>
+				</includes>
+				<targetPath>included</targetPath>
+			</resource>
 		</resources>
 		<pluginManagement>
 			<plugins>
