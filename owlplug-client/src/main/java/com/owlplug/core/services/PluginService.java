@@ -46,8 +46,6 @@ import org.springframework.stereotype.Service;
 public class PluginService extends BaseService {
 
   @Autowired
-  protected OwlPlugCentralService owlplugCentralService;
-  @Autowired
   protected ExploreService exploreService;
   @Autowired
   protected PluginDAO pluginDAO;
@@ -73,7 +71,7 @@ public class PluginService extends BaseService {
 
   /**
    * Returns an url to retrieve plugin screenshots. Url can be retrieved from
-   * registered packages in remote sources or using OwlPlug Central screenshot API.
+   * registered packages in remote sources.
    * 
    * @param plugin the plugin
    * @return screenshot url
@@ -93,9 +91,8 @@ public class PluginService extends BaseService {
         return Iterables.get(packages, 0).getScreenshotUrl();
       }
     }
-    
-    return owlplugCentralService.getPluginImageUrl(absoluteName);
-    
+
+    return null;
   }
 
   /**
@@ -104,7 +101,7 @@ public class PluginService extends BaseService {
    * @param plugin the plugin to resolve and save the image URL for
    * @throws IllegalArgumentException if the plugin or its footprint is null
    */
-  public void resolveAndSaveImageUrl(Plugin plugin) {
+  public void tryResolveAndSaveImageUrl(Plugin plugin) {
     if (plugin == null) {
       throw new IllegalArgumentException("Plugin cannot be null");
     }
@@ -112,8 +109,10 @@ public class PluginService extends BaseService {
       throw new IllegalArgumentException("Plugin footprint cannot be null");
     }
     String url = this.resolveImageUrl(plugin);
-    plugin.getFootprint().setScreenshotUrl(url);
-    pluginFootprintDAO.save(plugin.getFootprint());
+    if (url != null) {
+      plugin.getFootprint().setScreenshotUrl(url);
+      pluginFootprintDAO.save(plugin.getFootprint());
+    }
   }
   
   public void disablePlugin(Plugin plugin) {
