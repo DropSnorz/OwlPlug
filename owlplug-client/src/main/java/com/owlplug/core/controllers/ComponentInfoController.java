@@ -106,12 +106,12 @@ public class ComponentInfoController extends BaseController {
       String footprintUrl = currentPlugin.getFootprint().getScreenshotUrl();
       if (footprintUrl == null || footprintUrl.isEmpty()) {
         // Resolve and save if footprint URL is also missing
-        pluginService.resolveAndSaveImageUrl(currentPlugin);
+        pluginService.tryResolveAndSaveImageUrl(currentPlugin);
       }
       url = currentPlugin.getFootprint().getScreenshotUrl();
     }
 
-    if (knownPluginImages.contains(url) && !imageCache.contains(url)) {
+    if (url == null || (knownPluginImages.contains(url) && !imageCache.contains(url))) {
 
       BackgroundImage bgImg = new BackgroundImage(this.getApplicationDefaults().pluginPlaceholderImage,
           BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
