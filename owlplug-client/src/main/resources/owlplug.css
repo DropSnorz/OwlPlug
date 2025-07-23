@@ -108,14 +108,12 @@ TextArea .content {
 }
 
 .chip-view {
-    -fx-max-height: 45px;
+    -fx-max-height: 100px;
+    -fx-background-color: card-pane-color;
 }
 
 .chip-view .chips-pane .text-area {
-    -fx-prompt-text-fill: prompt-text-color;
-    -fx-pref-height: 32px;
-    -fx-height: 32px;
-    -fx-max-height: 32px;
+    -fx-text-fill: text-color;
 }
 
 .chip Button {
@@ -139,7 +137,7 @@ TextArea .content {
     -fx-background-color: #E0E0E0;
     -fx-background-radius: 40px;
     -fx-padding: 2px 8px 2px 8px;
-    -fx-pref-height: 24px;
+    -fx-pref-height: 32px;
     -fx-alignment: center-left;
     -fx-spacing: 8;
     -fx-text-fill: black;

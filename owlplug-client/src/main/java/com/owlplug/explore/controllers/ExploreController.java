@@ -61,6 +61,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import org.slf4j.Logger;
@@ -97,7 +98,7 @@ public class ExploreController extends BaseController {
   @FXML
   private Button syncSourcesButton;
   @FXML
-  private Label resultCounter;
+  private Text resultCounter;
   @FXML
   private MasonryPane masonryPane;
   @FXML
