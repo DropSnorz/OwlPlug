@@ -18,7 +18,7 @@
  
 package com.owlplug.explore.model;
 
-import com.owlplug.core.model.PluginFormat;
+import com.owlplug.plugin.model.PluginFormat;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

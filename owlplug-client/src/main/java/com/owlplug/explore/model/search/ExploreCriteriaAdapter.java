@@ -18,7 +18,7 @@
  
 package com.owlplug.explore.model.search;
 
-import com.owlplug.core.model.PluginType;
+import com.owlplug.plugin.model.PluginType;
 import com.owlplug.explore.dao.RemotePackageDAO;
 import com.owlplug.explore.model.RemotePackage;
 import java.util.List;

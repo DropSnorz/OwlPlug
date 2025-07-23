@@ -18,7 +18,7 @@
  
 package com.owlplug.explore.dao;
 
-import com.owlplug.core.model.PluginType;
+import com.owlplug.plugin.model.PluginType;
 import com.owlplug.explore.model.RemotePackage;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;

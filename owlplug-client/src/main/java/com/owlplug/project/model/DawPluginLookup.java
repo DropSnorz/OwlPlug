@@ -18,7 +18,7 @@
 
 package com.owlplug.project.model;
 
-import com.owlplug.core.model.Plugin;
+import com.owlplug.plugin.model.Plugin;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

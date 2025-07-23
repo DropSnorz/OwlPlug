@@ -18,7 +18,7 @@
 
 package com.owlplug.project.tasks.discovery.reaper;
 
-import com.owlplug.core.model.PluginFormat;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.parsers.reaper.PluginNodeListener;
 import com.owlplug.parsers.reaper.ReaperPlugin;

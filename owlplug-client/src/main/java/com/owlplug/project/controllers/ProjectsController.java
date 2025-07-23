@@ -20,7 +20,7 @@ package com.owlplug.project.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
+import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.project.components.ProjectTaskFactory;
 import com.owlplug.project.model.DawProject;

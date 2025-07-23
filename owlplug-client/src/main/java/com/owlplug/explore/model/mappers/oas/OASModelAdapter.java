@@ -18,9 +18,7 @@
 
 package com.owlplug.explore.model.mappers.oas;
 
-import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginFormat;
-import com.owlplug.core.model.PluginType;
+import com.owlplug.plugin.model.PluginType;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;

@@ -20,7 +20,7 @@ package com.owlplug.explore.components;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.BaseTaskFactory;
-import com.owlplug.core.components.CoreTaskFactory;
+import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.utils.FileUtils;
@@ -40,7 +40,7 @@ public class ExploreTaskFactory extends BaseTaskFactory {
   @Autowired
   private ApplicationDefaults applicationDefaults;
   @Autowired
-  private CoreTaskFactory coreTaskFactory;
+  private PluginTaskFactory pluginTaskFactory;
   @Autowired
   private RemoteSourceDAO remoteSourceDAO;
   @Autowired
@@ -73,7 +73,7 @@ public class ExploreTaskFactory extends BaseTaskFactory {
   public TaskExecutionContext createBundleInstallTask(PackageBundle bundle, File targetDirectory) {
     String path = FileUtils.convertPath(targetDirectory.getAbsolutePath());
     return create(new BundleInstallTask(bundle, targetDirectory, applicationDefaults))
-        .setOnSucceeded(e -> coreTaskFactory.createPluginSyncTask(path).scheduleNow());
+        .setOnSucceeded(e -> pluginTaskFactory.createPluginSyncTask(path).scheduleNow());
   }
 
 

@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
@@ -40,7 +41,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  * the TaskBarController bean.
  *
  */
-@Service
+@Component
 public class TaskRunner {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());

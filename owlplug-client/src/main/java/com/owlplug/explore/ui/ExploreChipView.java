@@ -21,7 +21,7 @@ package com.owlplug.explore.ui;
 import com.owlplug.controls.ChipView;
 import com.owlplug.controls.DefaultChip;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.model.PluginType;
+import com.owlplug.plugin.model.PluginType;
 import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import java.util.HashMap;

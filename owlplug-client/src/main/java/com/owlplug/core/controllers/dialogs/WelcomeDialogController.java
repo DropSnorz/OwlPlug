@@ -20,11 +20,12 @@ package com.owlplug.core.controllers.dialogs;
 
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.CoreTaskFactory;
+import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
-import com.owlplug.core.model.platform.OperatingSystem;
+import com.owlplug.core.model.OperatingSystem;
+import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,7 +40,7 @@ public class WelcomeDialogController extends AbstractDialogController {
   @Autowired
   private LazyViewRegistry lazyViewRegistry;
   @Autowired
-  private CoreTaskFactory taskFactory;
+  private PluginTaskFactory taskFactory;
   @Autowired
   private OptionsController optionsController;
   @Autowired

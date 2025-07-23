@@ -7,7 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.NewLinkController">
+<VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.dialogs.NewLinkController">
    <children>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
          <children>

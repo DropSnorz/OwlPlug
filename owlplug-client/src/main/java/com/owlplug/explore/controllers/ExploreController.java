@@ -29,7 +29,7 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.core.model.PluginFormat;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.PackageBundle;

@@ -20,7 +20,7 @@ package com.owlplug.explore.controllers;
 
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.core.model.PluginType;
+import com.owlplug.plugin.model.PluginType;
 import com.owlplug.core.ui.SideBar;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.model.PackageBundle;

@@ -18,9 +18,9 @@
 
 package com.owlplug.project.services;
 
-import com.owlplug.core.model.Plugin;
+import com.owlplug.plugin.model.Plugin;
 import com.owlplug.core.services.BaseService;
-import com.owlplug.core.services.PluginService;
+import com.owlplug.plugin.services.PluginService;
 import com.owlplug.project.dao.PluginLookupDAO;
 import com.owlplug.project.dao.DawPluginDAO;
 import com.owlplug.project.model.LookupResult;

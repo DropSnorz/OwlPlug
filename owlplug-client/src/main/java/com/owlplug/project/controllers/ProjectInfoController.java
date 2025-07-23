@@ -20,9 +20,9 @@ package com.owlplug.project.controllers;
 
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.core.controllers.PluginsController;
-import com.owlplug.core.model.Plugin;
-import com.owlplug.core.model.PluginFormat;
+import com.owlplug.plugin.controllers.PluginsController;
+import com.owlplug.plugin.model.Plugin;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.project.model.LookupResult;

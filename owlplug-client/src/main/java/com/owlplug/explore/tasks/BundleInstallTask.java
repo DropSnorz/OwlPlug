@@ -19,7 +19,7 @@
 package com.owlplug.explore.tasks;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.model.platform.RuntimePlatform;
+import com.owlplug.core.model.RuntimePlatform;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
