@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.owlplug.core.model.PluginFormat;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;

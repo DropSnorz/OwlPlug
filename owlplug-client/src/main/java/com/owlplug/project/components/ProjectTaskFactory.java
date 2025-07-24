@@ -24,8 +24,8 @@ import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.BaseTaskFactory;
 import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
-import com.owlplug.project.dao.DawProjectDAO;
-import com.owlplug.project.dao.DawPluginDAO;
+import com.owlplug.project.repositories.DawProjectRepository;
+import com.owlplug.project.repositories.DawPluginRepository;
 import com.owlplug.project.services.PluginLookupService;
 import com.owlplug.project.tasks.PluginLookupTask;
 import com.owlplug.project.tasks.ProjectSyncTask;
@@ -43,9 +43,9 @@ public class ProjectTaskFactory extends BaseTaskFactory {
   @Autowired
   private PluginLookupService lookupService;
   @Autowired
-  private DawProjectDAO projectDAO;
+  private DawProjectRepository projectRepository;
   @Autowired
-  private DawPluginDAO dawPluginDAO;
+  private DawPluginRepository dawPluginRepository;
 
   private ArrayList<SimpleEventListener> syncProjectsListeners = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class ProjectTaskFactory extends BaseTaskFactory {
 
     List<String> directories = prefs.getList(ApplicationDefaults.PROJECT_DIRECTORY_KEY);
 
-    ProjectSyncTask task = new ProjectSyncTask(projectDAO, directories);
+    ProjectSyncTask task = new ProjectSyncTask(projectRepository, directories);
     task.setOnSucceeded(e -> {
       createLookupTask().scheduleNow();
       notifyListeners(syncProjectsListeners);
@@ -63,7 +63,7 @@ public class ProjectTaskFactory extends BaseTaskFactory {
 
   public TaskExecutionContext createLookupTask() {
 
-    PluginLookupTask task = new PluginLookupTask(dawPluginDAO, lookupService);
+    PluginLookupTask task = new PluginLookupTask(dawPluginRepository, lookupService);
     task.setOnSucceeded(e -> {
       notifyListeners(syncProjectsListeners);
     });

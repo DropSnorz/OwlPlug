@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefWidth="400.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.ListDirectoryDialogController">
+<VBox prefWidth="400.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController">
    <children>
       <Label text="Add extra directories to the list. Update items by double-clicking on it and hit the &quot;Enter&quot; key to validate." wrapText="true" />
       <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">

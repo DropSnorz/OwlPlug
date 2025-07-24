@@ -18,8 +18,8 @@
  
 package com.owlplug.explore.model;
 
-import com.owlplug.core.model.PluginStage;
-import com.owlplug.core.model.PluginType;
+import com.owlplug.plugin.model.PluginStage;
+import com.owlplug.plugin.model.PluginType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

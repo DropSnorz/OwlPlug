@@ -19,7 +19,7 @@
 package com.owlplug.explore.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.model.PluginStage;
+import com.owlplug.plugin.model.PluginStage;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.controllers.ExploreController;

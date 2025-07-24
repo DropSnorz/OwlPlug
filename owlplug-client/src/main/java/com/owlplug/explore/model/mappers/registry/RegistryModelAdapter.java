@@ -18,8 +18,8 @@
 
 package com.owlplug.explore.model.mappers.registry;
 
-import com.owlplug.core.model.PluginStage;
-import com.owlplug.core.model.PluginType;
+import com.owlplug.plugin.model.PluginStage;
+import com.owlplug.plugin.model.PluginType;
 import com.owlplug.core.utils.UrlUtils;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;

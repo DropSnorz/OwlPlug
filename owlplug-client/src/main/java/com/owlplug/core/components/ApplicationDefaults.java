@@ -18,11 +18,10 @@
 
 package com.owlplug.core.components;
 
-import com.owlplug.core.model.PluginFormat;
-import com.owlplug.core.model.platform.OperatingSystem;
-import com.owlplug.core.model.platform.RuntimePlatform;
-import com.owlplug.core.model.platform.RuntimePlatformResolver;
+import com.owlplug.core.model.OperatingSystem;
+import com.owlplug.core.model.RuntimePlatform;
 import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawApplication;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -46,7 +45,8 @@ public class ApplicationDefaults {
   @Autowired
   private Environment env;
 
-  private RuntimePlatform runtimePlatform;
+  @Autowired
+  private RuntimePlatformResolver runtimePlatformResolver;
 
   private static List<String> contributors;
 
@@ -124,14 +124,10 @@ public class ApplicationDefaults {
    */
   public ApplicationDefaults() {
 
-    RuntimePlatformResolver platformResolver = new RuntimePlatformResolver();
-    runtimePlatform = platformResolver.resolve();
-    log.info("Runtime Platform Resolved: " + runtimePlatform.toString());
-
   }
 
   public RuntimePlatform getRuntimePlatform() {
-    return runtimePlatform;
+    return runtimePlatformResolver.getCurrentPlatform();
   }
 
   /**
@@ -184,6 +180,8 @@ public class ApplicationDefaults {
   }
 
   public String getDefaultPluginPath(PluginFormat format) {
+
+    RuntimePlatform runtimePlatform = runtimePlatformResolver.getCurrentPlatform();
 
     if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.WIN)) {
       if (format.equals(PluginFormat.VST2)) {

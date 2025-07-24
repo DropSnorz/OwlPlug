@@ -21,8 +21,8 @@ package com.owlplug.project.tasks;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.project.dao.DawProjectDAO;
 import com.owlplug.project.model.DawProject;
+import com.owlplug.project.repositories.DawProjectRepository;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
 import com.owlplug.project.tasks.discovery.reaper.ReaperProjectExplorer;
 import java.io.File;
@@ -35,12 +35,12 @@ public class ProjectSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private DawProjectDAO projectDAO;
+  private DawProjectRepository projectRepository;
   private List<String> projectDirectories;
 
-  public ProjectSyncTask(DawProjectDAO projectDAO,
+  public ProjectSyncTask(DawProjectRepository projectRepository,
                          List<String> projectDirectories) {
-    this.projectDAO = projectDAO;
+    this.projectRepository = projectRepository;
     this.projectDirectories = projectDirectories;
     setName("Sync DAW projects");
   }
@@ -52,7 +52,7 @@ public class ProjectSyncTask extends AbstractTask {
     log.debug("Starting project sync task");
     this.updateProgress(0,1);
 
-    projectDAO.deleteAll();
+    projectRepository.deleteAll();
 
     // Collect files from all project directories
     List<File> baseFiles = new ArrayList<>();
@@ -80,11 +80,11 @@ public class ProjectSyncTask extends AbstractTask {
       if (abletonExplorer.canExploreFile(file)) {
         this.updateMessage("Analyzing Ableton file: " + file.getAbsolutePath());
         DawProject project = abletonExplorer.explore(file);
-        projectDAO.save(project);
+        projectRepository.save(project);
       } else if (reaperExplorer.canExploreFile(file)) {
         this.updateMessage("Analyzing Reaper file: " + file.getAbsolutePath());
         DawProject project = reaperExplorer.explore(file);
-        projectDAO.save(project);
+        projectRepository.save(project);
       }
     }
 

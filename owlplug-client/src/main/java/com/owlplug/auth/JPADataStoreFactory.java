@@ -19,8 +19,7 @@
 package com.owlplug.auth;
 
 import com.google.api.client.util.store.DataStoreFactory;
-import com.owlplug.auth.dao.GoogleCredentialDAO;
-import java.io.IOException;
+import com.owlplug.auth.repositories.GoogleCredentialRepository;
 
 /**
  * JPADataStore factory. Creates new {@link JPADataStore} instances.
@@ -28,9 +27,9 @@ import java.io.IOException;
  */
 public class JPADataStoreFactory implements DataStoreFactory {
 
-  private GoogleCredentialDAO repository;
+  private GoogleCredentialRepository repository;
 
-  public JPADataStoreFactory(GoogleCredentialDAO repository) {
+  public JPADataStoreFactory(GoogleCredentialRepository repository) {
     this.repository = repository;
   }
 

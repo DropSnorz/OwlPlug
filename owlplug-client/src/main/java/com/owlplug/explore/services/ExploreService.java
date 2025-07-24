@@ -21,13 +21,13 @@ package com.owlplug.explore.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.owlplug.core.model.PluginFormat;
-import com.owlplug.core.model.platform.RuntimePlatform;
+import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.core.model.RuntimePlatform;
 import com.owlplug.core.services.BaseService;
-import com.owlplug.core.services.PluginService;
+import com.owlplug.plugin.services.PluginService;
 import com.owlplug.explore.components.ExploreTaskFactory;
-import com.owlplug.explore.dao.RemotePackageDAO;
-import com.owlplug.explore.dao.RemoteSourceDAO;
+import com.owlplug.explore.repositories.RemotePackageRepository;
+import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
@@ -60,9 +60,9 @@ public class ExploreService extends BaseService {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
-  private RemoteSourceDAO remoteSourceDAO;
+  private RemoteSourceRepository remoteSourceRepository;
   @Autowired
-  private RemotePackageDAO remotePackageDAO;
+  private RemotePackageRepository remotePackageRepository;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
   @Autowired
@@ -71,7 +71,7 @@ public class ExploreService extends BaseService {
   @PostConstruct
   private void init() {
 
-    RemoteSource owlplugRegistry = remoteSourceDAO.findByUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl());
+    RemoteSource owlplugRegistry = remoteSourceRepository.findByUrl(this.getApplicationDefaults().getOwlPlugRegistryUrl());
 
     if (owlplugRegistry == null) {
       owlplugRegistry = new RemoteSource();
@@ -81,9 +81,9 @@ public class ExploreService extends BaseService {
     owlplugRegistry.setDisplayUrl("https://registry.owlplug.com");
     owlplugRegistry.setType(SourceType.OWLPLUG_REGISTRY);
 
-    remoteSourceDAO.save(owlplugRegistry);
+    remoteSourceRepository.save(owlplugRegistry);
 
-    RemoteSource OASRegistry = remoteSourceDAO.findByUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl());
+    RemoteSource OASRegistry = remoteSourceRepository.findByUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl());
 
     if (OASRegistry == null) {
       OASRegistry = new RemoteSource();
@@ -93,7 +93,7 @@ public class ExploreService extends BaseService {
     OASRegistry.setDisplayUrl("https://github.com/open-audio-stack");
     OASRegistry.setType(SourceType.OAS_REGISTRY);
 
-    remoteSourceDAO.save(OASRegistry);
+    remoteSourceRepository.save(OASRegistry);
   }
 
   /**
@@ -104,11 +104,11 @@ public class ExploreService extends BaseService {
   }
 
   public Iterable<RemoteSource> getRemoteSources() {
-    return remoteSourceDAO.findAll();
+    return remoteSourceRepository.findAll();
   }
 
   public RemoteSource getRemoteSourceByUrl(String url) {
-    return remoteSourceDAO.findByUrl(url);
+    return remoteSourceRepository.findByUrl(url);
   }
 
   /**
@@ -121,15 +121,15 @@ public class ExploreService extends BaseService {
   public Iterable<RemotePackage> getRemotePackages(List<ExploreFilterCriteria> criteriaList) {
     RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
 
-    Specification<RemotePackage> spec = RemotePackageDAO.sourceEnabled()
-        .and(RemotePackageDAO.hasPlatformTag(env.getCompatiblePlatformsTags()));
+    Specification<RemotePackage> spec = RemotePackageRepository.sourceEnabled()
+        .and(RemotePackageRepository.hasPlatformTag(env.getCompatiblePlatformsTags()));
     spec = spec.and(ExploreCriteriaAdapter.toSpecification(criteriaList));
 
-    return remotePackageDAO.findAll(spec);
+    return remotePackageRepository.findAll(spec);
   }
 
   public Iterable<RemotePackage> getPackagesByName(String name) {
-    return remotePackageDAO.findByNameContainingIgnoreCase(name);
+    return remotePackageRepository.findByNameContainingIgnoreCase(name);
   }
 
   /**
@@ -252,15 +252,15 @@ public class ExploreService extends BaseService {
 
   public void enableSource(RemoteSource remoteSource, boolean enabled) {
     remoteSource.setEnabled(enabled);
-    remoteSourceDAO.save(remoteSource);
+    remoteSourceRepository.save(remoteSource);
   }
 
   public RemoteSource save(RemoteSource remoteSource) {
-    return remoteSourceDAO.save(remoteSource);
+    return remoteSourceRepository.save(remoteSource);
   }
 
   public void delete(RemoteSource remoteSource) {
-    remoteSourceDAO.delete(remoteSource);
+    remoteSourceRepository.delete(remoteSource);
   }
 
   public boolean canDeterminateBundleInstallFolder(PackageBundle bundle) {
@@ -312,6 +312,6 @@ public class ExploreService extends BaseService {
    * @return lit of creators
    */
   public List<String> getDistinctCreators() {
-    return remotePackageDAO.findDistinctCreators();
+    return remotePackageRepository.findDistinctCreators();
   }
 }

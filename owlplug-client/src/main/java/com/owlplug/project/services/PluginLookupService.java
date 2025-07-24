@@ -18,11 +18,11 @@
 
 package com.owlplug.project.services;
 
-import com.owlplug.core.model.Plugin;
+import com.owlplug.plugin.model.Plugin;
 import com.owlplug.core.services.BaseService;
-import com.owlplug.core.services.PluginService;
-import com.owlplug.project.dao.PluginLookupDAO;
-import com.owlplug.project.dao.DawPluginDAO;
+import com.owlplug.plugin.services.PluginService;
+import com.owlplug.project.repositories.PluginLookupRepository;
+import com.owlplug.project.repositories.DawPluginRepository;
 import com.owlplug.project.model.LookupResult;
 import com.owlplug.project.model.DawPluginLookup;
 import com.owlplug.project.model.DawPlugin;
@@ -35,14 +35,14 @@ public class PluginLookupService extends BaseService {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private PluginLookupDAO pluginLookupDAO;
+  private PluginLookupRepository pluginLookupRepository;
   @Autowired
-  private DawPluginDAO dawPluginDAO;
+  private DawPluginRepository dawPluginRepository;
 
   public void createLookup(DawPlugin projectPlugin) {
 
     projectPlugin.setLookup(lookup(projectPlugin));
-    dawPluginDAO.save(projectPlugin);
+    dawPluginRepository.save(projectPlugin);
 
   }
 
@@ -73,7 +73,7 @@ public class PluginLookupService extends BaseService {
   }
 
   public void deleteAllLookups() {
-    pluginLookupDAO.deleteAll();
+    pluginLookupRepository.deleteAll();
   }
 
 }

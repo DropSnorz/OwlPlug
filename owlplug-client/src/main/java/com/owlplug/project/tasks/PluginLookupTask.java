@@ -21,7 +21,7 @@ package com.owlplug.project.tasks;
 import com.google.common.collect.Iterables;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.project.dao.DawPluginDAO;
+import com.owlplug.project.repositories.DawPluginRepository;
 import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.services.PluginLookupService;
 import java.text.DecimalFormat;
@@ -29,10 +29,10 @@ import java.text.DecimalFormat;
 public class PluginLookupTask extends AbstractTask {
 
   private PluginLookupService pluginLookupService;
-  private DawPluginDAO dawPluginDAO;
+  private DawPluginRepository dawPluginRepository;
 
-  public PluginLookupTask(DawPluginDAO dawPluginDAO, PluginLookupService pluginLookupService) {
-    this.dawPluginDAO = dawPluginDAO;
+  public PluginLookupTask(DawPluginRepository dawPluginRepository, PluginLookupService pluginLookupService) {
+    this.dawPluginRepository = dawPluginRepository;
     this.pluginLookupService = pluginLookupService;
     setName("Lookup DAW Plugins");
   }
@@ -45,7 +45,7 @@ public class PluginLookupTask extends AbstractTask {
     this.updateProgress(0,1);
 
     pluginLookupService.deleteAllLookups();
-    Iterable<DawPlugin> plugins = dawPluginDAO.findAll();
+    Iterable<DawPlugin> plugins = dawPluginRepository.findAll();
 
     this.setMaxProgress(Iterables.size(plugins));
     for (DawPlugin plugin : plugins) {

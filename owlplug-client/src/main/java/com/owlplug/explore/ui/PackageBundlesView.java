@@ -19,7 +19,7 @@
 package com.owlplug.explore.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.model.PluginFormat;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.model.PackageBundle;
 import javafx.event.ActionEvent;

@@ -32,8 +32,8 @@ import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.model.Userinfoplus;
 import com.owlplug.auth.JPADataStoreFactory;
 import com.owlplug.auth.components.OwlPlugCredentials;
-import com.owlplug.auth.dao.GoogleCredentialDAO;
-import com.owlplug.auth.dao.UserAccountDAO;
+import com.owlplug.auth.repositories.GoogleCredentialRepository;
+import com.owlplug.auth.repositories.UserAccountRepository;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.model.UserAccountProvider;
 import com.owlplug.auth.utils.AuthenticationException;
@@ -66,9 +66,9 @@ public class AuthenticationService extends BaseService {
   @Autowired
   private OwlPlugCredentials owlPlugCredentials;
   @Autowired
-  private GoogleCredentialDAO googleCredentialDAO;
+  private GoogleCredentialRepository googleCredentialRepository;
   @Autowired
-  private UserAccountDAO userAccountDAO;
+  private UserAccountRepository userAccountRepository;
   @Autowired
   private MainController mainController;
 
@@ -90,13 +90,13 @@ public class AuthenticationService extends BaseService {
 
     try {
       NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-      DataStoreFactory dataStore = new JPADataStoreFactory(googleCredentialDAO);
+      DataStoreFactory dataStore = new JPADataStoreFactory(googleCredentialRepository);
       GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientId,
           clientSecret, scopes).setDataStoreFactory(dataStore).setAccessType("offline").setApprovalPrompt("force")
               .build();
 
       UserAccount userAccount = new UserAccount();
-      userAccountDAO.save(userAccount);
+      userAccountRepository.save(userAccount);
 
       receiver = new LocalServerReceiver();
 
@@ -110,9 +110,9 @@ public class AuthenticationService extends BaseService {
       userAccount.setName(userinfo.getName());
       userAccount.setIconUrl(userinfo.getPicture());
       userAccount.setAccountProvider(UserAccountProvider.GOOGLE);
-      userAccount.setCredential(googleCredentialDAO.findByKey(userAccount.getKey()));
+      userAccount.setCredential(googleCredentialRepository.findByKey(userAccount.getKey()));
 
-      userAccountDAO.save(userAccount);
+      userAccountRepository.save(userAccount);
       this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
     } catch (GeneralSecurityException | IOException e) {
@@ -120,7 +120,7 @@ public class AuthenticationService extends BaseService {
       throw new AuthenticationException(e);
     } finally {
       // Delete accounts without complete setup
-      userAccountDAO.deleteInvalidAccounts();
+      userAccountRepository.deleteInvalidAccounts();
     }
 
   }
@@ -136,7 +136,7 @@ public class AuthenticationService extends BaseService {
     String clientId = owlPlugCredentials.getGoogleAppId();
     String clientSecret = owlPlugCredentials.getGoogleSecret();
 
-    com.owlplug.auth.model.GoogleCredential gc = googleCredentialDAO.findByKey(key);
+    com.owlplug.auth.model.GoogleCredential gc = googleCredentialRepository.findByKey(key);
 
     return new GoogleCredential.Builder().setTransport(new NetHttpTransport()).setJsonFactory(new JacksonFactory())
         .setClientSecrets(clientId, clientSecret).build().setRefreshToken(gc.getRefreshToken());
@@ -150,8 +150,8 @@ public class AuthenticationService extends BaseService {
   @Transactional
   public void deleteAccount(UserAccount userAccount) {
 
-    googleCredentialDAO.deleteByKey(userAccount.getKey());
-    userAccountDAO.delete(userAccount);
+    googleCredentialRepository.deleteByKey(userAccount.getKey());
+    userAccountRepository.delete(userAccount);
     mainController.refreshAccounts();
   }
   
@@ -160,7 +160,7 @@ public class AuthenticationService extends BaseService {
    * @return list of user accounts
    */
   public Iterable<UserAccount> getAccounts() {
-    return userAccountDAO.findAll();
+    return userAccountRepository.findAll();
   }
   
   /**
@@ -169,7 +169,7 @@ public class AuthenticationService extends BaseService {
    * @return related user account
    */
   public Optional<UserAccount> getUserAccountById(Long id) {
-    return userAccountDAO.findById(id);
+    return userAccountRepository.findById(id);
   }
 
   /**
@@ -178,7 +178,7 @@ public class AuthenticationService extends BaseService {
    */
   public void stopAuthReceiver() {
     try {
-      userAccountDAO.deleteInvalidAccounts();
+      userAccountRepository.deleteInvalidAccounts();
       if (receiver != null) {
         receiver.stop();
       }
