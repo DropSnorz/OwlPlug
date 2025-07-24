@@ -16,27 +16,19 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.auth.dao;
+package com.owlplug.auth.repositories;
 
-import com.owlplug.auth.model.GoogleCredential;
-import java.util.Set;
-import java.util.stream.Stream;
+import com.owlplug.auth.model.UserAccount;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
-public interface GoogleCredentialDAO extends CrudRepository<GoogleCredential, Long> {
+public interface UserAccountRepository extends CrudRepository<UserAccount, Long> {
 
-  GoogleCredential findByKey(String key);
+  @Transactional
+  @Modifying(clearAutomatically=true, flushAutomatically=true)
+  @Query("DELETE FROM UserAccount u WHERE u.accountProvider = NULL")
+  public void deleteInvalidAccounts();
 
-  GoogleCredential findByAccessToken(String key);
-
-  @Query(value = "select key from GOOGLE_CREDENTIAL", nativeQuery = true)
-  Set<String> findAllKeys();
-
-  @Query("select c from GoogleCredential c")
-  Stream<GoogleCredential> findAllCredentialAsStream();
-
-  void deleteByKey(String key);
 }

@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.plugin.dao;
+package com.owlplug.plugin.repositories;
 
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFormat;
@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface PluginDAO extends JpaRepository<Plugin, Long>, JpaSpecificationExecutor<Plugin> {
+public interface PluginRepository extends JpaRepository<Plugin, Long>, JpaSpecificationExecutor<Plugin> {
 
   static Specification<Plugin> nameContains(String name) {
     return (plugin, cq, cb) -> cb.like(cb.lower(plugin.get("name")), "%" + name.toLowerCase() + "%");

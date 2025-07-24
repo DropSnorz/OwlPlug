@@ -15,14 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
+ 
+package com.owlplug.plugin.repositories;
 
-package com.owlplug.plugin.dao;
-
-import com.owlplug.plugin.model.PluginFootprint;
+import com.owlplug.plugin.model.Symlink;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
-public interface PluginFootprintDAO  extends JpaRepository<PluginFootprint, Long> {
+public interface SymlinkRepository extends JpaRepository<Symlink, Long> {
   
-  PluginFootprint findByPath(String path);
-
+  Symlink findByPath(String path);
+  
+  @Transactional
+  void deleteByPathContainingIgnoreCase(String path);
 }

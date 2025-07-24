@@ -21,9 +21,9 @@ package com.owlplug.plugin.tasks;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.plugin.dao.PluginDAO;
-import com.owlplug.plugin.dao.PluginFootprintDAO;
-import com.owlplug.plugin.dao.SymlinkDAO;
+import com.owlplug.plugin.repositories.PluginRepository;
+import com.owlplug.plugin.repositories.PluginFootprintRepository;
+import com.owlplug.plugin.repositories.SymlinkRepository;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginFootprint;
@@ -53,9 +53,9 @@ public class PluginSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private PluginDAO pluginDAO;
-  private SymlinkDAO symlinkDAO;
-  private PluginFootprintDAO pluginFootprintDAO;
+  private PluginRepository pluginRepository;
+  private SymlinkRepository symlinkRepository;
+  private PluginFootprintRepository pluginFootprintRepository;
   private NativeHostService nativeHostService;
   private PluginSyncTaskParameters parameters;
 
@@ -63,20 +63,20 @@ public class PluginSyncTask extends AbstractTask {
   /**
    * Creates a new PluginSyncTask.
    * @param parameters Task Parameters
-   * @param pluginDAO pluginDAO
-   * @param pluginFootprintDAO pluginFootprintDAO
-   * @param symlinkDAO symlinkDAO
+   * @param pluginRepository pluginRepository
+   * @param pluginFootprintRepository pluginFootprintRepository
+   * @param symlinkRepository symlinkRepository
    * @param nativeHostService nativeHostService
    */
   public PluginSyncTask(PluginSyncTaskParameters parameters, 
-      PluginDAO pluginDAO,
-      PluginFootprintDAO pluginFootprintDAO,
-      SymlinkDAO symlinkDAO,
+      PluginRepository pluginRepository,
+      PluginFootprintRepository pluginFootprintRepository,
+      SymlinkRepository symlinkRepository,
       NativeHostService nativeHostService) {
     this.parameters = parameters;
-    this.pluginDAO = pluginDAO;
-    this.pluginFootprintDAO = pluginFootprintDAO;
-    this.symlinkDAO = symlinkDAO;
+    this.pluginRepository = pluginRepository;
+    this.pluginFootprintRepository = pluginFootprintRepository;
+    this.symlinkRepository = symlinkRepository;
 
     this.nativeHostService = nativeHostService;
 
@@ -100,17 +100,17 @@ public class PluginSyncTask extends AbstractTask {
       
       if (parameters.getDirectoryScope() != null) {
         // Delete previous plugins scanned in the directory scope
-        pluginDAO.deleteByPathContainingIgnoreCase(parameters.getDirectoryScope());
-        symlinkDAO.deleteByPathContainingIgnoreCase(parameters.getDirectoryScope());
+        pluginRepository.deleteByPathContainingIgnoreCase(parameters.getDirectoryScope());
+        symlinkRepository.deleteByPathContainingIgnoreCase(parameters.getDirectoryScope());
       } else {
         // Delete all previous plugins by default (in case of a complete Sync task)
-        pluginDAO.deleteAll();
-        symlinkDAO.deleteAll();
+        pluginRepository.deleteAll();
+        symlinkRepository.deleteAll();
       }
 
       // Flushing context to the database as next queries will recreate entities
-      pluginDAO.flush();
-      symlinkDAO.flush();
+      pluginRepository.flush();
+      symlinkRepository.flush();
 
       if (parameters.getDirectoryScope() != null) {
         // Plugins are retrieved from a scoped directory
@@ -176,19 +176,19 @@ public class PluginSyncTask extends AbstractTask {
       log.info(collectedPluginFiles.size() + " plugins collected");
       
       //Save all discovered symlinks
-      symlinkDAO.saveAll(collectedSymlinks);
+      symlinkRepository.saveAll(collectedSymlinks);
 
       for (PluginFile pluginFile : collectedPluginFiles) {
         Plugin plugin = pluginFile.toPlugin();
         
-        PluginFootprint pluginFootprint = pluginFootprintDAO.findByPath(plugin.getPath());
+        PluginFootprint pluginFootprint = pluginFootprintRepository.findByPath(plugin.getPath());
         
         if (pluginFootprint == null) {
           pluginFootprint = new PluginFootprint(plugin.getPath());
-          pluginFootprintDAO.saveAndFlush(pluginFootprint);
+          pluginFootprintRepository.saveAndFlush(pluginFootprint);
         }
         plugin.setFootprint(pluginFootprint);
-        pluginDAO.save(plugin);
+        pluginRepository.save(plugin);
 
         if (nativeHostService.isNativeHostEnabled() && nativeHostService.getCurrentPluginLoader().isAvailable()
             && pluginFootprint.isNativeDiscoveryEnabled() && !plugin.isDisabled()) {
@@ -216,7 +216,7 @@ public class PluginSyncTask extends AbstractTask {
         }
         
         plugin.setSyncComplete(true);
-        pluginDAO.save(plugin);
+        pluginRepository.save(plugin);
 
         this.commitProgress(80.0 / collectedPluginFiles.size());
       }

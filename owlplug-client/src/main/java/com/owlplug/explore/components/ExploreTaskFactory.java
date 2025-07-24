@@ -24,8 +24,8 @@ import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.explore.dao.RemotePackageDAO;
-import com.owlplug.explore.dao.RemoteSourceDAO;
+import com.owlplug.explore.repositories.RemotePackageRepository;
+import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.tasks.BundleInstallTask;
 import com.owlplug.explore.tasks.SourceSyncTask;
@@ -42,9 +42,9 @@ public class ExploreTaskFactory extends BaseTaskFactory {
   @Autowired
   private PluginTaskFactory pluginTaskFactory;
   @Autowired
-  private RemoteSourceDAO remoteSourceDAO;
+  private RemoteSourceRepository remoteSourceRepository;
   @Autowired
-  private RemotePackageDAO remotePackageDAO;
+  private RemotePackageRepository remotePackageRepository;
 
   private ArrayList<SimpleEventListener> syncSourcesListeners = new ArrayList<>();
 
@@ -56,7 +56,7 @@ public class ExploreTaskFactory extends BaseTaskFactory {
    */
   public TaskExecutionContext createSourceSyncTask() {
 
-    SourceSyncTask task = new SourceSyncTask(remoteSourceDAO, remotePackageDAO);
+    SourceSyncTask task = new SourceSyncTask(remoteSourceRepository, remotePackageRepository);
     task.setOnSucceeded(e -> {
       notifyListeners(syncSourcesListeners);
     });

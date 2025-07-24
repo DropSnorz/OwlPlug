@@ -19,7 +19,7 @@
 package com.owlplug.explore.model.search;
 
 import com.owlplug.plugin.model.PluginType;
-import com.owlplug.explore.dao.RemotePackageDAO;
+import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.model.RemotePackage;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
@@ -39,25 +39,25 @@ public class ExploreCriteriaAdapter {
   public static Specification<RemotePackage> toSpecification(ExploreFilterCriteria criteria) {
 
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.NAME)) {
-      return RemotePackageDAO.nameContains(String.valueOf(criteria.getValue()));
+      return RemotePackageRepository.nameContains(String.valueOf(criteria.getValue()));
     }
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.CREATOR)) {
-      return RemotePackageDAO.hasCreator(String.valueOf(criteria.getValue()));
+      return RemotePackageRepository.hasCreator(String.valueOf(criteria.getValue()));
     }
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.TAG)) {
-      return RemotePackageDAO.hasTag(String.valueOf(criteria.getValue()));
+      return RemotePackageRepository.hasTag(String.valueOf(criteria.getValue()));
     }
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.TYPE)) {
-      return RemotePackageDAO.isTyped((PluginType) criteria.getValue());
+      return RemotePackageRepository.isTyped((PluginType) criteria.getValue());
     }
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.PLATFORM)) {
-      return RemotePackageDAO.hasPlatformTag(String.valueOf(criteria.getValue()));
+      return RemotePackageRepository.hasPlatformTag(String.valueOf(criteria.getValue()));
     }
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.FORMAT)) {
-      return RemotePackageDAO.hasFormat(String.valueOf(criteria.getValue()));
+      return RemotePackageRepository.hasFormat(String.valueOf(criteria.getValue()));
     }
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.FORMAT_LIST)) {
-      return RemotePackageDAO.hasFormat((List<String>) criteria.getValue());
+      return RemotePackageRepository.hasFormat((List<String>) criteria.getValue());
     }
     return Specification.where(null);
 

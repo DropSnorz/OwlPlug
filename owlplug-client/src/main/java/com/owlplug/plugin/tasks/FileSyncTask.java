@@ -21,7 +21,7 @@ package com.owlplug.plugin.tasks;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.plugin.dao.FileStatDAO;
+import com.owlplug.plugin.repositories.FileStatRepository;
 import com.owlplug.plugin.model.FileStat;
 import com.owlplug.core.utils.FileUtils;
 import java.io.File;
@@ -34,18 +34,18 @@ public class FileSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private FileStatDAO fileStatDAO;
+  private FileStatRepository fileStatRepository;
 
   private List<String> directories;
 
-  public FileSyncTask(FileStatDAO fileStatDAO, String directoryPath) {
-    this.fileStatDAO = fileStatDAO;
+  public FileSyncTask(FileStatRepository fileStatRepository, String directoryPath) {
+    this.fileStatRepository = fileStatRepository;
     directories = Arrays.asList(directoryPath);
     setName("Sync files metrics");
   }
 
-  public FileSyncTask(FileStatDAO fileStatDAO, List<String> directories) {
-    this.fileStatDAO = fileStatDAO;
+  public FileSyncTask(FileStatRepository fileStatRepository, List<String> directories) {
+    this.fileStatRepository = fileStatRepository;
     this.directories = directories;
     setName("Sync files metrics");
   }
@@ -80,9 +80,9 @@ public class FileSyncTask extends AbstractTask {
     long length = 0;
 
     this.updateMessage("Collecting file metrics on directory: " + directory.getAbsolutePath());
-    fileStatDAO.deleteByPath(FileUtils.convertPath(directory.getAbsolutePath()));
+    fileStatRepository.deleteByPath(FileUtils.convertPath(directory.getAbsolutePath()));
     // Flushing context to the database as next queries will recreate entities
-    fileStatDAO.flush();
+    fileStatRepository.flush();
 
     FileStat directoryStat = new FileStat();
     directoryStat.setName(directory.getName());
@@ -93,7 +93,7 @@ public class FileSyncTask extends AbstractTask {
       directoryStat.setParent(parent);
     }
     directoryStat.setLength(0);
-    fileStatDAO.saveAndFlush(directoryStat);
+    fileStatRepository.saveAndFlush(directoryStat);
 
     for (File file : directory.listFiles()) {
       if (file.isFile()) {
@@ -113,7 +113,7 @@ public class FileSyncTask extends AbstractTask {
     }
 
     directoryStat.setLength(length);
-    fileStatDAO.save(directoryStat);
+    fileStatRepository.save(directoryStat);
     return length;
 
   }

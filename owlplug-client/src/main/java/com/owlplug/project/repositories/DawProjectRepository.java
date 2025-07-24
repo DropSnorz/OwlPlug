@@ -16,10 +16,11 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.project.dao;
+package com.owlplug.project.repositories;
 
-import com.owlplug.project.model.DawPluginLookup;
+import com.owlplug.project.model.DawProject;
 import org.springframework.data.repository.CrudRepository;
 
-public interface PluginLookupDAO extends CrudRepository<DawPluginLookup, Long> {
+public interface DawProjectRepository extends CrudRepository<DawProject, Long> {
+
 }

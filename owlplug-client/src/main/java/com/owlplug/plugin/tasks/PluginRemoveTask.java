@@ -21,7 +21,7 @@ package com.owlplug.plugin.tasks;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.plugin.dao.PluginDAO;
+import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.model.Plugin;
 import java.io.File;
 import java.io.IOException;
@@ -34,12 +34,12 @@ public class PluginRemoveTask extends AbstractTask {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   protected Plugin plugin;
-  protected PluginDAO pluginDAO;
+  protected PluginRepository pluginRepository;
 
-  public PluginRemoveTask(Plugin plugin, PluginDAO pluginDAO) {
+  public PluginRemoveTask(Plugin plugin, PluginRepository pluginRepository) {
 
     this.plugin = plugin;
-    this.pluginDAO = pluginDAO;
+    this.pluginRepository = pluginRepository;
 
     setName("Remove Plugin - " + plugin.getName());
   }
@@ -65,7 +65,7 @@ public class PluginRemoveTask extends AbstractTask {
     
     
     if (fileDeleteSuccess) {
-      pluginDAO.delete(plugin);
+      pluginRepository.delete(plugin);
       this.updateProgress(1, 1);
       this.updateMessage("Plugin successfully deleted");
 

@@ -23,7 +23,7 @@ import com.owlplug.controls.DialogLayout;
 import com.owlplug.controls.DoughnutChart;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.plugin.dao.FileStatDAO;
+import com.owlplug.plugin.repositories.FileStatRepository;
 import com.owlplug.plugin.model.FileStat;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginDirectory;
@@ -59,7 +59,7 @@ public class DirectoryInfoController extends BaseController {
   @Autowired
   private PluginTaskFactory taskFactory;
   @Autowired
-  private FileStatDAO fileStatDAO;
+  private FileStatRepository fileStatRepository;
 
   @FXML
   private Label directoryNameLabel;
@@ -172,13 +172,13 @@ public class DirectoryInfoController extends BaseController {
       path = path.substring(0, path.length() - 1);
     }
 
-    Optional<FileStat> directoryStat = fileStatDAO.findByPath(path);
+    Optional<FileStat> directoryStat = fileStatRepository.findByPath(path);
     directoryStat.ifPresent(fileStat -> directoryMetricsTab.setText(
             FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
 
     directoryPluginsTab.setText("Plugins (" + pluginDirectory.getPluginList().size() + ")");
 
-    List<FileStat> fileStats = fileStatDAO.findByParentPathOrderByLengthDesc(path);
+    List<FileStat> fileStats = fileStatRepository.findByParentPathOrderByLengthDesc(path);
     directoryFilesTab.setText("Files (" + fileStats.size() + ")");
 
     ObservableList<FileStat> obsStats = FXCollections.observableArrayList();

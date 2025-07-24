@@ -25,8 +25,8 @@ import com.google.common.collect.Lists;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.explore.dao.RemotePackageDAO;
-import com.owlplug.explore.dao.RemoteSourceDAO;
+import com.owlplug.explore.repositories.RemotePackageRepository;
+import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
@@ -54,8 +54,8 @@ public class SourceSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private RemoteSourceDAO remoteSourceDAO;
-  private RemotePackageDAO remotePackageDAO;
+  private RemoteSourceRepository remoteSourceRepository;
+  private RemotePackageRepository remotePackageRepository;
 
   private ArrayList<String> warnings = new ArrayList<>();
 
@@ -63,13 +63,13 @@ public class SourceSyncTask extends AbstractTask {
   /**
    * Creates a new SourceSync tasks.
    * 
-   * @param remoteSourceDAO  remoteSource DAO
-   * @param remotePackageDAO remotePackage DAO
+   * @param remoteSourceRepository  remoteSource Repository
+   * @param remotePackageRepository remotePackage Repository
    */
-  public SourceSyncTask(RemoteSourceDAO remoteSourceDAO, RemotePackageDAO remotePackageDAO) {
+  public SourceSyncTask(RemoteSourceRepository remoteSourceRepository, RemotePackageRepository remotePackageRepository) {
     super("Syncing plugin sources");
-    this.remoteSourceDAO = remoteSourceDAO;
-    this.remotePackageDAO = remotePackageDAO;
+    this.remoteSourceRepository = remoteSourceRepository;
+    this.remotePackageRepository = remotePackageRepository;
   }
 
   @Override
@@ -78,17 +78,17 @@ public class SourceSyncTask extends AbstractTask {
     this.updateMessage("Syncing plugins stores");
     this.commitProgress(-1);
 
-    Iterable<RemoteSource> storeList = remoteSourceDAO.findAll();
+    Iterable<RemoteSource> storeList = remoteSourceRepository.findAll();
     this.setMaxProgress(2 + Iterables.size(storeList));
 
-    remotePackageDAO.deleteAll();
+    remotePackageRepository.deleteAll();
     // Flushing context to the database as next queries will recreate entities
-    remotePackageDAO.flush();
+    remotePackageRepository.flush();
 
     this.commitProgress(2);
     CloseableHttpResponse response = null;
 
-    for (RemoteSource remoteSource : remoteSourceDAO.findAll()) {
+    for (RemoteSource remoteSource : remoteSourceRepository.findAll()) {
       try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
         log.debug("Exploring source {} - {}", remoteSource.getName(), remoteSource.getType().getLabel());
         this.updateMessage("Exploring source " + remoteSource.getName()
@@ -164,7 +164,7 @@ public class SourceSyncTask extends AbstractTask {
             remotePackagePartition.add(remotePackage);
           }
         }
-        remotePackageDAO.saveAll(remotePackagePartition);
+        remotePackageRepository.saveAll(remotePackagePartition);
       }
 
     } catch (Exception e) {
@@ -199,7 +199,7 @@ public class SourceSyncTask extends AbstractTask {
             }
           }
         }
-        remotePackageDAO.saveAll(remotePackagePartition);
+        remotePackageRepository.saveAll(remotePackagePartition);
       }
 
     } catch (Exception e) {

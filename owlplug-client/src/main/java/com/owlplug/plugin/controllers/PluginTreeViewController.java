@@ -19,7 +19,7 @@
 package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.plugin.dao.SymlinkDAO;
+import com.owlplug.plugin.repositories.SymlinkRepository;
 import com.owlplug.plugin.model.IDirectory;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
@@ -49,7 +49,7 @@ public class PluginTreeViewController extends BaseController {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private SymlinkDAO symlinkDAO;
+  private SymlinkRepository symlinkRepository;
 
   private final SimpleStringProperty search = new SimpleStringProperty();
   private final TreeView<Object> pluginTreeView;
@@ -213,7 +213,7 @@ public class PluginTreeViewController extends BaseController {
 
             // Retrieve Symlink if exist
             // TODO: This can be refactored to prevent trailing slash removal
-            Symlink symlink = symlinkDAO.findByPath(currentPath.substring(0, currentPath.length() - 1));
+            Symlink symlink = symlinkRepository.findByPath(currentPath.substring(0, currentPath.length() - 1));
             if (symlink != null) {
               symlink.setPluginList(localPluginList);
               ft.setNodeValue(symlink);

@@ -21,10 +21,10 @@ package com.owlplug.plugin.components;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.BaseTaskFactory;
-import com.owlplug.plugin.dao.FileStatDAO;
-import com.owlplug.plugin.dao.PluginDAO;
-import com.owlplug.plugin.dao.PluginFootprintDAO;
-import com.owlplug.plugin.dao.SymlinkDAO;
+import com.owlplug.plugin.repositories.FileStatRepository;
+import com.owlplug.plugin.repositories.PluginRepository;
+import com.owlplug.plugin.repositories.PluginFootprintRepository;
+import com.owlplug.plugin.repositories.SymlinkRepository;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.NativeHostService;
 import com.owlplug.plugin.services.PluginService;
@@ -49,20 +49,20 @@ public class PluginTaskFactory extends BaseTaskFactory {
   @Autowired
   private ApplicationPreferences prefs;
   @Autowired
-  private PluginDAO pluginDAO;
+  private PluginRepository pluginRepository;
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private PluginFootprintDAO pluginFootprintDAO;
+  private PluginFootprintRepository pluginFootprintRepository;
   @Autowired
-  private SymlinkDAO symlinkDAO;
+  private SymlinkRepository symlinkRepository;
   @Autowired
   private NativeHostService nativeHostService;
   @Autowired
   private ProjectTaskFactory projectTaskFactory;
 
   @Autowired
-  private FileStatDAO fileStatDAO;
+  private FileStatRepository fileStatRepository;
 
 
   private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
@@ -105,9 +105,9 @@ public class PluginTaskFactory extends BaseTaskFactory {
     }
     
     PluginSyncTask syncTask = new PluginSyncTask(parameters,
-        pluginDAO, 
-        pluginFootprintDAO, 
-        symlinkDAO, 
+        pluginRepository,
+        pluginFootprintRepository,
+        symlinkRepository,
         nativeHostService);
     
     syncTask.setOnSucceeded(syncEvent -> {
@@ -129,13 +129,13 @@ public class PluginTaskFactory extends BaseTaskFactory {
   public TaskExecutionContext createFileStatSyncTask() {
 
     Set<String> directorySet = pluginService.getDirectoriesExplorationSet();
-    FileSyncTask task = new FileSyncTask(fileStatDAO, directorySet.stream().toList());
+    FileSyncTask task = new FileSyncTask(fileStatRepository, directorySet.stream().toList());
 
     return create(task);
   }
 
   public TaskExecutionContext createFileStatSyncTask(String directoryScope) {
-    FileSyncTask task = new FileSyncTask(fileStatDAO, directoryScope);
+    FileSyncTask task = new FileSyncTask(fileStatRepository, directoryScope);
     return create(task);
   }
   
@@ -146,7 +146,7 @@ public class PluginTaskFactory extends BaseTaskFactory {
    * @return task execution context
    */
   public TaskExecutionContext createPluginRemoveTask(Plugin plugin) {
-    PluginRemoveTask task = new PluginRemoveTask(plugin, pluginDAO);
+    PluginRemoveTask task = new PluginRemoveTask(plugin, pluginRepository);
     
     return create(task);
   }

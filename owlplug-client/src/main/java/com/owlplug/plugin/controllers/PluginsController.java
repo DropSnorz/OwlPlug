@@ -23,7 +23,7 @@ import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
-import com.owlplug.plugin.dao.PluginDAO;
+import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
 import javafx.fxml.FXML;
@@ -43,7 +43,7 @@ public class PluginsController extends BaseController {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private PluginDAO pluginDAO;
+  private PluginRepository pluginRepository;
   @Autowired
   private NodeInfoController nodeInfoController;
   @Autowired
@@ -196,7 +196,7 @@ public class PluginsController extends BaseController {
   }
 
   public void displayPlugins() {
-    Iterable<Plugin> plugins = pluginDAO.findAll();
+    Iterable<Plugin> plugins = pluginRepository.findAll();
     treeViewController.setPlugins(plugins);
     tableController.setPlugins(plugins);
   }

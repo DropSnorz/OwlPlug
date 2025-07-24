@@ -23,8 +23,8 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.services.BaseService;
-import com.owlplug.plugin.dao.PluginDAO;
-import com.owlplug.plugin.dao.PluginFootprintDAO;
+import com.owlplug.plugin.repositories.PluginRepository;
+import com.owlplug.plugin.repositories.PluginFootprintRepository;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFootprint;
 import com.owlplug.plugin.model.PluginFormat;
@@ -49,9 +49,9 @@ public class PluginService extends BaseService {
   @Autowired
   protected ExploreService exploreService;
   @Autowired
-  protected PluginDAO pluginDAO;
+  protected PluginRepository pluginRepository;
   @Autowired
-  protected PluginFootprintDAO pluginFootprintDAO;
+  protected PluginFootprintRepository pluginFootprintRepository;
   @Autowired
   protected PluginTaskFactory taskFactory;
   
@@ -67,7 +67,7 @@ public class PluginService extends BaseService {
   }
 
   public Iterable<Plugin> getAllPlugins() {
-    return pluginDAO.findAll();
+    return pluginRepository.findAll();
   }
 
   /**
@@ -112,7 +112,7 @@ public class PluginService extends BaseService {
     String url = this.resolveImageUrl(plugin);
     if (url != null) {
       plugin.getFootprint().setScreenshotUrl(url);
-      pluginFootprintDAO.save(plugin.getFootprint());
+      pluginFootprintRepository.save(plugin.getFootprint());
     }
   }
   
@@ -124,7 +124,7 @@ public class PluginService extends BaseService {
     if (originFile.renameTo(destFile)) {
       plugin.setDisabled(true);
       plugin.setPath(plugin.getPath() + ".disabled");
-      pluginDAO.save(plugin);
+      pluginRepository.save(plugin);
 
     } else {
       log.error("Plugin can't be disabled: failed to rename file {}", plugin.getPath());
@@ -145,7 +145,7 @@ public class PluginService extends BaseService {
     if (originFile.renameTo(destFile)) {
       plugin.setDisabled(false);
       plugin.setPath(newPath);
-      pluginDAO.save(plugin);
+      pluginRepository.save(plugin);
     } else {
       log.error("Plugin can't be enabled: failed to rename file {}", plugin.getPath());
     }
@@ -167,18 +167,18 @@ public class PluginService extends BaseService {
   }
 
   public Iterable<Plugin> find(String name, PluginFormat pluginFormat) {
-    Specification<Plugin> spec = PluginDAO.nameContains(name)
-            .and(PluginDAO.hasFormat(pluginFormat));
+    Specification<Plugin> spec = PluginRepository.nameContains(name)
+            .and(PluginRepository.hasFormat(pluginFormat));
 
 
-    return pluginDAO.findAll(spec);
+    return pluginRepository.findAll(spec);
   }
 
   public Iterable<Plugin> findByComponentName(String name, PluginFormat pluginFormat) {
-    Specification<Plugin> spec = PluginDAO.hasComponentName(name)
-            .and(PluginDAO.hasFormat(pluginFormat));
+    Specification<Plugin> spec = PluginRepository.hasComponentName(name)
+            .and(PluginRepository.hasFormat(pluginFormat));
 
-    return pluginDAO.findAll(spec);
+    return pluginRepository.findAll(spec);
 
   }
 
@@ -266,15 +266,15 @@ public class PluginService extends BaseService {
    * @param plugin - plugin to remove
    */
   public void delete(Plugin plugin) {
-    pluginDAO.delete(plugin);
+    pluginRepository.delete(plugin);
   }
 
   
   public PluginFootprint save(PluginFootprint pluginFootprint) {
-    return pluginFootprintDAO.save(pluginFootprint);
+    return pluginFootprintRepository.save(pluginFootprint);
   }
   
   public List<Plugin> getSyncIncompletePlugins() {
-    return pluginDAO.findBySyncComplete(false);
+    return pluginRepository.findBySyncComplete(false);
   }
 }

@@ -16,16 +16,13 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.plugin.dao;
+package com.owlplug.explore.repositories;
 
-import com.owlplug.plugin.model.Symlink;
+import com.owlplug.explore.model.RemoteSource;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
 
-public interface SymlinkDAO extends JpaRepository<Symlink, Long> {
-  
-  Symlink findByPath(String path);
-  
-  @Transactional
-  void deleteByPathContainingIgnoreCase(String path);
+public interface RemoteSourceRepository extends JpaRepository<RemoteSource, Long> {
+
+  RemoteSource findByName(String name);
+  RemoteSource findByUrl(String url);
 }

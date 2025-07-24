@@ -21,7 +21,7 @@ package com.owlplug.auth;
 import com.google.api.client.auth.oauth2.StoredCredential;
 import com.google.api.client.util.store.AbstractDataStore;
 import com.google.api.client.util.store.DataStore;
-import com.owlplug.auth.dao.GoogleCredentialDAO;
+import com.owlplug.auth.repositories.GoogleCredentialRepository;
 import com.owlplug.auth.model.GoogleCredential;
 import java.io.IOException;
 import java.util.Collection;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  */
 public class JPADataStore extends AbstractDataStore<StoredCredential> {
 
-  private GoogleCredentialDAO repository;
+  private GoogleCredentialRepository repository;
   private JPADataStoreFactory jpaDataStoreFactory;
 
   /**
@@ -42,7 +42,7 @@ public class JPADataStore extends AbstractDataStore<StoredCredential> {
    * @param dataStoreFactory data store factory
    * @param id               data store ID
    */
-  protected JPADataStore(JPADataStoreFactory dataStoreFactory, String id, GoogleCredentialDAO repository) {
+  protected JPADataStore(JPADataStoreFactory dataStoreFactory, String id, GoogleCredentialRepository repository) {
     super(dataStoreFactory, id);
     this.repository = repository;
   }

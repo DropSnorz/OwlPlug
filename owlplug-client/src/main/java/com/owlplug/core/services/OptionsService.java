@@ -18,17 +18,17 @@
  
 package com.owlplug.core.services;
 
-import com.owlplug.auth.dao.GoogleCredentialDAO;
-import com.owlplug.auth.dao.UserAccountDAO;
+import com.owlplug.auth.repositories.GoogleCredentialRepository;
+import com.owlplug.auth.repositories.UserAccountRepository;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.ImageCache;
-import com.owlplug.plugin.dao.FileStatDAO;
-import com.owlplug.plugin.dao.PluginDAO;
+import com.owlplug.plugin.repositories.FileStatRepository;
+import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.model.OperatingSystem;
-import com.owlplug.explore.dao.RemotePackageDAO;
-import com.owlplug.explore.dao.RemoteSourceDAO;
+import com.owlplug.explore.repositories.RemotePackageRepository;
+import com.owlplug.explore.repositories.RemoteSourceRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.prefs.BackingStoreException;
 import org.slf4j.Logger;
@@ -42,17 +42,17 @@ public class OptionsService extends BaseService {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
-  private PluginDAO pluginDAO;
+  private PluginRepository pluginRepository;
   @Autowired
-  private UserAccountDAO userAccountDAO;
+  private UserAccountRepository userAccountRepository;
   @Autowired
-  private GoogleCredentialDAO googleCredentialDAO;
+  private GoogleCredentialRepository googleCredentialRepository;
   @Autowired
-  private RemoteSourceDAO remoteSourceDAO;
+  private RemoteSourceRepository remoteSourceRepository;
   @Autowired
-  private RemotePackageDAO packageDAO;
+  private RemotePackageRepository packageRepository;
   @Autowired
-  private FileStatDAO fileStatDAO;
+  private FileStatRepository fileStatRepository;
   @Autowired
   private ImageCache imageCache;
 
@@ -100,13 +100,13 @@ public class OptionsService extends BaseService {
 
     try {
       this.getPreferences().clear();
-      pluginDAO.deleteAll();
+      pluginRepository.deleteAll();
 
-      googleCredentialDAO.deleteAll();
-      userAccountDAO.deleteAll();
-      packageDAO.deleteAll();
-      remoteSourceDAO.deleteAll();
-      fileStatDAO.deleteAll();
+      googleCredentialRepository.deleteAll();
+      userAccountRepository.deleteAll();
+      packageRepository.deleteAll();
+      remoteSourceRepository.deleteAll();
+      fileStatRepository.deleteAll();
 
       clearCache();
 

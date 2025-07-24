@@ -15,14 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
-package com.owlplug.explore.dao;
 
-import com.owlplug.explore.model.RemoteSource;
+package com.owlplug.plugin.repositories;
+
+import com.owlplug.plugin.model.FileStat;
+import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-public interface RemoteSourceDAO extends JpaRepository<RemoteSource, Long> {
+public interface FileStatRepository extends JpaRepository<FileStat, Long> {
 
-  RemoteSource findByName(String name);
-  RemoteSource findByUrl(String url);
+  Optional<FileStat> findByPath(String path);
+
+  List<FileStat> findByParentPathOrderByLengthDesc(String parentPath);
+
+  @Transactional
+  @Modifying(clearAutomatically=true, flushAutomatically=true)
+  @Query("delete from FileStat f where f.path=:path")
+  int deleteByPath(@Param("path") String path);
+
 }
