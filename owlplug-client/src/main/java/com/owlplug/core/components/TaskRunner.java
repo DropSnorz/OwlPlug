@@ -95,6 +95,7 @@ public class TaskRunner {
 
     if (!taskQueue.isEmpty() && currentTask == null) {
       disableError();
+      taskBarController.resetErrorLog();
       // Get the next pending task
       AbstractTask polledTask = taskQueue.pollFirst();
       setCurrentTask(polledTask);
@@ -109,6 +110,8 @@ public class TaskRunner {
             if (currentTask.getState().equals(State.FAILED)) {
               if (currentTask.getException() != null) {
                 log.error("Error while running task", currentTask.getException());
+                taskBarController.setErrorLog(currentTask.getException().getMessage(),
+                        currentTask.getException().toString());
               }
               triggerOnError();
             }
@@ -121,6 +124,7 @@ public class TaskRunner {
         public void onFailure(Throwable ex) {
           log.error("Error while running task", ex);
           Platform.runLater(() -> {
+            taskBarController.setErrorLog(ex.getMessage(), ex.toString());
             removeCurrentTask();
             scheduleNext();
           });

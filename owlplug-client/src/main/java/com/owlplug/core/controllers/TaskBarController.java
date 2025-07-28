@@ -29,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
@@ -48,6 +49,8 @@ public class TaskBarController extends BaseController {
   public ProgressBar taskProgressBar;
   @FXML
   private Button taskHistoryButton;
+  @FXML
+  private Button logsButton;
 
   /**
    * FXML initialize.
@@ -55,6 +58,21 @@ public class TaskBarController extends BaseController {
   public void initialize() {
 
     taskHistoryButton.setOnAction(e -> openTaskHistory());
+    resetErrorLog();
+
+  }
+
+  public void setErrorLog(String title, String content) {
+    logsButton.setVisible(true);
+    logsButton.setManaged(true);
+    logsButton.setOnAction(e -> {
+      showErrorDialog(title, content);
+    });
+  }
+
+  public void resetErrorLog() {
+    logsButton.setManaged(false);
+    logsButton.setVisible(false);
   }
 
   private void openTaskHistory() {
@@ -83,6 +101,9 @@ public class TaskBarController extends BaseController {
                 }
                 if (item.getState().equals(State.FAILED)) {
                   icon = getApplicationDefaults().taskFailImage;
+                  setOnMouseClicked(e -> {
+                    showErrorDialog(item.getException().getMessage(), item.getException().toString());
+                  });
                 }
                 ImageView imageView = new ImageView(icon);
                 setGraphic(imageView);
@@ -97,6 +118,12 @@ public class TaskBarController extends BaseController {
       popup.show(taskHistoryButton, Popup.PopupVPosition.BOTTOM, Popup.PopupHPosition.RIGHT);
     }
 
+  }
+
+  private void showErrorDialog(String title, String content) {
+    this.getDialogManager().newSimpleInfoDialog(
+            new Label(title), new TextArea(content)
+    ).show();
   }
 
 }
