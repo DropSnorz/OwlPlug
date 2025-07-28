@@ -6,7 +6,7 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    target-branch: "dev"
+    target-branch: "master"
     labels:
       - "dependencies"
 
@@ -15,6 +15,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    target-branch: "dev"
+    target-branch: "master"
     labels:
       - "dependencies"
