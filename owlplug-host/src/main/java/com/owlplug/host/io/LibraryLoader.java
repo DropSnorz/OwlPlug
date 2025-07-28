@@ -73,7 +73,8 @@ public class LibraryLoader {
       log.info("Library " + libName + " successfully loaded");
       return true;
     } catch (UnsatisfiedLinkError e) {
-      log.debug("Can't load library " + libName, e);
+      log.debug("Can't load library {} : {}", libName, e.getMessage());
+      log.trace("Library {} cannot be loaded", libName, e);
 
     }
 
