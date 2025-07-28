@@ -58,7 +58,7 @@ public class DialogManager {
    * 
    * @param width  - dialog width
    * @param height - dialog height
-   * @param body   - dialog body
+   * @param layout   - dialog layout
    * @return the dialog
    */
   public Dialog newDialog(double width, double height, DialogLayout layout) {

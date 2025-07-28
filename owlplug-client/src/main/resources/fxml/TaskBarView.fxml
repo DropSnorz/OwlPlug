@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<?import java.lang.String?>
-<HBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+<HBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.core.controllers.TaskBarController">
+
    <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
          minWidth="-Infinity" prefWidth="600.0" spacing="2.0" HBox.hgrow="ALWAYS">
       <styleClass>
@@ -25,6 +22,13 @@
          <ProgressBar fx:id="taskProgressBar" maxWidth="1.7976931348623157E308" prefWidth="200.0" progress="0.0"
                       HBox.hgrow="ALWAYS"/>
       </VBox>
+      <Button fx:id="logsButton" text="View Logs" layoutX="574.0" layoutY="14.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../icons/gear-white-32.png" />
+            </ImageView>
+         </graphic>
+      </Button>
       <Button fx:id="taskHistoryButton" contentDisplay="GRAPHIC_ONLY" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
