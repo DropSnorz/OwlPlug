@@ -18,14 +18,14 @@
 
 package com.owlplug.project.services;
 
-import com.owlplug.plugin.model.Plugin;
 import com.owlplug.core.services.BaseService;
+import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.project.repositories.PluginLookupRepository;
-import com.owlplug.project.repositories.DawPluginRepository;
-import com.owlplug.project.model.LookupResult;
-import com.owlplug.project.model.DawPluginLookup;
 import com.owlplug.project.model.DawPlugin;
+import com.owlplug.project.model.DawPluginLookup;
+import com.owlplug.project.model.LookupResult;
+import com.owlplug.project.repositories.DawPluginRepository;
+import com.owlplug.project.repositories.PluginLookupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

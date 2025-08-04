@@ -24,5 +24,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RemoteSourceRepository extends JpaRepository<RemoteSource, Long> {
 
   RemoteSource findByName(String name);
+
   RemoteSource findByUrl(String url);
 }

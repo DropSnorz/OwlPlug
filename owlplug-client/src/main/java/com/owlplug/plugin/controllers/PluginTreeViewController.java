@@ -19,14 +19,14 @@
 package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.plugin.repositories.SymlinkRepository;
+import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.plugin.model.IDirectory;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginDirectory;
 import com.owlplug.plugin.model.Symlink;
+import com.owlplug.plugin.repositories.SymlinkRepository;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.plugin.ui.PluginTreeCell;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +34,10 @@ import java.util.List;
 import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -65,12 +63,7 @@ public class PluginTreeViewController extends BaseController {
     treePluginNode = new FilterableTreeItem<>("(all)");
     treeFileRootNode = new FilterableTreeItem<>("(all)");
 
-    pluginTreeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
-      @Override
-      public TreeCell<Object> call(TreeView<Object> p) {
-        return new PluginTreeCell(getApplicationDefaults(), pluginService);
-      }
-    });
+    pluginTreeView.setCellFactory(p -> new PluginTreeCell(getApplicationDefaults(), pluginService));
 
     pluginTreeView.setRoot(treePluginNode);
 
@@ -80,8 +73,7 @@ public class PluginTreeViewController extends BaseController {
         return null;
       }
       return (item) -> {
-        if (item instanceof Plugin) {
-          Plugin plugin = (Plugin) item;
+        if (item instanceof Plugin plugin) {
           return plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
                   || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(
                       search.getValue().toLowerCase()));
@@ -97,8 +89,7 @@ public class PluginTreeViewController extends BaseController {
         return null;
       }
       return (item) -> {
-        if (item instanceof Plugin) {
-          Plugin plugin = (Plugin) item;
+        if (item instanceof Plugin plugin) {
           return plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
                   || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(search.getValue().toLowerCase()));
         } else {
@@ -146,7 +137,7 @@ public class PluginTreeViewController extends BaseController {
     treePluginNode.getInternalChildren().clear();
 
     for (Plugin plugin : plugins) {
-      FilterableTreeItem<Object> item = new FilterableTreeItem<Object>(plugin);
+      FilterableTreeItem<Object> item = new FilterableTreeItem<>(plugin);
       treePluginNode.getInternalChildren().add(item);
 
       // Display subcomponents in the plugin tree
@@ -204,7 +195,7 @@ public class PluginTreeViewController extends BaseController {
             // Node is a directory
           } else {
             // TODO Should be optimized for large plugin set
-            List<Plugin> localPluginList = new ArrayList<Plugin>();
+            List<Plugin> localPluginList = new ArrayList<>();
             for (Plugin p : plugins) {
               if (p.getPath().startsWith(currentPath)) {
                 localPluginList.add(p);
@@ -247,8 +238,7 @@ public class PluginTreeViewController extends BaseController {
       }
     }
 
-    if (treeHead != null && treeHead.getNodeValue() instanceof PluginDirectory) {
-      PluginDirectory directory = (PluginDirectory) treeHead.getNodeValue();
+    if (treeHead != null && treeHead.getNodeValue() instanceof PluginDirectory directory) {
       directory.setRootDirectory(true);
       item.setValue(directory);
       buildDirectoryTree(treeHead, item, "");
@@ -347,7 +337,7 @@ public class PluginTreeViewController extends BaseController {
     return items;
   }
 
-  class FileTree extends HashMap<String, PluginTreeViewController.FileTree> {
+  static class FileTree extends HashMap<String, PluginTreeViewController.FileTree> {
 
     private Object nodeValue;
 

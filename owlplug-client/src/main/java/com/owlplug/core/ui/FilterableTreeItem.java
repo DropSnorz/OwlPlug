@@ -18,7 +18,6 @@
  
 package com.owlplug.core.ui;
 
-import java.util.Objects;
 import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -37,19 +36,16 @@ public class FilterableTreeItem<T> extends TreeItem<T> {
   public FilterableTreeItem(T value) {
     super(value);
 
-    filteredChildren.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      Predicate<TreeItem<T>> p = child -> {
-        if (child instanceof FilterableTreeItem) {
-          ((FilterableTreeItem<T>) child).predicateProperty().set(predicate.get());
-        }
-        if (predicate.get() == null || !child.getChildren().isEmpty() || child.getValue() == null) {
-          return true;
-        }
+    filteredChildren.predicateProperty().bind(Bindings.createObjectBinding(() -> child -> {
+      if (child instanceof FilterableTreeItem) {
+        ((FilterableTreeItem<T>) child).predicateProperty().set(predicate.get());
+      }
+      if (predicate.get() == null || !child.getChildren().isEmpty() || child.getValue() == null) {
+        return true;
+      }
 
-        return predicate.get().test(child.getValue());
+      return predicate.get().test(child.getValue());
 
-      };
-      return p;
     }, predicate));
 
     filteredChildren.addListener((ListChangeListener<TreeItem<T>>) c -> {

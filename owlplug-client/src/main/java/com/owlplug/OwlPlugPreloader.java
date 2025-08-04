@@ -68,9 +68,7 @@ public class OwlPlugPreloader extends Preloader {
 
   @Override
   public void handleApplicationNotification(PreloaderNotification pn) {
-    if (pn instanceof PreloaderProgressMessage) {
-
-      PreloaderProgressMessage ppm = (PreloaderProgressMessage) pn;
+    if (pn instanceof PreloaderProgressMessage ppm) {
 
       if (ppm.getType().equals("error")) {
         Alert alert = new Alert(AlertType.ERROR);

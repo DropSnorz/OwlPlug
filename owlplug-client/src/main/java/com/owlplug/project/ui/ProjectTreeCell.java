@@ -19,9 +19,9 @@
 package com.owlplug.project.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.project.model.LookupResult;
-import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.DawPlugin;
+import com.owlplug.project.model.DawProject;
+import com.owlplug.project.model.LookupResult;
 import java.util.List;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;

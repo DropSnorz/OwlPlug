@@ -17,114 +17,86 @@
 <?import com.owlplug.plugin.ui.PluginStateView?>
 
 <?import javafx.scene.image.Image?>
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.ComponentInfoController">
-   <children>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
-         <children>
-            <StackPane maxHeight="180.0" prefHeight="180.0" prefWidth="500.0">
-               <children>
-                  <Pane fx:id="pluginScreenshotPane" prefHeight="180.0" prefWidth="500.0" />
-                  <VBox alignment="CENTER_LEFT" spacing="5.0">
-                     <children>
-                        <Label fx:id="pluginTitleLabel" styleClass="heading-title" text="UNKNOWN" />
-                        <Label fx:id="pluginFormatLabel" text="Plugin Format">
-                           <graphic>
-                              <HBox spacing="5">
-                                 <children>
-                                    <ImageView fx:id="pluginFormatIcon" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../icons/cube-white-16.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                              </HBox>
-                           </graphic>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </VBox>
-               </children>
-            </StackPane>
-            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="card-title" prefHeight="34">
-               <children>
-                  <Label text="General" />
-                  <Pane HBox.hgrow="ALWAYS" />
-               </children>
-            </HBox>
-            <GridPane>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="230.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="230.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <TextFlow prefWidth="200.0">
-                     <children>
-                        <Label text="Plugin Name: " />
-                        <Label fx:id="pluginNameLabel" styleClass="label-emphase" text="UNKNOWN" />
-                     </children>
-                  </TextFlow>
-                  <TextFlow prefWidth="200.0" GridPane.columnIndex="1">
-                     <children>
-                        <Label text="Plugin Version: " />
-                        <Label fx:id="pluginVersionLabel" styleClass="label-emphase" text="UNKNOWN" />
-                     </children>
-                  </TextFlow>
-                  <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <children>
-                        <Label text="Identifier: " />
-                        <Label fx:id="pluginIdentifierLabel" styleClass="label-emphase" text="UNKNOWN" />
-                     </children>
-                  </TextFlow>
-                  <HBox prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <children>
-                        <Label text="State: " />
-                        <PluginStateView fx:id="pluginStateView" styleClass="label-emphase"/>
-                     </children>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.owlplug.plugin.controllers.ComponentInfoController">
+   <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         prefWidth="500.0">
+      <styleClass>
+         <String fx:value="pane-card"/>
+         <String fx:value="no-padding"/>
+      </styleClass>
+      <StackPane maxHeight="180.0" prefHeight="180.0" prefWidth="500.0">
+         <Pane fx:id="pluginScreenshotPane" prefHeight="180.0" prefWidth="500.0"/>
+         <VBox alignment="CENTER_LEFT" spacing="5.0">
+            <opaqueInsets>
+               <Insets/>
+            </opaqueInsets>
+            <padding>
+               <Insets left="20.0"/>
+            </padding>
+            <Label fx:id="pluginTitleLabel" styleClass="heading-title" text="UNKNOWN"/>
+            <Label fx:id="pluginFormatLabel" text="Plugin Format">
+               <graphic>
+                  <HBox spacing="5">
+                     <ImageView fx:id="pluginFormatIcon" fitHeight="16.0" fitWidth="16.0"
+                                pickOnBounds="true" preserveRatio="true"/>
+                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
+                                preserveRatio="true">
+                        <Image url="@../icons/cube-white-16.png"/>
+                     </ImageView>
                   </HBox>
-                  <TextFlow prefWidth="200.0" GridPane.rowIndex="1">
-                     <children>
-                        <Label text="Manufacturer: " />
-                        <Label fx:id="pluginManufacturerLabel" styleClass="label-emphase" text="UNKNOWN" />
-                     </children>
-                  </TextFlow>
-                  <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                     <children>
-                        <Label text="Category: " />
-                        <Label fx:id="pluginCategoryLabel" styleClass="label-emphase" text="UNKNOWN" />
-                     </children>
-                  </TextFlow>
-                  <HBox alignment="BASELINE_LEFT" spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
-                     <children>
-                        <TextFlow GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
-                           <children>
-                              <Label text="Ref: " />
-                              <Label fx:id="pluginReferenceLabel" styleClass="label-emphase" text="UNKNOWN" />
-                           </children>
-                        </TextFlow>
-                     </children>
-                  </HBox>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="20.0" right="20.0" top="14.0" />
-               </padding>
-            </GridPane>
-         </children>
-         <styleClass>
-            <String fx:value="pane-card" />
-            <String fx:value="no-padding" />
-         </styleClass>
-      </VBox>
-   </children>
+               </graphic>
+            </Label>
+         </VBox>
+      </StackPane>
+      <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="card-title" prefHeight="34">
+         <Label text="General"/>
+         <Pane HBox.hgrow="ALWAYS"/>
+      </HBox>
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="230.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="230.0"/>
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+         </rowConstraints>
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="14.0"/>
+         </padding>
+         <TextFlow prefWidth="200.0">
+            <Label text="Plugin Name: "/>
+            <Label fx:id="pluginNameLabel" styleClass="label-emphase" text="UNKNOWN"/>
+         </TextFlow>
+         <TextFlow prefWidth="200.0" GridPane.columnIndex="1">
+            <Label text="Plugin Version: "/>
+            <Label fx:id="pluginVersionLabel" styleClass="label-emphase" text="UNKNOWN"/>
+         </TextFlow>
+         <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="Identifier: "/>
+            <Label fx:id="pluginIdentifierLabel" styleClass="label-emphase" text="UNKNOWN"/>
+         </TextFlow>
+         <HBox prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Label text="State: "/>
+            <PluginStateView fx:id="pluginStateView" styleClass="label-emphase"/>
+         </HBox>
+         <TextFlow prefWidth="200.0" GridPane.rowIndex="1">
+            <Label text="Manufacturer: "/>
+            <Label fx:id="pluginManufacturerLabel" styleClass="label-emphase" text="UNKNOWN"/>
+         </TextFlow>
+         <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+            <Label text="Category: "/>
+            <Label fx:id="pluginCategoryLabel" styleClass="label-emphase" text="UNKNOWN"/>
+         </TextFlow>
+         <HBox alignment="BASELINE_LEFT" spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
+            <TextFlow GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
+               <Label text="Ref: "/>
+               <Label fx:id="pluginReferenceLabel" styleClass="label-emphase" text="UNKNOWN"/>
+            </TextFlow>
+         </HBox>
+      </GridPane>
+   </VBox>
 </AnchorPane>

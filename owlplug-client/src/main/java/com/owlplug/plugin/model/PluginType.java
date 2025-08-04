@@ -21,7 +21,7 @@ package com.owlplug.plugin.model;
 public enum PluginType {
   INSTRUMENT("instrument"), EFFECT("effect");
 
-  private String text;
+  private final String text;
 
   PluginType(String text) {
     this.text = text;

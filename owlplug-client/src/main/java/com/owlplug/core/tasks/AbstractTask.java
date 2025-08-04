@@ -97,7 +97,15 @@ public abstract class AbstractTask extends Task<TaskResult> {
   public void setName(String name) {
     this.name = name;
   }
-  
+
+  public Instant getTaskStarted() {
+    return taskStarted;
+  }
+
+  public Instant getTaskCompleted() {
+    return taskCompleted;
+  }
+
   @Override
   protected void updateMessage(String message) {
     log.trace("Task" + name + " status update [" + message + "]");

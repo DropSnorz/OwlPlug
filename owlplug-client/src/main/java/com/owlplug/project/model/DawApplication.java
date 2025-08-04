@@ -21,7 +21,7 @@ package com.owlplug.project.model;
 public enum DawApplication {
   ABLETON("Ableton"),
   REAPER("Reaper");
-  private String name;
+  private final String name;
 
   DawApplication(String name) {
     this.name = name;

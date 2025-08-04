@@ -23,12 +23,12 @@ import com.owlplug.auth.repositories.UserAccountRepository;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.ImageCache;
-import com.owlplug.plugin.repositories.FileStatRepository;
-import com.owlplug.plugin.repositories.PluginRepository;
-import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.model.OperatingSystem;
 import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
+import com.owlplug.plugin.repositories.FileStatRepository;
+import com.owlplug.plugin.repositories.PluginRepository;
+import com.owlplug.plugin.model.PluginFormat;
 import jakarta.annotation.PostConstruct;
 import java.util.prefs.BackingStoreException;
 import org.slf4j.Logger;
@@ -93,10 +93,8 @@ public class OptionsService extends BaseService {
 
   /**
    * Clear all user data including Options, configured stores and cache.
-   * 
-   * @return true if data has been successfully cleared, false otherwise
    */
-  public boolean clearAllUserData() {
+  public void clearAllUserData() {
 
     try {
       this.getPreferences().clear();
@@ -110,11 +108,8 @@ public class OptionsService extends BaseService {
 
       clearCache();
 
-      return true;
-
     } catch (BackingStoreException e) {
       log.error("Preferences cannot be updated", e);
-      return false;
     }
   }
 

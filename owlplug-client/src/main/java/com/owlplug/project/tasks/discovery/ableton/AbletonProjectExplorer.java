@@ -20,8 +20,8 @@ package com.owlplug.project.tasks.discovery.ableton;
 
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.DawApplication;
-import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.DawPlugin;
+import com.owlplug.project.model.DawProject;
 import com.owlplug.project.tasks.discovery.ProjectExplorer;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;
 import java.io.BufferedInputStream;

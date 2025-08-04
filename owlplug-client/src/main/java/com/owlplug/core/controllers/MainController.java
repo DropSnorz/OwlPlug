@@ -33,11 +33,11 @@ import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
-import com.owlplug.plugin.services.PluginService;
-import com.owlplug.plugin.services.UpdateService;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.services.ExploreService;
+import com.owlplug.plugin.services.PluginService;
+import com.owlplug.plugin.services.UpdateService;
 import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -138,8 +138,7 @@ public class MainController extends BaseController {
         Platform.runLater(() -> accountComboBox.setValue(oldValue));
 
       }
-      if (newValue instanceof UserAccount) {
-        UserAccount userAccount = (UserAccount) newValue;
+      if (newValue instanceof UserAccount userAccount) {
         this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
 
       }
@@ -157,11 +156,11 @@ public class MainController extends BaseController {
 
     updatePane.setVisible(false);
 
-    Task<Boolean> retrieveUpdateStatusTask = new Task<Boolean>() {
-        @Override
-        protected Boolean call() throws Exception {
-          return updateService.isUpToDate();
-        }
+    Task<Boolean> retrieveUpdateStatusTask = new Task<>() {
+      @Override
+      protected Boolean call() throws Exception {
+        return updateService.isUpToDate();
+      }
     };
 
     retrieveUpdateStatusTask.setOnSucceeded(e -> {
@@ -214,7 +213,7 @@ public class MainController extends BaseController {
    */
   public void refreshAccounts() {
 
-    ArrayList<UserAccount> accounts = new ArrayList<UserAccount>();
+    ArrayList<UserAccount> accounts = new ArrayList<>();
 
     for (UserAccount account : authenticationService.getAccounts()) {
       accounts.add(account);

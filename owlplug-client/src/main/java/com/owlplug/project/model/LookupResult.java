@@ -22,7 +22,7 @@ public enum LookupResult {
 
   FOUND("Found"), MISSING("Missing");
 
-  private String value;
+  private final String value;
 
   LookupResult(String value) {
     this.value = value;

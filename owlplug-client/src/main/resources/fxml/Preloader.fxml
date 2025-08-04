@@ -4,40 +4,37 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, #dfa579, #464646 100%);" styleClass="preloader" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.PreloaderController">
-   <children>
-      <HBox fx:id="contributorsPane" layoutX="360.0" layoutY="130.0" prefHeight="30.0" prefWidth="212.0" spacing="5">
-         <children>
-            <Label text="Thanks to " styleClass="label-disabled" />
-         </children>
-      </HBox>
-      <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="33.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../media/owlplug-logo.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="295.0" layoutY="36.0" style="-fx-font-size: 68;" text="OwlPlug" />
-      <ProgressBar layoutY="297.0" prefWidth="600.0" />
-      <ImageView fitHeight="38.0" fitWidth="114.0" layoutX="349.0" layoutY="240.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../media/juce.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="38.0" fitWidth="106.0" layoutX="466.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../media/powered-by-open-audio-stack.png" />
-         </image>
-      </ImageView>
-      <HBox alignment="CENTER" layoutX="94.0" layoutY="247.0">
-         <children>
-            <Hyperlink fx:id="owlplugHyperlink" styleClass="hyperlink-disabled" text="owlplug.com" />
-            <Label styleClass="label-disabled" text=" - " />
-            <Hyperlink fx:id="statusHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled" text="Status" />
-            <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - " />
-            <Hyperlink fx:id="documentationHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled" text="Docs" />
-            <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - " />
-            <Hyperlink fx:id="roadmapHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled" text="Roadmap" />
-         </children>
-      </HBox>
-   </children>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0"
+      style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, #dfa579, #464646 100%);"
+      styleClass="preloader" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.owlplug.core.controllers.PreloaderController">
+   <HBox fx:id="contributorsPane" layoutX="360.0" layoutY="130.0" prefHeight="30.0" prefWidth="212.0" spacing="5">
+      <Label text="Thanks to " styleClass="label-disabled"/>
+   </HBox>
+   <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="33.0" layoutY="36.0" pickOnBounds="true"
+              preserveRatio="true">
+      <Image url="@../media/owlplug-logo.png"/>
+   </ImageView>
+   <Label layoutX="295.0" layoutY="36.0" style="-fx-font-size: 68;" text="OwlPlug"/>
+   <ProgressBar layoutY="297.0" prefWidth="600.0"/>
+   <ImageView fitHeight="38.0" fitWidth="114.0" layoutX="349.0" layoutY="240.0" pickOnBounds="true"
+              preserveRatio="true">
+      <Image url="@../media/juce.png"/>
+   </ImageView>
+   <ImageView fitHeight="38.0" fitWidth="106.0" layoutX="466.0" layoutY="241.0" pickOnBounds="true"
+              preserveRatio="true">
+      <Image url="@../media/powered-by-open-audio-stack.png"/>
+   </ImageView>
+   <HBox alignment="CENTER" layoutX="94.0" layoutY="247.0">
+      <Hyperlink fx:id="owlplugHyperlink" styleClass="hyperlink-disabled" text="owlplug.com"/>
+      <Label styleClass="label-disabled" text=" - "/>
+      <Hyperlink fx:id="statusHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled"
+                 text="Status"/>
+      <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - "/>
+      <Hyperlink fx:id="documentationHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled"
+                 text="Docs"/>
+      <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - "/>
+      <Hyperlink fx:id="roadmapHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled"
+                 text="Roadmap"/>
+   </HBox>
 </Pane>

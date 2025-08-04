@@ -21,13 +21,11 @@ package com.owlplug.explore.ui;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.explore.model.RemoteSource;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 
 public class PackageSourceBadgeView extends HBox {
 

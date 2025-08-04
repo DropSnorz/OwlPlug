@@ -89,8 +89,7 @@ public class ImageCache {
     if (cachedElement != null) {
       try {
         log.trace("Retrieving image {} from cache", url);
-        byte[] content = cachedElement;
-        ByteArrayInputStream s = new ByteArrayInputStream(content);
+        ByteArrayInputStream s = new ByteArrayInputStream(cachedElement);
         BufferedImage bufImage = ImageIO.read(s);
         return SwingFXUtils.toFXImage(bufImage, null);
       } catch (IOException e) {
@@ -124,7 +123,7 @@ public class ImageCache {
    */
   public void loadAsync(String url, ImageView imageView) {
 
-    Task<Image> task = new Task<Image>() {
+    Task<Image> task = new Task<>() {
       public Image call() {
         return ImageCache.this.get(url, "png", false);
       }
@@ -133,9 +132,7 @@ public class ImageCache {
     task.setOnSucceeded(e -> {
       Image image = task.getValue();
       if (image != null && !image.isError()) {
-        Platform.runLater(() -> {
-          imageView.setImage(task.getValue());
-        });
+        Platform.runLater(() -> imageView.setImage(task.getValue()));
       }
     });
     new Thread(task).start();

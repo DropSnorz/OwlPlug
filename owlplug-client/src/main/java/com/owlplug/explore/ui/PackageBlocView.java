@@ -19,12 +19,12 @@
 package com.owlplug.explore.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.plugin.model.PluginStage;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.plugin.model.PluginStage;
 import java.util.Random;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
@@ -185,24 +185,25 @@ public class PackageBlocView extends AnchorPane {
   private Node createPluginStageFlag(RemotePackage remotePackage) {
 
     Polygon polygonFlag = new Polygon();
-    polygonFlag.getPoints().addAll(new Double[] { 0.0, 0.0, 40.0, 0.0, 0.0, 40.0 });
+    polygonFlag.getPoints().addAll(0.0, 0.0, 40.0, 0.0, 0.0, 40.0);
 
     Label iconLabel = new Label("");
     iconLabel.setStyle("-fx-font-weight: bold;");
     iconLabel.setPadding(new Insets(5, 0, 0, 7));
 
     switch (remotePackage.getStage()) {
-    case BETA:
-      polygonFlag.setFill(Color.rgb(231, 76, 60));
-      iconLabel.setText("B");
-      break;
-    case DEMO:
-      polygonFlag.setFill(Color.rgb(155, 89, 182));
-      iconLabel.setText("D");
-      break;
-    default:
-      polygonFlag.setFill(Color.TRANSPARENT);
-      iconLabel.setText("");
+      case BETA -> {
+        polygonFlag.setFill(Color.rgb(231, 76, 60));
+        iconLabel.setText("B");
+      }
+      case DEMO -> {
+        polygonFlag.setFill(Color.rgb(155, 89, 182));
+        iconLabel.setText("D");
+      }
+      default -> {
+        polygonFlag.setFill(Color.TRANSPARENT);
+        iconLabel.setText("");
+      }
     }
 
     Group group = new Group();

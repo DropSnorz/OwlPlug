@@ -47,9 +47,7 @@ public class DialogManager {
     dialog.setDialogContainer(mainController.getRootPane());
     dialogStack.push(dialog);
 
-    dialog.setOnDialogClosed(e -> {
-      dialogStack.pop();
-    });
+    dialog.setOnDialogClosed(e -> dialogStack.pop());
 
     return dialog;
   }
@@ -105,9 +103,7 @@ public class DialogManager {
 
     Button button = new Button("Close");
 
-    button.setOnAction(e -> {
-      dialog.close();
-    });
+    button.setOnAction(e -> dialog.close());
 
     layout.setActions(button);
     return dialog;

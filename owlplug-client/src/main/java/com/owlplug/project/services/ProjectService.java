@@ -20,8 +20,8 @@ package com.owlplug.project.services;
 
 import com.owlplug.core.services.BaseService;
 import com.owlplug.project.components.ProjectTaskFactory;
-import com.owlplug.project.repositories.DawProjectRepository;
 import com.owlplug.project.model.DawProject;
+import com.owlplug.project.repositories.DawProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

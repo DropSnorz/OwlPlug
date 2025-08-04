@@ -21,7 +21,7 @@ package com.owlplug.plugin.model;
 public enum PluginFormat {
   VST2("VST2"), VST3("VST3"), AU("AU"), LV2("LV2");
 
-  private String text;
+  private final String text;
 
   PluginFormat(String text) {
     this.text = text;

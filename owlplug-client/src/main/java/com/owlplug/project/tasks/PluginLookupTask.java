@@ -21,8 +21,8 @@ package com.owlplug.project.tasks;
 import com.google.common.collect.Iterables;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.project.repositories.DawPluginRepository;
 import com.owlplug.project.model.DawPlugin;
+import com.owlplug.project.repositories.DawPluginRepository;
 import com.owlplug.project.services.PluginLookupService;
 import java.text.DecimalFormat;
 

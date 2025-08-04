@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
@@ -164,11 +163,11 @@ public class TaskRunner {
   
 
   public List<AbstractTask> getPendingTasks() {
-    return new ArrayList<AbstractTask>(taskQueue);
+    return new ArrayList<>(taskQueue);
   }
 
   public List<AbstractTask> getTaskHistory() {
-    return new ArrayList<AbstractTask>(taskHistory);
+    return new ArrayList<>(taskHistory);
   }
 
   private void triggerOnError() {

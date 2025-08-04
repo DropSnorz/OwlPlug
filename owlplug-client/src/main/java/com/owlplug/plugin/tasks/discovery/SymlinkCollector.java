@@ -18,8 +18,8 @@
  
 package com.owlplug.plugin.tasks.discovery;
 
-import com.owlplug.plugin.model.Symlink;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.plugin.model.Symlink;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,7 +40,7 @@ public class SymlinkCollector {
 
   public SymlinkCollector(boolean uniqueReferences) {
     this.uniqueReferences = uniqueReferences;
-    collectedSymlinks = new HashSet<String>();
+    collectedSymlinks = new HashSet<>();
   }
 
   public List<Symlink> collect(String directoryPath) {

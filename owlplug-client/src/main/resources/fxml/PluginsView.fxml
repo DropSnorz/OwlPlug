@@ -30,18 +30,14 @@
             <Button fx:id="exportButton" text="Export">
                 <graphic>
                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@../icons/connect-white-16.png"/>
-                        </image>
+                        <Image url="@../icons/connect-white-16.png"/>
                     </ImageView>
                 </graphic>
             </Button>
             <Button fx:id="syncButton" text="Sync">
                 <graphic>
                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@../icons/refresh-white-16.png"/>
-                        </image>
+                        <Image url="@../icons/refresh-white-16.png"/>
                     </ImageView>
                 </graphic>
             </Button>
@@ -55,32 +51,26 @@
       	</center>
       	<left>
             <VBox styleClass="small-tab-pane-container">
-                <children>
-                    <TabPane fx:id="displaySwitchTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
-                        <tabs>
-                            <Tab fx:id="displayListTab" text="List" closable="false" />
-                            <Tab fx:id="displayDirectoriesTab" text="Directories" closable="false" />
-                            <Tab fx:id="displayTableTab" text="Table" closable="false" />
-                        </tabs>
-                    </TabPane>
-                </children>
+                <TabPane fx:id="displaySwitchTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT"
+                         styleClass="small-tab-pane" BorderPane.alignment="CENTER">
+                    <Tab fx:id="displayListTab" text="List" closable="false"/>
+                    <Tab fx:id="displayDirectoriesTab" text="Directories" closable="false"/>
+                    <Tab fx:id="displayTableTab" text="Table" closable="false"/>
+                </TabPane>
             </VBox>
       	</left>
       </BorderPane>
    </center>
    <right>
-      <VBox fx:id="pluginInfoPane" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <AnchorPane VBox.vgrow="ALWAYS">
-               <children>
-                   <fx:include source="NodeInfoView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-               </children>
-            </AnchorPane>
-         </children>
-         <padding>
-            <Insets left="20.0" />
-         </padding>
-      </VBox>
+       <VBox fx:id="pluginInfoPane" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+           <padding>
+               <Insets left="20.0"/>
+           </padding>
+           <AnchorPane VBox.vgrow="ALWAYS">
+               <fx:include source="NodeInfoView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+           </AnchorPane>
+       </VBox>
    </right>
    <padding>
       <Insets bottom="10.0" left="20.0" right="20.0" top="2.0" />

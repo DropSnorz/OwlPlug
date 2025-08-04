@@ -35,7 +35,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(indexes = { @Index(name = "IDX_FILESTAT_ID", columnList = "id"),
-        @Index(name = "IDX_FILESTAT_PARENT_PATH", columnList = "parentPath") })
+    @Index(name = "IDX_FILESTAT_PARENT_PATH", columnList = "parentPath") })
 public class FileStat {
 
   @Id

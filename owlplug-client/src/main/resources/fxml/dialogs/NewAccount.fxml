@@ -5,29 +5,25 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.auth.controllers.AccountController">
-   <children>
-      <HBox fx:id="buttonPane" alignment="CENTER" spacing="20.0">
-         <children>
-            <Button fx:id="googleButton" contentDisplay="TOP" text="Google Plus Account">
-               <graphic>
-                  <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icons/gplus-grey-64.png" />
-                     </image>
-                  </ImageView>
-               </graphic></Button>
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin></HBox>
-      <ProgressIndicator fx:id="authProgressIndicator" visible="false" />
-      <Label fx:id="messageLabel" />
-      <HBox alignment="CENTER_RIGHT" spacing="2.0">
-         <children>
-            <Button fx:id="cancelButton" text="Cancel" />
-            <Button fx:id="closeButton" text="Close" />
-         </children>
-      </HBox>
-   </children>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.owlplug.auth.controllers.AccountController">
+   <HBox fx:id="buttonPane" alignment="CENTER" spacing="20.0">
+      <VBox.margin>
+         <Insets/>
+      </VBox.margin>
+      <Button fx:id="googleButton" contentDisplay="TOP" text="Google Plus Account">
+         <graphic>
+            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../../icons/gplus-grey-64.png"/>
+            </ImageView>
+         </graphic>
+      </Button>
+   </HBox>
+   <ProgressIndicator fx:id="authProgressIndicator" visible="false"/>
+   <Label fx:id="messageLabel"/>
+   <HBox alignment="CENTER_RIGHT" spacing="2.0">
+      <Button fx:id="cancelButton" text="Cancel"/>
+      <Button fx:id="closeButton" text="Close"/>
+   </HBox>
 </VBox>

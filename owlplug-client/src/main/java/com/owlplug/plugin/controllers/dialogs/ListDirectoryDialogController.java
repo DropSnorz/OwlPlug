@@ -68,14 +68,14 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
     });
   }
 
-  public void configure (String preferenceKey) {
+  public void configure(String preferenceKey) {
     this.currentPreferenceKey = preferenceKey;
 
     if (observableItems != null) {
       observableItems.removeListener(this);
     }
 
-    List<String> items = this.getPreferences().getList(preferenceKey, new ArrayList<String>());
+    List<String> items = this.getPreferences().getList(preferenceKey, new ArrayList<>());
     observableItems = FXCollections.observableArrayList(items);
 
     observableItems.addListener(this);

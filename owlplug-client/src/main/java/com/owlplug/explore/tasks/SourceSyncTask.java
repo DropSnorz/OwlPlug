@@ -25,8 +25,6 @@ import com.google.common.collect.Lists;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.explore.repositories.RemotePackageRepository;
-import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
@@ -38,6 +36,8 @@ import com.owlplug.explore.model.mappers.registry.PackageMapper;
 import com.owlplug.explore.model.mappers.registry.PackageVersionMapper;
 import com.owlplug.explore.model.mappers.registry.RegistryMapper;
 import com.owlplug.explore.model.mappers.registry.RegistryModelAdapter;
+import com.owlplug.explore.repositories.RemotePackageRepository;
+import com.owlplug.explore.repositories.RemoteSourceRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -207,7 +207,7 @@ public class SourceSyncTask extends AbstractTask {
     }
   }
 
-  private class StoreParsingException extends Exception {
+  private static class StoreParsingException extends Exception {
     StoreParsingException(Exception e) {
       super(e);
     }

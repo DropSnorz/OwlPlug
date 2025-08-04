@@ -20,13 +20,13 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
-import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.Symlink;
 import com.owlplug.plugin.tasks.SymlinkRemoveTask;
 import com.owlplug.plugin.ui.PluginListCellFactory;
-import com.owlplug.core.utils.PlatformUtils;
 import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -107,12 +107,8 @@ public class SymlinkInfoController extends BaseController {
     directoryPathLabel.setText(symlink.getPath());
     pluginDirectoryListView.getItems().setAll(symlink.getPluginList());
     targetPathLabel.setText(Optional.ofNullable(symlink.getTargetPath()).orElse("Unknown"));
-    
-    if (symlink.getTargetPath() == null) {
-      openTargetButton.setVisible(false);
-    } else {
-      openTargetButton.setVisible(true);
-    }
+
+    openTargetButton.setVisible(symlink.getTargetPath() != null);
   }
 
 }

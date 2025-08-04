@@ -1,112 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
+<?import com.owlplug.controls.MasonryPane?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import com.owlplug.controls.MasonryPane?>
-
-
-<?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.text.Text?>
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.ExploreController">
-   <children>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <HBox alignment="TOP_CENTER" spacing="10.0">
-               <children>
-                  <Button fx:id="sourcesButton" text="Sources">
-                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/server-white-32.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <HBox style="-fx-background-color:rgb(46, 46, 46)" alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
-                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@../icons/search-white-32.png" />
-                        </image>
-                        <HBox.margin>
-                           <Insets left="8.0" right="8.0" top="10"/>
-                        </HBox.margin>
-                     </ImageView>
-                     <HBox fx:id="exploreChipViewContainer" HBox.hgrow="ALWAYS" alignment="CENTER">
-                     </HBox>
-                     <TextFlow>
-                        <HBox.margin>
-                           <Insets left="8.0" right="8.0" top="10"/>
-                        </HBox.margin>
-                        <children>
-                           <Text fx:id="resultCounter" text="0" />
-                           <Text text=" plugins" />
-                        </children>
-                     </TextFlow>
-                  </HBox>
-                   <Button fx:id="formatFilterButton" text="Format">
-                       <graphic>
-                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                               <image>
-                                   <Image url="@../icons/format-white-16.png" />
-                               </image>
-                           </ImageView>
-                       </graphic>
-                   </Button>
-                   <Button fx:id="platformFilterButton" text="System">
-                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/gear-white-32.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="syncSourcesButton" text="Sync">
-                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/refresh-white-16.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     </Button>
-               </children>
+<?import javafx.scene.text.TextFlow?>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.owlplug.explore.controllers.ExploreController">
+   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0"
+         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+         AnchorPane.topAnchor="0.0">
+      <padding>
+         <Insets left="20.0" right="20.0" top="10.0"/>
+      </padding>
+      <HBox alignment="TOP_CENTER" spacing="10.0">
+         <Button fx:id="sourcesButton" text="Sources">
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@../icons/server-white-32.png"/>
+               </ImageView>
+            </graphic>
+         </Button>
+         <HBox style="-fx-background-color:rgb(46, 46, 46)" alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets left="8.0" right="8.0" top="10"/>
+               </HBox.margin>
+               <Image url="@../icons/search-white-32.png"/>
+            </ImageView>
+            <HBox fx:id="exploreChipViewContainer" HBox.hgrow="ALWAYS" alignment="CENTER">
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <ScrollPane fx:id="scrollPane" style="-fx-background-color: transparent;" fitToHeight="false" fitToWidth="true" pannable="true" HBox.hgrow="ALWAYS">
-                     <content>
-                        <VBox fx:id="masonryWrapper">
-                           <children>
-                              <MasonryPane fx:id="masonryPane" VBox.vgrow="ALWAYS" />
-                              <HBox fx:id="lazyLoadBar" alignment="CENTER" prefHeight="74.0" prefWidth="783.0" spacing="5.0">
-                                 <children>
-                                    <Hyperlink fx:id="lazyLoadLink" styleClass="hyperlink-dark" text="Load more..." />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </content>
-                  </ScrollPane>
-                  <AnchorPane>
-                  	<children>
-                  		<fx:include fx:id="packageInfoView" source="menu/PackageInfoView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  </children>
-                  </AnchorPane>
-               </children>
-            </HBox>
-         </children>
-         <padding>
-            <Insets left="20.0" right="20.0" top="10.0" />
-         </padding>
-      </VBox>
-   </children>
+            <TextFlow>
+               <HBox.margin>
+                  <Insets left="8.0" right="8.0" top="10"/>
+               </HBox.margin>
+               <Text fx:id="resultCounter" text="0"/>
+               <Text text=" plugins"/>
+            </TextFlow>
+         </HBox>
+         <Button fx:id="formatFilterButton" text="Format">
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@../icons/format-white-16.png"/>
+               </ImageView>
+            </graphic>
+         </Button>
+         <Button fx:id="platformFilterButton" text="System">
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@../icons/gear-white-32.png"/>
+               </ImageView>
+            </graphic>
+         </Button>
+         <Button fx:id="syncSourcesButton" text="Sync">
+            <graphic>
+               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@../icons/refresh-white-16.png"/>
+               </ImageView>
+            </graphic>
+         </Button>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+         <ScrollPane fx:id="scrollPane" style="-fx-background-color: transparent;" fitToWidth="true"
+                     pannable="true" HBox.hgrow="ALWAYS">
+            <VBox fx:id="masonryWrapper">
+               <MasonryPane fx:id="masonryPane" VBox.vgrow="ALWAYS"/>
+               <HBox fx:id="lazyLoadBar" alignment="CENTER" prefHeight="74.0" prefWidth="783.0"
+                     spacing="5.0">
+                  <Hyperlink fx:id="lazyLoadLink" styleClass="hyperlink-dark" text="Load more..."/>
+               </HBox>
+            </VBox>
+         </ScrollPane>
+         <AnchorPane>
+            <fx:include fx:id="packageInfoView" source="menu/PackageInfoView.fxml"
+                        AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                        AnchorPane.topAnchor="0.0"/>
+         </AnchorPane>
+      </HBox>
+   </VBox>
 </AnchorPane>

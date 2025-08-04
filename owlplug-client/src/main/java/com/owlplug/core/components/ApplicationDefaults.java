@@ -138,18 +138,13 @@ public class ApplicationDefaults {
    */
   public Image getPluginFormatIcon(PluginFormat format) {
 
-    switch (format) {
-    case VST2:
-      return vst2Image;
-    case VST3:
-      return vst3Image;
-    case AU:
-      return auImage;
-    case LV2:
-      return lv2Image;
-    default:
-      return vst2Image;
-    }
+    return switch (format) {
+      case VST2 -> vst2Image;
+      case VST3 -> vst3Image;
+      case AU -> auImage;
+      case LV2 -> lv2Image;
+      default -> vst2Image;
+    };
   }
 
 
@@ -161,21 +156,17 @@ public class ApplicationDefaults {
    */
   public Image getPackageTypeIcon(RemotePackage remotePackage) {
 
-    switch (remotePackage.getType()) {
-    case INSTRUMENT:
-      return instrumentImage;
-    case EFFECT:
-      return effectImage;
-    default:
-      return null;
-    }
+    return switch (remotePackage.getType()) {
+      case INSTRUMENT -> instrumentImage;
+      case EFFECT -> effectImage;
+      default -> null;
+    };
   }
 
   public Image getDAWApplicationIcon(DawApplication application) {
     return switch (application) {
       case ABLETON -> abletonLogoImage;
       case REAPER -> reaperLogoImage;
-      default -> pluginComponentImage;
     };
   }
 
