@@ -24,7 +24,7 @@ public enum ApplicationState {
   TERMINATED("TERMINATED"),
   UNKNOWN("UNKNOWN");
   
-  private String text;
+  private final String text;
 
   ApplicationState(String text) {
     this.text = text;

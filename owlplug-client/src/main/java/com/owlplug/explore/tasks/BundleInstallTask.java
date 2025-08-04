@@ -149,9 +149,7 @@ public class BundleInstallTask extends AbstractTask {
             contentLength(website));
         FileOutputStream fos = new FileOutputStream(outputFile)) {
 
-      rbc.setCallback(p -> {
-        computeTotalProgress(p);
-      });
+      rbc.setCallback(p -> computeTotalProgress(p));
       fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
       return outputFile;
 

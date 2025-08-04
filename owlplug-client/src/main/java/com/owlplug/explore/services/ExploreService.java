@@ -21,13 +21,9 @@ package com.owlplug.explore.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.model.RuntimePlatform;
 import com.owlplug.core.services.BaseService;
-import com.owlplug.plugin.services.PluginService;
 import com.owlplug.explore.components.ExploreTaskFactory;
-import com.owlplug.explore.repositories.RemotePackageRepository;
-import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
@@ -38,7 +34,10 @@ import com.owlplug.explore.model.mappers.registry.RegistryMapper;
 import com.owlplug.explore.model.mappers.registry.RegistryModelAdapter;
 import com.owlplug.explore.model.search.ExploreCriteriaAdapter;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
-import jakarta.annotation.PostConstruct;
+import com.owlplug.explore.repositories.RemotePackageRepository;
+import com.owlplug.explore.repositories.RemoteSourceRepository;
+import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.plugin.services.PluginService;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -54,6 +53,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class ExploreService extends BaseService {
@@ -215,8 +215,7 @@ public class ExploreService extends BaseService {
       if (registryMapper.getPackages() == null) {
         return null;
       }
-      RemoteSource remoteSource = RegistryModelAdapter.jsonMapperToEntity(registryMapper);
-      return remoteSource;
+      return RegistryModelAdapter.jsonMapperToEntity(registryMapper);
     } catch (JsonProcessingException e) {
       log.debug("Content don't match the Store spec", e);
       return null;
@@ -240,9 +239,7 @@ public class ExploreService extends BaseService {
         return null;
       }
 
-      RemoteSource remoteSource = OASModelAdapter.mapperToEntity(registryMapper);
-
-      return remoteSource;
+      return OASModelAdapter.mapperToEntity(registryMapper);
     } catch (JsonProcessingException e) {
       log.debug("Content don't match the Store spec", e);
       return null;

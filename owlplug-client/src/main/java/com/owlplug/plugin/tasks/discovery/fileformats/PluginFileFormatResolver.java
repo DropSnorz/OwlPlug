@@ -18,9 +18,9 @@
  
 package com.owlplug.plugin.tasks.discovery.fileformats;
 
-import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.model.OperatingSystem;
 import com.owlplug.core.model.RuntimePlatform;
+import com.owlplug.plugin.model.PluginFormat;
 import java.io.File;
 
 public class PluginFileFormatResolver {

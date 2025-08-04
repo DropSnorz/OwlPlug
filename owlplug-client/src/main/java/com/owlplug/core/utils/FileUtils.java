@@ -18,21 +18,13 @@
  
 package com.owlplug.core.utils;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +59,7 @@ public class FileUtils {
       files.add(directory);
     }
 
-    innerListFiles(files, directory, true, new ArrayList<String>());
+    innerListFiles(files, directory, true, new ArrayList<>());
     return files;
 
   }

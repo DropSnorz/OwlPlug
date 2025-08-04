@@ -10,32 +10,27 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import java.lang.String?>
-<HBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.TaskBarController">
-   <children>
-      <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="600.0" spacing="2.0" HBox.hgrow="ALWAYS">
-         <styleClass>
-            <String fx:value="pane-card" />
-         </styleClass>
-         <children>
-            <VBox HBox.hgrow="ALWAYS">
-               <children>
-                  <Label fx:id="taskLabel" text=" All clear" />
-                  <ProgressBar fx:id="taskProgressBar" maxWidth="1.7976931348623157E308" prefWidth="200.0" progress="0.0" HBox.hgrow="ALWAYS" />
-               </children>
-            </VBox>
-            <Button fx:id="taskHistoryButton" contentDisplay="GRAPHIC_ONLY" style="-fx-background-color: transparent;">
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/menudot-white-64.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-         </children>
-         <HBox.margin>
-            <Insets bottom="10.0" left="20.0" right="20.0" />
-         </HBox.margin>
-      </HBox>
-   </children>
+<HBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.owlplug.core.controllers.TaskBarController">
+   <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+         minWidth="-Infinity" prefWidth="600.0" spacing="2.0" HBox.hgrow="ALWAYS">
+      <styleClass>
+         <String fx:value="pane-card"/>
+      </styleClass>
+      <HBox.margin>
+         <Insets bottom="10.0" left="20.0" right="20.0"/>
+      </HBox.margin>
+      <VBox HBox.hgrow="ALWAYS">
+         <Label fx:id="taskLabel" text=" All clear"/>
+         <ProgressBar fx:id="taskProgressBar" maxWidth="1.7976931348623157E308" prefWidth="200.0" progress="0.0"
+                      HBox.hgrow="ALWAYS"/>
+      </VBox>
+      <Button fx:id="taskHistoryButton" contentDisplay="GRAPHIC_ONLY" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../icons/menudot-white-64.png"/>
+            </ImageView>
+         </graphic>
+      </Button>
+   </HBox>
 </HBox>

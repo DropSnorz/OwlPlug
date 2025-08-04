@@ -21,7 +21,7 @@ package com.owlplug.core.model;
 public enum OperatingSystem {
   WIN("win"), MAC("mac"), LINUX("linux"), UNKNOWN("unknown");
 
-  private String code;
+  private final String code;
 
   OperatingSystem(String code) {
     this.code = code;

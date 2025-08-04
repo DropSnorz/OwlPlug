@@ -20,14 +20,14 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.FileUtils;
+import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.ui.PluginStateView;
-import com.owlplug.core.utils.FileUtils;
-import com.owlplug.core.utils.PlatformUtils;
 import java.io.File;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;

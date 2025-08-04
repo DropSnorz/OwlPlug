@@ -23,9 +23,9 @@ public enum SourceType {
   OWLPLUG_REGISTRY("owlplug-registry", "OwlPlug Registry", "R"),
   OAS_REGISTRY("open-audio-stack-registry", "OAS Registry", "O");
 
-  private String value;
-  private String label;
-  private String shortLabel;
+  private final String value;
+  private final String label;
+  private final String shortLabel;
 
   SourceType(String value, String label, String shortLabel) {
     this.value = value;

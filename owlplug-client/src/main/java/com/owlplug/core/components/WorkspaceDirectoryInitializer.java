@@ -110,14 +110,14 @@ public class WorkspaceDirectoryInitializer {
     if (loggingFile.exists()) {
       log.info("Found custom logging properties " + loggingFile.getPath());
       List<String> allowedLogLevels = Arrays
-          .asList(new String[] { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL", "OFF", "ALL" });
+          .asList("TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL", "OFF", "ALL");
       Properties loggingProperties = new Properties();
       try {
         loggingProperties.load(new FileInputStream(loggingFile));
         
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         List<ch.qos.logback.classic.Logger> loggerList = loggerContext.getLoggerList();
-        loggerList.stream().forEach(logger -> {
+        loggerList.forEach(logger -> {
 
           if (loggingProperties.containsKey(logger.getName())) {
             String logLevelStr = loggingProperties.getProperty(logger.getName());

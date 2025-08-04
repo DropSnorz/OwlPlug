@@ -70,7 +70,7 @@ public class ApplicationPreferences {
   }
 
   public List<String> getList(String key) {
-    return getList(key, new ArrayList<String>());
+    return getList(key, new ArrayList<>());
   }
 
   public List<String> getList(String key, List<String> def) {

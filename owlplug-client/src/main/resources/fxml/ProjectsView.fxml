@@ -22,55 +22,45 @@
                 </TreeView>
             </center>
             <left>
-                <TabPane fx:id="projectTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT" styleClass="small-tab-pane" BorderPane.alignment="CENTER">
-                    <tabs>
-                        <Tab fx:id="treeTabAll" closable="false" text="All" />
-                    </tabs>
+                <TabPane fx:id="projectTreeViewTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT"
+                         styleClass="small-tab-pane" BorderPane.alignment="CENTER">
+                    <Tab fx:id="treeTabAll" closable="false" text="All"/>
                 </TabPane>
             </left>
             <top>
                 <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
-                    <children>
-                        <Button fx:id="projectDirectoryButton" text="Project Directories">
-                            <graphic>
-                                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../icons/folder-grey-16.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                        <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search" styleClass="label-dark" HBox.hgrow="ALWAYS" />
-                    </children>
+                    <Button fx:id="projectDirectoryButton" text="Project Directories">
+                        <graphic>
+                            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                <Image url="@../icons/folder-grey-16.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                    <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search"
+                               styleClass="label-dark" HBox.hgrow="ALWAYS"/>
                 </HBox>
             </top>
         </BorderPane>
     </center>
     <right>
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-            <children>
-                <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0" VBox.vgrow="NEVER" spacing="5.0">
-                    <children>
-                        <Button fx:id="syncProjectButton" text="Sync">
-                            <graphic>
-                                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../icons/refresh-white-16.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Button>
-                    </children>
-                </HBox>
-                <AnchorPane VBox.vgrow="ALWAYS">
-                    <children>
-                        <fx:include source="ProjectInfoView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                    </children>
-                </AnchorPane>
-            </children>
             <padding>
-                <Insets left="20.0" />
+                <Insets left="20.0"/>
             </padding>
+            <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0"
+                  VBox.vgrow="NEVER" spacing="5.0">
+                <Button fx:id="syncProjectButton" text="Sync">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/refresh-white-16.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+            <AnchorPane VBox.vgrow="ALWAYS">
+                <fx:include source="ProjectInfoView.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+            </AnchorPane>
         </VBox>
     </right>
     <padding>

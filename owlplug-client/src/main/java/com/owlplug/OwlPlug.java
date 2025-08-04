@@ -22,7 +22,6 @@ import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
 import java.beans.PropertyVetoException;
-import java.io.File;
 import java.nio.file.Paths;
 import java.time.Duration;
 import javafx.application.Application;
@@ -132,7 +131,7 @@ public class OwlPlug extends Application {
 
   @Bean
   @DependsOn("workspaceDirectoryInitializer")
-  public DataSource datasource() throws PropertyVetoException {
+  public DataSource datasource() {
     final DriverManagerDataSource dataSource = new DriverManagerDataSource();
     dataSource.setDriverClassName(environment.getProperty("spring.datasource.driver-class-name"));
     dataSource.setUrl(environment.getProperty("spring.datasource.url"));
@@ -168,7 +167,7 @@ public class OwlPlug extends Application {
    * operation should be operated here.
    */
   @Override
-  public void stop() throws Exception {
+  public void stop() {
     context.close();
   }
 

@@ -5,23 +5,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.WelcomeDialogController">
-   <children>
-      <VBox>
-         <children>
-            <Label text="Hi ! It's looks like this is the first time you are using OwlPlug. " wrapText="true" />
-            <Label text="Select paths where your plugins are installed. You can change this configuration later." wrapText="true" />
-         </children>
-      </VBox>
-      <VBox fx:id="pluginPathContainer" spacing="10.0">
-         <children>
-         </children>
-      </VBox>
-      <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
-         <children>
-            <Button fx:id="cancelButton" text="Ignore step" />
-            <Button fx:id="okButton" text="Next" />
-         </children>
-      </HBox>
-   </children>
+<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.owlplug.core.controllers.dialogs.WelcomeDialogController">
+   <VBox>
+      <Label text="Hi ! It's looks like this is the first time you are using OwlPlug. " wrapText="true"/>
+      <Label text="Select paths where your plugins are installed. You can change this configuration later."
+             wrapText="true"/>
+   </VBox>
+   <VBox fx:id="pluginPathContainer" spacing="10.0">
+   </VBox>
+   <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+      <Button fx:id="cancelButton" text="Ignore step"/>
+      <Button fx:id="okButton" text="Next"/>
+   </HBox>
 </VBox>

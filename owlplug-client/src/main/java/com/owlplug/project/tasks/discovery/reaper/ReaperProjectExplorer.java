@@ -18,12 +18,12 @@
 
 package com.owlplug.project.tasks.discovery.reaper;
 
-import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.parsers.reaper.PluginNodeListener;
 import com.owlplug.parsers.reaper.ReaperPlugin;
 import com.owlplug.parsers.reaper.ReaperProjectLexer;
 import com.owlplug.parsers.reaper.ReaperProjectParser;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawProject;

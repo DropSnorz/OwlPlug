@@ -19,19 +19,18 @@
 package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
-import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.model.Plugin;
+import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
 import javafx.scene.layout.VBox;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,8 +101,7 @@ public class PluginsController extends BaseController {
     treeViewController.getTreeView().getSelectionModel()
         .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
           if (newValue != null) {
-            TreeItem<Object> selectedItem = newValue;
-            nodeInfoController.setNode(selectedItem.getValue());
+            nodeInfoController.setNode(newValue.getValue());
             setInfoPaneDisplay(true);
           }
         });

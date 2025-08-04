@@ -3,19 +3,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefWidth="400.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController">
-   <children>
-      <Label text="Add extra directories to the list. Update items by double-clicking on it and hit the &quot;Enter&quot; key to validate." wrapText="true" />
-      <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
-         <children>
-            <Button fx:id="addDirectoryButton" text="+ Add a directory" />
-         </children>
-      </HBox>
-      <ListView fx:id="directoryListView" editable="true" prefHeight="200.0" prefWidth="200.0" />
-      <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
-         <children>
-            <Button fx:id="closeButton" text="Close" />
-         </children>
-      </HBox>
-   </children>
+<VBox prefWidth="400.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController">
+   <Label text="Add extra directories to the list. Update items by double-clicking on it and hit the &quot;Enter&quot; key to validate."
+          wrapText="true"/>
+   <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
+      <Button fx:id="addDirectoryButton" text="+ Add a directory"/>
+   </HBox>
+   <ListView fx:id="directoryListView" editable="true" prefHeight="200.0" prefWidth="200.0"/>
+   <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
+      <Button fx:id="closeButton" text="Close"/>
+   </HBox>
 </VBox>

@@ -18,11 +18,11 @@
  
 package com.owlplug.plugin.tasks.discovery;
 
-import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.model.RuntimePlatform;
+import com.owlplug.core.utils.FileUtils;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.tasks.discovery.fileformats.PluginFile;
 import com.owlplug.plugin.tasks.discovery.fileformats.PluginFileFormatResolver;
-import com.owlplug.core.utils.FileUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -20,15 +20,15 @@ package com.owlplug.explore.components;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.BaseTaskFactory;
-import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
-import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.tasks.BundleInstallTask;
 import com.owlplug.explore.tasks.SourceSyncTask;
+import com.owlplug.plugin.components.PluginTaskFactory;
 import java.io.File;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;

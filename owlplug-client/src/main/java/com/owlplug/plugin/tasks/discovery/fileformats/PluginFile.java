@@ -18,9 +18,9 @@
  
 package com.owlplug.plugin.tasks.discovery.fileformats;
 
+import com.owlplug.core.utils.FileUtils;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
-import com.owlplug.core.utils.FileUtils;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;

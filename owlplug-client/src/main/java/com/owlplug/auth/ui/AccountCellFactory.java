@@ -75,14 +75,13 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
 
   @Override
   public ListCell<AccountItem> call(ListView<AccountItem> l) {
-    return new ListCell<AccountItem>() {
+    return new ListCell<>() {
       @Override
       protected void updateItem(AccountItem item, boolean empty) {
         super.updateItem(item, empty);
         setAlignment(align);
-        if (item instanceof UserAccount) {
+        if (item instanceof UserAccount account) {
 
-          UserAccount account = (UserAccount) item;
           HBox cell = new HBox();
           cell.setSpacing(5);
           cell.setAlignment(align);
@@ -106,9 +105,7 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
             deleteButton.getStyleClass().add("hyperlink-button");
             cell.getChildren().add(deleteButton);
 
-            deleteButton.setOnAction(e -> {
-              authenticationService.deleteAccount(account);
-            });
+            deleteButton.setOnAction(e -> authenticationService.deleteAccount(account));
           }
 
           setGraphic(cell);
@@ -116,8 +113,7 @@ public class AccountCellFactory implements Callback<ListView<AccountItem>, ListC
           return;
         }
 
-        if (item instanceof AccountMenuItem) {
-          AccountMenuItem accountMenuItem = (AccountMenuItem) item;
+        if (item instanceof AccountMenuItem accountMenuItem) {
           setGraphic(null);
           setText(accountMenuItem.getText());
         }

@@ -20,14 +20,14 @@ package com.owlplug.explore.controllers;
 
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.plugin.model.PluginType;
 import com.owlplug.core.ui.SideBar;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
-import com.owlplug.explore.ui.PackageSourceBadgeView;
 import com.owlplug.explore.ui.PackageBundlesView;
+import com.owlplug.explore.ui.PackageSourceBadgeView;
+import com.owlplug.plugin.model.PluginType;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -230,7 +230,7 @@ public class PackageInfoController extends BaseController {
     sidebar.toggle();
   }
 
-  private class FakeChip extends HBox {
+  private static class FakeChip extends HBox {
 
     public FakeChip(String text) {
 

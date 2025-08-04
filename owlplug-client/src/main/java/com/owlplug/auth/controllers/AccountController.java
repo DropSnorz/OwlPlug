@@ -25,7 +25,6 @@ import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
@@ -74,7 +73,7 @@ public class AccountController extends AbstractDialogController {
       messageLabel.setText("Your default browser is opening... Proceed to sign in and come back here.");
       messageLabel.setVisible(true);
 
-      Task<Void> task = new Task<Void>() {
+      Task<Void> task = new Task<>() {
         @Override
         protected Void call() throws Exception {
           log.debug("Google auth task started");
@@ -121,9 +120,7 @@ public class AccountController extends AbstractDialogController {
       authenticationService.stopAuthReceiver();
     });
 
-    closeButton.setOnAction(event -> {
-      close();
-    });
+    closeButton.setOnAction(e -> close());
 
     // Do not compute layout for invisible nodes
     buttonPane.managedProperty().bind(buttonPane.visibleProperty());

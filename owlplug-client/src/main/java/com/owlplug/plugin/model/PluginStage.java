@@ -21,7 +21,7 @@ package com.owlplug.plugin.model;
 public enum PluginStage {
   BETA("beta"), DEMO("demo"), RELEASE("release");
 
-  private String text;
+  private final String text;
 
   PluginStage(String text) {
     this.text = text;

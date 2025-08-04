@@ -20,8 +20,8 @@ package com.owlplug.project.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.ui.FilterableTreeItem;
+import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.project.components.ProjectTaskFactory;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.services.ProjectService;
@@ -76,12 +76,8 @@ public class ProjectsController extends BaseController {
 
     projectTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
 
-    projectTreeView.setCellFactory(new Callback<TreeView<Object>, TreeCell<Object>>() {
-      @Override
-      public TreeCell<Object> call(TreeView<Object> p) {
-        return new ProjectTreeCell(getApplicationDefaults());
-      }
-    });
+    projectTreeView.setCellFactory((Callback<TreeView<Object>, TreeCell<Object>>)
+                                       p -> new ProjectTreeCell(getApplicationDefaults()));
 
     projectTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue instanceof TreeItem treeItem

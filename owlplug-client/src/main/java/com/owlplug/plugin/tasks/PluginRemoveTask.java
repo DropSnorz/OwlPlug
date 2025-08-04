@@ -21,8 +21,8 @@ package com.owlplug.plugin.tasks;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
-import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.model.Plugin;
+import com.owlplug.plugin.repositories.PluginRepository;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
@@ -52,7 +52,7 @@ public class PluginRemoveTask extends AbstractTask {
 
     File pluginFile = new File(plugin.getPath());
     boolean fileDeleteSuccess = false;
-    if(pluginFile.exists() && pluginFile.isDirectory()) {
+    if (pluginFile.exists() && pluginFile.isDirectory()) {
       try {
         FileUtils.deleteDirectory(pluginFile);
         fileDeleteSuccess = true;

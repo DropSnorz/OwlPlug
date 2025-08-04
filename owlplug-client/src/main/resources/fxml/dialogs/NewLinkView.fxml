@@ -7,106 +7,85 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.dialogs.NewLinkController">
-   <children>
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
-         <children>
-            <VBox alignment="BOTTOM_CENTER" spacing="5.0">
-               <children>
-                  <Label text="Links enables the creation of symbolic links across file-system and plugin directories." wrapText="true" />
-                  <TextFlow>
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="For example, a link can be configured from directory" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/path/to/plugins/extra">
-                           <font>
-                              <Font name="System Italic" size="12.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" to target an usb hard drive on " />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/mnt/extra">
-                           <font>
-                              <Font name="System Italic" size="12.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=". All plugins in " />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/mnt/extra">
-                           <font>
-                              <Font name="System Italic" size="12.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" will be accessible from" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/path/to/plugins/extra">
-                           <font>
-                              <Font name="System Italic" size="12.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=". Some systems may require admin privileges to create symlinks." />
-                     </children>
-                  </TextFlow>
-               </children>
-            </VBox>
-            <ImageView pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../media/symlinks.png" />
-               </image>
-            </ImageView>
-         </children>
-      </HBox>
-      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-         <children>
-            <VBox fillWidth="false" prefHeight="100.0" prefWidth="25.0" spacing="9.0">
-               <children>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icons/folderlink-grey-16.png" />
-                     </image>
-                  </ImageView>
-                  <SVGPath content="M 11,21.883 4.765,14.356 4,15 11.521,24 19,15 18.236,14.355 12,21.884 12,-9.6875002 h -1 z" fill="#8f8f8f" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icons/folder-grey-16.png" />
-                     </image>
-                  </ImageView>
-               </children>
-               <HBox.margin>
-                  <Insets top="5.0" />
-               </HBox.margin>
-            </VBox>
-            <VBox maxWidth="1.7976931348623157E308" spacing="20.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <VBox>
-                     <children>
-                        <Label text="1. New link path from one of your plugin folder" wrapText="true" />
-                        <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
-                           <children>
-                              <TextField fx:id="linkSourceParentTextField" promptText="/path/to/your/vst/directory" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="sourceDirectoryButton" text="..." />
-                              <TextField fx:id="linkSourceNameTextField" prefHeight="25.0" prefWidth="170.0" promptText="Link Name" HBox.hgrow="SOMETIMES" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="2. Target directory located anywhere on your file system." wrapText="true" />
-                        <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
-                           <children>
-                              <TextField fx:id="linkTargetTextField" promptText="/path/to/any/custom/directory" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="targetDirectoryButton" text="..." />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Link can't be created" />
-      <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
-         <children>
-            <Button fx:id="createButton" text="Create link" />
-            <Button fx:id="cancelButton" text="Cancel" />
-         </children>
-      </HBox>
-   </children>
+<VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.owlplug.plugin.controllers.dialogs.NewLinkController">
+   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
+      <VBox alignment="BOTTOM_CENTER" spacing="5.0">
+         <Label text="Links enables the creation of symbolic links across file-system and plugin directories."
+                wrapText="true"/>
+         <TextFlow>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                  text="For example, a link can be configured from directory"/>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/path/to/plugins/extra">
+               <font>
+                  <Font name="System Italic" size="12.0"/>
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" to target an usb hard drive on "/>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/mnt/extra">
+               <font>
+                  <Font name="System Italic" size="12.0"/>
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=". All plugins in "/>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/mnt/extra">
+               <font>
+                  <Font name="System Italic" size="12.0"/>
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" will be accessible from"/>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="/path/to/plugins/extra">
+               <font>
+                  <Font name="System Italic" size="12.0"/>
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0"
+                  text=". Some systems may require admin privileges to create symlinks."/>
+         </TextFlow>
+      </VBox>
+      <ImageView pickOnBounds="true" preserveRatio="true">
+         <Image url="@../../media/symlinks.png"/>
+      </ImageView>
+   </HBox>
+   <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+      <VBox fillWidth="false" prefHeight="100.0" prefWidth="25.0" spacing="9.0">
+         <HBox.margin>
+            <Insets top="5.0"/>
+         </HBox.margin>
+         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../icons/folderlink-grey-16.png"/>
+         </ImageView>
+         <SVGPath
+                 content="M 11,21.883 4.765,14.356 4,15 11.521,24 19,15 18.236,14.355 12,21.884 12,-9.6875002 h -1 z"
+                 fill="#8f8f8f"/>
+         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../icons/folder-grey-16.png"/>
+         </ImageView>
+      </VBox>
+      <VBox maxWidth="1.7976931348623157E308" spacing="20.0" HBox.hgrow="ALWAYS">
+         <VBox>
+            <Label text="1. New link path from one of your plugin folder" wrapText="true"/>
+            <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+               <TextField fx:id="linkSourceParentTextField" promptText="/path/to/your/vst/directory"
+                          HBox.hgrow="ALWAYS"/>
+               <Button fx:id="sourceDirectoryButton" text="..."/>
+               <TextField fx:id="linkSourceNameTextField" prefHeight="25.0" prefWidth="170.0"
+                          promptText="Link Name" HBox.hgrow="SOMETIMES"/>
+            </HBox>
+         </VBox>
+         <VBox>
+            <Label text="2. Target directory located anywhere on your file system." wrapText="true"/>
+            <HBox alignment="BASELINE_LEFT" prefWidth="500.0">
+               <TextField fx:id="linkTargetTextField" promptText="/path/to/any/custom/directory"
+                          HBox.hgrow="ALWAYS"/>
+               <Button fx:id="targetDirectoryButton" text="..."/>
+            </HBox>
+         </VBox>
+      </VBox>
+   </HBox>
+   <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Link can't be created"/>
+   <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
+      <Button fx:id="createButton" text="Create link"/>
+      <Button fx:id="cancelButton" text="Cancel"/>
+   </HBox>
 </VBox>

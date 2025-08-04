@@ -20,14 +20,14 @@ package com.owlplug.project.controllers;
 
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.plugin.controllers.PluginsController;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFormat;
-import com.owlplug.core.utils.PlatformUtils;
-import com.owlplug.core.utils.TimeUtils;
-import com.owlplug.project.model.LookupResult;
-import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.DawPlugin;
+import com.owlplug.project.model.DawProject;
+import com.owlplug.project.model.LookupResult;
 import java.io.File;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -122,7 +122,7 @@ public class ProjectInfoController extends BaseController {
       return new SimpleObjectProperty<>(cellData.getValue().getFormat());
     });
 
-    pluginTableStatusColumn.setCellFactory(e -> new TableCell<DawPlugin, String>() {
+    pluginTableStatusColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
@@ -151,7 +151,7 @@ public class ProjectInfoController extends BaseController {
       return null;
     });
 
-    pluginTableLinkColumn.setCellFactory(e -> new TableCell<DawPlugin, Plugin>() {
+    pluginTableLinkColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(Plugin item, boolean empty) {
         super.updateItem(item, empty);
@@ -170,7 +170,7 @@ public class ProjectInfoController extends BaseController {
       }
     });
 
-    pluginTableFormatColumn.setCellFactory(e -> new TableCell<DawPlugin, PluginFormat>() {
+    pluginTableFormatColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(PluginFormat item, boolean empty) {
         super.updateItem(item, empty);

@@ -29,24 +29,22 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
-import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
+import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
+import com.owlplug.plugin.model.PluginFormat;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -211,12 +209,9 @@ public class ExploreController extends BaseController {
       performPackageSearch();
     });
 
-    scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
-      @Override
-      public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        if (newValue.doubleValue() == 1) {
-          displayNewPackagePartition();
-        }
+    scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.doubleValue() == 1) {
+        displayNewPackagePartition();
       }
     });
 
@@ -256,7 +251,7 @@ public class ExploreController extends BaseController {
       criteriaList.add(new ExploreFilterCriteria(formats, ExploreFilterCriteriaType.FORMAT_LIST));
     }
 
-    Task<Iterable<RemotePackage>> task = new Task<Iterable<RemotePackage>>() {
+    Task<Iterable<RemotePackage>> task = new Task<>() {
       @Override
       protected Iterable<RemotePackage> call() throws Exception {
         return exploreService.getRemotePackages(criteriaList);
@@ -390,11 +385,11 @@ public class ExploreController extends BaseController {
 
     // A custom root directory to store plugin is defined and the base directory for
     // the bundle format is defined or not blank.
-    if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false) &&
-      baseDirectoryPath != null && !baseDirectoryPath.isBlank()) {
+    if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)
+            && baseDirectoryPath != null && !baseDirectoryPath.isBlank()) {
       // Store install target is already defined
       String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
-      Boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
+      boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
 
       //if the user wishes to group plugins by their creator,
       //then we need to include the subdirectory as well.

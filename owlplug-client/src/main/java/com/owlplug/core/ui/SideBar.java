@@ -20,8 +20,6 @@ package com.owlplug.core.ui;
 
 import javafx.animation.Animation;
 import javafx.animation.Transition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.Priority;
@@ -59,12 +57,7 @@ public class SideBar extends VBox {
         setOpacity(1.0 - frac);
       }
     };
-    hideSidebar.onFinishedProperty().set(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent actionEvent) {
-        setVisible(false);
-      }
-    });
+    hideSidebar.onFinishedProperty().set(e -> setVisible(false));
 
     // create an animation to show the sidebar.
     showSidebar = new Transition() {

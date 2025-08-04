@@ -20,11 +20,11 @@ package com.owlplug.core.controllers.dialogs;
 
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
 import com.owlplug.core.model.OperatingSystem;
+import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -103,9 +103,7 @@ public class WelcomeDialogController extends AbstractDialogController {
       taskFactory.createPluginSyncTask().schedule();
     });
 
-    cancelButton.setOnAction(e -> {
-      this.close();
-    });
+    cancelButton.setOnAction(e -> this.close());
 
     refreshView();
 

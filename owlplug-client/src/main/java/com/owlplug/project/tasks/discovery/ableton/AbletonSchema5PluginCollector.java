@@ -48,9 +48,9 @@ public class AbletonSchema5PluginCollector {
 
     ArrayList<DawPlugin> plugins = new ArrayList<>();
 
-    XPath xPath = XPathFactory.newInstance().newXPath();
+    XPath xpath = XPathFactory.newInstance().newXPath();
     try {
-      NodeList vstPlugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/VstPluginInfo")
+      NodeList vstPlugins = (NodeList) xpath.compile("//PluginDevice/PluginDesc/VstPluginInfo")
               .evaluate(document, XPathConstants.NODESET);
 
       for (int i = 0; i < vstPlugins.getLength();i++) {
@@ -60,7 +60,7 @@ public class AbletonSchema5PluginCollector {
         }
       }
 
-      NodeList vst3Plugins = (NodeList) xPath.compile("//PluginDevice/PluginDesc/Vst3PluginInfo")
+      NodeList vst3Plugins = (NodeList) xpath.compile("//PluginDevice/PluginDesc/Vst3PluginInfo")
               .evaluate(document, XPathConstants.NODESET);
       for (int i = 0; i < vst3Plugins.getLength();i++) {
         Node node = vst3Plugins.item(i);
@@ -69,7 +69,7 @@ public class AbletonSchema5PluginCollector {
         }
       }
 
-      NodeList auPlugins = (NodeList) xPath.compile("//AuPluginDevice/PluginDesc/AuPluginInfo")
+      NodeList auPlugins = (NodeList) xpath.compile("//AuPluginDevice/PluginDesc/AuPluginInfo")
               .evaluate(document, XPathConstants.NODESET);
       for (int i = 0; i < auPlugins.getLength();i++) {
         Node node = auPlugins.item(i);

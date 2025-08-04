@@ -18,9 +18,9 @@
  
 package com.owlplug.explore.model.search;
 
-import com.owlplug.plugin.model.PluginType;
-import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.explore.repositories.RemotePackageRepository;
+import com.owlplug.plugin.model.PluginType;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 

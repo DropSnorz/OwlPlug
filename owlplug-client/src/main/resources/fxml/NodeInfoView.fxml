@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
 
-
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.NodeInfoController">
-   <children>
-      <fx:include fx:id="pluginInfoView" source="PluginInfoView.fxml" AnchorPane.topAnchor="0.0"
-             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-             AnchorPane.bottomAnchor="0.0"/>
-      <fx:include fx:id="directoryInfoView" source="DirectoryInfoView.fxml" AnchorPane.topAnchor="0.0"
-             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-             AnchorPane.bottomAnchor="0.0"/>
-       <fx:include fx:id="symlinkInfoView" source="SymlinkInfoView.fxml" AnchorPane.topAnchor="0.0"
-             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-             AnchorPane.bottomAnchor="0.0"/>
-       <fx:include fx:id="componentInfoView" source="ComponentInfoView.fxml" AnchorPane.topAnchor="0.0"
-                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                   AnchorPane.bottomAnchor="0.0"/>
-   </children>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.owlplug.plugin.controllers.NodeInfoController">
+    <fx:include fx:id="pluginInfoView" source="PluginInfoView.fxml" AnchorPane.topAnchor="0.0"
+                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                AnchorPane.bottomAnchor="0.0"/>
+    <fx:include fx:id="directoryInfoView" source="DirectoryInfoView.fxml" AnchorPane.topAnchor="0.0"
+                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                AnchorPane.bottomAnchor="0.0"/>
+    <fx:include fx:id="symlinkInfoView" source="SymlinkInfoView.fxml" AnchorPane.topAnchor="0.0"
+                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                AnchorPane.bottomAnchor="0.0"/>
+    <fx:include fx:id="componentInfoView" source="ComponentInfoView.fxml" AnchorPane.topAnchor="0.0"
+                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                AnchorPane.bottomAnchor="0.0"/>
 </AnchorPane>

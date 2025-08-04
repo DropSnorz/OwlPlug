@@ -5,28 +5,25 @@
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.*?>
 
-<VBox fx:id="mainNode" spacing="5.0" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <Label fx:id="headerLabel" styleClass="heading-2" text="VST 3" />
-        <FlowPane hgap="3.0" prefWidth="200.0">
-            <children>
-                <ToggleSwitch fx:id="activationToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore plugins" />
-                <Label text="(" />
-                <Hyperlink fx:id="extraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
-                <Label text=")" />
-            </children>
-         <VBox.margin>
-            <Insets left="15.0" />
-         </VBox.margin>
-        </FlowPane>
-        <HBox alignment="BASELINE_LEFT" spacing="5.0">
-            <children>
-                <TextField fx:id="directoryTextField" promptText="VST3 plugin directory" HBox.hgrow="ALWAYS" />
-                <Button fx:id="directoryButton" text="..." />
-            </children>
-         <VBox.margin>
-            <Insets left="15.0" />
-         </VBox.margin>
-        </HBox>
-    </children>
+<VBox fx:id="mainNode" spacing="5.0" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <Label fx:id="headerLabel" styleClass="heading-2" text="VST 3"/>
+    <FlowPane hgap="3.0" prefWidth="200.0">
+        <VBox.margin>
+            <Insets left="15.0"/>
+        </VBox.margin>
+        <ToggleSwitch fx:id="activationToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0"
+                      text="Explore plugins"/>
+        <Label text="("/>
+        <Hyperlink fx:id="extraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories"
+                   underline="true"/>
+        <Label text=")"/>
+    </FlowPane>
+    <HBox alignment="BASELINE_LEFT" spacing="5.0">
+        <VBox.margin>
+            <Insets left="15.0"/>
+        </VBox.margin>
+        <TextField fx:id="directoryTextField" promptText="VST3 plugin directory" HBox.hgrow="ALWAYS"/>
+        <Button fx:id="directoryButton" text="..."/>
+    </HBox>
 </VBox>

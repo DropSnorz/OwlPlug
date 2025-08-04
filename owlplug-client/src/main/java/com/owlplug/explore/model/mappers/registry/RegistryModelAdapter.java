@@ -18,13 +18,13 @@
 
 package com.owlplug.explore.model.mappers.registry;
 
-import com.owlplug.plugin.model.PluginStage;
-import com.owlplug.plugin.model.PluginType;
 import com.owlplug.core.utils.UrlUtils;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
+import com.owlplug.plugin.model.PluginStage;
+import com.owlplug.plugin.model.PluginType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

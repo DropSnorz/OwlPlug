@@ -128,7 +128,7 @@ public class NewSourceDialogController extends AbstractDialogController implemen
     String sourceUrl = sourceUrlTextField.getText();
 
     if (sourceUrl != null && !sourceUrl.isEmpty()) {
-      Task<RemoteSource> task = new Task<RemoteSource>() {
+      Task<RemoteSource> task = new Task<>() {
         @Override
         protected RemoteSource call() throws Exception {
           return exploreService.fetchSourceFromRemoteUrl(sourceUrl);

@@ -36,7 +36,7 @@ public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCel
 
   @Override
   public ListCell<Plugin> call(ListView<Plugin> arg0) {
-    return new ListCell<Plugin>() {
+    return new ListCell<>() {
       private ImageView imageView = new ImageView();
 
       @Override
