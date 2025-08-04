@@ -42,6 +42,13 @@
       </TextFlow>
    </HBox>
    <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
-      <Button fx:id="closeButton" text="Close"/>
+      <Button fx:id="openLogsButton" text="Open Logs">
+         <graphic>
+            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+               <Image url="@../../icons/folder-grey-16.png" />
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="closeButton" text="Close this popup"/>
    </HBox>
 </VBox>
