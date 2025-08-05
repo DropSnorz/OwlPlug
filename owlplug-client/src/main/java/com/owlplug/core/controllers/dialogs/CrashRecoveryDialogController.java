@@ -48,7 +48,7 @@ import org.springframework.stereotype.Controller;
 public class CrashRecoveryDialogController extends AbstractDialogController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
-  
+
   @Autowired
   private LazyViewRegistry lazyViewRegistry;
   @Autowired
@@ -65,6 +65,8 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
   protected ComboBox<NativePluginLoader> pluginNativeComboBox;
   @FXML
   protected Button closeButton;
+  @FXML
+  protected Button openLogsButton;
   @FXML
   protected Hyperlink troubleshootingLink;
   @FXML 
@@ -119,6 +121,10 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     closeButton.setOnAction(e -> {
       optionsController.refreshView();
       this.close();
+    });
+
+    openLogsButton.setOnAction(e -> {
+      PlatformUtils.openFromDesktop(ApplicationDefaults.getLogDirectory());
     });
     
     List<Plugin> incompleteSyncPlugins = pluginService.getSyncIncompletePlugins();

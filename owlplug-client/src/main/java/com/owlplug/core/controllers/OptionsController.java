@@ -89,6 +89,8 @@ public class OptionsController extends BaseController {
   @FXML
   private Button moreFeaturesButton;
   @FXML
+  private Button openLogsButton;
+  @FXML
   private TextFlow versionTextFlow;
 
   private PluginPathFragmentController vst2PluginPathFragment;
@@ -223,6 +225,10 @@ public class OptionsController extends BaseController {
 
     moreFeaturesButton.setOnAction(e -> {
       donateDialogController.show();
+    });
+
+    openLogsButton.setOnAction(e -> {
+      PlatformUtils.openFromDesktop(ApplicationDefaults.getLogDirectory());
     });
 
     versionTextFlow.getChildren().add(new SlidingLabel(ApplicationDefaults.getContributors()));

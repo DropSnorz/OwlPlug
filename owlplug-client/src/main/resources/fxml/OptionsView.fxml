@@ -7,42 +7,36 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.owlplug.core.controllers.OptionsController">
-   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0"
-         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-         AnchorPane.topAnchor="0.0">
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.OptionsController">
+   <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <padding>
-         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
       </padding>
       <VBox HBox.hgrow="SOMETIMES">
          <VBox>
             <styleClass>
-               <String fx:value="pane-card"/>
+               <String fx:value="pane-card" />
             </styleClass>
             <padding>
-               <Insets bottom="5.0"/>
+               <Insets bottom="5.0" />
             </padding>
             <Label styleClass="heading-1" text="Audio Plugins">
                <VBox.margin>
-                  <Insets bottom="20.0"/>
+                  <Insets bottom="20.0" />
                </VBox.margin>
             </Label>
             <VBox>
                <VBox spacing="20.0">
-                  <VBox fx:id="pluginPathContainer" spacing="30.0"/>
+                  <VBox fx:id="pluginPathContainer" spacing="30.0" />
                   <VBox spacing="4.0">
                      <VBox.margin>
-                        <Insets bottom="16.0" top="16.0"/>
+                        <Insets bottom="16.0" top="16.0" />
                      </VBox.margin>
                      <HBox spacing="10.0">
-                        <CheckBox fx:id="pluginNativeCheckbox"
-                                  text="Native plugin discovery using"/>
-                        <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0"
-                                  HBox.hgrow="NEVER"/>
+                        <CheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery using" />
+                        <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="NEVER" />
                      </HBox>
-                     <Label styleClass="label-emphase"
-                            text="Allow deep plugin metadatas discovery using platform specific features"/>
+                     <Label styleClass="label-emphase" text="Allow deep plugin metadatas discovery using platform specific features" />
                   </VBox>
                </VBox>
             </VBox>
@@ -51,48 +45,37 @@
       <VBox HBox.hgrow="SOMETIMES">
          <VBox prefWidth="500.0" VBox.vgrow="NEVER">
             <styleClass>
-               <String fx:value="pane-card"/>
+               <String fx:value="pane-card" />
             </styleClass>
             <padding>
-               <Insets bottom="10.0"/>
+               <Insets bottom="10.0" />
             </padding>
             <Label styleClass="heading-1" text="Preferences">
                <VBox.margin>
-                  <Insets bottom="20.0"/>
+                  <Insets bottom="20.0" />
                </VBox.margin>
             </Label>
             <VBox spacing="15.0" VBox.vgrow="NEVER">
-               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0"
-                     VBox.vgrow="NEVER">
+               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" VBox.vgrow="NEVER">
                   <padding>
-                     <Insets left="5.0"/>
+                     <Insets left="5.0" />
                   </padding>
-                  <Label styleClass="heading-2" text="General"/>
+                  <Label styleClass="heading-2" text="General" />
                   <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="NEVER">
-                     <CheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup"
-                               wrapText="true"/>
-                     <CheckBox fx:id="storeSubDirectoryCheckBox"
-                               text="Wrap downloaded plugins in dedicated subdirectories"
-                               wrapText="true"/>
-                     <Label fx:id="warningSubDirectory" styleClass="label-danger"
-                            text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions."
-                            wrapText="true"/>
+                     <CheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" wrapText="true" />
+                     <CheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugins in dedicated subdirectories" wrapText="true" />
+                     <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
                      <VBox spacing="5.0" VBox.vgrow="NEVER">
-                        <CheckBox fx:id="storeDirectoryCheckBox"
-                                  text="Save downloaded plugins from remoteSource in a dedicated directory"
-                                  wrapText="true"/>
-                        <CheckBox fx:id="storeByCreatorCheckBox"
-                                  text="Save downloaded plugins grouped by their creator or manufacturer"
-                                  wrapText="true"/>
+                        <CheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from remoteSource in a dedicated directory" wrapText="true" />
+                        <CheckBox fx:id="storeByCreatorCheckBox" text="Save downloaded plugins grouped by their creator or manufacturer" wrapText="true" />
                         <HBox alignment="BASELINE_LEFT" prefWidth="200.0" VBox.vgrow="NEVER">
                            <VBox.margin>
-                              <Insets left="5.0"/>
+                              <Insets left="5.0" />
                            </VBox.margin>
-                           <Label text="\@plugin-directory/"/>
-                           <TextField fx:id="storeDirectoryTextField"
-                                      promptText="subdirectory (optional)"/>
-                           <Label fx:id="storeDirectorySeparator" text="/"/>
-                           <Label fx:id="storeByCreatorLabel" text="\@creator/"/>
+                           <Label text="\@plugin-directory/" />
+                           <TextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" />
+                           <Label fx:id="storeDirectorySeparator" text="/" />
+                           <Label fx:id="storeByCreatorLabel" text="\@creator/" />
                         </HBox>
 
                      </VBox>
@@ -100,43 +83,44 @@
                </VBox>
                <VBox spacing="10.0" VBox.vgrow="NEVER">
                   <VBox.margin>
-                     <Insets/>
+                     <Insets />
                   </VBox.margin>
-                  <Label styleClass="heading-2" text="Danger Zone"/>
+                  <Label styleClass="heading-2" text="Danger Zone" />
                   <VBox spacing="5.0">
-                     <Label text="Permanently delete all stored user data including settings, remote sources and accounts. Plugins and projects files will not be deleted."
-                            wrapText="true"/>
-                     <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity"
-                             text="Remove user data"/>
-                     <Label text="Remove the data cached by OwlPlug (screenshots, remote metadata, ...)"
-                            wrapText="true"/>
-                     <Button fx:id="clearCacheButton" minHeight="-Infinity" minWidth="-Infinity"
-                             text="Clear cache"/>
+                     <Label text="Permanently delete all stored user data including settings, remote sources and accounts. Plugins and projects files will not be deleted." wrapText="true" />
+                     <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" text="Remove user data" />
+                     <Label text="Remove the data cached by OwlPlug (screenshots, remote metadata, ...)" wrapText="true" />
+                     <Button fx:id="clearCacheButton" minHeight="-Infinity" minWidth="-Infinity" text="Clear cache" />
                   </VBox>
                </VBox>
                <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="145.0" VBox.vgrow="NEVER">
-                  <Label styleClass="heading-2" text="About"/>
-                  <Hyperlink fx:id="owlplugWebsiteLink" alignment="BASELINE_LEFT"
-                             styleClass="hyperlink-disabled" text="https://owlplug.com">
+                  <Label styleClass="heading-2" text="About" />
+                  <Hyperlink fx:id="owlplugWebsiteLink" alignment="BASELINE_LEFT" styleClass="hyperlink-disabled" text="https://owlplug.com">
                      <VBox.margin>
-                        <Insets left="-5.0"/>
+                        <Insets left="-5.0" />
                      </VBox.margin>
                   </Hyperlink>
                   <HBox spacing="5.0">
                      <VBox.margin>
-                        <Insets top="10.0"/>
+                        <Insets top="10.0" />
                      </VBox.margin>
-                     <TextFlow fx:id="versionTextFlow" prefHeight="25.0" prefWidth="335.0">
-                        <Label text="OwlPlug -"/>
-                        <Label fx:id="versionLabel" text="?.?.?" wrapText="true"/>
-                        <Label text=" - Thanks to "/>
+                     <TextFlow fx:id="versionTextFlow" prefHeight="25.0" prefWidth="309.0">
+                        <Label text="OwlPlug -" />
+                        <Label fx:id="versionLabel" text="?.?.?" wrapText="true" />
+                        <Label text=" - Thanks to " />
                      </TextFlow>
                      <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
-                        <Button fx:id="moreFeaturesButton" text="Contribute...">
+                        <Button fx:id="moreFeaturesButton" text="Contribute">
                            <graphic>
-                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                         preserveRatio="true">
-                                 <Image url="@../icons/rocket-white-64.png"/>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <Image url="@../icons/rocket-white-64.png" />
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="openLogsButton" text="Open Logs">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <Image url="@../icons/folder-grey-16.png" />
                               </ImageView>
                            </graphic>
                         </Button>

@@ -267,4 +267,8 @@ public class ApplicationDefaults {
     return Paths.get(getUserDataDirectory(), "temp").toString();
   }
 
+  public static String getLogDirectory() {
+    return Paths.get(getUserDataDirectory(), "logs").toString();
+  }
+
 }

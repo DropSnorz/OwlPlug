@@ -229,9 +229,9 @@ public class PluginSyncTask extends AbstractTask {
       return success();
 
     } catch (Exception e) {
+      this.updateMessage("Plugins synchronization failed: " + e.getMessage());
       log.error("Plugins synchronization failed", e);
-      this.updateMessage("Plugins synchronization failed. Check your plugin directory.");
-      throw new TaskException("Plugins synchronization failed");
+      throw new TaskException("Plugins synchronization failed", e);
 
     }
 
