@@ -113,13 +113,16 @@ public class PluginTaskFactory extends BaseTaskFactory {
     syncTask.setOnSucceeded(syncEvent -> {
       notifyListeners(syncPluginsListeners);
       TaskExecutionContext lookupTask = projectTaskFactory.createLookupTask();
-      lookupTask.getTask().setOnScheduled(lookupEvent -> {
-        if (directoryScope != null) {
-          createFileStatSyncTask(directoryScope).scheduleNow();
-        } else {
-          createFileStatSyncTask().scheduleNow();
-        }
-      });
+
+      if (prefs.getBoolean(ApplicationDefaults.SYNC_FILE_STAT, true)) {
+        lookupTask.getTask().setOnScheduled(lookupEvent -> {
+          if (directoryScope != null) {
+            createFileStatSyncTask(directoryScope).scheduleNow();
+          } else {
+            createFileStatSyncTask().scheduleNow();
+          }
+        });
+      }
       lookupTask.scheduleNow();
     });
 

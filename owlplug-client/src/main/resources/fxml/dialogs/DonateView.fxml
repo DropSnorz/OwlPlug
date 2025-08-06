@@ -37,11 +37,11 @@
          </Button>
 
       </HBox>
-      <Label text="If you like OwlPlug or want to see new features implemented, you can help me by clicking on the Contribute button. It will redirect you to the donation page."
+      <Label text="If you like OwlPlug or want to see new features implemented, you can help me by clicking on the Donate button. It will redirect you to the donation page."
              wrapText="true"/>
    </VBox>
    <HBox alignment="TOP_RIGHT" spacing="10.0" VBox.vgrow="NEVER">
-      <Button fx:id="donateButton" text="Contribute to OwlPlug"/>
+      <Button fx:id="donateButton" text="Donate to OwlPlug"/>
       <Button fx:id="cancelButton" text="No, leave"/>
    </HBox>
 </VBox>

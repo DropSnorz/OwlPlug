@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.OptionsController">
+<AnchorPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.OptionsController">
    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <padding>
          <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -43,7 +43,7 @@
          </VBox>
       </VBox>
       <VBox HBox.hgrow="SOMETIMES">
-         <VBox prefWidth="500.0" VBox.vgrow="NEVER">
+         <VBox prefWidth="550.0" VBox.vgrow="NEVER">
             <styleClass>
                <String fx:value="pane-card" />
             </styleClass>
@@ -61,25 +61,28 @@
                      <Insets left="5.0" />
                   </padding>
                   <Label styleClass="heading-2" text="General" />
-                  <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="NEVER">
-                     <CheckBox fx:id="syncPluginsCheckBox" text="Sync plugins on application startup" wrapText="true" />
-                     <CheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugins in dedicated subdirectories" wrapText="true" />
-                     <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
-                     <VBox spacing="5.0" VBox.vgrow="NEVER">
-                        <CheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from remoteSource in a dedicated directory" wrapText="true" />
-                        <CheckBox fx:id="storeByCreatorCheckBox" text="Save downloaded plugins grouped by their creator or manufacturer" wrapText="true" />
-                        <HBox alignment="BASELINE_LEFT" prefWidth="200.0" VBox.vgrow="NEVER">
-                           <VBox.margin>
-                              <Insets left="5.0" />
-                           </VBox.margin>
-                           <Label text="\@plugin-directory/" />
-                           <TextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" />
-                           <Label fx:id="storeDirectorySeparator" text="/" />
-                           <Label fx:id="storeByCreatorLabel" text="\@creator/" />
-                        </HBox>
-
-                     </VBox>
+                  <VBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+                     <CheckBox fx:id="syncPluginsCheckBox" text="Sync plugins after application startup" wrapText="true" />
+                     <CheckBox fx:id="syncFileStatCheckbox" text="Analyze file statistics after plugins sync (Size usage)" wrapText="true" />
                   </VBox>
+                  <Label layoutX="15.0" layoutY="10.0" styleClass="heading-2" text="Explore" />
+                  <VBox spacing="5.0">
+                     <CheckBox fx:id="storeSubDirectoryCheckBox" text="Save downloaded plugins in dedicated subdirectories" wrapText="true" />
+                     <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
+                     <CheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from remoteSource in a dedicated directory" wrapText="true" />
+                     <CheckBox fx:id="storeByCreatorCheckBox" text="Save downloaded plugins grouped by their creator or manufacturer" wrapText="true" />
+                     <HBox alignment="BASELINE_LEFT" prefWidth="200.0" VBox.vgrow="NEVER">
+                        <VBox.margin>
+                           <Insets left="5.0" />
+                        </VBox.margin>
+                        <Label text="\@plugin-directory/" />
+                        <TextField fx:id="storeDirectoryTextField" promptText="subdirectory (optional)" />
+                        <Label fx:id="storeDirectorySeparator" text="/" />
+                        <Label fx:id="storeByCreatorLabel" text="\@creator/" />
+                        <Label fx:id="storeSubDirectoryLabel" layoutX="266.0" layoutY="14.0" text="\@plugin/" />
+                     </HBox>
+   
+                     </VBox>
                </VBox>
                <VBox spacing="10.0" VBox.vgrow="NEVER">
                   <VBox.margin>
