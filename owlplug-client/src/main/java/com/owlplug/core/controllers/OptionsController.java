@@ -62,6 +62,8 @@ public class OptionsController extends BaseController {
   @FXML
   private CheckBox syncPluginsCheckBox;
   @FXML
+  private CheckBox syncFileStatCheckbox;
+  @FXML
   private Button removeDataButton;
   @FXML
   private Label versionLabel;
@@ -74,6 +76,8 @@ public class OptionsController extends BaseController {
   private CheckBox storeByCreatorCheckBox;
   @FXML
   private Label storeByCreatorLabel;
+  @FXML
+  private Label storeSubDirectoryLabel;
   @FXML
   private Label warningSubDirectory;
   @FXML
@@ -138,6 +142,7 @@ public class OptionsController extends BaseController {
     pluginPathContainer.getChildren().add(lv2PluginPathFragment.getNode());
 
     storeByCreatorLabel.setVisible(false);
+    storeSubDirectoryLabel.setVisible(false);
 
     pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
@@ -159,12 +164,18 @@ public class OptionsController extends BaseController {
       this.getPreferences().putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, newValue);
     });
 
+    syncFileStatCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      this.getPreferences().putBoolean(ApplicationDefaults.SYNC_FILE_STAT, newValue);
+    });
+
     storeSubDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, newValue);
       warningSubDirectory.setVisible(!newValue);
+      storeSubDirectoryLabel.setVisible(newValue);
     });
 
     warningSubDirectory.managedProperty().bind(warningSubDirectory.visibleProperty());
+    storeSubDirectoryLabel.managedProperty().bind(storeSubDirectoryLabel.visibleProperty());
 
     storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
@@ -179,6 +190,8 @@ public class OptionsController extends BaseController {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, newValue);
       storeByCreatorLabel.setVisible(newValue);
     });
+
+    storeByCreatorLabel.managedProperty().bind(storeByCreatorLabel.visibleProperty());
 
     storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
@@ -247,6 +260,7 @@ public class OptionsController extends BaseController {
     pluginNativeComboBox.setDisable(!nativeHostService.isNativeHostAvailable());
     pluginNativeCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
     syncPluginsCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
+    syncFileStatCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_FILE_STAT, true));
     storeSubDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     warningSubDirectory.setVisible(!this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));

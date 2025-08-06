@@ -116,8 +116,8 @@ public class ApplicationDefaults {
   public static final String APPLICATION_STATE_KEY = "APPLICATION_STATE_KEY";
   public static final String SHOW_DIALOG_DISABLE_PLUGIN_KEY = "SHOW_DIALOG_DISABLE_PLUGIN_KEY";
   public static final String PROJECT_DIRECTORY_KEY = "PROJECT_DIRECTORY_KEY";
-
   public static final String PLUGIN_PREFERRED_DISPLAY_KEY = "PLUGIN_PREFERRED_DISPLAY_KEY";
+  public static final String SYNC_FILE_STAT = "SYNC_FILE_STAT";
 
   /**
    * Creates a new ApplicationDefaults.
