@@ -19,50 +19,51 @@
 
 # Overview
 
-![owlplug-demo](http://dropsnorz.com/projects/owlplug/owlplug.gif)
+OwlPlug simplifies the way you organize, discover and install audio plugins. No more tedious file management, scattered folders, or missing dependencies — OwlPlug gives you a centralized experience for VST, AU, and LV2 plugins.
 
+- 🔎 **Manage** — Detect and list your existing audio plugins.
+- 🔗 **Organize** — Merge plugins from multiple locations into a single root directory.
+- 📂 **Analyze Projects** — Scan DAW projects to identify referenced and missing plugins.
+- 🌐 **Discover** — Connect to remote sources to browse and install plugins.
 
-**About OwlPlug**
+![owlplug-demo](https://dropsnorz.com/projects/owlplug/owlplug.gif)
 
+## About
 
 :earth_africa: [OwlPlug Website](https://owlplug.com) | :pushpin: [Roadmap](https://owlplug.com/roadmap) | :page_facing_up: [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki)
 
-**Why I have created OwlPlug ?** 
+OwlPlug is an open-source plugin manager designed to simplify the installation, discovery, and management of audio plugins.
+It was born out of frustration with the tedious process of installing and organizing plugins. Inspired by dependency managers and online content stores, OwlPlug offers a seamless way to manage your audio tools while also helping you discover new plugins from the community.
+All feedback, contributions, and suggestions are warmly welcomed.
 
-OwlPlug came from my hate of installing and managing audio plugins. The process is very annoying. I always wanted something simple that looks like dependency managers or online content store. I've started this just for fun... But because it was so simple to install plugins, I've discovered dozens of cool plugins just by using my own tool. So I realized this is not just a different way to install plugins, it's a real opportunity to share and discover awesome free and open sourced plugins developed by the community. 
+[![Powered by Open Audio Stack](./owlplug-client/src/main/resources/media/powered-by-open-audio-stack.svg)](https://github.com/open-audio-stack)
 
-All kinds of feedbacks are greatly welcomed.
+# Installation
 
-[![powered-by-open-audio-stack](./owlplug-client/src/main/resources/media/powered-by-open-audio-stack.svg)](https://github.com/open-audio-stack)
+## Direct Download
 
+### Requirements
+- Windows 7 (64-bit) or later
+- macOS High Sierra or later
+- Linux with `.deb` package support
 
-## Installation
+### Installation Steps
+1. Download the installer for your platform from the [Releases](http://github.com/dropsnorz/owlplug/releases) page.
+   - Windows: `.msi` installer
+   - macOS: `.dmg` file
+   - Linux: `.deb` package
+2. Run the installer.
+3. Launch OwlPlug.
 
-### Direct download (latest version)
+⚠️ **macOS Users**: On some versions of macOS, you may see a warning that OwlPlug is damaged. This can be fixed by following the instructions on the [Troubleshooting wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Troubleshooting). This issue occurs because the app is not notarized by Apple.
 
-**Requirements**: Windows 7 (64 bit) or later, macOS High Sierra or later.
+## Package Managers
 
-1. Browse binaries from [the release section](http://github.com/dropsnorz/owlplug/releases)
-2. Download and run the OwlPlug installer for your platform
-    * `.msi` installer on Windows
-    * `.dmg` file on macOS
-    * `.deb` file on Linux
-3. Run OwlPlug application
-
-:warning: Mac users, depending on your OS version, you may face an error mentioning that OwlPlug is damaged. You can fix this problem using a single command described on [the wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Troubleshooting).
-
-### Package managers
-
-#### Windows
+### Windows
 
 ```sh
-winget install owlplug
+winget install --exact --id=OwlPlug.OwlPlug
 ```
-
-
-## How to help
-
-[Download and Install](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, configure it, download plugins, etc... Report any kind of problems by [opening an issue](https://github.com/DropSnorz/OwlPlug/issues) on this repository. Feel free to use the [discussions tab](https://github.com/DropSnorz/OwlPlug/discussions) to ask questions, report suggestions and feedback about features and potential improvements.
 
 # Features
 
@@ -72,7 +73,7 @@ OwlPlug can discover VST2, VST3, AU and LV2 Plugins. OwlPlug is compatible with 
 
 After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
 
-## Links creation
+## Links management
 
 A Link allows you to create and manage symlinks across your filesystem and plugin directories. With Links, you can access directories anywhere on your filesystem (Hard drive, USB keys, custom directories...) through a single root plugin directory. For example, you can configure a link named *usb-drive* in `C:/AudioPlugins` to target your usb hard drive `D:/myPlugins`. All plugins in `D:/myPlugins` will be accessible using `C:/AudioPlugins/usb-drive`. This feature may be useful for DAW that scans plugins from predefined or limited number directories. On some Windows version, symlinks creation may require admin privileges.
 
@@ -102,11 +103,20 @@ Open Audio Stack registry plugins maintained by community.
 
 **Discover more plugin sources in [this wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Remote-plugin-sources).**
 
-### How to distribute my plugins on OwlPlug ?
+### How to distribute plugins on OwlPlug?
 
-* **(Recommended)** Distribute your plugins using on the official OwlPlug Registry. You can find more information on how to proceed in the [registry github repository](https://github.com/OwlPlug/owlplug-registry).
+* **(Recommended)** Distribute your plugins from the [open-audio-stack-registry](https://github.com/open-audio-stack/open-audio-stack-registry).
+* Distribute your plugins from the legacy [owlplug-registry](https://github.com/OwlPlug/owlplug-registry).
+* Setup and host a custom remote source to distribute multiple plugins, following the [open-audio-stack-registry](https://github.com/open-audio-stack/open-audio-stack-registry) or [owlplug-registry](https://github.com/OwlPlug/owlplug-registry) specification.
 
-* Setup and host a custom remote source to distribute multiple plugins, following the [registry specification](https://github.com/OwlPlug/owlplug-registry/blob/master/doc/Registry-specification.md).
+# How to contribute?
+
+There are several ways to support and get involved in the OwlPlug development.
+* [Downloading](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, using it, and talking about it around you.
+* [Reporting issues](https://github.com/DropSnorz/OwlPlug/issues) or feature suggestions. Most of the existing features have been inspired by the community feedback.
+* [Contributing](https://github.com/DropSnorz/OwlPlug) to the OwlPlug source code.
+* [Submitting or requesting](https://github.com/OwlPlug/owlplug-registry) plugins to be distributed with OwlPlug.
+* [Donating](https://www.paypal.com/donate?hosted_button_id=7MJGDTQXAPJ22) to help support development and server costs
 
 # Development
 
@@ -116,7 +126,7 @@ Open Audio Stack registry plugins maintained by community.
 * JavaFx
 * Hibernate & H2
 * Maven
-* Juce
+* JUCE
 
 
 ## Development Setup
