@@ -199,7 +199,7 @@ public class MainController extends BaseController {
     if (this.applicationMonitor.isPreviousExecutionSafelyTerminated()
             && this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
       log.info("Starting auto plugin sync");
-      pluginService.syncPlugins();
+      pluginService.scanPlugins(false);
     }
 
   }

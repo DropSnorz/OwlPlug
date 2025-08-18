@@ -58,8 +58,13 @@ public class PluginService extends BaseService {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
-  public void syncPlugins() {
-    taskFactory.createPluginSyncTask().schedule();
+  public void scanPlugins() {
+    scanPlugins(pluginRepository.count() > 0);
+
+  }
+
+  public void scanPlugins(boolean incremental) {
+    taskFactory.createPluginScanTask(incremental).scheduleNow();
   }
 
   public void syncFiles() {
@@ -154,7 +159,7 @@ public class PluginService extends BaseService {
 
   public PluginState getPluginState(Plugin plugin) {
 
-    if (!plugin.isSyncComplete()) {
+    if (!plugin.isScanComplete()) {
       return PluginState.UNSTABLE;
     }
     if (plugin.isDisabled()) {
@@ -203,7 +208,7 @@ public class PluginService extends BaseService {
   }
 
   /**
-   * Returns full list of explored directories during sync
+   * Returns full list of explored directories during scan
    * based on user preferences.
    * @return the set of explored directories
    */

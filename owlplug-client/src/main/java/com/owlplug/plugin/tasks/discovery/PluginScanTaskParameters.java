@@ -21,7 +21,7 @@ package com.owlplug.plugin.tasks.discovery;
 import com.owlplug.core.model.RuntimePlatform;
 import java.util.List;
 
-public class PluginSyncTaskParameters {
+public class PluginScanTaskParameters {
 
   private RuntimePlatform platform;
   private String directoryScope;
@@ -37,6 +37,7 @@ public class PluginSyncTaskParameters {
   private List<String> vst3ExtraDirectories;
   private List<String> auExtraDirectories;
   private List<String> lv2ExtraDirectories;
+  private boolean differential = false;
 
   public RuntimePlatform getPlatform() {
     return platform;
@@ -148,6 +149,14 @@ public class PluginSyncTaskParameters {
 
   public void setLv2ExtraDirectories(List<String> lv2ExtraDirectories) {
     this.lv2ExtraDirectories = lv2ExtraDirectories;
+  }
+
+  public boolean isDifferential() {
+    return differential;
+  }
+
+  public void setDifferential(boolean differential) {
+    this.differential = differential;
   }
 
 }

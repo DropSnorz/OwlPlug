@@ -40,7 +40,7 @@ public class SymlinkCollector {
 
   public SymlinkCollector(boolean uniqueReferences) {
     this.uniqueReferences = uniqueReferences;
-    collectedSymlinks = new HashSet<>();
+    this.collectedSymlinks = new HashSet<>();
   }
 
   public List<Symlink> collect(String directoryPath) {
