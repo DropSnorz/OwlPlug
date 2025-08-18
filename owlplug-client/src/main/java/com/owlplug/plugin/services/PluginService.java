@@ -37,6 +37,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,13 @@ public class PluginService extends BaseService {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
-  public void syncPlugins() {
-    taskFactory.createPluginSyncTask().schedule();
+  public void scanPlugins() {
+    scanPlugins(pluginRepository.count() > 0);
+
+  }
+
+  public void scanPlugins(boolean incremental) {
+    taskFactory.createPluginScanTask(incremental).scheduleNow();
   }
 
   public void syncFiles() {
@@ -154,7 +160,7 @@ public class PluginService extends BaseService {
 
   public PluginState getPluginState(Plugin plugin) {
 
-    if (!plugin.isSyncComplete()) {
+    if (!plugin.isScanComplete()) {
       return PluginState.UNSTABLE;
     }
     if (plugin.isDisabled()) {
@@ -203,7 +209,7 @@ public class PluginService extends BaseService {
   }
 
   /**
-   * Returns full list of explored directories during sync
+   * Returns full list of explored directories during scan
    * based on user preferences.
    * @return the set of explored directories
    */
@@ -213,32 +219,31 @@ public class PluginService extends BaseService {
     ApplicationPreferences prefs = this.getPreferences();
     if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
             && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
-      directorySet.add(FileUtils.convertPath(path));
+      directorySet.add(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
       directorySet.addAll(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
     }
 
     if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
             && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
-      directorySet.add(FileUtils.convertPath(path));
+      directorySet.add(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
       directorySet.addAll(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
     }
 
     if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)
             && !prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
-      directorySet.add(FileUtils.convertPath(path));
+      directorySet.add(prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
       directorySet.addAll(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
     }
 
     if (prefs.getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false)
             && !prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "").isBlank()) {
-      String path = prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
-      directorySet.add(FileUtils.convertPath(path));
+      directorySet.add(prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, ""));
       directorySet.addAll(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
     }
-    return directorySet;
+
+    return directorySet.stream()
+            .map(FileUtils::convertPath)
+            .collect(Collectors.toSet());
   }
 
   /**

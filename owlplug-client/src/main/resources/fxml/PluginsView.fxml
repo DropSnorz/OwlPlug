@@ -14,6 +14,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Pane?>
 
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.PluginsController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
@@ -34,13 +36,20 @@
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="syncButton" text="Sync">
-                <graphic>
-                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../icons/refresh-white-16.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
+            <HBox alignment="CENTER_LEFT">
+                <Button fx:id="scanButton" text="Scan">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/refresh-white-16.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <MenuButton prefHeight="28" popupSide="LEFT">
+                    <items>
+                        <MenuItem fx:id="fullScanMenuItem" text="Full Scan" />
+                    </items>
+                </MenuButton>
+            </HBox>
         </HBox>
     </top>
     <center>

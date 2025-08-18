@@ -104,7 +104,7 @@ public class WelcomeDialogController extends AbstractDialogController {
     okButton.setOnAction(e -> {
       this.close();
       optionsController.refreshView();
-      taskFactory.createPluginSyncTask().schedule();
+      taskFactory.createPluginScanTask().schedule();
     });
 
     cancelButton.setOnAction(e -> this.close());
