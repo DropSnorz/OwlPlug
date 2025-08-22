@@ -21,7 +21,7 @@ package com.owlplug.core.controllers;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.DialogManager;
-import com.owlplug.core.services.AnalyticsService;
+import com.owlplug.core.services.TelemetryService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BaseController {
@@ -31,7 +31,7 @@ public class BaseController {
   @Autowired
   private ApplicationPreferences preferences;
   @Autowired
-  private AnalyticsService analyticsService;
+  private TelemetryService telemetryService;
   @Autowired
   private DialogManager dialogManager;
   
@@ -44,8 +44,8 @@ public class BaseController {
     return preferences;
   }
   
-  public AnalyticsService getAnalyticsService() {
-    return analyticsService;
+  public TelemetryService getTelemetryService() {
+    return telemetryService;
   }
 
   public DialogManager getDialogManager() {

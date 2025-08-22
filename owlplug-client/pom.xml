@@ -216,6 +216,11 @@
 			<artifactId>hamcrest-library</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.mixpanel</groupId>
+			<artifactId>mixpanel-java</artifactId>
+			<version>1.4.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>

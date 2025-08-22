@@ -67,6 +67,7 @@ public class ProjectsController extends BaseController {
   @FXML
   public void initialize() {
     syncProjectButton.setOnAction(e -> {
+      this.getTelemetryService().event("/Projects/Scan");
       projectService.syncProjects();
     });
 

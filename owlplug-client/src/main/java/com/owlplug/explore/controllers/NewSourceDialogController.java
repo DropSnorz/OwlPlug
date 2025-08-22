@@ -145,7 +145,6 @@ public class NewSourceDialogController extends AbstractDialogController implemen
           close();
           this.getDialogManager().newSimpleInfoDialog("Success",
               "The plugin source " + pluginRemoteSource.getName() + " has been successfully added !").show();
-          this.getAnalyticsService().pageView("/app/source/action/add");
           this.exploreTaskFactory.createSourceSyncTask().scheduleNow();
 
         } else {

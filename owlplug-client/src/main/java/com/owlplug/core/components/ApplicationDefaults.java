@@ -118,6 +118,8 @@ public class ApplicationDefaults {
   public static final String PROJECT_DIRECTORY_KEY = "PROJECT_DIRECTORY_KEY";
   public static final String PLUGIN_PREFERRED_DISPLAY_KEY = "PLUGIN_PREFERRED_DISPLAY_KEY";
   public static final String SYNC_FILE_STAT = "SYNC_FILE_STAT";
+  public static final String TELEMETRY_ENABLED = "TELEMETRY_ENABLED";
+  public static final String TELEMETRY_USER_ID = "TELEMETRY_USER_ID";
 
   /**
    * Creates a new ApplicationDefaults.

@@ -90,6 +90,11 @@ public class OptionsController extends BaseController {
   private Hyperlink owlplugWebsiteLink;
   @FXML
   private VBox pluginPathContainer;
+
+  @FXML
+  private CheckBox telemetryCheckBox;
+  @FXML
+  private Hyperlink telemetryHyperlink;
   @FXML
   private Button moreFeaturesButton;
   @FXML
@@ -197,6 +202,15 @@ public class OptionsController extends BaseController {
       this.getPreferences().put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
     });
 
+    telemetryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      this.getPreferences().putBoolean(ApplicationDefaults.TELEMETRY_ENABLED, newValue);
+    });
+
+    telemetryHyperlink.setOnAction(e -> {
+      PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getEnvProperty("owlplug.github.wiki.url")
+                                           + "/Telemetry");
+    });
+
     clearCacheButton.setOnAction(e -> {
       optionsService.clearCache();
     });
@@ -266,6 +280,7 @@ public class OptionsController extends BaseController {
     storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
     storeByCreatorCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false));
     storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
+    telemetryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.TELEMETRY_ENABLED, true));
 
     NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
     pluginNativeComboBox.getSelectionModel().select(pluginLoader);
