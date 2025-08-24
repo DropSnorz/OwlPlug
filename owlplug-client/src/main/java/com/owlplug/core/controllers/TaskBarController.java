@@ -63,7 +63,8 @@ public class TaskBarController extends BaseController {
   }
 
   public void setErrorLog(AbstractTask task, String title, String content) {
-    this.getTelemetryService().event("Error/TaskExecution", p -> {
+
+    this.getTelemetryService().event("/Error/TaskExecution", p -> {
       p.put("taskName", task.getName());
       p.put("error", title);
       p.put("content", content);

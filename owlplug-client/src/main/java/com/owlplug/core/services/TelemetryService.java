@@ -46,6 +46,8 @@ public class TelemetryService extends BaseService {
 
   private String userId = null;
 
+  private static final int MAX_PROPS_LENGTH = 2000;
+
   private static final List<String> allowedEvents = List.of(
       "/Startup",
       "/Error/PluginScanIncomplete",
@@ -58,8 +60,8 @@ public class TelemetryService extends BaseService {
         "https://api-eu.mixpanel.com/engage");
     messageBuilder = new MessageBuilder(this.getApplicationDefaults().getEnvProperty("owlplug.telemetry.code"));
 
-    userId = this.getPreferences().get(ApplicationDefaults.TELEMETRY_USER_ID, UUID.randomUUID().toString());
-    this.getPreferences().put(ApplicationDefaults.TELEMETRY_USER_ID, userId);
+    userId = this.getPreferences().get(ApplicationDefaults.TELEMETRY_USER_ID_KEY, UUID.randomUUID().toString());
+    this.getPreferences().put(ApplicationDefaults.TELEMETRY_USER_ID_KEY, userId);
 
   }
 
@@ -68,19 +70,27 @@ public class TelemetryService extends BaseService {
   }
 
   public void event(String name, Consumer<Map<String, String>> builder) {
-    if (!this.getPreferences().getBoolean(ApplicationDefaults.TELEMETRY_ENABLED, false)) {
+    if (!this.getPreferences().getBoolean(ApplicationDefaults.TELEMETRY_ENABLED_KEY, false)) {
       return;
     }
     if (!allowedEvents.contains(name)) {
       return;
     }
 
-    Map<String, String> params = new HashMap<>();
-    builder.accept(params);
+    Thread.ofVirtual().start(() -> {
+      Map<String, String> params = new HashMap<>();
+      builder.accept(params);
 
-    params.put("appVersion", this.getApplicationDefaults().getVersion());
-    params.put("systemTag", this.getApplicationDefaults().getRuntimePlatform().getTag());
+      sanitize(params);
+      params.put("appVersion", this.getApplicationDefaults().getVersion());
+      params.put("systemTag", this.getApplicationDefaults().getRuntimePlatform().getTag());
 
+      send(name, params);
+    });
+
+  }
+
+  private void send(String name, Map<String, String> params) {
     JSONObject props = new JSONObject(params);
 
     // Create an event
@@ -95,7 +105,20 @@ public class TelemetryService extends BaseService {
       // Exception can be ignored (Network connection lost, backend offline, ...)
       log.debug("Telemetry event '{}' not sent: {}", name, e.getMessage());
     }
+  }
 
+  private void sanitize(Map<String, String> params) {
+    for (Map.Entry<String, String> entry : params.entrySet()) {
+      String value = entry.getValue();
+      if (value.length() > MAX_PROPS_LENGTH) {
+        value = value.substring(0, MAX_PROPS_LENGTH) + "…";
+      }
+
+      // Redact absolute paths (Unix & Windows)
+      value = value.replaceAll("([A-Za-z]:\\\\\\\\[^\\s]+)|(/[^\\s]+)", "<path>");
+      entry.setValue(value);
+
+    }
   }
 
 }
