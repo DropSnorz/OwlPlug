@@ -114,7 +114,7 @@ public class PluginTaskFactory extends BaseTaskFactory {
       notifyListeners(syncPluginsListeners);
       TaskExecutionContext lookupTask = projectTaskFactory.createLookupTask();
 
-      if (prefs.getBoolean(ApplicationDefaults.SYNC_FILE_STAT, true)) {
+      if (prefs.getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true)) {
         lookupTask.getTask().setOnScheduled(lookupEvent -> {
           if (directoryScope != null) {
             createFileStatSyncTask(directoryScope).scheduleNow();

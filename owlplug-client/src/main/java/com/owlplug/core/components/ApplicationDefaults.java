@@ -117,7 +117,9 @@ public class ApplicationDefaults {
   public static final String SHOW_DIALOG_DISABLE_PLUGIN_KEY = "SHOW_DIALOG_DISABLE_PLUGIN_KEY";
   public static final String PROJECT_DIRECTORY_KEY = "PROJECT_DIRECTORY_KEY";
   public static final String PLUGIN_PREFERRED_DISPLAY_KEY = "PLUGIN_PREFERRED_DISPLAY_KEY";
-  public static final String SYNC_FILE_STAT = "SYNC_FILE_STAT";
+  public static final String SYNC_FILE_STAT_KEY = "SYNC_FILE_STAT_KEY";
+  public static final String TELEMETRY_ENABLED_KEY = "TELEMETRY_ENABLED_KEY";
+  public static final String TELEMETRY_USER_ID_KEY = "TELEMETRY_USER_ID_KEY";
 
   /**
    * Creates a new ApplicationDefaults.

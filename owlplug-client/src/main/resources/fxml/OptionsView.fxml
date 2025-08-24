@@ -43,7 +43,7 @@
          </VBox>
       </VBox>
       <VBox HBox.hgrow="SOMETIMES">
-         <VBox prefWidth="550.0" VBox.vgrow="NEVER">
+         <VBox prefWidth="470.0" VBox.vgrow="NEVER">
             <styleClass>
                <String fx:value="pane-card" />
             </styleClass>
@@ -88,13 +88,16 @@
                   <VBox.margin>
                      <Insets />
                   </VBox.margin>
-                  <Label styleClass="heading-2" text="Danger Zone" />
-                  <VBox spacing="5.0">
-                     <Label text="Permanently delete all stored user data including settings, remote sources and accounts. Plugins and projects files will not be deleted." wrapText="true" />
-                     <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" text="Remove user data" />
-                     <Label text="Remove the data cached by OwlPlug (screenshots, remote metadata, ...)" wrapText="true" />
-                     <Button fx:id="clearCacheButton" minHeight="-Infinity" minWidth="-Infinity" text="Clear cache" />
-                  </VBox>
+                  <Label styleClass="heading-2" text="Advanced" />
+                  <HBox alignment="CENTER_LEFT">
+                        <CheckBox fx:id="telemetryCheckBox" mnemonicParsing="false" text="Send" />
+                        <Hyperlink fx:id="telemetryHyperlink" styleClass="hyperlink-disabled" text="Diagnostic Telemetry Data" />
+                        <Label text="over the network" />
+                  </HBox>
+                  <Label text="Permanently delete all stored user data including settings, remote sources and accounts. Plugins and projects files will not be deleted." wrapText="true" />
+                  <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" text="Remove user data" />
+                  <Label text="Remove the data cached by OwlPlug (screenshots, remote metadata, ...)" wrapText="true" />
+                  <Button fx:id="clearCacheButton" minHeight="-Infinity" minWidth="-Infinity" text="Clear cache" />
                </VBox>
                <VBox alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="145.0" VBox.vgrow="NEVER">
                   <Label styleClass="heading-2" text="About" />
@@ -112,7 +115,7 @@
                         <Label fx:id="versionLabel" text="?.?.?" wrapText="true" />
                         <Label text=" - Thanks to " />
                      </TextFlow>
-                     <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
+                     <HBox alignment="BASELINE_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
                         <Button fx:id="moreFeaturesButton" text="Contribute">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -120,7 +123,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="openLogsButton" text="Open Logs">
+                        <Button fx:id="openLogsButton" text="Logs">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                  <Image url="@../icons/folder-grey-16.png" />

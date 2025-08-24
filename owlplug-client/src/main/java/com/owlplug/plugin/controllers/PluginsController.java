@@ -179,13 +179,14 @@ public class PluginsController extends BaseController {
 
 
     syncButton.setOnAction(e -> {
-      this.getAnalyticsService().pageView("/app/core/action/syncPlugins");
+      this.getTelemetryService().event("/Plugins/Scan");
       pluginService.syncPlugins();
     });
 
     taskFactory.addSyncPluginsListener(this::displayPlugins);
 
     exportButton.setOnAction(e -> {
+      this.getTelemetryService().event("/Plugins/Export");
       exportDialogController.show();
     });
 

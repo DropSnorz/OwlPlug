@@ -192,7 +192,7 @@ public class MainController extends BaseController {
     this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
     optionsController.refreshView();
 
-    this.getAnalyticsService().pageView("/app/core/startup");
+    this.getTelemetryService().event("/Startup");
 
     // Startup plugin sync only triggered if configured and previous application
     // instance safely terminated
