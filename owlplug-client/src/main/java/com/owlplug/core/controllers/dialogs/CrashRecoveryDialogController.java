@@ -131,10 +131,16 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     
     if (incompleteSyncPlugins.size() > 0) {
       incompleteSyncPane.setVisible(true);
-      for (Plugin p : incompleteSyncPlugins) {
-        log.info("Last scan for plugin {} is incomplete", p.getName());
-        RecoveredPluginView pluginView = new RecoveredPluginView(p, pluginService, this.getApplicationDefaults());
+      for (Plugin plugin : incompleteSyncPlugins) {
+        log.info("Last scan for plugin {} is incomplete", plugin.getName());
+        RecoveredPluginView pluginView = new RecoveredPluginView(plugin, pluginService, this.getApplicationDefaults());
         pluginListContainer.getChildren().add(pluginView);
+
+        this.getTelemetryService().event("/Error/PluginScanIncomplete", p -> {
+          p.put("nativeDiscoveryLoader", this.getPreferences().get(
+              ApplicationDefaults.PREFERRED_NATIVE_LOADER, "unknown"));
+          p.put("pluginName", plugin.getName());
+        });
       }
     } else {
       incompleteSyncPane.setVisible(false);

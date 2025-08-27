@@ -197,7 +197,7 @@ public class ExploreController extends BaseController {
     });
 
     syncSourcesButton.setOnAction(e -> {
-      this.getAnalyticsService().pageView("/app/store/actions/syncStores");
+      this.getTelemetryService().event("/Explore/SyncSources");
       exploreTaskFactory.createSourceSyncTask().schedule();
     });
 
@@ -261,8 +261,6 @@ public class ExploreController extends BaseController {
       refreshView(task.getValue());
     });
     new Thread(task).start();
-    
-    this.getAnalyticsService().pageView("/app/store/action/search");
 
   }
 
@@ -369,10 +367,11 @@ public class ExploreController extends BaseController {
    */
   public boolean installBundle(PackageBundle bundle) {
     
-    this.getAnalyticsService().pageView("app/store/action/install", 
-        bundle.getRemotePackage().getRemoteSource().getName(),
-        bundle.getRemotePackage().getName(),
-        bundle.getName());
+    this.getTelemetryService().event("/Explore/Install", p -> {
+      p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
+      p.put("package", bundle.getRemotePackage().getName());
+      p.put("bundle", bundle.getName());
+    });
 
 
     File selectedDirectory = null;

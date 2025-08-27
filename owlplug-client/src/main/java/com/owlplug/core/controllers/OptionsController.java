@@ -90,6 +90,11 @@ public class OptionsController extends BaseController {
   private Hyperlink owlplugWebsiteLink;
   @FXML
   private VBox pluginPathContainer;
+
+  @FXML
+  private CheckBox telemetryCheckBox;
+  @FXML
+  private Hyperlink telemetryHyperlink;
   @FXML
   private Button moreFeaturesButton;
   @FXML
@@ -165,7 +170,7 @@ public class OptionsController extends BaseController {
     });
 
     syncFileStatCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.SYNC_FILE_STAT, newValue);
+      this.getPreferences().putBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, newValue);
     });
 
     storeSubDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -195,6 +200,15 @@ public class OptionsController extends BaseController {
 
     storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
+    });
+
+    telemetryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      this.getPreferences().putBoolean(ApplicationDefaults.TELEMETRY_ENABLED_KEY, newValue);
+    });
+
+    telemetryHyperlink.setOnAction(e -> {
+      PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getEnvProperty("owlplug.github.wiki.url")
+                                           + "/Telemetry");
     });
 
     clearCacheButton.setOnAction(e -> {
@@ -260,12 +274,13 @@ public class OptionsController extends BaseController {
     pluginNativeComboBox.setDisable(!nativeHostService.isNativeHostAvailable());
     pluginNativeCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
     syncPluginsCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
-    syncFileStatCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_FILE_STAT, true));
+    syncFileStatCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true));
     storeSubDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     warningSubDirectory.setVisible(!this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
     storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
     storeByCreatorCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false));
     storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
+    telemetryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.TELEMETRY_ENABLED_KEY, true));
 
     NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
     pluginNativeComboBox.getSelectionModel().select(pluginLoader);

@@ -89,7 +89,7 @@ public class NewLinkController extends AbstractDialogController {
       String targetPath = linkTargetTextField.getText();
       if (checkSymlinkCreation(sourcePath, targetPath)) {
         if (createSymlink(sourcePath, targetPath)) {
-          this.getAnalyticsService().pageView("/app/plugins/symlink/action/create");
+          this.getTelemetryService().event("/Plugins/CreateSymlink");
           pluginTaskFactory.createPluginSyncTask(new File(sourcePath).getParent()).schedule();
           setErrorMessage(null);
           this.close();
