@@ -107,9 +107,10 @@ public class FileSyncTask extends AbstractTask {
         directoryStat.getChilds().add(fileStat);
         length += fileStat.getLength();
 
-      } else {
+      } else if (file.isDirectory()) {
         length += extractFolderSize(file, directoryStat);
       }
+      // else it's probably a mac finder alias. Ignore it.
     }
 
     directoryStat.setLength(length);
