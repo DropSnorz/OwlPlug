@@ -37,6 +37,7 @@ public class PluginSyncTaskParameters {
   private List<String> vst3ExtraDirectories;
   private List<String> auExtraDirectories;
   private List<String> lv2ExtraDirectories;
+  private boolean isDifferential = true;
 
   public RuntimePlatform getPlatform() {
     return platform;
@@ -148,6 +149,14 @@ public class PluginSyncTaskParameters {
 
   public void setLv2ExtraDirectories(List<String> lv2ExtraDirectories) {
     this.lv2ExtraDirectories = lv2ExtraDirectories;
+  }
+
+  public boolean isDifferential() {
+    return isDifferential;
+  }
+
+  public void setDifferential(boolean differential) {
+    isDifferential = differential;
   }
 
 }

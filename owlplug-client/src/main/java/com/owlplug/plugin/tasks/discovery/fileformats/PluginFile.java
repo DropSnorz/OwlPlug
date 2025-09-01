@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import org.apache.commons.io.FilenameUtils;
+import org.aspectj.util.FileUtil;
 
 public abstract class PluginFile {
   
@@ -70,6 +71,10 @@ public abstract class PluginFile {
 
   public boolean isDisabled() {
     return pluginFile.getAbsolutePath().endsWith(".disabled");
+  }
+
+  public String getPath() {
+    return FileUtils.convertPath(pluginFile.getAbsolutePath());
   }
 
   @Override
