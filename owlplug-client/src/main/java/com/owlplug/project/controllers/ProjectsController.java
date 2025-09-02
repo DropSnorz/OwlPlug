@@ -68,7 +68,8 @@ public class ProjectsController extends BaseController {
   public void initialize() {
     syncProjectButton.setOnAction(e -> {
       this.getTelemetryService().event("/Projects/Scan");
-      projectService.syncProjects();
+      projectService.syncProjects(() -> syncProjectButton.setDisable(false));
+      syncProjectButton.setDisable(true);
     });
 
     projectTaskFactory.addSyncProjectsListener(() -> {

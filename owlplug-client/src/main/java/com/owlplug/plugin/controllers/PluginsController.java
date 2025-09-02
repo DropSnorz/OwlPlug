@@ -177,10 +177,14 @@ public class PluginsController extends BaseController {
       displaySwitchTabPane.getSelectionModel().select(displayListTab);
     }
 
-
     syncButton.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Scan");
-      pluginService.syncPlugins();
+      pluginService.syncPlugins(() -> {
+        syncButton.setDisable(false);
+        exportButton.setDisable(false);
+      });
+      syncButton.setDisable(true);
+      exportButton.setDisable(true);
     });
 
     taskFactory.addSyncPluginsListener(this::displayPlugins);
