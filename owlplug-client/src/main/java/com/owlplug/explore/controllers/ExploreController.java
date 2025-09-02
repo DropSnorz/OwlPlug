@@ -199,9 +199,9 @@ public class ExploreController extends BaseController {
     syncSourcesButton.setOnAction(e -> {
       this.getTelemetryService().event("/Explore/SyncSources");
       var context = exploreTaskFactory.createSourceSyncTask();
-      context.setOnSucceeded((__) -> syncSourcesButton.setDisable(false));
-      context.setOnFailed((__) -> syncSourcesButton.setDisable(false));
-      context.setOnCancelled((__) -> syncSourcesButton.setDisable(false));
+      context.setOnSucceeded((ignore) -> syncSourcesButton.setDisable(false));
+      context.setOnFailed((ignore) -> syncSourcesButton.setDisable(false));
+      context.setOnCancelled((ignore) -> syncSourcesButton.setDisable(false));
       context.schedule();
       syncSourcesButton.setDisable(true);
     });

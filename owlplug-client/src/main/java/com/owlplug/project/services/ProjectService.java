@@ -39,9 +39,9 @@ public class ProjectService extends BaseService {
 
   public void syncProjects(Runnable callback) {
     var context = taskFactory.createSyncTask();
-    context.setOnSucceeded((__) -> callback.run());
-    context.setOnFailed((__) -> callback.run());
-    context.setOnCancelled((__) -> callback.run());
+    context.setOnSucceeded((ignore) -> callback.run());
+    context.setOnFailed((ignore) -> callback.run());
+    context.setOnCancelled((ignore) -> callback.run());
     context.schedule();
   }
 

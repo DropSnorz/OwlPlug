@@ -64,11 +64,11 @@ public class PluginService extends BaseService {
   }
 
   public void syncPlugins(Runnable callback) {
-      var context = taskFactory.createPluginSyncTask();
-      context.setOnSucceeded((e) -> callback.run());
-      context.setOnFailed((e) -> callback.run());
-      context.setOnCancelled((e) -> callback.run());
-      context.schedule();
+    var context = taskFactory.createPluginSyncTask();
+    context.setOnSucceeded((e) -> callback.run());
+    context.setOnFailed((e) -> callback.run());
+    context.setOnCancelled((e) -> callback.run());
+    context.schedule();
   }
 
   public void syncFiles() {

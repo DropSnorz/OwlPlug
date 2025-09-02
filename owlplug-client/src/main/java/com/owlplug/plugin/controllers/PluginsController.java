@@ -180,8 +180,8 @@ public class PluginsController extends BaseController {
     syncButton.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Scan");
       pluginService.syncPlugins(() -> {
-          syncButton.setDisable(false);
-          exportButton.setDisable(false);
+        syncButton.setDisable(false);
+        exportButton.setDisable(false);
       });
       syncButton.setDisable(true);
       exportButton.setDisable(true);
