@@ -119,10 +119,8 @@ public class ExploreService extends BaseService {
    * @return list of remote packages
    */
   public Iterable<RemotePackage> getRemotePackages(List<ExploreFilterCriteria> criteriaList) {
-    RuntimePlatform env = this.getApplicationDefaults().getRuntimePlatform();
-
     Specification<RemotePackage> spec = RemotePackageRepository.sourceEnabled()
-        .and(RemotePackageRepository.hasPlatformTag(env.getCompatiblePlatformsTags()));
+        .and(RemotePackageRepository.fetchBundlesAndTargets());
     spec = spec.and(ExploreCriteriaAdapter.toSpecification(criteriaList));
 
     return remotePackageRepository.findAll(spec);

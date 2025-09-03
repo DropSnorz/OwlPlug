@@ -20,6 +20,7 @@ package com.owlplug.explore.repositories;
 
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.plugin.model.PluginType;
+import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import java.util.List;
@@ -113,11 +114,27 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
    * @return The JPA Specification
    */
   @SuppressWarnings("unchecked")
-  static Specification<RemotePackage> hasPlatformTag(Set<String> platformTagList) {
+  static Specification<RemotePackage> hasPlatformTag(List<String> platformTagList) {
     return (remotePackage, cq, cb) -> {
       Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
       return bundles.join("targets").in(platformTagList);
 
+    };
+  }
+
+  /**
+   * Eagerly fetch bundles and targets relationships.
+   *
+   * @return The JPA Specification
+   */
+  @SuppressWarnings("unchecked")
+  static Specification<RemotePackage> fetchBundlesAndTargets() {
+    return (root, query, cb) -> {
+      Fetch<Object, Object> bundlesFetch = root.fetch("bundles", JoinType.INNER);
+      bundlesFetch.fetch("targets", JoinType.LEFT);
+
+      // Always true predicate for WHERE clause
+      return cb.conjunction();
     };
   }
 

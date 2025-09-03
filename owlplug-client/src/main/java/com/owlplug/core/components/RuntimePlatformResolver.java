@@ -41,8 +41,10 @@ public class RuntimePlatformResolver {
     platforms.add(winX86);
     RuntimePlatform winX64 = new RuntimePlatform("win-x64", OperatingSystem.WIN, "x64", new String[]{"win64"});
     platforms.add(winX64);
-    RuntimePlatform mac = new RuntimePlatform("mac", OperatingSystem.MAC, "x64");
-    platforms.add(mac);
+    RuntimePlatform macX64 = new RuntimePlatform("mac-x64", OperatingSystem.MAC, "x64");
+    platforms.add(macX64);
+    RuntimePlatform macArm64 = new RuntimePlatform("mac-arm64", OperatingSystem.MAC, "arm64");
+    platforms.add(macArm64);
     RuntimePlatform linuxX86 = new RuntimePlatform("linux-x32", OperatingSystem.LINUX, "x32", new String[]{"linux32"});
     platforms.add(linuxX86);
     RuntimePlatform linuxX64 = new RuntimePlatform("linux-x64", OperatingSystem.LINUX, "x64", new String[]{"linux64"});
