@@ -85,7 +85,7 @@ public class OASModelAdapter {
    * @param file bundle json bundleMapper
    * @return bundle entity
    */
-  public static PackageBundle mapperToEntity(OASFile file) {
+  public static PackageBundle mapperToEntity(OASFile file, String name) {
 
     PackageBundle packageBundle = new PackageBundle();
     packageBundle.setDownloadUrl(file.getUrl());
@@ -99,9 +99,8 @@ public class OASModelAdapter {
     }
     packageBundle.setTargets(targets);
 
-    String name = file.getType();
-    name = name + " - " + String.join(" ", targets);
-    packageBundle.setName(name);
+    String bundleName = name + " - " + String.join(" ", targets);
+    packageBundle.setName(bundleName);
 
     // Size in OAS registry is in bits not in bytes.
     packageBundle.setFileSize(file.getSize() / 8);
@@ -125,7 +124,7 @@ public class OASModelAdapter {
           continue;
         }
 
-        PackageBundle bundle = mapperToEntity(file);
+        PackageBundle bundle = mapperToEntity(file, remotePackage.getName());
         bundle.setRemotePackage(remotePackage);
         bundles.add(bundle);
       }

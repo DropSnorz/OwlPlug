@@ -19,5 +19,5 @@
 package com.owlplug.explore.model.search;
 
 public enum ExploreFilterCriteriaType {
-  NAME, TAG, TYPE, PLATFORM, CREATOR, FORMAT, FORMAT_LIST
+  NAME, TAG, TYPE, PLATFORM, PLATFORM_LIST, CREATOR, FORMAT, FORMAT_LIST
 }

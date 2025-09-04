@@ -36,6 +36,7 @@ public class PackageBundle {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
+  @Deprecated
   private String name;
   private String downloadUrl;
 
@@ -63,10 +64,12 @@ public class PackageBundle {
     this.id = id;
   }
 
+  @Deprecated
   public String getName() {
     return name;
   }
 
+  @Deprecated
   public void setName(String name) {
     this.name = name;
   }

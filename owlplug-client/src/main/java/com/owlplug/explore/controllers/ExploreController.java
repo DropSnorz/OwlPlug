@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
@@ -169,13 +170,15 @@ public class ExploreController extends BaseController {
     
     targetFilterCheckBoxes.put("win-x32", new CheckBox("Windows x32"));
     targetFilterCheckBoxes.put("win-x64", new CheckBox("Windows x64"));
-    targetFilterCheckBoxes.put("mac", new CheckBox("MacOS (OSX)"));
+    targetFilterCheckBoxes.put("mac-x64", new CheckBox("MacOS x64"));
+    targetFilterCheckBoxes.put("mac-arm64", new CheckBox("MacOS arm64"));
     targetFilterCheckBoxes.put("linux-x32", new CheckBox("Linux x32 / amd32"));
     targetFilterCheckBoxes.put("linux-x64", new CheckBox("Linux x64 / amd64"));
     targetFilterCheckBoxes.put("linux-arm32", new CheckBox("Linux arm32"));
     targetFilterCheckBoxes.put("linux-arm64", new CheckBox("Linux arm64"));
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
-      entry.getValue().setSelected(false);
+      Set<String> preselected = this.getApplicationDefaults().getRuntimePlatform().getCompatiblePlatformsTags();
+      entry.getValue().setSelected(preselected.contains(entry.getKey()));
       entry.getValue().setOnAction(e -> {
         performPackageSearch();
       });
@@ -234,11 +237,15 @@ public class ExploreController extends BaseController {
   private void performPackageSearch() {
     final List<ExploreFilterCriteria> criteriaChipList = exploreChipView.getChips();
     List<ExploreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
-    
+
+    List<String> targets = new ArrayList<>();
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
       if (entry.getValue().isSelected()) {
-        criteriaList.add(new ExploreFilterCriteria(entry.getKey(), ExploreFilterCriteriaType.PLATFORM));
+        targets.add(entry.getKey());
       }
+    }
+    if (targets.size() > 0) {
+      criteriaList.add(new ExploreFilterCriteria(targets, ExploreFilterCriteriaType.PLATFORM_LIST));
     }
 
     List<String> formats = new ArrayList<>();
@@ -258,7 +265,7 @@ public class ExploreController extends BaseController {
       }
     };
     task.setOnSucceeded(e -> {
-      refreshView(task.getValue());
+      displayPackages(task.getValue());
     });
     new Thread(task).start();
 
@@ -268,8 +275,7 @@ public class ExploreController extends BaseController {
    * Refresh Store View.
    */
   public synchronized void refreshView() {
-    Iterable<RemotePackage> remotePackages = exploreService.getRemotePackages(exploreChipView.getChips());
-    refreshView(remotePackages);
+    performPackageSearch();
 
   }
 
@@ -278,7 +284,7 @@ public class ExploreController extends BaseController {
    * 
    * @param remotePackages - Remote package list
    */
-  public synchronized void refreshView(Iterable<RemotePackage> remotePackages) {
+  public synchronized void displayPackages(Iterable<RemotePackage> remotePackages) {
 
     if (shouldRefreshPackages(remotePackages)) {
       this.masonryPane.getChildren().clear();

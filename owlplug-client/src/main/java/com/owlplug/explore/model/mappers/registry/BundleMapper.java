@@ -22,6 +22,7 @@ import java.util.List;
 
 public class BundleMapper {
 
+  @Deprecated
   private String name;
   private List<String> targets;
   private String downloadUrl;
@@ -36,6 +37,7 @@ public class BundleMapper {
   private String technicalUid;
   private long fileSize;
 
+  @Deprecated
   public String getName() {
     return name;
   }
@@ -48,6 +50,7 @@ public class BundleMapper {
     this.formats = formats;
   }
 
+  @Deprecated
   public void setName(String name) {
     this.name = name;
   }

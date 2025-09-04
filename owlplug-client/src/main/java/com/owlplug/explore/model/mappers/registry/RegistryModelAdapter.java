@@ -71,7 +71,7 @@ public class RegistryModelAdapter {
     HashSet<PackageBundle> bundles = new HashSet<>();
     if (packageVersionMapper.getBundles() != null) {
       for (BundleMapper bundleMapper : packageVersionMapper.getBundles()) {
-        PackageBundle bundle = jsonMapperToEntity(bundleMapper);
+        PackageBundle bundle = jsonMapperToEntity(bundleMapper, remotePackage.getName());
         bundle.setRemotePackage(remotePackage);
         bundles.add(bundle);
       }
@@ -95,10 +95,13 @@ public class RegistryModelAdapter {
    * @param bundleMapper bundle json bundleMapper
    * @return bundle entity
    */
-  public static PackageBundle jsonMapperToEntity(BundleMapper bundleMapper) {
+  public static PackageBundle jsonMapperToEntity(BundleMapper bundleMapper, String name) {
 
     PackageBundle packageBundle = new PackageBundle();
-    packageBundle.setName(bundleMapper.getName());
+
+    String bundleName = name + " - " + String.join(" ", bundleMapper.getTargets());
+    packageBundle.setName(bundleName);
+
     packageBundle.setDownloadUrl(bundleMapper.getDownloadUrl());
     packageBundle.setDownloadSha256(bundleMapper.getDownloadSha256());
     packageBundle.setTargets(bundleMapper.getTargets());
