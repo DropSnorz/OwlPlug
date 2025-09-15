@@ -209,11 +209,11 @@ public class Plugin {
     this.footprint = footprint;
   }
   
-  public boolean isSyncComplete() {
+  public boolean isScanComplete() {
     return syncComplete;
   }
 
-  public void setSyncComplete(boolean syncComplete) {
+  public void setScanComplete(boolean syncComplete) {
     this.syncComplete = syncComplete;
   }
 

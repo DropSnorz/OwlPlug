@@ -33,8 +33,8 @@ import com.owlplug.plugin.services.NativeHostService;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.tasks.FileSyncTask;
 import com.owlplug.plugin.tasks.PluginRemoveTask;
-import com.owlplug.plugin.tasks.PluginSyncTask;
-import com.owlplug.plugin.tasks.discovery.PluginSyncTaskParameters;
+import com.owlplug.plugin.tasks.PluginScanTask;
+import com.owlplug.plugin.tasks.discovery.PluginScanTaskParameters;
 import com.owlplug.project.components.ProjectTaskFactory;
 import java.util.ArrayList;
 import java.util.Set;
@@ -65,27 +65,35 @@ public class PluginTaskFactory extends BaseTaskFactory {
   private FileStatRepository fileStatRepository;
 
 
-  private ArrayList<SimpleEventListener> syncPluginsListeners = new ArrayList<>();
+  private ArrayList<SimpleEventListener> scanPluginsListeners = new ArrayList<>();
 
   /**
-   * Creates a {@link PluginSyncTask} and binds listeners to the success callback.
+   * Creates a {@link PluginScanTask} and binds listeners to the success callback.
    * 
    * @return taskExecutionContext
    */
-  public TaskExecutionContext createPluginSyncTask() {
+  public TaskExecutionContext createPluginScanTask() {
+    return createPluginScanTask(null, true);
+  }
 
-    return createPluginSyncTask(null);
+  public TaskExecutionContext createPluginScanTask(boolean differential) {
+    return createPluginScanTask(null, differential);
+  }
+
+  public TaskExecutionContext createPluginScanTask(String directoryScope) {
+    return createPluginScanTask(directoryScope, false);
   }
   
   /**
-   * Creates a {@link PluginSyncTask} and binds listeners to the success callback.
-   * The task synchronizes plugins in the given directory scope.
+   * Creates a {@link PluginScanTask} and binds listeners to the success callback.
+   * The task scan plugins in the given directory scope.
    * @param directoryScope directory scope path
+   * @param differential set differential flag
    * @return taskExecutionContext
    */
-  public TaskExecutionContext createPluginSyncTask(String directoryScope) {
+  public TaskExecutionContext createPluginScanTask(String directoryScope, boolean differential) {
 
-    PluginSyncTaskParameters parameters = new PluginSyncTaskParameters();
+    PluginScanTaskParameters parameters = new PluginScanTaskParameters();
     parameters.setPlatform(applicationDefaults.getRuntimePlatform());
     parameters.setVst2Directory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
     parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
@@ -100,21 +108,24 @@ public class PluginTaskFactory extends BaseTaskFactory {
     parameters.setAuExtraDirectories(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
     parameters.setLv2ExtraDirectories(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
 
+    parameters.setDifferential(differential);
+
     if (directoryScope != null) {
       parameters.setDirectoryScope(FileUtils.convertPath(directoryScope));
     }
     
-    PluginSyncTask syncTask = new PluginSyncTask(parameters,
+    PluginScanTask scanTask = new PluginScanTask(parameters,
         pluginRepository,
         pluginFootprintRepository,
         symlinkRepository,
         nativeHostService);
     
-    syncTask.setOnSucceeded(syncEvent -> {
-      notifyListeners(syncPluginsListeners);
+    scanTask.setOnSucceeded(scanEvent -> {
+      notifyListeners(scanPluginsListeners);
       TaskExecutionContext lookupTask = projectTaskFactory.createLookupTask();
 
-      if (prefs.getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true)) {
+      if (prefs.getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true)
+          && !parameters.isDifferential()) {
         lookupTask.getTask().setOnScheduled(lookupEvent -> {
           if (directoryScope != null) {
             createFileStatSyncTask(directoryScope).scheduleNow();
@@ -126,14 +137,12 @@ public class PluginTaskFactory extends BaseTaskFactory {
       lookupTask.scheduleNow();
     });
 
-    return create(syncTask);
+    return create(scanTask);
   }
 
   public TaskExecutionContext createFileStatSyncTask() {
-
     Set<String> directorySet = pluginService.getDirectoriesExplorationSet();
     FileSyncTask task = new FileSyncTask(fileStatRepository, directorySet.stream().toList());
-
     return create(task);
   }
 
@@ -154,12 +163,12 @@ public class PluginTaskFactory extends BaseTaskFactory {
     return create(task);
   }
 
-  public void addSyncPluginsListener(SimpleEventListener eventListener) {
-    syncPluginsListeners.add(eventListener);
+  public void addScanPluginsListener(SimpleEventListener eventListener) {
+    scanPluginsListeners.add(eventListener);
   }
 
-  public void removeSyncPluginsListener(SimpleEventListener eventListener) {
-    syncPluginsListeners.remove(eventListener);
+  public void removeScanPluginsListener(SimpleEventListener eventListener) {
+    scanPluginsListeners.remove(eventListener);
   }
 
 }

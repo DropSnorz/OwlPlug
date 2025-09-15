@@ -28,6 +28,7 @@ import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -57,7 +58,9 @@ public class PluginsController extends BaseController {
   protected PluginTableController tableController;
 
   @FXML
-  private Button syncButton;
+  private Button scanButton;
+  @FXML
+  private MenuItem fullScanMenuItem;
   @FXML
   private Button exportButton;
   @FXML
@@ -177,13 +180,17 @@ public class PluginsController extends BaseController {
       displaySwitchTabPane.getSelectionModel().select(displayListTab);
     }
 
-
-    syncButton.setOnAction(e -> {
+    scanButton.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Scan");
-      pluginService.syncPlugins();
+      pluginService.scanPlugins();
     });
 
-    taskFactory.addSyncPluginsListener(this::displayPlugins);
+    fullScanMenuItem.setOnAction(e -> {
+      this.getTelemetryService().event("/Plugins/FullScan");
+      pluginService.scanPlugins(false);
+    });
+
+    taskFactory.addScanPluginsListener(this::displayPlugins);
 
     exportButton.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Export");
