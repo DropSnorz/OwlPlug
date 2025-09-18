@@ -265,3 +265,23 @@ jobs:
       with:
         name: owlplug-linux-appimage
         path: OwlPlug-${{ env.version }}-x86_64.AppImage
+  release:
+    needs: [package-win, package-osx, package-linux-deb, package-linux-appimage]
+    if: github.ref == 'refs/heads/master'
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v5
+      - name: Retrieve artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: ./packages
+      - uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2.3.2
+        with:
+          draft: true
+          tag_name: latest
+          name: OwlPlug Latest
+          files: |
+            packages/owlplug-win-installer/*
+            packages/owlplug-osx-installer-dmg/*
+            packages/owlplug-linux-installer-deb/*
+            packages/owlplug-linux-appimage/*
