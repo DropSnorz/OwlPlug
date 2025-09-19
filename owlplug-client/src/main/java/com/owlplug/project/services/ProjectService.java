@@ -37,6 +37,14 @@ public class ProjectService extends BaseService {
     taskFactory.createSyncTask().schedule();
   }
 
+  public void syncProjects(Runnable callback) {
+    var context = taskFactory.createSyncTask();
+    context.setOnSucceeded((ignore) -> callback.run());
+    context.setOnFailed((ignore) -> callback.run());
+    context.setOnCancelled((ignore) -> callback.run());
+    context.schedule();
+  }
+
   public Iterable<DawProject> getAllProjects() {
     return dawProjectRepository.findAll();
   }
