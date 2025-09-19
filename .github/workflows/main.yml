@@ -281,7 +281,7 @@ jobs:
           tag_name: latest
           name: OwlPlug Latest
           files: |
-            packages/owlplug-win-installer/*
+            packages/owlplug-win-installer-msi/*
             packages/owlplug-osx-installer-dmg/*
             packages/owlplug-linux-installer-deb/*
             packages/owlplug-linux-appimage/*
