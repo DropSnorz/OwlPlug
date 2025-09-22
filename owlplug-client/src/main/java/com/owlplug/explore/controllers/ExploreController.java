@@ -31,6 +31,7 @@ import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
+import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
@@ -85,6 +86,8 @@ public class ExploreController extends BaseController {
   private PackageInfoController packageInfoController;
   @Autowired
   private MainController mainController;
+  @Autowired
+  private InstallStepDialogController installStepDialogController;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
 
@@ -371,7 +374,7 @@ public class ExploreController extends BaseController {
    * 
    * @param bundle Bundle to install
    */
-  public boolean installBundle(PackageBundle bundle) {
+  public boolean prepareInstall(PackageBundle bundle) {
     
     this.getTelemetryService().event("/Explore/Install", p -> {
       p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
@@ -484,7 +487,9 @@ public class ExploreController extends BaseController {
 
     PackageBundle bundle = exploreService.findBestBundle(remotePackage);
     if (bundle != null) {
-      return installBundle(bundle);
+      //return prepareInstall(bundle);
+      installStepDialogController.show();
+      installStepDialogController.install(bundle);
     }
 
     return false;

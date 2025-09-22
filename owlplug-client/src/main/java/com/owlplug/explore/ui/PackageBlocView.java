@@ -145,7 +145,7 @@ public class PackageBlocView extends AnchorPane {
       bundleTextFlow.getChildren().add(bundleSource);
       CustomMenuItem bundleMenuItem = new CustomMenuItem(bundleTextFlow);
       bundleMenuItem.setOnAction(e -> {
-        this.parentController.installBundle(bundle);
+        this.parentController.prepareInstall(bundle);
       });
       bundlesListMenuItem.getItems().add(bundleMenuItem);
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="355.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.InstallStepDialogController">
+   <children>
+      <Accordion fx:id="stepAccordion" layoutX="27.0" layoutY="24.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="256.0" prefWidth="446.0">
+        <panes>
+          <TitledPane fx:id="prepareStep" animated="false" expanded="false" maxHeight="-Infinity" maxWidth="-Infinity" text="Prepare installation" />
+          <TitledPane fx:id="selectDirectoryStep" animated="false" expanded="false" text="Select installation directory">
+            <content>
+                  <VBox spacing="5.0">
+                     <children>
+                        <TextFlow>
+                           <children>
+                              <Text text="The plugin installation directory cannot be determined automatically. The plugin bundles contains following formats: " />
+                              <Text fx:id="formatText" text="formatLabel" />
+                           </children>
+                        </TextFlow>
+                        <HBox spacing="15.0">
+                           <children>
+                              <ToggleButton fx:id="vst2ToggleButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="70.0" text="VST2">
+                                 <graphic>
+                                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/vst2-blue-16.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></ToggleButton>
+                              <ToggleButton fx:id="vst3ToggleButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="70.0" text="VST3">
+                                  <graphic>
+                                      <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                              <Image url="@../../icons/vst3-green-16.png" />
+                                          </image>
+                                      </ImageView>
+                                  </graphic>
+                              </ToggleButton>
+                              <ToggleButton fx:id="auToggleButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="70.0" text="AU">
+                                  <graphic>
+                                      <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                              <Image url="@../../icons/au-purple-16.png" />
+                                          </image>
+                                      </ImageView>
+                                  </graphic>
+                              </ToggleButton>
+                              <ToggleButton fx:id="lv2ToggleButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="70.0" text="LV2">
+                                  <graphic>
+                                      <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                              <Image url="@../../icons/lv2-orange-16.png" />
+                                          </image>
+                                      </ImageView>
+                                  </graphic>
+                              </ToggleButton>
+                           </children>
+                        </HBox>
+                        <Pane prefHeight="29.0" prefWidth="424.0" />
+                        <Label text="Installation Directory:" />
+                        <TextField fx:id="installationDirectoryTextField" editable="false" promptText="Select a directory" />
+                     </children>
+                  </VBox>
+            </content>
+          </TitledPane>
+          <TitledPane fx:id="verifyStep" animated="false" text="Verify plugin installation">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
+      <ProgressBar fx:id="progressBar" layoutX="35.0" layoutY="298.0" prefHeight="18.0" prefWidth="446.0" progress="0.1" />
+      <Button fx:id="continueButton" layoutX="416.0" layoutY="316.0" mnemonicParsing="false" text="Continue" />
+      <Button fx:id= "closeButton" layoutX="364.0" layoutY="316.0" mnemonicParsing="false" text="Close" />
+   </children>
+</AnchorPane>
