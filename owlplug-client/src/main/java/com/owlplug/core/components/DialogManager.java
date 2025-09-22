@@ -27,15 +27,12 @@ import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Stack;
 
 @Component
 public class DialogManager {
 
   @Autowired
   private MainController mainController;
-
-  private Stack<Dialog> dialogStack = new Stack<>();
 
   /**
    * Creates a new dialog.
@@ -45,10 +42,6 @@ public class DialogManager {
   public Dialog newDialog() {
     Dialog dialog = new Dialog();
     dialog.setDialogContainer(mainController.getRootPane());
-    dialogStack.push(dialog);
-
-    dialog.setOnDialogClosed(e -> dialogStack.pop());
-
     return dialog;
   }
 
@@ -108,10 +101,6 @@ public class DialogManager {
     layout.setActions(button);
     return dialog;
 
-  }
-
-  public Dialog getDialog() {
-    return dialogStack.peek();
   }
 
 }

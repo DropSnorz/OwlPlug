@@ -18,6 +18,7 @@
  
 package com.owlplug.core.controllers.dialogs;
 
+import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.controllers.BaseController;
 
@@ -26,6 +27,9 @@ public abstract class AbstractDialogController extends BaseController {
   private double width = -1;
   private double height = -1;
   private boolean overlayClose = true;
+
+  private Dialog dialog;
+
 
   public AbstractDialogController() {
 
@@ -50,23 +54,25 @@ public abstract class AbstractDialogController extends BaseController {
    */
   public void show() {
     onDialogShow();
-    if (width != -1 && height != -1) {
-      this.getDialogManager().newDialog(width, height, this.getLayout());
-    } else {
-      this.getDialogManager().newDialog(this.getLayout());
+    if (dialog == null) {
+      if (width != -1 && height != -1) {
+        dialog = this.getDialogManager().newDialog(width, height, this.getLayout());
+      } else {
+        dialog = this.getDialogManager().newDialog(this.getLayout());
+      }
+      dialog.setOverlayClose(overlayClose);
+      dialog.show();
     }
-    this.getDialogManager().getDialog().setOverlayClose(overlayClose);
-    this.getDialogManager().getDialog().show();
-
   }
 
   /**
    * Close dialog frame.
    */
   public void close() {
-    onDialogClose();
-    this.getDialogManager().getDialog().close();
-
+    if (dialog != null) {
+      dialog.close();
+      dialog = null;
+    }
   }
 
   protected void setOverlayClose(boolean overlayClose) {
