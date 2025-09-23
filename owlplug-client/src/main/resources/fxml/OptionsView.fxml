@@ -67,10 +67,10 @@
                   </VBox>
                   <Label layoutX="15.0" layoutY="10.0" styleClass="heading-2" text="Explore" />
                   <VBox spacing="5.0">
-                     <CheckBox fx:id="storeSubDirectoryCheckBox" text="Save downloaded plugins in dedicated subdirectories" wrapText="true" />
+                     <CheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from remote sources in a dedicated directory" wrapText="true" />
+                     <CheckBox fx:id="storeByCreatorCheckBox" text="Group downloaded plugins by their creator or manufacturer name" wrapText="true" />
+                     <CheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap downloaded plugins in a subdirectory" wrapText="true" />
                      <Label fx:id="warningSubDirectory" styleClass="label-danger" text="Warning: This option is highly recommended. It prevents plugins from being overwritten due to filename collisions." wrapText="true" />
-                     <CheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins from remoteSource in a dedicated directory" wrapText="true" />
-                     <CheckBox fx:id="storeByCreatorCheckBox" text="Save downloaded plugins grouped by their creator or manufacturer" wrapText="true" />
                      <HBox alignment="BASELINE_LEFT" prefWidth="200.0" VBox.vgrow="NEVER">
                         <VBox.margin>
                            <Insets left="5.0" />
@@ -119,7 +119,7 @@
                         <Button fx:id="moreFeaturesButton" text="Contribute">
                            <graphic>
                               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                 <Image url="@../icons/rocket-white-64.png" />
+                                 <Image url="@../icons/heart-white-32.png" />
                               </ImageView>
                            </graphic>
                         </Button>
