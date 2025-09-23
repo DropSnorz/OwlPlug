@@ -181,14 +181,13 @@ public class OptionsController extends BaseController {
 
     warningSubDirectory.managedProperty().bind(warningSubDirectory.visibleProperty());
     storeSubDirectoryLabel.managedProperty().bind(storeSubDirectoryLabel.visibleProperty());
+    storeDirectorySeparator.managedProperty().bind(storeDirectorySeparator.visibleProperty());
+    storeDirectoryTextField.managedProperty().bind(storeDirectoryTextField.visibleProperty());
 
     storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
-      storeDirectoryTextField.setVisible(newValue);
       storeDirectorySeparator.setVisible(newValue);
-      storeDirectoryTextField.setDisable(!newValue);
-      double width = newValue ? 150 : 0;
-      storeDirectoryTextField.setMaxWidth(width);
+      storeDirectoryTextField.setVisible(newValue);
     });
 
     storeByCreatorCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -286,7 +285,6 @@ public class OptionsController extends BaseController {
     pluginNativeComboBox.getSelectionModel().select(pluginLoader);
 
     if (!storeDirectoryCheckBox.isSelected()) {
-      storeDirectoryTextField.setDisable(true);
       storeDirectoryTextField.setVisible(false);
     }
     if (!storeByCreatorCheckBox.isSelected()) {
