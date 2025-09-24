@@ -37,6 +37,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,14 @@ public class PluginService extends BaseService {
 
   public void syncPlugins() {
     taskFactory.createPluginSyncTask().schedule();
+  }
+
+  public void syncPlugins(Runnable callback) {
+    var context = taskFactory.createPluginSyncTask();
+    context.setOnSucceeded((e) -> callback.run());
+    context.setOnFailed((e) -> callback.run());
+    context.setOnCancelled((e) -> callback.run());
+    context.schedule();
   }
 
   public void syncFiles() {
