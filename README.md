@@ -44,7 +44,7 @@ All feedback, contributions, and suggestions are warmly welcomed.
 
 ### Requirements
 - Windows 7 (64-bit) or later
-- macOS High Sierra or later
+- macOS Ventura or later
 - Linux with `.deb` package support
 
 ### Installation Steps
