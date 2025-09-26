@@ -70,6 +70,8 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<!-- Override spring-boot managed version to fix https://github.com/DropSnorz/OwlPlug/issues/322 -->
+			<version>2.4.240</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
