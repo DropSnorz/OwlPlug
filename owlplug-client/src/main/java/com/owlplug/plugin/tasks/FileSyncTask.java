@@ -26,6 +26,7 @@ import com.owlplug.plugin.model.FileStat;
 import com.owlplug.plugin.repositories.FileStatRepository;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +35,13 @@ public class FileSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private FileStatRepository fileStatRepository;
+  private final FileStatRepository fileStatRepository;
 
-  private List<String> directories;
+  private final List<String> directories;
 
   public FileSyncTask(FileStatRepository fileStatRepository, String directoryPath) {
     this.fileStatRepository = fileStatRepository;
-    directories = Arrays.asList(directoryPath);
+    directories = Collections.singletonList(directoryPath);
     setName("Sync files metrics");
   }
 
@@ -56,14 +57,16 @@ public class FileSyncTask extends AbstractTask {
 
     this.updateProgress(1, 3);
 
+    log.info("Starting file sync task on {} directories", directories.size());
+
     long length = 0;
     for (String directoryPath : directories) {
       try {
-        log.info("Starting file sync task on directory {}", directoryPath);
+        log.info("Syncing file stats on directory {}", directoryPath);
         File directory = new File(directoryPath);
         if (directory.exists() && directory.isDirectory()) {
           length = extractFolderSize(directory, null);
-          log.info("Completed file sync task on directory {}, computed length: {}", directoryPath, length);
+          log.info("Completed file stat sync on directory {}, computed length: {}", directoryPath, length);
         }
 
       } catch (Exception e) {
@@ -84,6 +87,12 @@ public class FileSyncTask extends AbstractTask {
     // Flushing context to the database as next queries will recreate entities
     fileStatRepository.flush();
 
+    // files can be null in case of I/O exceptions
+    File[] subFiles = directory.listFiles();
+    if (!directory.exists() || subFiles == null) {
+      return length;
+    }
+
     FileStat directoryStat = new FileStat();
     directoryStat.setName(directory.getName());
     directoryStat.setPath(FileUtils.convertPath(directory.getAbsolutePath()));
@@ -95,7 +104,7 @@ public class FileSyncTask extends AbstractTask {
     directoryStat.setLength(0);
     fileStatRepository.saveAndFlush(directoryStat);
 
-    for (File file : directory.listFiles()) {
+    for (File file : subFiles) {
       if (file.isFile()) {
         FileStat fileStat = new FileStat();
         fileStat.setName(file.getName());
