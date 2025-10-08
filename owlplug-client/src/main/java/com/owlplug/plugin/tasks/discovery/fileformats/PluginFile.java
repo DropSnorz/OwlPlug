@@ -72,6 +72,10 @@ public abstract class PluginFile {
     return pluginFile.getAbsolutePath().endsWith(".disabled");
   }
 
+  public String getPath() {
+    return FileUtils.convertPath(pluginFile.getAbsolutePath());
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
