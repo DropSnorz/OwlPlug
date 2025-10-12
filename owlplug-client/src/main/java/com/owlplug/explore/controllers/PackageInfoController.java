@@ -211,7 +211,7 @@ public class PackageInfoController extends BaseController {
     // Bundle list display
     bundlesView.clear();
     for (PackageBundle bundle : remotePackage.getBundles()) {
-      bundlesView.addPackageBundle(bundle, e -> exploreController.installBundle(bundle));
+      bundlesView.addPackageBundle(bundle, e -> exploreController.prepareInstall(bundle));
     }
 
   }
