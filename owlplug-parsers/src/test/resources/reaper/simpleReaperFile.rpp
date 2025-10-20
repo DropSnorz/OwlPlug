@@ -3,7 +3,7 @@
   ATTRIBUTE3 0 -1
   ATTRIBUTE4 0 1 1
   <NODE2
-  ATTRIBUTE 1 "test1" "test2"
+  ATTRIBUTE 1 test1 "test2" "test with spaces"
   >
   LANEHEIGHT 0 0
   ARM 0

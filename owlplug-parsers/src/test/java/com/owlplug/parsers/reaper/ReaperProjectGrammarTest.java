@@ -70,7 +70,9 @@ public class ReaperProjectGrammarTest {
 
     assertEquals(2, pluginListener.getReaperPlugins().size());
     assertEquals("VST3i: Tunefish4 (Brain Control)", pluginListener.getReaperPlugins().get(0).getName());
+    assertEquals("Tunefish4.vst3", pluginListener.getReaperPlugins().get(0).getFilename());
     assertEquals("VSTi: Dexed (Digital Suburban)", pluginListener.getReaperPlugins().get(1).getName());
+    assertEquals("Dexed_x64-with space.dll", pluginListener.getReaperPlugins().get(1).getFilename());
 
   }
 
@@ -94,6 +96,8 @@ public class ReaperProjectGrammarTest {
 
     assertEquals(2, pluginListener.getReaperPlugins().size());
     assertEquals("VST: ReaComp (Cockos)", pluginListener.getReaperPlugins().get(0).getName());
+    assertEquals("reacomp.dll", pluginListener.getReaperPlugins().get(0).getFilename());
     assertEquals("VSTi: ReaSynth (Cockos)", pluginListener.getReaperPlugins().get(1).getName());
+    assertEquals("reasynth.dll", pluginListener.getReaperPlugins().get(1).getFilename());
   }
 }

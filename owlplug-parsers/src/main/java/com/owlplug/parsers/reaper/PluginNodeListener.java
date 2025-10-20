@@ -50,17 +50,20 @@ public class PluginNodeListener implements ReaperProjectListener {
     }
 
     ReaperPlugin plugin = new ReaperPlugin();
+
+    // Extract first node positional parameter (name)
     if (ctx.value().size() > 0) {
       plugin.setName(ctx.value(0).getText().replaceAll("\"", ""));
     }
+    // Extract second node positional parameter (filename)
     if (ctx.value().size() > 1) {
-      plugin.setFilename(ctx.value(1).getText());
+      plugin.setFilename(ctx.value(1).getText().replaceAll("\"", ""));
     }
+    // Extract fifth node positional parameter (rawId)
     if (ctx.value().size() > 4) {
       plugin.setRawId(ctx.value(4).getText());
     }
     reaperPlugins.add(plugin);
-
 
   }
 
