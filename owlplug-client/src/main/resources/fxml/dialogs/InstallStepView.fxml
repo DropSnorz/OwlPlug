@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -15,16 +16,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane prefHeight="360.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.InstallStepDialogController">
+<BorderPane prefHeight="460.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.InstallStepDialogController">
      <center>
       <VBox BorderPane.alignment="CENTER">
          <children>
+            <Pane fx:id="screenshotBackgroundPane" pickOnBounds="true" prefHeight="200.0" prefWidth="460.0" />
               <ProgressBar fx:id="progressBar" prefWidth="550.0" progress="0.1" />
-              <Accordion fx:id="stepAccordion" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="280.0">
+              <Accordion fx:id="stepAccordion" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="290.0">
                 <panes>
                   <TitledPane fx:id="prepareStep" animated="false" expanded="false" maxHeight="-Infinity" maxWidth="-Infinity" text="Prepare installation" />
                   <TitledPane fx:id="selectDirectoryStep" animated="false" expanded="false" text="Select installation directory">
@@ -90,14 +91,10 @@
                            <children>
                               <Text fx:id="directoryValidText" layoutX="20.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="directoryValidText" />
                               <Text layoutX="20.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Plugin will be installed in : " />
-                              <Text fx:id="installationDirectoryText" layoutX="42.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" installationDirectoryText">
-                                 <font>
-                                    <Font name="System Italic" size="12.0" />
-                                 </font>
-                              </Text>
+                              <Text fx:id="installationDirectoryText" layoutX="42.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" installationDirectoryText" />
                               <Text fx:id="directoryOverrideText" layoutX="20.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="directoryOverrideText" />
-                              <Button fx:id="directoryChooserButton" layoutX="40.0" layoutY="90.0" mnemonicParsing="false" text="Browse" />
-                              <CheckBox fx:id="directoryOverrideCheckBox" layoutX="42.0" layoutY="149.0" mnemonicParsing="false" text="Allow override directory content" />
+                              <Button fx:id="directoryChooserButton" layoutX="40.0" layoutY="90.0" mnemonicParsing="false" text="Change Directory ..." />
+                              <CheckBox fx:id="directoryOverrideCheckBox" layoutX="39.0" layoutY="163.0" mnemonicParsing="false" text="Allow overwrite directory content" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -115,6 +112,9 @@
                     <Button fx:id="closeButton" mnemonicParsing="false" text="Close" />
                     <Button fx:id="continueButton" mnemonicParsing="false" text="Continue" />
                </children>
+               <padding>
+                  <Insets right="20.0" top="10.0" />
+               </padding>
             </HBox>
            </children>
         </VBox>

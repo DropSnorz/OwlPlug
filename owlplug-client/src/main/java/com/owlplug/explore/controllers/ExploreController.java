@@ -393,8 +393,9 @@ public class ExploreController extends BaseController {
         p.put("bundle", bundle.getName());
       });
       installStepDialogController.install(bundle);
+      return true;
     }
-    return true;
+    return false;
   }
 
   /**

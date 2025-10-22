@@ -20,13 +20,13 @@ package com.owlplug.explore.controllers.dialogs;
 
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.services.ExploreService;
-import com.owlplug.plugin.model.PluginFormat;
 import java.io.File;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
@@ -38,6 +38,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
@@ -47,6 +56,8 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class InstallStepDialogController extends AbstractDialogController {
 
+  @FXML
+  private Pane screenshotBackgroundPane;
   @FXML
   private Accordion stepAccordion;
   @FXML
@@ -92,11 +103,13 @@ public class InstallStepDialogController extends AbstractDialogController {
   private LazyViewRegistry lazyViewRegistry;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
+  @Autowired
+  private ImageCache imageCache;
 
   private InstallationParameters installParams;
 
   public InstallStepDialogController() {
-    super(500,420);
+    super(500,600);
   }
 
   public void initialize() {
@@ -121,7 +134,10 @@ public class InstallStepDialogController extends AbstractDialogController {
       if (baseDir != null) {
         File installationDirectory = generateInstallationDirectoryFromBasePath(baseDir);
         installParams.setInstallationDirectory(installationDirectory);
-        installationDirectoryTextField.setText(installationDirectory.getAbsolutePath());
+        if (installationDirectory != null) {
+          installationDirectoryTextField.setText(installationDirectory.getAbsolutePath());
+        }
+
       } else {
         installParams.setInstallationDirectory(null);
         installationDirectoryTextField.setText("");
@@ -135,7 +151,11 @@ public class InstallStepDialogController extends AbstractDialogController {
         // Open directory chooser on top of the current windows
         Window mainWindow = directoryChooserButton.getScene().getWindow();
         File selectedDirectory = directoryChooser.showDialog(mainWindow);
-        installParams.setInstallationDirectory(selectedDirectory);
+        if (selectedDirectory != null) {
+          installParams.setInstallationDirectory(selectedDirectory);
+          // reset the confirmation flag if directory changed
+          installParams.setInstallationConfirmed(false);
+        }
         // revalidate installation
         this.resumeInstall();
       }
@@ -147,7 +167,6 @@ public class InstallStepDialogController extends AbstractDialogController {
       }
     });
 
-
     closeButton.setOnAction(e -> {
       this.close();
     });
@@ -155,18 +174,26 @@ public class InstallStepDialogController extends AbstractDialogController {
     continueButton.setOnAction(e -> {
       resumeInstall();
     });
-
-
   }
 
   public void install(PackageBundle bundle) {
     reset();
     installParams = new InstallationParameters();
     installParams.setBundle(bundle);
+
+    // Screenshot display
+    Image screenshot = imageCache.get(bundle.getRemotePackage().getScreenshotUrl());
+    if (screenshot != null) {
+      BackgroundImage bgImg = new BackgroundImage(screenshot, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+          BackgroundPosition.CENTER,
+          new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
+      screenshotBackgroundPane.setBackground(new Background(bgImg));
+    }
+    screenshotBackgroundPane.setEffect(new InnerShadow(25, Color.BLACK));
+
     resumeInstall();
   }
 
-  // TODO add support of one click install with dynamic show support
   private void resumeInstall() {
     stepAccordion.setExpandedPane(prepareStep);
     if (prepareInstallation()) {
@@ -280,17 +307,22 @@ public class InstallStepDialogController extends AbstractDialogController {
     // If any install target directory can be found, and it's not a valid directory
     if (installationDirectory.exists() && !installationDirectory.isDirectory()) {
       directoryValidText.setText("Installation directory " + installationDirectory.getName() + " is not a directory.");
-      directoryChooserButton.setDisable(false);
+      directoryChooserButton.setVisible(true);
       result = false;
     } else {
       directoryValidText.setText("Installation directory " + installationDirectory.getName() + " is valid.");
     }
 
-    if (installationDirectory.exists()
-            && !installParams.isDirectoryOverrideAllowed()) {
-      directoryOverrideText.setText("Directory " + installationDirectory.getName() + " already exists and content might be overridden.");
+
+    if (installationDirectory.exists()) {
+      directoryOverrideText.setText("Directory " + installationDirectory.getName()
+                                        + " already exists, existing files might get overwritten."
+                                        + "\nPlease, allow file overwrite to continue."
+      );
       directoryOverrideCheckBox.setDisable(false);
-      result = false;
+      if (!installParams.isDirectoryOverrideAllowed()) {
+        result = false;
+      }
     } else {
       directoryOverrideText.setText("Directory " + installationDirectory.getName() + " will be created.");
     }
@@ -340,7 +372,7 @@ public class InstallStepDialogController extends AbstractDialogController {
     prepareStep.setText("Prepare installation");
     selectDirectoryStep.setDisable(true);
     selectDirectoryStep.setText("Select installation directory");
-    prepareStep.setDisable(true);
+    verifyStep.setDisable(true);
     verifyStep.setText("Verify plugin installation");
 
     vst2ToggleButton.setDisable(!this.getPreferences().getBoolean(
@@ -350,11 +382,11 @@ public class InstallStepDialogController extends AbstractDialogController {
     auToggleButton.setDisable(!this.getPreferences().getBoolean(
             ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
     lv2ToggleButton.setDisable(!this.getPreferences().getBoolean(
-            ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
+            ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false));
 
     toggleGroup.selectToggle(null);
 
-    directoryChooserButton.setDisable(true);
+    directoryChooserButton.setVisible(false);
     directoryOverrideCheckBox.setDisable(true);
     directoryOverrideCheckBox.setSelected(false);
 

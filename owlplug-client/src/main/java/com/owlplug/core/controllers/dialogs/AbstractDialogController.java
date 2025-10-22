@@ -53,16 +53,25 @@ public abstract class AbstractDialogController extends BaseController {
    * Open and display dialog frame.
    */
   public void show() {
-    onDialogShow();
     if (dialog == null) {
       if (width != -1 && height != -1) {
         dialog = this.getDialogManager().newDialog(width, height, this.getLayout());
       } else {
         dialog = this.getDialogManager().newDialog(this.getLayout());
       }
+
+      dialog.setOnDialogClosed(e -> {
+        onDialogClose();
+        dialog = null;
+      });
+
+      dialog.setOnDialogOpened(e -> {
+        onDialogShow();
+      });
       dialog.setOverlayClose(overlayClose);
       dialog.show();
     }
+
   }
 
   /**
@@ -71,12 +80,14 @@ public abstract class AbstractDialogController extends BaseController {
   public void close() {
     if (dialog != null) {
       dialog.close();
-      dialog = null;
     }
   }
 
   protected void setOverlayClose(boolean overlayClose) {
     this.overlayClose = overlayClose;
+    if (dialog != null) {
+      dialog.setOverlayClose(overlayClose);
+    }
   }
 
   protected void onDialogShow() {
