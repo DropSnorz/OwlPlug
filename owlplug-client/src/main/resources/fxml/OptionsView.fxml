@@ -27,10 +27,10 @@
             </Label>
             <VBox>
                <VBox spacing="20.0">
-                  <VBox fx:id="pluginPathContainer" spacing="30.0" />
+                  <VBox fx:id="pluginPathContainer" spacing="10.0" />
                   <VBox spacing="4.0">
                      <VBox.margin>
-                        <Insets bottom="16.0" top="16.0" />
+                        <Insets bottom="16.0" top="10.0" />
                      </VBox.margin>
                      <HBox spacing="10.0">
                         <CheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery using" />

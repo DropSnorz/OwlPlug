@@ -18,7 +18,9 @@
 
 package com.owlplug.core.controllers.fragments;
 
+import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
+import com.owlplug.core.ui.SVGPaths;
 import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +32,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import org.controlsfx.control.ToggleSwitch;
@@ -52,6 +58,17 @@ public class PluginPathFragmentController {
   private TextField directoryTextField;
   @FXML
   private Button directoryButton;
+  @FXML
+  private Label directoryExistLabel;
+  @FXML
+  private Label canReadLabel;
+  @FXML
+  private Label canWriteLabel;
+
+  private SVGPath checkPath = new SVGPath();
+
+  private SVGPath crossPath = new SVGPath();
+
 
   private String name;
   private String enableOptionKey;
@@ -60,15 +77,19 @@ public class PluginPathFragmentController {
   private ApplicationPreferences prefs;
   private ListDirectoryDialogController listDirectoryDialogController;
 
+  private ApplicationDefaults applicationDefaults;
+
   public PluginPathFragmentController(String name, String enableOptionKey, String directoryOptionKey,
                                       String extraDirectoryOptionKey, ApplicationPreferences prefs,
-                                      ListDirectoryDialogController listDirectoryDialogController) {
+                                      ListDirectoryDialogController listDirectoryDialogController,
+                                      ApplicationDefaults applicationDefaults) {
     this.name = name;
     this.enableOptionKey = enableOptionKey;
     this.directoryOptionKey = directoryOptionKey;
     this.extraDirectoryOptionKey = extraDirectoryOptionKey;
     this.prefs = prefs;
     this.listDirectoryDialogController = listDirectoryDialogController;
+    this.applicationDefaults = applicationDefaults;
 
     init();
 
@@ -77,7 +98,6 @@ public class PluginPathFragmentController {
   public void init() {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fragments/PluginPathFragment.fxml"));
-
       // Set the controller for this specific tab
       loader.setController(this);
       loader.load();
@@ -86,15 +106,16 @@ public class PluginPathFragmentController {
       log.error("Could not init PluginPathFragment", e);
     }
 
+    checkPath.setContent(SVGPaths.check);
+    crossPath.setContent(SVGPaths.cross);
+
     headerLabel.setText(name);
     directoryTextField.setPromptText(name + " plugin directory");
 
     activationToggleButton.setText("Explore " + name + " plugins");
     activationToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       prefs.putBoolean(enableOptionKey, newValue);
-      directoryTextField.setDisable(!newValue);
-      directoryButton.setDisable(!newValue);
-      extraDirectoryLink.setDisable(!newValue);
+      refresh();
     });
 
 
@@ -109,6 +130,7 @@ public class PluginPathFragmentController {
 
     directoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
       prefs.put(directoryOptionKey, newValue);
+      refresh();
     });
 
     extraDirectoryLink.setOnAction(e -> {
@@ -129,6 +151,56 @@ public class PluginPathFragmentController {
 
   }
 
+  private DirectoryChecks checkDirectory(String path) {
+
+    DirectoryChecks checks = new DirectoryChecks();
+
+    // Handle blank or null path
+    if (path == null || path.isBlank()) {
+      checks.setExists(new DirectoryCheck(false, "Directory path is blank or not set."));
+      checks.setCanRead(new DirectoryCheck(false, "Cannot check read permission: path is blank."));
+      checks.setCanWrite(new DirectoryCheck(false, "Cannot check write permission: path is blank."));
+      return checks;
+    }
+
+    File dir = new File(path);
+    boolean exists = dir.exists() && dir.isDirectory();
+
+    // Exists check
+    DirectoryCheck existsCheck;
+    if (exists) {
+      existsCheck = new DirectoryCheck(true, "Directory exists.");
+    } else {
+      existsCheck = new DirectoryCheck(false, "Directory does not exist.");
+    }
+    checks.setExists(existsCheck);
+
+    // Read check
+    DirectoryCheck readCheck;
+    if (!exists) {
+      readCheck = new DirectoryCheck(false, "Cannot check read permissions: directory does not exist.");
+    } else if (dir.canRead()) {
+      readCheck = new DirectoryCheck(true, "Directory is readable.");
+    } else {
+      readCheck = new DirectoryCheck(false, "Directory is not readable.");
+    }
+    checks.setCanRead(readCheck);
+
+    // Write check
+    DirectoryCheck writeCheck;
+    if (!exists) {
+      writeCheck = new DirectoryCheck(false, "Cannot check write permission: directory does not exist.");
+    } else if (dir.canWrite()) {
+      writeCheck = new DirectoryCheck(true, "Directory is writable.");
+    } else {
+      writeCheck = new DirectoryCheck(false, "Directory is not writable.");
+    }
+    checks.setCanWrite(writeCheck);
+
+    return checks;
+
+  }
+
   public void refresh() {
 
     directoryTextField.setText(prefs.get(directoryOptionKey, ""));
@@ -137,6 +209,10 @@ public class PluginPathFragmentController {
     directoryTextField.setDisable(!enabled);
     directoryButton.setDisable(!enabled);
     extraDirectoryLink.setDisable(!enabled);
+
+    directoryExistLabel.setVisible(enabled);
+    canReadLabel.setVisible(enabled);
+    canWriteLabel.setVisible(enabled);
 
     activationToggleButton.setSelected(enabled);
 
@@ -147,10 +223,97 @@ public class PluginPathFragmentController {
       }
     ));
 
+    DirectoryChecks checks = checkDirectory(directoryTextField.getText());
+
+    directoryExistLabel.getStyleClass().removeAll("label-success", "label-danger");
+    Region imv = (Region) directoryExistLabel.getGraphic();
+    if (checks.getExists().getStatus()) {
+      directoryExistLabel.getStyleClass().add("label-success");
+      imv.setShape(checkPath);
+      imv.setStyle("-fx-background-color: success-color;");
+    } else {
+      directoryExistLabel.getStyleClass().add("label-danger");
+      imv.setShape(crossPath);
+      imv.setStyle("-fx-background-color: danger-color;");
+    }
+    directoryExistLabel.setTooltip(new Tooltip(checks.getExists().getMessage()));
+
+    imv = (Region) canReadLabel.getGraphic();
+    canReadLabel.getStyleClass().removeAll("label-success", "label-danger");
+    if (checks.getCanRead().getStatus()) {
+      canReadLabel.getStyleClass().add("label-success");
+      imv.setShape(checkPath);
+      imv.setStyle("-fx-background-color: success-color;");
+    } else {
+      canReadLabel.getStyleClass().add("label-danger");
+      imv.setShape(crossPath);
+      imv.setStyle("-fx-background-color: danger-color;");
+    }
+    canReadLabel.setTooltip(new Tooltip(checks.getCanRead().getMessage()));
+
+    imv = (Region) canWriteLabel.getGraphic();
+    canWriteLabel.getStyleClass().removeAll("label-success", "label-danger");
+    if (checks.getCanWrite().getStatus()) {
+      canWriteLabel.getStyleClass().add("label-success");
+      imv.setShape(checkPath);
+      imv.setStyle("-fx-background-color: success-color;");
+    } else {
+      canWriteLabel.getStyleClass().add("label-danger");
+      imv.setShape(crossPath);
+      imv.setStyle("-fx-background-color: danger-color;");
+    }
+    canWriteLabel.setTooltip(new Tooltip(checks.getCanWrite().getMessage()));
   }
 
   public Node getNode() {
     return mainNode;
   }
 
+  public static class DirectoryChecks {
+    private DirectoryCheck exists;
+    private DirectoryCheck canRead;
+    private DirectoryCheck canWrite;
+
+    public DirectoryCheck getExists() {
+      return exists;
+    }
+
+    public DirectoryCheck getCanRead() {
+      return canRead;
+    }
+
+    public DirectoryCheck getCanWrite() {
+      return canWrite;
+    }
+
+    public void setExists(DirectoryCheck exists) {
+      this.exists = exists;
+    }
+
+    public void setCanRead(DirectoryCheck canRead) {
+      this.canRead = canRead;
+    }
+
+    public void setCanWrite(DirectoryCheck canWrite) {
+      this.canWrite = canWrite;
+    }
+  }
+
+  public static class DirectoryCheck {
+    private final boolean status;
+    private final String message;
+
+    public DirectoryCheck(boolean status, String message) {
+      this.status = status;
+      this.message = message;
+    }
+
+    public boolean getStatus() {
+      return status;
+    }
+
+    public String getMessage() {
+      return message;
+    }
+  }
 }
