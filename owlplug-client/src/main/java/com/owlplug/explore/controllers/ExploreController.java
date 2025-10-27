@@ -31,6 +31,7 @@ import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
+import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
@@ -85,6 +86,8 @@ public class ExploreController extends BaseController {
   private PackageInfoController packageInfoController;
   @Autowired
   private MainController mainController;
+  @Autowired
+  private InstallStepDialogController installStepDialogController;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
 
@@ -367,126 +370,31 @@ public class ExploreController extends BaseController {
   }
 
   /**
-   * Trigger bundle installation sequence.
-   * 
-   * @param bundle Bundle to install
-   */
-  public boolean installBundle(PackageBundle bundle) {
-    
-    this.getTelemetryService().event("/Explore/Install", p -> {
-      p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
-      p.put("package", bundle.getRemotePackage().getName());
-      p.put("bundle", bundle.getName());
-    });
-
-
-    File selectedDirectory = null;
-    String baseDirectoryPath = null;
-
-    // Compute base directory using format if possible
-    if (exploreService.canDeterminateBundleInstallFolder(bundle)) {
-      baseDirectoryPath = exploreService.getBundleInstallFolder(bundle);
-    }
-
-    // A custom root directory to store plugin is defined and the base directory for
-    // the bundle format is defined or not blank.
-    if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false)
-            && baseDirectoryPath != null && !baseDirectoryPath.isBlank()) {
-      // Store install target is already defined
-      String relativeDirectoryPath  = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
-      boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
-
-      //if the user wishes to group plugins by their creator,
-      //then we need to include the subdirectory as well.
-      if (shouldGroupByCreator) {
-        String creator = FileUtils.sanitizeFileName(bundle.getRemotePackage().getCreator());
-        relativeDirectoryPath = relativeDirectoryPath + File.separator + creator;
-      }
-
-      selectedDirectory = new File(baseDirectoryPath, relativeDirectoryPath);
-      
-      // A plugin root directory is not defined
-    } else {
-      // Open dialog chooser to define store installation target
-      DirectoryChooser directoryChooser = new DirectoryChooser();
-      // Open the VST directory
-      String vstDirectory = this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY,
-              this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.VST2));
-      File initialDirectory = new File(vstDirectory);
-      if (initialDirectory.isDirectory()) {
-        directoryChooser.setInitialDirectory(initialDirectory);
-      }
-      // Open directory chooser on top of the current windows
-      Window mainWindow = masonryPane.getScene().getWindow();
-      selectedDirectory = directoryChooser.showDialog(mainWindow);
-    }
-    
-    
-    // If any install target directory can be found, abort install
-    if (selectedDirectory == null 
-        || (selectedDirectory.exists() && !selectedDirectory.isDirectory())) {
-      log.error("Install directory can't be found: " + selectedDirectory);
-      return false;
-    }
-
-    // Plugin should be wrapped in a subdirectory
-    if (this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true)) {
-      // If the plugin is wrapped into a subdirectory, checks for already existing
-      // directory
-      File subSelectedDirectory = new File(selectedDirectory,
-          FileUtils.sanitizeFileName(bundle.getRemotePackage().getName()));
-      // If directory exists, asks the user for overwrite permission
-      if (subSelectedDirectory.exists()) {
-        Dialog dialog = this.getDialogManager().newDialog();
-
-        DialogLayout layout = new DialogLayout();
-
-        layout.setHeading(new Label("Remove plugin"));
-        layout.setBody(new Label("A previous installation of " + bundle.getRemotePackage().getName()
-            + " exists. Do you want to overwrite it ? \nOnly files in conflict will be replaced."));
-
-        Button cancelButton = new Button("No, do nothing");
-        cancelButton.setOnAction(cancelEvent -> {
-          dialog.close();
-        });
-
-        Button overwriteButton = new Button("Yes, overwrite");
-        overwriteButton.setOnAction(removeEvent -> {
-          dialog.close();
-          exploreTaskFactory.createBundleInstallTask(bundle, subSelectedDirectory).schedule();
-
-        });
-        overwriteButton.getStyleClass().add("button-danger");
-
-        layout.setActions(overwriteButton, cancelButton);
-        dialog.setContent(layout);
-        dialog.show();
-        return false;
-      } else {
-        // Plugin can be installed in the subdirectory (no conflicts)
-        exploreTaskFactory.createBundleInstallTask(bundle, subSelectedDirectory).schedule();
-        return true;
-      }
-    }
-    // If a target directory has been previously found, start install tasks
-    exploreTaskFactory.createBundleInstallTask(bundle, selectedDirectory).schedule();
-    return true;
-
-  }
-
-  /**
    * Trigger package installation. The best bundle will be selected based on the
    * current user platform.
    * 
    * @param remotePackage Package to install
    */
   public boolean installPackage(RemotePackage remotePackage) {
-
     PackageBundle bundle = exploreService.findBestBundle(remotePackage);
-    if (bundle != null) {
-      return installBundle(bundle);
-    }
+    return installBundle(bundle);
+  }
 
+  /**
+   * Trigger bundle installation.
+   *
+   * @param bundle Package to install
+   */
+  public boolean installBundle(PackageBundle bundle) {
+    if (bundle != null) {
+      this.getTelemetryService().event("/Explore/Install", p -> {
+        p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
+        p.put("package", bundle.getRemotePackage().getName());
+        p.put("bundle", bundle.getName());
+      });
+      installStepDialogController.install(bundle);
+      return true;
+    }
     return false;
   }
 
