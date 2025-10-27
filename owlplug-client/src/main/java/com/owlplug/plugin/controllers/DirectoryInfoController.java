@@ -32,6 +32,7 @@ import com.owlplug.plugin.model.PluginDirectory;
 import com.owlplug.plugin.repositories.FileStatRepository;
 import com.owlplug.plugin.tasks.DirectoryRemoveTask;
 import com.owlplug.plugin.ui.PluginListCellFactory;
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import javafx.beans.property.SimpleStringProperty;
@@ -166,6 +167,8 @@ public class DirectoryInfoController extends BaseController {
     pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());
     directoryMetricsTab.setText("0 KB");
 
+    File file = new File(pluginDirectory.getPath());
+    deleteDirectoryButton.setDisable(!file.canWrite());
 
     String path = pluginDirectory.getPath();
     if (path.endsWith("/")) {

@@ -172,6 +172,9 @@ public class PluginInfoController extends BaseController {
     pluginStateView.setPluginState(pluginService.getPluginState(plugin));
     pluginPathLabel.setText(plugin.getPath());
 
+    File file = new File(plugin.getPath());
+    this.uninstallButton.setDisable(!file.canWrite());
+
     if (plugin.isDisabled()) {
       enableButton.setManaged(true);
       enableButton.setVisible(true);
@@ -182,7 +185,6 @@ public class PluginInfoController extends BaseController {
       enableButton.setVisible(false);
       disableButton.setManaged(true);
       disableButton.setVisible(true);
-
     }
 
     if (plugin.getFootprint() != null) {

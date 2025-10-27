@@ -156,7 +156,12 @@ public class PluginTreeViewController extends BaseController {
 
     Set<String> userPluginDirectories = pluginService.getDirectoriesExplorationSet();
     for (String directory : userPluginDirectories) {
-      treeFileRootNode.getInternalChildren().add(initDirectoryRoot(pluginTree, directory));
+      FilterableTreeItem<Object> item = initDirectoryRoot(pluginTree, directory);
+      // Ensure the tree item is not empty before adding the root directory
+      // This way, no entry is added if no plugins has been detected
+      if (item.getValue() != null) {
+        treeFileRootNode.getInternalChildren().add(item);
+      }
     }
 
     treeFileRootNode.setExpanded(true);
@@ -250,7 +255,7 @@ public class PluginTreeViewController extends BaseController {
 
   /**
    * Builds the directory tree view using filetree representation. If some
-   * directories contains only one subdirectory and nothing else, they are merged
+   * directories contain only one subdirectory and nothing else, they are merged
    * together in one node.
    *
    * @param pluginTree   File tree representation

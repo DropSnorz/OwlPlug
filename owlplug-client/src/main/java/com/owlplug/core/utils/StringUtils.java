@@ -18,6 +18,9 @@
 
 package com.owlplug.core.utils;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public class StringUtils {
 
   public static String truncate(String str, int size, String suffix) {
@@ -38,5 +41,14 @@ public class StringUtils {
       String truncatedString = input.substring(0, maxLength - clearEndLength);
       return truncatedString + "..." + input.substring(input.length() - clearEndLength);
     }
+  }
+
+  public static String getStackTraceAsString(Throwable throwable) {
+    if (throwable == null) {
+      return "null throwable";
+    }
+    StringWriter sw = new StringWriter();
+    throwable.printStackTrace(new PrintWriter(sw));
+    return sw.toString();
   }
 }

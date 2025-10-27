@@ -21,6 +21,7 @@ package com.owlplug.core.components;
 import com.owlplug.core.controllers.TaskBarController;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
+import com.owlplug.core.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -123,7 +124,7 @@ public class TaskRunner {
         public void onFailure(Throwable ex) {
           log.error("Error while running task", ex);
           Platform.runLater(() -> {
-            taskBarController.setErrorLog(currentTask, ex.getMessage(), ex.toString());
+            taskBarController.setErrorLog(currentTask, ex.getMessage(), StringUtils.getStackTraceAsString(ex));
             removeCurrentTask();
             scheduleNext();
           });
