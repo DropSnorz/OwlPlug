@@ -11,6 +11,7 @@
 
     disabled-color: rgb(160, 160, 160);
     danger-color: #d9534f;
+    warning-color: #ffc107;
     success-color: rgb(40, 167, 69);
     prompt-text-color: #4D4D4D;
 
@@ -33,8 +34,16 @@ Label {
     -fx-text-fill: text-color;
 }
 
+.label-success {
+    -fx-text-fill: success-color;
+}
+
 .label-danger {
     -fx-text-fill: danger-color;
+}
+
+.label-warning {
+    -fx-text-fill: warning-color;
 }
 
 .label-disabled {
