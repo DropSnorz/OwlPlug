@@ -204,7 +204,12 @@ public class ExploreController extends BaseController {
 
     syncSourcesButton.setOnAction(e -> {
       this.getTelemetryService().event("/Explore/SyncSources");
-      exploreTaskFactory.createSourceSyncTask().schedule();
+      var context = exploreTaskFactory.createSourceSyncTask();
+      context.setOnSucceeded((ignore) -> syncSourcesButton.setDisable(false));
+      context.setOnFailed((ignore) -> syncSourcesButton.setDisable(false));
+      context.setOnCancelled((ignore) -> syncSourcesButton.setDisable(false));
+      context.schedule();
+      syncSourcesButton.setDisable(true);
     });
 
     exploreChipView = new ExploreChipView(this.getApplicationDefaults(), this.exploreService.getDistinctCreators());
