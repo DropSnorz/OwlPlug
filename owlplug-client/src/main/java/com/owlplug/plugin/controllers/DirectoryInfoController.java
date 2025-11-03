@@ -119,7 +119,7 @@ public class DirectoryInfoController extends BaseController {
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
         taskFactory.create(new DirectoryRemoveTask(pluginDirectory))
-            .setOnSucceeded(x -> taskFactory.createPluginSyncTask(pluginDirectory.getPath()).schedule())
+            .setOnSucceeded(x -> taskFactory.createPluginScanTask(pluginDirectory.getPath()).schedule())
             .schedule();
       });
       removeButton.getStyleClass().add("button-danger");
