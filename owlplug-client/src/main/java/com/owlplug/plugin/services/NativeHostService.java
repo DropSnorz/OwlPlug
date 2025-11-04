@@ -45,8 +45,8 @@ public class NativeHostService extends BaseService {
 
   @PostConstruct
   private void init() {
-    pluginLoaders.add(JNINativePluginLoader.getInstance());
     pluginLoaders.add(EmbeddedScannerPluginLoader.getInstance());
+    pluginLoaders.add(JNINativePluginLoader.getInstance());
     this.fallbackLoader = DummyPluginLoader.getInstance();
     pluginLoaders.add(fallbackLoader);
 

@@ -71,7 +71,7 @@ public class JNINativePluginLoader implements NativePluginLoader {
 
   @Override
   public String getId() {
-    return "owlplug-jni";
+    return "owlplug-jni-legacy";
   }
 
   @Override

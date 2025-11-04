@@ -76,16 +76,6 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
     scannerId = DEFAULT_SCANNER_ID;
   }
 
-  public EmbeddedScannerPluginLoader usingScannerPath(String path) {
-    this.scannerDirectory = path;
-    return this;
-  }
-
-  public EmbeddedScannerPluginLoader usingScannerId(String scannerId) {
-    this.scannerId = scannerId;
-    return this;
-  }
-
   @Override
   public void init() {
 
@@ -135,7 +125,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
     try {
       CommandRunner commandRunner = new CommandRunner();
       commandRunner.setTimeoutActivated(true);
-      commandRunner.setTimeout(30000); // 30 seconds timeout
+      commandRunner.setTimeout(10000); // 10 seconds timeout
       CommandResult result = commandRunner.run(scannerDirectory + SEPARATOR +  scannerId, path);
       log.debug("Response received from scanner");
       log.debug(result.getOutput());
