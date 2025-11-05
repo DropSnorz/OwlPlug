@@ -94,7 +94,6 @@ public class TaskRunner {
   private synchronized void scheduleNext() {
 
     if (!taskQueue.isEmpty() && currentTask == null) {
-      disableError();
       taskBarController.resetErrorLog();
       // Get the next pending task
       AbstractTask polledTask = taskQueue.pollFirst();
@@ -112,8 +111,11 @@ public class TaskRunner {
                 log.error("Error while running task", currentTask.getException());
                 taskBarController.setErrorLog(currentTask, currentTask.getException().getMessage(),
                         currentTask.getException().toString());
+              } else {
+                log.error("Task failed without exception !");
+                taskBarController.setErrorLog(currentTask, "Task failed",
+                    "No error information available. TaskResult=" + result);
               }
-              triggerOnError();
             }
             removeCurrentTask();
             scheduleNext();
@@ -136,14 +138,14 @@ public class TaskRunner {
   private void setCurrentTask(AbstractTask task) {
     this.currentTask = task;
     // Bind progress indicators
-    taskBarController.taskProgressBar.progressProperty().bind(currentTask.progressProperty());
-    taskBarController.taskLabel.textProperty().bind(currentTask.messageProperty());
+    taskBarController.progressProperty().bind(currentTask.progressProperty());
+    taskBarController.taskNameProperty().bind(currentTask.messageProperty());
   }
 
   private void removeCurrentTask() {
     // Unbind progress indicators
-    taskBarController.taskProgressBar.progressProperty().unbind();
-    taskBarController.taskLabel.textProperty().unbind();
+    taskBarController.progressProperty().unbind();
+    taskBarController.taskNameProperty().unbind();
 
     currentTask = null;
 
@@ -151,7 +153,7 @@ public class TaskRunner {
 
   private void addInTaskHistory(AbstractTask task) {
     if (taskHistory.size() >= 10) {
-      taskHistory.remove(0);
+      taskHistory.removeFirst();
     }
     taskHistory.add(task);
   }
@@ -165,7 +167,6 @@ public class TaskRunner {
     }
     
   }
-  
 
   public List<AbstractTask> getPendingTasks() {
     return new ArrayList<>(taskQueue);
@@ -175,14 +176,5 @@ public class TaskRunner {
     return new ArrayList<>(taskHistory);
   }
 
-  private void triggerOnError() {
-    taskBarController.taskProgressBar.getStyleClass().add("progress-bar-error");
-
-  }
-
-  public void disableError() {
-    taskBarController.taskProgressBar.getStyleClass().remove("progress-bar-error");
-
-  }
 
 }

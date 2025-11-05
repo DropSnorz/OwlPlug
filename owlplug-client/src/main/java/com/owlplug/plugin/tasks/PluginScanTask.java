@@ -98,7 +98,7 @@ public class PluginScanTask extends AbstractTask {
 
     log.info("Plugin Scan task started");
     this.updateMessage("Collecting plugins...");
-    this.commitProgress(10);
+    this.commitProgress(20);
 
     // Clear data from previous scan if not incremental
     if (!parameters.isDifferential()) {
