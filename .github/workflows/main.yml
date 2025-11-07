@@ -74,7 +74,7 @@ jobs:
         name: owlplug-host-osx
         path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}.dylib
   build-host-linux:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v5
       with:
@@ -92,7 +92,7 @@ jobs:
       env:
         OS: linux
     - name : Install Juce dev dependencies
-      run: sudo apt update && sudo apt install libasound2-dev libcurl4-openssl-dev libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libfreetype-dev
+      run: sudo apt update && sudo apt install libasound2-dev libcurl4-openssl-dev libx11-dev libxcomposite-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libfreetype-dev libfreetype6-dev libfontconfig1-dev
     - name: Install XmlStarlet
       run: sudo apt-get install xmlstarlet
     - name: Get Host Version

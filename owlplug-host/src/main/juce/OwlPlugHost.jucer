@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" version="1.4.0"
+<JUCERPROJECT id="uVQsa4" name="owlplug-host" projectType="dll" version="1.5.0"
               companyName="OwlPlug" companyWebsite="https://owlplug.com" bundleIdentifier="com.owlplug.host"
-              displaySplashScreen="1" jucerFormatVersion="1">
+              displaySplashScreen="1" jucerFormatVersion="1" cppLanguageStandard="20">
   <MAINGROUP id="tTU8aN" name="owlplug-host">
     <GROUP id="{67E14D11-0E24-62FA-D544-692759DB4816}" name="Source">
       <FILE id="LpOsQn" name="com_owlplug_host_loaders_jni_JNIPluginMapper.cpp"
