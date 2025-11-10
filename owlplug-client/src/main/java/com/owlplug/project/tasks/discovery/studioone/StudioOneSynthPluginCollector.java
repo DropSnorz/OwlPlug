@@ -72,87 +72,51 @@ public class StudioOneSynthPluginCollector {
   }
 
   private DawPlugin readSynthElement(Element synthElement) {
-
-    // For synth plugins, prefer classInfo over deviceData
-    // because deviceData may contain track/instance names (e.g., "ANA 2", "ANA 2 (2)")
-    // while classInfo always contains the actual plugin name
-    String pluginName = null;
-    
-    // Traverse children to find deviceData and ghostData elements
-    NodeList children = synthElement.getChildNodes();
-    Element deviceData = null;
-    Element ghostData = null;
-    
-    for (int i = 0; i < children.getLength(); i++) {
-      Node child = children.item(i);
-      if (child instanceof Element childElem && "Attributes".equals(childElem.getTagName())) {
-        String xid = childElem.getAttribute("x:id");
-        if ("deviceData".equals(xid)) {
-          deviceData = childElem;
-        } else if ("ghostData".equals(xid)) {
-          ghostData = childElem;
-        }
-      }
-    }
-    
-    // Try classInfo FIRST (it has the actual plugin name)
-    if (ghostData != null) {
-      NodeList ghostChildren = ghostData.getChildNodes();
-      for (int i = 0; i < ghostChildren.getLength(); i++) {
-        Node ghostChild = ghostChildren.item(i);
-        if (ghostChild instanceof Element ghostChildElem && "Attributes".equals(ghostChildElem.getTagName())) {
-          String xid = ghostChildElem.getAttribute("x:id");
-          if ("classInfo".equals(xid)) {
-            pluginName = ghostChildElem.getAttribute("name");
-            if (pluginName != null && !pluginName.isEmpty()) {
-              break;
-            }
-          }
-        }
-      }
-    }
-
-    // Fallback to deviceData only if classInfo didn't work
-    if ((pluginName == null || pluginName.isEmpty()) && deviceData != null) {
-      pluginName = deviceData.getAttribute("name");
-    }
-
+    String pluginName = extractPluginName(synthElement);
     if (pluginName == null || pluginName.isEmpty()) {
       return null;
     }
 
-    // Get plugin format from subCategory (using DOM directly)
-    PluginFormat format = null;
-    Element classInfo = null;
+    PluginFormat format = extractPluginFormat(synthElement);
+    if (format == null) {
+      return null;
+    }
+
+    DawPlugin plugin = new DawPlugin();
+    plugin.setName(pluginName);
+    plugin.setFormat(format);
+    return plugin;
+  }
+
+  private String extractPluginName(Element synthElement) {
+    // For synth plugins, prefer classInfo over deviceData
+    // because deviceData may contain track/instance names (e.g., "ANA 2", "ANA 2 (2)")
+    // while classInfo always contains the actual plugin name
+    StudioOneDomUtils.DeviceDataAndGhostData data = StudioOneDomUtils.findDeviceDataAndGhostData(synthElement);
     
-    // Find classInfo element (we may have already found ghostData above)
-    if (ghostData == null) {
-      // Reuse the children NodeList we already have
-      for (int i = 0; i < children.getLength(); i++) {
-        Node child = children.item(i);
-        if (child instanceof Element childElem && "Attributes".equals(childElem.getTagName())) {
-          String xid = childElem.getAttribute("x:id");
-          if ("ghostData".equals(xid)) {
-            ghostData = childElem;
-            break;
-          }
-        }
+    // Try classInfo FIRST (it has the actual plugin name)
+    Element classInfo = StudioOneDomUtils.findClassInfo(data.getGhostData());
+    if (classInfo != null) {
+      String name = classInfo.getAttribute("name");
+      if (name != null && !name.isEmpty()) {
+        return name;
       }
     }
-    
-    if (ghostData != null) {
-      NodeList ghostChildren = ghostData.getChildNodes();
-      for (int i = 0; i < ghostChildren.getLength(); i++) {
-        Node ghostChild = ghostChildren.item(i);
-        if (ghostChild instanceof Element ghostChildElem && "Attributes".equals(ghostChildElem.getTagName())) {
-          String xid = ghostChildElem.getAttribute("x:id");
-          if ("classInfo".equals(xid)) {
-            classInfo = ghostChildElem;
-            break;
-          }
-        }
+
+    // Fallback to deviceData only if classInfo didn't work
+    if (data.getDeviceData() != null) {
+      String name = data.getDeviceData().getAttribute("name");
+      if (name != null && !name.isEmpty()) {
+        return name;
       }
     }
+
+    return null;
+  }
+
+  private PluginFormat extractPluginFormat(Element synthElement) {
+    StudioOneDomUtils.DeviceDataAndGhostData data = StudioOneDomUtils.findDeviceDataAndGhostData(synthElement);
+    Element classInfo = StudioOneDomUtils.findClassInfo(data.getGhostData());
     
     if (classInfo != null) {
       String subCategory = classInfo.getAttribute("subCategory");
@@ -168,9 +132,9 @@ public class StudioOneSynthPluginCollector {
 
           // Determine format from subCategory (format is like "VST2/Mastering" or "VST3/Mastering")
           if (subCategory.startsWith("VST2") || subCategory.contains("VST2")) {
-            format = PluginFormat.VST2;
+            return PluginFormat.VST2;
           } else if (subCategory.startsWith("VST3") || subCategory.contains("VST3")) {
-            format = PluginFormat.VST3;
+            return PluginFormat.VST3;
           }
         }
       } else {
@@ -179,15 +143,7 @@ public class StudioOneSynthPluginCollector {
       }
     }
 
-    if (format == null) {
-      return null;
-    }
-
-    DawPlugin plugin = new DawPlugin();
-    plugin.setName(pluginName);
-    plugin.setFormat(format);
-
-    return plugin;
+    return null;
   }
 
 }

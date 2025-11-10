@@ -84,15 +84,21 @@ public class ProjectSyncTask extends AbstractTask {
       if (abletonExplorer.canExploreFile(file)) {
         this.updateMessage("Analyzing Ableton file: " + file.getAbsolutePath());
         DawProject project = abletonExplorer.explore(file);
-        projectRepository.save(project);
+        if (project != null) {
+          projectRepository.save(project);
+        }
       } else if (reaperExplorer.canExploreFile(file)) {
         this.updateMessage("Analyzing Reaper file: " + file.getAbsolutePath());
         DawProject project = reaperExplorer.explore(file);
-        projectRepository.save(project);
+        if (project != null) {
+          projectRepository.save(project);
+        }
       } else if (studioOneExplorer.canExploreFile(file)) {
         this.updateMessage("Analyzing Studio One file: " + file.getAbsolutePath());
         DawProject project = studioOneExplorer.explore(file);
-        projectRepository.save(project);
+        if (project != null) {
+          projectRepository.save(project);
+        }
       }
     }
 

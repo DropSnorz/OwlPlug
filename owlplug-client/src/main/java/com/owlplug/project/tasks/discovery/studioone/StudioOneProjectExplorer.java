@@ -33,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
@@ -80,10 +81,24 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
 
     Path tempDir = null;
     try {
-      // Extract ZIP archive to temporary directory
+      // Extract only the files we need from the ZIP archive to temporary directory
+      // This avoids creating directories with reserved names (e.g., Windows "Strings" directory)
       tempDir = Files.createTempDirectory("studioone-");
       log.debug("Extracting Studio One project to: {}", tempDir);
-      ArchiveUtils.extract(file, tempDir.toFile());
+      
+      List<String> targetFiles = Arrays.asList(
+          "metainfo.xml",
+          "Devices/audiomixer.xml",
+          "Devices/audiosynthfolder.xml"
+      );
+      
+      try {
+        ArchiveUtils.extractFiles(file, tempDir.toFile(), targetFiles);
+      } catch (IOException e) {
+        log.warn("Failed to extract Studio One project file: {} - {}", 
+            file.getAbsolutePath(), e.getMessage());
+        return null; // Skip this file and continue with others
+      }
 
       // Parse metainfo.xml for project metadata
       File metainfoFile = new File(tempDir.toFile(), "metainfo.xml");
@@ -99,48 +114,7 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
       project.setPath(FileUtils.convertPath(file.getAbsolutePath()));
       project.setName(FilenameUtils.removeExtension(file.getName()));
 
-      // Extract metadata from metainfo.xml
-      try {
-        NodeList titleNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Title']/@value")
-                .evaluate(metainfoDoc, XPathConstants.NODESET);
-        if (titleNodes.getLength() > 0) {
-          String title = titleNodes.item(0).getNodeValue();
-          if (title != null && !title.isEmpty()) {
-            project.setName(title);
-          }
-        }
-
-        NodeList creatorNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Creator']/@value")
-                .evaluate(metainfoDoc, XPathConstants.NODESET);
-        if (creatorNodes.getLength() > 0) {
-          String creator = creatorNodes.item(0).getNodeValue();
-          project.setAppFullName(creator != null ? creator : "Studio One");
-        } else {
-          // Try to get from Generator attribute
-          NodeList generatorNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Generator']/@value")
-                  .evaluate(metainfoDoc, XPathConstants.NODESET);
-          if (generatorNodes.getLength() > 0) {
-            String generator = generatorNodes.item(0).getNodeValue();
-            if (generator != null && generator.startsWith("Studio One/")) {
-              project.setAppFullName(generator);
-            } else {
-              project.setAppFullName("Studio One");
-            }
-          } else {
-            project.setAppFullName("Studio One");
-          }
-        }
-
-        NodeList versionNodes = (NodeList) xpath.compile("//Attribute[@id='Document:FormatVersion']/@value")
-                .evaluate(metainfoDoc, XPathConstants.NODESET);
-        if (versionNodes.getLength() > 0) {
-          String version = versionNodes.item(0).getNodeValue();
-          project.setFormatVersion(version);
-        }
-      } catch (XPathExpressionException e) {
-        log.debug("Error extracting metadata from metainfo.xml, using defaults", e);
-        project.setAppFullName("Studio One");
-      }
+      extractMetadata(metainfoDoc, xpath, project);
 
       // Set file timestamps
       project.setLastModifiedAt(new Date(file.lastModified()));
@@ -148,37 +122,7 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
       FileTime fileTime = attr.creationTime();
       project.setCreatedAt(Date.from(fileTime.toInstant()));
 
-      // Parse audiomixer.xml for audio effect plugins
-      File audiomixerFile = new File(tempDir.toFile(), "Devices/audiomixer.xml");
-      if (audiomixerFile.exists()) {
-        try {
-          Document audiomixerDoc = createDocument(audiomixerFile);
-          StudioOneAudioMixerPluginCollector audioCollector = new StudioOneAudioMixerPluginCollector(audiomixerDoc);
-          List<DawPlugin> audioPlugins = audioCollector.collectPlugins();
-          for (DawPlugin plugin : audioPlugins) {
-            plugin.setProject(project);
-            project.getPlugins().add(plugin);
-          }
-        } catch (Exception e) {
-          log.error("Error parsing audiomixer.xml", e);
-        }
-      }
-
-      // Parse audiosynthfolder.xml for instrument plugins
-      File synthFile = new File(tempDir.toFile(), "Devices/audiosynthfolder.xml");
-      if (synthFile.exists()) {
-        try {
-          Document synthDoc = createDocument(synthFile);
-          StudioOneSynthPluginCollector synthCollector = new StudioOneSynthPluginCollector(synthDoc);
-          List<DawPlugin> synthPlugins = synthCollector.collectPlugins();
-          for (DawPlugin plugin : synthPlugins) {
-            plugin.setProject(project);
-            project.getPlugins().add(plugin);
-          }
-        } catch (Exception e) {
-          log.error("Error parsing audiosynthfolder.xml", e);
-        }
-      }
+      collectPlugins(tempDir, project);
 
       return project;
 
@@ -195,6 +139,84 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
         } catch (IOException e) {
           log.debug("Failed to clean up temporary directory: {}", tempDir, e);
         }
+      }
+    }
+  }
+
+  private void extractMetadata(Document metainfoDoc, XPath xpath, DawProject project) {
+    try {
+      NodeList titleNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Title']/@value")
+              .evaluate(metainfoDoc, XPathConstants.NODESET);
+      if (titleNodes.getLength() > 0) {
+        String title = titleNodes.item(0).getNodeValue();
+        if (title != null && !title.isEmpty()) {
+          project.setName(title);
+        }
+      }
+
+      NodeList creatorNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Creator']/@value")
+              .evaluate(metainfoDoc, XPathConstants.NODESET);
+      if (creatorNodes.getLength() > 0) {
+        String creator = creatorNodes.item(0).getNodeValue();
+        project.setAppFullName(creator != null ? creator : "Studio One");
+      } else {
+        // Try to get from Generator attribute
+        NodeList generatorNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Generator']/@value")
+                .evaluate(metainfoDoc, XPathConstants.NODESET);
+        if (generatorNodes.getLength() > 0) {
+          String generator = generatorNodes.item(0).getNodeValue();
+          if (generator != null && generator.startsWith("Studio One/")) {
+            project.setAppFullName(generator);
+          } else {
+            project.setAppFullName("Studio One");
+          }
+        } else {
+          project.setAppFullName("Studio One");
+        }
+      }
+
+      NodeList versionNodes = (NodeList) xpath.compile("//Attribute[@id='Document:FormatVersion']/@value")
+              .evaluate(metainfoDoc, XPathConstants.NODESET);
+      if (versionNodes.getLength() > 0) {
+        String version = versionNodes.item(0).getNodeValue();
+        project.setFormatVersion(version);
+      }
+    } catch (XPathExpressionException e) {
+      log.debug("Error extracting metadata from metainfo.xml, using defaults", e);
+      project.setAppFullName("Studio One");
+    }
+  }
+
+  private void collectPlugins(Path tempDir, DawProject project) {
+    // Parse audiomixer.xml for audio effect plugins
+    File audiomixerFile = new File(tempDir.toFile(), "Devices/audiomixer.xml");
+    if (audiomixerFile.exists()) {
+      try {
+        Document audiomixerDoc = createDocument(audiomixerFile);
+        StudioOneAudioMixerPluginCollector audioCollector = new StudioOneAudioMixerPluginCollector(audiomixerDoc);
+        List<DawPlugin> audioPlugins = audioCollector.collectPlugins();
+        for (DawPlugin plugin : audioPlugins) {
+          plugin.setProject(project);
+          project.getPlugins().add(plugin);
+        }
+      } catch (Exception e) {
+        log.error("Error parsing audiomixer.xml", e);
+      }
+    }
+
+    // Parse audiosynthfolder.xml for instrument plugins
+    File synthFile = new File(tempDir.toFile(), "Devices/audiosynthfolder.xml");
+    if (synthFile.exists()) {
+      try {
+        Document synthDoc = createDocument(synthFile);
+        StudioOneSynthPluginCollector synthCollector = new StudioOneSynthPluginCollector(synthDoc);
+        List<DawPlugin> synthPlugins = synthCollector.collectPlugins();
+        for (DawPlugin plugin : synthPlugins) {
+          plugin.setProject(project);
+          project.getPlugins().add(plugin);
+        }
+      } catch (Exception e) {
+        log.error("Error parsing audiosynthfolder.xml", e);
       }
     }
   }
