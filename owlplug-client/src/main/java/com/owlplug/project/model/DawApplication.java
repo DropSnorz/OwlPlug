@@ -20,7 +20,8 @@ package com.owlplug.project.model;
 
 public enum DawApplication {
   ABLETON("Ableton"),
-  REAPER("Reaper");
+  REAPER("Reaper"),
+  STUDIO_ONE("Studio One");
   private final String name;
 
   DawApplication(String name) {
