@@ -147,21 +147,8 @@ public class ArchiveUtils {
     }
   }
 
-  private static ArchiveInputStream createArchiveInputStream(File sourceFile) throws IOException, CompressorException, ArchiveException {
-    if (isCompressed(sourceFile)) {
-      InputStream fi = new FileInputStream(sourceFile);
-      InputStream bi = new BufferedInputStream(fi);
-      CompressorInputStream gzi = new CompressorStreamFactory().createCompressorInputStream(bi);
-      InputStream bgzi = new BufferedInputStream(gzi);
-      return new ArchiveStreamFactory().createArchiveInputStream(bgzi);
-    } else {
-      InputStream fi = new FileInputStream(sourceFile);
-      InputStream bi = new BufferedInputStream(fi);
-      return new ArchiveStreamFactory().createArchiveInputStream(bi);
-    }
-  }
-
-  private static void extractFiles(ArchiveInputStream archiveInputStream, File destinationDirectory, List<String> filePaths) throws IOException {
+  private static void extractFiles(ArchiveInputStream archiveInputStream,
+      File destinationDirectory, List<String> filePaths) throws IOException {
     PathCollection pathCollection = collectTargetPaths(filePaths);
     
     ArchiveEntry entry;
@@ -178,6 +165,21 @@ public class ArchiveUtils {
       } else if (shouldExtract) {
         extractFile(entry, archiveInputStream, destinationDirectory);
       }
+    }
+  }
+
+  private static ArchiveInputStream createArchiveInputStream(File sourceFile)
+      throws IOException, CompressorException, ArchiveException {
+    if (isCompressed(sourceFile)) {
+      InputStream fi = new FileInputStream(sourceFile);
+      InputStream bi = new BufferedInputStream(fi);
+      CompressorInputStream gzi = new CompressorStreamFactory().createCompressorInputStream(bi);
+      InputStream bgzi = new BufferedInputStream(gzi);
+      return new ArchiveStreamFactory().createArchiveInputStream(bgzi);
+    } else {
+      InputStream fi = new FileInputStream(sourceFile);
+      InputStream bi = new BufferedInputStream(fi);
+      return new ArchiveStreamFactory().createArchiveInputStream(bi);
     }
   }
 
@@ -210,7 +212,8 @@ public class ArchiveUtils {
     }
   }
 
-  private static void createDirectoryIfNeeded(String entryName, Set<String> requiredDirs, File destinationDirectory) throws IOException {
+  private static void createDirectoryIfNeeded(String entryName, Set<String> requiredDirs,
+      File destinationDirectory) throws IOException {
     String dirPath = entryName.endsWith("/") ? entryName : entryName + "/";
     if (requiredDirs.contains(dirPath)) {
       File f = new File(destinationDirectory, entryName);
@@ -220,7 +223,8 @@ public class ArchiveUtils {
     }
   }
 
-  private static void extractFile(ArchiveEntry entry, ArchiveInputStream archiveInputStream, File destinationDirectory) throws IOException {
+  private static void extractFile(ArchiveEntry entry, ArchiveInputStream archiveInputStream,
+      File destinationDirectory) throws IOException {
     File f = new File(destinationDirectory, entry.getName());
     File parent = f.getParentFile();
     if (parent != null && !parent.isDirectory() && !parent.mkdirs()) {

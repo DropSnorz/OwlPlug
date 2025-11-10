@@ -64,7 +64,8 @@ public class PluginLookupService extends BaseService {
     // but the installed plugin doesn't (or vice versa)
     String normalizedName = PluginUtils.absoluteName(originalName);
 
-    log.debug("Looking up plugin: '{}' (normalized: '{}') format: {}", originalName, normalizedName, projectPlugin.getFormat());
+    log.debug("Looking up plugin: '{}' (normalized: '{}') format: {}",
+        originalName, normalizedName, projectPlugin.getFormat());
 
     // Try normalized name first
     Iterable<Plugin> plugins = pluginService.find(normalizedName, projectPlugin.getFormat());

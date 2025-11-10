@@ -103,11 +103,12 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
       // Parse metainfo.xml for project metadata
       File metainfoFile = new File(tempDir.toFile(), "metainfo.xml");
       if (!metainfoFile.exists()) {
-        throw new ProjectExplorerException("metainfo.xml not found in Studio One project: " + file.getAbsolutePath(), null);
+        throw new ProjectExplorerException(
+            "metainfo.xml not found in Studio One project: " + file.getAbsolutePath(), null);
       }
 
-      Document metainfoDoc = createDocument(metainfoFile);
-      XPath xpath = XPathFactory.newInstance().newXPath();
+      final Document metainfoDoc = createDocument(metainfoFile);
+      final XPath xpath = XPathFactory.newInstance().newXPath();
 
       DawProject project = new DawProject();
       project.setApplication(DawApplication.STUDIO_ONE);
@@ -127,7 +128,8 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
       return project;
 
     } catch (IOException e) {
-      throw new ProjectExplorerException("Error while extracting Studio One project file: " + file.getAbsolutePath(), e);
+      throw new ProjectExplorerException(
+          "Error while extracting Studio One project file: " + file.getAbsolutePath(), e);
     } catch (ParserConfigurationException | SAXException e) {
       throw new ProjectExplorerException("Error while parsing XML in Studio One project: " + file.getAbsolutePath(), e);
     } finally {
@@ -221,7 +223,8 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
     }
   }
 
-  private Document createDocument(File file) throws ProjectExplorerException, ParserConfigurationException, SAXException, IOException {
+  private Document createDocument(File file)
+      throws ProjectExplorerException, ParserConfigurationException, SAXException, IOException {
     try (FileInputStream fis = new FileInputStream(file)) {
       DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = builderFactory.newDocumentBuilder();
