@@ -25,7 +25,6 @@ import com.owlplug.core.utils.FileUtils;
 import com.owlplug.plugin.model.FileStat;
 import com.owlplug.plugin.repositories.FileStatRepository;
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
@@ -76,7 +75,7 @@ public class FileSyncTask extends AbstractTask {
     }
     this.updateMessage("Plugins and files metrics synchronized.");
     this.updateProgress(3, 3);
-    return success();
+    return completed();
   }
 
   public long extractFolderSize(File directory, FileStat parent) {

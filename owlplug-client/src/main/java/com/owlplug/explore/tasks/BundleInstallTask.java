@@ -124,7 +124,7 @@ public class BundleInstallTask extends AbstractTask {
       throw new TaskException("An error occurred during plugin install", e);
     }
 
-    return success();
+    return completed();
   }
 
   private File downloadInTempDirectory(PackageBundle bundle) throws TaskException {

@@ -47,6 +47,6 @@ public class DirectoryRemoveTask extends AbstractTask {
     this.updateProgress(1, 1);
     this.updateMessage("Directory successfully deleted");
 
-    return null;
+    return completed();
   }
 }

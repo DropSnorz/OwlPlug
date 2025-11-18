@@ -136,7 +136,7 @@ public class SourceSyncTask extends AbstractTask {
       this.updateMessage("Plugin sources synced. Error accessing sources " + String.join(",", this.warnings));
     }
 
-    return success();
+    return completed();
   }
 
   private void processRegistrySource(HttpEntity entity, RemoteSource remoteSource) throws StoreParsingException {
