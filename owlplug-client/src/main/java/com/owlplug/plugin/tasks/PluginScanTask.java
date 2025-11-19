@@ -86,7 +86,7 @@ public class PluginScanTask extends AbstractTask {
   protected TaskResult start() throws Exception {
     try {
       collect();
-      return success();
+      return completed();
     } catch (Exception e) {
       this.updateMessage("Plugins scan failed: " + e.getMessage());
       log.error("Plugins scan failed", e);

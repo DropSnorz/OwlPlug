@@ -86,7 +86,7 @@ public abstract class AbstractTask extends Task<TaskResult> {
     updateProgress(committedProgress + progress, maxProgress);
   }
 
-  protected TaskResult success() {
+  protected TaskResult completed() {
     return new TaskResult();
   }
 

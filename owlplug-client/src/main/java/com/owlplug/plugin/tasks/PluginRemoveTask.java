@@ -63,19 +63,15 @@ public class PluginRemoveTask extends AbstractTask {
       fileDeleteSuccess = pluginFile.delete();
     }
     
-    
     if (fileDeleteSuccess) {
       pluginRepository.delete(plugin);
       this.updateProgress(1, 1);
       this.updateMessage("Plugin successfully deleted");
 
-      return null;
+      return completed();
     } else {
       this.updateMessage("Error during plugin removal");
       throw new TaskException("Error during plugin removal");
-
     }
-
   }
-
 }

@@ -50,6 +50,6 @@ public class SymlinkRemoveTask extends AbstractTask {
     this.updateProgress(1, 1);
     this.updateMessage("Symlink successfully deleted");
 
-    return null;
+    return completed();
   }
 }

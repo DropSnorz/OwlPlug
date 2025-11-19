@@ -91,6 +91,6 @@ public class ProjectSyncTask extends AbstractTask {
     this.updateMessage("All projects are synchronized");
     this.updateProgress(1,1);
 
-    return success();
+    return completed();
   }
 }

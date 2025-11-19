@@ -61,6 +61,6 @@ public class PluginLookupTask extends AbstractTask {
     this.updateMessage("All projects and plugins are up-to-date");
     this.updateProgress(1,1);
 
-    return success();
+    return completed();
   }
 }
