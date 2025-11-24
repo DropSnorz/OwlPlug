@@ -225,12 +225,12 @@ public class PluginPathFragmentController {
 
     DirectoryChecks checks = checkDirectory(directoryTextField.getText());
 
-    directoryExistLabel.getStyleClass().removeAll("label-success", "label-danger");
+    directoryExistLabel.getStyleClass().removeAll("label-disabled", "label-danger");
     Region imv = (Region) directoryExistLabel.getGraphic();
     if (checks.getExists().getStatus()) {
-      directoryExistLabel.getStyleClass().add("label-success");
+      directoryExistLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: success-color;");
+      imv.setStyle("-fx-background-color: disabled-color;");
     } else {
       directoryExistLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
@@ -239,11 +239,11 @@ public class PluginPathFragmentController {
     directoryExistLabel.setTooltip(new Tooltip(checks.getExists().getMessage()));
 
     imv = (Region) canReadLabel.getGraphic();
-    canReadLabel.getStyleClass().removeAll("label-success", "label-danger");
+    canReadLabel.getStyleClass().removeAll("label-disabled", "label-danger");
     if (checks.getCanRead().getStatus()) {
-      canReadLabel.getStyleClass().add("label-success");
+      canReadLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: success-color;");
+      imv.setStyle("-fx-background-color: disabled-color;");
     } else {
       canReadLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
@@ -252,11 +252,11 @@ public class PluginPathFragmentController {
     canReadLabel.setTooltip(new Tooltip(checks.getCanRead().getMessage()));
 
     imv = (Region) canWriteLabel.getGraphic();
-    canWriteLabel.getStyleClass().removeAll("label-success", "label-danger");
+    canWriteLabel.getStyleClass().removeAll("label-disabled", "label-danger");
     if (checks.getCanWrite().getStatus()) {
-      canWriteLabel.getStyleClass().add("label-success");
+      canWriteLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: success-color;");
+      imv.setStyle("-fx-background-color: disabled-color;");
     } else {
       canWriteLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
