@@ -43,7 +43,7 @@ jobs:
         name: owlplug-host-win
         path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}.dll
   build-host-osx:
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
     - uses: actions/checkout@v6
       with:
@@ -181,7 +181,7 @@ jobs:
         name: owlplug-win-installer-msi
         path: build/output/OwlPlug-${{ env.version }}.msi
   package-osx:
-    runs-on: macos-13
+    runs-on: macos-14
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v6
