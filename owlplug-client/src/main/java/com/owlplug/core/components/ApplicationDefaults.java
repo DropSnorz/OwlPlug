@@ -169,6 +169,7 @@ public class ApplicationDefaults {
     return switch (application) {
       case ABLETON -> abletonLogoImage;
       case REAPER -> reaperLogoImage;
+      case STUDIO_ONE -> pluginComponentImage; // Using generic plugin icon as placeholder
     };
   }
 
