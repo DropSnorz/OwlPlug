@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.owlplug</groupId>
 		<artifactId>owlplug</artifactId>
-		<version>1.30.1</version>
+		<version>1.31.0</version>
 	</parent>
 
 	<artifactId>owlplug-client</artifactId>
@@ -35,17 +35,17 @@
 		<dependency>
 			<groupId>com.owlplug</groupId>
 			<artifactId>owlplug-host</artifactId>
-			<version>1.30.1</version>
+			<version>1.31.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.owlplug</groupId>
 			<artifactId>owlplug-controls</artifactId>
-			<version>1.30.1</version>
+			<version>1.31.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.owlplug</groupId>
 			<artifactId>owlplug-parsers</artifactId>
-			<version>1.30.1</version>
+			<version>1.31.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
