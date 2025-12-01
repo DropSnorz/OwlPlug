@@ -37,12 +37,14 @@ import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.plugin.services.UpdateService;
+import com.owlplug.core.services.AppUpdateService;
 import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -79,7 +81,7 @@ public class MainController extends BaseController {
   @Autowired
   private AuthenticationService authenticationService;
   @Autowired
-  private UpdateService updateService;
+  private AppUpdateService appUpdateService;
   @Autowired
   private PluginService pluginService;
   @Autowired
@@ -151,25 +153,20 @@ public class MainController extends BaseController {
     refreshAccounts();
 
     downloadUpdateButton.setOnAction(e -> {
-      PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getUpdateDownloadUrl());
+      PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getDownloadUrl());
     });
 
     updatePane.setVisible(false);
-
-    Task<Boolean> retrieveUpdateStatusTask = new Task<>() {
-      @Override
-      protected Boolean call() throws Exception {
-        return updateService.isUpToDate();
-      }
-    };
-
-    retrieveUpdateStatusTask.setOnSucceeded(e -> {
-      if (!retrieveUpdateStatusTask.getValue()) {
-        updatePane.setVisible(true);
-      }
-    });
-
-    new Thread(retrieveUpdateStatusTask).start();
+    Executor executor = Executors.newVirtualThreadPerTaskExecutor();
+    CompletableFuture
+            .supplyAsync(() -> appUpdateService.isUpToDate(), executor)
+            .thenAccept(isUpToDate -> {
+              Platform.runLater(() -> {
+                if (!isUpToDate) {
+                  updatePane.setVisible(true);
+                }
+              });
+            });
 
     tabPaneContent.getSelectionModel()
             .selectedItemProperty()
