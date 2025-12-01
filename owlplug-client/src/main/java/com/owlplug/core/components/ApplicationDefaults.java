@@ -212,12 +212,12 @@ public class ApplicationDefaults {
     return env.getProperty("owlplug.version");
   }
 
-  public String getOwlPlugHubUrl() {
-    return env.getProperty("owlplug.hub.url");
+  public String getLatestUrl() {
+    return env.getProperty("owlplug.github.latestUrl");
   }
 
-  public String getUpdateDownloadUrl() {
-    return env.getProperty("owlplug.hub.updateDownloadUrl");
+  public String getDownloadUrl() {
+    return env.getProperty("owlplug.github.downloadUrl");
   }
 
   public String getOwlPlugRegistryUrl() {

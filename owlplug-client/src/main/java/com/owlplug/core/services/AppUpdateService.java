@@ -16,11 +16,10 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
  
-package com.owlplug.plugin.services;
+package com.owlplug.core.services;
 
-import com.owlplug.core.model.json.RemoteVersion;
-import com.owlplug.core.services.BaseService;
 import com.vdurmont.semver4j.Semver;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class UpdateService extends BaseService {
+public class AppUpdateService extends BaseService {
 
   
   private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -39,34 +38,38 @@ public class UpdateService extends BaseService {
    */
   public boolean isUpToDate() {
     
-    String remoteVersion = getLastVersion();
+    String lastVersion = getLastVersion();
     
-    if (remoteVersion != null) {
-      Semver remoteSemver = new Semver(remoteVersion);
+    if (lastVersion != null) {
+      log.debug("Last app version retrieved: {}", lastVersion);
+      Semver lastSemver = new Semver(lastVersion);
       Semver currentSemver = new Semver(this.getApplicationDefaults().getVersion());
-      return remoteSemver.isLowerThanOrEqualTo(currentSemver);
+      return lastSemver.isLowerThanOrEqualTo(currentSemver);
 
     }
     return true;
-
   }
-  
+
   private String getLastVersion() {
     RestTemplate restTemplate = new RestTemplate();
-    RemoteVersion remoteVersion = null;
+    restTemplate.getInterceptors().add((request, body, execution) -> {
+      request.getHeaders().add("User-Agent", "OwlPlug/App");
+      request.getHeaders().add("Accept", "application/vnd.github+json");
+      return execution.execute(request, body);
+    });
+    String url = this.getApplicationDefaults().getLatestUrl();
+
     try {
-      remoteVersion = restTemplate.getForObject(this.getApplicationDefaults().getOwlPlugHubUrl() 
-          + "/releases/latest/version.json", RemoteVersion.class);
+      // Map GitHub JSON to a simple Map so we can extract "tag_name"
+      Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+
+      if (response.containsKey("tag_name")) {
+        return (String) response.get("tag_name");
+      }
     } catch (RestClientException e) {
-      log.error("Error retrieving latest owlplug version", e);
-    }
-
-    if (remoteVersion != null) {
-      return remoteVersion.version;
-
+      log.error("Error retrieving latest GitHub release version", e);
     }
     return null;
-    
   }
  
 }
