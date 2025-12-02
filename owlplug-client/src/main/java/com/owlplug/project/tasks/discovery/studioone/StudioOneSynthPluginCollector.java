@@ -18,6 +18,7 @@
 
 package com.owlplug.project.tasks.discovery.studioone;
 
+import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawPlugin;
 import java.util.ArrayList;
@@ -72,78 +73,24 @@ public class StudioOneSynthPluginCollector {
   }
 
   private DawPlugin readSynthElement(Element synthElement) {
-    String pluginName = extractPluginName(synthElement);
+    String pluginName = StudioOneDomUtils.extractPluginName(synthElement);
     if (pluginName == null || pluginName.isEmpty()) {
       return null;
     }
 
-    PluginFormat format = extractPluginFormat(synthElement);
+    PluginFormat format = StudioOneDomUtils.extractSynthPluginFormat(synthElement);
     if (format == null) {
       return null;
     }
 
+    // Normalize the plugin name (remove platform suffixes like x64, x32, etc.)
+    // This ensures cleaner data in the database and simplifies later queries
+    String normalizedName = PluginUtils.absoluteName(pluginName);
+
     DawPlugin plugin = new DawPlugin();
-    plugin.setName(pluginName);
+    plugin.setName(normalizedName);
     plugin.setFormat(format);
     return plugin;
-  }
-
-  private String extractPluginName(Element synthElement) {
-    // For synth plugins, prefer classInfo over deviceData
-    // because deviceData may contain track/instance names (e.g., "ANA 2", "ANA 2 (2)")
-    // while classInfo always contains the actual plugin name
-    StudioOneDomUtils.DeviceDataAndGhostData data = StudioOneDomUtils.findDeviceDataAndGhostData(synthElement);
-    
-    // Try classInfo FIRST (it has the actual plugin name)
-    Element classInfo = StudioOneDomUtils.findClassInfo(data.getGhostData());
-    if (classInfo != null) {
-      String name = classInfo.getAttribute("name");
-      if (name != null && !name.isEmpty()) {
-        return name;
-      }
-    }
-
-    // Fallback to deviceData only if classInfo didn't work
-    if (data.getDeviceData() != null) {
-      String name = data.getDeviceData().getAttribute("name");
-      if (name != null && !name.isEmpty()) {
-        return name;
-      }
-    }
-
-    return null;
-  }
-
-  private PluginFormat extractPluginFormat(Element synthElement) {
-    StudioOneDomUtils.DeviceDataAndGhostData data = StudioOneDomUtils.findDeviceDataAndGhostData(synthElement);
-    Element classInfo = StudioOneDomUtils.findClassInfo(data.getGhostData());
-    
-    if (classInfo != null) {
-      String subCategory = classInfo.getAttribute("subCategory");
-      String category = classInfo.getAttribute("category");
-
-      // Only process AudioSynth category
-      if (category != null && category.equals("AudioSynth")) {
-        if (subCategory != null && !subCategory.isEmpty()) {
-          // Skip native Studio One plugins
-          if (subCategory.equals("(Native)")) {
-            return null;
-          }
-
-          // Determine format from subCategory (format is like "VST2/Mastering" or "VST3/Mastering")
-          if (subCategory.startsWith("VST2") || subCategory.contains("VST2")) {
-            return PluginFormat.VST2;
-          } else if (subCategory.startsWith("VST3") || subCategory.contains("VST3")) {
-            return PluginFormat.VST3;
-          }
-        }
-      } else {
-        // Not an AudioSynth, skip
-        return null;
-      }
-    }
-
-    return null;
   }
 
 }

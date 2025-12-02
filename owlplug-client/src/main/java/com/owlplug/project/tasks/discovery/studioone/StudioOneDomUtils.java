@@ -18,6 +18,7 @@
 
 package com.owlplug.project.tasks.discovery.studioone;
 
+import com.owlplug.plugin.model.PluginFormat;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -33,17 +34,7 @@ public class StudioOneDomUtils {
    * @return the element with matching x:id, or null if not found
    */
   public static Element findElementByXId(Element parent, String xidValue) {
-    NodeList children = parent.getChildNodes();
-    for (int i = 0; i < children.getLength(); i++) {
-      Node child = children.item(i);
-      if (child instanceof Element childElem && "Attributes".equals(childElem.getTagName())) {
-        String xid = childElem.getAttribute("x:id");
-        if (xidValue.equals(xid)) {
-          return childElem;
-        }
-      }
-    }
-    return null;
+    return findAttributeByXId(parent, xidValue);
   }
 
   /**
@@ -53,23 +44,10 @@ public class StudioOneDomUtils {
    * @return a record containing deviceData and ghostData elements (either may be null)
    */
   public static DeviceDataAndGhostData findDeviceDataAndGhostData(Element element) {
-    NodeList children = element.getChildNodes();
-    Element deviceData = null;
-    Element ghostData = null;
-
-    for (int i = 0; i < children.getLength(); i++) {
-      Node child = children.item(i);
-      if (child instanceof Element childElem && "Attributes".equals(childElem.getTagName())) {
-        String xid = childElem.getAttribute("x:id");
-        if ("deviceData".equals(xid)) {
-          deviceData = childElem;
-        } else if ("ghostData".equals(xid)) {
-          ghostData = childElem;
-        }
-      }
-    }
-
-    return new DeviceDataAndGhostData(deviceData, ghostData);
+    return new DeviceDataAndGhostData(
+        findAttributeByXId(element, "deviceData"),
+        findAttributeByXId(element, "ghostData")
+    );
   }
 
   /**
@@ -79,17 +57,115 @@ public class StudioOneDomUtils {
    * @return the classInfo element, or null if not found
    */
   public static Element findClassInfo(Element ghostData) {
-    if (ghostData == null) {
+    return findAttributeByXId(ghostData, "classInfo");
+  }
+
+  /**
+   * Private helper method to find an Attributes child element with a specific x:id value.
+   *
+   * @param parent the parent element to search within
+   * @param xidValue the value of the x:id attribute to find
+   * @return the element with matching x:id, or null if not found
+   */
+  private static Element findAttributeByXId(Element parent, String xidValue) {
+    if (parent == null || xidValue == null) {
       return null;
     }
+    NodeList children = parent.getChildNodes();
+    for (int i = 0; i < children.getLength(); i++) {
+      Node child = children.item(i);
+      if (child.getNodeType() == Node.ELEMENT_NODE) {
+        Element elem = (Element) child;
+        if ("Attributes".equals(elem.getTagName()) 
+            && xidValue.equals(elem.getAttribute("x:id"))) {
+          return elem;
+        }
+      }
+    }
+    return null;
+  }
 
-    NodeList ghostChildren = ghostData.getChildNodes();
-    for (int i = 0; i < ghostChildren.getLength(); i++) {
-      Node ghostChild = ghostChildren.item(i);
-      if (ghostChild instanceof Element ghostChildElem && "Attributes".equals(ghostChildElem.getTagName())) {
-        String xid = ghostChildElem.getAttribute("x:id");
-        if ("classInfo".equals(xid)) {
-          return ghostChildElem;
+  /**
+   * Extracts the plugin name from an element, preferring classInfo over deviceData.
+   * This avoids instance-specific names (e.g., "Ozone 9 (2)") in favor of the actual plugin name.
+   *
+   * @param element the element containing plugin information
+   * @return the plugin name, or null if not found
+   */
+  public static String extractPluginName(Element element) {
+    DeviceDataAndGhostData data = findDeviceDataAndGhostData(element);
+    
+    // Try classInfo FIRST (it has the actual plugin name)
+    Element classInfo = findClassInfo(data.getGhostData());
+    if (classInfo != null) {
+      String name = classInfo.getAttribute("name");
+      if (name != null && !name.isEmpty()) {
+        return name;
+      }
+    }
+
+    // Fallback to deviceData only if classInfo didn't work
+    if (data.getDeviceData() != null) {
+      String name = data.getDeviceData().getAttribute("name");
+      if (name != null && !name.isEmpty()) {
+        return name;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Extracts the plugin format from an element for audio effect plugins.
+   *
+   * @param element the element containing plugin information
+   * @return the plugin format, or null if not found or native
+   */
+  public static PluginFormat extractPluginFormat(Element element) {
+    DeviceDataAndGhostData data = findDeviceDataAndGhostData(element);
+    Element classInfo = findClassInfo(data.getGhostData());
+    
+    if (classInfo != null) {
+      String subCategory = classInfo.getAttribute("subCategory");
+      if (subCategory != null && !subCategory.isEmpty()) {
+        if (subCategory.equals("(Native)")) {
+          return null;
+        }
+        if (subCategory.contains("VST2")) {
+          return PluginFormat.VST2;
+        } else if (subCategory.contains("VST3")) {
+          return PluginFormat.VST3;
+        }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Extracts the plugin format from an element for synth/instrument plugins.
+   * This includes an additional check for the AudioSynth category.
+   *
+   * @param element the element containing plugin information
+   * @return the plugin format, or null if not found, native, or not an AudioSynth
+   */
+  public static PluginFormat extractSynthPluginFormat(Element element) {
+    DeviceDataAndGhostData data = findDeviceDataAndGhostData(element);
+    Element classInfo = findClassInfo(data.getGhostData());
+    
+    if (classInfo != null) {
+      String subCategory = classInfo.getAttribute("subCategory");
+      String category = classInfo.getAttribute("category");
+
+      if (category != null && category.equals("AudioSynth")) {
+        if (subCategory != null && !subCategory.isEmpty()) {
+          if (subCategory.equals("(Native)")) {
+            return null;
+          }
+          if (subCategory.contains("VST2")) {
+            return PluginFormat.VST2;
+          } else if (subCategory.contains("VST3")) {
+            return PluginFormat.VST3;
+          }
         }
       }
     }

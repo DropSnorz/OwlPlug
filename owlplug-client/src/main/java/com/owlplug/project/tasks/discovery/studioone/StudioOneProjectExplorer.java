@@ -139,7 +139,7 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
           org.apache.commons.io.FileUtils.deleteDirectory(tempDir.toFile());
           log.debug("Cleaned up temporary directory: {}", tempDir);
         } catch (IOException e) {
-          log.debug("Failed to clean up temporary directory: {}", tempDir, e);
+          log.error("Failed to clean up temporary directory: {}", tempDir, e);
         }
       }
     }
