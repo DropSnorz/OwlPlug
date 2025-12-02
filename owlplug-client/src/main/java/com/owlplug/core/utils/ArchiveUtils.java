@@ -25,9 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
@@ -134,114 +132,33 @@ public class ArchiveUtils {
    * This is useful when you only need a subset of files and want to avoid
    * creating directories with reserved names (e.g., Windows "Strings" directory).
    *
-   * @param source the archive file to extract from
+   * @param archive the archive file to extract from
    * @param dest the destination directory
-   * @param filePaths list of file paths within the archive to extract (e.g., "metainfo.xml", "Devices/audiomixer.xml")
+   * @param targetPaths collection of file paths within the archive to extract (e.g., "metainfo.xml", "Devices/audiomixer.xml")
    * @throws IOException if extraction fails
    */
-  public static void extractFiles(File source, File dest, List<String> filePaths) throws IOException {
-    try (ArchiveInputStream archiveInputStream = createArchiveInputStream(source)) {
-      extractFiles(archiveInputStream, dest, filePaths);
-    } catch (CompressorException | ArchiveException e) {
-      throw new IOException("Error while extracting files from archive: " + source.getAbsolutePath(), e);
-    }
-  }
+  public static void extractFiles(File archive, File dest, Collection<String> targetPaths) throws IOException {
+    try (InputStream fi = new BufferedInputStream(new FileInputStream(archive));
+         ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(fi)) {
 
-  private static void extractFiles(ArchiveInputStream archiveInputStream,
-      File destinationDirectory, List<String> filePaths) throws IOException {
-    PathCollection pathCollection = collectTargetPaths(filePaths);
-    
-    ArchiveEntry entry;
-    while ((entry = archiveInputStream.getNextEntry()) != null) {
-      if (!archiveInputStream.canReadEntryData(entry)) {
-        continue;
-      }
-      
-      String entryName = entry.getName().replace('\\', '/');
-      boolean shouldExtract = pathCollection.targetPaths.contains(entryName);
-      
-      if (entry.isDirectory()) {
-        createDirectoryIfNeeded(entryName, pathCollection.requiredDirs, destinationDirectory);
-      } else if (shouldExtract) {
-        extractFile(entry, archiveInputStream, destinationDirectory);
-      }
-    }
-  }
+      ArchiveEntry entry;
+      while ((entry = ais.getNextEntry()) != null) {
+        String entryName = entry.getName().replace('\\', '/');
+        if (!targetPaths.contains(entryName) || entry.isDirectory()) {
+          continue;
+        }
 
-  private static ArchiveInputStream createArchiveInputStream(File sourceFile)
-      throws IOException, CompressorException, ArchiveException {
-    if (isCompressed(sourceFile)) {
-      InputStream fi = new FileInputStream(sourceFile);
-      InputStream bi = new BufferedInputStream(fi);
-      CompressorInputStream gzi = new CompressorStreamFactory().createCompressorInputStream(bi);
-      InputStream bgzi = new BufferedInputStream(gzi);
-      return new ArchiveStreamFactory().createArchiveInputStream(bgzi);
-    } else {
-      InputStream fi = new FileInputStream(sourceFile);
-      InputStream bi = new BufferedInputStream(fi);
-      return new ArchiveStreamFactory().createArchiveInputStream(bi);
-    }
-  }
+        File outFile = new File(dest, entryName);
+        if (!outFile.getParentFile().isDirectory() && !outFile.getParentFile().mkdirs()) {
+          throw new IOException("Failed to create directories for file " + outFile.getAbsolutePath());
+        }
 
-  private static PathCollection collectTargetPaths(List<String> filePaths) {
-    Set<String> targetPaths = new HashSet<>();
-    Set<String> requiredDirs = new HashSet<>();
-    
-    for (String path : filePaths) {
-      String normalizedPath = path.replace('\\', '/');
-      targetPaths.add(normalizedPath);
-      collectParentDirectories(normalizedPath, requiredDirs);
-    }
-    
-    return new PathCollection(targetPaths, requiredDirs);
-  }
-
-  private static void collectParentDirectories(String normalizedPath, Set<String> requiredDirs) {
-    int lastSlash = normalizedPath.lastIndexOf('/');
-    if (lastSlash > 0) {
-      String dirPath = normalizedPath.substring(0, lastSlash);
-      while (!dirPath.isEmpty()) {
-        requiredDirs.add(dirPath + "/");
-        int nextSlash = dirPath.lastIndexOf('/');
-        if (nextSlash > 0) {
-          dirPath = dirPath.substring(0, nextSlash);
-        } else {
-          break;
+        try (OutputStream out = Files.newOutputStream(outFile.toPath())) {
+          IOUtils.copy(ais, out);
         }
       }
-    }
-  }
-
-  private static void createDirectoryIfNeeded(String entryName, Set<String> requiredDirs,
-      File destinationDirectory) throws IOException {
-    String dirPath = entryName.endsWith("/") ? entryName : entryName + "/";
-    if (requiredDirs.contains(dirPath)) {
-      File f = new File(destinationDirectory, entryName);
-      if (!f.isDirectory() && !f.mkdirs()) {
-        throw new IOException("failed to create directory " + f);
-      }
-    }
-  }
-
-  private static void extractFile(ArchiveEntry entry, ArchiveInputStream archiveInputStream,
-      File destinationDirectory) throws IOException {
-    File f = new File(destinationDirectory, entry.getName());
-    File parent = f.getParentFile();
-    if (parent != null && !parent.isDirectory() && !parent.mkdirs()) {
-      throw new IOException("failed to create directory " + parent);
-    }
-    try (OutputStream output = Files.newOutputStream(f.toPath())) {
-      IOUtils.copy(archiveInputStream, output);
-    }
-  }
-
-  private static class PathCollection {
-    final Set<String> targetPaths;
-    final Set<String> requiredDirs;
-
-    PathCollection(Set<String> targetPaths, Set<String> requiredDirs) {
-      this.targetPaths = targetPaths;
-      this.requiredDirs = requiredDirs;
+    } catch (ArchiveException e) {
+      throw new IOException("Failed to read archive: " + archive, e);
     }
   }
 

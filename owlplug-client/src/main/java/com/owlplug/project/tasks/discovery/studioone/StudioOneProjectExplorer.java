@@ -146,6 +146,7 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
   }
 
   private void extractMetadata(Document metainfoDoc, XPath xpath, DawProject project) {
+    // Extract title - if query fails, keep default name from filename
     try {
       NodeList titleNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Title']/@value")
               .evaluate(metainfoDoc, XPathConstants.NODESET);
@@ -155,28 +156,31 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
           project.setName(title);
         }
       }
+    } catch (XPathExpressionException e) {
+      log.debug("Error extracting Document:Title from metainfo.xml, using default", e);
+    }
 
-      NodeList creatorNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Creator']/@value")
+    // Extract app full name from Generator - if query fails, use default
+    try {
+      NodeList generatorNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Generator']/@value")
               .evaluate(metainfoDoc, XPathConstants.NODESET);
-      if (creatorNodes.getLength() > 0) {
-        String creator = creatorNodes.item(0).getNodeValue();
-        project.setAppFullName(creator != null ? creator : "Studio One");
-      } else {
-        // Try to get from Generator attribute
-        NodeList generatorNodes = (NodeList) xpath.compile("//Attribute[@id='Document:Generator']/@value")
-                .evaluate(metainfoDoc, XPathConstants.NODESET);
-        if (generatorNodes.getLength() > 0) {
-          String generator = generatorNodes.item(0).getNodeValue();
-          if (generator != null && generator.startsWith("Studio One/")) {
-            project.setAppFullName(generator);
-          } else {
-            project.setAppFullName("Studio One");
-          }
+      if (generatorNodes.getLength() > 0) {
+        String generator = generatorNodes.item(0).getNodeValue();
+        if (generator != null && generator.startsWith("Studio One/")) {
+          project.setAppFullName(generator);
         } else {
           project.setAppFullName("Studio One");
         }
+      } else {
+        project.setAppFullName("Studio One");
       }
+    } catch (XPathExpressionException e) {
+      log.debug("Error extracting Document:Generator from metainfo.xml, using default", e);
+      project.setAppFullName("Studio One");
+    }
 
+    // Extract format version - if query fails, leave unset
+    try {
       NodeList versionNodes = (NodeList) xpath.compile("//Attribute[@id='Document:FormatVersion']/@value")
               .evaluate(metainfoDoc, XPathConstants.NODESET);
       if (versionNodes.getLength() > 0) {
@@ -184,8 +188,7 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
         project.setFormatVersion(version);
       }
     } catch (XPathExpressionException e) {
-      log.debug("Error extracting metadata from metainfo.xml, using defaults", e);
-      project.setAppFullName("Studio One");
+      log.debug("Error extracting Document:FormatVersion from metainfo.xml, leaving unset", e);
     }
   }
 
