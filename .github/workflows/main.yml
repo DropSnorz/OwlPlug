@@ -11,6 +11,7 @@ on:
       - ci/*
       - openjdk/*
       - linux
+      - support/*
 
 jobs:
   build-host-win:
@@ -43,7 +44,7 @@ jobs:
         name: owlplug-host-win
         path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}.dll
   build-host-osx:
-    runs-on: macos-14
+    runs-on: macos-15-intel
     steps:
     - uses: actions/checkout@v6
       with:
@@ -181,7 +182,7 @@ jobs:
         name: owlplug-win-installer-msi
         path: build/output/OwlPlug-${{ env.version }}.msi
   package-osx:
-    runs-on: macos-14
+    runs-on: macos-15-intel
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v6
@@ -267,7 +268,7 @@ jobs:
         path: OwlPlug-${{ env.version }}-x86_64.AppImage
   release:
     needs: [package-win, package-osx, package-linux-deb, package-linux-appimage]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/support/')
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v6
