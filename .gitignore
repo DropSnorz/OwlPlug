@@ -11,6 +11,7 @@
 # Owlplug specific
 build/input/
 build/output/
+temp/
 src/main/resources/credentials.properties
 
 # OwlPlug Host binaries 
