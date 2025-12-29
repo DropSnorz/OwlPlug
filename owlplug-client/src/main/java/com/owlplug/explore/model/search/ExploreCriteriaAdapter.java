@@ -28,7 +28,7 @@ public class ExploreCriteriaAdapter {
 
   public static Specification<RemotePackage> toSpecification(List<ExploreFilterCriteria> criteriaList) {
 
-    Specification<RemotePackage> spec = Specification.where(null);
+    Specification<RemotePackage> spec = Specification.unrestricted();
     for (ExploreFilterCriteria criteria : criteriaList) {
       spec = spec.and(toSpecification(criteria));
     }
@@ -63,7 +63,7 @@ public class ExploreCriteriaAdapter {
       return RemotePackageRepository.hasFormat((List<String>) criteria.getValue());
     }
 
-    return Specification.where(null);
+    return Specification.unrestricted();
 
   }
 

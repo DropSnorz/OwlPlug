@@ -26,11 +26,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 public class AppTestContext {
 
-  @MockBean
+  @MockitoBean
   protected Preferences preferences;
 
   @BeforeAll

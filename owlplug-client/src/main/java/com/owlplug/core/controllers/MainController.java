@@ -150,8 +150,6 @@ public class MainController extends BaseController {
     accountComboBox.setButtonCell(new AccountCellFactory(imageCache, Pos.CENTER_RIGHT).call(null));
     accountComboBox.setCellFactory(new AccountCellFactory(authenticationService, imageCache, true));
 
-    refreshAccounts();
-
     downloadUpdateButton.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getDownloadUrl());
     });
@@ -178,6 +176,8 @@ public class MainController extends BaseController {
    * called once in the application lifecycle.
    */
   public void dispatchPostInitialize() {
+
+    refreshAccounts();
 
     if (!this.applicationMonitor.isPreviousExecutionSafelyTerminated()) {
       log.info("Previous execution not terminated safely, opening crash recovery dialog");
