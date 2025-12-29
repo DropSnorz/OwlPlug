@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<springboot.version>3.4.4</springboot.version>
+		<springboot.version>4.0.1</springboot.version>
         <mockito.version>5.20.0</mockito.version>
 	</properties>
 	
@@ -71,8 +71,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<!-- Override spring-boot managed version to fix https://github.com/DropSnorz/OwlPlug/issues/322 -->
-			<version>2.4.240</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

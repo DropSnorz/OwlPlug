@@ -25,6 +25,7 @@ import java.beans.PropertyVetoException;
 import java.nio.file.Paths;
 import java.time.Duration;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -61,11 +62,23 @@ public class OwlPlug extends Application {
 
   private ConfigurableApplicationContext context;
   private Parent rootNode;
-  
-  
+
+  /**
+   * Main method called on JAR execution. It bootstraps JavaFx Application and
+   * it's preloader {@see com.owlplug.OwlPlugPreloader}
+   *
+   * @param args The command line arguments given on JAR execution. Usually empty.
+   */
+  public static void boot(String[] args) {
+    System.setProperty("javafx.preloader", "com.owlplug.OwlPlugPreloader");
+    launch(OwlPlug.class, args);
+
+  }
+
   /**
    * JavaFX Application initialization method. It boostraps Spring boot
    * application context and binds it to FXMLLoader controller factory.
+   * Running from the JavaFX-Launcher thread.
    */
   @Override
   public void init() throws Exception {
@@ -80,7 +93,9 @@ public class OwlPlug extends Application {
       rootNode = loader.load();
 
       MainController mainController = context.getBean(MainController.class);
-      mainController.dispatchPostInitialize();
+
+      Platform.runLater(mainController::dispatchPostInitialize);
+
     } catch (BeanCreationException e) {
       if (e.getRootCause() instanceof HibernateException) {
         log.error("OwlPlug is maybe already running", e);
@@ -147,7 +162,6 @@ public class OwlPlug extends Application {
    */
   @Bean
   public CacheManager getCacheManager() {
-
     CacheManager cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
         .with(CacheManagerBuilder.persistence(
                 Paths.get(ApplicationDefaults.getUserDataDirectory(),  "cache").toString())
@@ -171,15 +185,4 @@ public class OwlPlug extends Application {
     context.close();
   }
 
-  /**
-   * Main method called on JAR execution. It bootstraps JavaFx Application and
-   * it's preloader {@see com.owlplug.OwlPlugPreloader}
-   *
-   * @param args The command line arguments given on JAR execution. Usually empty.
-   */
-  public static void boot(String[] args) {
-    System.setProperty("javafx.preloader", "com.owlplug.OwlPlugPreloader");
-    launch(OwlPlug.class, args);
-
-  }
 }
