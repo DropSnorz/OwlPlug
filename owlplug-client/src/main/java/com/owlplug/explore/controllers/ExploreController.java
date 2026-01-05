@@ -42,6 +42,7 @@ import com.owlplug.explore.ui.PackageBlocViewBuilder;
 import com.owlplug.plugin.model.PluginFormat;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -193,7 +194,11 @@ public class ExploreController extends BaseController {
     Label popupLabel = new Label("Target environment contains");
     popupLabel.getStyleClass().add("label-disabled");
     platformFilterVbox.getChildren().add(popupLabel);
-    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
+    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()
+            .stream()
+            .sorted(Entry.<String, CheckBox>comparingByKey().reversed())
+            .toList()
+    ) {
       platformFilterVbox.getChildren().add(entry.getValue());
     }
 
