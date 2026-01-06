@@ -12,7 +12,7 @@
     <artifactId>owlplug-parsers</artifactId>
 
     <properties>
-        <antlr.version>4.10.1</antlr.version>
+        <antlr.version>4.13.2</antlr.version>
     </properties>
 
     <dependencies>
