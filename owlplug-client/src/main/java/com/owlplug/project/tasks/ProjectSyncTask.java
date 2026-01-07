@@ -25,6 +25,7 @@ import com.owlplug.project.model.DawProject;
 import com.owlplug.project.repositories.DawProjectRepository;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
 import com.owlplug.project.tasks.discovery.reaper.ReaperProjectExplorer;
+import com.owlplug.project.tasks.discovery.studioone.StudioOneProjectExplorer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,19 +73,32 @@ public class ProjectSyncTask extends AbstractTask {
 
     this.setMaxProgress(filteredFiles.size());
 
+    // Create explorer instances once, outside the loop (they are stateless)
+    AbletonProjectExplorer abletonExplorer = new AbletonProjectExplorer();
+    ReaperProjectExplorer reaperExplorer = new ReaperProjectExplorer();
+    StudioOneProjectExplorer studioOneExplorer = new StudioOneProjectExplorer();
+
     for (File file : filteredFiles) {
       this.commitProgress(1);
-      AbletonProjectExplorer abletonExplorer = new AbletonProjectExplorer();
-      ReaperProjectExplorer reaperExplorer = new ReaperProjectExplorer();
 
       if (abletonExplorer.canExploreFile(file)) {
         this.updateMessage("Analyzing Ableton file: " + file.getAbsolutePath());
         DawProject project = abletonExplorer.explore(file);
-        projectRepository.save(project);
+        if (project != null) {
+          projectRepository.save(project);
+        }
       } else if (reaperExplorer.canExploreFile(file)) {
         this.updateMessage("Analyzing Reaper file: " + file.getAbsolutePath());
         DawProject project = reaperExplorer.explore(file);
-        projectRepository.save(project);
+        if (project != null) {
+          projectRepository.save(project);
+        }
+      } else if (studioOneExplorer.canExploreFile(file)) {
+        this.updateMessage("Analyzing Studio One file: " + file.getAbsolutePath());
+        DawProject project = studioOneExplorer.explore(file);
+        if (project != null) {
+          projectRepository.save(project);
+        }
       }
     }
 
