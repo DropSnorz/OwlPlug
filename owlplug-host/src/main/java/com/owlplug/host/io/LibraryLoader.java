@@ -21,7 +21,12 @@ package com.owlplug.host.io;
 import com.owlplug.host.model.OS;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,115 +35,78 @@ import org.slf4j.LoggerFactory;
  * Loads Native library from regular library path or classpath.
  *
  */
-public class LibraryLoader {
+public final class LibraryLoader {
+
   private static final Logger log = LoggerFactory.getLogger(LibraryLoader.class);
 
-  private static final String SEPARATOR = System.getProperty("file.separator");
-  private static final String TMP_PATH = System.getProperty("java.io.tmpdir");
-  private static final String LIB_EXTENSION = getPlatformLibraryExtension();
-  
+  private static final Path TMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"));
+  private static final String LIB_EXTENSION = platformExtension();
 
-  public static boolean load(String libName, Class ref, boolean throwOnFailure) {
-    if (load(libName)) {
-      return true;
-    }
-    if (load(TMP_PATH + SEPARATOR + libName + LIB_EXTENSION)) {
-      return true;
-    }
-    if (extract(ref, libName)) {
-      return true;
-    }
+  private LibraryLoader() {
+  }
 
-    if (throwOnFailure) {
-      throw new UnsatisfiedLinkError("No " + libName 
-          + " in java.library.path or on the classpath");
-    } else {
-      log.error("No " + libName + " in java.library.path or on the classpath");
+  public static boolean load(String libName, Class<?> referenceClass) {
+    if (tryLoadByName(libName)) return true;
+
+    Path tempLib = TMP_DIR.resolve(libName + LIB_EXTENSION);
+    if (tryLoadByPath(tempLib)) return true;
+
+    return extractAndLoad(referenceClass, libName, tempLib);
+  }
+
+  private static boolean tryLoadByName(String libName) {
+    try {
+      System.loadLibrary(libName);
+      log.info("Loaded library by name: {}", libName);
+      return true;
+    } catch (UnsatisfiedLinkError e) {
+      log.debug("Failed to load library by name: {}", libName, e);
       return false;
     }
   }
-  
-  /**
-   * Loads library from path or by library name.
-   * @param libName library path or name
-   * @return
-   */
-  public static boolean load(String libName) {
+
+  private static boolean tryLoadByPath(Path path) {
+    if (!Files.exists(path)) {
+      return false;
+    }
+
     try {
-      if (libName.contains(SEPARATOR)) {
-        System.load(libName);
-      } else {
-        System.loadLibrary(libName);
-      }
-      log.info("Library " + libName + " successfully loaded");
+      System.load(path.toAbsolutePath().toString());
+      log.info("Loaded library from path: {}", path);
       return true;
     } catch (UnsatisfiedLinkError e) {
-      log.debug("Can't load library {} : {}", libName, e.getMessage());
-      log.trace("Library {} cannot be loaded", libName, e);
-
+      log.debug("Failed to load library from path: {}", path, e);
+      return false;
     }
-
-    return false;
   }
 
-  /**
-   * Extracts and load the library from a temp directory.
-   * @param ref JNI Class
-   * @param libName library name
-   * @return
-   */
-  public static boolean extract(Class ref, String libName) {
-    try {
-      log.debug("Extracting library to " + TMP_PATH + SEPARATOR + libName + LIB_EXTENSION);
-      File file = new File(TMP_PATH + SEPARATOR + libName + LIB_EXTENSION);
-      InputStream is = ref.getClassLoader().getResourceAsStream(libName + LIB_EXTENSION);
-      if (is == null) {
-        log.error("Library " + libName + LIB_EXTENSION + " not in classpath");
+  private static boolean extractAndLoad(Class<?> ref, String libName, Path target) {
+    String resourceName = libName + LIB_EXTENSION;
+
+    try (InputStream in = ref.getClassLoader().getResourceAsStream(resourceName)) {
+      if (in == null) {
+        log.debug("Library {} not found on classpath", resourceName);
         return false;
-
       }
 
-      int read;
-      byte[] buffer = new byte[4096];
-      FileOutputStream os = new FileOutputStream(file);
-      while ((read = is.read(buffer)) != -1) {
-        os.write(buffer, 0, read);
-      }
-      os.close();
-      is.close();
+      Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
+      log.debug("Extracted library to {}", target);
 
-      if (load(file.getAbsolutePath())) {
-        return true;
-      } else {
-        log.error("Library can't be loaded from " + file.getAbsolutePath());
-      }
+      return tryLoadByPath(target);
 
-    } catch (Throwable t) {
-      log.error("Can't export Library " + libName + " from classpath to temp directory", t);
+    } catch (IOException e) {
+      log.error("Failed to extract native library {}", resourceName, e);
+      return false;
     }
-
-    return false;
   }
-  
-  /**
-   * Returns platform default library extension.
-   * - Windows host: .dll
-   * - Mac host: .dylib
-   * Returns an empty string for any other hosts
-   * @return host default library extension
-   */
-  private static String getPlatformLibraryExtension() {
-    if (OS.WINDOWS.isCurrentOs()) {
-      return ".dll";
-    } else if (OS.MAC.isCurrentOs()) {
-      return ".dylib";
-    } else if (OS.LINUX.isCurrentOs()) {
-      return ".so";
-    }
-    
-    log.warn("No library file extension is defined for current platform {}", OS.current());
-    return "";
-  }
-  
 
+  private static String platformExtension() {
+    if (OS.WINDOWS.isCurrentOs()) return ".dll";
+    if (OS.MAC.isCurrentOs()) return ".dylib";
+    if (OS.LINUX.isCurrentOs()) return ".so";
+
+    throw new UnsupportedOperationException(
+        "Unsupported OS for native libraries: " + OS.current());
+  }
 }
+

@@ -1,24 +1,26 @@
 echo "Preparing package"
 
-owlplugversion=$1
+owlplug_version=$1
+target_platform=$2
 
 echo "Exporting LICENSE File"
 
 cp ../LICENSE ./input/LICENSE
 
-echo "Copying owlplug-client-$owlplugversion.jar to owlplug.jar"
+echo "Copying owlplug-client-${owlplug_version}.jar to owlplug.jar"
 
-cp ../owlplug-client/target/owlplug-client-$owlplugversion.jar ./input/owlplug.jar
+cp ../owlplug-client/target/owlplug-client-${owlplug_version}.jar ./input/owlplug.jar
 
 echo "Generating OwlPlug DEB Install package"
 
 jpackage --input ./input/ --name OwlPlug --main-class org.springframework.boot.loader.launch.JarLauncher \
 --main-jar owlplug.jar --license-file ./input/LICENSE --dest ./output \
---app-version $owlplugversion --icon ./resources/owlplug.png --vendor OwlPlug \
+--app-version ${owlplug_version} --icon ./resources/owlplug.png --vendor OwlPlug \
 --linux-package-name owlplug --linux-deb-maintainer contact@owlplug.com \
 --linux-menu-group "AudioVideo;Audio" --linux-shortcut
 
-mv ./output/owlplug_${owlplugversion}_amd64.deb ./output/OwlPlug-$owlplugversion.deb
+# Rename owlplug_${version]_${arch} to owlplug-${version}-${platform}
+mv ./output/owlplug_${owlplug_version}_*.deb ./output/OwlPlug-${owlplug_version}-${target_platform}.deb
 
 ls ./output
 

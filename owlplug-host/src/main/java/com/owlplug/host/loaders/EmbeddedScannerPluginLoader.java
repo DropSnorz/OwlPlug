@@ -24,9 +24,7 @@ import com.owlplug.host.io.ClassPathFileExtractor;
 import com.owlplug.host.io.ClassPathVersionUtils;
 import com.owlplug.host.io.CommandResult;
 import com.owlplug.host.io.CommandRunner;
-import com.owlplug.host.io.LibraryLoader;
-import com.owlplug.host.model.OS;
-import com.owlplug.host.utils.FileSystemUtils;
+import com.owlplug.host.utils.OSUtils;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -45,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 public class EmbeddedScannerPluginLoader implements NativePluginLoader {
 
-  private static final Logger log = LoggerFactory.getLogger(LibraryLoader.class);
+  private static final Logger log = LoggerFactory.getLogger(EmbeddedScannerPluginLoader.class);
 
   private static final String PLUGIN_COMPONENT_OUTPUT_DELIMITER_BEGIN = "---BEGIN PLUGIN COMPONENT DELIMITER---";
   private static final String PLUGIN_COMPONENT_OUTPUT_DELIMITER_END = "---END PLUGIN COMPONENT DELIMITER---";
@@ -55,8 +53,8 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
 
   private static final String DEFAULT_SCANNER_NAME = "owlplug-scanner";
   private static final String DEFAULT_SCANNER_VERSION = ClassPathVersionUtils.getVersionSafe(DEFAULT_SCANNER_NAME);
-  private static String DEFAULT_SCANNER_EXT = getPlatformExecutableExtension();
-  private static String DEFAULT_SCANNER_PLATFORM_TAG = getPlatformTagName();
+  private static final String DEFAULT_SCANNER_EXT = getPlatformExecutableExtension();
+  private static final String DEFAULT_SCANNER_PLATFORM_TAG = OSUtils.getPlatformTagName();
   private static final String DEFAULT_SCANNER_ID =
       DEFAULT_SCANNER_NAME + "-" + DEFAULT_SCANNER_VERSION + "-" + DEFAULT_SCANNER_PLATFORM_TAG + DEFAULT_SCANNER_EXT;
 
@@ -85,7 +83,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
       try {
         ClassPathFileExtractor.extract(this.getClass(), DEFAULT_SCANNER_ID, scannerFile);
       } catch (IOException e) {
-        log.error("Scanner executable can't be extracted to " + scannerFile.getAbsolutePath());
+        log.error("Scanner executable can't be extracted to {}", scannerFile.getAbsolutePath());
       }
     }
 
@@ -93,7 +91,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
       available = true;
 
       // Apply executable permissions on POSIX filesystem
-      if (FileSystemUtils.isPosix()) {
+      if (OSUtils.isPosixFileSystem()) {
         try {
           Set<PosixFilePermission> executablePermission = PosixFilePermissions.fromString("rwxr-xr--");
           Files.setPosixFilePermissions(scannerFile.toPath(), executablePermission);
@@ -196,8 +194,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
     try {
       JAXBContext jaxbContext = JAXBContext.newInstance(JuceXMLPlugin.class);
       Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-      JuceXMLPlugin juceXmlPlugin = (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(xml));
-      return juceXmlPlugin;
+      return (JuceXMLPlugin) jaxbUnmarshaller.unmarshal(new StringReader(xml));
 
     } catch (JAXBException e) {
       log.error("Error during XML mapping", e);
@@ -234,28 +231,14 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
 
   /**
    * Returns platform default executable extension.
-   * - Windows host: .exe
-   * - Mac host: empty string
+   * No extensions defined for scanners.
    * Returns an empty string for any other hosts
    *
    * @return host default library extension
    */
   private static String getPlatformExecutableExtension() {
-    if (OS.WINDOWS.isCurrentOs()) {
-      return ".exe";
-    }
     return "";
   }
 
-  private static String getPlatformTagName() {
-    if (OS.WINDOWS.isCurrentOs()) {
-      return "win";
-    } else if (OS.MAC.isCurrentOs()) {
-      return "osx";
-    } else if (OS.LINUX.isCurrentOs()) {
-      return "linux";
-    }
-    return "";
-  }
 
 }

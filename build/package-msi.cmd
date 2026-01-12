@@ -1,6 +1,8 @@
 @echo off
 
 set owlplug-version=%1
+set target-platform=%2
+
 echo ** Preparing package **
 
 echo ** Exporting LICENSE File **
@@ -17,5 +19,7 @@ jpackage --type msi --input ./input/ --name OwlPlug --main-class org.springframe
 --main-jar owlplug.jar --license-file .\input\LICENSE --dest ./output ^
 --app-version %owlplug-version% --icon .\resources\owlplug.ico --vendor OwlPlug ^
 --win-dir-chooser --win-menu --win-shortcut
+
+move ".\output\OwlPlug-%owlplug-version%.msi" ".\output\OwlPlug-%owlplug-version%-%target-platform%.msi"
 
 echo ** OwlPlug MSI Install package generated**

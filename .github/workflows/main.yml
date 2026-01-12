@@ -1,6 +1,3 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: Owlplug Main
 
 on: 
@@ -14,7 +11,14 @@ on:
 
 jobs:
   build-host-win:
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        platform: [ win-x64 ]
+        include:
+          - platform: win-x64
+            arch: x64
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v6
       with:
@@ -37,13 +41,25 @@ jobs:
     - name: "Build Host"
       run: ./build/build-host-win.sh
       shell: bash
+    - name: Add architecture to filename
+      run: mv "owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}.dll" "owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}-${{ matrix.platform }}.dll"
     - name: Upload Host Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-host-win
-        path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}.dll
+        name: owlplug-host-${{ matrix.platform }}
+        path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}-${{ matrix.platform }}.dll
   build-host-osx:
-    runs-on: macos-15-intel
+    strategy:
+      matrix:
+        platform: [ osx-x64, osx-arm64 ]
+        include:
+          - platform: osx-x64
+            arch: x64
+            os: macos-15-intel
+          - platform: osx-arm64
+            arch: arm64
+            os: macos-15
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v6
       with:
@@ -68,13 +84,26 @@ jobs:
     - name: "Build Host"
       run: ./build/build-host-osx.sh
       shell: bash
+    - name: Add architecture to filename
+      run: mv owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}.dylib owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}-${{ matrix.platform }}.dylib
     - name: Upload Host Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-host-osx
-        path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}.dylib
+        name: owlplug-host-${{ matrix.platform }}
+        path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}-${{ matrix.platform }}.dylib
   build-host-linux:
-    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        platform: [ linux-x64 ]
+        include:
+          - platform: linux-x64
+            arch: x64
+            os: ubuntu-24.04
+          # Projucer is only distributed for x64/amd64 linux.
+          # The projucer is required to generate the Makefile, but the build can be run for arm64 after that.
+          # A solution to support arm64 OwlPlug scanner would be to download projucer and render the Makefile
+          # prior to the build matrix in a prepare job.
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v6
       with:
@@ -101,16 +130,32 @@ jobs:
     - name: "Build Host"
       run: ./build/build-host-linux.sh
       shell: bash
-    - name: Add version in binary name
-      run: mv owlplug-host/src/main/juce/Builds/LinuxMakefile/build/libowlplug-host.so owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}.so
+    - name: Add version and architecture to filename
+      run: mv owlplug-host/src/main/juce/Builds/LinuxMakefile/build/libowlplug-host.so owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}-${{ matrix.platform }}.so
     - name: Upload Host Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-host-linux
-        path: owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}.so
+        name: owlplug-host-${{ matrix.platform }}
+        path: owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}-${{ matrix.platform }}.so
   build-jar:
-    runs-on: ubuntu-latest
-    needs: [build-host-win, build-host-osx, build-host-linux]
+    strategy:
+      matrix:
+        platform: [ win-x64, osx-x64, osx-arm64, linux-x64 ]
+        include:
+          - platform: win-x64
+            arch: x64
+            os: windows-latest
+          - platform: osx-x64
+            arch: x64
+            os: macos-15-intel
+          - platform: osx-arm64
+            arch: arm64
+            os: macos-15
+          - platform: linux-x64
+            arch: x64
+            os: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
+    needs: [ build-host-win, build-host-osx, build-host-linux ]
     steps:
     - uses: actions/checkout@v6
     - name: Set up JDK 25
@@ -120,31 +165,18 @@ jobs:
         java-version: 25
     - name: Get version
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+      shell: bash
       id: get-version
-    - name: Install Windows native Host artifact
+    - name: Install Native Host artifact
       uses: actions/download-artifact@v7
       with:
-        name: owlplug-host-win
-        path: owlplug-host/src/main/resources
-    - name: Install OSX native Host artifact
-      uses: actions/download-artifact@v7
-      with:
-        name: owlplug-host-osx
-        path: owlplug-host/src/main/resources
-    - name: Install Linux native Host artifact
-      uses: actions/download-artifact@v7
-      with:
-        name: owlplug-host-linux
+        name: owlplug-host-${{ matrix.platform }}
         path: owlplug-host/src/main/resources
     - name: Get OwlPlug Scanner version
       run: echo "scanner_version=$(cat ./owlplug-host/src/main/resources/owlplug-scanner.version)" >> $GITHUB_ENV
       id: get-scanner-version
-    - name: Download scanner win binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-win.exe --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-win.exe
-    - name: Download scanner osx binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-osx --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-osx
-    - name: Download scanner linux binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-linux --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-linux
+    - name: Download scanner binary
+      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-${{ matrix.platform }} --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-${{ matrix.platform }}
     - name: Build maven parent project
       run: mvn -B install -DskipTests
     - name: Build runnable Jar
@@ -152,10 +184,17 @@ jobs:
     - name: Upload Jar Build Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-client-jar
+        name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target/owlplug-client-${{ env.version }}.jar
-  package-win:
-    runs-on: windows-latest
+  package-win-msi:
+    strategy:
+      matrix:
+        platform: [ win-x64 ]
+        include:
+          - platform: win-x64
+            arch: x64
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v6
@@ -171,17 +210,27 @@ jobs:
     - name: Install Jar artifact
       uses: actions/download-artifact@v7
       with:
-        name: owlplug-client-jar
+        name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target
     - name: Package installer
-      run: cd build && ./package-msi.cmd ${{ env.version }}
+      run: cd build && ./package-msi.cmd ${{ env.version }} ${{ matrix.platform }}
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-win-installer-msi
-        path: build/output/OwlPlug-${{ env.version }}.msi
-  package-osx:
-    runs-on: macos-15-intel
+        name: owlplug-win-installer-msi-${{ matrix.platform }}
+        path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.msi
+  package-osx-dmg:
+    strategy:
+      matrix:
+        platform: [ osx-x64, osx-arm64 ]
+        include:
+          - platform: osx-x64
+            arch: x64
+            os: macos-15-intel
+          - platform: osx-arm64
+            arch: arm64
+            os: macos-15
+    runs-on: ${{ matrix.os }}
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v6
@@ -196,17 +245,24 @@ jobs:
     - name: Install Jar artifact
       uses: actions/download-artifact@v7
       with:
-        name: owlplug-client-jar
+        name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target
     - name: Package installer
-      run: cd build && ./package-dmg.sh ${{ env.version }}
+      run: cd build && ./package-dmg.sh ${{ env.version }} ${{ matrix.platform }}
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-osx-installer-dmg
-        path: build/output/OwlPlug-${{ env.version }}.dmg
+        name: owlplug-osx-installer-dmg-${{ matrix.platform }}
+        path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.dmg
   package-linux-deb:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [ linux-x64 ]
+        include:
+          - platform: linux-x64
+            arch: x64
+            os: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v6
@@ -221,17 +277,25 @@ jobs:
     - name: Install Jar artifact
       uses: actions/download-artifact@v7
       with:
-        name: owlplug-client-jar
+        name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target
     - name: Package installer
-      run: cd build && ./package-deb.sh ${{ env.version }}
+      run: cd build && ./package-deb.sh ${{ env.version }} ${{ matrix.platform }}
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-linux-installer-deb
-        path: build/output/OwlPlug-${{ env.version }}.deb
+        name: owlplug-linux-installer-deb-${{ matrix.platform }}
+        path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.deb
   package-linux-appimage:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [ linux-x64 ]
+        include:
+          - platform: linux-x64
+            arch: x64
+            os: ubuntu-24.04
+            app_image_arch: x86_64
+    runs-on: ${{ matrix.os }}
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v6
@@ -246,27 +310,27 @@ jobs:
     - name: Install Jar artifact
       uses: actions/download-artifact@v7
       with:
-        name: owlplug-client-jar
+        name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target
     - name: Package installer
-      run: cd build && ./package-appimage.sh ${{ env.version }}
+      run: cd build && ./package-appimage.sh ${{ env.version }} ${{ matrix.platform }}
     - name: Download FUSE dependency
       run: sudo add-apt-repository universe && sudo apt install libfuse2
     - name: Download AppImage Tool
-      run: wget "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
+      run: wget "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${{ matrix.app_image_arch }}.AppImage"
     - name: Allow AppImage Execution
-      run: chmod a+x appimagetool-x86_64.AppImage
+      run: chmod a+x appimagetool-${{ matrix.app_image_arch }}.AppImage
     - name: Run AppImage Tool
-      run: ./appimagetool-x86_64.AppImage build/OwlPlug.AppDir --verbose
+      run: ./appimagetool-${{ matrix.app_image_arch }}.AppImage build/OwlPlug.AppDir --verbose
     - name: Rename OwlPlug AppImage
-      run: mv OwlPlug-x86_64.AppImage OwlPlug-${{ env.version }}-x86_64.AppImage
+      run: mv OwlPlug-${{ matrix.app_image_arch }}.AppImage OwlPlug-${{ env.version }}-${{ matrix.platform }}.AppImage
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-linux-appimage
-        path: OwlPlug-${{ env.version }}-x86_64.AppImage
+        name: owlplug-linux-appimage-${{ matrix.platform }}
+        path: OwlPlug-${{ env.version }}-${{ matrix.platform }}.AppImage
   release:
-    needs: [package-win, package-osx, package-linux-deb, package-linux-appimage]
+    needs: [package-win-msi, package-osx-dmg, package-linux-deb, package-linux-appimage]
     if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/support/')
     runs-on: "ubuntu-latest"
     steps:
@@ -281,7 +345,4 @@ jobs:
           tag_name: latest
           name: OwlPlug Latest
           files: |
-            packages/owlplug-win-installer-msi/*
-            packages/owlplug-osx-installer-dmg/*
-            packages/owlplug-linux-installer-deb/*
-            packages/owlplug-linux-appimage/*
+            packages/**/*
