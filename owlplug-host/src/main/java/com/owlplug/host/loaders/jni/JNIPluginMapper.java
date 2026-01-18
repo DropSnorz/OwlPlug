@@ -21,13 +21,15 @@ package com.owlplug.host.loaders.jni;
 import com.owlplug.host.NativePlugin;
 import com.owlplug.host.io.ClassPathVersionUtils;
 import com.owlplug.host.io.LibraryLoader;
+import com.owlplug.host.utils.OSUtils;
 import java.util.List;
 
 public class JNIPluginMapper {
 
   private static final String LIB_NAME = "owlplug-host";
   private static final String LIB_VERSION = ClassPathVersionUtils.getVersionSafe(LIB_NAME);
-  private static final String LIB_ID = LIB_NAME + "-" + LIB_VERSION;
+  private static final String LIB_TAG = OSUtils.getPlatformTagName();
+  private static final String LIB_ID = LIB_NAME + "-" + LIB_VERSION + '-' + LIB_TAG;
 
   private static JNIPluginMapper INSTANCE;
   private boolean isNativeLibraryLoaded;
@@ -45,7 +47,7 @@ public class JNIPluginMapper {
 
   public void init() {
     if (!isNativeLibraryLoaded()) {
-      isNativeLibraryLoaded = LibraryLoader.load(LIB_ID, JNIPluginMapper.class, false);
+      isNativeLibraryLoaded = LibraryLoader.load(LIB_ID, JNIPluginMapper.class);
     }
   }
   
