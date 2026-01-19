@@ -217,7 +217,7 @@ jobs:
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-win-installer-msi-${{ matrix.platform }}
+        name: owlplug-installer-msi-${{ matrix.platform }}
         path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.msi
   package-osx-dmg:
     strategy:
@@ -252,7 +252,7 @@ jobs:
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-osx-installer-dmg-${{ matrix.platform }}
+        name: owlplug-installer-dmg-${{ matrix.platform }}
         path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.dmg
   package-linux-deb:
     strategy:
@@ -284,7 +284,7 @@ jobs:
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-linux-installer-deb-${{ matrix.platform }}
+        name: owlplug-installer-deb-${{ matrix.platform }}
         path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.deb
   package-linux-appimage:
     strategy:
@@ -327,7 +327,7 @@ jobs:
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v6
       with:
-        name: owlplug-linux-appimage-${{ matrix.platform }}
+        name: owlplug-appimage-${{ matrix.platform }}
         path: OwlPlug-${{ env.version }}-${{ matrix.platform }}.AppImage
   release:
     needs: [package-win-msi, package-osx-dmg, package-linux-deb, package-linux-appimage]
@@ -335,10 +335,16 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v6
-      - name: Retrieve artifacts
+      - name: Retrieve installer artifacts
         uses: actions/download-artifact@v7
         with:
           path: ./packages
+          pattern: owlplug-installer-*
+      - name: Retrieve appimage artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: ./packages
+          pattern: owlplug-appimage-*
       - uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
         with:
           draft: true
