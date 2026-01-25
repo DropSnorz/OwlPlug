@@ -130,7 +130,7 @@ public class NewSourceDialogController extends AbstractDialogController implemen
     if (sourceUrl != null && !sourceUrl.isEmpty()) {
       Task<RemoteSource> task = new Task<>() {
         @Override
-        protected RemoteSource call() throws Exception {
+        protected RemoteSource call() {
           return exploreService.fetchSourceFromRemoteUrl(sourceUrl);
         }
       };

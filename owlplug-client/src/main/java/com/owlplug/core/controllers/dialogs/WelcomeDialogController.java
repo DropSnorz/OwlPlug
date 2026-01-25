@@ -72,29 +72,25 @@ public class WelcomeDialogController extends AbstractDialogController {
       ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST_DIRECTORY_KEY,
       ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY,
       this.getPreferences(),
-      this.listDirectoryDialogController,
-      this.getApplicationDefaults());
+      this.listDirectoryDialogController);
     vst3PluginPathFragment = new PluginPathFragmentController("VST3",
       ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY,
       ApplicationDefaults.VST3_DIRECTORY_KEY,
       ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY,
       this.getPreferences(),
-      this.listDirectoryDialogController,
-      this.getApplicationDefaults());
+      this.listDirectoryDialogController);
     auPluginPathFragment = new PluginPathFragmentController("AU",
       ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY,
       ApplicationDefaults.AU_DIRECTORY_KEY,
       ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY,
       this.getPreferences(),
-      this.listDirectoryDialogController,
-      this.getApplicationDefaults());
+      this.listDirectoryDialogController);
     lv2PluginPathFragment = new PluginPathFragmentController("LV2",
       ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY,
       ApplicationDefaults.LV2_DIRECTORY_KEY,
       ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY,
       this.getPreferences(),
-      this.listDirectoryDialogController,
-      this.getApplicationDefaults());
+      this.listDirectoryDialogController);
 
     pluginPathContainer.getChildren().add(vst2PluginPathFragment.getNode());
     pluginPathContainer.getChildren().add(vst3PluginPathFragment.getNode());

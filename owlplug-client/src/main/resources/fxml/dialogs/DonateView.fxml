@@ -8,7 +8,7 @@
       fx:controller="com.owlplug.core.controllers.dialogs.DonateDialogController">
    <VBox spacing="20.0">
       <Label text="The OwlPlug app is completely free to use, offering all its features without any cost."
-             wrapText="true" fx:id=""></Label>
+             wrapText="true" fx:id=""/>
       <Label text="However, to keep improving and developing the app, I rely on the support of users. If you enjoy using the app and would like to help me add new features and make it better, please consider donating. Your financial contribution will directly support ongoing development and ensure that I can keep the app available for everyone."
              wrapText="true"/>
       <HBox alignment="CENTER" spacing="10.0" VBox.vgrow="NEVER">

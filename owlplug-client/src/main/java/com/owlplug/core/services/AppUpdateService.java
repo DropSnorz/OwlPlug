@@ -60,7 +60,7 @@ public class AppUpdateService extends BaseService {
     String url = this.getApplicationDefaults().getLatestUrl();
 
     try {
-      // Map GitHub JSON to a simple Map so we can extract "tag_name"
+      // Map GitHub JSON to a simple Map, so we can extract "tag_name"
       Map<String, Object> response = restTemplate.getForObject(url, Map.class);
 
       if (response.containsKey("tag_name")) {

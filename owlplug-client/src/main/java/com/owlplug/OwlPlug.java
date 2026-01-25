@@ -21,7 +21,6 @@ package com.owlplug;
 import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
-import java.beans.PropertyVetoException;
 import java.nio.file.Paths;
 import java.time.Duration;
 import javafx.application.Application;
