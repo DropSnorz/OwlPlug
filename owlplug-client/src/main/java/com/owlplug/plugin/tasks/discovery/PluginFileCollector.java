@@ -76,6 +76,8 @@ public class PluginFileCollector {
         for (PluginFile previouslyCollectedFile : collectedFiles) {
           if (file.getAbsolutePath().contains(previouslyCollectedFile.getPluginFile().getAbsolutePath())) {
             nestedPluginDetected = true;
+            // Early loop exit upon nested plugin detection
+            break;
           }
         }
 

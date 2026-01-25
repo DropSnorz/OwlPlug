@@ -34,7 +34,7 @@ public interface FileStatRepository extends JpaRepository<FileStat, Long> {
   List<FileStat> findByParentPathOrderByLengthDesc(String parentPath);
 
   @Transactional
-  @Modifying(clearAutomatically=true, flushAutomatically=true)
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("delete from FileStat f where f.path=:path")
   int deleteByPath(@Param("path") String path);
 

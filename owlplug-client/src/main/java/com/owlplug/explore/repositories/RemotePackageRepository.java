@@ -24,7 +24,6 @@ import jakarta.persistence.criteria.Fetch;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import java.util.List;
-import java.util.Set;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -166,10 +165,10 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
     };
   }
 
-  public Iterable<RemotePackage> findByNameContainingIgnoreCase(String name);
+  Iterable<RemotePackage> findByNameContainingIgnoreCase(String name);
   
   @Query("SELECT DISTINCT p.creator FROM RemotePackage p")
-  public List<String> findDistinctCreators();
+  List<String> findDistinctCreators();
   
 
 }

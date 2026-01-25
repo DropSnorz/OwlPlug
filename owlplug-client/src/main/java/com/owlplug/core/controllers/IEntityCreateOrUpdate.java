@@ -20,8 +20,8 @@ package com.owlplug.core.controllers;
 
 public interface IEntityCreateOrUpdate<T> {
 
-  public void startCreateSequence();
+  void startCreateSequence();
 
-  public void startUpdateSequence(T entity);
+  void startUpdateSequence(T entity);
 
 }

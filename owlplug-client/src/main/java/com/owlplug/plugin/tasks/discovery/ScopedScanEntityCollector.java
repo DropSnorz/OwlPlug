@@ -22,9 +22,7 @@ package com.owlplug.plugin.tasks.discovery;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.Symlink;
 import com.owlplug.plugin.tasks.discovery.fileformats.PluginFile;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 /**

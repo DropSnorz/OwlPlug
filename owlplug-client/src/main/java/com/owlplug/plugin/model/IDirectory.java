@@ -20,12 +20,12 @@ package com.owlplug.plugin.model;
 
 public interface IDirectory {
 
-  public String getName();
+  String getName();
   
-  public boolean isStale();
+  boolean isStale();
 
-  public String getDisplayName();
+  String getDisplayName();
 
-  public void setDisplayName(String name);
+  void setDisplayName(String name);
 
 }

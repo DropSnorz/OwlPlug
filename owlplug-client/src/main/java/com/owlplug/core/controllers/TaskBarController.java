@@ -92,7 +92,7 @@ public class TaskBarController extends BaseController {
       tasks.addAll(taskRunner.getPendingTasks());
       list.getItems().addAll(tasks);
 
-      list.setCellFactory(new Callback<ListView<AbstractTask>, ListCell<AbstractTask>>() {
+      list.setCellFactory(new Callback<>() {
         @Override
         public ListCell<AbstractTask> call(ListView<AbstractTask> param) {
           return new ListCell<>() {

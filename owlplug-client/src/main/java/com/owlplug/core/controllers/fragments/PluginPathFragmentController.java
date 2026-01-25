@@ -18,7 +18,6 @@
 
 package com.owlplug.core.controllers.fragments;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.ui.SVGPaths;
 import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
@@ -33,7 +32,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.DirectoryChooser;
@@ -77,19 +75,15 @@ public class PluginPathFragmentController {
   private ApplicationPreferences prefs;
   private ListDirectoryDialogController listDirectoryDialogController;
 
-  private ApplicationDefaults applicationDefaults;
-
   public PluginPathFragmentController(String name, String enableOptionKey, String directoryOptionKey,
                                       String extraDirectoryOptionKey, ApplicationPreferences prefs,
-                                      ListDirectoryDialogController listDirectoryDialogController,
-                                      ApplicationDefaults applicationDefaults) {
+                                      ListDirectoryDialogController listDirectoryDialogController) {
     this.name = name;
     this.enableOptionKey = enableOptionKey;
     this.directoryOptionKey = directoryOptionKey;
     this.extraDirectoryOptionKey = extraDirectoryOptionKey;
     this.prefs = prefs;
     this.listDirectoryDialogController = listDirectoryDialogController;
-    this.applicationDefaults = applicationDefaults;
 
     init();
 
@@ -227,7 +221,7 @@ public class PluginPathFragmentController {
 
     directoryExistLabel.getStyleClass().removeAll("label-disabled", "label-danger");
     Region imv = (Region) directoryExistLabel.getGraphic();
-    if (checks.getExists().getStatus()) {
+    if (checks.getExists().status()) {
       directoryExistLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
       imv.setStyle("-fx-background-color: disabled-color;");
@@ -236,11 +230,11 @@ public class PluginPathFragmentController {
       imv.setShape(crossPath);
       imv.setStyle("-fx-background-color: danger-color;");
     }
-    directoryExistLabel.setTooltip(new Tooltip(checks.getExists().getMessage()));
+    directoryExistLabel.setTooltip(new Tooltip(checks.getExists().message()));
 
     imv = (Region) canReadLabel.getGraphic();
     canReadLabel.getStyleClass().removeAll("label-disabled", "label-danger");
-    if (checks.getCanRead().getStatus()) {
+    if (checks.getCanRead().status()) {
       canReadLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
       imv.setStyle("-fx-background-color: disabled-color;");
@@ -249,11 +243,11 @@ public class PluginPathFragmentController {
       imv.setShape(crossPath);
       imv.setStyle("-fx-background-color: danger-color;");
     }
-    canReadLabel.setTooltip(new Tooltip(checks.getCanRead().getMessage()));
+    canReadLabel.setTooltip(new Tooltip(checks.getCanRead().message()));
 
     imv = (Region) canWriteLabel.getGraphic();
     canWriteLabel.getStyleClass().removeAll("label-disabled", "label-danger");
-    if (checks.getCanWrite().getStatus()) {
+    if (checks.getCanWrite().status()) {
       canWriteLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
       imv.setStyle("-fx-background-color: disabled-color;");
@@ -262,7 +256,7 @@ public class PluginPathFragmentController {
       imv.setShape(crossPath);
       imv.setStyle("-fx-background-color: danger-color;");
     }
-    canWriteLabel.setTooltip(new Tooltip(checks.getCanWrite().getMessage()));
+    canWriteLabel.setTooltip(new Tooltip(checks.getCanWrite().message()));
   }
 
   public Node getNode() {
@@ -299,21 +293,6 @@ public class PluginPathFragmentController {
     }
   }
 
-  public static class DirectoryCheck {
-    private final boolean status;
-    private final String message;
-
-    public DirectoryCheck(boolean status, String message) {
-      this.status = status;
-      this.message = message;
-    }
-
-    public boolean getStatus() {
-      return status;
-    }
-
-    public String getMessage() {
-      return message;
-    }
+  public record DirectoryCheck(boolean status, String message) {
   }
 }

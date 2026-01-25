@@ -19,17 +19,13 @@
 package com.owlplug.explore.controllers;
 
 import com.google.common.collect.Iterables;
-import com.owlplug.controls.Dialog;
-import com.owlplug.controls.DialogLayout;
 import com.owlplug.controls.MasonryPane;
 import com.owlplug.controls.Popup;
 import com.owlplug.controls.Rippler;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
 import com.owlplug.explore.model.PackageBundle;
@@ -40,9 +36,7 @@ import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
 import com.owlplug.plugin.model.PluginFormat;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -63,8 +57,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -268,7 +260,7 @@ public class ExploreController extends BaseController {
 
     Task<Iterable<RemotePackage>> task = new Task<>() {
       @Override
-      protected Iterable<RemotePackage> call() throws Exception {
+      protected Iterable<RemotePackage> call() {
         return exploreService.getRemotePackages(criteriaList);
       }
     };
