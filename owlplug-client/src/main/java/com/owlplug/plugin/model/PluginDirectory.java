@@ -18,12 +18,14 @@
  
 package com.owlplug.plugin.model;
 
+import jakarta.persistence.Column;
 import java.util.List;
 
 public class PluginDirectory implements IDirectory {
 
   protected String name;
   protected String displayName;
+  @Column(length = 512)
   protected String path;
   protected boolean rootDirectory;
   protected List<Plugin> pluginList;

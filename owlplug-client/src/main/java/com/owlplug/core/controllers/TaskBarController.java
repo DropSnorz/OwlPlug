@@ -133,12 +133,12 @@ public class TaskBarController extends BaseController {
     ).show();
   }
 
-  public void setErrorLog(AbstractTask task, String title, String content) {
+  public void setErrorLog(AbstractTask task, String title, String content, String summary) {
 
     this.getTelemetryService().event("/Error/TaskExecution", p -> {
       p.put("taskName", task.getName());
       p.put("error", title);
-      p.put("content", content);
+      p.put("summary", summary);
     });
     taskProgressBar.getStyleClass().add("progress-bar-error");
     logsButton.setVisible(true);

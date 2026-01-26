@@ -32,6 +32,7 @@ import javafx.concurrent.WorkerStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.NestedExceptionUtils;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -114,13 +115,15 @@ public class TaskRunner {
             taskBarController.setErrorLog(
                 currentTask,
                 ex.getMessage(),
-                StringUtils.getStackTraceAsString(ex)
+                StringUtils.getStackTraceAsString(ex),
+                NestedExceptionUtils.getMostSpecificCause(ex).getMessage()
             );
           } else {
             taskBarController.setErrorLog(
                 currentTask,
                 "Task failed",
-                "No error information available."
+                "No error information available.",
+                "No summary available"
             );
           }
           removeCurrentTask();
