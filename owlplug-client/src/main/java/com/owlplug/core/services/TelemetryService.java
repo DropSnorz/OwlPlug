@@ -107,11 +107,14 @@ public class TelemetryService extends BaseService {
     }
   }
 
-  private void sanitize(Map<String, String> params) {
+  void sanitize(Map<String, String> params) {
+    sanitize(params, MAX_PROPS_LENGTH);
+  }
+  void sanitize(Map<String, String> params, int maxLength) {
     for (Map.Entry<String, String> entry : params.entrySet()) {
       String value = entry.getValue();
-      if (value.length() > MAX_PROPS_LENGTH) {
-        value = value.substring(0, MAX_PROPS_LENGTH) + "…";
+      if (value.length() > maxLength) {
+        value = value.substring(0, maxLength) + "…";
       }
 
       // Redact absolute paths (Unix & Windows)

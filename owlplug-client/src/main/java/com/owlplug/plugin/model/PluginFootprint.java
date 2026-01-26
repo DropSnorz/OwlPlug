@@ -18,6 +18,7 @@
 
 package com.owlplug.plugin.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +34,7 @@ public class PluginFootprint {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
+  @Column(length = 512)
   protected String path;
   protected boolean nativeDiscoveryEnabled = true;
 

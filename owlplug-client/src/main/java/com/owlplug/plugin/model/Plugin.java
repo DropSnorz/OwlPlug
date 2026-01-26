@@ -54,12 +54,13 @@ public class Plugin {
   protected String category;
   protected String manufacturerName;
   protected String identifier;
+  @Column(length = 512)
   protected String path;
+  @Column(length = 512)
   protected String scanDirectoryPath;
   protected String bundleId;
   protected String version;
 
-  // Suggestion: could be renamed to screenshotURI
   protected String screenshotUrl;
   protected boolean nativeCompatible = false;
   protected boolean syncComplete = false;
