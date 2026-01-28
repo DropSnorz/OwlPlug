@@ -37,10 +37,14 @@ public class RuntimePlatformResolver {
 
   public RuntimePlatformResolver() {
 
-    RuntimePlatform winX86 = new RuntimePlatform("win-x32", OperatingSystem.WIN, "x32", new String[]{"win32"});
-    platforms.add(winX86);
+    RuntimePlatform winX32 = new RuntimePlatform("win-x32", OperatingSystem.WIN, "x32", new String[]{"win32"});
+    platforms.add(winX32);
     RuntimePlatform winX64 = new RuntimePlatform("win-x64", OperatingSystem.WIN, "x64", new String[]{"win64"});
     platforms.add(winX64);
+    RuntimePlatform winArm64 = new RuntimePlatform("win-arm64", OperatingSystem.WIN, "arm64");
+    platforms.add(winArm64);
+    RuntimePlatform winArm64ec = new RuntimePlatform("win-arm64ec", OperatingSystem.WIN, "arm64ec");
+    platforms.add(winArm64ec);
     RuntimePlatform macX64 = new RuntimePlatform("mac-x64", OperatingSystem.MAC, "x64");
     platforms.add(macX64);
     RuntimePlatform macArm64 = new RuntimePlatform("mac-arm64", OperatingSystem.MAC, "arm64");
@@ -54,7 +58,8 @@ public class RuntimePlatformResolver {
     RuntimePlatform linuxArm64 = new RuntimePlatform("linux-arm64", OperatingSystem.LINUX, "arm64");
     platforms.add(linuxArm64);
 
-    winX64.getCompatiblePlatforms().add(winX86);
+    winX64.getCompatiblePlatforms().add(winX32);
+    winArm64ec.getCompatiblePlatforms().add(winX64);
     linuxX64.getCompatiblePlatforms().add(linuxX86);
     linuxArm64.getCompatiblePlatforms().add(linuxArm86);
 
@@ -95,6 +100,8 @@ public class RuntimePlatformResolver {
       return "arm64";
     } else if (arch.matches("^(arm|arm32)$")) {
       return "arm32";
+    } else if (arch.matches("^(arm64ec)$")) {
+      return "arm64ec";
     } else {
       return "unknown";
     }
