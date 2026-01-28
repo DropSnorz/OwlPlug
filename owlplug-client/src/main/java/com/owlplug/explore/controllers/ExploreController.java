@@ -166,6 +166,8 @@ public class ExploreController extends BaseController {
     
     targetFilterCheckBoxes.put("win-x32", new CheckBox("Windows x32"));
     targetFilterCheckBoxes.put("win-x64", new CheckBox("Windows x64"));
+    targetFilterCheckBoxes.put("win-arm64", new CheckBox("Windows arm64"));
+    targetFilterCheckBoxes.put("win-arm64ec", new CheckBox("Windows arm64 E.C."));
     targetFilterCheckBoxes.put("mac-x64", new CheckBox("MacOS x64"));
     targetFilterCheckBoxes.put("mac-arm64", new CheckBox("MacOS arm64"));
     targetFilterCheckBoxes.put("linux-x32", new CheckBox("Linux x32 / amd32"));
