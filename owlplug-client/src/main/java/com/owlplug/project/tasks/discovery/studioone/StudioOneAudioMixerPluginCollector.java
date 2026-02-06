@@ -50,17 +50,10 @@ public class StudioOneAudioMixerPluginCollector {
 
     XPath xpath = XPathFactory.newInstance().newXPath();
     try {
-      Element insertsNode = findInsertsNode(document, xpath);
-      
-      // Find FX nodes - either as children of Inserts, or anywhere with name starting with "FX"
-      NodeList fxNodes;
-      if (insertsNode != null) {
-        fxNodes = (NodeList) xpath.compile("./Attributes[starts-with(@name, 'FX')]")
-                .evaluate(insertsNode, XPathConstants.NODESET);
-      } else {
-        fxNodes = (NodeList) xpath.compile("//Attributes[starts-with(@name, 'FX')]")
-                .evaluate(document, XPathConstants.NODESET);
-      }
+      // Find all FX nodes in the document (all Inserts / channel groups)
+      NodeList fxNodes = (NodeList) xpath
+          .compile("//Attributes[starts-with(@name, 'FX')]")
+          .evaluate(document, XPathConstants.NODESET);
 
       for (int i = 0; i < fxNodes.getLength(); i++) {
         Node node = fxNodes.item(i);
@@ -83,23 +76,6 @@ public class StudioOneAudioMixerPluginCollector {
     }
 
     return plugins;
-  }
-
-  private Element findInsertsNode(Document document, XPath xpath) throws XPathExpressionException {
-    // Find the Inserts node by checking x:id attribute directly
-    // Note: x:id is a literal attribute name (colon is part of the name, not a namespace)
-    NodeList allAttributes = (NodeList) xpath.compile("//Attributes")
-            .evaluate(document, XPathConstants.NODESET);
-    for (int i = 0; i < allAttributes.getLength(); i++) {
-      Node node = allAttributes.item(i);
-      if (node instanceof Element elem) {
-        String xidValue = elem.getAttribute("x:id");
-        if ("Inserts".equals(xidValue)) {
-          return elem;
-        }
-      }
-    }
-    return null;
   }
 
   private DawPlugin readPluginElement(Element pluginElement) {
