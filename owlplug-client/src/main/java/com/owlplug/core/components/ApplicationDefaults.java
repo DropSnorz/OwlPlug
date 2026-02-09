@@ -83,6 +83,8 @@ public class ApplicationDefaults {
   public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
   public final Image reaperLogoImage = new Image(getClass().getResourceAsStream("/icons/reaper-white-16.png"));
 
+  public final Image studioOneLogoImage = new Image(getClass().getResourceAsStream("/icons/studioone-white-16.png"));
+
   public final Image errorIconImage = new Image(
           getClass().getResourceAsStream("/icons/error-red-16.png"));
 
@@ -169,7 +171,7 @@ public class ApplicationDefaults {
     return switch (application) {
       case ABLETON -> abletonLogoImage;
       case REAPER -> reaperLogoImage;
-      case STUDIO_ONE -> pluginComponentImage; // Using generic plugin icon as placeholder
+      case STUDIO_ONE -> studioOneLogoImage;
     };
   }
 

@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.project.taks.discovery;
+package com.owlplug.project.tasks.discovery;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
