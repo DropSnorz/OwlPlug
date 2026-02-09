@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.Collection;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
@@ -123,6 +124,41 @@ public class ArchiveUtils {
           IOUtils.copy(o, output);
         }
       }
+    }
+  }
+
+  /**
+   * Extract only specific files from an archive.
+   * This is useful when you only need a subset of files and want to avoid
+   * creating directories with reserved names (e.g., Windows "Strings" directory).
+   *
+   * @param archive the archive file to extract from
+   * @param dest the destination directory
+   * @param targetPaths collection of file paths within the archive to extract (e.g., "metainfo.xml", "Devices/audiomixer.xml")
+   * @throws IOException if extraction fails
+   */
+  public static void extractFiles(File archive, File dest, Collection<String> targetPaths) throws IOException {
+    try (InputStream fi = new BufferedInputStream(new FileInputStream(archive));
+         ArchiveInputStream ais = new ArchiveStreamFactory().createArchiveInputStream(fi)) {
+
+      ArchiveEntry entry;
+      while ((entry = ais.getNextEntry()) != null) {
+        String entryName = entry.getName().replace('\\', '/');
+        if (!targetPaths.contains(entryName) || entry.isDirectory()) {
+          continue;
+        }
+
+        File outFile = new File(dest, entryName);
+        if (!outFile.getParentFile().isDirectory() && !outFile.getParentFile().mkdirs()) {
+          throw new IOException("Failed to create directories for file " + outFile.getAbsolutePath());
+        }
+
+        try (OutputStream out = Files.newOutputStream(outFile.toPath())) {
+          IOUtils.copy(ais, out);
+        }
+      }
+    } catch (ArchiveException e) {
+      throw new IOException("Failed to read archive: " + archive, e);
     }
   }
 
