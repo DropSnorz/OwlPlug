@@ -1,4 +1,4 @@
-package com.owlplug.project.taks.discovery;
+package com.owlplug.plugin.tasks.discovery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,8 +11,6 @@ import static org.mockito.Mockito.when;
 
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.Symlink;
-import com.owlplug.plugin.tasks.discovery.DifferentialScanEntityCollector;
-import com.owlplug.plugin.tasks.discovery.PluginScanTaskParameters;
 import com.owlplug.plugin.tasks.discovery.fileformats.PluginFile;
 import java.util.List;
 import java.util.Set;

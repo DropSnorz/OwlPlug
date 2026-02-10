@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SynthFolder>
+    <Attributes name="Sylenth1" speakerFormat="Stereo">
+        <Attributes x:id="deviceData" name="Sylenth1" />
+        <Attributes x:id="ghostData">
+            <Attributes x:id="classInfo" name="Sylenth1" subCategory="VST2" category="AudioSynth" />
+        </Attributes>
+    </Attributes>
+    <Attributes name="Massive" speakerFormat="Stereo">
+        <Attributes x:id="deviceData" name="Massive" />
+        <Attributes x:id="ghostData">
+            <Attributes x:id="classInfo" name="Massive" subCategory="VST2" category="AudioSynth" />
+        </Attributes>
+    </Attributes>
+</SynthFolder>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AudioMixer>
+    <Attributes name="FX Reverb" speakerFormat="Stereo">
+        <Attributes x:id="deviceData" name="Reverb" />
+        <Attributes x:id="ghostData">
+            <Attributes x:id="classInfo" name="Reverb" subCategory="VST2" category="AudioEffect" />
+        </Attributes>
+    </Attributes>
+    <Attributes name="FX Delay" speakerFormat="Stereo">
+        <Attributes x:id="deviceData" name="Delay" />
+        <Attributes x:id="ghostData">
+            <Attributes x:id="classInfo" name="Delay" subCategory="VST2" category="AudioEffect" />
+        </Attributes>
+    </Attributes>
+    <Attributes name="FX Compressor" speakerFormat="Stereo">
+        <Attributes x:id="deviceData" name="Compressor" />
+        <Attributes x:id="ghostData">
+            <Attributes x:id="classInfo" name="Compressor" subCategory="VST2" category="AudioEffect" />
+        </Attributes>
+    </Attributes>
+</AudioMixer>
