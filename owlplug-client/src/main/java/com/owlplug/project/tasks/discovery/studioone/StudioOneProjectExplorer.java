@@ -83,7 +83,7 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
     try {
       // Extract only the files we need from the ZIP archive to temporary directory
       // This avoids creating directories with reserved names (e.g., Windows "Strings" directory)
-      tempDir = Files.createTempDirectory("studioone-");
+      tempDir = Files.createTempDirectory("owlplug-studioone-");
       log.debug("Extracting Studio One project to: {}", tempDir);
       
       List<String> targetFiles = Arrays.asList(
@@ -230,6 +230,9 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
       throws ProjectExplorerException, ParserConfigurationException, SAXException, IOException {
     try (FileInputStream fis = new FileInputStream(file)) {
       DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+      builderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      builderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      builderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
       DocumentBuilder builder = builderFactory.newDocumentBuilder();
       return builder.parse(fis);
     } catch (FileNotFoundException e) {

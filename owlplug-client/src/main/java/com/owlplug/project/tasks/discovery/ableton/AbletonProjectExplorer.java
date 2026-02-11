@@ -95,9 +95,9 @@ public class AbletonProjectExplorer implements ProjectExplorer {
       return project;
 
     } catch (XPathExpressionException e) {
-      throw new ProjectExplorerException("Error while parsing project file " + file.getAbsolutePath(), e);
+      throw new ProjectExplorerException("Error while parsing project file: " + file.getAbsolutePath(), e);
     } catch (IOException e) {
-      throw new ProjectExplorerException("Error while reading file " + file.getAbsolutePath(), e);
+      throw new ProjectExplorerException("Error while reading file: " + file.getAbsolutePath(), e);
     }
 
   }
@@ -110,6 +110,9 @@ public class AbletonProjectExplorer implements ProjectExplorer {
          InputStream bgzi = new BufferedInputStream(gzi)) {
 
       DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+      builderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+      builderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+      builderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
       DocumentBuilder builder = builderFactory.newDocumentBuilder();
       return builder.parse(bgzi);
 
@@ -118,7 +121,7 @@ public class AbletonProjectExplorer implements ProjectExplorer {
     } catch (CompressorException e) {
       throw new ProjectExplorerException("Error while uncompressing project file: " + file.getAbsolutePath(), e);
     } catch (IOException | ParserConfigurationException | SAXException e) {
-      throw new ProjectExplorerException("Unexpected error while reading project file: {}", e);
+      throw new ProjectExplorerException("Unexpected error while reading project file: " + file.getAbsolutePath(), e);
     }
   }
 
