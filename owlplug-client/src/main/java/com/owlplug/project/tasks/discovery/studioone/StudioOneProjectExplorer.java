@@ -93,7 +93,7 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
       );
       
       try {
-        ArchiveUtils.extractFiles(file, tempDir.toFile(), targetFiles);
+        ArchiveUtils.extract(file, tempDir.toFile(), targetFiles);
       } catch (IOException e) {
         log.warn("Failed to extract Studio One project file: {} - {}", 
             file.getAbsolutePath(), e.getMessage());
