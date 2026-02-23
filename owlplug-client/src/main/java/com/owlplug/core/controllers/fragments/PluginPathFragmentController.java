@@ -20,6 +20,7 @@ package com.owlplug.core.controllers.fragments;
 
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.ui.SVGPaths;
+import com.owlplug.core.utils.FileUtils;
 import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
 import java.io.File;
 import java.io.IOException;
@@ -123,7 +124,7 @@ public class PluginPathFragmentController {
     });
 
     directoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.put(directoryOptionKey, newValue);
+      prefs.put(directoryOptionKey, FileUtils.convertPath(newValue));
       refresh();
     });
 

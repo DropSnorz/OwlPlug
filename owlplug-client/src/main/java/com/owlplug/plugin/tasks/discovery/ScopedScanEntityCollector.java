@@ -22,6 +22,9 @@ package com.owlplug.plugin.tasks.discovery;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.Symlink;
 import com.owlplug.plugin.tasks.discovery.fileformats.PluginFile;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -65,6 +68,15 @@ public class ScopedScanEntityCollector {
       }
 
       collectedSymlinks.addAll(symlinkCollector.collect(parameters.getDirectoryScope()));
+
+      // Try to restore original scan directory when a directory scope is used
+      // https://github.com/DropSnorz/OwlPlug/issues/424
+      String scanPath = getScanPathFromDirectoryScope(parameters.getDirectoryScope());
+      if (scanPath != null) {
+        File scanFile = new File(scanPath);
+        collectedPluginFiles.forEach(f -> f.setScanDirectory(scanFile));
+      }
+
 
     } else {
       // Plugins are retrieved from regulars directories
@@ -121,6 +133,40 @@ public class ScopedScanEntityCollector {
 
   public Set<Symlink> getSymlinks() {
     return symlinks;
+  }
+
+  private Set<String> getAllPluginScanPath() {
+    Set<String> paths = new HashSet<String>();
+
+    paths.add(parameters.getVst2Directory());
+    paths.add(parameters.getVst3Directory());
+    paths.add(parameters.getAuDirectory());
+    paths.add(parameters.getLv2Directory());
+
+    paths.addAll(parameters.getVst2ExtraDirectories());
+    paths.addAll(parameters.getVst3ExtraDirectories());
+    paths.addAll(parameters.getAuExtraDirectories());
+    paths.addAll(parameters.getLv2ExtraDirectories());
+
+    // Clean null and blank paths if some are provided
+    paths.removeIf(p -> p == null || p.isBlank());
+
+    return paths;
+
+  }
+
+  /**
+   * Compute original scan directory based on the provided directory scope.
+   * See related <a href="https://github.com/DropSnorz/OwlPlug/issues/424">issue</a>
+   * @param directoryScope the directory scope
+   * @return path to the potential scan directory
+   */
+  private String getScanPathFromDirectoryScope(String directoryScope) {
+    return getAllPluginScanPath()
+               .stream()
+               .sorted()
+               .filter(s -> directoryScope.startsWith(s))
+               .findFirst().orElse(null);
   }
 
 }
