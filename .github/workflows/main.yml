@@ -44,7 +44,7 @@ jobs:
     - name: Add architecture to filename
       run: mv "owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}.dll" "owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}-${{ matrix.platform }}.dll"
     - name: Upload Host Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: owlplug-host-${{ matrix.platform }}
         path: owlplug-host/src/main/juce/Builds/VisualStudio2019/x64/Release/Dynamic Library/owlplug-host-${{ env.version }}-${{ matrix.platform }}.dll
@@ -87,7 +87,7 @@ jobs:
     - name: Add architecture to filename
       run: mv owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}.dylib owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}-${{ matrix.platform }}.dylib
     - name: Upload Host Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: owlplug-host-${{ matrix.platform }}
         path: owlplug-host/src/main/juce/Builds/MacOSX/build/Release/owlplug-host-${{ env.version }}-${{ matrix.platform }}.dylib
@@ -133,7 +133,7 @@ jobs:
     - name: Add version and architecture to filename
       run: mv owlplug-host/src/main/juce/Builds/LinuxMakefile/build/libowlplug-host.so owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}-${{ matrix.platform }}.so
     - name: Upload Host Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: owlplug-host-${{ matrix.platform }}
         path: owlplug-host/src/main/juce/Builds/LinuxMakefile/build/owlplug-host-${{ env.version }}-${{ matrix.platform }}.so
@@ -182,7 +182,7 @@ jobs:
     - name: Build runnable Jar
       run: cd owlplug-client && mvn -B install spring-boot:repackage -DskipTests
     - name: Upload Jar Build Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target/owlplug-client-${{ env.version }}.jar
@@ -215,7 +215,7 @@ jobs:
     - name: Package installer
       run: cd build && ./package-msi.cmd ${{ env.version }} ${{ matrix.platform }}
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: owlplug-installer-msi-${{ matrix.platform }}
         path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.msi
@@ -250,7 +250,7 @@ jobs:
     - name: Package installer
       run: cd build && ./package-dmg.sh ${{ env.version }} ${{ matrix.platform }}
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: owlplug-installer-dmg-${{ matrix.platform }}
         path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.dmg
@@ -282,7 +282,7 @@ jobs:
     - name: Package installer
       run: cd build && ./package-deb.sh ${{ env.version }} ${{ matrix.platform }}
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: owlplug-installer-deb-${{ matrix.platform }}
         path: build/output/OwlPlug-${{ env.version }}-${{ matrix.platform }}.deb
@@ -325,7 +325,7 @@ jobs:
     - name: Rename OwlPlug AppImage
       run: mv OwlPlug-${{ matrix.app_image_arch }}.AppImage OwlPlug-${{ env.version }}-${{ matrix.platform }}.AppImage
     - name: Upload Installer Artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: owlplug-appimage-${{ matrix.platform }}
         path: OwlPlug-${{ env.version }}-${{ matrix.platform }}.AppImage
