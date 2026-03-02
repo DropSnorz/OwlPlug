@@ -42,16 +42,11 @@ All feedback, contributions, and suggestions are warmly welcomed.
 
 ## Direct Download
 
-### Requirements
-- Windows 7 (64-bit) or later
-- macOS Ventura or later
-- Linux with `.deb` package support
-
-### Installation Steps
 1. Download the installer for your platform from the [Releases](http://github.com/dropsnorz/owlplug/releases) page.
-   - Windows: `.msi` installer
-   - macOS: `.dmg` file
-   - Linux: `.deb` package
+   - Windows (x64): `*-x64.msi` installer
+   - MacOS (x64): `*-x64.dmg` file
+   - MacOS (arm64): `*-arm64.dmg` file
+   - Linux (x64): `*-x64.deb` package or `*-x64.AppImage` file
 2. Run the installer.
 3. Launch OwlPlug.
 
