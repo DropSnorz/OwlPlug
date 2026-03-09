@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 
 <VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.owlplug.plugin.controllers.dialogs.NewLinkController">
+      fx:controller="com.owlplug.plugin.controllers.dialogs.NewLinkDialogController">
    <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
       <VBox alignment="BOTTOM_CENTER" spacing="5.0">
          <Label text="Links enables the creation of symbolic links across file-system and plugin directories."

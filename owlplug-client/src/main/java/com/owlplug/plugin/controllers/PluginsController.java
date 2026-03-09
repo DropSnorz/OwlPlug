@@ -20,12 +20,15 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.events.PluginDisplayEvent;
+import com.owlplug.core.events.PluginRefreshEvent;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
-import com.owlplug.plugin.controllers.dialogs.NewLinkController;
+import com.owlplug.plugin.controllers.dialogs.NewLinkDialogController;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
@@ -35,9 +38,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class PluginsController extends BaseController {
 
   @Autowired
@@ -45,11 +51,7 @@ public class PluginsController extends BaseController {
   @Autowired
   private PluginRepository pluginRepository;
   @Autowired
-  private NodeInfoController nodeInfoController;
-  @Autowired
-  private NewLinkController newLinkController;
-  @Autowired
-  private ExportDialogController exportDialogController;
+  private NewLinkDialogController newLinkController;
   @Autowired
   protected PluginTaskFactory taskFactory;
   @Autowired
@@ -57,6 +59,8 @@ public class PluginsController extends BaseController {
   @Autowired
   protected PluginTableController tableController;
 
+  @FXML
+  private NodeInfoController nodeInfoViewController;
   @FXML
   private Button scanButton;
   @FXML
@@ -88,7 +92,8 @@ public class PluginsController extends BaseController {
   public void initialize() {
 
     newLinkButton.setOnAction(e -> {
-      newLinkController.show();
+      NewLinkDialogController dialog  = new NewLinkDialogController();
+      dialog.show();
     });
 
     // Add Plugin Table and TreeView to the scene graph
@@ -104,7 +109,7 @@ public class PluginsController extends BaseController {
     treeViewController.getTreeView().getSelectionModel()
         .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
           if (newValue != null) {
-            nodeInfoController.setNode(newValue.getValue());
+            nodeInfoViewController.setNode(newValue.getValue());
             setInfoPaneDisplay(true);
           }
         });
@@ -128,7 +133,7 @@ public class PluginsController extends BaseController {
     tableController.getTableView().getSelectionModel()
         .selectedItemProperty().addListener((observable, oldValue, newValue) -> {
           if (newValue != null) {
-            nodeInfoController.setNode(newValue);
+            nodeInfoViewController.setNode(newValue);
           }
         });
 
@@ -194,7 +199,8 @@ public class PluginsController extends BaseController {
 
     exportButton.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Export");
-      exportDialogController.show();
+      ExportDialogController dialog = new ExportDialogController();
+      dialog.show();
     });
 
     this.displayPlugins();
@@ -228,6 +234,16 @@ public class PluginsController extends BaseController {
   public void toggleInfoPaneDisplay() {
     pluginInfoPane.setManaged(!pluginInfoPane.isManaged());
     pluginInfoPane.setVisible(!pluginInfoPane.isVisible());
+  }
+
+  @EventListener
+  public void handle(PluginRefreshEvent event) {
+    Platform.runLater(this::refresh);
+  }
+
+  @EventListener
+  public void handle(PluginDisplayEvent event) {
+    Platform.runLater(this::displayPlugins);
   }
 
 }

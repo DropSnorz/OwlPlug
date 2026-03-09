@@ -23,18 +23,23 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
+import com.owlplug.core.events.OptionRefreshEvent;
 import com.owlplug.core.model.OperatingSystem;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class WelcomeDialogController extends AbstractDialogController {
 
   @Autowired
@@ -58,7 +63,7 @@ public class WelcomeDialogController extends AbstractDialogController {
   private PluginPathFragmentController auPluginPathFragment;
   private PluginPathFragmentController lv2PluginPathFragment;
 
-  WelcomeDialogController() {
+  public WelcomeDialogController() {
     super(700, 300);
     this.setOverlayClose(false);
   }
@@ -107,6 +112,11 @@ public class WelcomeDialogController extends AbstractDialogController {
 
     refreshView();
 
+  }
+
+  @EventListener
+  public void handle(OptionRefreshEvent event) {
+    Platform.runLater(this::refreshView);
   }
 
   public void refreshView() {

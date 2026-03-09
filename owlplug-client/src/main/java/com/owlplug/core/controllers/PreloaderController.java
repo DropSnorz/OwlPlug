@@ -24,9 +24,11 @@ import com.owlplug.core.utils.PlatformUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.HBox;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class PreloaderController extends BaseController {
   
   @FXML

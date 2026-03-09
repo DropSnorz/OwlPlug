@@ -37,9 +37,11 @@ import javafx.stage.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class ExportDialogController extends AbstractDialogController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -58,7 +60,7 @@ public class ExportDialogController extends AbstractDialogController {
   @FXML
   private Button saveAsButton;
 
-  ExportDialogController() {
+  public ExportDialogController() {
     super(650, 500);
   }
 

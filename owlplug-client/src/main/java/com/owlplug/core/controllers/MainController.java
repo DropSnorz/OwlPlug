@@ -33,6 +33,7 @@ import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
+import com.owlplug.core.events.OptionRefreshEvent;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.services.ExploreService;
@@ -59,6 +60,7 @@ import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -67,17 +69,11 @@ public class MainController extends BaseController {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
+  private ApplicationEventPublisher publisher;
+  @Autowired
   private LazyViewRegistry viewRegistry;
   @Autowired
-  private AccountController accountController;
-  @Autowired
   private CrashRecoveryDialogController crashRecoveryDialogController;
-  @Autowired
-  private WelcomeDialogController welcomeDialogController;
-  @Autowired
-  private OptionsController optionsController;
-  @Autowired
-  private ExploreController exploreController;
   @Autowired
   private AuthenticationService authenticationService;
   @Autowired
@@ -92,6 +88,8 @@ public class MainController extends BaseController {
   private TaskRunner taskRunner;
   @Autowired
   private ApplicationMonitor applicationMonitor;
+  @FXML
+  private ExploreController exploreViewController;
   @FXML
   private StackPane rootPane;
   @FXML
@@ -129,12 +127,13 @@ public class MainController extends BaseController {
       // Force the store masonry pane to render correctly when the user select the
       // store tab.
       if (newValue.intValue() == 2) {
-        exploreController.requestLayout();
+        exploreViewController.requestLayout();
       }
     });
 
     accountComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
       if (newValue instanceof AccountMenuItem) {
+        AccountController accountController = new AccountController();
         accountController.show();
         // Delay comboBox selector change
         Platform.runLater(() -> accountComboBox.setValue(oldValue));
@@ -183,11 +182,14 @@ public class MainController extends BaseController {
       log.info("Previous execution not terminated safely, opening crash recovery dialog");
       crashRecoveryDialogController.show();
     } else if (this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
-      welcomeDialogController.show();
+      WelcomeDialogController dialog = new WelcomeDialogController();
+      dialog.show();
       exploreService.syncSources();
     }
     this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
-    optionsController.refreshView();
+
+    // Refresh Options view
+    publisher.publishEvent(new OptionRefreshEvent());
 
     this.getTelemetryService().event("/Startup", p -> {
       p.put("osName", System.getProperty("os.name"));

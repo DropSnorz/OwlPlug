@@ -26,19 +26,21 @@ import com.owlplug.plugin.model.Symlink;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class NodeInfoController extends BaseController {
 
-  @Autowired
-  private PluginInfoController pluginInfoController;
-  @Autowired
-  private DirectoryInfoController directoryInfoController;
-  @Autowired
-  private SymlinkInfoController symlinkInfoController;
-  @Autowired
-  private ComponentInfoController componentInfoController;
+  @FXML
+  private PluginInfoController pluginInfoViewController;
+  @FXML
+  private DirectoryInfoController directoryInfoViewController;
+  @FXML
+  private SymlinkInfoController symlinkInfoViewController;
+  @FXML
+  private ComponentInfoController componentInfoViewController;
 
   @FXML
   private Node pluginInfoView;
@@ -68,19 +70,19 @@ public class NodeInfoController extends BaseController {
     componentInfoView.setVisible(false);
 
     if (node instanceof Plugin) {
-      pluginInfoController.setPlugin((Plugin) node);
+      pluginInfoViewController.setPlugin((Plugin) node);
       pluginInfoView.setVisible(true);
     }
     if (node instanceof PluginDirectory) {
-      directoryInfoController.setPluginDirectory((PluginDirectory) node);
+      directoryInfoViewController.setPluginDirectory((PluginDirectory) node);
       directoryInfoView.setVisible(true);
     }
     if (node instanceof Symlink) {
-      symlinkInfoController.setSymlink((Symlink) node);
+      symlinkInfoViewController.setSymlink((Symlink) node);
       symlinkInfoView.setVisible(true);
     }
     if (node instanceof PluginComponent) {
-      componentInfoController.setComponent((PluginComponent) node);
+      componentInfoViewController.setComponent((PluginComponent) node);
       componentInfoView.setVisible(true);
     }
   }

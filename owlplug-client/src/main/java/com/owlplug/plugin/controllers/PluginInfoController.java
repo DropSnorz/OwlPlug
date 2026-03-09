@@ -23,6 +23,8 @@ import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.events.PluginDisplayEvent;
+import com.owlplug.core.events.PluginRefreshEvent;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
@@ -51,13 +53,17 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class PluginInfoController extends BaseController {
 
   @Autowired
-  private PluginsController pluginsController;
+  private ApplicationEventPublisher publisher;
   @Autowired
   private PluginService pluginService;
   @Autowired
@@ -137,7 +143,7 @@ public class PluginInfoController extends BaseController {
     enableButton.setOnAction(e -> {
       pluginService.enablePlugin(plugin);
       setPlugin(plugin);
-      pluginsController.refresh();
+      publisher.publishEvent(new PluginRefreshEvent());
     });
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
@@ -248,7 +254,8 @@ public class PluginInfoController extends BaseController {
     removeButton.setOnAction(removeEvent -> {
       dialog.close();
       pluginTaskFactory.createPluginRemoveTask(plugin)
-          .setOnSucceeded(x -> pluginsController.displayPlugins()).schedule();
+          .setOnSucceeded(x -> publisher.publishEvent(new PluginDisplayEvent()))
+          .schedule();
     });
     removeButton.getStyleClass().add("button-danger");
 

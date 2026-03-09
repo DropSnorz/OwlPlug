@@ -60,9 +60,11 @@ import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class ExploreController extends BaseController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -76,14 +78,14 @@ public class ExploreController extends BaseController {
   @Autowired
   private LazyViewRegistry viewRegistry;
   @Autowired
-  private PackageInfoController packageInfoController;
-  @Autowired
   private MainController mainController;
   @Autowired
   private InstallStepDialogController installStepDialogController;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
 
+  @FXML
+  private PackageInfoController packageInfoViewController;
   @FXML
   private Button sourcesButton;
   @FXML
@@ -130,6 +132,8 @@ public class ExploreController extends BaseController {
    * FXML initialize.
    */
   public void initialize() {
+
+    packageInfoViewController.setParentController(this);
 
     packageBlocViewBuilder = new PackageBlocViewBuilder(this.getApplicationDefaults(), imageCache, this);
 
@@ -358,8 +362,8 @@ public class ExploreController extends BaseController {
    * @param remotePackage - package
    */
   public void selectPackage(RemotePackage remotePackage) {
-    packageInfoController.setPackage(remotePackage);
-    packageInfoController.show();
+    packageInfoViewController.setPackage(remotePackage);
+    packageInfoViewController.show();
   }
 
   public void addSearchChip(String chip) {

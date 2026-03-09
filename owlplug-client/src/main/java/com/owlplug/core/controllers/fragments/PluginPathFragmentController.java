@@ -40,7 +40,11 @@ import javafx.stage.Window;
 import org.controlsfx.control.ToggleSwitch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
+@Controller
+@Scope("prototype")
 public class PluginPathFragmentController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());

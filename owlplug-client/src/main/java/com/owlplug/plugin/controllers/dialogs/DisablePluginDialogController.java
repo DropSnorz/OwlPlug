@@ -22,8 +22,7 @@ package com.owlplug.plugin.controllers.dialogs;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
-import com.owlplug.plugin.controllers.PluginInfoController;
-import com.owlplug.plugin.controllers.PluginsController;
+import com.owlplug.core.events.PluginRefreshEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
 import javafx.geometry.Insets;
@@ -33,17 +32,18 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class DisablePluginDialogController extends AbstractDialogController {
 
   @Autowired
-  private PluginsController pluginsController;
-  @Autowired
   private PluginService pluginService;
   @Autowired
-  private PluginInfoController pluginInfoController;
+  private ApplicationEventPublisher publisher;
 
   private Plugin plugin;
 
@@ -98,7 +98,7 @@ public class DisablePluginDialogController extends AbstractDialogController {
 
   public void disablePluginWithoutPrompt(Plugin plugin) {
     pluginService.disablePlugin(plugin);
-    pluginsController.refresh();
-    pluginInfoController.refresh();
+    publisher.publishEvent(new PluginRefreshEvent());
+    // TODO add event collector to the pluginInfoController
   }
 }

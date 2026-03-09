@@ -20,6 +20,7 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.events.PluginRefreshEvent;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
@@ -47,13 +48,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class PluginTableController extends BaseController {
 
   @Autowired
-  private PluginsController pluginsController;
+  private ApplicationEventPublisher publisher;
+
   @Autowired
   private DisablePluginDialogController disableController;
   @Autowired
@@ -229,7 +234,7 @@ public class PluginTableController extends BaseController {
       MenuItem enableItem = new MenuItem("Enable plugin");
       enableItem.setOnAction(e -> {
         pluginService.enablePlugin(plugin);
-        pluginsController.refresh();
+        publisher.publishEvent(new PluginRefreshEvent());
       });
       menu.getItems().add(enableItem);
     } else {
@@ -250,7 +255,8 @@ public class PluginTableController extends BaseController {
     MenuItem infoDisplayItem = new MenuItem("Toggle info display");
     menu.getItems().add(infoDisplayItem);
     infoDisplayItem.setOnAction(e -> {
-      pluginsController.toggleInfoPaneDisplay();
+      // TODO : toggle info pane and uncomment code
+      // pluginsController.toggleInfoPaneDisplay();
     });
 
     return menu;

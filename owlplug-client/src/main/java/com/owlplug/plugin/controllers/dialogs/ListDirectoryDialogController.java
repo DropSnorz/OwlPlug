@@ -23,6 +23,7 @@ import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
+import com.owlplug.core.events.OptionRefreshEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -33,16 +34,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class ListDirectoryDialogController extends AbstractDialogController implements ListChangeListener<String> {
 
   @Autowired
-  private OptionsController optionsController;
-  @Autowired
-  private WelcomeDialogController welcomeDialogController;
-
+  private ApplicationEventPublisher publisher;
   @Autowired
   private LazyViewRegistry lazyViewRegistry;
 
@@ -96,8 +97,9 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
     prefList.removeIf(x -> x.isBlank() || x.equals(newDirectoryItem));
     this.getPreferences().putList(currentPreferenceKey, prefList);
 
-    optionsController.refreshView();
-    welcomeDialogController.refreshView();
+    publisher.publishEvent(new OptionRefreshEvent());
+    // TODO : welcome dialog Controller should listen for event
+    // welcomeDialogController.refreshView();
   }
 
 

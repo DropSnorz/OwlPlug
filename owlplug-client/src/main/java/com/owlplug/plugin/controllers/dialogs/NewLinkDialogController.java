@@ -38,10 +38,12 @@ import javafx.stage.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class NewLinkController extends AbstractDialogController {
+@Scope("prototype")
+public class NewLinkDialogController extends AbstractDialogController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -69,7 +71,7 @@ public class NewLinkController extends AbstractDialogController {
   
   private AutoCompletePopup<String> autoCompletePath;
 
-  NewLinkController() {
+  public NewLinkDialogController() {
     super(750, 300);
   }
 

@@ -33,9 +33,11 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class NewSourceDialogController extends AbstractDialogController implements IEntityCreateOrUpdate<RemoteSource> {
 
   @Autowired

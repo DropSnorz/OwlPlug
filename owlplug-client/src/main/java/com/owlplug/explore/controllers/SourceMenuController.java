@@ -19,7 +19,7 @@
 package com.owlplug.explore.controllers;
 
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.events.ExploreRefreshEvent;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.PackageSourceBadgeView;
@@ -34,15 +34,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@Scope("prototype")
 public class SourceMenuController extends BaseController {
 
   @Autowired
-  private MainController mainController;
-  @Autowired
-  private ExploreController exploreController;
+  private ApplicationEventPublisher publisher;
   @Autowired
   private NewSourceDialogController newSourceDialogController;
   @Autowired
@@ -61,7 +62,8 @@ public class SourceMenuController extends BaseController {
     newSourceMenuItem.setOnMouseClicked(e -> {
       newSourceDialogController.show();
       newSourceDialogController.startCreateSequence();
-      mainController.getLeftDrawer().close();
+      // TODO close main controller
+      //mainController.getLeftDrawer().close();
     });
 
     refreshView();
@@ -106,7 +108,7 @@ public class SourceMenuController extends BaseController {
       activeToggleButton.setSelected(pluginRemoteSource.isEnabled());
       activeToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
         exploreService.enableSource(pluginRemoteSource, newValue);
-        exploreController.refreshView();
+        publisher.publishEvent(new ExploreRefreshEvent());
 
       });
       HBox.setHgrow(activeToggleButton, Priority.NEVER);

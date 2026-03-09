@@ -47,6 +47,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
+// TODO move to a scoped controller.
+// Requires some updates on the task runner side.
 public class TaskBarController extends BaseController {
 
   @Autowired

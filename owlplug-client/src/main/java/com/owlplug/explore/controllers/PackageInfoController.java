@@ -45,13 +45,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 @Controller
+//TODO add scope as prototype
 public class PackageInfoController extends BaseController {
 
-  @Autowired
-  private ExploreController exploreController;
+  private ExploreController parentController;
   @Autowired
   private ImageCache imageCache;
 
@@ -106,7 +107,7 @@ public class PackageInfoController extends BaseController {
     packageInfoContainer.getChildren().add(sidebar);
 
     creatorLink.setOnAction(e -> {
-      exploreController.addSearchChip(creatorLink.getText());
+      parentController.addSearchChip(creatorLink.getText());
     });
 
     closeButton.setOnAction(e -> {
@@ -161,7 +162,7 @@ public class PackageInfoController extends BaseController {
     // Activate and configure install button
     this.installButton.setDisable(false);
     installButton.setOnAction(e -> {
-      boolean installStarted = exploreController.installPackage(remotePackage);
+      boolean installStarted = parentController.installPackage(remotePackage);
       if (installStarted) {
         this.installButton.setDisable(true);
       }
@@ -203,7 +204,7 @@ public class PackageInfoController extends BaseController {
       chip.getStyleClass().add("chip");
       chip.getStyleClass().add("fake-chip");
       chip.setOnMouseClicked(e -> {
-        exploreController.addSearchChip(tag.getName());
+        parentController.addSearchChip(tag.getName());
       });
       tagContainer.getChildren().add(chip);
     }
@@ -211,7 +212,7 @@ public class PackageInfoController extends BaseController {
     // Bundle list display
     bundlesView.clear();
     for (PackageBundle bundle : remotePackage.getBundles()) {
-      bundlesView.addPackageBundle(bundle, e -> exploreController.installBundle(bundle));
+      bundlesView.addPackageBundle(bundle, e -> parentController.installBundle(bundle));
     }
 
   }
@@ -243,4 +244,7 @@ public class PackageInfoController extends BaseController {
 
   }
 
+  public void setParentController(ExploreController parentController) {
+    this.parentController = parentController;
+  }
 }
