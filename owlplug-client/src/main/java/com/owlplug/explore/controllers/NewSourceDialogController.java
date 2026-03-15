@@ -43,8 +43,6 @@ public class NewSourceDialogController extends AbstractDialogController implemen
   @Autowired
   private ExploreService exploreService;
   @Autowired
-  private SourceMenuController sourceMenuController;
-  @Autowired
   private ExploreTaskFactory exploreTaskFactory;
 
   @FXML
@@ -141,7 +139,6 @@ public class NewSourceDialogController extends AbstractDialogController implemen
         if (pluginRemoteSource != null) {
           errorLabel.setVisible(false);
           exploreService.save(pluginRemoteSource);
-          sourceMenuController.refreshView();
           close();
           this.getDialogManager().newSimpleInfoDialog("Success",
               "The plugin source " + pluginRemoteSource.getName() + " has been successfully added !").show();

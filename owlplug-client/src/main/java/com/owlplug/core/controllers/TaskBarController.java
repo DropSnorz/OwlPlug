@@ -73,6 +73,7 @@ public class TaskBarController extends BaseController {
    */
   public void initialize() {
 
+    taskRunner.registerTaskBarController(this);
     taskHistoryButton.setOnAction(e -> openTaskHistory());
     resetErrorLog();
 

@@ -21,10 +21,10 @@ package com.owlplug;
 import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.utils.FX;
 import java.nio.file.Paths;
 import java.time.Duration;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -93,7 +93,7 @@ public class OwlPlug extends Application {
 
       MainController mainController = context.getBean(MainController.class);
 
-      Platform.runLater(mainController::dispatchPostInitialize);
+      FX.run(mainController::dispatchPostInitialize);
 
     } catch (BeanCreationException e) {
       if (e.getRootCause() instanceof HibernateException) {

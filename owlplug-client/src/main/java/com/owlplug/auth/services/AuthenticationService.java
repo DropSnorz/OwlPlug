@@ -32,6 +32,7 @@ import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.model.Userinfoplus;
 import com.owlplug.auth.JPADataStoreFactory;
 import com.owlplug.auth.components.OwlPlugCredentials;
+import com.owlplug.auth.events.AccountUpdateEvent;
 import com.owlplug.auth.repositories.GoogleCredentialRepository;
 import com.owlplug.auth.repositories.UserAccountRepository;
 import com.owlplug.auth.model.UserAccount;
@@ -48,6 +49,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 /**
@@ -64,13 +66,13 @@ public class AuthenticationService extends BaseService {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
+  private ApplicationEventPublisher publisher;
+  @Autowired
   private OwlPlugCredentials owlPlugCredentials;
   @Autowired
   private GoogleCredentialRepository googleCredentialRepository;
   @Autowired
   private UserAccountRepository userAccountRepository;
-  @Autowired
-  private MainController mainController;
 
   private static final JsonFactory JSON_FACTORY = new JacksonFactory();
   private LocalServerReceiver receiver = null;
@@ -114,6 +116,7 @@ public class AuthenticationService extends BaseService {
 
       userAccountRepository.save(userAccount);
       this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
+      publisher.publishEvent(new AccountUpdateEvent());
 
     } catch (GeneralSecurityException | IOException e) {
       log.error("Error during authentication", e);
@@ -152,7 +155,7 @@ public class AuthenticationService extends BaseService {
 
     googleCredentialRepository.deleteByKey(userAccount.getKey());
     userAccountRepository.delete(userAccount);
-    mainController.refreshAccounts();
+    publisher.publishEvent(new AccountUpdateEvent());
   }
   
   /**

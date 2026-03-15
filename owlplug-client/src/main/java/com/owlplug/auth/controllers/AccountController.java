@@ -42,8 +42,6 @@ public class AccountController extends AbstractDialogController {
   @Autowired
   private AuthenticationService authenticationService;
   @Autowired 
-  private MainController mainController;
-  @Autowired 
   private LazyViewRegistry viewRegistry;
 
   @FXML
@@ -92,7 +90,6 @@ public class AccountController extends AbstractDialogController {
         messageLabel.setText("Your account has been successfully added");
         messageLabel.setVisible(true);
         cancelFlag = false;
-        mainController.refreshAccounts();
       });
 
       task.setOnFailed(event -> {
