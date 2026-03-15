@@ -29,7 +29,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AppUpdateService extends BaseService {
 
-  
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   /**

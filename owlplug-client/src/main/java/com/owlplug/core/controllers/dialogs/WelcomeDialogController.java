@@ -23,15 +23,17 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
+import com.owlplug.core.events.PreferencesChangedEvent;
 import com.owlplug.core.model.OperatingSystem;
+import com.owlplug.core.utils.FX;
 import com.owlplug.plugin.components.PluginTaskFactory;
-import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -121,6 +123,11 @@ public class WelcomeDialogController extends AbstractDialogController {
       auPluginPathFragment.disable();
     }
 
+  }
+
+  @EventListener
+  private void handle(PreferencesChangedEvent event) {
+    FX.run(this::refreshView);
   }
 
   @Override

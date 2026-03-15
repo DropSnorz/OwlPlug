@@ -26,8 +26,10 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.utils.FX;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
+import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
@@ -41,7 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -60,6 +61,8 @@ import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -78,6 +81,7 @@ public class ExploreController extends BaseController {
   @Autowired
   private PackageInfoController packageInfoController;
   @Autowired
+  @Lazy
   private MainController mainController;
   @Autowired
   private InstallStepDialogController installStepDialogController;
@@ -225,8 +229,8 @@ public class ExploreController extends BaseController {
     });
     lazyLoadBar.setVisible(false);
 
-    exploreTaskFactory.addSyncSourcesListener(() -> refreshView());
-    refreshView();
+    exploreTaskFactory.addSyncSourcesListener(() -> performPackageSearch());
+    performPackageSearch();
 
     masonryPane.setHSpacing(5);
     masonryPane.setVSpacing(5);
@@ -236,7 +240,7 @@ public class ExploreController extends BaseController {
 
   }
   
-  private void performPackageSearch() {
+  private synchronized void performPackageSearch() {
     final List<ExploreFilterCriteria> criteriaChipList = exploreChipView.getChips();
     List<ExploreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
 
@@ -270,14 +274,6 @@ public class ExploreController extends BaseController {
       displayPackages(task.getValue());
     });
     new Thread(task).start();
-
-  }
-
-  /**
-   * Refresh Store View.
-   */
-  public synchronized void refreshView() {
-    performPackageSearch();
 
   }
 
@@ -320,7 +316,7 @@ public class ExploreController extends BaseController {
 
       }
 
-      Platform.runLater(() -> {
+      FX.run(() -> {
         masonryPane.requestLayout();
         scrollPane.requestLayout();
       });
@@ -403,6 +399,11 @@ public class ExploreController extends BaseController {
   public void requestLayout() {
     masonryPane.requestLayout();
     scrollPane.requestLayout();
+  }
+
+  @EventListener
+  private void handle(RemoteSourceUpdatedEvent event) {
+    FX.run(this::performPackageSearch);
   }
 
 }

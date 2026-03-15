@@ -32,7 +32,7 @@
                     <Button fx:id="projectDirectoryButton" text="Project Directories">
                         <graphic>
                             <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                <Image url="@../icons/folder-grey-16.png"/>
+                                <Image url="@../../icons/folder-grey-16.png"/>
                             </ImageView>
                         </graphic>
                     </Button>
@@ -52,7 +52,7 @@
                 <Button fx:id="syncProjectButton" text="Sync">
                     <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                            <Image url="@../icons/refresh-white-16.png"/>
+                            <Image url="@../../icons/refresh-white-16.png"/>
                         </ImageView>
                     </graphic>
                 </Button>

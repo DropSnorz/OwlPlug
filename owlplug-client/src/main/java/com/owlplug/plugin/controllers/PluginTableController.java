@@ -47,12 +47,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PluginTableController extends BaseController {
 
   @Autowired
+  @Lazy
   private PluginsController pluginsController;
   @Autowired
   private DisablePluginDialogController disableController;
@@ -229,7 +231,6 @@ public class PluginTableController extends BaseController {
       MenuItem enableItem = new MenuItem("Enable plugin");
       enableItem.setOnAction(e -> {
         pluginService.enablePlugin(plugin);
-        pluginsController.refresh();
       });
       menu.getItems().add(enableItem);
     } else {

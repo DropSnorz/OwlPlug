@@ -45,12 +45,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PackageInfoController extends BaseController {
 
   @Autowired
+  @Lazy
   private ExploreController exploreController;
   @Autowired
   private ImageCache imageCache;

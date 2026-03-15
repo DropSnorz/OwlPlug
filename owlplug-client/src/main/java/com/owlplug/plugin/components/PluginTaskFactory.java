@@ -39,6 +39,7 @@ import com.owlplug.project.components.ProjectTaskFactory;
 import java.util.ArrayList;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +52,7 @@ public class PluginTaskFactory extends BaseTaskFactory {
   @Autowired
   private PluginRepository pluginRepository;
   @Autowired
+  @Lazy
   private PluginService pluginService;
   @Autowired
   private PluginFootprintRepository pluginFootprintRepository;
@@ -60,7 +62,6 @@ public class PluginTaskFactory extends BaseTaskFactory {
   private NativeHostService nativeHostService;
   @Autowired
   private ProjectTaskFactory projectTaskFactory;
-
   @Autowired
   private FileStatRepository fileStatRepository;
 

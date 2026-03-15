@@ -32,7 +32,7 @@
             <Button fx:id="exportButton" text="Export">
                 <graphic>
                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../icons/connect-white-16.png"/>
+                        <Image url="@../../icons/connect-white-16.png"/>
                     </ImageView>
                 </graphic>
             </Button>
@@ -40,7 +40,7 @@
                 <Button fx:id="scanButton" text="Scan">
                     <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                            <Image url="@../icons/refresh-white-16.png"/>
+                            <Image url="@../../icons/refresh-white-16.png"/>
                         </ImageView>
                     </graphic>
                 </Button>

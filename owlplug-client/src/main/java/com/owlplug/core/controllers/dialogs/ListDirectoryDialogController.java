@@ -16,13 +16,12 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.plugin.controllers.dialogs;
+package com.owlplug.core.controllers.dialogs;
 
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.LazyViewRegistry;
-import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
-import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
+import com.owlplug.core.events.PreferencesChangedEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -33,16 +32,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class ListDirectoryDialogController extends AbstractDialogController implements ListChangeListener<String> {
 
   @Autowired
-  private OptionsController optionsController;
-  @Autowired
-  private WelcomeDialogController welcomeDialogController;
-
+  private ApplicationEventPublisher publisher;
   @Autowired
   private LazyViewRegistry lazyViewRegistry;
 
@@ -96,10 +93,9 @@ public class ListDirectoryDialogController extends AbstractDialogController impl
     prefList.removeIf(x -> x.isBlank() || x.equals(newDirectoryItem));
     this.getPreferences().putList(currentPreferenceKey, prefList);
 
-    optionsController.refreshView();
-    welcomeDialogController.refreshView();
-  }
+    publisher.publishEvent(new PreferencesChangedEvent());
 
+  }
 
   protected DialogLayout getLayout() {
     DialogLayout layout = new DialogLayout();

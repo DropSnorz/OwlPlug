@@ -27,12 +27,14 @@ import com.owlplug.project.model.LookupResult;
 import com.owlplug.project.repositories.DawPluginRepository;
 import com.owlplug.project.repositories.PluginLookupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PluginLookupService extends BaseService {
 
   @Autowired
+  @Lazy
   private PluginService pluginService;
   @Autowired
   private PluginLookupRepository pluginLookupRepository;

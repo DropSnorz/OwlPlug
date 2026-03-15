@@ -25,7 +25,7 @@
          <Button fx:id="sourcesButton" text="Sources">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../icons/server-white-32.png"/>
+                  <Image url="@../../icons/server-white-32.png"/>
                </ImageView>
             </graphic>
          </Button>
@@ -34,7 +34,7 @@
                <HBox.margin>
                   <Insets left="8.0" right="8.0" top="10"/>
                </HBox.margin>
-               <Image url="@../icons/search-white-32.png"/>
+               <Image url="@../../icons/search-white-32.png"/>
             </ImageView>
             <HBox fx:id="exploreChipViewContainer" HBox.hgrow="ALWAYS" alignment="CENTER">
             </HBox>
@@ -49,21 +49,21 @@
          <Button fx:id="formatFilterButton" text="Format">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../icons/format-white-16.png"/>
+                  <Image url="@../../icons/format-white-16.png"/>
                </ImageView>
             </graphic>
          </Button>
          <Button fx:id="platformFilterButton" text="System">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../icons/gear-white-32.png"/>
+                  <Image url="@../../icons/gear-white-32.png"/>
                </ImageView>
             </graphic>
          </Button>
          <Button fx:id="syncSourcesButton" text="Sync">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../icons/refresh-white-16.png"/>
+                  <Image url="@../../icons/refresh-white-16.png"/>
                </ImageView>
             </graphic>
          </Button>
@@ -80,7 +80,7 @@
             </VBox>
          </ScrollPane>
          <AnchorPane>
-            <fx:include fx:id="packageInfoView" source="menu/PackageInfoView.fxml"
+            <fx:include fx:id="packageInfoView" source="PackageInfoView.fxml"
                         AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                         AnchorPane.topAnchor="0.0"/>
          </AnchorPane>
