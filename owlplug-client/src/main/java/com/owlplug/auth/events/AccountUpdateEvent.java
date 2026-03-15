@@ -16,25 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.core.services;
+package com.owlplug.auth.events;
 
-import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.components.ApplicationPreferences;
-import org.springframework.beans.factory.annotation.Autowired;
-
-public class BaseService {
-  
-  @Autowired
-  private ApplicationDefaults applicationDefaults;
-  @Autowired
-  private ApplicationPreferences preferences;
-
-  public ApplicationDefaults getApplicationDefaults() {
-    return applicationDefaults;
-  }
-  
-  public ApplicationPreferences getPreferences() {
-    return preferences;
-  }
-
+public class AccountUpdateEvent {
 }

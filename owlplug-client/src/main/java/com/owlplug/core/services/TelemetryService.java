@@ -39,11 +39,8 @@ import org.springframework.stereotype.Service;
 public class TelemetryService extends BaseService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
-
   private MessageBuilder messageBuilder;
-
   private MixpanelAPI mixpanel;
-
   private String userId = null;
 
   private static final int MAX_PROPS_LENGTH = 2000;

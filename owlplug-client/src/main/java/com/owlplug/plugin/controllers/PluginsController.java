@@ -20,9 +20,12 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.FX;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
+import com.owlplug.plugin.events.PluginRefreshEvent;
+import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
@@ -35,6 +38,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -228,6 +232,16 @@ public class PluginsController extends BaseController {
   public void toggleInfoPaneDisplay() {
     pluginInfoPane.setManaged(!pluginInfoPane.isManaged());
     pluginInfoPane.setVisible(!pluginInfoPane.isVisible());
+  }
+
+  @EventListener
+  private void handle(PluginRefreshEvent event) {
+    FX.run(this::refresh);
+  }
+
+  @EventListener
+  private void handle(PluginUpdateEvent event) {
+    FX.run(this::displayPlugins);
   }
 
 }

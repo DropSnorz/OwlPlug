@@ -37,9 +37,7 @@ import org.springframework.stereotype.Service;
 public class NativeHostService extends BaseService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
-
   private List<NativePluginLoader> pluginLoaders = new ArrayList<>();
-
   private NativePluginLoader currentPluginLoader = null;
   private NativePluginLoader fallbackLoader = null;
 

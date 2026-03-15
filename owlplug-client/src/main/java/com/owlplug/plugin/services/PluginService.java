@@ -27,6 +27,7 @@ import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.plugin.components.PluginTaskFactory;
+import com.owlplug.plugin.events.PluginRefreshEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFootprint;
 import com.owlplug.plugin.model.PluginFormat;
@@ -41,6 +42,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +51,9 @@ import org.springframework.stereotype.Service;
 public class PluginService extends BaseService {
 
   @Autowired
+  private ApplicationEventPublisher publisher;
+  @Autowired
+  @Lazy
   protected ExploreService exploreService;
   @Autowired
   protected PluginRepository pluginRepository;
@@ -135,6 +141,7 @@ public class PluginService extends BaseService {
     } else {
       log.error("Plugin can't be disabled: failed to rename file {}", plugin.getPath());
     }
+    publisher.publishEvent(new PluginRefreshEvent());
     
   }
   
@@ -155,6 +162,8 @@ public class PluginService extends BaseService {
     } else {
       log.error("Plugin can't be enabled: failed to rename file {}", plugin.getPath());
     }
+
+    publisher.publishEvent(new PluginRefreshEvent());
 
   }
 

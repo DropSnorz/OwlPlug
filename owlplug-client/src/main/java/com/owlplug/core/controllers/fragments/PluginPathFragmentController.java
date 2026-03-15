@@ -21,7 +21,7 @@ package com.owlplug.core.controllers.fragments;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.ui.SVGPaths;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
+import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;

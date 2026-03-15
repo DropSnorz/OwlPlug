@@ -23,7 +23,6 @@ import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.owlplug.plugin.controllers.PluginInfoController;
-import com.owlplug.plugin.controllers.PluginsController;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
 import javafx.geometry.Insets;
@@ -37,13 +36,8 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class DisablePluginDialogController extends AbstractDialogController {
-
-  @Autowired
-  private PluginsController pluginsController;
   @Autowired
   private PluginService pluginService;
-  @Autowired
-  private PluginInfoController pluginInfoController;
 
   private Plugin plugin;
 
@@ -98,7 +92,5 @@ public class DisablePluginDialogController extends AbstractDialogController {
 
   public void disablePluginWithoutPrompt(Plugin plugin) {
     pluginService.disablePlugin(plugin);
-    pluginsController.refresh();
-    pluginInfoController.refresh();
   }
 }

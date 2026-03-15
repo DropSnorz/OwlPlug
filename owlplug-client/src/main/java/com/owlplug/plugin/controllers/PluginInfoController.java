@@ -23,9 +23,12 @@ import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
+import com.owlplug.plugin.events.PluginRefreshEvent;
+import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.services.PluginService;
@@ -51,13 +54,15 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class PluginInfoController extends BaseController {
 
   @Autowired
-  private PluginsController pluginsController;
+  private ApplicationEventPublisher publisher;
   @Autowired
   private PluginService pluginService;
   @Autowired
@@ -137,7 +142,6 @@ public class PluginInfoController extends BaseController {
     enableButton.setOnAction(e -> {
       pluginService.enablePlugin(plugin);
       setPlugin(plugin);
-      pluginsController.refresh();
     });
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
@@ -248,13 +252,20 @@ public class PluginInfoController extends BaseController {
     removeButton.setOnAction(removeEvent -> {
       dialog.close();
       pluginTaskFactory.createPluginRemoveTask(plugin)
-          .setOnSucceeded(x -> pluginsController.displayPlugins()).schedule();
+          // NOTE : PluginUpdateEvent should be raised in the plugin service
+          // once plugin service refactored to handle removal logic.
+          .setOnSucceeded(x -> publisher.publishEvent(new PluginUpdateEvent())).schedule();
+
     });
     removeButton.getStyleClass().add("button-danger");
 
     layout.setActions(removeButton, cancelButton);
     dialog.setContent(layout);
     dialog.show();
+  }
+  @EventListener
+  private void handle(PluginRefreshEvent event) {
+    FX.run(this::refresh);
   }
 
 }

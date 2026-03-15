@@ -20,19 +20,17 @@ package com.owlplug.core.components;
 
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
-import com.owlplug.core.controllers.MainController;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class DialogManager {
 
-  @Autowired
-  private MainController mainController;
+  private StackPane dialogContainer;
 
   /**
    * Creates a new dialog.
@@ -41,7 +39,7 @@ public class DialogManager {
    */
   public Dialog newDialog() {
     Dialog dialog = new Dialog();
-    dialog.setDialogContainer(mainController.getRootPane());
+    dialog.setDialogContainer(dialogContainer);
     return dialog;
   }
 
@@ -101,6 +99,10 @@ public class DialogManager {
     layout.setActions(button);
     return dialog;
 
+  }
+
+  public void setDialogContainer(StackPane dialogContainer) {
+    this.dialogContainer = dialogContainer;
   }
 
 }

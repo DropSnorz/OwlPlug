@@ -21,13 +21,13 @@ package com.owlplug.core.components;
 import com.owlplug.core.controllers.TaskBarController;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
+import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;
-import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,6 @@ public class TaskRunner {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired
   private TaskBarController taskBarController;
 
   private final SimpleAsyncTaskExecutor executor;
@@ -104,13 +103,13 @@ public class TaskRunner {
       CompletableFuture<TaskResult> future = submitCompletable(currentTask, executor);
 
       future.thenAccept(result -> {
-        Platform.runLater(() -> {
+        FX.run(() -> {
           removeCurrentTask();
           scheduleNext();
         });
       }).exceptionally(ex -> {
         log.error("Error while running task", ex);
-        Platform.runLater(() -> {
+        FX.run(() -> {
           if (ex != null) {
             taskBarController.setErrorLog(
                 currentTask,
@@ -196,6 +195,10 @@ public class TaskRunner {
 
   public List<AbstractTask> getTaskHistory() {
     return new ArrayList<>(taskHistory);
+  }
+
+  public void registerTaskBarController(TaskBarController tbc) {
+    this.taskBarController = tbc;
   }
 
 

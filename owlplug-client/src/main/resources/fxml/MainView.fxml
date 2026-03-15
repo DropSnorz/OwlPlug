@@ -60,13 +60,13 @@
                                                 prefWidth="200.0"/>
                                 </Tab>
                                 <Tab closable="false" text="Plugins">
-                                    <fx:include fx:id="pluginView" source="PluginsView.fxml"/>
+                                    <fx:include fx:id="pluginView" source="plugins/PluginsView.fxml"/>
                                 </Tab>
                                 <Tab closable="false" text="Explore">
-                                    <fx:include fx:id="exploreView" source="ExploreView.fxml"/>
+                                    <fx:include fx:id="exploreView" source="explore/ExploreView.fxml"/>
                                 </Tab>
                                 <Tab closable="false" text="Projects">
-                                    <fx:include fx:id="projectView" source="ProjectsView.fxml"/>
+                                    <fx:include fx:id="projectView" source="projects/ProjectsView.fxml"/>
                                 </Tab>
                                 <Tab closable="false" text="Options">
                                     <fx:include fx:id="optionView" source="OptionsView.fxml"/>

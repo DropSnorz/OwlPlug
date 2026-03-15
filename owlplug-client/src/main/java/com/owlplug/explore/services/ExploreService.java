@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.owlplug.core.model.RuntimePlatform;
 import com.owlplug.core.services.BaseService;
-import com.owlplug.explore.components.ExploreTaskFactory;
+import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
@@ -51,6 +51,8 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
@@ -60,12 +62,13 @@ public class ExploreService extends BaseService {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
+  private ApplicationEventPublisher publisher;
+  @Autowired
   private RemoteSourceRepository remoteSourceRepository;
   @Autowired
   private RemotePackageRepository remotePackageRepository;
   @Autowired
-  private ExploreTaskFactory exploreTaskFactory;
-  @Autowired
+  @Lazy
   private PluginService pluginService;
 
   @PostConstruct
@@ -94,13 +97,6 @@ public class ExploreService extends BaseService {
     OASRegistry.setType(SourceType.OAS_REGISTRY);
 
     remoteSourceRepository.save(OASRegistry);
-  }
-
-  /**
-   * Triggers Store sync task.
-   */
-  public void syncSources() {
-    exploreTaskFactory.createSourceSyncTask().schedule();
   }
 
   public Iterable<RemoteSource> getRemoteSources() {
@@ -248,10 +244,13 @@ public class ExploreService extends BaseService {
   public void enableSource(RemoteSource remoteSource, boolean enabled) {
     remoteSource.setEnabled(enabled);
     remoteSourceRepository.save(remoteSource);
+    publisher.publishEvent(new RemoteSourceUpdatedEvent(remoteSource));
   }
 
   public RemoteSource save(RemoteSource remoteSource) {
-    return remoteSourceRepository.save(remoteSource);
+    RemoteSource saved = remoteSourceRepository.save(remoteSource);
+    publisher.publishEvent(new RemoteSourceUpdatedEvent(saved));
+    return saved;
   }
 
   public void delete(RemoteSource remoteSource) {
