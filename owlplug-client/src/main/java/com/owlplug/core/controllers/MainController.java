@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers;
 
 import com.owlplug.auth.controllers.AccountController;
+import com.owlplug.auth.events.AccountUpdateEvent;
 import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.services.AuthenticationService;
 import com.owlplug.auth.ui.AccountCellFactory;
@@ -33,7 +34,10 @@ import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
+import com.owlplug.core.events.PreferencesChangedEvent;
+import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.plugin.services.PluginService;
@@ -44,21 +48,20 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -67,15 +70,17 @@ public class MainController extends BaseController {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
+  private ApplicationEventPublisher publisher;
+  @Autowired
   private LazyViewRegistry viewRegistry;
   @Autowired
   private AccountController accountController;
   @Autowired
   private CrashRecoveryDialogController crashRecoveryDialogController;
   @Autowired
-  private WelcomeDialogController welcomeDialogController;
+  private ExploreTaskFactory exploreTaskFactory;
   @Autowired
-  private OptionsController optionsController;
+  private WelcomeDialogController welcomeDialogController;
   @Autowired
   private ExploreController exploreController;
   @Autowired
@@ -85,23 +90,18 @@ public class MainController extends BaseController {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private ExploreService exploreService;
-  @Autowired
   private ImageCache imageCache;
   @Autowired
   private TaskRunner taskRunner;
   @Autowired
   private ApplicationMonitor applicationMonitor;
+
   @FXML
   private StackPane rootPane;
-  @FXML
-  private BorderPane mainPane;
   @FXML
   private TabPane tabPaneHeader;
   @FXML
   private TabPane tabPaneContent;
-  @FXML
-  private VBox contentPanePlaceholder;
   @FXML
   private Drawer leftDrawer;
   @FXML
@@ -120,6 +120,7 @@ public class MainController extends BaseController {
   public void initialize() {
 
     viewRegistry.preload();
+    this.getDialogManager().setDialogContainer(this.getRootPane());
 
     this.tabPaneHeader.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
     this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener((options, oldValue, newValue) -> {
@@ -137,7 +138,7 @@ public class MainController extends BaseController {
       if (newValue instanceof AccountMenuItem) {
         accountController.show();
         // Delay comboBox selector change
-        Platform.runLater(() -> accountComboBox.setValue(oldValue));
+        FX.run(() -> accountComboBox.setValue(oldValue));
 
       }
       if (newValue instanceof UserAccount userAccount) {
@@ -159,7 +160,7 @@ public class MainController extends BaseController {
     CompletableFuture
             .supplyAsync(() -> appUpdateService.isUpToDate(), executor)
             .thenAccept(isUpToDate -> {
-              Platform.runLater(() -> {
+              FX.run(() -> {
                 if (!isUpToDate) {
                   updatePane.setVisible(true);
                 }
@@ -179,15 +180,16 @@ public class MainController extends BaseController {
 
     refreshAccounts();
 
+    boolean firstLaunch = this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true);
     if (!this.applicationMonitor.isPreviousExecutionSafelyTerminated()) {
       log.info("Previous execution not terminated safely, opening crash recovery dialog");
       crashRecoveryDialogController.show();
-    } else if (this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true)) {
+    } else if (firstLaunch) {
       welcomeDialogController.show();
-      exploreService.syncSources();
+      exploreTaskFactory.createSourceSyncTask().schedule();
+      this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
+      publisher.publishEvent(new PreferencesChangedEvent());
     }
-    this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
-    optionsController.refreshView();
 
     this.getTelemetryService().event("/Startup", p -> {
       p.put("osName", System.getProperty("os.name"));
@@ -266,6 +268,11 @@ public class MainController extends BaseController {
     if (node != null) {
       leftDrawer.setSidePane(node);
     }
+  }
+
+  @EventListener
+  private void handle(AccountUpdateEvent event) {
+    FX.run(this::refreshAccounts);
   }
 
 }

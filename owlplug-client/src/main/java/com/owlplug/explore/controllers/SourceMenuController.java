@@ -20,6 +20,8 @@ package com.owlplug.explore.controllers;
 
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.utils.FX;
+import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.PackageSourceBadgeView;
@@ -34,15 +36,16 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class SourceMenuController extends BaseController {
 
   @Autowired
+  @Lazy
   private MainController mainController;
-  @Autowired
-  private ExploreController exploreController;
   @Autowired
   private NewSourceDialogController newSourceDialogController;
   @Autowired
@@ -106,7 +109,6 @@ public class SourceMenuController extends BaseController {
       activeToggleButton.setSelected(pluginRemoteSource.isEnabled());
       activeToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
         exploreService.enableSource(pluginRemoteSource, newValue);
-        exploreController.refreshView();
 
       });
       HBox.setHgrow(activeToggleButton, Priority.NEVER);
@@ -147,6 +149,11 @@ public class SourceMenuController extends BaseController {
       }
       return url.replace("http://", "").replaceAll("https://", "");
     }
+  }
+
+  @EventListener
+  private void handle(RemoteSourceUpdatedEvent event) {
+    FX.run(this::refreshView);
   }
 
 }

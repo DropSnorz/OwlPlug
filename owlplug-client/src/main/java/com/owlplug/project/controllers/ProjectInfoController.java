@@ -42,6 +42,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -50,6 +51,7 @@ public class ProjectInfoController extends BaseController {
   @Autowired
   private PluginsController pluginsController;
   @Autowired
+  @Lazy
   private MainController mainController;
 
   @FXML

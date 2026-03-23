@@ -25,7 +25,7 @@
          <Label fx:id="directoryNameLabel" text="DirectoryName">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../icons/folder-grey-16.png"/>
+                  <Image url="@../../icons/folder-grey-16.png"/>
                </ImageView>
             </graphic>
          </Label>
@@ -34,14 +34,14 @@
          <Button fx:id="openDirectoryButton" text="Open directory">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../icons/share-white-16.png"/>
+                  <Image url="@../../icons/share-white-16.png"/>
                </ImageView>
             </graphic>
          </Button>
          <Button fx:id="deleteDirectoryButton" alignment="CENTER" styleClass="button-danger" text="Delete All">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../icons/trash-white-16.png"/>
+                  <Image url="@../../icons/trash-white-16.png"/>
                </ImageView>
             </graphic>
          </Button>
@@ -51,7 +51,7 @@
          <Tab fx:id="directoryMetricsTab" disable="true" text="Metrics">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../icons/chart-white-16.png"/>
+                  <Image url="@../../icons/chart-white-16.png"/>
                </ImageView>
             </graphic>
             <AnchorPane minHeight="0.0" minWidth="0.0"/>

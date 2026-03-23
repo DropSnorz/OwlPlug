@@ -56,6 +56,15 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class InstallStepDialogController extends AbstractDialogController {
 
+  @Autowired
+  private ExploreService exploreService;
+  @Autowired
+  private LazyViewRegistry lazyViewRegistry;
+  @Autowired
+  private ExploreTaskFactory exploreTaskFactory;
+  @Autowired
+  private ImageCache imageCache;
+
   @FXML
   private Pane screenshotBackgroundPane;
   @FXML
@@ -96,15 +105,6 @@ public class InstallStepDialogController extends AbstractDialogController {
   private Button closeButton;
 
   private final ToggleGroup toggleGroup = new ToggleGroup();
-
-  @Autowired
-  private ExploreService exploreService;
-  @Autowired
-  private LazyViewRegistry lazyViewRegistry;
-  @Autowired
-  private ExploreTaskFactory exploreTaskFactory;
-  @Autowired
-  private ImageCache imageCache;
 
   private InstallationParameters installParams;
 

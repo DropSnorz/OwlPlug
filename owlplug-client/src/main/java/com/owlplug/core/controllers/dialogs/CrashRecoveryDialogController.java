@@ -21,7 +21,7 @@ package com.owlplug.core.controllers.dialogs;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.LazyViewRegistry;
-import com.owlplug.core.controllers.OptionsController;
+import com.owlplug.core.events.PreferencesChangedEvent;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.host.loaders.NativePluginLoader;
 import com.owlplug.plugin.model.Plugin;
@@ -42,6 +42,7 @@ import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -50,13 +51,13 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
+  private ApplicationEventPublisher publisher;
+  @Autowired
   private LazyViewRegistry lazyViewRegistry;
   @Autowired
   private PluginService pluginService;
   @Autowired
   private NativeHostService nativeHostService;
-  @Autowired 
-  private OptionsController optionsController;
   
   
   @FXML
@@ -119,7 +120,7 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     ));
     
     closeButton.setOnAction(e -> {
-      optionsController.refreshView();
+      publisher.publishEvent(new PreferencesChangedEvent());
       this.close();
     });
 

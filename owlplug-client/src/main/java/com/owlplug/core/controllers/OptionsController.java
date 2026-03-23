@@ -23,12 +23,14 @@ import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.dialogs.DonateDialogController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
+import com.owlplug.core.events.PreferencesChangedEvent;
 import com.owlplug.core.model.OperatingSystem;
 import com.owlplug.core.services.OptionsService;
 import com.owlplug.core.ui.SlidingLabel;
+import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.host.loaders.NativePluginLoader;
-import com.owlplug.plugin.controllers.dialogs.ListDirectoryDialogController;
+import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.plugin.services.NativeHostService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,6 +44,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -297,6 +300,11 @@ public class OptionsController extends BaseController {
       auPluginPathFragment.disable();
     }
 
+  }
+
+  @EventListener
+  private void handle(PreferencesChangedEvent event) {
+    FX.run(this::refreshView);
   }
 
 }
