@@ -19,6 +19,7 @@
 package com.owlplug.core.utils;
 
 import java.awt.Desktop;
+import java.awt.Desktop.Action;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -54,7 +55,12 @@ public class PlatformUtils {
     try {
       if (Desktop.isDesktopSupported()) {
         log.debug("Opening address " + url + " in default browser");
-        Desktop.getDesktop().browse(new URI(url));
+        Desktop desktop = Desktop.getDesktop();
+        if(desktop.isSupported(Action.BROWSE)) {
+          desktop.browse(new URI(url));
+        } else {
+          new ProcessBuilder("xdg-open", url).start();
+        }
       }
     } catch (IOException e) {
       log.error("Can't open default browser");
