@@ -168,7 +168,7 @@ jobs:
       shell: bash
       id: get-version
     - name: Install Native Host artifact
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: owlplug-host-${{ matrix.platform }}
         path: owlplug-host/src/main/resources
@@ -208,7 +208,7 @@ jobs:
       shell: bash
       id: get-version
     - name: Install Jar artifact
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target
@@ -243,7 +243,7 @@ jobs:
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Jar artifact
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target
@@ -275,7 +275,7 @@ jobs:
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Jar artifact
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target
@@ -308,7 +308,7 @@ jobs:
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
     - name: Install Jar artifact
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: owlplug-client-jar-${{ matrix.platform }}
         path: owlplug-client/target
@@ -336,12 +336,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Retrieve installer artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: ./packages
           pattern: owlplug-installer-*
       - name: Retrieve appimage artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: ./packages
           pattern: owlplug-appimage-*
