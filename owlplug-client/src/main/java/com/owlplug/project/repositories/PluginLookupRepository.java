@@ -19,7 +19,11 @@
 package com.owlplug.project.repositories;
 
 import com.owlplug.project.model.DawPluginLookup;
+import com.owlplug.project.model.LookupResult;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PluginLookupRepository extends CrudRepository<DawPluginLookup, Long> {
+
+  long countByResult(LookupResult result);
+
 }
