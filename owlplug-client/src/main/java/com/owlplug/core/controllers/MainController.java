@@ -110,6 +110,7 @@ public class MainController extends BaseController {
   @FXML
   private Button downloadUpdateButton;
 
+  public static int HOME_TAB_INDEX = 0;
   public static int PLUGINS_TAB_INDEX = 1;
   public static int EXPLORE_TAB_INDEX = 2;
   public static int PROJECTS_TAB_INDEX = 3;

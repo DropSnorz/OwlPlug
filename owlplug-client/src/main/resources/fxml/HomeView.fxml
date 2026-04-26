@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="no-padding"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.owlplug.core.controllers.HomeController">
+    <VBox spacing="20.0">
+        <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+        </padding>
+
+        <!-- Header -->
+        <VBox spacing="4.0">
+            <Label styleClass="heading-title" text="Dashboard"/>
+            <Label styleClass="label-disabled" text="Overview of your plugins and projects"/>
+        </VBox>
+
+        <!-- Quick Actions -->
+        <VBox spacing="12.0" styleClass="pane-card">
+            <Label styleClass="dashboard-section-title" text="Quick Actions"/>
+            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@../icons/search-white-32.png"/>
+                </ImageView>
+                <TextField fx:id="pluginSearchField" promptText="Search plugins and press Enter..." HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <HBox spacing="10.0">
+                <Button fx:id="scanPluginsButton" text="Scan Plugins">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/refresh-white-16.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="exploreButton" text="Explore Store">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/earth-white-32.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="syncProjectsButton" text="Sync Projects">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/refresh-white-16.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="settingsButton" text="Settings">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/gear-white-32.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+        </VBox>
+
+        <!-- Setup Suggestions (conditionally shown) -->
+        <VBox fx:id="setupPane" spacing="16.0" styleClass="pane-card">
+            <Label styleClass="dashboard-section-title" text="Get Started"/>
+
+            <!-- Shown when no plugin directory is configured -->
+            <VBox fx:id="noPluginDirectorySuggestion" spacing="6.0">
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <ImageView fitHeight="14.0" fitWidth="14.0" preserveRatio="true">
+                        <Image url="@../icons/error-red-16.png"/>
+                    </ImageView>
+                    <Label styleClass="label-emphase" text="No plugin directories configured"/>
+                </HBox>
+                <Label styleClass="label-disabled"
+                       text="Enable at least one plugin format and set a directory in Settings to start scanning."/>
+                <Button fx:id="setupPluginDirButton" text="Open Settings">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/gear-white-32.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+
+            <!-- Shown when directories are configured but no scan has been run -->
+            <VBox fx:id="noPluginSuggestion" spacing="6.0">
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <ImageView fitHeight="14.0" fitWidth="14.0" preserveRatio="true">
+                        <Image url="@../icons/foldersearch-grey-16.png"/>
+                    </ImageView>
+                    <Label styleClass="label-emphase" text="No plugins scanned yet"/>
+                </HBox>
+                <Label styleClass="label-disabled"
+                       text="Plugin directories are configured. Run a scan to discover your installed plugins."/>
+                <Button fx:id="scanSuggestionButton" text="Scan Plugins Now">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/refresh-white-16.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+
+            <!-- Shown when no projects are found -->
+            <VBox fx:id="noProjectSuggestion" spacing="6.0">
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <ImageView fitHeight="14.0" fitWidth="14.0" preserveRatio="true">
+                        <Image url="@../icons/folder-grey-16.png"/>
+                    </ImageView>
+                    <Label styleClass="label-emphase" text="No projects found"/>
+                </HBox>
+                <Label styleClass="label-disabled"
+                       text="Configure a project directory to track your DAW projects and their plugin dependencies."/>
+                <Button fx:id="setupProjectDirButton" text="Configure Project Directory">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/folder-grey-16.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </VBox>
+        </VBox>
+
+        <!-- Stats Row -->
+        <HBox spacing="12.0">
+
+            <!-- Total Plugins tile (clickable) -->
+            <VBox fx:id="pluginTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                </padding>
+                <Label fx:id="pluginCountLabel" styleClass="dashboard-tile-value" text="0"/>
+                <Label styleClass="dashboard-tile-label" text="Total Plugins"/>
+            </VBox>
+
+            <!-- VST2 tile -->
+            <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <padding>
+                    <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../icons/vst2-blue-16.png"/>
+                    </ImageView>
+                    <Label styleClass="dashboard-tile-label" text="VST2"/>
+                </HBox>
+                <Label fx:id="vst2CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+            </VBox>
+
+            <!-- VST3 tile -->
+            <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <padding>
+                    <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../icons/vst3-green-16.png"/>
+                    </ImageView>
+                    <Label styleClass="dashboard-tile-label" text="VST3"/>
+                </HBox>
+                <Label fx:id="vst3CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+            </VBox>
+
+            <!-- AU tile -->
+            <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <padding>
+                    <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../icons/au-purple-16.png"/>
+                    </ImageView>
+                    <Label styleClass="dashboard-tile-label" text="AU"/>
+                </HBox>
+                <Label fx:id="auCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+            </VBox>
+
+            <!-- LV2 tile -->
+            <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <padding>
+                    <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@../icons/lv2-orange-16.png"/>
+                    </ImageView>
+                    <Label styleClass="dashboard-tile-label" text="LV2"/>
+                </HBox>
+                <Label fx:id="lv2CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+            </VBox>
+
+            <!-- Disabled tile -->
+            <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <padding>
+                    <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                </padding>
+                <Label styleClass="dashboard-tile-label" text="Disabled"/>
+                <Label fx:id="disabledCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+            </VBox>
+
+        </HBox>
+
+        <HBox spacing="12.0">
+
+            <!-- Total Projects tile (clickable) -->
+            <VBox fx:id="projectTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                </padding>
+                <Label fx:id="projectCountLabel" styleClass="dashboard-tile-value" text="0"/>
+                <Label styleClass="dashboard-tile-label" text="Total Projects"/>
+            </VBox>
+
+            <!-- Unresolved Project Plugins tile -->
+            <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <padding>
+                    <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                    <ImageView fitHeight="13.0" fitWidth="13.0" preserveRatio="true">
+                        <Image url="@../icons/cross-red-16.png"/>
+                    </ImageView>
+                    <Label styleClass="dashboard-tile-label" text="Unresolved Project Plugins"/>
+                </HBox>
+                <Label fx:id="unresolvedPluginCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+            </VBox>
+
+        </HBox>
+
+        <HBox spacing="12.0">
+            <!-- Top Plugin Directories by Size -->
+            <VBox fx:id="fileSizeSection" spacing="10.0" styleClass="pane-card" HBox.hgrow="ALWAYS">
+                <Label styleClass="dashboard-section-title" text="Top Plugin Directories by Size"/>
+                <VBox fx:id="fileSizeChartContainer" prefHeight="160.0"/>
+                <Label fx:id="fileSizeEmptyLabel" styleClass="label-disabled"
+                       text="No file statistics available. Run a plugin scan with file stat sync enabled in Options."/>
+            </VBox>
+
+            <VBox spacing="12">
+                <!-- Number of plugins directories -->
+                <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/folder-grey-16.png"/>
+                        </ImageView>
+                        <Label styleClass="dashboard-tile-label" text="Plugin Directories"/>
+                    </HBox>
+                    <Label fx:id="pluginDirectoryCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+                <!-- Number of plugins directories -->
+                <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="14.0" left="18.0" right="18.0" top="14.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/folder-grey-16.png"/>
+                        </ImageView>
+                        <Label styleClass="dashboard-tile-label" text="Project Directories"/>
+                    </HBox>
+                    <Label fx:id="projectDirectoryCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+            </VBox>
+        </HBox>
+
+    </VBox>
+</ScrollPane>
