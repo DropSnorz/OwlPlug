@@ -23,11 +23,11 @@ import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import org.controlsfx.control.ToggleSwitch;
 
 public class RecoveredPluginView extends HBox {
   
@@ -42,8 +42,7 @@ public class RecoveredPluginView extends HBox {
     super();
     
     this.setAlignment(Pos.BASELINE_LEFT);
-    this.getStyleClass().add("recovered-plugin-view");
-        
+
     Label label = new Label(plugin.getName());
     ImageView imageView = new ImageView();
     imageView.setImage(applicationDefaults.getPluginFormatIcon(plugin.getFormat()));
@@ -54,17 +53,17 @@ public class RecoveredPluginView extends HBox {
     Pane transparentPane = new Pane();
     HBox.setHgrow(transparentPane, Priority.ALWAYS);
     this.getChildren().add(transparentPane);
-    
-    ToggleButton toggleButton = new ToggleButton();
-    toggleButton.setText("Native Discovery");
-    toggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
-    
-    toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+
+    ToggleSwitch toggleSwitch = new ToggleSwitch("Native Discovery");
+    toggleSwitch.setScaleX(0.8);
+    toggleSwitch.setScaleY(0.8);
+    toggleSwitch.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
+    toggleSwitch.selectedProperty().addListener((observable, oldValue, newValue) -> {
       plugin.getFootprint().setNativeDiscoveryEnabled(newValue);
       pluginService.save(plugin.getFootprint());
     });
     
-    this.getChildren().add(toggleButton);
+    this.getChildren().add(toggleSwitch);
     
   }
 

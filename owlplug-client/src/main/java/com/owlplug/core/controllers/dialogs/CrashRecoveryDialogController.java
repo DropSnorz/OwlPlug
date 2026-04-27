@@ -37,6 +37,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -73,13 +74,12 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
   @FXML 
   protected Hyperlink issuesLink;
   @FXML
-  protected VBox pluginListContainer;
-  @FXML
   protected Pane incompleteSyncPane;
-  
+  @FXML
+  protected ListView<RecoveredPluginView> pluginListContainer;
   
   CrashRecoveryDialogController() {
-    super(600, 550);
+    super(600, 650);
     this.setOverlayClose(false);
   }
 
@@ -135,7 +135,7 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
       for (Plugin plugin : incompleteSyncPlugins) {
         log.info("Last scan for plugin {} is incomplete", plugin.getName());
         RecoveredPluginView pluginView = new RecoveredPluginView(plugin, pluginService, this.getApplicationDefaults());
-        pluginListContainer.getChildren().add(pluginView);
+        pluginListContainer.getItems().add(pluginView);
 
         this.getTelemetryService().event("/Error/PluginScanIncomplete", p -> {
           p.put("nativeDiscoveryLoader", this.getPreferences().get(
@@ -154,7 +154,7 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
 
     DialogLayout layout = new DialogLayout();
 
-    Label title = new Label("Ooh, something wrong happens :(");
+    Label title = new Label("Ooh, something wrong happened :(");
     title.getStyleClass().add("heading-3");
     layout.setHeading(title);
     layout.setBody(lazyViewRegistry.get(LazyViewRegistry.CRASH_RECOVERY_VIEW));
