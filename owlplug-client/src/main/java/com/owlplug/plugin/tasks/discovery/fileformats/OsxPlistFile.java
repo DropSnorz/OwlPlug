@@ -35,7 +35,7 @@ public class OsxPlistFile {
   
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private File plist;
+  private final File plist;
 
   public OsxPlistFile(File plist) {
     super();
@@ -44,11 +44,27 @@ public class OsxPlistFile {
 
 
   public void bindProperties(Plugin plugin) {
-    
     try {
-      NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(plist);
+      // Ensure plist class constructor input is not null
+      if (plist == null) {
+        log.error("Plist file/input is null, cannot bind properties.");
+        return;
+      }
+
+      NSObject rootObject = PropertyListParser.parse(plist);
+
+      // Ensure parsed result is a NSDictionary
+      // Some execution shown that it could be null
+      if (!(rootObject instanceof NSDictionary)) {
+        log.error("Plist root is not a NSDictionary, actual type: {}",
+                rootObject == null ? "null" : rootObject.getClass().getName());
+        return;
+      }
+
+      NSDictionary rootDict = (NSDictionary) rootObject;
+
       NSObject nsBundleId = rootDict.objectForKey("CFBundleIdentifier");
-      NSObject nsBundleVersion = rootDict.objectForKey("CFBun" + "dleShortVersionString");
+      NSObject nsBundleVersion = rootDict.objectForKey("CFBundleShortVersionString");
 
       if (nsBundleVersion == null) {
         nsBundleVersion = rootDict.objectForKey("CFBundleVersion");
@@ -59,9 +75,10 @@ public class OsxPlistFile {
       if (nsBundleVersion != null) {
         plugin.setVersion(nsBundleVersion.toString());
       }
-    } catch (IOException | PropertyListFormatException | ParseException | ParserConfigurationException
-        | SAXException e) {
-      log.error("Error while binding plugin  properties from Plist file", e);
+
+    } catch (IOException | PropertyListFormatException | ParseException
+             | ParserConfigurationException | SAXException e) {
+      log.error("Error while binding plugin properties from Plist file", e);
     }
   }
 }
