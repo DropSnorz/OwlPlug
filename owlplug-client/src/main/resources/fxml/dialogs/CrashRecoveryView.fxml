@@ -6,39 +6,40 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
+<VBox prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController">
    <HBox alignment="CENTER_LEFT" spacing="10.0">
       <ImageView fitHeight="150.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-         <Image url="@../../media/owlplug-owl-crash.png"/>
+         <Image url="@../../media/owlplug-owl-crash.png" />
       </ImageView>
       <VBox>
-         <Label text="It's look like OwlPlug has not been terminated properly." wrapText="true"/>
-         <Label text="If a crash occurs during plugin sync, it's likely caused by a plugin that fails to load properly. Similar to other DAWs, a corrupted plugin can potentially crash the host application."
-                wrapText="true"/>
+         <Label text="It's look like OwlPlug has not been terminated properly." wrapText="true" />
+         <Label text="If a crash occurs during plugin sync, it's likely caused by a plugin that fails to load properly. Similar to other DAWs, a corrupted plugin can potentially crash the host application." wrapText="true" />
       </VBox>
    </HBox>
-   <VBox fx:id="incompleteSyncPane" spacing="5.0">
-      <Label text="Following plugins have not been analyzed completely. For each plugin, you can turn off &quot;Native Discovery&quot; to skip plugin loading during scanning: "/>
-      <VBox fx:id="pluginListContainer"/>
+   <VBox VBox.vgrow="ALWAYS">
+      <children>
+         <Label text="Following plugins have not been analyzed completely." wrapText="true" />
+         <Label layoutX="10.0" layoutY="10.0" text="For each plugin, you can turn off &quot;Native Discovery&quot; to skip plugin loading during scanning: " wrapText="true" />
+      </children>
    </VBox>
+   <ListView fx:id="pluginListContainer" VBox.vgrow="SOMETIMES" />
+   <VBox fx:id="incompleteSyncPane" spacing="5.0" VBox.vgrow="ALWAYS" />
    <VBox spacing="5.0" VBox.vgrow="SOMETIMES">
       <VBox.margin>
-         <Insets bottom="10.0" top="10.0"/>
+         <Insets bottom="10.0" top="10.0" />
       </VBox.margin>
-      <Label text="You can try to change the scanner implementation or disable native discovery globally in Options:"
-             wrapText="true"/>
+      <Label text="You can try to change the scanner implementation or disable native discovery globally in Options:" wrapText="true" />
       <HBox spacing="5.0">
-         <CheckBox fx:id="nativeDiscoveryCheckbox" text="Global Native plugin discovery using"/>
-         <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="SOMETIMES"/>
+         <CheckBox fx:id="nativeDiscoveryCheckbox" text="Global Native plugin discovery using" />
+         <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="SOMETIMES" />
       </HBox>
    </VBox>
    <HBox VBox.vgrow="SOMETIMES">
       <TextFlow>
-         <Label text="For more information about scanning plugins, check the " wrapText="true"/>
-         <Hyperlink fx:id="troubleshootingLink" text="OwlPlug documentation"/>
-         <Label text="If the problem persist and seems related to OwlPlug," wrapText="true"/>
-         <Hyperlink fx:id="issuesLink" text="report the issue."/>
+         <Label text="For more information about scanning plugins, check the " wrapText="true" />
+         <Hyperlink fx:id="troubleshootingLink" text="OwlPlug documentation" />
+         <Label text="If the problem persist and seems related to OwlPlug," wrapText="true" />
+         <Hyperlink fx:id="issuesLink" text="report the issue." />
       </TextFlow>
    </HBox>
    <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
@@ -49,6 +50,6 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="closeButton" text="Close this popup"/>
+      <Button fx:id="closeButton" text="Close this popup" />
    </HBox>
 </VBox>
