@@ -22,7 +22,8 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.ui.FilterableTreeItem;
-import com.owlplug.project.components.ProjectTaskFactory;
+import com.owlplug.core.utils.FX;
+import com.owlplug.project.events.ProjectSyncEvent;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.services.ProjectService;
 import com.owlplug.project.ui.ProjectTreeCell;
@@ -37,6 +38,7 @@ import javafx.scene.control.TreeView;
 import javafx.util.Callback;
 import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -44,8 +46,6 @@ public class ProjectsController extends BaseController {
 
   @Autowired
   private ProjectService projectService;
-  @Autowired
-  private ProjectTaskFactory projectTaskFactory;
   @Autowired
   private ListDirectoryDialogController listDirectoryDialogController;
   @Autowired
@@ -69,10 +69,6 @@ public class ProjectsController extends BaseController {
     syncProjectButton.setOnAction(e -> {
       this.getTelemetryService().event("/Projects/Scan");
       projectService.syncProjects();
-    });
-
-    projectTaskFactory.addSyncProjectsListener(() -> {
-      refresh();
     });
 
     projectTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
@@ -124,5 +120,10 @@ public class ProjectsController extends BaseController {
 
     projectTreeNode.setExpanded(true);
 
+  }
+
+  @EventListener
+  private void handle(ProjectSyncEvent event) {
+    FX.run(this::refresh);
   }
 }

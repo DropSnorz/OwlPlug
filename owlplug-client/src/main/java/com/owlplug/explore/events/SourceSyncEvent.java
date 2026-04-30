@@ -15,24 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
-package com.owlplug.core.components;
 
-import com.owlplug.core.tasks.AbstractTask;
-import com.owlplug.core.tasks.TaskExecutionContext;
-import org.springframework.beans.factory.annotation.Autowired;
+package com.owlplug.explore.events;
 
-public class BaseTaskFactory {
-  
-  @Autowired
-  private TaskRunner taskRunner;
-  
-  public TaskExecutionContext create(AbstractTask task) {
-    return buildContext(task);
-  }
-  
-  protected TaskExecutionContext buildContext(AbstractTask task) {
-    return new TaskExecutionContext(task, taskRunner);
-  }
-
+/**
+ * Remote source sync task has completed successfully.
+ */
+public record SourceSyncEvent() {
 }

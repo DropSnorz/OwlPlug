@@ -25,6 +25,7 @@ import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
 import com.owlplug.plugin.events.PluginRefreshEvent;
+import com.owlplug.plugin.events.PluginScanEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
@@ -194,8 +195,6 @@ public class PluginsController extends BaseController {
       pluginService.scanPlugins(false);
     });
 
-    taskFactory.addScanPluginsListener(this::displayPlugins);
-
     exportButton.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Export");
       exportDialogController.show();
@@ -232,6 +231,11 @@ public class PluginsController extends BaseController {
   public void toggleInfoPaneDisplay() {
     pluginInfoPane.setManaged(!pluginInfoPane.isManaged());
     pluginInfoPane.setVisible(!pluginInfoPane.isVisible());
+  }
+
+  @EventListener
+  private void handle(PluginScanEvent event) {
+    FX.run(this::displayPlugins);
   }
 
   @EventListener
