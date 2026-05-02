@@ -30,6 +30,7 @@ import com.owlplug.core.utils.FX;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
 import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
+import com.owlplug.explore.events.SourceSyncEvent;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
@@ -229,7 +230,6 @@ public class ExploreController extends BaseController {
     });
     lazyLoadBar.setVisible(false);
 
-    exploreTaskFactory.addSyncSourcesListener(() -> performPackageSearch());
     performPackageSearch();
 
     masonryPane.setHSpacing(5);
@@ -399,6 +399,11 @@ public class ExploreController extends BaseController {
   public void requestLayout() {
     masonryPane.requestLayout();
     scrollPane.requestLayout();
+  }
+
+  @EventListener
+  private void handle(SourceSyncEvent event) {
+    FX.run(this::performPackageSearch);
   }
 
   @EventListener

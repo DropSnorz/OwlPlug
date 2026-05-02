@@ -21,9 +21,9 @@ package com.owlplug.plugin.components;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.BaseTaskFactory;
-import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.plugin.events.PluginScanEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.FileStatRepository;
 import com.owlplug.plugin.repositories.PluginFootprintRepository;
@@ -36,9 +36,9 @@ import com.owlplug.plugin.tasks.PluginRemoveTask;
 import com.owlplug.plugin.tasks.PluginScanTask;
 import com.owlplug.plugin.tasks.discovery.PluginScanTaskParameters;
 import com.owlplug.project.components.ProjectTaskFactory;
-import java.util.ArrayList;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -64,9 +64,8 @@ public class PluginTaskFactory extends BaseTaskFactory {
   private ProjectTaskFactory projectTaskFactory;
   @Autowired
   private FileStatRepository fileStatRepository;
-
-
-  private ArrayList<SimpleEventListener> scanPluginsListeners = new ArrayList<>();
+  @Autowired
+  private ApplicationEventPublisher publisher;
 
   /**
    * Creates a {@link PluginScanTask} and binds listeners to the success callback.
@@ -122,7 +121,7 @@ public class PluginTaskFactory extends BaseTaskFactory {
         nativeHostService);
     
     scanTask.setOnSucceeded(scanEvent -> {
-      notifyListeners(scanPluginsListeners);
+      publisher.publishEvent(new PluginScanEvent());
       TaskExecutionContext lookupTask = projectTaskFactory.createLookupTask();
 
       if (prefs.getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true)
@@ -162,14 +161,6 @@ public class PluginTaskFactory extends BaseTaskFactory {
     PluginRemoveTask task = new PluginRemoveTask(plugin, pluginRepository);
     
     return create(task);
-  }
-
-  public void addScanPluginsListener(SimpleEventListener eventListener) {
-    scanPluginsListeners.add(eventListener);
-  }
-
-  public void removeScanPluginsListener(SimpleEventListener eventListener) {
-    scanPluginsListeners.remove(eventListener);
   }
 
 }

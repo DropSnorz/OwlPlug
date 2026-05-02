@@ -20,9 +20,9 @@ package com.owlplug.explore.components;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.BaseTaskFactory;
-import com.owlplug.core.tasks.SimpleEventListener;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.explore.events.SourceSyncEvent;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
@@ -30,8 +30,8 @@ import com.owlplug.explore.tasks.BundleInstallTask;
 import com.owlplug.explore.tasks.SourceSyncTask;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import java.io.File;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -45,20 +45,20 @@ public class ExploreTaskFactory extends BaseTaskFactory {
   private RemoteSourceRepository remoteSourceRepository;
   @Autowired
   private RemotePackageRepository remotePackageRepository;
-
-  private ArrayList<SimpleEventListener> syncSourcesListeners = new ArrayList<>();
+  @Autowired
+  private ApplicationEventPublisher publisher;
 
 
   /**
    * Creates a {@link SourceSyncTask} and binds listeners to the success callback.
-   * 
+   *
    * @return
    */
   public TaskExecutionContext createSourceSyncTask() {
 
     SourceSyncTask task = new SourceSyncTask(remoteSourceRepository, remotePackageRepository);
     task.setOnSucceeded(e -> {
-      notifyListeners(syncSourcesListeners);
+      publisher.publishEvent(new SourceSyncEvent());
     });
     return create(task);
   }
@@ -77,13 +77,5 @@ public class ExploreTaskFactory extends BaseTaskFactory {
   }
 
 
-
-  public void addSyncSourcesListener(SimpleEventListener eventListener) {
-    syncSourcesListeners.add(eventListener);
-  }
-
-  public void removeSyncSourcesListener(SimpleEventListener eventListener) {
-    syncSourcesListeners.remove(eventListener);
-  }
 
 }
