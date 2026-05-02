@@ -223,6 +223,10 @@ public class PluginsController extends BaseController {
     tableController.refresh();
   }
 
+  public void setSearch(String query) {
+    searchTextField.setText(query);
+  }
+
   public void setInfoPaneDisplay(boolean display) {
     pluginInfoPane.setManaged(display);
     pluginInfoPane.setVisible(display);

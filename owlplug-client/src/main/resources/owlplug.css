@@ -404,33 +404,57 @@ ProgressIndicator {
 .default-color0.chart-pie {
     -fx-pie-color: #116A7B;
 }
+.default-color0.chart-bar {
+    -fx-bar-fill: #116A7B;
+}
 
 .default-color1.chart-pie {
     -fx-pie-color: #85586F;
+}
+.default-color1.chart-bar {
+    -fx-bar-fill: #85586F;
 }
 
 .default-color2.chart-pie {
     -fx-pie-color: #7F8B52;
 }
+.default-color2.chart-bar {
+    -fx-bar-fill: #7F8B52;
+}
 
 .default-color3.chart-pie {
     -fx-pie-color: #FFDBA4;
+}
+.default-color3.chart-bar {
+    -fx-bar-fill: #FFDBA4;
 }
 
 .default-color4.chart-pie {
     -fx-pie-color: #47A992;
 }
+.default-color4.chart-bar {
+    -fx-bar-fill: #47A992;
+}
 
 .default-color5.chart-pie {
     -fx-pie-color: #C84B31;
+}
+.default-color5.chart-bar {
+    -fx-bar-fill: #C84B31;
 }
 
 .default-color6.chart-pie {
     -fx-pie-color: #BCCC9A;
 }
+.default-color6.chart-bar {
+    -fx-bar-fill: #BCCC9A;
+}
 
 .default-color7.chart-pie {
     -fx-pie-color: #968C83;
+}
+.default-color7.chart-bar {
+    -fx-bar-fill: #968C83;
 }
 
 .chart-pie {
@@ -465,6 +489,86 @@ ProgressIndicator {
 
 .scroll-pane>.viewport {
     -fx-background-color: transparent;
+}
+
+/****************************************************************
+ *
+ * Home Dashboard
+ *
+ * **************************************************************/
+
+.dashboard-tile {
+    -fx-background-color: card-pane-color;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.55), 8, 0, 0, 2);
+    -fx-spacing: 4;
+    -fx-min-width: 90px;
+}
+
+.dashboard-tile-clickable {
+    -fx-cursor: hand;
+}
+
+.dashboard-tile-clickable:hover {
+    -fx-background-color: rgb(60, 60, 60);
+}
+
+.dashboard-tile-value {
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-text-fill: text-color;
+}
+
+.dashboard-tile-value-small {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: text-color;
+}
+
+.dashboard-tile-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: text-emphase-color;
+}
+
+.dashboard-section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: text-emphase-color;
+}
+
+.dashboard-bar-chart {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.dashboard-bar-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.dashboard-bar-chart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.dashboard-bar-chart .chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.dashboard-bar-chart .axis {
+    -fx-tick-label-fill: text-emphase-color;
+}
+
+.dashboard-bar-chart .axis-label {
+    -fx-text-fill: text-emphase-color;
+}
+
+.dashboard-bar-chart .axis-line {
+    visibility: hidden;
+}
+
+.dashboard-bar-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
 }
 
 .no-padding {

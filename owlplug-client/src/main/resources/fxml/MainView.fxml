@@ -26,7 +26,7 @@
             </styleClass>
             <TabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;"
                      HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
-                <Tab disable="true" text="OwlPlug" closable="false"/>
+                <Tab text="Home" closable="false"/>
                 <Tab text="Plugins" closable="false"/>
                 <Tab text="Explore" closable="false"/>
                 <Tab text="Projects" closable="false"/>
@@ -55,9 +55,8 @@
                         <VBox fx:id="contentPanePlaceholder">
                             <TabPane fx:id="tabPaneContent" prefHeight="100.0" prefWidth="441.0"
                                      styleClass="no-header-tab-pane" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-                                <Tab closable="false" disable="true" text="OwlPlug">
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                prefWidth="200.0"/>
+                                <Tab closable="false" text="Home">
+                                    <fx:include fx:id="homeView" source="HomeView.fxml"/>
                                 </Tab>
                                 <Tab closable="false" text="Plugins">
                                     <fx:include fx:id="pluginView" source="plugins/PluginsView.fxml"/>
