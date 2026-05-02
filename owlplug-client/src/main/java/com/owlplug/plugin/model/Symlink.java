@@ -18,6 +18,7 @@
  
 package com.owlplug.plugin.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,7 +33,9 @@ public class Symlink implements IDirectory {
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
   protected String name;
+  @Column(length = 512)
   protected String path;
+  @Column(length = 512)
   protected String targetPath;
   protected boolean enabled;
   protected boolean stale;
