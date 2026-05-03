@@ -19,6 +19,7 @@
 package com.owlplug.plugin.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,12 +45,14 @@ public class FileStat {
 
   private String name;
 
+  @Column(length = 512)
   private String path;
 
   @ManyToOne
   @JoinColumn(name = "parent_id")
   private FileStat parent;
 
+  @Column(length = 512)
   private String parentPath;
   private long length;
 
