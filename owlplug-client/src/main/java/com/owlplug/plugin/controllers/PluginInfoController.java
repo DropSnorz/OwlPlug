@@ -37,6 +37,7 @@ import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -140,8 +141,7 @@ public class PluginInfoController extends BaseController {
     });
 
     enableButton.setOnAction(e -> {
-      pluginService.enablePlugin(plugin);
-      setPlugin(plugin);
+      CompletableFuture.runAsync(() -> pluginService.enablePlugin(plugin));
     });
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
@@ -149,7 +149,7 @@ public class PluginInfoController extends BaseController {
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       if (plugin != null && plugin.getFootprint() != null) {
         plugin.getFootprint().setNativeDiscoveryEnabled(newValue);
-        pluginService.save(plugin.getFootprint());
+        CompletableFuture.runAsync(() -> pluginService.save(plugin.getFootprint()));
       }
     });
 

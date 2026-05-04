@@ -175,19 +175,15 @@ public class DirectoryInfoController extends BaseController {
       path = path.substring(0, path.length() - 1);
     }
 
+    directoryPluginsTab.setText("Plugins (" + pluginDirectory.getPluginList().size() + ")");
+
     Optional<FileStat> directoryStat = fileStatRepository.findByPath(path);
     directoryStat.ifPresent(fileStat -> directoryMetricsTab.setText(
-            FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
-
-    directoryPluginsTab.setText("Plugins (" + pluginDirectory.getPluginList().size() + ")");
+        FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
 
     List<FileStat> fileStats = fileStatRepository.findByParentPathOrderByLengthDesc(path);
     directoryFilesTab.setText("Files (" + fileStats.size() + ")");
-
-    ObservableList<FileStat> obsStats = FXCollections.observableArrayList();
-    obsStats.addAll(fileStats);
-    directoryFilesTableView.setItems(obsStats);
-
+    directoryFilesTableView.setItems(FXCollections.observableArrayList(fileStats));
     pieChart.setData(createStatChartBuckets(fileStats));
     pieChart.layout();
 
