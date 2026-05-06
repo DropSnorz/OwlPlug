@@ -68,19 +68,19 @@ public class NodeInfoController extends BaseController {
     componentInfoView.setVisible(false);
 
     if (node instanceof Plugin) {
-      pluginInfoController.setPlugin((Plugin) node);
+      pluginInfoController.pluginProperty().set((Plugin) node);
       pluginInfoView.setVisible(true);
     }
     if (node instanceof PluginDirectory) {
-      directoryInfoController.setPluginDirectory((PluginDirectory) node);
+      directoryInfoController.pluginDirectoryProperty().set((PluginDirectory) node);
       directoryInfoView.setVisible(true);
     }
     if (node instanceof Symlink) {
-      symlinkInfoController.setSymlink((Symlink) node);
+      symlinkInfoController.symlinkProperty().set((Symlink) node);
       symlinkInfoView.setVisible(true);
     }
     if (node instanceof PluginComponent) {
-      componentInfoController.setComponent((PluginComponent) node);
+      componentInfoController.componentProperty().set((PluginComponent) node);
       componentInfoView.setVisible(true);
     }
   }

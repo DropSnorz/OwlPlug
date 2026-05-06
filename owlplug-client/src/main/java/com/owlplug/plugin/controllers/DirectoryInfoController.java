@@ -35,6 +35,8 @@ import com.owlplug.plugin.ui.PluginListCellFactory;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -88,15 +90,17 @@ public class DirectoryInfoController extends BaseController {
   private TableColumn<FileStat, String> fileSizeColumn;
   private PieChart pieChart;
 
-  private PluginDirectory pluginDirectory;
+  private final ObjectProperty<PluginDirectory> pluginDirectoryProperty = new SimpleObjectProperty<>();
 
   /**
    * FXML Initialize.
    */
   public void initialize() {
 
+    pluginDirectoryProperty.addListener(e -> refresh());
+
     openDirectoryButton.setOnAction(e -> {
-      PlatformUtils.openFromDesktop(pluginDirectory.getPath());
+      PlatformUtils.openFromDesktop(pluginDirectoryProperty.get().getPath());
     });
 
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
@@ -104,6 +108,8 @@ public class DirectoryInfoController extends BaseController {
     deleteDirectoryButton.setOnAction(e -> {
       Dialog dialog = this.getDialogManager().newDialog();
       DialogLayout layout = new DialogLayout();
+
+      PluginDirectory pluginDirectory = pluginDirectoryProperty.get();
 
       layout.setHeading(new Label("Remove directory"));
       layout.setBody(new Label("Do you really want to remove " + pluginDirectory.getName()
@@ -160,8 +166,13 @@ public class DirectoryInfoController extends BaseController {
 
   }
 
-  public void setPluginDirectory(PluginDirectory pluginDirectory) {
-    this.pluginDirectory = pluginDirectory;
+  /**
+   * Refresh directory info.
+   * Most database accesses are performed in this method and expected to be run on
+   * UI thread to work around a bug with charts display with concurrent updates.
+   */
+  public void refresh() {
+    PluginDirectory pluginDirectory = pluginDirectoryProperty.get();
     directoryPathTextField.setText(pluginDirectory.getPath());
     directoryNameLabel.setText(pluginDirectory.getName());
     pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());
@@ -175,19 +186,15 @@ public class DirectoryInfoController extends BaseController {
       path = path.substring(0, path.length() - 1);
     }
 
+    directoryPluginsTab.setText("Plugins (" + pluginDirectory.getPluginList().size() + ")");
+
     Optional<FileStat> directoryStat = fileStatRepository.findByPath(path);
     directoryStat.ifPresent(fileStat -> directoryMetricsTab.setText(
-            FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
-
-    directoryPluginsTab.setText("Plugins (" + pluginDirectory.getPluginList().size() + ")");
+        FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
 
     List<FileStat> fileStats = fileStatRepository.findByParentPathOrderByLengthDesc(path);
     directoryFilesTab.setText("Files (" + fileStats.size() + ")");
-
-    ObservableList<FileStat> obsStats = FXCollections.observableArrayList();
-    obsStats.addAll(fileStats);
-    directoryFilesTableView.setItems(obsStats);
-
+    directoryFilesTableView.setItems(FXCollections.observableArrayList(fileStats));
     pieChart.setData(createStatChartBuckets(fileStats));
     pieChart.layout();
 
@@ -212,6 +219,10 @@ public class DirectoryInfoController extends BaseController {
     }
 
     return chartData;
+  }
+
+  public ObjectProperty<PluginDirectory> pluginDirectoryProperty() {
+    return pluginDirectoryProperty;
   }
 
 

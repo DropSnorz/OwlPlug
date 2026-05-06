@@ -28,6 +28,8 @@ import com.owlplug.plugin.model.Symlink;
 import com.owlplug.plugin.tasks.SymlinkRemoveTask;
 import com.owlplug.plugin.ui.PluginListCellFactory;
 import java.util.Optional;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -55,21 +57,22 @@ public class SymlinkInfoController extends BaseController {
   @FXML
   private Label targetPathLabel;
 
-  private Symlink symlink;
+  private final ObjectProperty<Symlink> symlinkProperty = new SimpleObjectProperty<>();
 
   /**
    * FXML Initialize.
    */
   public void initialize() {
 
+    symlinkProperty.addListener(e -> refresh());
     openLinkButton.setGraphic(new ImageView(this.getApplicationDefaults().symlinkImage));
     openLinkButton.setOnAction(e -> {
-      PlatformUtils.openFromDesktop(symlink.getPath());
+      PlatformUtils.openFromDesktop(symlinkProperty.get().getPath());
     });
     
     openTargetButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openTargetButton.setOnAction(e -> {
-      PlatformUtils.openFromDesktop(symlink.getTargetPath());
+      PlatformUtils.openFromDesktop(symlinkProperty.get().getTargetPath());
     });
 
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
@@ -79,7 +82,7 @@ public class SymlinkInfoController extends BaseController {
       DialogLayout layout = new DialogLayout();
 
       layout.setHeading(new Label("Remove directory"));
-      layout.setBody(new Label("Do you really want to delete link " + symlink.getName()
+      layout.setBody(new Label("Do you really want to delete link " + symlinkProperty.get().getName()
           + " ? Content will NOT be removed from the target folder."));
 
       Button cancelButton = new Button("Cancel");
@@ -91,7 +94,7 @@ public class SymlinkInfoController extends BaseController {
       Button removeButton = new Button("Delete");
       removeButton.setOnAction(removeEvent -> {
         dialog.close();
-        taskFactory.create(new SymlinkRemoveTask(symlink))
+        taskFactory.create(new SymlinkRemoveTask(symlinkProperty.get()))
             .setOnSucceeded(x -> taskFactory.createPluginScanTask().scheduleNow()).schedule();
       });
       removeButton.getStyleClass().add("button-danger");
@@ -102,13 +105,15 @@ public class SymlinkInfoController extends BaseController {
     });
   }
 
-  public void setSymlink(Symlink symlink) {
-    this.symlink = symlink;
+  public void refresh() {
+    Symlink symlink = symlinkProperty.get();
     directoryPathLabel.setText(symlink.getPath());
     pluginDirectoryListView.getItems().setAll(symlink.getPluginList());
     targetPathLabel.setText(Optional.ofNullable(symlink.getTargetPath()).orElse("Unknown"));
-
     openTargetButton.setVisible(symlink.getTargetPath() != null);
   }
 
+  public ObjectProperty<Symlink> symlinkProperty() {
+    return symlinkProperty;
+  }
 }

@@ -168,11 +168,11 @@ public class PluginService extends BaseService {
 
   public PluginState getPluginState(Plugin plugin) {
 
-    if (!plugin.isScanComplete()) {
-      return PluginState.UNSTABLE;
-    }
     if (plugin.isDisabled()) {
       return PluginState.DISABLED;
+    }
+    if (!plugin.isScanComplete()) {
+      return PluginState.UNSTABLE;
     }
     if (plugin.isNativeCompatible()) {
       return PluginState.ACTIVE;

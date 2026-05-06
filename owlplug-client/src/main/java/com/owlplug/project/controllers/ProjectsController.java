@@ -79,7 +79,7 @@ public class ProjectsController extends BaseController {
     projectTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue instanceof TreeItem treeItem
            && treeItem.getValue() instanceof DawProject project) {
-        projectInfoController.setProject(project);
+        projectInfoController.projectProperty().set(project);
       }
     });
 
