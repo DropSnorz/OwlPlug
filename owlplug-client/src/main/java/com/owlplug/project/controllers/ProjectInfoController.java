@@ -29,6 +29,7 @@ import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.LookupResult;
 import java.io.File;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -89,19 +90,21 @@ public class ProjectInfoController extends BaseController {
   @FXML
   private TableColumn<DawPlugin, Plugin> pluginTableLinkColumn;
 
-  private DawProject currentProject = null;
+  private final ObjectProperty<DawProject> projectProperty = new SimpleObjectProperty<>();
 
 
   @FXML
   public void initialize() {
+    projectProperty.addListener(e -> refresh());
     openDirectoryButton.setOnAction(e -> {
       File projectFile = new File(projectPathLabel.getText());
       PlatformUtils.openFromDesktop(projectFile.getParentFile());
     });
 
     projectOpenButton.setOnAction(e -> {
-      if (currentProject != null) {
-        PlatformUtils.openFromDesktop(currentProject.getPath());
+      DawProject project = projectProperty.get();
+      if (project != null) {
+        PlatformUtils.openFromDesktop(project.getPath());
         // Disable to prevent opening the project several times.
         projectOpenButton.setDisable(true);
       }
@@ -188,8 +191,8 @@ public class ProjectInfoController extends BaseController {
 
   }
 
-  public void setProject(DawProject project) {
-    this.currentProject = project;
+  public void refresh() {
+    DawProject project = projectProperty.get();
     projectInfoPane.setVisible(true);
     projectNameLabel.setText(project.getName());
     projectAppLabel.setText(project.getApplication().getName());
@@ -204,6 +207,10 @@ public class ProjectInfoController extends BaseController {
 
     pluginTable.setItems(FXCollections.observableList(project.getPlugins().stream().toList()));
 
+  }
+
+  public ObjectProperty<DawProject> projectProperty() {
+    return projectProperty;
   }
 
 }
