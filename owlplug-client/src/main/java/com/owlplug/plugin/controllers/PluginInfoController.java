@@ -37,6 +37,9 @@ import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -107,8 +110,8 @@ public class PluginInfoController extends BaseController {
   @FXML
   private ToggleSwitch nativeDiscoveryToggleButton;
 
-  private Plugin plugin = null;
-  private ArrayList<String> knownPluginImages = new ArrayList<>();
+  private final ObjectProperty<Plugin> pluginProperty = new SimpleObjectProperty<Plugin>();
+  private final ArrayList<String> knownPluginImages = new ArrayList<>();
 
   /**
    * FXML initialize method.
@@ -116,6 +119,7 @@ public class PluginInfoController extends BaseController {
   @FXML
   public void initialize() {
 
+    pluginProperty.addListener(e -> refresh());
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
 
     openDirectoryButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
@@ -130,7 +134,9 @@ public class PluginInfoController extends BaseController {
 
     });
 
+
     disableButton.setOnAction(e -> {
+      Plugin plugin = pluginProperty.get();
       if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
         this.disableController.setPlugin(plugin);
         this.disableController.show();
@@ -140,28 +146,25 @@ public class PluginInfoController extends BaseController {
     });
 
     enableButton.setOnAction(e -> {
-      pluginService.enablePlugin(plugin);
-      setPlugin(plugin);
+      Plugin plugin = pluginProperty.get();
+      CompletableFuture.runAsync(() -> pluginService.enablePlugin(plugin));
     });
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
 
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      Plugin plugin = pluginProperty.get();
       if (plugin != null && plugin.getFootprint() != null) {
         plugin.getFootprint().setNativeDiscoveryEnabled(newValue);
-        pluginService.save(plugin.getFootprint());
+        CompletableFuture.runAsync(() -> pluginService.save(plugin.getFootprint()));
       }
     });
 
   }
 
-  public void setPlugin(Plugin plugin) {
-    this.plugin = plugin;
-    refresh();
-  }
-
   public void refresh() {
 
+    Plugin plugin = pluginProperty.get();
     if (plugin == null) {
       return;
     }
@@ -202,6 +205,7 @@ public class PluginInfoController extends BaseController {
   }
 
   private void setPluginImage() {
+    Plugin plugin = pluginProperty.get();
     String url = plugin.getScreenshotUrl();
     if (url == null || url.isEmpty()) {
       // Fallback to footprint screenshot URL
@@ -235,6 +239,7 @@ public class PluginInfoController extends BaseController {
   }
   
   private void showUninstallDialog() {
+    Plugin plugin = pluginProperty.get();
     
     Dialog dialog = this.getDialogManager().newDialog();
     DialogLayout layout = new DialogLayout();
@@ -263,9 +268,14 @@ public class PluginInfoController extends BaseController {
     dialog.setContent(layout);
     dialog.show();
   }
+
   @EventListener
   private void handle(PluginRefreshEvent event) {
     FX.run(this::refresh);
   }
 
+  public ObjectProperty<Plugin> pluginProperty() {
+    return pluginProperty;
+  }
 }
+

@@ -21,6 +21,7 @@ package com.owlplug.plugin.ui;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
+import java.util.concurrent.CompletableFuture;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -60,7 +61,7 @@ public class RecoveredPluginView extends HBox {
     toggleSwitch.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
     toggleSwitch.selectedProperty().addListener((observable, oldValue, newValue) -> {
       plugin.getFootprint().setNativeDiscoveryEnabled(newValue);
-      pluginService.save(plugin.getFootprint());
+      CompletableFuture.runAsync(() -> pluginService.save(plugin.getFootprint()));
     });
     
     this.getChildren().add(toggleSwitch);

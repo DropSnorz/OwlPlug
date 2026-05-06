@@ -29,6 +29,7 @@ import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -230,7 +231,7 @@ public class PluginTableController extends BaseController {
     if (plugin.isDisabled()) {
       MenuItem enableItem = new MenuItem("Enable plugin");
       enableItem.setOnAction(e -> {
-        pluginService.enablePlugin(plugin);
+        CompletableFuture.runAsync(() -> pluginService.enablePlugin(plugin));
       });
       menu.getItems().add(enableItem);
     } else {

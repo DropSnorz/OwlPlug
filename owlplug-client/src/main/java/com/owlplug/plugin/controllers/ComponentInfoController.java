@@ -26,6 +26,8 @@ import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.util.ArrayList;
 import java.util.Optional;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
@@ -70,20 +72,22 @@ public class ComponentInfoController extends BaseController {
   private PluginStateView pluginStateView;
   @FXML
   private Label pluginReferenceLabel;
-  private PluginComponent currentComponent = null;
-  private ArrayList<String> knownPluginImages = new ArrayList<>();
+
+  private final ObjectProperty<PluginComponent> componentProperty = new SimpleObjectProperty<>();
+  private final ArrayList<String> knownPluginImages = new ArrayList<>();
 
   /**
    * FXML initialize method.
    */
   @FXML
   public void initialize() {
+    componentProperty.addListener(e -> refresh());
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
 
   }
 
-  public void setComponent(PluginComponent component) {
-    this.currentComponent = component;
+  public void refresh() {
+    PluginComponent component = componentProperty.get();
     pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(component.getPlugin().getFormat()));
     pluginFormatLabel.setText(component.getPlugin().getFormat().getText() + " Plugin Component");
     pluginTitleLabel.setText(component.getName());
@@ -99,7 +103,7 @@ public class ComponentInfoController extends BaseController {
   }
 
   private void setPluginImage() {
-    Plugin currentPlugin = currentComponent.getPlugin();
+    Plugin currentPlugin = componentProperty.get().getPlugin();
 
     String url = currentPlugin.getScreenshotUrl();
     if (url == null || url.isEmpty()) {
@@ -131,6 +135,10 @@ public class ComponentInfoController extends BaseController {
       }
 
     }
+  }
+
+  public ObjectProperty<PluginComponent> componentProperty() {
+    return componentProperty;
   }
 
 }
