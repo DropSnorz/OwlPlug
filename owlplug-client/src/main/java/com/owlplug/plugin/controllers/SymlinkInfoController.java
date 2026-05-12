@@ -21,6 +21,8 @@ package com.owlplug.plugin.controllers;
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.Async;
+import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.model.Plugin;
@@ -58,6 +60,10 @@ public class SymlinkInfoController extends BaseController {
   private Label targetPathLabel;
 
   private final ObjectProperty<Symlink> symlinkProperty = new SimpleObjectProperty<>();
+
+  // One sequence per refresh slot: guarantees only the latest symlink's plugin
+  // list is applied to the UI, even if a previous lazy-load resolves out of order.
+  private final Async.Sequence refreshSequence = new Async.Sequence();
 
   /**
    * FXML Initialize.
@@ -107,10 +113,15 @@ public class SymlinkInfoController extends BaseController {
 
   public void refresh() {
     Symlink symlink = symlinkProperty.get();
+
+    // Simple field reads — in-memory, safe on the FX thread.
     directoryPathLabel.setText(symlink.getPath());
-    pluginDirectoryListView.getItems().setAll(symlink.getPluginList());
     targetPathLabel.setText(Optional.ofNullable(symlink.getTargetPath()).orElse("Unknown"));
     openTargetButton.setVisible(symlink.getTargetPath() != null);
+
+    // getPluginList may trigger a lazy JPA load — offload to a virtual thread.
+    refreshSequence.supply(symlink::getPluginList)
+        .thenAccept(plugins -> FX.run(() -> pluginDirectoryListView.getItems().setAll(plugins)));
   }
 
   public ObjectProperty<Symlink> symlinkProperty() {

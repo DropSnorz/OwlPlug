@@ -22,6 +22,8 @@ import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.controls.DoughnutChart;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.Async;
+import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.StringUtils;
@@ -64,6 +66,11 @@ public class DirectoryInfoController extends BaseController {
   @Autowired
   private FileStatRepository fileStatRepository;
 
+  // One sequence per refresh slot: guarantees that only the result of the
+  // latest refresh() call is applied to the UI, even if an older DB query
+  // resolves later.
+  private final Async.Sequence refreshSequence = new Async.Sequence();
+
   @FXML
   private Label directoryNameLabel;
   @FXML
@@ -89,6 +96,7 @@ public class DirectoryInfoController extends BaseController {
   @FXML
   private TableColumn<FileStat, String> fileSizeColumn;
   private PieChart pieChart;
+
 
   private final ObjectProperty<PluginDirectory> pluginDirectoryProperty = new SimpleObjectProperty<>();
 
@@ -168,37 +176,37 @@ public class DirectoryInfoController extends BaseController {
 
   /**
    * Refresh directory info.
-   * Most database accesses are performed in this method and expected to be run on
-   * UI thread to work around a bug with charts display with concurrent updates.
    */
   public void refresh() {
     PluginDirectory pluginDirectory = pluginDirectoryProperty.get();
+
     directoryPathTextField.setText(pluginDirectory.getPath());
     directoryNameLabel.setText(pluginDirectory.getName());
     pluginDirectoryListView.getItems().setAll(pluginDirectory.getPluginList());
+    directoryPluginsTab.setText("Plugins (" + pluginDirectory.getPluginList().size() + ")");
     directoryMetricsTab.setText("0 KB");
-
-    File file = new File(pluginDirectory.getPath());
-    deleteDirectoryButton.setDisable(!file.canWrite());
+    deleteDirectoryButton.setDisable(!new File(pluginDirectory.getPath()).canWrite());
 
     String path = pluginDirectory.getPath();
     if (path.endsWith("/")) {
       path = path.substring(0, path.length() - 1);
     }
+    final String resolvedPath = path;
 
-    directoryPluginsTab.setText("Plugins (" + pluginDirectory.getPluginList().size() + ")");
+    refreshSequence.supply(() -> new FileStatResults(
+        fileStatRepository.findByPath(resolvedPath),
+        fileStatRepository.findByParentPathOrderByLengthDesc(resolvedPath)
+    )).thenAccept(results -> FX.run(() -> {
+      results.directoryStat().ifPresent(fileStat ->
+          directoryMetricsTab.setText(FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
+      directoryFilesTab.setText("Files (" + results.fileStats().size() + ")");
+      directoryFilesTableView.setItems(FXCollections.observableArrayList(results.fileStats()));
+      pieChart.setData(createStatChartBuckets(results.fileStats()));
 
-    Optional<FileStat> directoryStat = fileStatRepository.findByPath(path);
-    directoryStat.ifPresent(fileStat -> directoryMetricsTab.setText(
-        FileUtils.humanReadableByteCount(fileStat.getLength(), true)));
-
-    List<FileStat> fileStats = fileStatRepository.findByParentPathOrderByLengthDesc(path);
-    directoryFilesTab.setText("Files (" + fileStats.size() + ")");
-    directoryFilesTableView.setItems(FXCollections.observableArrayList(fileStats));
-    pieChart.setData(createStatChartBuckets(fileStats));
-    pieChart.layout();
-
+    }));
   }
+
+  private record FileStatResults(Optional<FileStat> directoryStat, List<FileStat> fileStats) {}
 
   private ObservableList<PieChart.Data> createStatChartBuckets(List<FileStat> fileStats) {
     ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
