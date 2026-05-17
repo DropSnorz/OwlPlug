@@ -23,6 +23,7 @@ import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.plugin.components.PluginTaskFactory;
@@ -31,13 +32,14 @@ import com.owlplug.plugin.events.PluginRefreshEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
+import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.ui.PluginComponentCellFactory;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -113,6 +115,10 @@ public class PluginInfoController extends BaseController {
   private final ObjectProperty<Plugin> pluginProperty = new SimpleObjectProperty<Plugin>();
   private final ArrayList<String> knownPluginImages = new ArrayList<>();
 
+  // One sequence per refresh slot: guarantees only the latest selection's data
+  // reaches the UI, even if a previous DB query resolves out of order.
+  private final Async.Sequence refreshSequence = new Async.Sequence();
+
   /**
    * FXML initialize method.
    */
@@ -147,7 +153,7 @@ public class PluginInfoController extends BaseController {
 
     enableButton.setOnAction(e -> {
       Plugin plugin = pluginProperty.get();
-      CompletableFuture.runAsync(() -> pluginService.enablePlugin(plugin));
+      Async.run(() -> pluginService.enablePlugin(plugin));
     });
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
@@ -156,7 +162,7 @@ public class PluginInfoController extends BaseController {
       Plugin plugin = pluginProperty.get();
       if (plugin != null && plugin.getFootprint() != null) {
         plugin.getFootprint().setNativeDiscoveryEnabled(newValue);
-        CompletableFuture.runAsync(() -> pluginService.save(plugin.getFootprint()));
+        Async.run(() -> pluginService.save(plugin.getFootprint()));
       }
     });
 
@@ -168,6 +174,9 @@ public class PluginInfoController extends BaseController {
     if (plugin == null) {
       return;
     }
+
+    // All reads below come from already-loaded in-memory fields — safe to run
+    // on the FX thread without risk of blocking.
     pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(plugin.getFormat()));
     pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
     pluginTitleLabel.setText(plugin.getName());
@@ -176,11 +185,8 @@ public class PluginInfoController extends BaseController {
     pluginManufacturerLabel.setText(Optional.ofNullable(plugin.getManufacturerName()).orElse("Unknown"));
     pluginIdentifierLabel.setText(Optional.ofNullable(plugin.getUid()).orElse("Unknown"));
     pluginCategoryLabel.setText(Optional.ofNullable(plugin.getCategory()).orElse("Unknown"));
-    pluginStateView.setPluginState(pluginService.getPluginState(plugin));
     pluginPathLabel.setText(plugin.getPath());
-
-    File file = new File(plugin.getPath());
-    this.uninstallButton.setDisable(!file.canWrite());
+    uninstallButton.setDisable(!new File(plugin.getPath()).canWrite());
 
     if (plugin.isDisabled()) {
       enableButton.setManaged(true);
@@ -198,11 +204,22 @@ public class PluginInfoController extends BaseController {
       nativeDiscoveryToggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
     }
 
-    ObservableList<PluginComponent> components = FXCollections.observableList(new ArrayList(plugin.getComponents()));
-    pluginComponentListView.setItems(components);
-
     setPluginImage();
+
+    // getPluginState may hit the database, and getComponents may trigger a
+    // lazy JPA load — offload both to a virtual thread. The sequence ensures
+    // that if the user selects another plugin before this resolves, the
+    // stale result is silently dropped.
+    refreshSequence.supply(() -> new PluginRefreshData(
+        pluginService.getPluginState(plugin),
+        new ArrayList<>(plugin.getComponents())
+    )).thenAccept(data -> FX.run(() -> {
+      pluginStateView.setPluginState(data.state());
+      pluginComponentListView.setItems(FXCollections.observableList(data.components()));
+    }));
   }
+
+  private record PluginRefreshData(PluginState state, List<PluginComponent> components) {}
 
   private void setPluginImage() {
     Plugin plugin = pluginProperty.get();

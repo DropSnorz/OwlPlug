@@ -62,27 +62,41 @@ public class NodeInfoController extends BaseController {
 
   public void setNode(Object node) {
 
-    pluginInfoView.setVisible(false);
-    directoryInfoView.setVisible(false);
-    symlinkInfoView.setVisible(false);
-    componentInfoView.setVisible(false);
-
-    if (node instanceof Plugin) {
-      pluginInfoController.pluginProperty().set((Plugin) node);
-      pluginInfoView.setVisible(true);
-    }
-    if (node instanceof PluginDirectory) {
-      directoryInfoController.pluginDirectoryProperty().set((PluginDirectory) node);
-      directoryInfoView.setVisible(true);
-    }
-    if (node instanceof Symlink) {
-      symlinkInfoController.symlinkProperty().set((Symlink) node);
-      symlinkInfoView.setVisible(true);
-    }
-    if (node instanceof PluginComponent) {
-      componentInfoController.componentProperty().set((PluginComponent) node);
-      componentInfoView.setVisible(true);
+    switch (node) {
+      case Plugin plugin -> {
+        pluginInfoController.pluginProperty().set(plugin);
+        pluginInfoView.setVisible(true);
+        directoryInfoView.setVisible(false);
+        symlinkInfoView.setVisible(false);
+        componentInfoView.setVisible(false);
+      }
+      case PluginDirectory pluginDirectory -> {
+        directoryInfoController.pluginDirectoryProperty().set(pluginDirectory);
+        directoryInfoView.setVisible(true);
+        pluginInfoView.setVisible(false);
+        symlinkInfoView.setVisible(false);
+        componentInfoView.setVisible(false);
+      }
+      case Symlink symlink -> {
+        symlinkInfoController.symlinkProperty().set(symlink);
+        symlinkInfoView.setVisible(true);
+        pluginInfoView.setVisible(false);
+        directoryInfoView.setVisible(false);
+        componentInfoView.setVisible(false);
+      }
+      case PluginComponent pluginComponent -> {
+        componentInfoController.componentProperty().set(pluginComponent);
+        componentInfoView.setVisible(true);
+        pluginInfoView.setVisible(false);
+        symlinkInfoView.setVisible(false);
+        directoryInfoView.setVisible(false);
+      }
+      case null, default -> {
+        // do nothing otherwise
+        // Previously, all view where hidden, but it created
+        // rendering bugs when file stat PieChart is hidden while animation is running.
+        // Some text nodes remains displayed and cannot be cleared.
+      }
     }
   }
-
 }

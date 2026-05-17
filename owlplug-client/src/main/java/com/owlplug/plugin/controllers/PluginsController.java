@@ -30,7 +30,7 @@ import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
-import java.util.concurrent.CompletableFuture;
+import com.owlplug.core.utils.Async;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
@@ -206,7 +206,7 @@ public class PluginsController extends BaseController {
   }
 
   public void displayPlugins() {
-    CompletableFuture.supplyAsync(() -> pluginRepository.findAll())
+    Async.supply(() -> pluginRepository.findAll())
         .thenAccept(plugins -> FX.run(() -> {
           treeViewController.setPlugins(plugins);
           tableController.setPlugins(plugins);
