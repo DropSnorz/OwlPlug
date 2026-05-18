@@ -174,9 +174,10 @@ jobs:
         path: owlplug-host/src/main/resources
     - name: Get OwlPlug Scanner version
       run: echo "scanner_version=$(cat ./owlplug-host/src/main/resources/owlplug-scanner.version)" >> $GITHUB_ENV
+      shell: bash
       id: get-scanner-version
     - name: Download scanner binary
-      run: curl --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-${{ matrix.platform }} --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-${{ matrix.platform }}
+      run: curl --fail --location https://github.com/OwlPlug/owlplug-scanner/releases/download/${{ env.scanner_version }}/owlplug-scanner-${{ env.scanner_version }}-${{ matrix.platform }} --output owlplug-host/src/main/resources/owlplug-scanner-${{ env.scanner_version }}-${{ matrix.platform }}
     - name: Build maven parent project
       run: mvn -B install -DskipTests
     - name: Build runnable Jar
