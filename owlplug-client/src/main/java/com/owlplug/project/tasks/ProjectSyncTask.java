@@ -23,6 +23,8 @@ import com.owlplug.core.tasks.TaskResult;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.repositories.DawProjectRepository;
+import com.owlplug.project.tasks.discovery.ProjectExplorer;
+import com.owlplug.project.tasks.discovery.ProjectExplorerException;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
 import com.owlplug.project.tasks.discovery.reaper.ReaperProjectExplorer;
 import com.owlplug.project.tasks.discovery.studioone.StudioOneProjectExplorer;
@@ -36,8 +38,9 @@ public class ProjectSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private DawProjectRepository projectRepository;
-  private List<String> projectDirectories;
+  private boolean hasParseErrors = false;
+  private final DawProjectRepository projectRepository;
+  private final List<String> projectDirectories;
 
   public ProjectSyncTask(DawProjectRepository projectRepository,
                          List<String> projectDirectories) {
@@ -73,36 +76,36 @@ public class ProjectSyncTask extends AbstractTask {
 
     this.setMaxProgress(filteredFiles.size());
 
-    // Create explorer instances once, outside the loop (they are stateless)
-    AbletonProjectExplorer abletonExplorer = new AbletonProjectExplorer();
-    ReaperProjectExplorer reaperExplorer = new ReaperProjectExplorer();
-    StudioOneProjectExplorer studioOneExplorer = new StudioOneProjectExplorer();
+    List<ProjectExplorer> explorers = List.of(
+        new AbletonProjectExplorer(),
+        new ReaperProjectExplorer(),
+        new StudioOneProjectExplorer()
+    );
 
     for (File file : filteredFiles) {
       this.commitProgress(1);
-
-      if (abletonExplorer.canExploreFile(file)) {
-        this.updateMessage("Analyzing Ableton file: " + file.getAbsolutePath());
-        DawProject project = abletonExplorer.explore(file);
-        if (project != null) {
-          projectRepository.save(project);
-        }
-      } else if (reaperExplorer.canExploreFile(file)) {
-        this.updateMessage("Analyzing Reaper file: " + file.getAbsolutePath());
-        DawProject project = reaperExplorer.explore(file);
-        if (project != null) {
-          projectRepository.save(project);
-        }
-      } else if (studioOneExplorer.canExploreFile(file)) {
-        this.updateMessage("Analyzing Studio One file: " + file.getAbsolutePath());
-        DawProject project = studioOneExplorer.explore(file);
-        if (project != null) {
-          projectRepository.save(project);
+      for (ProjectExplorer explorer : explorers) {
+        if (explorer.canExploreFile(file)) {
+          try {
+            this.updateMessage("Analyzing project file: " + file.getAbsolutePath());
+            DawProject project = explorer.explore(file);
+            if (project != null) {
+              projectRepository.save(project);
+            }
+          } catch (ProjectExplorerException e) {
+            hasParseErrors = true;
+            log.error("Failed to parse project file, skipping: {}", file.getAbsolutePath(), e);
+          }
+          break;
         }
       }
     }
 
-    this.updateMessage("All projects are synchronized");
+    if (hasParseErrors) {
+      this.updateMessage("Projects synchronized. Some files cannot be parsed, check application logs in Options.");
+    } else {
+      this.updateMessage("All projects are synchronized");
+    }
     this.updateProgress(1,1);
 
     return completed();
