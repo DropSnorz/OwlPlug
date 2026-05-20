@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,28 +44,43 @@ public class PlatformUtils {
   }
 
   public static void openFromDesktop(File file) {
-    try {
-      Desktop.getDesktop().open(file);
-    } catch (IOException e) {
-      log.error("Application for the given file fails to be launched", e);
-    }
+    Async.run(() -> {
+      if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Action.OPEN)) {
+        log.warn("Desktop API not supported, cannot open file: {}", file.getAbsolutePath());
+        return;
+      }
+      try {
+        Desktop.getDesktop().open(file);
+      } catch (IOException e) {
+        log.error("Application for the given file fails to be launched", e);
+      }
+    });
   }
 
   public static void openDefaultBrowser(String url) {
-
-    try {
-      log.debug("Opening address " + url + " in default browser");
-      if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
-        Desktop.getDesktop().browse(new URI(url));
+    Async.run(() -> {
+      try {
+        log.debug("Opening address {} in default browser", url);
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
+          Desktop.getDesktop().browse(new URI(url));
+        } else {
+          log.warn("Desktop API not supported, falling back to xdg-open");
+          Process process = new ProcessBuilder("xdg-open", url).start();
+          if (!process.waitFor(5, TimeUnit.SECONDS)) {
+            process.destroyForcibly();
+            log.warn("xdg-open timed out for URL: {}", url);
+          } else if (process.exitValue() != 0) {
+            log.error("xdg-open failed for URL: {} (exit code {})", url, process.exitValue());
+          }
+        }
+      } catch (IOException e) {
+        log.error("Can't open default browser for URL: {}", url, e);
+      } catch (URISyntaxException e) {
+        log.error("Invalid URI: {}", url);
+      } catch (InterruptedException e) {
+        log.error("Thread interrupted while waiting for xdg-open to finish", e);
       }
-      else {
-        new ProcessBuilder("xdg-open", url).start();
-      }
-    } catch (IOException e) {
-      log.error("Can't open default browser");
-    } catch (URISyntaxException e) {
-      log.error("Error in URI:" + url);
-    }
+    });
   }
 
 }
