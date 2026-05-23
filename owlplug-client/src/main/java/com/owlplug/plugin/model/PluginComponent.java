@@ -19,6 +19,7 @@
 package com.owlplug.plugin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,7 +32,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(indexes = { @Index(name = "IDX_PLUGIN_COMPONENT_ID", columnList = "id") })
-public class PluginComponent {
+public class PluginComponent implements IPlugin {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,6 +48,7 @@ public class PluginComponent {
   protected String version;
   @Enumerated(EnumType.STRING)
   protected PluginType type;
+
 
   @ManyToOne
   @JsonIgnore
@@ -140,4 +142,8 @@ public class PluginComponent {
     this.plugin = plugin;
   }
 
+  @Override
+  public Plugin asPlugin() {
+    return this.plugin;
+  }
 }

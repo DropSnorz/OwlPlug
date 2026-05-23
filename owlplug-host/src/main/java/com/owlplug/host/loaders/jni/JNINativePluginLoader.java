@@ -19,6 +19,7 @@
 package com.owlplug.host.loaders.jni;
 
 import com.owlplug.host.NativePlugin;
+import com.owlplug.host.loaders.NativeLoaderException;
 import com.owlplug.host.loaders.NativePluginLoader;
 import java.util.List;
 
@@ -50,8 +51,12 @@ public class JNINativePluginLoader implements NativePluginLoader {
   }
 
   @Override
-  public List<NativePlugin> loadPlugin(String path) {
-    return nativePluginMapper.mapPlugin(path);
+  public List<NativePlugin> loadPlugin(String path) throws NativeLoaderException {
+    List<NativePlugin> plugins = nativePluginMapper.mapPlugin(path);
+    if (plugins == null) {
+      throw new NativeLoaderException("Scan rejected this plugin, probably incompatible with current platform.");
+    }
+    return plugins;
   }
 
   @Override

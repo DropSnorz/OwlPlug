@@ -16,25 +16,42 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.host.loaders;
 
-import com.owlplug.host.NativePlugin;
-import java.util.List;
+package com.owlplug.plugin.model;
 
-public interface NativePluginLoader {
+public interface IPlugin {
 
-  public void init();
+  /**
+   * Retrieve the associated Plugin object from this Plugin object.
+   * In case of Component, it returns the parent plugin.
+   * In case of Plugin, it should return itself.
+   * @return plugin
+   */
+  Plugin asPlugin();
 
-  public void open();
+  /**
+   * Get object identifier.
+   * The identifier is not guaranteed to be unique across Plugin and Component.
+   * @return id
+   */
+  Long getId();
 
-  public List<NativePlugin> loadPlugin(String path) throws NativeLoaderException;
+  String getName();
 
-  public void close();
+  String getDescriptiveName();
 
-  public boolean isAvailable();
+  String getVersion();
 
-  public String getName();
+  String getUid();
 
-  public String getId();
+  String getCategory();
+
+  String getManufacturerName();
+
+  String getIdentifier();
+
+  String getBundleId();
+
+  PluginType getType();
 
 }

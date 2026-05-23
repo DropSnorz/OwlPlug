@@ -18,23 +18,14 @@
 
 package com.owlplug.host.loaders;
 
-import com.owlplug.host.NativePlugin;
-import java.util.List;
+public class NativeLoaderException extends Exception {
 
-public interface NativePluginLoader {
+  public NativeLoaderException(String message) {
+    super(message);
+  }
 
-  public void init();
-
-  public void open();
-
-  public List<NativePlugin> loadPlugin(String path) throws NativeLoaderException;
-
-  public void close();
-
-  public boolean isAvailable();
-
-  public String getName();
-
-  public String getId();
+  public NativeLoaderException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
 }

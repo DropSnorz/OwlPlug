@@ -21,6 +21,7 @@ package com.owlplug.plugin.controllers;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.plugin.model.IDirectory;
+import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginDirectory;
@@ -73,7 +74,7 @@ public class PluginTreeViewController extends BaseController {
         return null;
       }
       return (item) -> {
-        if (item instanceof Plugin plugin) {
+        if (item instanceof IPlugin plugin) {
           return plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
                   || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(
                       search.getValue().toLowerCase()));
@@ -89,7 +90,7 @@ public class PluginTreeViewController extends BaseController {
         return null;
       }
       return (item) -> {
-        if (item instanceof Plugin plugin) {
+        if (item instanceof IPlugin plugin) {
           return plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
                   || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(search.getValue().toLowerCase()));
         } else {

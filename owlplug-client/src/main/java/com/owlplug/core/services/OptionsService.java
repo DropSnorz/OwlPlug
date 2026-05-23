@@ -89,6 +89,9 @@ public class OptionsService extends BaseService {
     if (prefs.get(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, null) == null) {
       prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, Boolean.TRUE);
     }
+    if (prefs.get(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, null) == null) {
+      prefs.putLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 10L);
+    }
   }
 
   /**

@@ -23,6 +23,7 @@ import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
+import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginState;
@@ -63,9 +64,9 @@ public class PluginTableController extends BaseController {
   private PluginService pluginService;
 
   private final SimpleStringProperty search = new SimpleStringProperty();
-  private final TableView<Plugin> tableView;
+  private final TableView<IPlugin> tableView;
 
-  private final ObservableList<Plugin> pluginList;
+  private final ObservableList<IPlugin> pluginList;
 
 
   public PluginTableController() {
@@ -75,7 +76,7 @@ public class PluginTableController extends BaseController {
     createColumns();
 
     tableView.setRowFactory(tv -> {
-      TableRow<Plugin> row = new TableRow<>();
+      TableRow<IPlugin> row = new TableRow<>();
       row.itemProperty().addListener((obs, oldItem, newItem) -> {
         if (newItem != null) {
           row.setContextMenu(createPluginContextMenu(newItem));
@@ -88,7 +89,7 @@ public class PluginTableController extends BaseController {
     pluginList = FXCollections.observableArrayList();
     // Wraps an ObservableList and filters its content using the provided Predicate.
     // All changes in the ObservableList are propagated immediately to the FilteredList.
-    FilteredList<Plugin> filteredPluginList = new FilteredList<>(pluginList);
+    FilteredList<IPlugin> filteredPluginList = new FilteredList<>(pluginList);
 
     filteredPluginList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
       if (search.getValue() == null || search.getValue().isEmpty()) {
@@ -99,17 +100,17 @@ public class PluginTableController extends BaseController {
                      search.getValue().toLowerCase()));
     }, search));
 
-    SortedList<Plugin> sortedPluginList = new SortedList<>(filteredPluginList);
+    SortedList<IPlugin> sortedPluginList = new SortedList<>(filteredPluginList);
     tableView.setItems(sortedPluginList);
     sortedPluginList.comparatorProperty().bind(tableView.comparatorProperty());
 
   }
 
   private void createColumns() {
-    TableColumn<Plugin, String> nameColumn = new TableColumn<>("Name");
+    TableColumn<IPlugin, String> nameColumn = new TableColumn<>("Name");
     nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-    TableColumn<Plugin, PluginFormat> formatColumn = new TableColumn<>("Format");
-    formatColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getFormat()));
+    TableColumn<IPlugin, PluginFormat> formatColumn = new TableColumn<>("Format");
+    formatColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().asPlugin().getFormat()));
     formatColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(PluginFormat item, boolean empty) {
@@ -123,17 +124,17 @@ public class PluginTableController extends BaseController {
         }
       }
     });
-    TableColumn<Plugin, String> manufacturerColumn = new TableColumn<>("Manufacturer");
+    TableColumn<IPlugin, String> manufacturerColumn = new TableColumn<>("Manufacturer");
     manufacturerColumn.setCellValueFactory(cellData ->
                                                new SimpleStringProperty(cellData.getValue().getManufacturerName()));
-    TableColumn<Plugin, String> versionColumn = new TableColumn<>("Version");
+    TableColumn<IPlugin, String> versionColumn = new TableColumn<>("Version");
     versionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getVersion()));
-    TableColumn<Plugin, String> categoryColumn = new TableColumn<>("Category");
+    TableColumn<IPlugin, String> categoryColumn = new TableColumn<>("Category");
     categoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategory()));
     // Directory Column
-    TableColumn<Plugin, String> directoryColumn = new TableColumn<>("Directory");
+    TableColumn<IPlugin, String> directoryColumn = new TableColumn<>("Directory");
     directoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-        FileUtils.getParentDirectoryName(cellData.getValue().getPath())));
+        FileUtils.getParentDirectoryName(cellData.getValue().asPlugin().getPath())));
     directoryColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(String item, boolean empty) {
@@ -148,9 +149,9 @@ public class PluginTableController extends BaseController {
       }
     });
     // Scan Directory Column
-    TableColumn<Plugin, String> scanDirectoryColumn = new TableColumn<>("Scan Dir.");
+    TableColumn<IPlugin, String> scanDirectoryColumn = new TableColumn<>("Scan Dir.");
     scanDirectoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-        FileUtils.getFilename(cellData.getValue().getScanDirectoryPath())));
+        FileUtils.getFilename(cellData.getValue().asPlugin().getScanDirectoryPath())));
     scanDirectoryColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(String item, boolean empty) {
@@ -165,9 +166,9 @@ public class PluginTableController extends BaseController {
       }
     });
     // Plugin State Column
-    TableColumn<Plugin, PluginState> stateColumn = new TableColumn<>("State");
+    TableColumn<IPlugin, PluginState> stateColumn = new TableColumn<>("State");
     stateColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(
-        pluginService.getPluginState(cellData.getValue())));
+        pluginService.getPluginState(cellData.getValue().asPlugin())));
     stateColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(PluginState item, boolean empty) {
@@ -188,10 +189,16 @@ public class PluginTableController extends BaseController {
 
   public void setPlugins(Iterable<Plugin> plugins) {
     pluginList.clear();
-    plugins.forEach(pluginList::add);
+    plugins.forEach(p -> {
+      pluginList.add(p);
+      if (p.getComponents().size() > 1) {
+        pluginList.addAll(p.getComponents());
+      }
+    });
+
   }
 
-  public TableView<Plugin> getTableView() {
+  public TableView<IPlugin> getTableView() {
     return tableView;
   }
 
@@ -201,7 +208,8 @@ public class PluginTableController extends BaseController {
   }
 
   public void selectPluginById(long id) {
-    for (Plugin plugin : pluginList) {
+    for (IPlugin p : pluginList) {
+      Plugin plugin = p.asPlugin(); // Get plugin or component parent
       if (plugin.getId().equals(id)) {
         tableView.getSelectionModel().select(plugin);
         break;
@@ -217,37 +225,39 @@ public class PluginTableController extends BaseController {
     tableView.refresh();
   }
 
-  private ContextMenu createPluginContextMenu(Plugin plugin) {
+  private ContextMenu createPluginContextMenu(IPlugin plugin) {
 
     ContextMenu menu = new ContextMenu();
     MenuItem openDirItem = new MenuItem("Reveal in File Explorer");
     openDirItem.setOnAction(e -> {
-      File pluginFile = new File(plugin.getPath());
+      File pluginFile = new File(plugin.asPlugin().getPath());
       PlatformUtils.openFromDesktop(pluginFile.getParentFile());
     });
 
     menu.getItems().addAll(openDirItem, new SeparatorMenuItem());
 
-    if (plugin.isDisabled()) {
-      MenuItem enableItem = new MenuItem("Enable plugin");
-      enableItem.setOnAction(e -> {
-        Async.run(() -> pluginService.enablePlugin(plugin));
-      });
-      menu.getItems().add(enableItem);
-    } else {
-      MenuItem disableItem = new MenuItem("Disable plugin");
-      disableItem.setOnAction(e -> {
-        if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
-          this.disableController.setPlugin(plugin);
-          this.disableController.show();
-        } else {
-          this.disableController.disablePluginWithoutPrompt(plugin);
-        }
-      });
-      menu.getItems().add(disableItem);
-    }
+    if (plugin instanceof Plugin p) {
+      if (p.isDisabled()) {
+        MenuItem enableItem = new MenuItem("Enable plugin");
+        enableItem.setOnAction(e -> {
+          Async.run(() -> pluginService.enablePlugin(p));
+        });
+        menu.getItems().add(enableItem);
+      } else {
+        MenuItem disableItem = new MenuItem("Disable plugin");
+        disableItem.setOnAction(e -> {
+          if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
+            this.disableController.setPlugin(p);
+            this.disableController.show();
+          } else {
+            this.disableController.disablePluginWithoutPrompt(p);
+          }
+        });
+        menu.getItems().add(disableItem);
+      }
 
-    menu.getItems().add(new SeparatorMenuItem());
+      menu.getItems().add(new SeparatorMenuItem());
+    }
 
     MenuItem infoDisplayItem = new MenuItem("Toggle info display");
     menu.getItems().add(infoDisplayItem);
