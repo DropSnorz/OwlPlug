@@ -206,6 +206,8 @@ public class PluginInfoController extends BaseController {
       String scanError = plugin.getFootprint().getLastScanStatus();
       lastScanErrorLabel.setText(scanError != null ? scanError : "");
       lastScanErrorLabel.setVisible(scanError != null);
+    } else {
+      lastScanErrorLabel.setVisible(false);
     }
 
     setPluginImage();

@@ -130,7 +130,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
       log.debug("Response received from scanner");
       log.debug(result.getOutput());
 
-      if (result.getExitValue() >= 0) {
+      if (result.getExitValue() == 0) {
         log.debug("Extracting XML from content received by the scanner");
         return createPluginsFromCommandOutput(result.getOutput());
       } else {

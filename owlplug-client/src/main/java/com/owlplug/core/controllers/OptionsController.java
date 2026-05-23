@@ -179,12 +179,14 @@ public class OptionsController extends BaseController {
       }
       try {
         long timeout = Long.parseLong(newValue);
-        if (timeout >= 0) {
+        if (timeout >= 0 && timeout <= 3600) {
           this.getPreferences().putLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, timeout);
           nativeHostService.setScannerTimeout(timeout);
+        } else {
+          loaderTimeoutTextField.setText(oldValue);
         }
       } catch (NumberFormatException ignored) {
-        // ignore invalid input
+        // Ignore in case of invalid values (empty string)
       }
     });
 
@@ -314,7 +316,7 @@ public class OptionsController extends BaseController {
     NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
     pluginNativeComboBox.getSelectionModel().select(pluginLoader);
 
-    long timeout = this.getPreferences().getLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 30L);
+    long timeout = this.getPreferences().getLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 10L);
     loaderTimeoutTextField.setText(String.valueOf(timeout));
     updateScannerTimeoutFieldState();
 

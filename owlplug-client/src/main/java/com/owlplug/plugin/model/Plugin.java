@@ -42,7 +42,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Inheritance
 @Table(indexes = { @Index(name = "IDX_PLUGIN_ID", columnList = "id"),
     @Index(name = "IDX_PLUGIN_NAME", columnList = "name") })
-public class Plugin {
+public class Plugin implements IPlugin {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -237,5 +237,10 @@ public class Plugin {
 
   public void setComponents(Set<PluginComponent> components) {
     this.components = components;
+  }
+
+  @Override
+  public Plugin asPlugin() {
+    return this;
   }
 }
