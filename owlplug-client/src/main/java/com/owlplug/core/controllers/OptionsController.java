@@ -63,6 +63,8 @@ public class OptionsController extends BaseController {
   @FXML
   private ComboBox<NativePluginLoader> pluginNativeComboBox;
   @FXML
+  private TextField loaderTimeoutTextField;
+  @FXML
   private CheckBox syncPluginsCheckBox;
   @FXML
   private CheckBox syncFileStatCheckbox;
@@ -155,6 +157,7 @@ public class OptionsController extends BaseController {
     pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
       this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
       this.pluginNativeComboBox.setDisable(!newValue);
+      updateScannerTimeoutFieldState();
     });
 
     ObservableList<NativePluginLoader> pluginLoaders = FXCollections.observableArrayList(
@@ -163,8 +166,25 @@ public class OptionsController extends BaseController {
 
     pluginNativeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
-        this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER,newValue.getId());
+        this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER, newValue.getId());
         nativeHostService.setCurrentPluginLoader(newValue);
+        updateScannerTimeoutFieldState();
+      }
+    });
+
+    loaderTimeoutTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+      if (!newValue.matches("\\d*")) {
+        loaderTimeoutTextField.setText(newValue.replaceAll("[^\\d]", ""));
+        return;
+      }
+      try {
+        long timeout = Long.parseLong(newValue);
+        if (timeout >= 0) {
+          this.getPreferences().putLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, timeout);
+          nativeHostService.setScannerTimeout(timeout);
+        }
+      } catch (NumberFormatException ignored) {
+        // ignore invalid input
       }
     });
 
@@ -265,6 +285,13 @@ public class OptionsController extends BaseController {
     refreshView();
   }
 
+  private void updateScannerTimeoutFieldState() {
+    NativePluginLoader selected = pluginNativeComboBox.getSelectionModel().getSelectedItem();
+    boolean isOwlPlugScanner = selected != null && "owlplug-scanner".equals(selected.getId());
+    boolean nativeEnabled = pluginNativeCheckbox.isSelected() && !pluginNativeCheckbox.isDisable();
+    loaderTimeoutTextField.setDisable(!nativeEnabled || !isOwlPlugScanner);
+  }
+
   public void refreshView() {
 
     vst2PluginPathFragment.refresh();
@@ -286,6 +313,10 @@ public class OptionsController extends BaseController {
 
     NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
     pluginNativeComboBox.getSelectionModel().select(pluginLoader);
+
+    long timeout = this.getPreferences().getLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 30L);
+    loaderTimeoutTextField.setText(String.valueOf(timeout));
+    updateScannerTimeoutFieldState();
 
     if (!storeDirectoryCheckBox.isSelected()) {
       storeDirectoryTextField.setVisible(false);

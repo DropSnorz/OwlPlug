@@ -137,5 +137,12 @@
             </HBox.margin>
          </ToggleSwitch>
       </HBox>
+      <HBox alignment="CENTER_LEFT">
+        <Label fx:id="lastScanErrorLabel" wrapText="true" >
+           <HBox.margin>
+                <Insets  top="5" bottom="5" left="5"/>
+           </HBox.margin>
+        </Label>
+      </HBox>
    </VBox>
 </AnchorPane>

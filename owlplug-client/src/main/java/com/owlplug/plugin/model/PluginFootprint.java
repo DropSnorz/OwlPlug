@@ -39,6 +39,8 @@ public class PluginFootprint {
   protected boolean nativeDiscoveryEnabled = true;
 
   protected String screenshotUrl;
+
+  private String lastScanStatus;
   
   public PluginFootprint() {
   }
@@ -73,6 +75,14 @@ public class PluginFootprint {
 
   public Long getId() {
     return id;
+  }
+
+  public String getLastScanStatus() {
+    return lastScanStatus;
+  }
+
+  public void setLastScanStatus(String lastScanStatus) {
+    this.lastScanStatus = lastScanStatus;
   }
 
 }

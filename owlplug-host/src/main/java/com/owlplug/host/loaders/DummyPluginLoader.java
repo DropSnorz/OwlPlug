@@ -47,8 +47,8 @@ public class DummyPluginLoader implements NativePluginLoader {
   }
 
   @Override
-  public List<NativePlugin> loadPlugin(String path) {
-    return null;
+  public List<NativePlugin> loadPlugin(String path) throws NativeLoaderException {
+    return List.of();
   }
 
   @Override

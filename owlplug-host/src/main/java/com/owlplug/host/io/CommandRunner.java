@@ -57,12 +57,10 @@ public class CommandRunner {
     Process process = pb.start();
 
     ExecutorService executor = Executors.newFixedThreadPool(1);
+    Future<String> stdoutFuture = executor.submit(new StreamReader(process.getInputStream()));
 
-    Callable<String> stdoutReader = new StreamReader(process.getInputStream());
-    Future<String> stdoutFuture = executor.submit(stdoutReader);
-
-    boolean finished;
     try {
+      boolean finished;
       if (timeoutActivated) {
         finished = process.waitFor(timeout, TimeUnit.MILLISECONDS);
       } else {
@@ -70,27 +68,21 @@ public class CommandRunner {
         finished = true;
       }
 
-    } catch (InterruptedException e) {
-      log.error("Interrupted while waiting for process");
-      process.destroy();
-      throw new IOException("Interrupted while waiting for process", e);
-    }
+      if (!finished) {
+        log.error("Forcibly destroying process after timeout {}ms exceeded.", timeout);
+        throw new IOException("Process timeout exceeded: " + timeout + "ms");
+      }
 
-    if (!finished) {
-      log.error("Forcibly destroying process after timeout {}ms exceeded.", timeout);
-      process.destroyForcibly();
-      throw new IOException("Process timeout exceeded: " + timeout + "ms");
-    }
-
-    try {
-      // Let 1 seconds for gracefully read and complete process
       String stdout = stdoutFuture.get(1, TimeUnit.SECONDS);
       return new CommandResult(process.exitValue(), stdout);
     } catch (InterruptedException e) {
-      throw new IOException("Interrupted while reading process output", e);
+      throw new IOException("Process execution interrupted", e);
     } catch (ExecutionException | TimeoutException e) {
       throw new IOException("Failed to read process output", e);
     } finally {
+      // destroyForcibly closes the process streams, which unblocks any readLine()
+      // call in the StreamReader thread — safe to call even if the process already exited
+      process.destroyForcibly();
       executor.shutdownNow();
     }
   }

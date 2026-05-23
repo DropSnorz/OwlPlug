@@ -43,7 +43,6 @@ import java.util.Optional;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -111,6 +110,8 @@ public class PluginInfoController extends BaseController {
   private ListView<PluginComponent> pluginComponentListView;
   @FXML
   private ToggleSwitch nativeDiscoveryToggleButton;
+  @FXML
+  private Label lastScanErrorLabel;
 
   private final ObjectProperty<Plugin> pluginProperty = new SimpleObjectProperty<Plugin>();
   private final ArrayList<String> knownPluginImages = new ArrayList<>();
@@ -157,6 +158,8 @@ public class PluginInfoController extends BaseController {
     });
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
+    lastScanErrorLabel.managedProperty().bind(lastScanErrorLabel.visibleProperty());
+    lastScanErrorLabel.setVisible(false);
 
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       Plugin plugin = pluginProperty.get();
@@ -175,8 +178,6 @@ public class PluginInfoController extends BaseController {
       return;
     }
 
-    // All reads below come from already-loaded in-memory fields — safe to run
-    // on the FX thread without risk of blocking.
     pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(plugin.getFormat()));
     pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
     pluginTitleLabel.setText(plugin.getName());
@@ -202,6 +203,9 @@ public class PluginInfoController extends BaseController {
 
     if (plugin.getFootprint() != null) {
       nativeDiscoveryToggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
+      String scanError = plugin.getFootprint().getLastScanStatus();
+      lastScanErrorLabel.setText(scanError != null ? scanError : "");
+      lastScanErrorLabel.setVisible(scanError != null);
     }
 
     setPluginImage();

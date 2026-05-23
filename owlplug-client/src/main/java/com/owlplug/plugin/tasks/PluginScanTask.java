@@ -21,7 +21,9 @@ package com.owlplug.plugin.tasks;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
+import com.owlplug.core.utils.StringUtils;
 import com.owlplug.host.NativePlugin;
+import com.owlplug.host.loaders.NativeLoaderException;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginFootprint;
@@ -172,27 +174,35 @@ public class PluginScanTask extends AbstractTask {
 
         log.debug("Load plugin using native discovery: " + plugin.getPath());
         this.updateMessage("Exploring plugin " + plugin.getName());
-        List<NativePlugin> nativePlugins = nativeHostService.loadPlugin(plugin.getPath());
+        try {
+          List<NativePlugin> nativePlugins = nativeHostService.loadPlugin(plugin.getPath());
+          pluginFootprint.setLastScanStatus(null);
 
-        if (nativePlugins != null && !nativePlugins.isEmpty()) {
-          log.debug("Found {} components (nativePlugin) for plugin {}", nativePlugins.size(), plugin.getName());
+          if (!nativePlugins.isEmpty()) {
+            log.debug("Found {} components (nativePlugin) for plugin {}", nativePlugins.size(), plugin.getName());
 
-          plugin.setNativeCompatible(true);
+            plugin.setNativeCompatible(true);
 
-          for (NativePlugin nativePlugin : nativePlugins) {
-            PluginComponent component = createComponentFromNative(nativePlugin);
-            component.setPlugin(plugin);
-            plugin.getComponents().add(component);
-            log.debug("Created component {} for plugin {}", component.getName(), plugin.getName());
+            for (NativePlugin nativePlugin : nativePlugins) {
+              PluginComponent component = createComponentFromNative(nativePlugin);
+              component.setPlugin(plugin);
+              plugin.getComponents().add(component);
+              log.debug("Created component {} for plugin {}", component.getName(), plugin.getName());
+            }
+
+            // Hardcode plugin properties from the first component (nativePlugin) retrieved.
+            mapPluginPropertiesFromNative(plugin, nativePlugins.get(0));
           }
-
-          // Hardcode plugin properties from the first component (nativePlugin) retrieved.
-          mapPluginPropertiesFromNative(plugin, nativePlugins.get(0));
-
+        } catch (NativeLoaderException e) {
+          log.error("Native scan failed for plugin {}: {}", plugin.getName(), e.getMessage());
+          pluginFootprint.setLastScanStatus(StringUtils.truncate(
+              e.getMessage(), 240, "..."
+          ));
         }
       }
 
       plugin.setScanComplete(true);
+      pluginFootprintRepository.save(pluginFootprint);
       pluginRepository.save(plugin);
 
       this.commitProgress(80.0 / pluginFiles.size());

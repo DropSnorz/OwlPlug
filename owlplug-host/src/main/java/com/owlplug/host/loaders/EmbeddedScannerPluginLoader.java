@@ -58,9 +58,11 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   private static final String DEFAULT_SCANNER_ID =
       DEFAULT_SCANNER_NAME + "-" + DEFAULT_SCANNER_VERSION + "-" + DEFAULT_SCANNER_PLATFORM_TAG + DEFAULT_SCANNER_EXT;
 
+  private final String scannerDirectory;
+  private final String scannerId;
   private boolean available = false;
-  private String scannerDirectory;
-  private String scannerId;
+  // 10s default timeout for scanner execution
+  private long timeoutMillis = 10000;
 
   public static EmbeddedScannerPluginLoader getInstance() {
     if (INSTANCE == null) {
@@ -112,7 +114,7 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   }
 
   @Override
-  public List<NativePlugin> loadPlugin(String path) {
+  public List<NativePlugin> loadPlugin(String path) throws NativeLoaderException {
 
     log.debug("Load plugin {}", path);
 
@@ -123,27 +125,22 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
     try {
       CommandRunner commandRunner = new CommandRunner();
       commandRunner.setTimeoutActivated(true);
-      commandRunner.setTimeout(10000); // 10 seconds timeout
-      CommandResult result = commandRunner.run(scannerDirectory + SEPARATOR +  scannerId, path);
+      commandRunner.setTimeout(timeoutMillis);
+      CommandResult result = commandRunner.run(scannerDirectory + SEPARATOR + scannerId, path);
       log.debug("Response received from scanner");
       log.debug(result.getOutput());
 
       if (result.getExitValue() >= 0) {
-
         log.debug("Extracting XML from content received by the scanner");
-        String output = result.getOutput();
-
-        return createPluginsFromCommandOutput(output);
-
+        return createPluginsFromCommandOutput(result.getOutput());
       } else {
-        log.debug("Invalid return code {} received from plugin scanner", result.getExitValue());
+        throw new NativeLoaderException("Scanner exited with code " + result.getExitValue());
       }
 
     } catch (IOException e) {
       log.error("Error executing plugin scanner {}", path, e);
+      throw new NativeLoaderException("Scanner execution failed: " + e.getMessage(), e);
     }
-
-    return null;
   }
 
   private List<NativePlugin> createPluginsFromCommandOutput(String output) {
@@ -221,6 +218,10 @@ public class EmbeddedScannerPluginLoader implements NativePluginLoader {
   @Override
   public String getId() {
     return "owlplug-scanner";
+  }
+
+  public void setTimeout(long timeoutMillis) {
+    this.timeoutMillis = timeoutMillis;
   }
 
   @Override

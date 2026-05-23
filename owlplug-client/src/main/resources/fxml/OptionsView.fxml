@@ -29,12 +29,13 @@
                <VBox spacing="20.0">
                   <VBox fx:id="pluginPathContainer" spacing="10.0" />
                   <VBox spacing="4.0">
-                     <VBox.margin>
-                        <Insets bottom="16.0" top="10.0" />
-                     </VBox.margin>
                      <HBox spacing="10.0">
                         <CheckBox fx:id="pluginNativeCheckbox" text="Native plugin discovery using" />
                         <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="NEVER" />
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <Label text="Native loader timeout (in seconds)" />
+                        <TextField fx:id="loaderTimeoutTextField" prefWidth="60.0" />
                      </HBox>
                      <Label styleClass="label-emphase" text="Allow deep plugin metadatas discovery using platform specific features" />
                   </VBox>

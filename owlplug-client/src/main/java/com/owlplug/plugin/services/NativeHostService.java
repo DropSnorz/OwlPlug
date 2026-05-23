@@ -23,6 +23,7 @@ import com.owlplug.core.services.BaseService;
 import com.owlplug.host.NativePlugin;
 import com.owlplug.host.loaders.DummyPluginLoader;
 import com.owlplug.host.loaders.EmbeddedScannerPluginLoader;
+import com.owlplug.host.loaders.NativeLoaderException;
 import com.owlplug.host.loaders.NativePluginLoader;
 import com.owlplug.host.loaders.jni.JNINativePluginLoader;
 import jakarta.annotation.PostConstruct;
@@ -52,6 +53,8 @@ public class NativeHostService extends BaseService {
       loader.init();
     }
     configureCurrentPluginLoader();
+    long timeoutSeconds = this.getPreferences().getLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 30L);
+    EmbeddedScannerPluginLoader.getInstance().setTimeout(timeoutSeconds * 1000);
   }
 
   private void configureCurrentPluginLoader() {
@@ -110,7 +113,11 @@ public class NativeHostService extends BaseService {
     this.currentPluginLoader = pluginLoader;
   }
 
-  public List<NativePlugin> loadPlugin(String path) {
+  public void setScannerTimeout(long timeoutSeconds) {
+    EmbeddedScannerPluginLoader.getInstance().setTimeout(timeoutSeconds * 1000);
+  }
+
+  public List<NativePlugin> loadPlugin(String path) throws NativeLoaderException {
     if (currentPluginLoader != null) {
       return currentPluginLoader.loadPlugin(path);
     } else {
