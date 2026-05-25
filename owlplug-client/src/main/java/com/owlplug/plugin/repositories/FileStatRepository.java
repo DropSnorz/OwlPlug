@@ -33,6 +33,8 @@ public interface FileStatRepository extends JpaRepository<FileStat, Long> {
 
   List<FileStat> findByParentPathOrderByLengthDesc(String parentPath);
 
+  List<FileStat> findTop5ByParentIsNullOrderByLengthDesc();
+
   @Transactional
   @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("delete from FileStat f where f.path=:path")

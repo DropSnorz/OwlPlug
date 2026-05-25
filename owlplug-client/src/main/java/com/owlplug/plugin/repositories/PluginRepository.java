@@ -49,8 +49,12 @@ public interface PluginRepository extends JpaRepository<Plugin, Long>, JpaSpecif
 
 
   Plugin findByPath(String path);
-  
+
   List<Plugin> findBySyncComplete(boolean syncComplete);
+
+  long countByFormat(PluginFormat format);
+
+  long countByDisabledTrue();
   
   @Transactional
   void deleteByPathContainingIgnoreCase(String path);

@@ -18,10 +18,14 @@
 
 package com.owlplug.project.services;
 
+import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.services.BaseService;
 import com.owlplug.project.components.ProjectTaskFactory;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.repositories.DawProjectRepository;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +43,10 @@ public class ProjectService extends BaseService {
 
   public Iterable<DawProject> getAllProjects() {
     return dawProjectRepository.findAll();
+  }
+
+  public Set<String> getProjectDirectories() {
+    return new HashSet<>(this.getPreferences().getList(ApplicationDefaults.PROJECT_DIRECTORY_KEY));
   }
 
 }
