@@ -24,7 +24,8 @@
             <styleClass>
                 <String fx:value="header"/>
             </styleClass>
-            <TabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0" style="-fx-tab-min-height: 45;"
+            <TabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0"
+                     style="-fx-tab-min-height: 36;"
                      HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
                 <Tab disable="true" text="OwlPlug" closable="false"/>
                 <Tab text="Plugins" closable="false"/>

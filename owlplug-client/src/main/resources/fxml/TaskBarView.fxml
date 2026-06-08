@@ -8,14 +8,14 @@
 
 <HBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.core.controllers.TaskBarController">
+    <styleClass>
+        <String fx:value="task-bar-footer"/>
+    </styleClass>
 
    <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
          minWidth="-Infinity" prefWidth="600.0" spacing="2.0" HBox.hgrow="ALWAYS">
-      <styleClass>
-         <String fx:value="pane-card"/>
-      </styleClass>
       <HBox.margin>
-         <Insets bottom="10.0" left="20.0" right="20.0"/>
+         <Insets bottom="10.0" left="20.0" right="20.0" top="10"/>
       </HBox.margin>
       <VBox HBox.hgrow="ALWAYS">
          <Label fx:id="taskLabel" text=" All clear"/>

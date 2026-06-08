@@ -39,9 +39,9 @@ import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.ExploreController;
-import com.owlplug.explore.services.ExploreService;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.services.AppUpdateService;
+import atlantafx.base.theme.Styles;
 import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -56,7 +56,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,7 +121,7 @@ public class MainController extends BaseController {
     viewRegistry.preload();
     this.getDialogManager().setDialogContainer(this.getRootPane());
 
-    this.tabPaneHeader.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
+    tabPaneHeader.getStyleClass().add(Styles.TABS_BORDER_TOP);
     this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener((options, oldValue, newValue) -> {
       tabPaneContent.getSelectionModel().select(newValue.intValue());
       leftDrawer.close();

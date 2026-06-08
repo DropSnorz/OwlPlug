@@ -17,7 +17,8 @@
  */
 
 package com.owlplug.plugin.ui;
- 
+
+import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
@@ -28,7 +29,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import org.controlsfx.control.ToggleSwitch;
 
 public class RecoveredPluginView extends HBox {
   

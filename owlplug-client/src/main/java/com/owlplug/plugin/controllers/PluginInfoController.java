@@ -18,6 +18,7 @@
 
 package com.owlplug.plugin.controllers;
 
+import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
@@ -56,7 +57,6 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;

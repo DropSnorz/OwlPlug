@@ -27,7 +27,6 @@ import com.owlplug.plugin.controllers.dialogs.NewLinkController;
 import com.owlplug.plugin.events.PluginRefreshEvent;
 import com.owlplug.plugin.events.PluginScanEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
-import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.utils.Async;
@@ -38,7 +37,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
@@ -145,8 +143,6 @@ public class PluginsController extends BaseController {
      * Controller and node graph initialization
      * ===================
      */
-
-    displaySwitchTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
 
     // Set default display (flat plugin tree)
     treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
