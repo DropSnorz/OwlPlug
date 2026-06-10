@@ -4,32 +4,69 @@
 
 
 .root {
+
+    /* Atlantafx colors mapping
+
+     -color-fg-default;
+     -color-fg-muted;
+     -color-fg-subtle;
+     -color-fg-emphasis;
+
+     -color-bg-default;
+     -color-bg-overlay;
+     -color-bg-subtle;
+     -color-bg-inset;
+
+     -color-border-default;
+     -color-border-muted;
+     -color-border-subtle;
+     -color-shadow-default;
+
+     -color-neutral-emphasis-plus;
+     -color-neutral-emphasis;
+     -color-neutral-muted;
+     -color-neutral-subtle;
+
+     -color-accent-fg;
+     -color-accent-emphasis;
+     -color-accent-muted;
+     -color-accent-subtle;
+
+     -color-success-fg;
+     -color-success-emphasis;
+     -color-success-muted;
+     -color-success-subtle;
+
+     -color-warning-fg;
+     -color-warning-emphasis;
+     -color-warning-muted;
+     -color-warning-subtle;
+
+     -color-danger-fg;
+     -color-danger-emphasis;
+     -color-danger-muted;
+     -color-danger-subtle;
+
+     */
     -fx-font-family: "Segoe UI";
-    card-pane-darkshade-color: -color-bg-subtle;
-    card-pane-color: -color-bg-default; /* AtlantaFx mapping */
-    card-pane-lightshade-color: -color-bg-subtle;
 
     disabled-color: -color-neutral-muted;
     danger-color: -color-danger-subtle;
     warning-color: -color-warning-fg;
     success-color: -color-success-fg;
 
-    prompt-text-color: #4D4D4D;
-
-    theme-primary-color: -color-accent-fg; /* AtlantaFx primary */
-    theme-secondary-color: #ebc8ae;
+    theme-primary-color: -color-accent-fg;
 
     text-color: -color-fg-default;
     text-emphase-color: -color-fg-emphasis;
 }
 
 #mainPane {
-    /* -fx-background-color: linear-gradient(to top, #1E1E1E 0%, #c79081 100%); */
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
 }
 
 .dialog-overlay-pane>StackPane {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
 }
 
 Label {
@@ -80,7 +117,7 @@ Text {
 }
 
 .text-danger {
-    -fx-fill: disabled-color;
+    -fx-fill: danger-color;
 }
 
 TextArea {
@@ -128,14 +165,6 @@ TextArea .content {
 }
 
 .chip Button {
-    -fx-background-color: transparent;
-    -fx-max-height: 20px;
-    -fx-max-width: 20px;
-    -fx-text-fill: black;
-    -fx-border-width: 0px;
-}
-
-.chip Button:pressed {
     -fx-background-color: transparent;
     -fx-max-height: 20px;
     -fx-max-width: 20px;
@@ -245,9 +274,6 @@ TextArea .content {
     -fx-text-fill: disabled-color;
 }
 
-.list-view {
-}
-
 .combo-box .combo-box-popup .list-view,
 .combo-box .combo-box-popup .list-cell {
     -fx-text-fill: white;
@@ -255,7 +281,7 @@ TextArea .content {
 
 .combo-box .combo-box-popup .list-cell:hover {
     -fx-text-fill: white;
-    -fx-background-color: card-pane-lightshade-color;
+    -fx-background-color: -color-bg-subtle;
 }
 
 .combo-box .list-cell {
@@ -271,7 +297,7 @@ TextArea .content {
 }
 
 .small-tab-pane-container {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
 }
 
 .small-tab-pane *.tab *.tab-label {
@@ -280,28 +306,21 @@ TextArea .content {
 }
 
 .drawer-side-pane {
-    -fx-background-color: card-pane-color;
-}
-
-.autocomplete-list {
+    -fx-background-color: -color-bg-default;
 }
 
 .autocomplete-list .list-cell {
     -fx-text-fill: text-color;
 }
 
-/* ControlsFx Autocomplete Popup */
-.auto-complete-popup>.list-view {
-}
-
 .popup,
 .popup .popup-container,
 .popup .list-view {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
 }
 
 .progress-bar-error>.bar {
-    -fx-background-color: red;
+    -fx-background-color: -color-danger-fg;
 }
 
 .progress-bar-link {
@@ -313,7 +332,7 @@ ProgressIndicator {
 }
 
 .context-menu {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
     -fx-text-fill: text-color;
 }
 
@@ -364,7 +383,7 @@ ProgressIndicator {
 .pane-card .card-title {
     -fx-height: 37;
     -fx-padding: 5, 5, 5, 5;
-    -fx-background-color: card-pane-darkshade-color;
+    -fx-background-color: -color-bg-subtle;
     -fx-margin: 0, 0, 10, 0;
 }
 
@@ -454,7 +473,7 @@ ProgressIndicator {
 }
 
 .chart-legend {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
 }
 
 .chart-legend>.label {
@@ -471,7 +490,7 @@ ProgressIndicator {
 }
 
 .doughnut-inner-circle {
-    -fx-fill: card-pane-color;
+    -fx-fill: -color-bg-default;
 }
 
 .preloader .progress-bar {
