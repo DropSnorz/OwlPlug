@@ -5,24 +5,22 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Pane?>
-
-<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.control.SplitMenuButton?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.PluginsController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
             <Button fx:id="newLinkButton" alignment="BASELINE_CENTER" text="New link">
                 <graphic>
                     <Region prefHeight="15.0" prefWidth="18.0"
-                            style="-fx-background-color: white; -fx-shape: &quot; m 19.847458,19.194915 4.152543,-2.943321 -4.152543,-2.870237 v 1.263203 c 0,0 -4.824423,1.072601 -5.813559,5.380864 2.106169,-2.255246 5.813559,-2.166797 5.813559,-2.166797 z M 19.5,13 c -13,7.333333 -6.5,3.666667 0,0 z m -4.68,9 H 0 V 2 h 7 c 1.695,1.942 2.371,3 4,3 h 13 v 7.82 C 22.831,11.696 21.246,11 19.5,11 15.916,11 13,13.916 13,17.5 c 0,1.747 0.695,3.331 1.82,4.5 z&quot;;"/>
+                            style="-fx-background-color: -color-fg-default; -fx-shape: &quot; m 19.847458,19.194915 4.152543,-2.943321 -4.152543,-2.870237 v 1.263203 c 0,0 -4.824423,1.072601 -5.813559,5.380864 2.106169,-2.255246 5.813559,-2.166797 5.813559,-2.166797 z M 19.5,13 c -13,7.333333 -6.5,3.666667 0,0 z m -4.68,9 H 0 V 2 h 7 c 1.695,1.942 2.371,3 4,3 h 13 v 7.82 C 22.831,11.696 21.246,11 19.5,11 15.916,11 13,13.916 13,17.5 c 0,1.747 0.695,3.331 1.82,4.5 z&quot;;"/>
                 </graphic>
             </Button>
             <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search"
@@ -31,24 +29,27 @@
             <Pane prefWidth="365.0" />
             <Button fx:id="exportButton" text="Export">
                 <graphic>
-                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../icons/connect-white-16.png"/>
-                    </ImageView>
+                    <FontIcon iconLiteral="mdi2e-export" />
                 </graphic>
             </Button>
             <HBox alignment="CENTER_LEFT">
-                <Button fx:id="scanButton" text="Scan">
+                <SplitMenuButton fx:id="scanMenuButton" popupSide="LEFT" text="Scan">
                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                            <Image url="@../../icons/refresh-white-16.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2s-sync" />
                     </graphic>
-                </Button>
-                <MenuButton prefHeight="28" popupSide="LEFT">
                     <items>
-                        <MenuItem fx:id="fullScanMenuItem" text="Full Scan" />
+                        <MenuItem fx:id="scanMenuItem" text="Scan" >
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2s-sync" />
+                            </graphic>
+                        </MenuItem>
+                        <MenuItem fx:id="fullScanMenuItem" text="Full Scan">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2s-sync-alert" />
+                            </graphic>
+                        </MenuItem>
                     </items>
-                </MenuButton>
+                </SplitMenuButton>
             </HBox>
         </HBox>
     </top>
@@ -59,14 +60,24 @@
             </VBox>
       	</center>
       	<left>
-            <VBox styleClass="small-tab-pane-container">
-                <TabPane fx:id="displaySwitchTabPane" prefHeight="289.0" prefWidth="37.0" side="LEFT"
-                         styleClass="small-tab-pane" BorderPane.alignment="CENTER">
-                    <Tab fx:id="displayListTab" text="List" closable="false"/>
-                    <Tab fx:id="displayDirectoriesTab" text="Directories" closable="false"/>
-                    <Tab fx:id="displayTableTab" text="Table" closable="false"/>
-                </TabPane>
-            </VBox>
+            <TabPane fx:id="displaySwitchTabPane" side="LEFT"
+                     styleClass="floating" BorderPane.alignment="CENTER" tabMaxWidth="35">
+                <Tab fx:id="displayListTab" closable="false">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2f-format-list-bulleted" />
+                    </graphic>
+                </Tab>
+                <Tab fx:id="displayDirectoriesTab" closable="false">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2f-file-tree" />
+                    </graphic>
+                </Tab>
+                <Tab fx:id="displayTableTab" closable="false">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2v-view-module-outline" />
+                    </graphic>
+                </Tab>
+            </TabPane>
       	</left>
       </BorderPane>
    </center>

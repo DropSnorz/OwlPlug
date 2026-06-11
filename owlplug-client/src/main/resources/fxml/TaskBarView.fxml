@@ -3,9 +3,9 @@
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <HBox xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.core.controllers.TaskBarController">
     <styleClass>
@@ -24,16 +24,12 @@
       </VBox>
       <Button fx:id="logsButton" text="View Logs" layoutX="574.0" layoutY="14.0" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../icons/gear-white-32.png" />
-            </ImageView>
+            <FontIcon iconLiteral="mdi2c-cogs" />
          </graphic>
       </Button>
       <Button fx:id="taskHistoryButton" contentDisplay="GRAPHIC_ONLY" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../icons/menudot-white-64.png"/>
-            </ImageView>
+            <FontIcon iconLiteral="mdi2d-dots-vertical" />
          </graphic>
       </Button>
    </HBox>

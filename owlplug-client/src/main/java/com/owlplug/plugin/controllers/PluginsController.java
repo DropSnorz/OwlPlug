@@ -33,6 +33,7 @@ import com.owlplug.core.utils.Async;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -62,7 +63,9 @@ public class PluginsController extends BaseController {
   protected PluginTableController tableController;
 
   @FXML
-  private Button scanButton;
+  private SplitMenuButton scanMenuButton;
+  @FXML
+  private MenuItem scanMenuItem;
   @FXML
   private MenuItem fullScanMenuItem;
   @FXML
@@ -182,7 +185,12 @@ public class PluginsController extends BaseController {
       displaySwitchTabPane.getSelectionModel().select(displayListTab);
     }
 
-    scanButton.setOnAction(e -> {
+    scanMenuButton.setOnAction(e -> {
+      this.getTelemetryService().event("/Plugins/Scan");
+      pluginService.scanPlugins();
+    });
+
+    scanMenuItem.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Scan");
       pluginService.scanPlugins();
     });

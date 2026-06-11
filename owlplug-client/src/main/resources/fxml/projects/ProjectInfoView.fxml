@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.owlplug.project.controllers.ProjectInfoController">
     <VBox fx:id="projectInfoPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
@@ -37,9 +38,7 @@
             <Pane HBox.hgrow="ALWAYS"/>
             <Button fx:id="projectOpenButton" layoutX="353.0" layoutY="10.0" text="Open Project">
                 <graphic>
-                    <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../icons/share-white-16.png"/>
-                    </ImageView>
+                    <FontIcon iconLiteral="mdi2o-open-in-new"/>
                 </graphic>
             </Button>
         </HBox>

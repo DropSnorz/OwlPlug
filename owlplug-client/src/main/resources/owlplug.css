@@ -120,16 +120,6 @@ Text {
     -fx-fill: danger-color;
 }
 
-TextArea {
-    -fx-text-fill: text-color;
-    -fx-background-color: rgb(55, 55, 55);
-
-}
-
-TextArea .content {
-    -fx-background-color: rgb(55, 55, 55);
-
-}
 
 .table-view .cell-unknown-link,
 .table-view .cell-unknown-link:hover {
@@ -296,18 +286,10 @@ TextArea .content {
     visibility: hidden;
 }
 
-.small-tab-pane-container {
-    -fx-background-color: -color-bg-default;
-}
-
-.small-tab-pane *.tab *.tab-label {
-    -fx-font-size: 15px;
-    -fx-font-weight: normal;
-}
-
 .drawer-side-pane {
     -fx-background-color: -color-bg-default;
 }
+
 
 .autocomplete-list .list-cell {
     -fx-text-fill: text-color;

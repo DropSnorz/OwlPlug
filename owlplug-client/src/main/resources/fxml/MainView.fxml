@@ -16,6 +16,7 @@
 
 <?import java.lang.String?>
 <?import com.owlplug.controls.Drawer?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.owlplug.core.controllers.MainController">
     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
@@ -28,10 +29,26 @@
                      style="-fx-tab-min-height: 36;"
                      HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
                 <Tab disable="true" text="OwlPlug" closable="false"/>
-                <Tab text="Plugins" closable="false"/>
-                <Tab text="Explore" closable="false"/>
-                <Tab text="Projects" closable="false"/>
-                <Tab text="Options" closable="false"/>
+                <Tab text="Plugins" closable="false">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2p-power-plug-outline" />
+                    </graphic>
+                </Tab>
+                <Tab text="Explore" closable="false">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-compass-outline" />
+                    </graphic>
+                </Tab>
+                <Tab text="Projects" closable="false">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2a-archive-music-outline" />
+                    </graphic>
+                </Tab>
+                <Tab text="Options" closable="false">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2c-cog-outline" />
+                    </graphic>
+                </Tab>
             </TabPane>
             <HBox fx:id="updatePane" alignment="CENTER_LEFT" prefHeight="45.0" spacing="5.0">
                 <padding>

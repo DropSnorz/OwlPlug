@@ -6,6 +6,7 @@
 	<properties>
 		<springboot.version>4.0.1</springboot.version>
         <mockito.version>5.20.0</mockito.version>
+        <ikonli.version>12.4.0</ikonli.version>
 	</properties>
 	
 	<parent>
@@ -124,6 +125,16 @@
             <groupId>io.github.mkpaz</groupId>
             <artifactId>atlantafx-base</artifactId>
             <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-javafx</artifactId>
+            <version>${ikonli.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-materialdesign2-pack</artifactId>
+            <version>${ikonli.version}</version>
         </dependency>
 		<dependency>
 			<groupId>com.googlecode.plist</groupId>
