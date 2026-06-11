@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.explore.controllers;
 
 import com.google.common.collect.Iterables;
@@ -38,6 +38,7 @@ import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
+import com.owlplug.explore.ui.PackageListRowView;
 import com.owlplug.plugin.model.PluginFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +54,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -98,6 +102,12 @@ public class ExploreController extends BaseController {
   @FXML
   private Button syncSourcesButton;
   @FXML
+  private TabPane displaySwitchTabPane;
+  @FXML
+  private Tab displayGridTab;
+  @FXML
+  private Tab displayListTab;
+  @FXML
   private Text resultCounter;
   @FXML
   private MasonryPane masonryPane;
@@ -108,28 +118,34 @@ public class ExploreController extends BaseController {
   @FXML
   private Hyperlink lazyLoadLink;
   @FXML
+  private ScrollPane listScrollPane;
+  @FXML
+  private VBox listPane;
+  @FXML
+  private HBox listLazyLoadBar;
+  @FXML
+  private Hyperlink listLazyLoadLink;
+  @FXML
   private Pane exploreChipViewContainer;
-  
-  private final HashMap<String, CheckBox> targetFilterCheckBoxes = new HashMap<>();
 
+  private final HashMap<String, CheckBox> targetFilterCheckBoxes = new HashMap<>();
   private final HashMap<String, CheckBox> formatsFilterCheckBoxes = new HashMap<>();
-  
 
   private ExploreChipView exploreChipView;
   private PackageBlocViewBuilder packageBlocViewBuilder = null;
 
   /**
    * Loaded packages from remote sources are displayed by partitions (like pagination).
-   * When the user scrolls the entire partition, the next one is appended in the
-   * UI.
+   * When the user scrolls the entire partition, the next one is appended in the UI.
    */
   private Iterable<List<RemotePackage>> loadedPackagePartitions;
   private Iterable<RemotePackage> loadedRemotePackages = new ArrayList<>();
 
-  /**
-   * Counter of loaded partitions on UI.
-   */
+  /** Counter of loaded partitions on UI — masonry view. */
   private int displayedPartitions = 0;
+
+  /** Counter of loaded partitions on UI — list view. */
+  private int listDisplayedPartitions = 0;
 
   /**
    * FXML initialize.
@@ -141,16 +157,13 @@ public class ExploreController extends BaseController {
     sourcesButton.setOnAction(e -> {
       mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.SOURCE_MENU_VIEW));
       mainController.getLeftDrawer().open();
-
     });
 
     for (PluginFormat format : PluginFormat.values()) {
       CheckBox checkbox = new CheckBox(format.getText());
       formatsFilterCheckBoxes.put(format.getText().toLowerCase(), checkbox);
       checkbox.setSelected(false);
-      checkbox.setOnAction(e -> {
-        performPackageSearch();
-      });
+      checkbox.setOnAction(e -> performPackageSearch());
     }
 
     VBox formatFilterVbox = new VBox();
@@ -168,7 +181,6 @@ public class ExploreController extends BaseController {
       popup.show(formatFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
     });
 
-    
     targetFilterCheckBoxes.put("win-x32", new CheckBox("Windows x32"));
     targetFilterCheckBoxes.put("win-x64", new CheckBox("Windows x64"));
     targetFilterCheckBoxes.put("win-arm64", new CheckBox("Windows arm64"));
@@ -182,11 +194,9 @@ public class ExploreController extends BaseController {
     for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
       Set<String> preselected = this.getApplicationDefaults().getRuntimePlatform().getCompatiblePlatformsTags();
       entry.getValue().setSelected(preselected.contains(entry.getKey()));
-      entry.getValue().setOnAction(e -> {
-        performPackageSearch();
-      });
+      entry.getValue().setOnAction(e -> performPackageSearch());
     }
-    
+
     VBox platformFilterVbox = new VBox();
     platformFilterVbox.setSpacing(5);
     platformFilterVbox.setPadding(new Insets(5,10,5,10));
@@ -219,27 +229,47 @@ public class ExploreController extends BaseController {
       performPackageSearch();
     });
 
+    // Grid view scroll → load next partition
     scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue.doubleValue() == 1) {
         displayNewPackagePartition();
       }
     });
-
-    lazyLoadLink.setOnAction(e -> {
-      displayNewPackagePartition();
-    });
+    lazyLoadLink.setOnAction(e -> displayNewPackagePartition());
     lazyLoadBar.setVisible(false);
+
+    // List view scroll → load next partition
+    listScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.doubleValue() == 1) {
+        displayNewListPartition();
+      }
+    });
+    listLazyLoadLink.setOnAction(e -> displayNewListPartition());
+    listLazyLoadBar.setVisible(false);
+
+    displaySwitchTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+      boolean listActive = newTab.equals(displayListTab);
+      scrollPane.setVisible(!listActive);
+      scrollPane.setManaged(!listActive);
+      listScrollPane.setVisible(listActive);
+      listScrollPane.setManaged(listActive);
+      if (!listActive) {
+        FX.run(() -> {
+          masonryPane.requestLayout();
+          scrollPane.requestLayout();
+        });
+      }
+    });
+    displaySwitchTabPane.getSelectionModel().select(displayListTab);
 
     performPackageSearch();
 
     masonryPane.setHSpacing(5);
     masonryPane.setVSpacing(5);
-
     masonryPane.setCellHeight(130);
     masonryPane.setCellWidth(130);
-
   }
-  
+
   private synchronized void performPackageSearch() {
     final List<ExploreFilterCriteria> criteriaChipList = exploreChipView.getChips();
     List<ExploreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
@@ -270,33 +300,33 @@ public class ExploreController extends BaseController {
         return exploreService.getRemotePackages(criteriaList);
       }
     };
-    task.setOnSucceeded(e -> {
-      displayPackages(task.getValue());
-    });
+    task.setOnSucceeded(e -> displayPackages(task.getValue()));
     new Thread(task).start();
-
   }
 
   /**
    * Display remote source package list.
-   * 
+   *
    * @param remotePackages - Remote package list
    */
   public synchronized void displayPackages(Iterable<RemotePackage> remotePackages) {
-
     if (shouldRefreshPackages(remotePackages)) {
       this.masonryPane.getChildren().clear();
       this.masonryPane.requestLayout();
 
+      // Remove all list rows (keep the lazyLoadBar at the end)
+      listPane.getChildren().removeIf(node -> node instanceof PackageListRowView);
+
       loadedRemotePackages = remotePackages;
       loadedPackagePartitions = Iterables.partition(loadedRemotePackages, PARTITION_SIZE);
       displayedPartitions = 0;
+      listDisplayedPartitions = 0;
       displayNewPackagePartition();
+      displayNewListPartition();
     }
   }
 
   private void displayNewPackagePartition() {
-
     if (Iterables.size(loadedPackagePartitions) > displayedPartitions) {
       for (RemotePackage remotePackage : Iterables.get(loadedPackagePartitions, displayedPartitions)) {
         Rippler rippler = new Rippler(packageBlocViewBuilder.build(remotePackage));
@@ -309,48 +339,59 @@ public class ExploreController extends BaseController {
       }
       displayedPartitions += 1;
 
-      if (Iterables.size(loadedPackagePartitions) == displayedPartitions) {
-        lazyLoadBar.setVisible(false);
-      } else {
-        lazyLoadBar.setVisible(true);
-
-      }
+      boolean allLoaded = Iterables.size(loadedPackagePartitions) == displayedPartitions;
+      lazyLoadBar.setVisible(!allLoaded);
 
       FX.run(() -> {
         masonryPane.requestLayout();
         scrollPane.requestLayout();
       });
     }
-    
-    resultCounter.setText(this.masonryPane.getChildren().size() + " / " + Iterables.size(this.loadedRemotePackages));
 
+    resultCounter.setText(this.masonryPane.getChildren().size() + " / " + Iterables.size(this.loadedRemotePackages));
+  }
+
+  private void displayNewListPartition() {
+    if (Iterables.size(loadedPackagePartitions) > listDisplayedPartitions) {
+      // Insert rows before the lazyLoadBar (always the last child)
+      int lazyBarIndex = listPane.getChildren().size() - 1;
+      int insertIndex = lazyBarIndex;
+      for (RemotePackage remotePackage : Iterables.get(loadedPackagePartitions, listDisplayedPartitions)) {
+        Image image = imageCache.get(remotePackage.getScreenshotUrl());
+        PackageListRowView row = new PackageListRowView(
+            this.getApplicationDefaults(), remotePackage, image, this);
+        row.setOnMouseClicked(e -> {
+          if (e.getButton().equals(MouseButton.PRIMARY)) {
+            selectPackage(remotePackage);
+          }
+        });
+        listPane.getChildren().add(insertIndex++, row);
+      }
+      listDisplayedPartitions += 1;
+
+      boolean allLoaded = Iterables.size(loadedPackagePartitions) == listDisplayedPartitions;
+      listLazyLoadBar.setVisible(!allLoaded);
+    }
   }
 
   /**
-   * Returns true if the given package list is different from the previously
-   * loaded package list.
-   * 
-   * @param newPackages - the new package list
-   * @return
+   * Returns true if the given package list is different from the previously loaded package list.
    */
   private boolean shouldRefreshPackages(Iterable<RemotePackage> newPackages) {
-
     if (Iterables.size(newPackages) != Iterables.size(loadedRemotePackages)) {
       return true;
     }
-
     for (int i = 0; i < Iterables.size(newPackages); i++) {
       if (!Iterables.get(newPackages, i).getId().equals(Iterables.get(loadedRemotePackages, i).getId())) {
         return true;
       }
     }
-
     return false;
   }
 
   /**
    * Displays full package information.
-   * 
+   *
    * @param remotePackage - package
    */
   public void selectPackage(RemotePackage remotePackage) {
@@ -365,9 +406,8 @@ public class ExploreController extends BaseController {
   }
 
   /**
-   * Trigger package installation. The best bundle will be selected based on the
-   * current user platform.
-   * 
+   * Trigger package installation. The best bundle will be selected based on the current user platform.
+   *
    * @param remotePackage Package to install
    */
   public boolean installPackage(RemotePackage remotePackage) {

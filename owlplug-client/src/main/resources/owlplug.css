@@ -480,6 +480,82 @@ ProgressIndicator {
 }
 
 /****************************************************************
+ * Package list view
+ ****************************************************************/
+
+.package-list-row {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-border-color: -color-border-muted;
+    -fx-cursor: hand;
+}
+
+.package-list-row:hover {
+    -fx-background-color: -color-bg-overlay;
+    -fx-border-color: -color-accent-muted;
+}
+
+.package-list-thumb {
+    -fx-background-color: -color-bg-inset;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.package-list-name {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-fg-default;
+}
+
+.package-list-creator {
+    -fx-text-fill: -color-fg-muted;
+    -fx-font-size: 11px;
+}
+
+.package-list-tag {
+    -fx-background-color: -color-neutral-subtle;
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-padding: 1 5 1 5;
+    -fx-font-size: 10px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-cursor: hand;
+}
+
+.package-list-tag:hover {
+    -fx-background-color: -color-accent-subtle;
+    -fx-text-fill: -color-accent-fg;
+}
+
+.package-list-format {
+    -fx-background-color: -color-accent-subtle;
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-padding: 1 5 1 5;
+    -fx-font-size: 10px;
+    -fx-text-fill: -color-accent-fg;
+}
+
+.package-stage-badge {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 1 4 1 4;
+    -fx-background-radius: 0 3px 0 0;
+    -fx-text-fill: white;
+}
+
+.package-stage-beta {
+    -fx-background-color: rgba(231, 76, 60, 0.85);
+}
+
+.package-stage-demo {
+    -fx-background-color: rgba(155, 89, 182, 0.85);
+}
+
+
+/****************************************************************
  *
  * Utilities
  *
