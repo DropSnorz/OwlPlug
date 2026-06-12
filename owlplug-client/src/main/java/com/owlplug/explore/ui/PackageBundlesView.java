@@ -19,17 +19,15 @@
 package com.owlplug.explore.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.model.PackageBundle;
-import com.owlplug.plugin.model.PluginFormat;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -71,16 +69,10 @@ public class PackageBundlesView extends VBox {
     hbox.setAlignment(Pos.CENTER_LEFT);
     hbox.setFillHeight(false);
 
-    HBox formatsContainer = new HBox(2);
+    HBox formatsContainer = new HBox(4);
     for (String formatValue : bundle.getFormats()) {
-      PluginFormat format = PluginFormat.fromBundleString(formatValue);
-      if (format != null) {
-        ImageView iv = new ImageView(this.applicationDefaults.getPluginFormatIcon(format));
-        Label labelIv = new Label();
-        labelIv.setGraphic(iv);
-        labelIv.setTooltip(new Tooltip(format.toString()));
-        formatsContainer.getChildren().add(labelIv);
-      }
+      formatsContainer.getChildren().add(new PluginFormatBadgeView(formatValue,
+          applicationDefaults, PluginFormatBadgeView.DisplayMode.ICON_ONLY));
     }
     hbox.getChildren().add(formatsContainer);
 

@@ -529,13 +529,51 @@ ProgressIndicator {
     -fx-text-fill: -color-accent-fg;
 }
 
-.package-list-format {
-    -fx-background-color: -color-accent-subtle;
+.plugin-format-badge {
     -fx-background-radius: 3px;
     -fx-border-radius: 3px;
-    -fx-padding: 1 5 1 5;
+    -fx-padding: 2 5 2 4;
+}
+
+.plugin-format-badge .label {
     -fx-font-size: 10px;
-    -fx-text-fill: -color-accent-fg;
+    -fx-font-weight: bold;
+    -fx-padding: 0;
+}
+
+.plugin-format-badge-vst2 {
+    -fx-background-color: rgba(52, 152, 219, 0.15);
+}
+.plugin-format-badge-vst2 .label {
+    -fx-text-fill: #3498db;
+}
+
+.plugin-format-badge-vst3 {
+    -fx-background-color: rgba(46, 204, 113, 0.15);
+}
+.plugin-format-badge-vst3 .label {
+    -fx-text-fill: #27ae60;
+}
+
+.plugin-format-badge-au {
+    -fx-background-color: rgba(155, 89, 182, 0.15);
+}
+.plugin-format-badge-au .label {
+    -fx-text-fill: #9b59b6;
+}
+
+.plugin-format-badge-lv2 {
+    -fx-background-color: rgba(230, 126, 34, 0.15);
+}
+.plugin-format-badge-lv2 .label {
+    -fx-text-fill: #e67e22;
+}
+
+.plugin-format-badge-default {
+    -fx-background-color: rgba(149, 165, 166, 0.15);
+}
+.plugin-format-badge-default .label {
+    -fx-text-fill: #95a5a6;
 }
 
 .package-stage-badge {

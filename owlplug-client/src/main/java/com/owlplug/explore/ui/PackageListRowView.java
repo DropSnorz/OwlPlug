@@ -19,6 +19,7 @@
 package com.owlplug.explore.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.controllers.ExploreController;
@@ -35,8 +36,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -186,10 +185,7 @@ public class PackageListRowView extends HBox {
         }
       }
       for (String fmt : seenFormats) {
-        Label fmtLabel = new Label(fmt.toUpperCase());
-        fmtLabel.getStyleClass().add("package-list-format");
-        Tooltip.install(fmtLabel, new Tooltip(fmt));
-        typeAndFormats.getChildren().add(fmtLabel);
+        typeAndFormats.getChildren().add(new PluginFormatBadgeView(fmt, applicationDefaults));
       }
     }
 

@@ -142,13 +142,15 @@ public class ApplicationDefaults {
    * @return Associated icon
    */
   public Image getPluginFormatIcon(PluginFormat format) {
-
+    if (format == null) {
+      return pluginComponentImage;
+    }
     return switch (format) {
       case VST2 -> vst2Image;
       case VST3 -> vst3Image;
       case AU -> auImage;
       case LV2 -> lv2Image;
-      default -> vst2Image;
+      default -> pluginComponentImage;
     };
   }
 

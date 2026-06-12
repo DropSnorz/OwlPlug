@@ -35,6 +35,7 @@ import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.plugin.ui.PluginComponentCellFactory;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
@@ -52,6 +53,7 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -79,9 +81,7 @@ public class PluginInfoController extends BaseController {
   @FXML
   private Pane pluginScreenshotPane;
   @FXML
-  private ImageView pluginFormatIcon;
-  @FXML
-  private Label pluginFormatLabel;
+  private HBox pluginFormatBadgeContainer;
   @FXML
   private Label pluginTitleLabel;
   @FXML
@@ -178,8 +178,9 @@ public class PluginInfoController extends BaseController {
       return;
     }
 
-    pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(plugin.getFormat()));
-    pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
+    pluginFormatBadgeContainer.getChildren().setAll(
+        new PluginFormatBadgeView(plugin.getFormat(), this.getApplicationDefaults()));
+
     pluginTitleLabel.setText(plugin.getName());
     pluginNameLabel.setText(Optional.ofNullable(plugin.getDescriptiveName()).orElse(plugin.getName()));
     pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse("Unknown"));
