@@ -19,14 +19,14 @@
 package com.owlplug.explore.model.search;
 
 import java.util.Objects;
-import javafx.scene.image.Image;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class ExploreFilterCriteria {
 
   private Object value;
   private String textValue;
   private ExploreFilterCriteriaType filterType;
-  private Image icon;
+  private FontIcon icon;
 
   /**
    * Creates a ExploreFilterCriteria.
@@ -47,7 +47,7 @@ public class ExploreFilterCriteria {
    * @param filterType - criteria type
    * @param icon       - criteria icon displayed
    */
-  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, Image icon) {
+  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, FontIcon icon) {
     super();
     this.value = value;
     this.filterType = filterType;
@@ -63,7 +63,7 @@ public class ExploreFilterCriteria {
    * @param textValue  - custom text value overwriting original value toString()
    *                   conversion.
    */
-  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, Image icon, String textValue) {
+  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, FontIcon icon, String textValue) {
     super();
     this.value = value;
     this.icon = icon;
@@ -87,11 +87,11 @@ public class ExploreFilterCriteria {
     this.filterType = filterType;
   }
 
-  public Image getIcon() {
+  public FontIcon getIcon() {
     return icon;
   }
 
-  public void setIcon(Image icon) {
+  public void setIcon(FontIcon icon) {
     this.icon = icon;
   }
 

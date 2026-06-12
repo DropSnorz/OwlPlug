@@ -27,6 +27,7 @@ import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.ui.PackageBundlesView;
 import com.owlplug.explore.ui.PackageSourceBadgeView;
+import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginType;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -44,6 +45,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -197,6 +199,7 @@ public class PackageInfoController extends BaseController {
     } else if (remotePackage.getType() == PluginType.EFFECT) {
       this.typeLabel.setText("Effect (VST)");
     }
+    this.typeLabel.setGraphic(this.getApplicationDefaults().getPackageTypeIcon(remotePackage.getType()));
 
     // Tag display
     tagContainer.getChildren().clear();

@@ -44,6 +44,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.kordamp.ikonli.javafx.FontIcon;
 import atlantafx.base.layout.InputGroup;
 
 public class PackageListRowView extends HBox {
@@ -165,13 +166,10 @@ public class PackageListRowView extends HBox {
     typeAndFormats.setAlignment(Pos.CENTER_RIGHT);
 
     if (remotePackage.getType() != null) {
-      Image typeIcon = applicationDefaults.getPackageTypeIcon(remotePackage);
-      if (typeIcon != null) {
-        ImageView typeImg = new ImageView(typeIcon);
-        typeImg.setFitHeight(16);
-        typeImg.setFitWidth(16);
-        typeAndFormats.getChildren().add(typeImg);
-      }
+      FontIcon typeIcon = applicationDefaults.getPackageTypeIcon(remotePackage.getType());
+      typeIcon.setIconSize(16);
+      typeAndFormats.getChildren().add(typeIcon);
+
       Label typeLabel = new Label(remotePackage.getType().name());
       typeLabel.getStyleClass().add("label-disabled");
       typeAndFormats.getChildren().add(typeLabel);

@@ -22,6 +22,7 @@ import com.owlplug.core.model.OperatingSystem;
 import com.owlplug.core.model.RuntimePlatform;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.plugin.model.PluginType;
 import com.owlplug.project.model.DawApplication;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.scene.image.Image;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,13 +70,7 @@ public class ApplicationDefaults {
   public final Image taskSuccessImage = new Image(getClass().getResourceAsStream("/icons/check-green-16.png"));
   public final Image taskFailImage = new Image(getClass().getResourceAsStream("/icons/cross-red-16.png"));
   public final Image taskRunningImage = new Image(getClass().getResourceAsStream("/icons/play-green-16.png"));
-  public final Image rocketImage = new Image(getClass().getResourceAsStream("/icons/rocket-white-64.png"));
-  public final Image serverImage = new Image(getClass().getResourceAsStream("/icons/server-white-32.png"));
-  public final Image instrumentImage = new Image(getClass().getResourceAsStream("/icons/synth-white-16.png"));
-  public final Image effectImage = new Image(getClass().getResourceAsStream("/icons/effect-white-16.png"));
-  public final Image tagImage = new Image(getClass().getResourceAsStream("/icons/tag-white-16.png"));
   public final Image symlinkImage = new Image(getClass().getResourceAsStream("/icons/folderlink-grey-16.png"));
-  public final Image userImage = new Image(getClass().getResourceAsStream("/icons/user-white-32.png"));
   public final Image scanDirectoryImage = new Image(getClass().getResourceAsStream("/icons/foldersearch-grey-16.png"));
   public final Image verifiedSourceImage = new Image(getClass().getResourceAsStream("/icons/doublecheck-grey-16.png"));
   public final Image suggestedSourceImage = new Image(
@@ -158,15 +154,14 @@ public class ApplicationDefaults {
   /**
    * Returns plugin icon based on plugin format.
    * 
-   * @param remotePackage - package
+   * @param type - Plugin type
    * @return Associated icon
    */
-  public Image getPackageTypeIcon(RemotePackage remotePackage) {
+  public FontIcon getPackageTypeIcon(PluginType type) {
 
-    return switch (remotePackage.getType()) {
-      case INSTRUMENT -> instrumentImage;
-      case EFFECT -> effectImage;
-      default -> null;
+    return switch (type) {
+      case INSTRUMENT -> new FontIcon("mdi2p-piano");
+      case EFFECT -> new FontIcon("mdi2w-waveform");
     };
   }
 

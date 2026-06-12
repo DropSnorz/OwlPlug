@@ -29,13 +29,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.ListCell;
-import javafx.scene.image.ImageView;
 import javafx.util.StringConverter;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
 
-  private ApplicationDefaults applicationDefaults;
-  private List<String> pluginCreators;
+  private final ApplicationDefaults applicationDefaults;
+  private final List<String> pluginCreators;
 
   private static final String PROMPT_TEXT = "Enter your search query by Name, Authors, Category...";
 
@@ -57,64 +57,65 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
     HashMap<String, ExploreFilterCriteria> suggestions = new LinkedHashMap<>();
     
     suggestions.put("Effect", new ExploreFilterCriteria(PluginType.EFFECT, ExploreFilterCriteriaType.TYPE,
-        applicationDefaults.effectImage, "Effect"));
+        applicationDefaults.getPackageTypeIcon(PluginType.EFFECT), "Effect"));
     suggestions.put("Instrument", new ExploreFilterCriteria(PluginType.INSTRUMENT, ExploreFilterCriteriaType.TYPE,
-        applicationDefaults.instrumentImage, "Instrument"));
+        applicationDefaults.getPackageTypeIcon(PluginType.INSTRUMENT), "Instrument"));
     
-    suggestions.put("Amp", new ExploreFilterCriteria("Amp", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+    suggestions.put("Amp",
+        new ExploreFilterCriteria("Amp", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Analog",
-        new ExploreFilterCriteria("Analog", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Analog", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Ambient",
-        new ExploreFilterCriteria("Ambient", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-    suggestions.put("Bass", new ExploreFilterCriteria("Bass", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Ambient", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+    suggestions.put("Bass", new ExploreFilterCriteria("Bass", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Brass",
-        new ExploreFilterCriteria("Brass", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Brass", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Compressor",
-        new ExploreFilterCriteria("Compressor", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Compressor", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Delay",
-        new ExploreFilterCriteria("Delay", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Delay", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Distortion",
-        new ExploreFilterCriteria("Distortion", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-    suggestions.put("Drum", new ExploreFilterCriteria("Drum", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Distortion", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+    suggestions.put("Drum", new ExploreFilterCriteria("Drum", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Equalizer",
-        new ExploreFilterCriteria("Equalizer", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Equalizer", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Filter",
-        new ExploreFilterCriteria("Filter", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Filter", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Flanger",
-        new ExploreFilterCriteria("Flanger", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-    suggestions.put("Gate", new ExploreFilterCriteria("Gate", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Flanger", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+    suggestions.put("Gate", new ExploreFilterCriteria("Gate", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Guitar",
-        new ExploreFilterCriteria("Guitar", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-    suggestions.put("LFO", new ExploreFilterCriteria("LFO", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Guitar", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+    suggestions.put("LFO", new ExploreFilterCriteria("LFO", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Limiter",
-        new ExploreFilterCriteria("Limiter", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Limiter", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Maximizer",
-        new ExploreFilterCriteria("Maximizer", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Maximizer", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Monophonic",
-        new ExploreFilterCriteria("Monophonic", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Monophonic", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Orchestral",
-        new ExploreFilterCriteria("Orchestral", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Orchestral", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Organ",
-        new ExploreFilterCriteria("Organ", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Organ", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Panner",
-        new ExploreFilterCriteria("Panner", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Panner", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Phaser",
-        new ExploreFilterCriteria("Phaser", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Phaser", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Piano",
-        new ExploreFilterCriteria("Piano", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Piano", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Reverb",
-        new ExploreFilterCriteria("Reverb", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Reverb", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Tremolo",
-        new ExploreFilterCriteria("Tremolo", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
-    suggestions.put("Tube", new ExploreFilterCriteria("Tube", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Tremolo", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+    suggestions.put("Tube", new ExploreFilterCriteria("Tube", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Synth",
-        new ExploreFilterCriteria("Synth", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Synth", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
     suggestions.put("Vintage",
-        new ExploreFilterCriteria("Vintage", ExploreFilterCriteriaType.TAG, applicationDefaults.tagImage));
+        new ExploreFilterCriteria("Vintage", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
 
     for (String creator : pluginCreators) {
       suggestions.put(creator, new ExploreFilterCriteria(creator, ExploreFilterCriteriaType.CREATOR,
-          applicationDefaults.userImage));
+          new FontIcon("mdi2a-account-group-outline")));
     }
 
     this.getSuggestions().addAll(suggestions.values());
@@ -160,10 +161,7 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
         super.updateItem(item, empty);
         if (item != null && !empty) {
           setText(item.toString());
-          ImageView imageView = new ImageView(item.getIcon());
-          imageView.setFitWidth(10);
-          imageView.setFitHeight(10);
-          setGraphic(imageView);
+          setGraphic(getItem().getIcon());
         } else {
           setGraphic(null);
           setText(null);

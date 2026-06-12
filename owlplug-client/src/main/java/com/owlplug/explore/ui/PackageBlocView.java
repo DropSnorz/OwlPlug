@@ -54,6 +54,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class PackageBlocView extends AnchorPane {
 
@@ -94,13 +95,10 @@ public class PackageBlocView extends AnchorPane {
     footer.setSpacing(5);
     footer.getStyleClass().add("package-bloc-title");
     if (remotePackage.getType() != null) {
-      Image typeIcon = applicationDefaults.getPackageTypeIcon(remotePackage);
-      if (typeIcon != null) {
-        ImageView typeImageView = new ImageView(typeIcon);
-        typeImageView.setFitHeight(16);
-        typeImageView.setFitWidth(16);
-        footer.getChildren().add(typeImageView);
-      }
+      FontIcon typeIcon = applicationDefaults.getPackageTypeIcon(remotePackage.getType());
+      typeIcon.setIconSize(16);
+      footer.getChildren().add(typeIcon);
+
     }
     footer.getChildren().add(new Label(remotePackage.getName()));
     footer.setPrefSize(USE_COMPUTED_SIZE, USE_COMPUTED_SIZE);

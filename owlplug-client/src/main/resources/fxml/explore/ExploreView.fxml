@@ -19,6 +19,7 @@
 <?import javafx.scene.text.TextFlow?>
 <?import java.lang.String?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
+
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.owlplug.explore.controllers.ExploreController">
    <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
@@ -32,26 +33,20 @@
             <padding><Insets bottom="10.0"/></padding>
             <Button fx:id="sourcesButton" text="Sources">
                <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../../icons/server-white-32.png"/>
-                  </ImageView>
+                  <FontIcon iconLiteral="mdi2w-warehouse"/>
                </graphic>
             </Button>
-            <HBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                <padding><Insets left="5.0"/></padding>
                 <styleClass>
                     <String fx:value="search-bar-chip-view"/>
                 </styleClass>
-               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <HBox.margin>
-                     <Insets left="8.0" right="8.0" top="10"/>
-                  </HBox.margin>
-                  <Image url="@../../icons/search-white-32.png"/>
-               </ImageView>
+               <FontIcon iconLiteral="mdi2m-magnify" />
                <HBox fx:id="exploreChipViewContainer" HBox.hgrow="ALWAYS" alignment="CENTER">
                </HBox>
                <TextFlow>
                   <HBox.margin>
-                     <Insets left="8.0" right="8.0" top="10"/>
+                     <Insets left="8.0" right="8.0" top="8"/>
                   </HBox.margin>
                   <Text fx:id="resultCounter" text="0"/>
                   <Text text=" plugins"/>
@@ -66,16 +61,12 @@
             </Button>
             <Button fx:id="platformFilterButton" text="System">
                <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../../icons/gear-white-32.png"/>
-                  </ImageView>
+                   <FontIcon iconLiteral="mdi2c-cogs"/>
                </graphic>
             </Button>
             <Button fx:id="syncSourcesButton" text="Sync">
                <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../../icons/refresh-white-16.png"/>
-                  </ImageView>
+                  <FontIcon iconLiteral="mdi2s-sync"/>
                </graphic>
             </Button>
          </HBox>
