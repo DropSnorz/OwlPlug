@@ -158,54 +158,67 @@ Text {
     -fx-background-color: transparent;
     -fx-max-height: 20px;
     -fx-max-width: 20px;
-    -fx-text-fill: black;
+    -fx-text-fill: -color-fg-muted;
     -fx-border-width: 0px;
 }
 
-.chip-label {
-    -fx-font-size: 12.0;
-    -fx-background-color: #E0E0E0;
-    -fx-background-radius: 40px;
-    -fx-padding: 2px 8px 2px 8px;
-    -fx-pref-height: 32px;
-    -fx-alignment: center-left;
-    -fx-spacing: 8;
-    -fx-text-fill: black;
-}
-
 .chip-view .chip Label {
-    -fx-text-fill: black;
+    -fx-text-fill: -color-fg-muted;
 }
 
-/* Used for FakeChip rendering outside of a ChipView */
 .chip Label {
-    -fx-text-fill: black;
+    -fx-text-fill: -color-fg-muted;
 }
 
 .chip-view .chip-brown {
-    -fx-background-color: #b2675e;
+    -fx-background-color: rgba(178, 103, 94, 0.15);
+}
+
+.chip-view .chip-brown Label {
+    -fx-text-fill: #b2675e;
 }
 
 .chip-view .chip-red {
-    -fx-background-color: #A1887F;
+    -fx-background-color: rgba(161, 136, 127, 0.15);
+}
+
+.chip-view .chip-red Label {
+    -fx-text-fill: #A1887F;
 }
 
 .chip-view .chip-green {
-    -fx-background-color: #C5E1A5;
+    -fx-background-color: rgba(197, 225, 165, 0.15);
+}
+
+.chip-view .chip-green Label {
+    -fx-text-fill: #7cb342;
 }
 
 .chip-view .chip-blue {
-    -fx-background-color: #657899
+    -fx-background-color: rgba(101, 120, 153, 0.15);
 }
 
-.fake-chip:hover {
+.chip-view .chip-blue Label {
+    -fx-text-fill: #657899;
+}
+
+.package-tag-badge {
+    -fx-background-color: -color-neutral-subtle;
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-padding: 1 5 1 5;
+    -fx-font-size: 10px;
+    -fx-text-fill: -color-fg-muted;
     -fx-cursor: hand;
-    -fx-background-color: #D4D4D4;
+}
+
+.package-tag-badge:hover {
+    -fx-background-color: -color-accent-subtle;
+    -fx-text-fill: -color-accent-fg;
 }
 
 .button-danger {
     -fx-background-color: danger-color;
-
 }
 
 .button-danger:hover {
@@ -220,8 +233,8 @@ Text {
     -fx-background-color: success-color;
 }
 
-.button-info {
-    -fx-background-color: #2980b9;
+.button-default {
+    -fx-background-color: -color-fg-default;
 }
 
 
@@ -514,21 +527,6 @@ ProgressIndicator {
     -fx-font-size: 11px;
 }
 
-.package-list-tag {
-    -fx-background-color: -color-neutral-subtle;
-    -fx-background-radius: 3px;
-    -fx-border-radius: 3px;
-    -fx-padding: 1 5 1 5;
-    -fx-font-size: 10px;
-    -fx-text-fill: -color-fg-muted;
-    -fx-cursor: hand;
-}
-
-.package-list-tag:hover {
-    -fx-background-color: -color-accent-subtle;
-    -fx-text-fill: -color-accent-fg;
-}
-
 .plugin-format-badge {
     -fx-background-radius: 3px;
     -fx-border-radius: 3px;
@@ -592,6 +590,14 @@ ProgressIndicator {
     -fx-background-color: rgba(155, 89, 182, 0.85);
 }
 
+
+/****************************************************************
+ * Install step dialog
+ ****************************************************************/
+
+.install-step-screenshot .progress-bar > .bar {
+    -fx-background-radius: 0;
+}
 
 /****************************************************************
  *

@@ -15,7 +15,7 @@
       <Label fx:id="errorLabel" styleClass="label-danger" text="Error: Invalid source response"/>
    </VBox>
    <VBox spacing="10.0">
-      <Label text="Plugin source suggestions (3)"/>
+      <Label text="Plugin source suggestions (2)"/>
       <HBox spacing="5.0">
          <Button fx:id="owlplugSuggestionButton" text="OwlPlug Registry">
             <graphic>

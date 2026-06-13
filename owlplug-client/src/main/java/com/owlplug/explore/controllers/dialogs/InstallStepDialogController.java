@@ -47,9 +47,9 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -78,7 +78,7 @@ public class InstallStepDialogController extends AbstractDialogController {
   @FXML
   private ProgressBar progressBar;
   @FXML
-  private Text formatText;
+  private Label formatText;
   @FXML
   private TextField installationDirectoryTextField;
   @FXML
@@ -90,11 +90,11 @@ public class InstallStepDialogController extends AbstractDialogController {
   @FXML
   private ToggleButton lv2ToggleButton;
   @FXML
-  private Text installationDirectoryText;
+  private Label installationDirectoryText;
   @FXML
-  private Text directoryValidText;
+  private Label directoryValidText;
   @FXML
-  private Text directoryOverrideText;
+  private Label directoryOverrideText;
   @FXML
   private Button directoryChooserButton;
   @FXML
@@ -109,7 +109,7 @@ public class InstallStepDialogController extends AbstractDialogController {
   private InstallationParameters installParams;
 
   public InstallStepDialogController() {
-    super(500,600);
+    super(580,630);
   }
 
   public void initialize() {
@@ -197,7 +197,7 @@ public class InstallStepDialogController extends AbstractDialogController {
   private void resumeInstall() {
     stepAccordion.setExpandedPane(prepareStep);
     if (prepareInstallation()) {
-      prepareStep.setText("✅ Prepare installation");
+      prepareStep.setGraphic(createCheckIcon());
       prepareStep.setDisable(true);
       progressBar.setProgress((double) 1 / 3);
     } else {
@@ -209,7 +209,7 @@ public class InstallStepDialogController extends AbstractDialogController {
 
     stepAccordion.setExpandedPane(selectDirectoryStep);
     if (selectInstallationDirectory()) {
-      selectDirectoryStep.setText("✅ Select installation directory");
+      selectDirectoryStep.setGraphic(createCheckIcon());
       selectDirectoryStep.setDisable(true);
       progressBar.setProgress((double) 2 / 3);
     } else {
@@ -221,7 +221,7 @@ public class InstallStepDialogController extends AbstractDialogController {
 
     stepAccordion.setExpandedPane(verifyStep);
     if (verifyInstallationDirectory()) {
-      verifyStep.setText("✅ Verify plugin installation");
+      verifyStep.setGraphic(createCheckIcon());
       verifyStep.setDisable(true);
       progressBar.setProgress(1);
     } else {
@@ -273,8 +273,7 @@ public class InstallStepDialogController extends AbstractDialogController {
     }
 
     if (installParams != null && installParams.getBundle() != null) {
-      formatText.setText(String.join(", ", installParams.getBundle().getFormats())
-                             .toUpperCase());
+      formatText.setText("Bundle formats: " + String.join(", ", installParams.getBundle().getFormats()).toUpperCase());
     }
 
     return false;
@@ -284,7 +283,7 @@ public class InstallStepDialogController extends AbstractDialogController {
    * Verify final predicates for bundle installation:
    *  - Installation directory must be a valid target file, otherwise
    *  the user can choose another directory.
-   *  - Verify that folder does not already exits, otherwise ask the user
+   *  - Verify that folder does not already exist, otherwise ask the user
    *  for permission to overwrite existing file in this folder.
    * @return true if installation predicates are met.
    */
@@ -295,36 +294,42 @@ public class InstallStepDialogController extends AbstractDialogController {
 
     boolean result = true;
 
-    installationDirectoryText.setText(installParams.getInstallationDirectory().getAbsolutePath());
+    File installationDirectory = installParams.getInstallationDirectory();
+    installationDirectoryText.setText(installationDirectory.getAbsolutePath());
+
+    // Reset validation styles
+    directoryValidText.getStyleClass().removeAll("label-success", "label-danger");
+    directoryOverrideText.getStyleClass().remove("label-warning");
+    directoryChooserButton.setVisible(false);
+    directoryChooserButton.setManaged(false);
 
     if (!installParams.isInstallationConfirmed()) {
       installParams.setInstallationConfirmed(true);
       result = false;
     }
 
-    File installationDirectory = installParams.getInstallationDirectory();
-
-    // If any install target directory can be found, and it's not a valid directory
     if (installationDirectory.exists() && !installationDirectory.isDirectory()) {
-      directoryValidText.setText("Installation directory " + installationDirectory.getName() + " is not a directory.");
+      directoryValidText.setText(installationDirectory.getName() + " is not a valid installation directory.");
+      directoryValidText.getStyleClass().add("label-danger");
       directoryChooserButton.setVisible(true);
+      directoryChooserButton.setManaged(true);
       result = false;
     } else {
-      directoryValidText.setText("Installation directory " + installationDirectory.getName() + " is valid.");
+      directoryValidText.setText(installationDirectory.getName() + " directory is a valid installation path.");
+      directoryValidText.getStyleClass().add("label-success");
     }
-
 
     if (installationDirectory.exists()) {
       directoryOverrideText.setText("Directory " + installationDirectory.getName()
-                                        + " already exists, existing files might get overwritten."
-                                        + "\nPlease, allow file overwrite to continue."
-      );
+          + " already exists. Existing files may be overwritten. Please confirm below to continue.");
+      directoryOverrideText.getStyleClass().add("label-warning");
       directoryOverrideCheckBox.setDisable(false);
       if (!installParams.isDirectoryOverrideAllowed()) {
         result = false;
       }
     } else {
-      directoryOverrideText.setText("Directory " + installationDirectory.getName() + " will be created.");
+      directoryOverrideText.setText("A new directory will be created: " + installationDirectory.getName());
+      directoryOverrideCheckBox.setDisable(true);
     }
 
     return result;
@@ -369,11 +374,11 @@ public class InstallStepDialogController extends AbstractDialogController {
 
   public void reset() {
     prepareStep.setDisable(true);
-    prepareStep.setText("Prepare installation");
+    prepareStep.setGraphic(null);
     selectDirectoryStep.setDisable(true);
-    selectDirectoryStep.setText("Select installation directory");
+    selectDirectoryStep.setGraphic(null);
     verifyStep.setDisable(true);
-    verifyStep.setText("Verify plugin installation");
+    verifyStep.setGraphic(null);
 
     vst2ToggleButton.setDisable(!this.getPreferences().getBoolean(
             ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
@@ -387,16 +392,30 @@ public class InstallStepDialogController extends AbstractDialogController {
     toggleGroup.selectToggle(null);
 
     directoryChooserButton.setVisible(false);
+    directoryChooserButton.setManaged(false);
     directoryOverrideCheckBox.setDisable(true);
     directoryOverrideCheckBox.setSelected(false);
 
+    installationDirectoryText.setText("");
+    directoryValidText.setText("");
+    directoryValidText.getStyleClass().removeAll("label-success", "label-danger");
+    directoryOverrideText.setText("");
+    directoryOverrideText.getStyleClass().remove("label-warning");
+    formatText.setText("");
   }
 
+
+  private FontIcon createCheckIcon() {
+    FontIcon icon = new FontIcon("mdi2c-check");
+    icon.setIconSize(16);
+    return icon;
+  }
 
   @Override
   protected DialogLayout getLayout() {
     DialogLayout layout = new DialogLayout();
-    Label title = new Label("Prepare installation");
+    Label title = new Label("Install Plugin");
+    title.setGraphic(new FontIcon("mdi2d-download"));
     title.getStyleClass().add("heading-3");
     layout.setHeading(title);
     layout.setBody(lazyViewRegistry.get(LazyViewRegistry.INSTALL_STEP_VIEW));

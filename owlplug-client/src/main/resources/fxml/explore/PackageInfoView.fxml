@@ -3,11 +3,9 @@
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import org.controlsfx.dialog.FontSelectorDialog.FontPanel?>
+
 <HBox fx:id="packageInfoContainer" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.explore.controllers.PackageInfoController">
    <padding>

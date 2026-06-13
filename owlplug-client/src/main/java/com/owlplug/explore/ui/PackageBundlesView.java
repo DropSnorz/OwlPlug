@@ -86,7 +86,7 @@ public class PackageBundlesView extends VBox {
     HBox.setHgrow(filler, Priority.SOMETIMES);
     hbox.getChildren().add(filler);
     Button installButton = new Button("Install");
-    installButton.getStyleClass().add("button-info");
+    installButton.getStyleClass().add("small");
     installButton.setOnAction(installHandler);
     installButton.setMinWidth(USE_PREF_SIZE);
     hbox.getChildren().add(installButton);

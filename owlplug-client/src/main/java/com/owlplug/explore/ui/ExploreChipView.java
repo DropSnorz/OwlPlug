@@ -139,10 +139,10 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
           root.getStyleClass().add("chip-brown");
         }
         if (getItem().getFilterType() == ExploreFilterCriteriaType.TAG) {
-          root.getStyleClass().add("chip-red");
+          root.getStyleClass().add("chip-blue");
         }
         if (getItem().getFilterType() == ExploreFilterCriteriaType.CREATOR) {
-          root.getStyleClass().add("chip-blue");
+          root.getStyleClass().add("chip-red");
         }
       }
     });

@@ -93,7 +93,7 @@
                   <HBox alignment="CENTER_LEFT">
                         <CheckBox fx:id="telemetryCheckBox" mnemonicParsing="false" text="Send" />
                         <Hyperlink fx:id="telemetryHyperlink" styleClass="hyperlink-disabled" text="Diagnostic Telemetry Data" />
-                        <Label text="over the network" />
+                        <Label text=" over the network" />
                   </HBox>
                   <Label text="Permanently delete all stored user data including settings, remote sources and accounts. Plugins and projects files will not be deleted." wrapText="true" />
                   <Button fx:id="removeDataButton" minHeight="-Infinity" minWidth="-Infinity" text="Remove user data" />
