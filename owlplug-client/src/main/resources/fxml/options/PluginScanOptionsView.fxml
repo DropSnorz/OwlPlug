@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+    xmlns="http://javafx.com/javafx/17.0.2-ea"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.owlplug.core.controllers.options.PluginScanOptionsController">
+
+    <VBox spacing="16.0">
+        <padding><Insets top="24.0" right="24.0" bottom="24.0" left="24.0"/></padding>
+
+        <!-- Section header -->
+        <Label text="Plugin Scan" styleClass="heading-1"/>
+        <Label text="Configure audio plugin formats, scan paths, and discovery options."
+               styleClass="label-disabled" wrapText="true"/>
+        <Separator/>
+
+        <!-- Plugin Formats -->
+        <Label text="Plugin Formats" styleClass="heading-2"/>
+        <VBox fx:id="formatsContainer" spacing="35.0"/>
+
+        <Separator/>
+
+        <!-- Native Discovery -->
+        <Label text="Native Discovery" styleClass="heading-2"/>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <CheckBox fx:id="pluginNativeCheckbox" text="Enable native plugin discovery using"/>
+            <ComboBox fx:id="pluginNativeComboBox" prefHeight="28.0"/>
+        </HBox>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+            <Label text="Scanner timeout (seconds)"/>
+            <Spinner fx:id="loaderTimeoutSpinner" prefWidth="90.0" editable="true"/>
+        </HBox>
+        <Label text="Enables deep plugin metadata discovery using platform-specific host features."
+               styleClass="label-disabled" wrapText="true"/>
+
+        <Separator/>
+
+        <!-- Scan Preferences -->
+        <Label text="Scan Preferences" styleClass="heading-2"/>
+        <CheckBox fx:id="syncPluginsCheckBox" text="Sync plugins after application startup"/>
+        <CheckBox fx:id="syncFileStatCheckbox" text="Analyze file statistics after plugins sync (size usage)"/>
+
+    </VBox>
+</ScrollPane>

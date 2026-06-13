@@ -10,13 +10,16 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import atlantafx.base.controls.ToggleSwitch?>
+
 <VBox fx:id="mainNode" spacing="5.0" VBox.vgrow="NEVER" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
-    <Label fx:id="headerLabel" styleClass="heading-2" text="VST 3" />
+    <HBox fx:id="headerBox" spacing="8" alignment="CENTER_LEFT">
+        <Label fx:id="headerLabel" styleClass="heading-3" text="VST 3" />
+    </HBox>
     <FlowPane hgap="3.0" prefWidth="200.0">
         <VBox.margin>
             <Insets left="15.0" />
         </VBox.margin>
-        <ToggleSwitch fx:id="activationToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Explore plugins" labelPosition="RIGHT" />
+        <ToggleSwitch fx:id="activationToggleButton" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" text="Scan plugins" labelPosition="RIGHT" />
         <Label text="(" />
         <Hyperlink fx:id="extraDirectoryLink" styleClass="hyperlink-disabled" text="+ 0 additional directories" underline="true" />
         <Label text=")" />

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+    xmlns="http://javafx.com/javafx/17.0.2-ea"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.owlplug.core.controllers.options.ProjectsOptionsController">
+
+    <VBox spacing="16.0">
+        <padding><Insets top="24.0" right="24.0" bottom="24.0" left="24.0"/></padding>
+
+        <!-- Section header -->
+        <Label text="Projects" styleClass="heading-1"/>
+        <Label text="Manage directories where OwlPlug should scan for DAW project files."
+               styleClass="label-disabled" wrapText="true"/>
+        <Separator/>
+
+        <!-- Project Directories -->
+        <Label text="Project Directories" styleClass="heading-2"/>
+        <Label text="Add the root directories containing your DAW projects. OwlPlug will scan these directories to detect which plugins are used in your projects."
+               styleClass="label-disabled" wrapText="true"/>
+        <ListView fx:id="projectListView" prefHeight="220.0" VBox.vgrow="ALWAYS"/>
+        <HBox spacing="8.0" alignment="CENTER_LEFT">
+            <Button fx:id="addDirButton" text="Add Directory"/>
+            <Button fx:id="removeDirButton" text="Remove Selected"/>
+        </HBox>
+
+    </VBox>
+</ScrollPane>

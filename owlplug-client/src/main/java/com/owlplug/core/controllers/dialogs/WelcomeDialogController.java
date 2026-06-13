@@ -27,6 +27,7 @@ import com.owlplug.core.events.PreferencesChangedEvent;
 import com.owlplug.core.model.OperatingSystem;
 import com.owlplug.core.utils.FX;
 import com.owlplug.plugin.components.PluginTaskFactory;
+import com.owlplug.plugin.model.PluginFormat;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -70,28 +71,28 @@ public class WelcomeDialogController extends AbstractDialogController {
    */
   public void initialize() {
 
-    vst2PluginPathFragment = new PluginPathFragmentController("VST2",
+    vst2PluginPathFragment = new PluginPathFragmentController(PluginFormat.VST2,
       ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST_DIRECTORY_KEY,
       ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
+      this.getPreferences(), this.getApplicationDefaults(),
       this.listDirectoryDialogController);
-    vst3PluginPathFragment = new PluginPathFragmentController("VST3",
+    vst3PluginPathFragment = new PluginPathFragmentController(PluginFormat.VST3,
       ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY,
       ApplicationDefaults.VST3_DIRECTORY_KEY,
       ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
+      this.getPreferences(), this.getApplicationDefaults(),
       this.listDirectoryDialogController);
-    auPluginPathFragment = new PluginPathFragmentController("AU",
+    auPluginPathFragment = new PluginPathFragmentController(PluginFormat.AU,
       ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY,
       ApplicationDefaults.AU_DIRECTORY_KEY,
       ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
+      this.getPreferences(), this.getApplicationDefaults(),
       this.listDirectoryDialogController);
-    lv2PluginPathFragment = new PluginPathFragmentController("LV2",
+    lv2PluginPathFragment = new PluginPathFragmentController(PluginFormat.LV2,
       ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY,
       ApplicationDefaults.LV2_DIRECTORY_KEY,
       ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
+      this.getPreferences(), this.getApplicationDefaults(),
       this.listDirectoryDialogController);
 
     pluginPathContainer.getChildren().add(vst2PluginPathFragment.getNode());

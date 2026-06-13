@@ -100,12 +100,23 @@ Label {
 }
 
 .heading-1 {
-    -fx-font-size: 22px;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
     -fx-margin: 0, 0, 8, 0;
 }
 
 .heading-2 {
-    -fx-font-size: 20px;
+    -fx-font-size: 21px;
+    -fx-font-weight: bold;
+}
+
+.heading-3 {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.heading-4 {
+    -fx-font-size: 14px;
 }
 
 Text {
@@ -591,12 +602,48 @@ ProgressIndicator {
 }
 
 
+
 /****************************************************************
  * Install step dialog
  ****************************************************************/
 
 .install-step-screenshot .progress-bar > .bar {
     -fx-background-radius: 0;
+}
+
+/****************************************************************
+ * Options view
+ ****************************************************************/
+
+.options-sidebar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 1 0 0;
+}
+
+.options-sidebar-footer {
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1 0 0 0;
+}
+
+.options-nav-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 12 8 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-max-width: Infinity;
+}
+
+.options-nav-button:hover {
+    -fx-background-color: -color-neutral-subtle;
+}
+
+.options-nav-button:selected {
+    -fx-background-color: -color-accent-subtle;
+    -fx-text-fill: -color-accent-fg;
+    -fx-font-weight: bold;
 }
 
 /****************************************************************
