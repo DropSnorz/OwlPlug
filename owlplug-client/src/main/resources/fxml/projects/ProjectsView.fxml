@@ -6,8 +6,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -36,9 +34,7 @@
                 <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
                     <Button fx:id="projectDirectoryButton" text="Project Directories">
                         <graphic>
-                            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                <Image url="@../../icons/folder-grey-16.png"/>
-                            </ImageView>
+                            <FontIcon iconLiteral="mdi2f-folder-multiple"/>
                         </graphic>
                     </Button>
                     <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search"

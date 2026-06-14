@@ -74,6 +74,11 @@ public class OptionsController extends BaseController {
 
   private final ToggleGroup navToggleGroup = new ToggleGroup();
 
+  public static int SCAN_SECTION_INDEX = 0;
+  public static int INSTALLATION_SECTION_INDEX = 1;
+  public static int PROJECTS_SECTION_INDEX = 2;
+  public static int APPLICATION_SECTION_INDEX = 3;
+
   @FXML
   public void initialize() {
     hideSection(pluginScanOptions);
@@ -131,6 +136,10 @@ public class OptionsController extends BaseController {
   private void hideSection(Node section) {
     section.setVisible(false);
     section.setManaged(false);
+  }
+
+  public void navigateToSection(int index) {
+    navToggleGroup.getToggles().get(index).setSelected(true);
   }
 
   public void refreshView() {

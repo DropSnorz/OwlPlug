@@ -111,6 +111,9 @@ public class MainController extends BaseController {
   private Button downloadUpdateButton;
 
   public static int PLUGINS_TAB_INDEX = 1;
+  public static int EXPLORE_TAB_INDEX = 2;
+  public static int PROJECTS_TAB_INDEX = 3;
+  public static int OPTIONS_TAB_INDEX = 4;
 
   /**
    * FXML initialize method.
@@ -204,7 +207,7 @@ public class MainController extends BaseController {
 
   }
 
-  public void selectMainTab(int index) {
+  public void navigateToMainTab(int index) {
     this.tabPaneHeader.getSelectionModel().select(index);
   }
 
