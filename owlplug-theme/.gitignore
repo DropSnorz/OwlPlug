@@ -1,0 +1,5 @@
+# Maven extraction target
+target/
+
+# Generated css files
+*.css

@@ -18,7 +18,7 @@
  
 package com.owlplug;
 
-import atlantafx.base.theme.PrimerDark;
+import com.owlplug.theme.OwlPlugDarkTheme;
 import com.owlplug.core.components.ApplicationDefaults;
 import javafx.application.Application;
 import javafx.application.Preloader;
@@ -42,7 +42,7 @@ public class OwlPlugPreloader extends Preloader {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Preloader.fxml"));
     Parent root = loader.load();
 
-    Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+    Application.setUserAgentStylesheet(new OwlPlugDarkTheme().getUserAgentStylesheet());
 
     Scene scene = new Scene(root);
     String owlplugCss = OwlPlugPreloader.class.getResource("/owlplug.css").toExternalForm();

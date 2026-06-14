@@ -40,6 +40,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.owlplug</groupId>
+			<artifactId>owlplug-theme</artifactId>
+			<version>1.33.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.owlplug</groupId>
 			<artifactId>owlplug-controls</artifactId>
 			<version>1.33.1</version>
 		</dependency>
@@ -124,7 +129,7 @@
         <dependency>
             <groupId>io.github.mkpaz</groupId>
             <artifactId>atlantafx-base</artifactId>
-            <version>2.1.0</version>
+            <version>${atlantafx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>

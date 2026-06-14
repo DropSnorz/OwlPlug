@@ -306,8 +306,10 @@ Text {
     -fx-tab-max-height: 0;
 }
 
-.no-header-tab-pane>.tab-header-area {
-    visibility: hidden;
+.no-header-tab-pane > .tab-header-area {
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
 }
 
 .drawer-side-pane {
@@ -360,9 +362,14 @@ ProgressIndicator {
     -fx-text-fill: text-color;
 }
 
-/* Change the content area background */
+/* Collapse the unused content area of the navigation TabPane */
+/* JavaFX always renders a content area below the tab strip even when tabs have no content */
 #tabPaneHeader .tab-content-area {
     -fx-background-color: -color-bg-subtle;
+    -fx-padding: 0;
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
 }
 
 /* Change the tab header area background */
