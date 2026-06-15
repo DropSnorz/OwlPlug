@@ -18,6 +18,7 @@
 
 package com.owlplug.core.controllers.fragments;
 
+import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.ui.SVGPaths;
 import com.owlplug.core.utils.FileUtils;
@@ -37,7 +38,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
-import org.controlsfx.control.ToggleSwitch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

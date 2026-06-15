@@ -27,18 +27,17 @@ import com.owlplug.plugin.controllers.dialogs.NewLinkController;
 import com.owlplug.plugin.events.PluginRefreshEvent;
 import com.owlplug.plugin.events.PluginScanEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
-import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.utils.Async;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
@@ -64,7 +63,9 @@ public class PluginsController extends BaseController {
   protected PluginTableController tableController;
 
   @FXML
-  private Button scanButton;
+  private SplitMenuButton scanMenuButton;
+  @FXML
+  private MenuItem scanMenuItem;
   @FXML
   private MenuItem fullScanMenuItem;
   @FXML
@@ -146,8 +147,6 @@ public class PluginsController extends BaseController {
      * ===================
      */
 
-    displaySwitchTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
-
     // Set default display (flat plugin tree)
     treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
     treeViewController.getTreeView().setVisible(true);
@@ -186,7 +185,12 @@ public class PluginsController extends BaseController {
       displaySwitchTabPane.getSelectionModel().select(displayListTab);
     }
 
-    scanButton.setOnAction(e -> {
+    scanMenuButton.setOnAction(e -> {
+      this.getTelemetryService().event("/Plugins/Scan");
+      pluginService.scanPlugins();
+    });
+
+    scanMenuItem.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Scan");
       pluginService.scanPlugins();
     });

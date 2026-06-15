@@ -6,6 +6,7 @@
 	<properties>
 		<springboot.version>4.0.1</springboot.version>
         <mockito.version>5.20.0</mockito.version>
+        <ikonli.version>12.4.0</ikonli.version>
 	</properties>
 	
 	<parent>
@@ -120,18 +121,21 @@
 			<artifactId>controlsfx</artifactId>
 			<version>11.1.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jfxtras</groupId>
-			<artifactId>jmetro</artifactId>
-			<version>11.6.16</version>
-			<exclusions>
-				<exclusion>
-					<!-- Exclude embedded javafx -->
-					<groupId>org.openjfx</groupId>
-					<artifactId>javafx-base</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>atlantafx-base</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-javafx</artifactId>
+            <version>${ikonli.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-materialdesign2-pack</artifactId>
+            <version>${ikonli.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>com.googlecode.plist</groupId>
 			<artifactId>dd-plist</artifactId>

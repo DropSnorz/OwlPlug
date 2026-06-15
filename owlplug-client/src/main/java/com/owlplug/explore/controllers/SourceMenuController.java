@@ -18,6 +18,7 @@
  
 package com.owlplug.explore.controllers;
 
+import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.FX;
@@ -34,7 +35,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;

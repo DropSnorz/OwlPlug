@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
+<?import java.lang.String?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.owlplug.explore.controllers.ExploreController">
    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0"
@@ -29,7 +30,10 @@
                </ImageView>
             </graphic>
          </Button>
-         <HBox style="-fx-background-color:rgb(46, 46, 46)" alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+         <HBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
+             <styleClass>
+                 <String fx:value="search-bar-chip-view"/>
+             </styleClass>
             <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
                   <Insets left="8.0" right="8.0" top="10"/>

@@ -9,12 +9,14 @@
 <BorderPane prefHeight="460.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.InstallStepDialogController">
      <center>
          <VBox BorderPane.alignment="CENTER">
-             <Pane fx:id="screenshotBackgroundPane" pickOnBounds="true" prefHeight="200.0" prefWidth="460.0" />
+             <Pane fx:id="screenshotBackgroundPane" prefHeight="200.0" prefWidth="460.0" />
              <ProgressBar fx:id="progressBar" prefWidth="550.0" progress="0.1" />
              <Accordion fx:id="stepAccordion" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="290.0">
                  <panes>
-                     <TitledPane fx:id="prepareStep" animated="false" expanded="false" maxHeight="-Infinity" maxWidth="-Infinity" text="Prepare installation" />
-                     <TitledPane fx:id="selectDirectoryStep" animated="false" expanded="false" text="Select installation directory">
+                     <TitledPane fx:id="prepareStep" animated="false" expanded="false" maxHeight="-Infinity" maxWidth="-Infinity" text="Prepare installation"
+                      styleClass="dense"/>
+                     <TitledPane fx:id="selectDirectoryStep" animated="false" expanded="false" text="Select installation directory"
+                      styleClass="dense">
                          <VBox spacing="5.0">
                              <TextFlow VBox.vgrow="NEVER">
                                  <Text text="The plugin installation directory cannot be determined automatically. The plugin bundles contains following formats: " />
@@ -57,7 +59,7 @@
                              <TextField fx:id="installationDirectoryTextField" editable="false" promptText="Select a directory" />
                          </VBox>
                      </TitledPane>
-                     <TitledPane fx:id="verifyStep" animated="false" text="Verify plugin installation">
+                     <TitledPane fx:id="verifyStep" animated="false" text="Verify plugin installation" styleClass="dense">
                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                              <Text fx:id="directoryValidText" layoutX="20.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="directoryValidText" />
                              <Text layoutX="20.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Plugin will be installed in : " />

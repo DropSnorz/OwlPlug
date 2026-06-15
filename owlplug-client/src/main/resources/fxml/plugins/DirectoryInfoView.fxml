@@ -6,6 +6,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
             xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.owlplug.plugin.controllers.DirectoryInfoController">
@@ -33,16 +34,12 @@
          </HBox>
          <Button fx:id="openDirectoryButton" text="Open directory">
             <graphic>
-               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../icons/share-white-16.png"/>
-               </ImageView>
+               <FontIcon iconLiteral="mdi2o-open-in-new" />
             </graphic>
          </Button>
          <Button fx:id="deleteDirectoryButton" alignment="CENTER" styleClass="button-danger" text="Delete All">
             <graphic>
-               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../icons/trash-white-16.png"/>
-               </ImageView>
+                  <FontIcon iconLiteral="mdi2d-delete-outline"/>
             </graphic>
          </Button>
       </HBox>
@@ -50,9 +47,7 @@
       <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
          <Tab fx:id="directoryMetricsTab" disable="true" text="Metrics">
             <graphic>
-               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../icons/chart-white-16.png"/>
-               </ImageView>
+               <FontIcon iconLiteral="mdi2c-chart-bar" />
             </graphic>
             <AnchorPane minHeight="0.0" minWidth="0.0"/>
          </Tab>

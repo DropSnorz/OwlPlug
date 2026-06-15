@@ -18,6 +18,7 @@
 
 package com.owlplug;
 
+import atlantafx.base.theme.PrimerDark;
 import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
@@ -30,8 +31,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javax.sql.DataSource;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
@@ -121,13 +120,17 @@ public class OwlPlug extends Application {
     double width = 1050;
     double height = 800;
 
+    Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+
+
     Scene scene = new Scene(rootNode, width, height);
-    JMetro metroTheme = new JMetro(Style.DARK);
-    metroTheme.setScene(scene);
+
     String owlplugControlsCss = OwlPlugControlsResources.load("/css/owlplug-controls.css").toExternalForm();
-    metroTheme.getOverridingStylesheets().add(owlplugControlsCss);
     String owlplugCss = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
-    metroTheme.getOverridingStylesheets().add(owlplugCss);
+
+    scene.getStylesheets().add(owlplugCss);
+    scene.getStylesheets().add(owlplugControlsCss);
+
     primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
 

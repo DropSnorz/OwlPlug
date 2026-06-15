@@ -36,7 +36,6 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.util.Callback;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
@@ -70,8 +69,6 @@ public class ProjectsController extends BaseController {
       this.getTelemetryService().event("/Projects/Scan");
       projectService.syncProjects();
     });
-
-    projectTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
 
     projectTreeView.setCellFactory((Callback<TreeView<Object>, TreeCell<Object>>)
                                        p -> new ProjectTreeCell(getApplicationDefaults()));
