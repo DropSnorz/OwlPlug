@@ -151,17 +151,10 @@ public class ApplicationDefaults {
   }
 
 
-  /**
-   * Returns plugin icon based on plugin format.
-   * 
-   * @param type - Plugin type
-   * @return Associated icon
-   */
-  public FontIcon getPackageTypeIcon(PluginType type) {
-
+  public String getPackageTypeIconLiteral(PluginType type) {
     return switch (type) {
-      case INSTRUMENT -> new FontIcon("mdi2p-piano");
-      case EFFECT -> new FontIcon("mdi2w-waveform");
+      case INSTRUMENT -> "mdi2p-piano";
+      case EFFECT -> "mdi2w-waveform";
     };
   }
 

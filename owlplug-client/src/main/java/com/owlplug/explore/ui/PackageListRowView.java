@@ -166,7 +166,8 @@ public class PackageListRowView extends HBox {
     typeAndFormats.setAlignment(Pos.CENTER_RIGHT);
 
     if (remotePackage.getType() != null) {
-      FontIcon typeIcon = applicationDefaults.getPackageTypeIcon(remotePackage.getType());
+      FontIcon typeIcon = new FontIcon(
+              applicationDefaults.getPackageTypeIconLiteral(remotePackage.getType()));
       typeIcon.setIconSize(16);
       typeAndFormats.getChildren().add(typeIcon);
 
@@ -222,18 +223,20 @@ public class PackageListRowView extends HBox {
     ContextMenu contextMenu = new ContextMenu();
     contextMenu.getItems().add(installMenuItem);
 
-    Menu bundlesMenu = new Menu("Other Packages");
-    for (PackageBundle bundle : remotePackage.getBundles()) {
-      TextFlow bundleTextFlow = new TextFlow();
-      bundleTextFlow.getChildren().add(new Label("Install"));
-      Text bundleSource = new Text(" (" + StringUtils.truncate(bundle.getName(), 50, "...") + ")");
-      bundleSource.getStyleClass().add("text-disabled");
-      bundleTextFlow.getChildren().add(bundleSource);
-      CustomMenuItem bundleMenuItem = new CustomMenuItem(bundleTextFlow);
-      bundleMenuItem.setOnAction(e -> parentController.installBundle(bundle));
-      bundlesMenu.getItems().add(bundleMenuItem);
+    if (remotePackage.getBundles() != null) {
+      Menu bundlesMenu = new Menu("Other Packages");
+      for (PackageBundle bundle : remotePackage.getBundles()) {
+        TextFlow bundleTextFlow = new TextFlow();
+        bundleTextFlow.getChildren().add(new Label("Install"));
+        Text bundleSource = new Text(" (" + StringUtils.truncate(bundle.getName(), 50, "...") + ")");
+        bundleSource.getStyleClass().add("text-disabled");
+        bundleTextFlow.getChildren().add(bundleSource);
+        CustomMenuItem bundleMenuItem = new CustomMenuItem(bundleTextFlow);
+        bundleMenuItem.setOnAction(e -> parentController.installBundle(bundle));
+        bundlesMenu.getItems().add(bundleMenuItem);
+      }
+      contextMenu.getItems().add(bundlesMenu);
     }
-    contextMenu.getItems().add(bundlesMenu);
 
     MenuItem pageMenuItem = new MenuItem("Browse plugin page...");
     pageMenuItem.setOnAction(e -> PlatformUtils.openDefaultBrowser(remotePackage.getPageUrl()));

@@ -70,9 +70,11 @@ public class PackageBundlesView extends VBox {
     hbox.setFillHeight(false);
 
     HBox formatsContainer = new HBox(4);
-    for (String formatValue : bundle.getFormats()) {
-      formatsContainer.getChildren().add(new PluginFormatBadgeView(formatValue,
-          applicationDefaults, PluginFormatBadgeView.DisplayMode.ICON_ONLY));
+    if (bundle.getFormats() != null) {
+      for (String formatValue : bundle.getFormats()) {
+        formatsContainer.getChildren().add(new PluginFormatBadgeView(formatValue,
+            applicationDefaults, PluginFormatBadgeView.DisplayMode.ICON_ONLY));
+      }
     }
     hbox.getChildren().add(formatsContainer);
 

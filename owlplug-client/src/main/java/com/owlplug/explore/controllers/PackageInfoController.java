@@ -197,7 +197,8 @@ public class PackageInfoController extends BaseController {
     } else if (remotePackage.getType() == PluginType.EFFECT) {
       this.typeLabel.setText("Effect (VST)");
     }
-    this.typeLabel.setGraphic(this.getApplicationDefaults().getPackageTypeIcon(remotePackage.getType()));
+    this.typeLabel.setGraphic(new FontIcon(
+            this.getApplicationDefaults().getPackageTypeIconLiteral(remotePackage.getType())));
 
     // Tag display
     tagContainer.getChildren().clear();

@@ -101,7 +101,9 @@
                      </tooltip>
                   </Hyperlink>
                   <Label fx:id="typeLabel" text="TYPE" GridPane.rowIndex="1">
-                     <FontIcon iconLiteral="mdi2w-waveform"/>
+                     <graphic>
+                        <FontIcon iconLiteral="mdi2w-waveform"/>
+                     </graphic>
                      <tooltip>
                         <Tooltip text="Plugin type"/>
                      </tooltip>

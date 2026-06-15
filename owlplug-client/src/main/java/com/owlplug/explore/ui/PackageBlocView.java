@@ -95,7 +95,8 @@ public class PackageBlocView extends AnchorPane {
     footer.setSpacing(5);
     footer.getStyleClass().add("package-bloc-title");
     if (remotePackage.getType() != null) {
-      FontIcon typeIcon = applicationDefaults.getPackageTypeIcon(remotePackage.getType());
+      FontIcon typeIcon = new FontIcon(
+              applicationDefaults.getPackageTypeIconLiteral(remotePackage.getType()));
       typeIcon.setIconSize(16);
       footer.getChildren().add(typeIcon);
 

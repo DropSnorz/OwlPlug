@@ -396,6 +396,7 @@ public class InstallStepDialogController extends AbstractDialogController {
     directoryOverrideCheckBox.setDisable(true);
     directoryOverrideCheckBox.setSelected(false);
 
+    installationDirectoryTextField.setText("");
     installationDirectoryText.setText("");
     directoryValidText.setText("");
     directoryValidText.getStyleClass().removeAll("label-success", "label-danger");

@@ -348,7 +348,7 @@ public class ExploreController extends BaseController {
       });
     }
 
-    resultCounter.setText(this.masonryPane.getChildren().size() + " / " + Iterables.size(this.loadedRemotePackages));
+    refreshResultCounter();
   }
 
   private void displayNewListPartition() {
@@ -371,7 +371,13 @@ public class ExploreController extends BaseController {
 
       boolean allLoaded = Iterables.size(loadedPackagePartitions) == listDisplayedPartitions;
       listLazyLoadBar.setVisible(!allLoaded);
+
+      refreshResultCounter();
     }
+  }
+
+  private void refreshResultCounter() {
+    resultCounter.setText(this.masonryPane.getChildren().size() + " / " + Iterables.size(this.loadedRemotePackages));
   }
 
   /**

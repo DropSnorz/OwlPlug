@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.explore.ui;
 
 import com.owlplug.controls.ChipView;
@@ -41,7 +41,7 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
 
   /**
    * Creates an ExploreChipView.
-   * 
+   *
    * @param applicationDefaults - OwlPlug application defaults
    */
   public ExploreChipView(ApplicationDefaults applicationDefaults, List<String> pluginCreators) {
@@ -55,67 +55,67 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
   private void init() {
 
     HashMap<String, ExploreFilterCriteria> suggestions = new LinkedHashMap<>();
-    
+
     suggestions.put("Effect", new ExploreFilterCriteria(PluginType.EFFECT, ExploreFilterCriteriaType.TYPE,
-        applicationDefaults.getPackageTypeIcon(PluginType.EFFECT), "Effect"));
+        applicationDefaults.getPackageTypeIconLiteral(PluginType.EFFECT), "Effect"));
     suggestions.put("Instrument", new ExploreFilterCriteria(PluginType.INSTRUMENT, ExploreFilterCriteriaType.TYPE,
-        applicationDefaults.getPackageTypeIcon(PluginType.INSTRUMENT), "Instrument"));
-    
+        applicationDefaults.getPackageTypeIconLiteral(PluginType.INSTRUMENT), "Instrument"));
+
     suggestions.put("Amp",
-        new ExploreFilterCriteria("Amp", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Amp", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Analog",
-        new ExploreFilterCriteria("Analog", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Analog", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Ambient",
-        new ExploreFilterCriteria("Ambient", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
-    suggestions.put("Bass", new ExploreFilterCriteria("Bass", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Ambient", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
+    suggestions.put("Bass", new ExploreFilterCriteria("Bass", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Brass",
-        new ExploreFilterCriteria("Brass", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Brass", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Compressor",
-        new ExploreFilterCriteria("Compressor", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Compressor", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Delay",
-        new ExploreFilterCriteria("Delay", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Delay", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Distortion",
-        new ExploreFilterCriteria("Distortion", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
-    suggestions.put("Drum", new ExploreFilterCriteria("Drum", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Distortion", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
+    suggestions.put("Drum", new ExploreFilterCriteria("Drum", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Equalizer",
-        new ExploreFilterCriteria("Equalizer", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Equalizer", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Filter",
-        new ExploreFilterCriteria("Filter", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Filter", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Flanger",
-        new ExploreFilterCriteria("Flanger", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
-    suggestions.put("Gate", new ExploreFilterCriteria("Gate", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Flanger", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
+    suggestions.put("Gate", new ExploreFilterCriteria("Gate", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Guitar",
-        new ExploreFilterCriteria("Guitar", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
-    suggestions.put("LFO", new ExploreFilterCriteria("LFO", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Guitar", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
+    suggestions.put("LFO", new ExploreFilterCriteria("LFO", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Limiter",
-        new ExploreFilterCriteria("Limiter", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Limiter", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Maximizer",
-        new ExploreFilterCriteria("Maximizer", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Maximizer", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Monophonic",
-        new ExploreFilterCriteria("Monophonic", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Monophonic", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Orchestral",
-        new ExploreFilterCriteria("Orchestral", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Orchestral", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Organ",
-        new ExploreFilterCriteria("Organ", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Organ", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Panner",
-        new ExploreFilterCriteria("Panner", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Panner", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Phaser",
-        new ExploreFilterCriteria("Phaser", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Phaser", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Piano",
-        new ExploreFilterCriteria("Piano", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Piano", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Reverb",
-        new ExploreFilterCriteria("Reverb", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Reverb", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Tremolo",
-        new ExploreFilterCriteria("Tremolo", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
-    suggestions.put("Tube", new ExploreFilterCriteria("Tube", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Tremolo", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
+    suggestions.put("Tube", new ExploreFilterCriteria("Tube", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Synth",
-        new ExploreFilterCriteria("Synth", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Synth", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
     suggestions.put("Vintage",
-        new ExploreFilterCriteria("Vintage", ExploreFilterCriteriaType.TAG, new FontIcon("mdi2t-tag-outline")));
+        new ExploreFilterCriteria("Vintage", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
 
     for (String creator : pluginCreators) {
       suggestions.put(creator, new ExploreFilterCriteria(creator, ExploreFilterCriteriaType.CREATOR,
-          new FontIcon("mdi2a-account-group-outline")));
+          "mdi2a-account-group-outline"));
     }
 
     this.getSuggestions().addAll(suggestions.values());
@@ -161,7 +161,8 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
         super.updateItem(item, empty);
         if (item != null && !empty) {
           setText(item.toString());
-          setGraphic(getItem().getIcon());
+          String literal = item.getIconLiteral();
+          setGraphic(literal != null ? new FontIcon(literal) : null);
         } else {
           setGraphic(null);
           setText(null);
