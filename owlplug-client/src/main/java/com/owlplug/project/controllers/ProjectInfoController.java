@@ -19,6 +19,7 @@
 package com.owlplug.project.controllers;
 
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.TimeUtils;
@@ -41,6 +42,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -183,8 +185,9 @@ public class ProjectInfoController extends BaseController {
           setText(null);
           setGraphic(null);
         } else {
-          setText(item.getText());
-          setGraphic(new ImageView(getApplicationDefaults().getPluginFormatIcon(item)));
+          setText(null);
+          setGraphic(new HBox(new PluginFormatBadgeView(
+              item, getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.ICON_ONLY)));
         }
       }
     });

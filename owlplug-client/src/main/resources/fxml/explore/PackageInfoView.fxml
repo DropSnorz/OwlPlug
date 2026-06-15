@@ -3,8 +3,8 @@
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <HBox fx:id="packageInfoContainer" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.explore.controllers.PackageInfoController">
@@ -31,10 +31,7 @@
                <HBox BorderPane.alignment="CENTER">
                   <Button fx:id="closeButton" styleClass="package-bloc-title">
                      <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true"
-                                   rotate="180.0">
-                           <Image url="@../../icons/arrow-ui-white-32.png"/>
-                        </ImageView>
+                         <FontIcon iconLiteral="mdi2a-arrow-left" iconSize="20" />
                      </graphic>
                   </Button>
                   <Region maxHeight="10.0" HBox.hgrow="ALWAYS"/>
@@ -54,10 +51,7 @@
                      <Region HBox.hgrow="ALWAYS"/>
                      <Button fx:id="installButton" styleClass="button-success" text="Install">
                         <graphic>
-                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                              <Image url="@../../icons/download-white-32.png"/>
-                           </ImageView>
+                           <FontIcon iconLiteral="mdi2d-download" />
                         </graphic>
                      </Button>
                   </HBox>
@@ -73,18 +67,12 @@
                   <Region HBox.hgrow="ALWAYS"/>
                   <Button fx:id="donateButton" text="Donate">
                      <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                           <Image url="@../../icons/heart-white-32.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2c-cards-heart-outline" />
                      </graphic>
                   </Button>
                   <Button fx:id="browsePageButton" layoutX="306.0" layoutY="10.0" text="Website">
                      <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                           <Image url="@../../icons/earth-white-32.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2w-web" />
                      </graphic>
                   </Button>
                </HBox>
@@ -106,10 +94,7 @@
                   </padding>
                   <Hyperlink fx:id="creatorLink" styleClass="hyperlink-disabled" text="CREATOR">
                      <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                           <Image url="@../../icons/user-white-32.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2a-account-group-outline"/>
                      </graphic>
                      <tooltip>
                         <Tooltip text="Creator"/>
@@ -117,31 +102,19 @@
                   </Hyperlink>
                   <Label fx:id="typeLabel" text="TYPE" GridPane.rowIndex="1">
                      <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                           <Image url="@../../icons/wave-circle-32.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2w-waveform"/>
                      </graphic>
                      <tooltip>
                         <Tooltip text="Plugin type"/>
                      </tooltip>
                   </Label>
                   <HBox spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
-                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                preserveRatio="true">
-                        <HBox.margin>
-                           <Insets top="4.0"/>
-                        </HBox.margin>
-                        <Image url="@../../icons/tag-white-16.png"/>
-                     </ImageView>
+                     <FontIcon iconLiteral="mdi2t-tag-outline" />
                      <FlowPane fx:id="tagContainer" hgap="5.0" vgap="5.0"/>
                   </HBox>
                   <Label fx:id="licenseLabel" text="LICENSE" GridPane.columnIndex="1">
                      <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                           <Image url="@../../icons/share-white-32.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2l-license" />
                      </graphic>
                      <tooltip>
                         <Tooltip text="License"/>
@@ -150,10 +123,7 @@
                   <Label fx:id="versionLabel" text="VERSION" GridPane.columnIndex="1"
                          GridPane.rowIndex="1">
                      <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                           <Image url="@../../icons/package-white-32.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2p-package-variant-closed" />
                      </graphic>
                      <tooltip>
                         <Tooltip text="Version"/>

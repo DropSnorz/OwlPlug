@@ -30,8 +30,8 @@ import com.owlplug.plugin.components.PluginTaskFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
@@ -139,10 +139,9 @@ public class WelcomeDialogController extends AbstractDialogController {
   protected DialogLayout getLayout() {
     Label title = new Label("Owlplug is almost ready !");
     title.getStyleClass().add("heading-3");
-    ImageView iv = new ImageView(this.getApplicationDefaults().rocketImage);
-    iv.setFitHeight(20);
-    iv.setFitWidth(20);
-    title.setGraphic(iv);
+    FontIcon icon = new FontIcon("mdi2r-rocket-launch-outline");
+    icon.setIconSize(20);
+    title.setGraphic(icon);
     DialogLayout layout = new DialogLayout();
     layout.setHeading(title);
     layout.setBody(lazyViewRegistry.get(LazyViewRegistry.WELCOME_VIEW));

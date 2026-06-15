@@ -57,9 +57,7 @@
                 <Label text="New OwlPlug version available"/>
                 <Button fx:id="downloadUpdateButton" text="Download">
                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                            <Image url="@../icons/download-white-32.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2d-download-outline"/>
                     </graphic>
                 </Button>
             </HBox>

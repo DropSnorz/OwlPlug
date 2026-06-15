@@ -28,6 +28,7 @@ import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
 import com.owlplug.core.utils.Async;
@@ -46,6 +47,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,8 +121,8 @@ public class PluginTableController extends BaseController {
           setText(null);
           setGraphic(null);
         } else {
-          setText(item.getText());
-          setGraphic(new ImageView(getApplicationDefaults().getPluginFormatIcon(item)));
+          setText(null);
+          setGraphic(new HBox(new PluginFormatBadgeView(item, getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.ICON_ONLY)));
         }
       }
     });

@@ -15,22 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.explore.model.search;
 
 import java.util.Objects;
-import javafx.scene.image.Image;
 
 public class ExploreFilterCriteria {
 
   private Object value;
   private String textValue;
   private ExploreFilterCriteriaType filterType;
-  private Image icon;
+  private String iconLiteral;
 
   /**
    * Creates a ExploreFilterCriteria.
-   * 
+   *
    * @param value      - criteria value
    * @param filterType - criteria type
    */
@@ -42,31 +41,32 @@ public class ExploreFilterCriteria {
 
   /**
    * Creates a ExploreFilterCriteria.
-   * 
-   * @param value      - criteria value
-   * @param filterType - criteria type
-   * @param icon       - criteria icon displayed
+   *
+   * @param value       - criteria value
+   * @param filterType  - criteria type
+   * @param iconLiteral - Ikonli icon literal identifier
    */
-  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, Image icon) {
+  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, String iconLiteral) {
     super();
     this.value = value;
     this.filterType = filterType;
-    this.icon = icon;
+    this.iconLiteral = iconLiteral;
   }
 
   /**
    * Creates a ExploreFilterCriteria.
-   * 
-   * @param value      - criteria value
-   * @param filterType - criteria type
-   * @param icon       - criteria icon to display
-   * @param textValue  - custom text value overwriting original value toString()
-   *                   conversion.
+   *
+   * @param value       - criteria value
+   * @param filterType  - criteria type
+   * @param iconLiteral - Ikonli icon literal identifier
+   * @param textValue   - custom text value overwriting original value toString()
+   *                    conversion.
    */
-  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, Image icon, String textValue) {
+  public ExploreFilterCriteria(Object value, ExploreFilterCriteriaType filterType, String iconLiteral,
+                               String textValue) {
     super();
     this.value = value;
-    this.icon = icon;
+    this.iconLiteral = iconLiteral;
     this.filterType = filterType;
     this.textValue = textValue;
   }
@@ -87,12 +87,12 @@ public class ExploreFilterCriteria {
     this.filterType = filterType;
   }
 
-  public Image getIcon() {
-    return icon;
+  public String getIconLiteral() {
+    return iconLiteral;
   }
 
-  public void setIcon(Image icon) {
-    this.icon = icon;
+  public void setIconLiteral(String iconLiteral) {
+    this.iconLiteral = iconLiteral;
   }
 
   @Override

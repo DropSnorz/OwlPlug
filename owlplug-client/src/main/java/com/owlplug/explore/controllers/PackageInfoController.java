@@ -27,9 +27,9 @@ import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.ui.PackageBundlesView;
 import com.owlplug.explore.ui.PackageSourceBadgeView;
+import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginType;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -41,9 +41,9 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -147,7 +147,7 @@ public class PackageInfoController extends BaseController {
     this.nameLabel.setText(remotePackage.getName());
     this.remoteSourceLabel.setText(remotePackage.getRemoteSource().getName());
 
-    // Redirect button configuratio
+    // Redirect button configuration
     browsePageButton.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(remotePackage.getPageUrl());
     });
@@ -197,13 +197,13 @@ public class PackageInfoController extends BaseController {
     } else if (remotePackage.getType() == PluginType.EFFECT) {
       this.typeLabel.setText("Effect (VST)");
     }
+    this.typeLabel.setGraphic(new FontIcon(
+            this.getApplicationDefaults().getPackageTypeIconLiteral(remotePackage.getType())));
 
     // Tag display
     tagContainer.getChildren().clear();
     for (PackageTag tag : remotePackage.getTags()) {
-      Node chip = new FakeChip(tag.getName());
-      chip.getStyleClass().add("chip");
-      chip.getStyleClass().add("fake-chip");
+      FakeChip chip = new FakeChip(tag.getName());
       chip.setOnMouseClicked(e -> {
         exploreController.addSearchChip(tag.getName());
       });
@@ -222,6 +222,7 @@ public class PackageInfoController extends BaseController {
     if (sidebar.isCollapsed()) {
       sidebar.expand();
     }
+
   }
 
   public void hide() {
@@ -232,15 +233,11 @@ public class PackageInfoController extends BaseController {
     sidebar.toggle();
   }
 
-  private static class FakeChip extends HBox {
+  private static class FakeChip extends Label {
 
     public FakeChip(String text) {
-
-      Label label = new Label(text);
-      label.setWrapText(true);
-      label.setMaxWidth(100);
-      getChildren().add(label);
-      this.getStyleClass().add("chip-label");
+      super(text);
+      this.getStyleClass().add("package-tag-badge");
     }
 
   }
