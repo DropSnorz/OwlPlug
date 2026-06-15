@@ -406,6 +406,26 @@ ProgressIndicator {
     -fx-text-fill: disabled-color;
 }
 
+/* Plugin info view */
+
+.info-field-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: disabled-color;
+}
+
+.info-field-value {
+    -fx-font-size: 13px;
+    -fx-text-fill: text-emphase-color;
+}
+
+.plugin-action-bar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: -color-border-default;
+    -fx-padding: 8 16 8 16;
+}
+
 .package-bloc-title {
     -fx-background-color: rgba(0, 0, 0, 0.85);
     -fx-padding: 10, 10, 10, 10;
