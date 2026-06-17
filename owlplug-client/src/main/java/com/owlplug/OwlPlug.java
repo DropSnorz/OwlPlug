@@ -18,7 +18,7 @@
 
 package com.owlplug;
 
-import atlantafx.base.theme.PrimerDark;
+import com.owlplug.theme.OwlPlugDarkTheme;
 import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.MainController;
@@ -120,7 +120,7 @@ public class OwlPlug extends Application {
     double width = 1050;
     double height = 800;
 
-    Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+    Application.setUserAgentStylesheet(new OwlPlugDarkTheme().getUserAgentStylesheet());
 
 
     Scene scene = new Scene(rootNode, width, height);

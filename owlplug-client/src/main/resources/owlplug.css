@@ -50,10 +50,10 @@
      */
     -fx-font-family: "Segoe UI";
 
-    disabled-color: -color-neutral-muted;
-    danger-color: -color-danger-subtle;
-    warning-color: -color-warning-fg;
-    success-color: -color-success-fg;
+    disabled-color: -color-fg-muted;
+    danger-color: -color-danger-emphasis;
+    warning-color: -color-warning-emphasis;
+    success-color: -color-success-emphasis;
 
     theme-primary-color: -color-accent-fg;
 
@@ -100,12 +100,23 @@ Label {
 }
 
 .heading-1 {
-    -fx-font-size: 22px;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
     -fx-margin: 0, 0, 8, 0;
 }
 
 .heading-2 {
-    -fx-font-size: 20px;
+    -fx-font-size: 21px;
+    -fx-font-weight: bold;
+}
+
+.heading-3 {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.heading-4 {
+    -fx-font-size: 14px;
 }
 
 Text {
@@ -295,8 +306,10 @@ Text {
     -fx-tab-max-height: 0;
 }
 
-.no-header-tab-pane>.tab-header-area {
-    visibility: hidden;
+.no-header-tab-pane > .tab-header-area {
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
 }
 
 .drawer-side-pane {
@@ -349,9 +362,14 @@ ProgressIndicator {
     -fx-text-fill: text-color;
 }
 
-/* Change the content area background */
+/* Collapse the unused content area of the navigation TabPane */
+/* JavaFX always renders a content area below the tab strip even when tabs have no content */
 #tabPaneHeader .tab-content-area {
     -fx-background-color: -color-bg-subtle;
+    -fx-padding: 0;
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
 }
 
 /* Change the tab header area background */
@@ -591,12 +609,52 @@ ProgressIndicator {
 }
 
 
+
 /****************************************************************
  * Install step dialog
  ****************************************************************/
 
 .install-step-screenshot .progress-bar > .bar {
     -fx-background-radius: 0;
+}
+
+/****************************************************************
+ * Options view
+ ****************************************************************/
+
+.options-sidebar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 1 0 0;
+}
+
+.options-sidebar-footer {
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1 0 0 0;
+}
+
+.options-nav-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 12 8 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-max-width: Infinity;
+}
+
+.options-nav-button:hover {
+    -fx-background-color: -color-neutral-subtle;
+}
+
+.options-nav-button:selected {
+    -fx-background-color: -color-accent-subtle;
+    -fx-text-fill: -color-accent-fg;
+    -fx-font-weight: bold;
+}
+
+.options-nav-button:selected .ikonli-font-icon {
+    -fx-icon-color: -color-accent-fg;
 }
 
 /****************************************************************

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+    xmlns="http://javafx.com/javafx/17.0.2-ea"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.owlplug.core.controllers.options.InstallationOptionsController">
+
+    <VBox spacing="16.0">
+        <padding><Insets top="24.0" right="24.0" bottom="24.0" left="24.0"/></padding>
+
+        <!-- Section header -->
+        <Label text="Installation" styleClass="heading-1"/>
+        <Label text="Configure how plugins are organized when downloaded and installed from remote sources."
+               styleClass="label-disabled" wrapText="true"/>
+        <Separator/>
+
+        <!-- Organization -->
+        <Label text="Download Organization" styleClass="heading-2"/>
+        <CheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins in a dedicated subdirectory"/>
+        <HBox fx:id="storeDirectoryRow" spacing="8.0" alignment="CENTER_LEFT">
+            <Label text="Subdirectory name:"/>
+            <TextField fx:id="storeDirectoryTextField" promptText="optional subdirectory name" HBox.hgrow="ALWAYS"/>
+        </HBox>
+        <CheckBox fx:id="storeByCreatorCheckBox" text="Group plugins by their creator or manufacturer"/>
+        <CheckBox fx:id="storeSubDirectoryCheckBox" text="Wrap each plugin in its own subdirectory"/>
+        <Label fx:id="warningSubDirectory"
+               text="Warning: Wrapping plugins in a subdirectory is highly recommended. It prevents files from being overwritten due to filename collisions."
+               styleClass="label-danger" wrapText="true"/>
+
+        <Separator/>
+
+        <!-- Path Preview -->
+        <Label text="Installation Path Preview" styleClass="heading-2"/>
+        <Label text="Based on your current settings, plugins will be installed to the following paths. &quot;Acme Audio&quot; and &quot;MyPlugin&quot; are used as example creator and plugin names."
+               styleClass="label-disabled" wrapText="true"/>
+        <VBox fx:id="pathPreviewContainer" spacing="8.0"/>
+
+    </VBox>
+</ScrollPane>

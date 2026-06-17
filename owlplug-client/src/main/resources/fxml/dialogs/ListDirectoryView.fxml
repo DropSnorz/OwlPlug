@@ -3,13 +3,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefWidth="400.0" spacing="10.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.ListDirectoryDialogController">
-   <Label text="Update items by double-clicking on it and hit the &quot;Enter&quot; key to validate." wrapText="true" />
-   <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
-      <Button fx:id="addDirectoryButton" text="+ Add a directory" />
-   </HBox>
-   <ListView fx:id="directoryListView" editable="true" prefHeight="200.0" prefWidth="200.0" />
-   <HBox alignment="CENTER_RIGHT" prefHeight="50.0" spacing="10.0">
-      <Button fx:id="closeButton" text="Close" />
+<VBox prefWidth="460.0" spacing="12.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.core.controllers.dialogs.ListDirectoryDialogController">
+   <ListView fx:id="directoryListView" prefHeight="220.0" VBox.vgrow="ALWAYS"/>
+   <HBox spacing="8.0" alignment="CENTER_LEFT">
+      <Button fx:id="addDirectoryButton" text="Add Directory"/>
+      <Button fx:id="removeDirectoryButton" text="Remove Selected"/>
+      <Region HBox.hgrow="ALWAYS"/>
+      <Button fx:id="closeButton" text="Done"/>
    </HBox>
 </VBox>

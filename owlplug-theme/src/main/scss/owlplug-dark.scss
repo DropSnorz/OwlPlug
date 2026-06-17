@@ -1,0 +1,144 @@
+// OwlPlug Dark — custom AtlantaFX theme for OwlPlug
+// Primary: #A8492E (warm terracotta/burnt sienna)
+// Base: Primer Dark with a faint warm tint to harmonise with the primary
+// Theme variants : #b86a54 #220f09 #b15b43 #793521
+
+@use "sass:color";
+
+@use "../../../target/atlantafx/styles/settings/utils" as utils;
+
+// ── Color scale ──────────────────────────────────────────────────────────────
+
+@forward "../../../target/atlantafx/styles/settings/color-scale" with (
+
+  $dark:  #010409,
+  $light: #ffffff,
+
+  // Neutral — Primer Dark warmed very slightly to harmonise with terracotta
+  $base-0: #f0f6fc,
+  $base-1: #cdd1d6,
+  $base-2: #b0b7be,
+  $base-3: #8b9199,
+  $base-4: #6c7280,
+  $base-5: #484d56,
+  $base-6: #31333a,
+  $base-7: #22252c,
+  $base-8: #181a20,
+  $base-9: #0e1018,
+
+  // Accent — OwlPlug terracotta (#A8492E is the primary at accent-5)
+  $accent-0: #fef2ed,
+  $accent-1: #fdd8c8,
+  $accent-2: #f7b099,
+  $accent-3: #d97a58,
+  $accent-4: #be5f3e,
+  $accent-5: #a8492e,
+  $accent-6: #8a3a22,
+  $accent-7: #6b2c18,
+  $accent-8: #4c1e10,
+  $accent-9: #301209,
+
+  // Success (identical to Primer Dark)
+  $success-0: #aff5b4,
+  $success-1: #7ee787,
+  $success-2: #56d364,
+  $success-3: #3fb950,
+  $success-4: #2ea043,
+  $success-5: #238636,
+  $success-6: #196c2e,
+  $success-7: #0f5323,
+  $success-8: #033a16,
+  $success-9: #04260f,
+
+  // Warning (identical to Primer Dark)
+  $warning-0: #f8e3a1,
+  $warning-1: #f2cc60,
+  $warning-2: #e3b341,
+  $warning-3: #d29922,
+  $warning-4: #bb8009,
+  $warning-5: #9e6a03,
+  $warning-6: #845306,
+  $warning-7: #693e00,
+  $warning-8: #4b2900,
+  $warning-9: #341a00,
+
+  // Danger (identical to Primer Dark)
+  $danger-0: #ffdcd7,
+  $danger-1: #ffc1ba,
+  $danger-2: #ffa198,
+  $danger-3: #ff7b72,
+  $danger-4: #f85149,
+  $danger-5: #da3633,
+  $danger-6: #b62324,
+  $danger-7: #8e1519,
+  $danger-8: #67060c,
+  $danger-9: #490202
+);
+
+@use "../../../target/atlantafx/styles/settings/color-scale" as scale;
+
+// ── Functional color tokens ───────────────────────────────────────────────────
+
+@forward "../../../target/atlantafx/styles/settings/color-vars" with (
+
+  $fg-default:           scale.$base-1,
+  $fg-muted:             scale.$base-3,
+  $fg-subtle:            scale.$base-4,
+  $fg-onEmphasis:        scale.$light,
+
+  $canvas-default:       scale.$base-9,
+  $canvas-overlay:       scale.$base-8,
+  $canvas-inset:         scale.$dark,
+  $canvas-subtle:        scale.$base-8,
+
+  $border-default:       scale.$base-6,
+  $border-muted:         scale.$base-7,
+  $border-subtle:        utils.flattenColor(scale.$base-9, color.change(scale.$base-0, $alpha: 0.1)),
+
+  $shadow-default:       scale.$dark,
+
+  $neutral-emphasisPlus: scale.$base-4,
+  $neutral-emphasis:     scale.$base-4,
+  $neutral-muted:        color.change(scale.$base-4, $alpha: 0.4),
+  $neutral-subtle:       color.change(scale.$base-4, $alpha: 0.1),
+
+  // accent-fg: lighter terracotta for text/icons on dark canvas (~5.5:1 on base-9)
+  // accent-emphasis: #A8492E primary for filled elements
+  $accent-fg:            scale.$accent-3,
+  $accent-emphasis:      scale.$accent-5,
+  $accent-muted:         color.change(scale.$accent-5, $alpha: 0.4),
+  $accent-subtle:        color.change(scale.$accent-5, $alpha: 0.15),
+
+  $success-fg:           scale.$success-3,
+  $success-emphasis:     scale.$success-5,
+  $success-muted:        color.change(scale.$success-4, $alpha: 0.4),
+  $success-subtle:       color.change(scale.$success-4, $alpha: 0.15),
+
+  $warning-fg:           scale.$warning-3,
+  $warning-emphasis:     scale.$warning-5,
+  $warning-muted:        color.change(scale.$warning-4, $alpha: 0.4),
+  $warning-subtle:       color.change(scale.$warning-4, $alpha: 0.15),
+
+  $danger-fg:            scale.$danger-4,
+  $danger-emphasis:      scale.$danger-5,
+  $danger-muted:         color.change(scale.$danger-4, $alpha: 0.4),
+  $danger-subtle:        color.change(scale.$danger-4, $alpha: 0.15)
+);
+
+@forward "../../../target/atlantafx/styles/settings/config" with (
+  $darkMode: true
+);
+
+@use "../../../target/atlantafx/styles/general";
+@use "../../../target/atlantafx/styles/components";
+
+// Override floating TabPane: use default canvas instead of inset background
+.tab-pane.floating {
+  > .tab-header-area {
+    -fx-background-color: -color-border-default, -color-bg-default;
+  }
+
+  > .tab-header-area > .headers-region > .tab > .tab-container {
+    -fx-background-color: -color-border-subtle, -color-bg-default;
+  }
+}

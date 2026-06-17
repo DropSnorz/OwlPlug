@@ -18,9 +18,9 @@
 
 package com.owlplug.project.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
+import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.core.utils.FX;
 import com.owlplug.project.events.ProjectSyncEvent;
@@ -46,7 +46,9 @@ public class ProjectsController extends BaseController {
   @Autowired
   private ProjectService projectService;
   @Autowired
-  private ListDirectoryDialogController listDirectoryDialogController;
+  private MainController mainController;
+  @Autowired
+  private OptionsController optionsController;
   @Autowired
   private ProjectInfoController projectInfoController;
 
@@ -81,8 +83,8 @@ public class ProjectsController extends BaseController {
     });
 
     projectDirectoryButton.setOnAction(e -> {
-      listDirectoryDialogController.configure(ApplicationDefaults.PROJECT_DIRECTORY_KEY);
-      listDirectoryDialogController.show();
+      optionsController.navigateToSection(OptionsController.PROJECTS_SECTION_INDEX);
+      mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX);
     });
 
     projectTreeNode = new FilterableTreeItem<>("(all)");

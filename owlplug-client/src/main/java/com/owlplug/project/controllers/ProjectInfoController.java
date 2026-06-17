@@ -170,7 +170,7 @@ public class ProjectInfoController extends BaseController {
           link.setGraphic(new ImageView(getApplicationDefaults().linkIconImage));
           link.setOnAction(e -> {
             pluginsController.selectPluginById(item.getId());
-            mainController.selectMainTab(MainController.PLUGINS_TAB_INDEX);
+            mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
           });
           setGraphic(link);
         }

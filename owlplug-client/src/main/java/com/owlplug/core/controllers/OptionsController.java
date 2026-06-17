@@ -18,321 +18,135 @@
 
 package com.owlplug.core.controllers;
 
-import com.owlplug.controls.Dialog;
-import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.controllers.dialogs.DonateDialogController;
-import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
+import com.owlplug.core.controllers.options.ApplicationOptionsController;
+import com.owlplug.core.controllers.options.InstallationOptionsController;
+import com.owlplug.core.controllers.options.PluginScanOptionsController;
+import com.owlplug.core.controllers.options.ProjectsOptionsController;
 import com.owlplug.core.events.PreferencesChangedEvent;
-import com.owlplug.core.model.OperatingSystem;
-import com.owlplug.core.services.OptionsService;
 import com.owlplug.core.ui.SlidingLabel;
 import com.owlplug.core.utils.FX;
-import com.owlplug.core.utils.PlatformUtils;
-import com.owlplug.host.loaders.NativePluginLoader;
-import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
-import com.owlplug.plugin.services.NativeHostService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Hyperlink;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class OptionsController extends BaseController {
 
-  @Autowired
-  private OptionsService optionsService;
-  @Autowired
-  private NativeHostService nativeHostService;
-  @Autowired
-  private ListDirectoryDialogController listDirectoryDialogController;
-  @Autowired
-  private DonateDialogController donateDialogController;
   @FXML
-  private CheckBox pluginNativeCheckbox;
+  private VBox navContainer;
   @FXML
-  private ComboBox<NativePluginLoader> pluginNativeComboBox;
-  @FXML
-  private TextField loaderTimeoutTextField;
-  @FXML
-  private CheckBox syncPluginsCheckBox;
-  @FXML
-  private CheckBox syncFileStatCheckbox;
-  @FXML
-  private Button removeDataButton;
+  private StackPane contentArea;
   @FXML
   private Label versionLabel;
+  @FXML
+  private TextFlow contributorsFlow;
 
+  // Section root nodes injected via fx:include fx:id convention
   @FXML
-  private Button clearCacheButton;
+  private ScrollPane pluginScanOptions;
   @FXML
-  private CheckBox storeSubDirectoryCheckBox;
+  private ScrollPane installationOptions;
   @FXML
-  private CheckBox storeByCreatorCheckBox;
+  private ScrollPane projectsOptions;
   @FXML
-  private Label storeByCreatorLabel;
-  @FXML
-  private Label storeSubDirectoryLabel;
-  @FXML
-  private Label warningSubDirectory;
-  @FXML
-  private CheckBox storeDirectoryCheckBox;
-  @FXML
-  private TextField storeDirectoryTextField;
-  @FXML
-  private Label storeDirectorySeparator;
-  @FXML
-  private Hyperlink owlplugWebsiteLink;
-  @FXML
-  private VBox pluginPathContainer;
+  private ScrollPane applicationOptions;
 
+  // Section controllers injected via {fx:id}Controller convention
   @FXML
-  private CheckBox telemetryCheckBox;
+  private PluginScanOptionsController pluginScanOptionsController;
   @FXML
-  private Hyperlink telemetryHyperlink;
+  private InstallationOptionsController installationOptionsController;
   @FXML
-  private Button moreFeaturesButton;
+  private ProjectsOptionsController projectsOptionsController;
   @FXML
-  private Button openLogsButton;
-  @FXML
-  private TextFlow versionTextFlow;
+  private ApplicationOptionsController applicationOptionsController;
 
-  private PluginPathFragmentController vst2PluginPathFragment;
-  private PluginPathFragmentController vst3PluginPathFragment;
-  private PluginPathFragmentController auPluginPathFragment;
-  private PluginPathFragmentController lv2PluginPathFragment;
+  private final ToggleGroup navToggleGroup = new ToggleGroup();
 
-  /**
-   * FXML initialize method.
-   */
+  public static int SCAN_SECTION_INDEX = 0;
+  public static int INSTALLATION_SECTION_INDEX = 1;
+  public static int PROJECTS_SECTION_INDEX = 2;
+  public static int APPLICATION_SECTION_INDEX = 3;
+
   @FXML
   public void initialize() {
+    hideSection(pluginScanOptions);
+    hideSection(installationOptions);
+    hideSection(projectsOptions);
+    hideSection(applicationOptions);
 
-    vst2PluginPathFragment = new PluginPathFragmentController("VST2",
-      ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY,
-      ApplicationDefaults.VST_DIRECTORY_KEY,
-      ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
-      this.listDirectoryDialogController);
+    addNavButton("Plugin Scan",  "mdi2m-magnify",             pluginScanOptions);
+    addNavButton("Installation", "mdi2d-download-outline",     installationOptions);
+    addNavButton("Projects",     "mdi2f-folder-music-outline", projectsOptions);
+    addNavButton("Application",  "mdi2c-cog-outline",          applicationOptions);
 
-    vst3PluginPathFragment = new PluginPathFragmentController("VST3",
-      ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY,
-      ApplicationDefaults.VST3_DIRECTORY_KEY,
-      ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
-      this.listDirectoryDialogController);
-
-    auPluginPathFragment = new PluginPathFragmentController("AU",
-      ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY,
-      ApplicationDefaults.AU_DIRECTORY_KEY,
-      ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
-      this.listDirectoryDialogController);
-
-    lv2PluginPathFragment = new PluginPathFragmentController("LV2",
-      ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY,
-      ApplicationDefaults.LV2_DIRECTORY_KEY,
-      ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
-      this.listDirectoryDialogController);
-
-    pluginPathContainer.getChildren().add(vst2PluginPathFragment.getNode());
-    pluginPathContainer.getChildren().add(vst3PluginPathFragment.getNode());
-    pluginPathContainer.getChildren().add(auPluginPathFragment.getNode());
-    pluginPathContainer.getChildren().add(lv2PluginPathFragment.getNode());
-
-    storeByCreatorLabel.setVisible(false);
-    storeSubDirectoryLabel.setVisible(false);
-
-    pluginNativeCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
-      this.pluginNativeComboBox.setDisable(!newValue);
-      updateScannerTimeoutFieldState();
-    });
-
-    ObservableList<NativePluginLoader> pluginLoaders = FXCollections.observableArrayList(
-        nativeHostService.getAvailablePluginLoaders());
-    pluginNativeComboBox.setItems(pluginLoaders);
-
-    pluginNativeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue != null) {
-        this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER, newValue.getId());
-        nativeHostService.setCurrentPluginLoader(newValue);
-        updateScannerTimeoutFieldState();
+    // Prevent deselecting all buttons
+    navToggleGroup.selectedToggleProperty().addListener((obs, prev, next) -> {
+      if (next == null && prev != null) {
+        prev.setSelected(true);
       }
     });
 
-    loaderTimeoutTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      if (!newValue.matches("\\d*")) {
-        loaderTimeoutTextField.setText(newValue.replaceAll("[^\\d]", ""));
-        return;
-      }
-      try {
-        long timeout = Long.parseLong(newValue);
-        if (timeout >= 0 && timeout <= 3600) {
-          this.getPreferences().putLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, timeout);
-          nativeHostService.setScannerTimeout(timeout);
-        } else {
-          loaderTimeoutTextField.setText(oldValue);
-        }
-      } catch (NumberFormatException ignored) {
-        // Ignore in case of invalid values (empty string)
-      }
-    });
+    navToggleGroup.getToggles().get(0).setSelected(true);
 
-    syncPluginsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, newValue);
-    });
-
-    syncFileStatCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, newValue);
-    });
-
-    storeSubDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, newValue);
-      warningSubDirectory.setVisible(!newValue);
-      storeSubDirectoryLabel.setVisible(newValue);
-    });
-
-    warningSubDirectory.managedProperty().bind(warningSubDirectory.visibleProperty());
-    storeSubDirectoryLabel.managedProperty().bind(storeSubDirectoryLabel.visibleProperty());
-    storeDirectorySeparator.managedProperty().bind(storeDirectorySeparator.visibleProperty());
-    storeDirectoryTextField.managedProperty().bind(storeDirectoryTextField.visibleProperty());
-
-    storeDirectoryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, newValue);
-      storeDirectorySeparator.setVisible(newValue);
-      storeDirectoryTextField.setVisible(newValue);
-    });
-
-    storeByCreatorCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, newValue);
-      storeByCreatorLabel.setVisible(newValue);
-    });
-
-    storeByCreatorLabel.managedProperty().bind(storeByCreatorLabel.visibleProperty());
-
-    storeDirectoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().put(ApplicationDefaults.STORE_DIRECTORY_KEY, newValue);
-    });
-
-    telemetryCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.TELEMETRY_ENABLED_KEY, newValue);
-    });
-
-    telemetryHyperlink.setOnAction(e -> {
-      PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getEnvProperty("owlplug.github.wiki.url")
-                                           + "/Telemetry");
-    });
-
-    clearCacheButton.setOnAction(e -> {
-      optionsService.clearCache();
-    });
-
-    removeDataButton.setOnAction(e -> {
-      Dialog dialog = this.getDialogManager().newDialog();
-      DialogLayout layout = new DialogLayout();
-      layout.setHeading(new Label("Remove user data"));
-      layout.setBody(new Label("Do you really want to remove all user data including accounts, "
-          + "stores and custom settings ? \n\nYou must restart OwlPlug for a complete reset."));
-
-      Button cancelButton = new Button("Cancel");
-      cancelButton.setOnAction(cancelEvent -> {
-        dialog.close();
-      });
-
-      Button removeButton = new Button("Remove data");
-      removeButton.setOnAction(removeEvent -> {
-        dialog.close();
-        optionsService.clearAllUserData();
-        this.refreshView();
-
-        // User data cleared twice because the refreshView() triggers UI changes that may be replicated in data
-        optionsService.clearAllUserData();
-
-      });
-      removeButton.getStyleClass().add("button-danger");
-
-      layout.setActions(removeButton, cancelButton);
-      dialog.setContent(layout);
-      dialog.show();
-    });
-
-    versionLabel.setText(this.getApplicationDefaults().getVersion());
-
-    owlplugWebsiteLink.setOnAction(e -> {
-      PlatformUtils.openDefaultBrowser(owlplugWebsiteLink.getText());
-    });
-
-    moreFeaturesButton.setOnAction(e -> {
-      donateDialogController.show();
-    });
-
-    openLogsButton.setOnAction(e -> {
-      PlatformUtils.openFromDesktop(ApplicationDefaults.getLogDirectory());
-    });
-
-    versionTextFlow.getChildren().add(new SlidingLabel(ApplicationDefaults.getContributors()));
+    versionLabel.setText("OwlPlug " + getApplicationDefaults().getVersion());
+    contributorsFlow.getChildren().add(new SlidingLabel(ApplicationDefaults.getContributors()));
 
     refreshView();
   }
 
-  private void updateScannerTimeoutFieldState() {
-    NativePluginLoader selected = pluginNativeComboBox.getSelectionModel().getSelectedItem();
-    boolean isOwlPlugScanner = selected != null && "owlplug-scanner".equals(selected.getId());
-    boolean nativeEnabled = pluginNativeCheckbox.isSelected() && !pluginNativeCheckbox.isDisable();
-    loaderTimeoutTextField.setDisable(!nativeEnabled || !isOwlPlugScanner);
+  private void addNavButton(String label, String iconCode, Node section) {
+    FontIcon icon = new FontIcon(iconCode);
+    icon.setIconSize(15);
+
+    ToggleButton btn = new ToggleButton(label, icon);
+    btn.setToggleGroup(navToggleGroup);
+    btn.setMaxWidth(Double.MAX_VALUE);
+    btn.setAlignment(Pos.CENTER_LEFT);
+    btn.getStyleClass().add("options-nav-button");
+    btn.setGraphicTextGap(10);
+
+    btn.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
+      if (isSelected) {
+        showSection(section);
+      } else {
+        hideSection(section);
+      }
+    });
+
+    navContainer.getChildren().add(btn);
+  }
+
+  private void showSection(Node section) {
+    section.setVisible(true);
+    section.setManaged(true);
+  }
+
+  private void hideSection(Node section) {
+    section.setVisible(false);
+    section.setManaged(false);
+  }
+
+  public void navigateToSection(int index) {
+    navToggleGroup.getToggles().get(index).setSelected(true);
   }
 
   public void refreshView() {
-
-    vst2PluginPathFragment.refresh();
-    vst3PluginPathFragment.refresh();
-    auPluginPathFragment.refresh();
-    lv2PluginPathFragment.refresh();
-
-    pluginNativeCheckbox.setDisable(!nativeHostService.isNativeHostAvailable());
-    pluginNativeComboBox.setDisable(!nativeHostService.isNativeHostAvailable());
-    pluginNativeCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
-    syncPluginsCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
-    syncFileStatCheckbox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true));
-    storeSubDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
-    warningSubDirectory.setVisible(!this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true));
-    storeDirectoryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
-    storeByCreatorCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false));
-    storeDirectoryTextField.setText(this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
-    telemetryCheckBox.setSelected(this.getPreferences().getBoolean(ApplicationDefaults.TELEMETRY_ENABLED_KEY, true));
-
-    NativePluginLoader pluginLoader = nativeHostService.getCurrentPluginLoader();
-    pluginNativeComboBox.getSelectionModel().select(pluginLoader);
-
-    long timeout = this.getPreferences().getLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 10L);
-    loaderTimeoutTextField.setText(String.valueOf(timeout));
-    updateScannerTimeoutFieldState();
-
-    if (!storeDirectoryCheckBox.isSelected()) {
-      storeDirectoryTextField.setVisible(false);
-    }
-    if (!storeByCreatorCheckBox.isSelected()) {
-      storeByCreatorLabel.setVisible(false);
-    }
-    
-    // Disable AU options for non MAC users
-    if (!this.getApplicationDefaults().getRuntimePlatform()
-        .getOperatingSystem().equals(OperatingSystem.MAC)) {
-      auPluginPathFragment.disable();
-    }
-
+    pluginScanOptionsController.refresh();
+    installationOptionsController.refresh();
+    projectsOptionsController.refresh();
+    applicationOptionsController.refresh();
   }
 
   @EventListener
