@@ -102,7 +102,7 @@ public class PackageListRowView extends HBox {
       } else if (remotePackage.getStage() == PluginStage.DEMO) {
         stageBadge.getStyleClass().add("package-stage-demo");
       }
-      StackPane.setAlignment(stageBadge, Pos.BOTTOM_LEFT);
+      StackPane.setAlignment(stageBadge, Pos.TOP_LEFT);
       thumb.getChildren().add(stageBadge);
     }
 

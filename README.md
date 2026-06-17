@@ -1,6 +1,6 @@
  
 <p align="center">
-<img src="doc/owlplug-logo.png">
+<img src="doc/owlplug-title-bg.png">
 </p>
 <p align="center">
 <sup>

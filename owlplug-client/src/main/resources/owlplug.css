@@ -50,10 +50,10 @@
      */
     -fx-font-family: "Segoe UI";
 
-    disabled-color: -color-neutral-muted;
-    danger-color: -color-danger-subtle;
-    warning-color: -color-warning-fg;
-    success-color: -color-success-fg;
+    disabled-color: -color-fg-muted;
+    danger-color: -color-danger-emphasis;
+    warning-color: -color-warning-emphasis;
+    success-color: -color-success-emphasis;
 
     theme-primary-color: -color-accent-fg;
 
@@ -651,6 +651,10 @@ ProgressIndicator {
     -fx-background-color: -color-accent-subtle;
     -fx-text-fill: -color-accent-fg;
     -fx-font-weight: bold;
+}
+
+.options-nav-button:selected .ikonli-font-icon {
+    -fx-icon-color: -color-accent-fg;
 }
 
 /****************************************************************

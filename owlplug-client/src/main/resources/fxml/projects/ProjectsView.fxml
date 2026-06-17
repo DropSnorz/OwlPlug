@@ -50,7 +50,7 @@
             </padding>
             <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0"
                   VBox.vgrow="NEVER" spacing="5.0">
-                <Button fx:id="syncProjectButton" text="Sync">
+                <Button fx:id="syncProjectButton" text="Sync" defaultButton="true">
                     <graphic>
                         <FontIcon iconLiteral="mdi2s-sync" />
                     </graphic>
@@ -63,7 +63,7 @@
         </VBox>
     </right>
     <padding>
-        <Insets bottom="10.0" left="20.0" right="20.0" top="2.0" />
+        <Insets bottom="10.0" left="5.0" right="5.0" top="2.0" />
     </padding>
     <bottom>
         <VBox minHeight="5.0" prefHeight="5.0" prefWidth="537.0" BorderPane.alignment="CENTER" />

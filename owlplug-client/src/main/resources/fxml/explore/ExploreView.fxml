@@ -26,7 +26,7 @@
          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
          AnchorPane.topAnchor="0.0">
       <padding>
-         <Insets left="20.0" right="20.0" top="10.0" bottom="10.0"/>
+         <Insets left="5.0" right="5.0" top="5.0" bottom="10.0"/>
       </padding>
       <top>
          <HBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
@@ -64,7 +64,7 @@
                    <FontIcon iconLiteral="mdi2c-cogs"/>
                </graphic>
             </Button>
-            <Button fx:id="syncSourcesButton" text="Sync">
+            <Button fx:id="syncSourcesButton" text="Sync" defaultButton="true">
                <graphic>
                   <FontIcon iconLiteral="mdi2s-sync"/>
                </graphic>

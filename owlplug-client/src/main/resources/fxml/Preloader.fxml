@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0"
-      style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, #dfa579, -color-bg-subtle 100%);"
+      style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, -color-accent-fg, -color-bg-subtle 100%);"
       styleClass="preloader" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.core.controllers.PreloaderController">
    <HBox fx:id="contributorsPane" layoutX="360.0" layoutY="130.0" prefHeight="30.0" prefWidth="212.0" spacing="5">

@@ -45,7 +45,7 @@ public class DonateDialogController extends AbstractDialogController {
   private Button cancelButton;
 
   DonateDialogController() {
-    super(550, 480);
+    super(600, 480);
     this.setOverlayClose(false);
   }
 

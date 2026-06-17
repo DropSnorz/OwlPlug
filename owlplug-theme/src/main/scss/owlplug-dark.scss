@@ -1,6 +1,7 @@
 // OwlPlug Dark — custom AtlantaFX theme for OwlPlug
-// Primary: #C0764A (warm terracotta/burnt sienna)
+// Primary: #A8492E (warm terracotta/burnt sienna)
 // Base: Primer Dark with a faint warm tint to harmonise with the primary
+// Theme variants : #b86a54 #220f09 #b15b43 #793521
 
 @use "sass:color";
 
@@ -25,17 +26,17 @@
   $base-8: #181a20,
   $base-9: #0e1018,
 
-  // Accent — OwlPlug terracotta (#C0764A is the primary at accent-5)
-  $accent-0: #fef4ec,
-  $accent-1: #fde0c8,
-  $accent-2: #f9c29c,
-  $accent-3: #e89e72,
-  $accent-4: #d48558,
-  $accent-5: #c0764a,
-  $accent-6: #9e5c34,
-  $accent-7: #7a4224,
-  $accent-8: #582e16,
-  $accent-9: #3a1c0a,
+  // Accent — OwlPlug terracotta (#A8492E is the primary at accent-5)
+  $accent-0: #fef2ed,
+  $accent-1: #fdd8c8,
+  $accent-2: #f7b099,
+  $accent-3: #d97a58,
+  $accent-4: #be5f3e,
+  $accent-5: #a8492e,
+  $accent-6: #8a3a22,
+  $accent-7: #6b2c18,
+  $accent-8: #4c1e10,
+  $accent-9: #301209,
 
   // Success (identical to Primer Dark)
   $success-0: #aff5b4,
@@ -102,7 +103,7 @@
   $neutral-subtle:       color.change(scale.$base-4, $alpha: 0.1),
 
   // accent-fg: lighter terracotta for text/icons on dark canvas (~5.5:1 on base-9)
-  // accent-emphasis: #C0764A primary for filled elements
+  // accent-emphasis: #A8492E primary for filled elements
   $accent-fg:            scale.$accent-3,
   $accent-emphasis:      scale.$accent-5,
   $accent-muted:         color.change(scale.$accent-5, $alpha: 0.4),
@@ -130,3 +131,14 @@
 
 @use "../../../target/atlantafx/styles/general";
 @use "../../../target/atlantafx/styles/components";
+
+// Override floating TabPane: use default canvas instead of inset background
+.tab-pane.floating {
+  > .tab-header-area {
+    -fx-background-color: -color-border-default, -color-bg-default;
+  }
+
+  > .tab-header-area > .headers-region > .tab > .tab-container {
+    -fx-background-color: -color-border-subtle, -color-bg-default;
+  }
+}

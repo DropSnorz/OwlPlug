@@ -37,9 +37,7 @@ public class OwlPlugDarkTheme implements Theme {
 
   @Override
   public String getUserAgentStylesheetBSS() {
-    return Objects.requireNonNull(
-        OwlPlugDarkTheme.class.getResource("owlplug-dark-bss.css")
-    ).toExternalForm();
+    throw new UnsupportedOperationException();
   }
 
   @Override
