@@ -78,16 +78,20 @@ public class ApplicationDefaults {
   public final Image openAudioLogoSmall = new Image(ApplicationDefaults.class.getResourceAsStream("/media/open-audio-16.png"));
   public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
   public final Image reaperLogoImage = new Image(getClass().getResourceAsStream("/icons/reaper-white-16.png"));
-
   public final Image studioOneLogoImage = new Image(getClass().getResourceAsStream("/icons/studioone-white-16.png"));
 
   public final Image errorIconImage = new Image(
           getClass().getResourceAsStream("/icons/error-red-16.png"));
 
-  public final Image linkIconImage = new Image(
-          getClass().getResourceAsStream("/icons/link-grey-16.png"));
   public final Image pluginPlaceholderImage = new Image(
       getClass().getResourceAsStream("/media/plugin-placeholder.png"));
+  public final Image abletonPlaceholderImage = new Image(
+      getClass().getResourceAsStream("/media/ableton-placeholder.png"));
+  public final Image reaperPlaceholderImage = new Image(
+      getClass().getResourceAsStream("/media/reaper-placeholder.png"));
+    public final Image studioOnePlaceholderImage = new Image(
+        getClass().getResourceAsStream("/media/studioone-placeholder.png"));
+
   // CHECKSTYLE:ON
 
   public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
@@ -199,6 +203,14 @@ public class ApplicationDefaults {
     }
 
     return "/path/to/audio/plugins";
+  }
+
+  public Image getDawApplicationImage(DawApplication application) {
+    return switch (application) {
+      case ABLETON -> abletonPlaceholderImage;
+      case REAPER -> reaperPlaceholderImage;
+      case STUDIO_ONE -> studioOnePlaceholderImage;
+    };
   }
 
 

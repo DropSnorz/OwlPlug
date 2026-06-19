@@ -18,6 +18,7 @@
 
         <!-- Header: project name and app label -->
         <StackPane maxHeight="180.0" prefHeight="180.0" prefWidth="500.0">
+            <Pane fx:id="projectScreenshotPane" prefHeight="180.0" prefWidth="500.0"/>
             <VBox alignment="CENTER_LEFT" spacing="5.0">
                 <opaqueInsets>
                     <Insets/>
@@ -91,7 +92,7 @@
                 <Label text="PATH" styleClass="info-field-label"/>
                 <HBox alignment="CENTER_LEFT" spacing="8.0">
                     <Label fx:id="projectPathLabel" styleClass="info-field-value" text="UNKNOWN"
-                           wrapText="true" maxWidth="390.0" HBox.hgrow="ALWAYS"/>
+                           wrapText="true" HBox.hgrow="ALWAYS"/>
                     <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0">
                         <graphic>
                             <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
@@ -108,15 +109,15 @@
         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
             <Label text="Plugins"/>
         </HBox>
-        <TableView fx:id="pluginTable" prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="pluginTable" prefHeight="200.0" prefWidth="200.0" styleClass="dense">
             <columns>
-                <TableColumn fx:id="pluginTableFormatColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0"
+                <TableColumn fx:id="pluginTableFormatColumn" minWidth="75.0" maxWidth="75.0" resizable="false"
                              text="Format"/>
-                <TableColumn fx:id="pluginTableNameColumn" editable="false" maxWidth="250.0" minWidth="200.0"
-                             prefWidth="-1.0" text="Name"/>
-                <TableColumn fx:id="pluginTableStatusColumn" editable="false" maxWidth="150.0" minWidth="100.0"
-                             prefWidth="-1.0" resizable="false" text="Status"/>
-                <TableColumn fx:id="pluginTableLinkColumn" editable="false" resizable="false" text="Link"/>
+                <TableColumn fx:id="pluginTableNameColumn" editable="false" minWidth="100.0" text="Name"/>
+                <TableColumn fx:id="pluginTableStatusColumn" editable="false" minWidth="120.0" maxWidth="120.0"
+                             resizable="false" text="Status"/>
+                <TableColumn fx:id="pluginTableLinkColumn" editable="false" minWidth="45.0" maxWidth="45.0"
+                             resizable="false"/>
             </columns>
         </TableView>
     </VBox>

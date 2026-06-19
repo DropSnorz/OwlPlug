@@ -39,7 +39,7 @@
                 </Tab>
                 <Tab text="Projects" closable="false">
                     <graphic>
-                        <FontIcon iconLiteral="mdi2a-archive-music-outline" />
+                        <FontIcon iconLiteral="mdi2f-folder-music-outline" />
                     </graphic>
                 </Tab>
                 <Tab text="Options" closable="false">
