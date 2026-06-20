@@ -129,7 +129,6 @@ public class PluginInfoController extends BaseController {
     pluginProperty.addListener(e -> refresh());
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
 
-    openDirectoryButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openDirectoryButton.setText("");
     openDirectoryButton.setOnAction(e -> {
       File pluginFile = new File(pluginPathLabel.getText());

@@ -50,6 +50,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -146,7 +147,7 @@ public class PluginTableController extends BaseController {
           setGraphic(null);
         } else {
           setText(item);
-          setGraphic(new ImageView(getApplicationDefaults().directoryImage));
+          setGraphic(new FontIcon("mdi2f-folder"));
         }
       }
     });
@@ -163,7 +164,7 @@ public class PluginTableController extends BaseController {
           setGraphic(null);
         } else {
           setText(item);
-          setGraphic(new ImageView(getApplicationDefaults().scanDirectoryImage));
+          setGraphic(new FontIcon("mdi2f-folder-search"));
         }
       }
     });

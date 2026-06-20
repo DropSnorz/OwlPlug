@@ -60,7 +60,6 @@ public class ApplicationDefaults {
 
   public final Image owlplugLogoSmall = new Image(
       ApplicationDefaults.class.getResourceAsStream("/media/owlplug-logo-16.png"));
-  public final Image directoryImage = new Image(getClass().getResourceAsStream("/icons/folder-grey-16.png"));
   public final Image vst2Image = new Image(getClass().getResourceAsStream("/icons/vst2-blue-16.png"));
   public final Image vst3Image = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
   public final Image auImage = new Image(getClass().getResourceAsStream("/icons/au-purple-16.png"));
@@ -70,24 +69,26 @@ public class ApplicationDefaults {
   public final Image taskSuccessImage = new Image(getClass().getResourceAsStream("/icons/check-green-16.png"));
   public final Image taskFailImage = new Image(getClass().getResourceAsStream("/icons/cross-red-16.png"));
   public final Image taskRunningImage = new Image(getClass().getResourceAsStream("/icons/play-green-16.png"));
-  public final Image symlinkImage = new Image(getClass().getResourceAsStream("/icons/folderlink-grey-16.png"));
-  public final Image scanDirectoryImage = new Image(getClass().getResourceAsStream("/icons/foldersearch-grey-16.png"));
   public final Image verifiedSourceImage = new Image(getClass().getResourceAsStream("/icons/doublecheck-grey-16.png"));
   public final Image suggestedSourceImage = new Image(
       ApplicationDefaults.class.getResourceAsStream("/icons/check-grey-16.png"));
   public final Image openAudioLogoSmall = new Image(ApplicationDefaults.class.getResourceAsStream("/media/open-audio-16.png"));
   public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
   public final Image reaperLogoImage = new Image(getClass().getResourceAsStream("/icons/reaper-white-16.png"));
-
   public final Image studioOneLogoImage = new Image(getClass().getResourceAsStream("/icons/studioone-white-16.png"));
 
   public final Image errorIconImage = new Image(
           getClass().getResourceAsStream("/icons/error-red-16.png"));
 
-  public final Image linkIconImage = new Image(
-          getClass().getResourceAsStream("/icons/link-grey-16.png"));
   public final Image pluginPlaceholderImage = new Image(
       getClass().getResourceAsStream("/media/plugin-placeholder.png"));
+  public final Image abletonPlaceholderImage = new Image(
+      getClass().getResourceAsStream("/media/ableton-placeholder.png"));
+  public final Image reaperPlaceholderImage = new Image(
+      getClass().getResourceAsStream("/media/reaper-placeholder.png"));
+    public final Image studioOnePlaceholderImage = new Image(
+        getClass().getResourceAsStream("/media/studioone-placeholder.png"));
+
   // CHECKSTYLE:ON
 
   public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
@@ -199,6 +200,14 @@ public class ApplicationDefaults {
     }
 
     return "/path/to/audio/plugins";
+  }
+
+  public Image getDawApplicationImage(DawApplication application) {
+    return switch (application) {
+      case ABLETON -> abletonPlaceholderImage;
+      case REAPER -> reaperPlaceholderImage;
+      case STUDIO_ONE -> studioOnePlaceholderImage;
+    };
   }
 
 

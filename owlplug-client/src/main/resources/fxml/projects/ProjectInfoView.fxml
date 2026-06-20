@@ -5,7 +5,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
@@ -16,7 +15,10 @@
             <String fx:value="pane-card"/>
             <String fx:value="no-padding"/>
         </styleClass>
+
+        <!-- Header: project name and app label -->
         <StackPane maxHeight="180.0" prefHeight="180.0" prefWidth="500.0">
+            <Pane fx:id="projectScreenshotPane" prefHeight="180.0" prefWidth="500.0"/>
             <VBox alignment="CENTER_LEFT" spacing="5.0">
                 <opaqueInsets>
                     <Insets/>
@@ -33,6 +35,8 @@
                 </Label>
             </VBox>
         </StackPane>
+
+        <!-- General section with action buttons -->
         <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="card-title">
             <Label text="General"/>
             <Pane HBox.hgrow="ALWAYS"/>
@@ -42,70 +46,75 @@
                 </graphic>
             </Button>
         </HBox>
-        <GridPane>
+
+        <!-- Metadata grid -->
+        <GridPane hgap="16.0" vgap="14.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="230.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="230.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="230.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="230.0"/>
             </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            </rowConstraints>
             <padding>
-                <Insets bottom="10.0" left="20.0" right="20.0" top="14.0"/>
+                <Insets left="20.0" right="20.0" top="18.0" bottom="18.0"/>
             </padding>
-            <TextFlow prefWidth="200.0">
-                <Label text="Application : "/>
-                <Label fx:id="appFullNameLabel" styleClass="label-emphase" text="UNKNOWN"/>
-            </TextFlow>
-            <TextFlow prefWidth="200.0" GridPane.columnIndex="1">
-                <Label text="Format Version: "/>
-                <Label fx:id="projectFormatVersionLabel" styleClass="label-emphase" text="UNKNOWN"/>
-            </TextFlow>
-            <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <Label text="Last Modified: "/>
-                <Label fx:id="projectLastModifiedLabel" styleClass="label-emphase" text="UNKNOWN"/>
-            </TextFlow>
-            <TextFlow prefWidth="200.0" GridPane.rowIndex="1">
-                <Label text="Created: "/>
-                <Label fx:id="projectCreatedLabel" styleClass="label-emphase" text="UNKNOWN"/>
-            </TextFlow>
-            <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                <Label text="Plugins detected: "/>
-                <Label fx:id="projectPluginsFoundLabel" styleClass="label-emphase" text="UNKNOWN"/>
-            </TextFlow>
-            <HBox alignment="CENTER_LEFT" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
-                <Label minHeight="-Infinity" minWidth="-Infinity" text="Path: "/>
-                <Label fx:id="projectPathLabel" styleClass="label-emphase" text="UNKNOWN"
-                       textOverrun="CENTER_ELLIPSIS" wrapText="true"/>
-                <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0"
-                        styleClass="label-emphase">
-                    <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                            <Image url="@../../icons/folder-grey-16.png"/>
-                        </ImageView>
-                    </graphic>
-                    <HBox.margin>
-                        <Insets left="5.0"/>
-                    </HBox.margin>
-                </Button>
-            </HBox>
+
+            <!-- Application -->
+            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="APPLICATION" styleClass="info-field-label"/>
+                <Label fx:id="appFullNameLabel" styleClass="info-field-value" text="UNKNOWN"/>
+            </VBox>
+
+            <!-- Format Version -->
+            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="FORMAT VERSION" styleClass="info-field-label"/>
+                <Label fx:id="projectFormatVersionLabel" styleClass="info-field-value" text="UNKNOWN"/>
+            </VBox>
+
+            <!-- Created -->
+            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="CREATED" styleClass="info-field-label"/>
+                <Label fx:id="projectCreatedLabel" styleClass="info-field-value" text="UNKNOWN"/>
+            </VBox>
+
+            <!-- Last Modified -->
+            <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label text="LAST MODIFIED" styleClass="info-field-label"/>
+                <Label fx:id="projectLastModifiedLabel" styleClass="info-field-value" text="UNKNOWN"/>
+            </VBox>
+
+            <!-- Plugins detected -->
+            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                <Label text="PLUGINS DETECTED" styleClass="info-field-label"/>
+                <Label fx:id="projectPluginsFoundLabel" styleClass="info-field-value" text="UNKNOWN"/>
+            </VBox>
+
+            <!-- Path (full width) with open folder button -->
+            <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2147483647">
+                <Label text="PATH" styleClass="info-field-label"/>
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <Label fx:id="projectPathLabel" styleClass="info-field-value" text="UNKNOWN"
+                           wrapText="true" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2f-folder" />
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
         </GridPane>
+
+        <!-- Plugins section -->
         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
             <Label text="Plugins"/>
         </HBox>
-        <TableView fx:id="pluginTable" prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="pluginTable" prefHeight="200.0" prefWidth="200.0" styleClass="dense">
             <columns>
-                <TableColumn fx:id="pluginTableFormatColumn" maxWidth="100.0" minWidth="100.0" prefWidth="-1.0"
+                <TableColumn fx:id="pluginTableFormatColumn" minWidth="75.0" maxWidth="75.0" resizable="false"
                              text="Format"/>
-                <TableColumn fx:id="pluginTableNameColumn" editable="false" maxWidth="250.0" minWidth="200.0"
-                             prefWidth="-1.0" text="Name"/>
-                <TableColumn fx:id="pluginTableStatusColumn" editable="false" maxWidth="150.0" minWidth="100.0"
-                             prefWidth="-1.0" resizable="false" text="Status"/>
-                <TableColumn fx:id="pluginTableLinkColumn" editable="false" resizable="false" text="Link"/>
+                <TableColumn fx:id="pluginTableNameColumn" editable="false" minWidth="100.0" text="Name"/>
+                <TableColumn fx:id="pluginTableStatusColumn" editable="false" minWidth="120.0" maxWidth="120.0"
+                             resizable="false" text="Status"/>
+                <TableColumn fx:id="pluginTableLinkColumn" editable="false" minWidth="45.0" maxWidth="45.0"
+                             resizable="false"/>
             </columns>
         </TableView>
     </VBox>

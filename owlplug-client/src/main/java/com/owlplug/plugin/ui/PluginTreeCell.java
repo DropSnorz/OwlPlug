@@ -35,6 +35,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class PluginTreeCell extends TreeCell<Object> {
 
@@ -135,15 +136,15 @@ public class PluginTreeCell extends TreeCell<Object> {
 
     Node icon;
     if (dir instanceof Symlink) {
-      icon = new ImageView(applicationDefaults.symlinkImage);
+      icon = new FontIcon("mdi2f-folder-arrow-right");
     } else if (dir instanceof PluginDirectory pluginDirectory) {
       if (pluginDirectory.isRootDirectory()) {
-        icon = new ImageView(applicationDefaults.scanDirectoryImage);
+        icon = new FontIcon("mdi2f-folder-search");
       } else {
-        icon = new ImageView(applicationDefaults.directoryImage);
+        icon = new FontIcon("mdi2f-folder");
       }
     } else {
-      icon = new ImageView(applicationDefaults.directoryImage);
+      icon = new FontIcon("mdi2f-folder");
     }
     HBox hbox = new HBox(5);
     hbox.getChildren().add(icon);

@@ -41,9 +41,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -59,6 +67,8 @@ public class ProjectInfoController extends BaseController {
 
   @FXML
   private VBox projectInfoPane;
+  @FXML
+  private Pane projectScreenshotPane;
   @FXML
   private Label projectNameLabel;
   @FXML
@@ -97,6 +107,8 @@ public class ProjectInfoController extends BaseController {
 
   @FXML
   public void initialize() {
+
+    projectScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.8, 0));
     projectProperty.addListener(e -> refresh());
     openDirectoryButton.setOnAction(e -> {
       File projectFile = new File(projectPathLabel.getText());
@@ -114,6 +126,7 @@ public class ProjectInfoController extends BaseController {
 
     // Set invisible by default if no project is selected.
     projectInfoPane.setVisible(false);
+    pluginTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
     pluginTableNameColumn.setCellValueFactory(cellData -> {
       return new SimpleStringProperty(cellData.getValue().getName());
@@ -133,20 +146,33 @@ public class ProjectInfoController extends BaseController {
       @Override
       public void updateItem(String item, boolean empty) {
         super.updateItem(item, empty);
-        this.getStyleClass().remove("cell-unknown-link");
-        this.getStyleClass().remove("cell-missing-link");
-        this.getStyleClass().remove("cell-found-link");
+        setText(null);
         if (item == null || empty) {
-          setText(null);
+          setGraphic(null);
         } else {
-          setText(item);
-          if (item.equals(LookupResult.MISSING.getValue())) {
-            this.getStyleClass().add("cell-missing-link");
-          } else if (item.equals(LookupResult.FOUND.getValue())) {
-            this.getStyleClass().add("cell-found-link");
+          String iconLiteral;
+          String iconStyleClass;
+          String labelStyleClass;
+          if (item.equals(LookupResult.FOUND.getValue())) {
+            iconLiteral = "mdi2c-check";
+            iconStyleClass = "status-icon-found";
+            labelStyleClass = "label-success";
+          } else if (item.equals(LookupResult.MISSING.getValue())) {
+            iconLiteral = "mdi2a-alert-circle-outline";
+            iconStyleClass = "status-icon-missing";
+            labelStyleClass = "label-danger";
           } else {
-            this.getStyleClass().add("cell-unknown-link");
+            iconLiteral = "mdi2h-help-circle-outline";
+            iconStyleClass = "status-icon-unknown";
+            labelStyleClass = "label-disabled";
           }
+          FontIcon icon = new FontIcon(iconLiteral);
+          icon.getStyleClass().add(iconStyleClass);
+          Label label = new Label(item);
+          label.getStyleClass().add(labelStyleClass);
+          HBox badge = new HBox(5, icon, label);
+          badge.getStyleClass().add("lookup-status-badge");
+          setGraphic(badge);
         }
       }
     });
@@ -167,8 +193,8 @@ public class ProjectInfoController extends BaseController {
           setGraphic(null);
         } else {
           Hyperlink link = new Hyperlink();
-          link.setGraphic(new ImageView(getApplicationDefaults().linkIconImage));
-          link.setOnAction(e -> {
+          link.setGraphic(new FontIcon("mdi2p-power-plug-outline"));
+          link.setOnAction(ev -> {
             pluginsController.selectPluginById(item.getId());
             mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
           });
@@ -187,7 +213,7 @@ public class ProjectInfoController extends BaseController {
         } else {
           setText(null);
           setGraphic(new HBox(new PluginFormatBadgeView(
-              item, getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.ICON_ONLY)));
+              item, getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.DEFAULT)));
         }
       }
     });
@@ -209,6 +235,11 @@ public class ProjectInfoController extends BaseController {
     projectPathLabel.setText(project.getPath());
 
     pluginTable.setItems(FXCollections.observableList(project.getPlugins().stream().toList()));
+
+    BackgroundImage bgImg = new BackgroundImage(this.getApplicationDefaults().getDawApplicationImage(project.getApplication()),
+        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
+    projectScreenshotPane.setBackground(new Background(bgImg));
 
   }
 
