@@ -26,7 +26,11 @@
             <TabPane fx:id="tabPaneHeader" prefHeight="45.0" prefWidth="450.0"
                      style="-fx-tab-min-height: 36;"
                      HBox.hgrow="ALWAYS" VBox.vgrow="NEVER">
-                <Tab text="Home" closable="false"/>
+                <Tab text="Home" closable="false">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2v-view-dashboard-outline" />
+                    </graphic>
+                </Tab>
                 <Tab text="Plugins" closable="false">
                     <graphic>
                         <FontIcon iconLiteral="mdi2p-power-plug-outline" />

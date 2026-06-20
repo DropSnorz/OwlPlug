@@ -18,10 +18,10 @@
 
 package com.owlplug.core.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.utils.FX;
 import com.owlplug.plugin.controllers.PluginsController;
+import com.owlplug.plugin.events.PluginScanCompletedEvent;
+import com.owlplug.plugin.events.PluginScanStartedEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.model.FileStat;
 import com.owlplug.plugin.model.PluginFormat;
@@ -33,10 +33,12 @@ import com.owlplug.project.repositories.DawProjectRepository;
 import com.owlplug.project.repositories.PluginLookupRepository;
 import com.owlplug.project.services.ProjectService;
 import java.util.List;
+import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.util.Duration;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -44,11 +46,13 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import org.apache.commons.io.FileUtils;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
@@ -76,7 +80,8 @@ public class HomeController extends BaseController {
   @Lazy
   private PluginsController pluginsController;
   @Autowired
-  private ListDirectoryDialogController listDirectoryDialogController;
+  @Lazy
+  private OptionsController optionsController;
 
   @FXML
   private Label pluginCountLabel;
@@ -100,9 +105,20 @@ public class HomeController extends BaseController {
   private Label projectDirectoryCountLabel;
 
   @FXML
+  private HBox scanProgressPane;
+  @FXML
+  private FontIcon scanIcon;
+
+  private RotateTransition scanRotation;
+
+  @FXML
   private VBox pluginTile;
   @FXML
   private VBox projectTile;
+  @FXML
+  private VBox pluginDirTile;
+  @FXML
+  private VBox projectDirTile;
 
   @FXML
   private VBox fileSizeChartContainer;
@@ -145,6 +161,14 @@ public class HomeController extends BaseController {
   public void initialize() {
     pluginTile.setOnMouseClicked(e -> mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX));
     projectTile.setOnMouseClicked(e -> mainController.navigateToMainTab(MainController.PROJECTS_TAB_INDEX));
+    pluginDirTile.setOnMouseClicked(e -> {
+      mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX);
+      optionsController.navigateToSection(OptionsController.SCAN_SECTION_INDEX);
+    });
+    projectDirTile.setOnMouseClicked(e -> {
+      mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX);
+      optionsController.navigateToSection(OptionsController.PROJECTS_SECTION_INDEX);
+    });
 
     pluginSearchField.setOnAction(e -> {
       mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
@@ -159,9 +183,13 @@ public class HomeController extends BaseController {
     setupPluginDirButton.setOnAction(e -> mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX));
     scanSuggestionButton.setOnAction(e -> pluginService.scanPlugins());
     setupProjectDirButton.setOnAction(e -> {
-      listDirectoryDialogController.configure(ApplicationDefaults.PROJECT_DIRECTORY_KEY);
-      listDirectoryDialogController.show();
+      mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX);
+      optionsController.navigateToSection(OptionsController.PROJECTS_SECTION_INDEX);
     });
+
+    scanRotation = new RotateTransition(Duration.millis(700), scanIcon);
+    scanRotation.setByAngle(360);
+    scanRotation.setCycleCount(RotateTransition.INDEFINITE);
 
     initFileSizeChart();
     refresh();
@@ -281,6 +309,25 @@ public class HomeController extends BaseController {
   private void setNodeVisible(VBox node, boolean visible) {
     node.setVisible(visible);
     node.setManaged(visible);
+  }
+
+  @EventListener
+  private void handle(PluginScanStartedEvent event) {
+    FX.run(() -> {
+      scanProgressPane.setVisible(true);
+      scanProgressPane.setManaged(true);
+      scanRotation.play();
+    });
+  }
+
+  @EventListener
+  private void handle(PluginScanCompletedEvent event) {
+    FX.run(() -> {
+      scanProgressPane.setVisible(false);
+      scanProgressPane.setManaged(false);
+      scanRotation.stop();
+      refresh();
+    });
   }
 
   @EventListener

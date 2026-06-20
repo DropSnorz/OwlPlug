@@ -388,7 +388,10 @@ ProgressIndicator {
 
 
 .pane-card {
-    -fx-padding: 10, 10, 10, 10;
+    -fx-padding: 14;
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
     -fx-border-width: 1px;
     -fx-border-color: -color-border-default;
 }
@@ -698,10 +701,11 @@ ProgressIndicator {
  * **************************************************************/
 
 .dashboard-tile {
-    -fx-background-color: card-pane-color;
-    -fx-background-radius: 6px;
-    -fx-border-radius: 6px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.55), 8, 0, 0, 2);
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1px;
     -fx-spacing: 4;
     -fx-min-width: 90px;
 }
@@ -711,30 +715,31 @@ ProgressIndicator {
 }
 
 .dashboard-tile-clickable:hover {
-    -fx-background-color: rgb(60, 60, 60);
+    -fx-background-color: -color-bg-overlay;
+    -fx-border-color: -color-accent-fg;
 }
 
 .dashboard-tile-value {
-    -fx-font-size: 34px;
+    -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -color-fg-emphasis;
 }
 
 .dashboard-tile-value-small {
-    -fx-font-size: 24px;
+    -fx-font-size: 22px;
     -fx-font-weight: bold;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -color-fg-default;
 }
 
 .dashboard-tile-label {
-    -fx-font-size: 12px;
-    -fx-text-fill: text-emphase-color;
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
 }
 
 .dashboard-section-title {
-    -fx-font-size: 14px;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
-    -fx-text-fill: text-emphase-color;
+    -fx-text-fill: -color-fg-subtle;
 }
 
 .dashboard-bar-chart {
@@ -755,11 +760,11 @@ ProgressIndicator {
 }
 
 .dashboard-bar-chart .axis {
-    -fx-tick-label-fill: text-emphase-color;
+    -fx-tick-label-fill: -color-fg-muted;
 }
 
 .dashboard-bar-chart .axis-label {
-    -fx-text-fill: text-emphase-color;
+    -fx-text-fill: -color-fg-muted;
 }
 
 .dashboard-bar-chart .axis-line {
@@ -769,8 +774,23 @@ ProgressIndicator {
 .dashboard-bar-label {
     -fx-font-size: 11px;
     -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-emphasis;
 }
 
 .no-padding {
     -fx-padding: 0;
+}
+
+.dashboard-scan-indicator {
+    -fx-background-color: -color-accent-subtle;
+    -fx-background-radius: 6px;
+    -fx-padding: 6 12 6 12;
+}
+
+.dashboard-scan-indicator .ikonli-font-icon {
+    -fx-icon-color: -color-accent-fg;
+}
+
+.dashboard-scan-indicator Label {
+    -fx-text-fill: -color-accent-fg;
 }

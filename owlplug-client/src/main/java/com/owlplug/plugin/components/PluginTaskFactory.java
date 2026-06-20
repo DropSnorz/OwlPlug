@@ -23,7 +23,8 @@ import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.BaseTaskFactory;
 import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.plugin.events.PluginScanEvent;
+import com.owlplug.plugin.events.PluginScanCompletedEvent;
+import com.owlplug.plugin.events.PluginScanStartedEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.FileStatRepository;
 import com.owlplug.plugin.repositories.PluginFootprintRepository;
@@ -120,8 +121,10 @@ public class PluginTaskFactory extends BaseTaskFactory {
         symlinkRepository,
         nativeHostService);
     
+    scanTask.setOnRunning(e -> publisher.publishEvent(new PluginScanStartedEvent()));
+
     scanTask.setOnSucceeded(scanEvent -> {
-      publisher.publishEvent(new PluginScanEvent());
+      publisher.publishEvent(new PluginScanCompletedEvent());
       TaskExecutionContext lookupTask = projectTaskFactory.createLookupTask();
 
       if (prefs.getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true)
