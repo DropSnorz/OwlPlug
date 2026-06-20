@@ -25,9 +25,7 @@
       <HBox alignment="CENTER_RIGHT" spacing="5.0" HBox.hgrow="ALWAYS">
          <Label fx:id="directoryNameLabel" text="DirectoryName">
             <graphic>
-               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../icons/folder-grey-16.png"/>
-               </ImageView>
+               <FontIcon iconLiteral="mdi2f-folder" />
             </graphic>
          </Label>
          <HBox HBox.hgrow="ALWAYS">

@@ -95,10 +95,7 @@
                            wrapText="true" HBox.hgrow="ALWAYS"/>
                     <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0">
                         <graphic>
-                            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                       preserveRatio="true">
-                                <Image url="@../../icons/folder-grey-16.png"/>
-                            </ImageView>
+                            <FontIcon iconLiteral="mdi2f-folder" />
                         </graphic>
                     </Button>
                 </HBox>
