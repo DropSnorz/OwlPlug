@@ -20,10 +20,13 @@
         </padding>
 
         <!-- Header -->
-        <VBox spacing="4.0">
-            <Label styleClass="heading-2" text="Overview"/>
-            <Label styleClass="label-disabled" text="Your plugin library at a glance"/>
-        </VBox>
+        <HBox alignment="CENTER_LEFT">
+            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                <Label styleClass="heading-2" text="Overview"/>
+                <Label styleClass="label-disabled" text="Your plugin library at a glance"/>
+            </VBox>
+            <Label fx:id="lastScanLabel" styleClass="label-disabled"/>
+        </HBox>
 
         <!-- Quick Actions -->
         <HBox alignment="CENTER_LEFT" spacing="8.0">

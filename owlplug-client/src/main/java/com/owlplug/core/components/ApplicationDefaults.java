@@ -119,6 +119,7 @@ public class ApplicationDefaults {
   public static final String SYNC_FILE_STAT_KEY = "SYNC_FILE_STAT_KEY";
   public static final String TELEMETRY_ENABLED_KEY = "TELEMETRY_ENABLED_KEY";
   public static final String TELEMETRY_USER_ID_KEY = "TELEMETRY_USER_ID_KEY";
+  public static final String LAST_PLUGIN_SCAN_DATE_KEY = "LAST_PLUGIN_SCAN_DATE_KEY";
 
   /**
    * Creates a new ApplicationDefaults.

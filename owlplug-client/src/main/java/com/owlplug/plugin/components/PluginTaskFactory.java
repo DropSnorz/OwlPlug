@@ -124,6 +124,7 @@ public class PluginTaskFactory extends BaseTaskFactory {
     scanTask.setOnRunning(e -> publisher.publishEvent(new PluginScanStartedEvent()));
 
     scanTask.setOnSucceeded(scanEvent -> {
+      prefs.putLong(ApplicationDefaults.LAST_PLUGIN_SCAN_DATE_KEY, System.currentTimeMillis());
       publisher.publishEvent(new PluginScanCompletedEvent());
       TaskExecutionContext lookupTask = projectTaskFactory.createLookupTask();
 

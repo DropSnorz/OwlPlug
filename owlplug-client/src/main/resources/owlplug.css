@@ -327,10 +327,6 @@ Text {
     -fx-background-color: -color-bg-default;
 }
 
-.progress-bar-error>.bar {
-    -fx-background-color: -color-danger-fg;
-}
-
 .progress-bar-link {
     dot_color: rgb(143, 143, 143);
 }
@@ -384,6 +380,30 @@ ProgressIndicator {
 
 .task-bar-footer {
     -fx-background-color: -color-bg-inset;
+    -fx-border-color: -color-border-muted transparent transparent transparent;
+    -fx-border-width: 1px;
+}
+
+.task-bar-progress {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+}
+
+.task-bar-progress > .track {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.task-bar-progress > .bar {
+    -fx-background-color: -color-accent-fg;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.task-bar-progress.progress-bar-error > .bar {
+    -fx-background-color: -color-danger-fg;
 }
 
 

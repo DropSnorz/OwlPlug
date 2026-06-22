@@ -18,7 +18,9 @@
 
 package com.owlplug.core.controllers;
 
+import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.utils.FX;
+import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.plugin.controllers.PluginsController;
 import com.owlplug.plugin.events.PluginScanCompletedEvent;
 import com.owlplug.plugin.events.PluginScanStartedEvent;
@@ -32,6 +34,7 @@ import com.owlplug.project.model.LookupResult;
 import com.owlplug.project.repositories.DawProjectRepository;
 import com.owlplug.project.repositories.PluginLookupRepository;
 import com.owlplug.project.services.ProjectService;
+import java.util.Date;
 import java.util.List;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
@@ -135,6 +138,9 @@ public class HomeController extends BaseController {
   private VBox noProjectSuggestion;
 
   @FXML
+  private Label lastScanLabel;
+
+  @FXML
   private TextField pluginSearchField;
 
   @FXML
@@ -232,6 +238,10 @@ public class HomeController extends BaseController {
     final long projectDirectoryCount = projectService.getProjectDirectories().size();
 
 
+    final long lastScanTimestamp = getPreferences().getLong(ApplicationDefaults.LAST_PLUGIN_SCAN_DATE_KEY, 0L);
+    lastScanLabel.setText(lastScanTimestamp == 0L ? "Never scanned"
+        : "Last scan: " + TimeUtils.getHumanReadableDurationFrom(new Date(lastScanTimestamp)));
+
     pluginCountLabel.setText(String.valueOf(totalPlugins));
     vst2CountLabel.setText(String.valueOf(vst2Count));
     vst3CountLabel.setText(String.valueOf(vst3Count));
@@ -305,6 +315,7 @@ public class HomeController extends BaseController {
             })
     ));
   }
+
 
   private void setNodeVisible(VBox node, boolean visible) {
     node.setVisible(visible);
