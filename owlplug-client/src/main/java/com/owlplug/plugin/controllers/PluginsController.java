@@ -25,7 +25,7 @@ import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
 import com.owlplug.plugin.events.PluginRefreshEvent;
-import com.owlplug.plugin.events.PluginScanEvent;
+import com.owlplug.plugin.events.PluginScanCompletedEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
@@ -230,6 +230,10 @@ public class PluginsController extends BaseController {
     tableController.refresh();
   }
 
+  public void setSearch(String query) {
+    searchTextField.setText(query);
+  }
+
   public void setInfoPaneDisplay(boolean display) {
     pluginInfoPane.setManaged(display);
     pluginInfoPane.setVisible(display);
@@ -241,7 +245,7 @@ public class PluginsController extends BaseController {
   }
 
   @EventListener
-  private void handle(PluginScanEvent event) {
+  private void handle(PluginScanCompletedEvent event) {
     FX.run(this::displayPlugins);
   }
 

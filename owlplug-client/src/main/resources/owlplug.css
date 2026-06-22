@@ -325,10 +325,6 @@ Text {
     -fx-background-color: -color-bg-default;
 }
 
-.progress-bar-error>.bar {
-    -fx-background-color: -color-danger-fg;
-}
-
 .progress-bar-link {
     dot_color: rgb(143, 143, 143);
 }
@@ -382,11 +378,38 @@ ProgressIndicator {
 
 .task-bar-footer {
     -fx-background-color: -color-bg-inset;
+    -fx-border-color: -color-border-muted transparent transparent transparent;
+    -fx-border-width: 1px;
+}
+
+.task-bar-progress {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+}
+
+.task-bar-progress > .track {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.task-bar-progress > .bar {
+    -fx-background-color: -color-accent-fg;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.task-bar-progress.progress-bar-error > .bar {
+    -fx-background-color: -color-danger-fg;
 }
 
 
 .pane-card {
-    -fx-padding: 10, 10, 10, 10;
+    -fx-padding: 14;
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
     -fx-border-width: 1px;
     -fx-border-color: -color-border-default;
 }
@@ -470,33 +493,57 @@ ProgressIndicator {
 .default-color0.chart-pie {
     -fx-pie-color: #116A7B;
 }
+.default-color0.chart-bar {
+    -fx-bar-fill: #116A7B;
+}
 
 .default-color1.chart-pie {
     -fx-pie-color: #85586F;
+}
+.default-color1.chart-bar {
+    -fx-bar-fill: #85586F;
 }
 
 .default-color2.chart-pie {
     -fx-pie-color: #7F8B52;
 }
+.default-color2.chart-bar {
+    -fx-bar-fill: #7F8B52;
+}
 
 .default-color3.chart-pie {
     -fx-pie-color: #FFDBA4;
+}
+.default-color3.chart-bar {
+    -fx-bar-fill: #FFDBA4;
 }
 
 .default-color4.chart-pie {
     -fx-pie-color: #47A992;
 }
+.default-color4.chart-bar {
+    -fx-bar-fill: #47A992;
+}
 
 .default-color5.chart-pie {
     -fx-pie-color: #C84B31;
+}
+.default-color5.chart-bar {
+    -fx-bar-fill: #C84B31;
 }
 
 .default-color6.chart-pie {
     -fx-pie-color: #BCCC9A;
 }
+.default-color6.chart-bar {
+    -fx-bar-fill: #BCCC9A;
+}
 
 .default-color7.chart-pie {
     -fx-pie-color: #968C83;
+}
+.default-color7.chart-bar {
+    -fx-bar-fill: #968C83;
 }
 
 .chart-pie {
@@ -685,6 +732,103 @@ ProgressIndicator {
     -fx-background-color: transparent;
 }
 
+/****************************************************************
+ *
+ * Home Dashboard
+ *
+ * **************************************************************/
+
+.dashboard-tile {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1px;
+    -fx-spacing: 4;
+    -fx-min-width: 90px;
+}
+
+.dashboard-tile-clickable {
+    -fx-cursor: hand;
+}
+
+.dashboard-tile-clickable:hover {
+    -fx-background-color: -color-bg-overlay;
+    -fx-border-color: -color-accent-fg;
+}
+
+.dashboard-tile-value {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-emphasis;
+}
+
+.dashboard-tile-value-small {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-default;
+}
+
+.dashboard-tile-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.dashboard-section-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-subtle;
+}
+
+.dashboard-bar-chart {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.dashboard-bar-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.dashboard-bar-chart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.dashboard-bar-chart .chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.dashboard-bar-chart .axis {
+    -fx-tick-label-fill: -color-fg-muted;
+}
+
+.dashboard-bar-chart .axis-label {
+    -fx-text-fill: -color-fg-muted;
+}
+
+.dashboard-bar-chart .axis-line {
+    visibility: hidden;
+}
+
+.dashboard-bar-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-emphasis;
+}
+
 .no-padding {
     -fx-padding: 0;
+}
+
+.dashboard-scan-indicator {
+    -fx-background-color: -color-accent-subtle;
+    -fx-background-radius: 6px;
+    -fx-padding: 6 12 6 12;
+}
+
+.dashboard-scan-indicator .ikonli-font-icon {
+    -fx-icon-color: -color-accent-fg;
+}
+
+.dashboard-scan-indicator .label {
+    -fx-text-fill: -color-accent-fg;
 }

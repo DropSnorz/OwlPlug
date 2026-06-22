@@ -19,7 +19,7 @@
 package com.owlplug.plugin.events;
 
 /**
- * Plugin scan task has completed successfully.
+ * Plugin scan task has started running.
  */
-public record PluginScanEvent() {
+public record PluginScanStartedEvent() {
 }

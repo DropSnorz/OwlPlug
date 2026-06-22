@@ -52,7 +52,7 @@ public class TimeUtils {
       }
     }
     if ("".contentEquals(res)) {
-      return "0 seconds ago";
+      return "Just now";
     } else {
       return res.toString();
     }

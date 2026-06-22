@@ -29,6 +29,7 @@ import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.repositories.FileStatRepository;
 import com.owlplug.plugin.repositories.PluginRepository;
+import com.owlplug.project.repositories.DawProjectRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.prefs.BackingStoreException;
 import org.slf4j.Logger;
@@ -53,6 +54,8 @@ public class OptionsService extends BaseService {
   private RemotePackageRepository packageRepository;
   @Autowired
   private FileStatRepository fileStatRepository;
+  @Autowired
+  private DawProjectRepository projectRepository;
   @Autowired
   private ImageCache imageCache;
 
@@ -108,6 +111,7 @@ public class OptionsService extends BaseService {
       packageRepository.deleteAll();
       remoteSourceRepository.deleteAll();
       fileStatRepository.deleteAll();
+      projectRepository.deleteAll();
 
       clearCache();
 

@@ -16,14 +16,10 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.project.repositories;
+package com.owlplug.plugin.events;
 
-import com.owlplug.project.model.DawPluginLookup;
-import com.owlplug.project.model.LookupResult;
-import org.springframework.data.repository.CrudRepository;
-
-public interface PluginLookupRepository extends CrudRepository<DawPluginLookup, Long> {
-
-  long countByResult(LookupResult result);
-
+/**
+ * Plugin scan task has completed successfully.
+ */
+public record PluginScanCompletedEvent() {
 }
