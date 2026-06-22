@@ -811,6 +811,6 @@ ProgressIndicator {
     -fx-icon-color: -color-accent-fg;
 }
 
-.dashboard-scan-indicator Label {
+.dashboard-scan-indicator .label {
     -fx-text-fill: -color-accent-fg;
 }

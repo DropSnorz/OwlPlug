@@ -141,6 +141,9 @@ public class PluginTaskFactory extends BaseTaskFactory {
       lookupTask.scheduleNow();
     });
 
+    scanTask.setOnFailed(scanEvent -> publisher.publishEvent(new PluginScanCompletedEvent()));
+    scanTask.setOnCancelled(scanEvent -> publisher.publishEvent(new PluginScanCompletedEvent()));
+
     return create(scanTask);
   }
 

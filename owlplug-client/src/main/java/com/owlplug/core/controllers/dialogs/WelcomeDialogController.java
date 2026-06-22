@@ -100,6 +100,7 @@ public class WelcomeDialogController extends AbstractDialogController {
             "LV2", "Open standard, primarily for Linux")
     );
 
+    // Disable AU options for non MAC users
     if (!this.getApplicationDefaults().getRuntimePlatform()
         .getOperatingSystem().equals(OperatingSystem.MAC)) {
       formatTogglesContainer.getChildren().get(2).setDisable(true);

@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.plugin.controllers.PluginsController;
@@ -160,6 +161,8 @@ public class HomeController extends BaseController {
 
   private BarChart<Number, String> fileSizeChart;
 
+  private final Async.Sequence refreshSequence = new Async.Sequence();
+
   /**
    * FXML initialize method.
    */
@@ -224,49 +227,51 @@ public class HomeController extends BaseController {
 
   /**
    * Refreshes all dashboard statistics and updates setup suggestion visibility.
+   * Data fetching runs on a virtual thread; UI updates are applied on the FX thread.
    */
   public void refresh() {
-    final long totalPlugins = pluginRepository.count();
-    final long vst2Count = pluginRepository.countByFormat(PluginFormat.VST2);
-    final long vst3Count = pluginRepository.countByFormat(PluginFormat.VST3);
-    final long auCount = pluginRepository.countByFormat(PluginFormat.AU);
-    final long lv2Count = pluginRepository.countByFormat(PluginFormat.LV2);
-    final long projectCount = dawProjectRepository.count();
-    final long unresolvedCount = pluginLookupRepository.countByResult(LookupResult.MISSING);
-    final long disabledCount = pluginRepository.countByDisabledTrue();
-    final long pluginDirectoryCount = pluginService.getDirectoriesExplorationSet().size();
-    final long projectDirectoryCount = projectService.getProjectDirectories().size();
+    refreshSequence.supply(() -> new DashboardData(
+        pluginRepository.count(),
+        pluginRepository.countByFormat(PluginFormat.VST2),
+        pluginRepository.countByFormat(PluginFormat.VST3),
+        pluginRepository.countByFormat(PluginFormat.AU),
+        pluginRepository.countByFormat(PluginFormat.LV2),
+        dawProjectRepository.count(),
+        pluginLookupRepository.countByResult(LookupResult.MISSING),
+        pluginRepository.countByDisabledTrue(),
+        pluginService.getDirectoriesExplorationSet().size(),
+        projectService.getProjectDirectories().size(),
+        fileStatRepository.findTop5ByParentIsNullOrderByLengthDesc(),
+        getPreferences().getLong(ApplicationDefaults.LAST_PLUGIN_SCAN_DATE_KEY, 0L)
+    )).thenAccept(data -> FX.run(() -> {
+      lastScanLabel.setText(data.lastScanTimestamp() == 0L ? "Never scanned"
+          : "Last scan: " + TimeUtils.getHumanReadableDurationFrom(new Date(data.lastScanTimestamp())));
 
+      pluginCountLabel.setText(String.valueOf(data.totalPlugins()));
+      vst2CountLabel.setText(String.valueOf(data.vst2Count()));
+      vst3CountLabel.setText(String.valueOf(data.vst3Count()));
+      auCountLabel.setText(String.valueOf(data.auCount()));
+      lv2CountLabel.setText(String.valueOf(data.lv2Count()));
+      projectCountLabel.setText(String.valueOf(data.projectCount()));
+      unresolvedPluginCountLabel.setText(String.valueOf(data.unresolvedCount()));
+      disabledCountLabel.setText(String.valueOf(data.disabledCount()));
+      pluginDirectoryCountLabel.setText(String.valueOf(data.pluginDirectoryCount()));
+      projectDirectoryCountLabel.setText(String.valueOf(data.projectDirectoryCount()));
 
-    final long lastScanTimestamp = getPreferences().getLong(ApplicationDefaults.LAST_PLUGIN_SCAN_DATE_KEY, 0L);
-    lastScanLabel.setText(lastScanTimestamp == 0L ? "Never scanned"
-        : "Last scan: " + TimeUtils.getHumanReadableDurationFrom(new Date(lastScanTimestamp)));
+      final boolean hasPluginDirectories = data.pluginDirectoryCount() > 0;
+      final boolean hasProjectDirectories = data.projectDirectoryCount() > 0;
+      final boolean hasPlugins = data.totalPlugins() > 0;
 
-    pluginCountLabel.setText(String.valueOf(totalPlugins));
-    vst2CountLabel.setText(String.valueOf(vst2Count));
-    vst3CountLabel.setText(String.valueOf(vst3Count));
-    auCountLabel.setText(String.valueOf(auCount));
-    lv2CountLabel.setText(String.valueOf(lv2Count));
-    projectCountLabel.setText(String.valueOf(projectCount));
-    unresolvedPluginCountLabel.setText(String.valueOf(unresolvedCount));
-    disabledCountLabel.setText(String.valueOf(disabledCount));
-    pluginDirectoryCountLabel.setText(String.valueOf(pluginDirectoryCount));
-    projectDirectoryCountLabel.setText(String.valueOf(projectDirectoryCount));
+      setNodeVisible(noPluginDirectorySuggestion, !hasPluginDirectories);
+      setNodeVisible(noPluginSuggestion, hasPluginDirectories && !hasPlugins);
+      setNodeVisible(noProjectSuggestion, !hasProjectDirectories);
+      setNodeVisible(setupPane, !hasPluginDirectories || !hasPlugins || !hasProjectDirectories);
 
-    final boolean hasPluginDirectories = !pluginService.getDirectoriesExplorationSet().isEmpty();
-    final boolean hasProjectDirectories = !projectService.getProjectDirectories().isEmpty();
-    final boolean hasPlugins = totalPlugins > 0;
-
-    setNodeVisible(noPluginDirectorySuggestion, !hasPluginDirectories);
-    setNodeVisible(noPluginSuggestion, hasPluginDirectories && !hasPlugins);
-    setNodeVisible(noProjectSuggestion, !hasProjectDirectories);
-    setNodeVisible(setupPane, !hasPluginDirectories || !hasPlugins || !hasProjectDirectories);
-
-    refreshFileSizeChart();
+      applyFileSizeChart(data.topStats());
+    }));
   }
 
-  private void refreshFileSizeChart() {
-    final List<FileStat> topStats = fileStatRepository.findTop5ByParentIsNullOrderByLengthDesc();
+  private void applyFileSizeChart(List<FileStat> topStats) {
     final boolean hasData = !topStats.isEmpty();
 
     fileSizeEmptyLabel.setVisible(!hasData);
@@ -314,6 +319,22 @@ public class HomeController extends BaseController {
               }
             })
     ));
+  }
+
+  private record DashboardData(
+      long totalPlugins,
+      long vst2Count,
+      long vst3Count,
+      long auCount,
+      long lv2Count,
+      long projectCount,
+      long unresolvedCount,
+      long disabledCount,
+      long pluginDirectoryCount,
+      long projectDirectoryCount,
+      List<FileStat> topStats,
+      long lastScanTimestamp
+  ) {
   }
 
 
