@@ -20,6 +20,7 @@
 package com.owlplug.project.components;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.BaseTaskFactory;
 import com.owlplug.core.tasks.TaskExecutionContext;
@@ -51,7 +52,7 @@ public class ProjectTaskFactory extends BaseTaskFactory {
 
   public TaskExecutionContext createSyncTask() {
 
-    List<String> directories = prefs.getList(ApplicationDefaults.PROJECT_DIRECTORY_KEY);
+    List<String> directories = prefs.getList(Prefs.Projects.DIRECTORY);
 
     ProjectSyncTask task = new ProjectSyncTask(projectRepository, directories);
     task.setOnSucceeded(e -> {

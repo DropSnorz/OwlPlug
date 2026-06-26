@@ -19,6 +19,7 @@
 package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
@@ -249,7 +250,7 @@ public class PluginTableController extends BaseController {
       } else {
         MenuItem disableItem = new MenuItem("Disable plugin");
         disableItem.setOnAction(e -> {
-          if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
+          if (this.getPreferences().getBoolean(Prefs.App.SHOW_DIALOG_DISABLE_PLUGIN, true)) {
             this.disableController.setPlugin(p);
             this.disableController.show();
           } else {

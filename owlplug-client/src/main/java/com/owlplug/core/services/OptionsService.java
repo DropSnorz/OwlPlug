@@ -21,6 +21,7 @@ package com.owlplug.core.services;
 import com.owlplug.auth.repositories.GoogleCredentialRepository;
 import com.owlplug.auth.repositories.UserAccountRepository;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.model.OperatingSystem;
@@ -64,36 +65,36 @@ public class OptionsService extends BaseService {
     
     ApplicationPreferences prefs = this.getPreferences();
     // Init default options
-    if (prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, null) == null) {
-      prefs.put(ApplicationDefaults.VST_DIRECTORY_KEY, 
+    if (prefs.get(Prefs.Plugins.VST2_DIRECTORY, null) == null) {
+      prefs.put(Prefs.Plugins.VST2_DIRECTORY,
           this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.VST2));
     }
-    if (prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, null) == null) {
-      prefs.put(ApplicationDefaults.VST3_DIRECTORY_KEY, 
+    if (prefs.get(Prefs.Plugins.VST3_DIRECTORY, null) == null) {
+      prefs.put(Prefs.Plugins.VST3_DIRECTORY,
           this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.VST3));
     }
-    if (prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, null) == null
+    if (prefs.get(Prefs.Plugins.AU_DIRECTORY, null) == null
         && this.getApplicationDefaults().getRuntimePlatform().getOperatingSystem().equals(OperatingSystem.MAC)) {
-      prefs.put(ApplicationDefaults.AU_DIRECTORY_KEY, 
+      prefs.put(Prefs.Plugins.AU_DIRECTORY,
           this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.AU));
     }
-    if (prefs.get(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, null) == null) {
-      prefs.putBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, Boolean.TRUE);
+    if (prefs.get(Prefs.Plugins.VST2_DISCOVERY_ENABLED, null) == null) {
+      prefs.putBoolean(Prefs.Plugins.VST2_DISCOVERY_ENABLED, Boolean.TRUE);
     }
-    if (prefs.get(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, null) == null) {
-      prefs.putBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, Boolean.TRUE);
+    if (prefs.get(Prefs.Plugins.VST3_DISCOVERY_ENABLED, null) == null) {
+      prefs.putBoolean(Prefs.Plugins.VST3_DISCOVERY_ENABLED, Boolean.TRUE);
     }
-    if (prefs.get(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, null) == null) {
-      prefs.putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, Boolean.TRUE);
+    if (prefs.get(Prefs.Plugins.NativeHost.ENABLED, null) == null) {
+      prefs.putBoolean(Prefs.Plugins.NativeHost.ENABLED, Boolean.TRUE);
     }
-    if (prefs.get(ApplicationDefaults.SELECTED_ACCOUNT_KEY, null) == null) {
-      prefs.putBoolean(ApplicationDefaults.SELECTED_ACCOUNT_KEY, Boolean.FALSE);
+    if (prefs.get(Prefs.Auth.SELECTED_ACCOUNT, null) == null) {
+      prefs.putBoolean(Prefs.Auth.SELECTED_ACCOUNT, Boolean.FALSE);
     }
-    if (prefs.get(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, null) == null) {
-      prefs.putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, Boolean.TRUE);
+    if (prefs.get(Prefs.Explore.STORE_SUBDIRECTORY_ENABLED, null) == null) {
+      prefs.putBoolean(Prefs.Explore.STORE_SUBDIRECTORY_ENABLED, Boolean.TRUE);
     }
-    if (prefs.get(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, null) == null) {
-      prefs.putLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 10L);
+    if (prefs.get(Prefs.Plugins.NativeHost.LOADER_TIMEOUT, null) == null) {
+      prefs.putLong(Prefs.Plugins.NativeHost.LOADER_TIMEOUT, 10L);
     }
   }
 

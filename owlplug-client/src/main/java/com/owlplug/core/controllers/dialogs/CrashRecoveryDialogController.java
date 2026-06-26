@@ -20,6 +20,7 @@ package com.owlplug.core.controllers.dialogs;
 
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.events.PreferencesChangedEvent;
 import com.owlplug.core.utils.PlatformUtils;
@@ -90,10 +91,10 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
     
     nativeDiscoveryCheckbox.setDisable(!nativeHostService.isNativeHostAvailable());
     nativeDiscoveryCheckbox.setSelected(this.getPreferences().getBoolean(
-        ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
+        Prefs.Plugins.NativeHost.ENABLED, false));
     
     nativeDiscoveryCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, newValue);
+      this.getPreferences().putBoolean(Prefs.Plugins.NativeHost.ENABLED, newValue);
       this.pluginNativeComboBox.setDisable(!newValue);
     });
 
@@ -103,7 +104,7 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
 
     pluginNativeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue != null) {
-        this.getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER, newValue.getId());
+        this.getPreferences().put(Prefs.Plugins.NativeHost.PREFERRED_LOADER, newValue.getId());
         nativeHostService.setCurrentPluginLoader(newValue);
       }
     });
@@ -139,7 +140,7 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
 
         this.getTelemetryService().event("/Error/PluginScanIncomplete", p -> {
           p.put("nativeDiscoveryLoader", this.getPreferences().get(
-              ApplicationDefaults.PREFERRED_NATIVE_LOADER, "unknown"));
+              Prefs.Plugins.NativeHost.PREFERRED_LOADER, "unknown"));
           p.put("pluginName", plugin.getName());
           p.put("pluginFormat", plugin.getFormat().getText());
         });

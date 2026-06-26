@@ -23,6 +23,7 @@ import com.mixpanel.mixpanelapi.ClientDelivery;
 import com.mixpanel.mixpanelapi.MessageBuilder;
 import com.mixpanel.mixpanelapi.MixpanelAPI;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.HashMap;
@@ -57,8 +58,8 @@ public class TelemetryService extends BaseService {
         "https://api-eu.mixpanel.com/engage");
     messageBuilder = new MessageBuilder(this.getApplicationDefaults().getEnvProperty("owlplug.telemetry.code"));
 
-    userId = this.getPreferences().get(ApplicationDefaults.TELEMETRY_USER_ID_KEY, UUID.randomUUID().toString());
-    this.getPreferences().put(ApplicationDefaults.TELEMETRY_USER_ID_KEY, userId);
+    userId = this.getPreferences().get(Prefs.Telemetry.USER_ID, UUID.randomUUID().toString());
+    this.getPreferences().put(Prefs.Telemetry.USER_ID, userId);
 
   }
 
@@ -67,7 +68,7 @@ public class TelemetryService extends BaseService {
   }
 
   public void event(String name, Consumer<Map<String, String>> builder) {
-    if (!this.getPreferences().getBoolean(ApplicationDefaults.TELEMETRY_ENABLED_KEY, false)) {
+    if (!this.getPreferences().getBoolean(Prefs.Telemetry.ENABLED, false)) {
       return;
     }
     if (!allowedEvents.contains(name)) {

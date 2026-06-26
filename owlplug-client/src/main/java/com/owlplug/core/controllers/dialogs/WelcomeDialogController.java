@@ -21,6 +21,7 @@ package com.owlplug.core.controllers.dialogs;
 import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.OptionsController;
 import com.owlplug.core.model.OperatingSystem;
@@ -90,13 +91,13 @@ public class WelcomeDialogController extends AbstractDialogController {
 
   private void buildFormatToggles() {
     formatTogglesContainer.getChildren().addAll(
-        buildFormatRow(PluginFormat.VST2, ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY,
+        buildFormatRow(PluginFormat.VST2, Prefs.Plugins.VST2_DISCOVERY_ENABLED,
             "VST2", "Legacy format, broadly supported across DAWs"),
-        buildFormatRow(PluginFormat.VST3, ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY,
+        buildFormatRow(PluginFormat.VST3, Prefs.Plugins.VST3_DISCOVERY_ENABLED,
             "VST3", "Modern Steinberg format — recommended"),
-        buildFormatRow(PluginFormat.AU, ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY,
+        buildFormatRow(PluginFormat.AU, Prefs.Plugins.AU_DISCOVERY_ENABLED,
             "AU", "Audio Units — macOS only"),
-        buildFormatRow(PluginFormat.LV2, ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY,
+        buildFormatRow(PluginFormat.LV2, Prefs.Plugins.LV2_DISCOVERY_ENABLED,
             "LV2", "Open standard, primarily for Linux")
     );
 

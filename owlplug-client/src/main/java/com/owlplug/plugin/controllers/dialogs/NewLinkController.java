@@ -21,6 +21,7 @@ package com.owlplug.plugin.controllers.dialogs;
 import com.owlplug.controls.AutoCompletePopup;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.owlplug.plugin.components.PluginTaskFactory;
@@ -129,11 +130,11 @@ public class NewLinkController extends AbstractDialogController {
   @Override
   public void show() {
     autoCompletePath.getSuggestions().clear();
-    if (this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)) {
-      autoCompletePath.getSuggestions().add(this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY,""));
+    if (this.getPreferences().getBoolean(Prefs.Plugins.VST2_DISCOVERY_ENABLED, false)) {
+      autoCompletePath.getSuggestions().add(this.getPreferences().get(Prefs.Plugins.VST2_DIRECTORY,""));
     }
-    if (this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)) {
-      autoCompletePath.getSuggestions().add(this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY,""));
+    if (this.getPreferences().getBoolean(Prefs.Plugins.VST3_DISCOVERY_ENABLED, false)) {
+      autoCompletePath.getSuggestions().add(this.getPreferences().get(Prefs.Plugins.VST3_DIRECTORY,""));
     }
     super.show();
   }

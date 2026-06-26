@@ -39,6 +39,7 @@ import com.owlplug.auth.model.UserAccount;
 import com.owlplug.auth.model.UserAccountProvider;
 import com.owlplug.auth.utils.AuthenticationException;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.services.BaseService;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
@@ -114,7 +115,7 @@ public class AuthenticationService extends BaseService {
       userAccount.setCredential(googleCredentialRepository.findByKey(userAccount.getKey()));
 
       userAccountRepository.save(userAccount);
-      this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
+      this.getPreferences().putLong(Prefs.Auth.SELECTED_ACCOUNT, userAccount.getId());
       publisher.publishEvent(new AccountUpdateEvent());
 
     } catch (GeneralSecurityException | IOException e) {

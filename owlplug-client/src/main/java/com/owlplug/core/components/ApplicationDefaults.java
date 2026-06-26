@@ -91,36 +91,59 @@ public class ApplicationDefaults {
 
   // CHECKSTYLE:ON
 
-  public static final String VST_DIRECTORY_KEY = "VST_DIRECTORY";
-  public static final String VST2_DISCOVERY_ENABLED_KEY = "VST2_DISCOVERY_ENABLED";
-  public static final String VST2_EXTRA_DIRECTORY_KEY = "VST2_EXTRA_DIRECTORY_KEY";
-  public static final String VST3_DIRECTORY_KEY = "VST3_DIRECTORY";
-  public static final String VST3_DISCOVERY_ENABLED_KEY = "VST3_DISCOVERY_ENABLED";
-  public static final String VST3_EXTRA_DIRECTORY_KEY = "VST3_EXTRA_DIRECTORY_KEY";
-  public static final String AU_DIRECTORY_KEY = "AU_DIRECTORY_KEY";
-  public static final String AU_DISCOVERY_ENABLED_KEY = "AU_DISCOVERY_ENABLED_KEY";
-  public static final String AU_EXTRA_DIRECTORY_KEY = "AU_EXTRA_DIRECTORY_KEY";
-  public static final String LV2_DIRECTORY_KEY = "LV2_DIRECTORY_KEY";
-  public static final String LV2_DISCOVERY_ENABLED_KEY = "LV2_DISCOVERY_ENABLED_KEY";
-  public static final String LV2_EXTRA_DIRECTORY_KEY = "LV2_EXTRA_DIRECTORY_KEY";
-  public static final String NATIVE_HOST_ENABLED_KEY = "NATIVE_HOST_ENABLED_KEY";
-  public static final String PREFERRED_NATIVE_LOADER = "PREFERRED_NATIVE_LOADER";
-  public static final String NATIVE_LOADER_TIMEOUT_KEY = "NATIVE_LOADER_TIMEOUT_KEY";
-  public static final String SELECTED_ACCOUNT_KEY = "SELECTED_ACCOUNT_KEY";
-  public static final String SYNC_PLUGINS_STARTUP_KEY = "SYNC_PLUGINS_STARTUP_KEY";
-  public static final String STORE_DIRECTORY_ENABLED_KEY = "STORE_DIRECTORY_ENABLED_KEY";
-  public static final String STORE_BY_CREATOR_ENABLED_KEY = "STORE_BY_CREATOR_ENABLED_KEY";
-  public static final String STORE_DIRECTORY_KEY = "STORE_DIRECTORY_KEY";
-  public static final String STORE_SUBDIRECTORY_ENABLED = "STORE_SUBDIRECTORY_ENABLED";
-  public static final String FIRST_LAUNCH_KEY = "FIRST_LAUNCH_KEY";
-  public static final String APPLICATION_STATE_KEY = "APPLICATION_STATE_KEY";
-  public static final String SHOW_DIALOG_DISABLE_PLUGIN_KEY = "SHOW_DIALOG_DISABLE_PLUGIN_KEY";
-  public static final String PROJECT_DIRECTORY_KEY = "PROJECT_DIRECTORY_KEY";
-  public static final String PLUGIN_PREFERRED_DISPLAY_KEY = "PLUGIN_PREFERRED_DISPLAY_KEY";
-  public static final String SYNC_FILE_STAT_KEY = "SYNC_FILE_STAT_KEY";
-  public static final String TELEMETRY_ENABLED_KEY = "TELEMETRY_ENABLED_KEY";
-  public static final String TELEMETRY_USER_ID_KEY = "TELEMETRY_USER_ID_KEY";
-  public static final String LAST_PLUGIN_SCAN_DATE_KEY = "LAST_PLUGIN_SCAN_DATE_KEY";
+  public static final class Prefs {
+
+    public static final class Plugins {
+      public static final String VST2_DIRECTORY         = "plugins.vst2.directory";
+      public static final String VST2_DISCOVERY_ENABLED = "plugins.vst2.discovery_enabled";
+      public static final String VST2_EXTRA_DIRECTORY   = "plugins.vst2.extra_directory";
+      public static final String VST3_DIRECTORY         = "plugins.vst3.directory";
+      public static final String VST3_DISCOVERY_ENABLED = "plugins.vst3.discovery_enabled";
+      public static final String VST3_EXTRA_DIRECTORY   = "plugins.vst3.extra_directory";
+      public static final String AU_DIRECTORY           = "plugins.au.directory";
+      public static final String AU_DISCOVERY_ENABLED   = "plugins.au.discovery_enabled";
+      public static final String AU_EXTRA_DIRECTORY     = "plugins.au.extra_directory";
+      public static final String LV2_DIRECTORY          = "plugins.lv2.directory";
+      public static final String LV2_DISCOVERY_ENABLED  = "plugins.lv2.discovery_enabled";
+      public static final String LV2_EXTRA_DIRECTORY    = "plugins.lv2.extra_directory";
+      public static final String PREFERRED_DISPLAY      = "plugins.preferred_display";
+      public static final String LAST_SCAN_DATE         = "plugins.last_scan_date";
+
+      public static final class NativeHost {
+        public static final String ENABLED           = "plugins.native_host.enabled";
+        public static final String PREFERRED_LOADER  = "plugins.native_host.preferred_loader";
+        public static final String LOADER_TIMEOUT    = "plugins.native_host.loader_timeout";
+      }
+    }
+
+    public static final class Explore {
+      public static final String STORE_DIRECTORY_ENABLED   = "explore.store_directory_enabled";
+      public static final String STORE_BY_CREATOR_ENABLED  = "explore.store_by_creator_enabled";
+      public static final String STORE_DIRECTORY           = "explore.store_directory";
+      public static final String STORE_SUBDIRECTORY_ENABLED = "explore.store_subdirectory_enabled";
+    }
+
+    public static final class Auth {
+      public static final String SELECTED_ACCOUNT = "auth.selected_account";
+    }
+
+    public static final class Projects {
+      public static final String DIRECTORY = "projects.directory";
+    }
+
+    public static final class Telemetry {
+      public static final String ENABLED = "telemetry.enabled";
+      public static final String USER_ID = "telemetry.user_id";
+    }
+
+    public static final class App {
+      public static final String FIRST_LAUNCH               = "app.first_launch";
+      public static final String STATE                      = "app.state";
+      public static final String SYNC_PLUGINS_ON_STARTUP    = "app.sync_plugins_on_startup";
+      public static final String SYNC_FILE_STAT             = "app.sync_file_stat";
+      public static final String SHOW_DIALOG_DISABLE_PLUGIN = "app.show_dialog_disable_plugin";
+    }
+  }
 
   /**
    * Creates a new ApplicationDefaults.

@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers.options;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import java.io.File;
@@ -62,20 +63,20 @@ public class InstallationOptionsController extends BaseController {
     warningSubDirectory.managedProperty().bind(warningSubDirectory.visibleProperty());
 
     storeDirectoryCheckBox.selectedProperty().addListener((obs, o, n) -> {
-      getPreferences().putBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, n);
+      getPreferences().putBoolean(Prefs.Explore.STORE_DIRECTORY_ENABLED, n);
       refreshPathPreview();
     });
     storeByCreatorCheckBox.selectedProperty().addListener((obs, o, n) -> {
-      getPreferences().putBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, n);
+      getPreferences().putBoolean(Prefs.Explore.STORE_BY_CREATOR_ENABLED, n);
       refreshPathPreview();
     });
     storeSubDirectoryCheckBox.selectedProperty().addListener((obs, o, n) -> {
-      getPreferences().putBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, n);
+      getPreferences().putBoolean(Prefs.Explore.STORE_SUBDIRECTORY_ENABLED, n);
       warningSubDirectory.setVisible(!n);
       refreshPathPreview();
     });
     storeDirectoryTextField.textProperty().addListener((obs, o, n) -> {
-      getPreferences().put(ApplicationDefaults.STORE_DIRECTORY_KEY, n);
+      getPreferences().put(Prefs.Explore.STORE_DIRECTORY, n);
       refreshPathPreview();
     });
 
@@ -92,23 +93,23 @@ public class InstallationOptionsController extends BaseController {
   }
 
   public void refresh() {
-    boolean storeSubDir = getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true);
+    boolean storeSubDir = getPreferences().getBoolean(Prefs.Explore.STORE_SUBDIRECTORY_ENABLED, true);
     storeSubDirectoryCheckBox.setSelected(storeSubDir);
     warningSubDirectory.setVisible(!storeSubDir);
     storeDirectoryCheckBox.setSelected(
-        getPreferences().getBoolean(ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false));
+        getPreferences().getBoolean(Prefs.Explore.STORE_DIRECTORY_ENABLED, false));
     storeByCreatorCheckBox.setSelected(
-        getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false));
+        getPreferences().getBoolean(Prefs.Explore.STORE_BY_CREATOR_ENABLED, false));
     storeDirectoryTextField.setText(
-        getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, ""));
+        getPreferences().get(Prefs.Explore.STORE_DIRECTORY, ""));
     refreshPathPreview();
   }
 
   private void refreshPathPreview() {
-    vst2PathLabel.setText(simulatePath(ApplicationDefaults.VST_DIRECTORY_KEY));
-    vst3PathLabel.setText(simulatePath(ApplicationDefaults.VST3_DIRECTORY_KEY));
-    auPathLabel.setText(simulatePath(ApplicationDefaults.AU_DIRECTORY_KEY));
-    lv2PathLabel.setText(simulatePath(ApplicationDefaults.LV2_DIRECTORY_KEY));
+    vst2PathLabel.setText(simulatePath(Prefs.Plugins.VST2_DIRECTORY));
+    vst3PathLabel.setText(simulatePath(Prefs.Plugins.VST3_DIRECTORY));
+    auPathLabel.setText(simulatePath(Prefs.Plugins.AU_DIRECTORY));
+    lv2PathLabel.setText(simulatePath(Prefs.Plugins.LV2_DIRECTORY));
   }
 
   private String simulatePath(String formatDirKey) {

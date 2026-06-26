@@ -21,6 +21,7 @@ package com.owlplug.plugin.controllers.dialogs;
 
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.owlplug.plugin.controllers.PluginInfoController;
 import com.owlplug.plugin.model.Plugin;
@@ -64,9 +65,9 @@ public class DisablePluginDialogController extends AbstractDialogController {
 
     CheckBox displayDialog = new CheckBox("Don't show me this message again");
     VBox.setMargin(displayDialog, new Insets(20,0,0,0));
-    displayDialog.setSelected(!getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true));
+    displayDialog.setSelected(!getPreferences().getBoolean(Prefs.App.SHOW_DIALOG_DISABLE_PLUGIN, true));
     displayDialog.selectedProperty().addListener((observable, oldValue, newValue) -> {
-      this.getPreferences().putBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, !newValue);
+      this.getPreferences().putBoolean(Prefs.App.SHOW_DIALOG_DISABLE_PLUGIN, !newValue);
     });
     vbox.getChildren().add(displayDialog);
     layout.setBody(vbox);

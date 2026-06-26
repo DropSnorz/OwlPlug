@@ -21,6 +21,7 @@ package com.owlplug.core.controllers.options;
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.dialogs.DonateDialogController;
 import com.owlplug.core.services.OptionsService;
@@ -59,7 +60,7 @@ public class ApplicationOptionsController extends BaseController {
   @FXML
   public void initialize() {
     telemetryCheckBox.selectedProperty().addListener((obs, o, n) ->
-        getPreferences().putBoolean(ApplicationDefaults.TELEMETRY_ENABLED_KEY, n));
+        getPreferences().putBoolean(Prefs.Telemetry.ENABLED, n));
 
     telemetryHyperlink.setOnAction(e -> PlatformUtils.openDefaultBrowser(
         getApplicationDefaults().getEnvProperty("owlplug.github.wiki.url") + "/Telemetry"));
@@ -93,7 +94,7 @@ public class ApplicationOptionsController extends BaseController {
 
   public void refresh() {
     telemetryCheckBox.setSelected(
-        getPreferences().getBoolean(ApplicationDefaults.TELEMETRY_ENABLED_KEY, true));
+        getPreferences().getBoolean(Prefs.Telemetry.ENABLED, true));
   }
 
 }

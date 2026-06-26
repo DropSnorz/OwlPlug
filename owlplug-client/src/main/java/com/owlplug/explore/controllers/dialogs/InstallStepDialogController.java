@@ -20,6 +20,7 @@ package com.owlplug.explore.controllers.dialogs;
 
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
@@ -123,13 +124,13 @@ public class InstallStepDialogController extends AbstractDialogController {
       }
       String baseDir = null;
       if (vst2ToggleButton.equals(obs.getValue())) {
-        baseDir = this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+        baseDir = this.getPreferences().get(Prefs.Plugins.VST2_DIRECTORY, "");
       } else if (vst3ToggleButton.equals(obs.getValue())) {
-        baseDir = this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
+        baseDir = this.getPreferences().get(Prefs.Plugins.VST3_DIRECTORY, "");
       } else if (auToggleButton.equals(obs.getValue())) {
-        baseDir = this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
+        baseDir = this.getPreferences().get(Prefs.Plugins.AU_DIRECTORY, "");
       } else if (lv2ToggleButton.equals(obs.getValue())) {
-        baseDir = this.getPreferences().get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
+        baseDir = this.getPreferences().get(Prefs.Plugins.LV2_DIRECTORY, "");
       }
       if (baseDir != null) {
         File installationDirectory = generateInstallationDirectoryFromBasePath(baseDir);
@@ -345,15 +346,15 @@ public class InstallStepDialogController extends AbstractDialogController {
 
       selectedDirectory = new File(baseDirectoryPath);
       boolean shouldStoreInDirectory = this.getPreferences().getBoolean(
-              ApplicationDefaults.STORE_DIRECTORY_ENABLED_KEY, false);
+              Prefs.Explore.STORE_DIRECTORY_ENABLED, false);
       //if the user wishes to group plugins in a dedicated directory
       //then we need to include the subdirectory as well.
       if (shouldStoreInDirectory) {
-        String relativeDirectoryPath = this.getPreferences().get(ApplicationDefaults.STORE_DIRECTORY_KEY, "");
+        String relativeDirectoryPath = this.getPreferences().get(Prefs.Explore.STORE_DIRECTORY, "");
         selectedDirectory = new File(selectedDirectory, relativeDirectoryPath);
       }
 
-      boolean shouldGroupByCreator = this.getPreferences().getBoolean(ApplicationDefaults.STORE_BY_CREATOR_ENABLED_KEY, false);
+      boolean shouldGroupByCreator = this.getPreferences().getBoolean(Prefs.Explore.STORE_BY_CREATOR_ENABLED, false);
       //if the user wishes to group plugins by their creator,
       //then we need to include the subdirectory as well.
       if (shouldGroupByCreator) {
@@ -361,7 +362,7 @@ public class InstallStepDialogController extends AbstractDialogController {
         selectedDirectory = new File(selectedDirectory, creator);
       }
 
-      boolean shouldWrapSubDirectory = this.getPreferences().getBoolean(ApplicationDefaults.STORE_SUBDIRECTORY_ENABLED, true);
+      boolean shouldWrapSubDirectory = this.getPreferences().getBoolean(Prefs.Explore.STORE_SUBDIRECTORY_ENABLED, true);
       if (shouldWrapSubDirectory) {
         // If the plugin is wrapped into a subdirectory, checks for already existing
         // directory
@@ -381,13 +382,13 @@ public class InstallStepDialogController extends AbstractDialogController {
     verifyStep.setGraphic(null);
 
     vst2ToggleButton.setDisable(!this.getPreferences().getBoolean(
-            ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
+            Prefs.Plugins.VST2_DISCOVERY_ENABLED, false));
     vst3ToggleButton.setDisable(!this.getPreferences().getBoolean(
-            ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
+            Prefs.Plugins.VST3_DISCOVERY_ENABLED, false));
     auToggleButton.setDisable(!this.getPreferences().getBoolean(
-            ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
+            Prefs.Plugins.AU_DISCOVERY_ENABLED, false));
     lv2ToggleButton.setDisable(!this.getPreferences().getBoolean(
-            ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false));
+            Prefs.Plugins.LV2_DISCOVERY_ENABLED, false));
 
     toggleGroup.selectToggle(null);
 
