@@ -22,6 +22,7 @@ import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.Async;
@@ -143,7 +144,7 @@ public class PluginInfoController extends BaseController {
 
     disableButton.setOnAction(e -> {
       Plugin plugin = pluginProperty.get();
-      if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
+      if (this.getPreferences().getBoolean(Prefs.App.SHOW_DIALOG_DISABLE_PLUGIN, true)) {
         this.disableController.setPlugin(plugin);
         this.disableController.show();
       } else {

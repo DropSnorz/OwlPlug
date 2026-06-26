@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers.options;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
@@ -65,20 +66,20 @@ public class PluginScanOptionsController extends BaseController {
   @FXML
   public void initialize() {
     vst2Fragment = new PluginPathFragmentController(PluginFormat.VST2,
-        ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST_DIRECTORY_KEY,
-        ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY, getPreferences(),
+        Prefs.Plugins.VST2_DISCOVERY_ENABLED, Prefs.Plugins.VST2_DIRECTORY,
+        Prefs.Plugins.VST2_EXTRA_DIRECTORY, getPreferences(),
         getApplicationDefaults(), listDirectoryDialogController);
     vst3Fragment = new PluginPathFragmentController(PluginFormat.VST3,
-        ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST3_DIRECTORY_KEY,
-        ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY, getPreferences(),
+        Prefs.Plugins.VST3_DISCOVERY_ENABLED, Prefs.Plugins.VST3_DIRECTORY,
+        Prefs.Plugins.VST3_EXTRA_DIRECTORY, getPreferences(),
         getApplicationDefaults(), listDirectoryDialogController);
     auFragment = new PluginPathFragmentController(PluginFormat.AU,
-        ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, ApplicationDefaults.AU_DIRECTORY_KEY,
-        ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY, getPreferences(),
+        Prefs.Plugins.AU_DISCOVERY_ENABLED, Prefs.Plugins.AU_DIRECTORY,
+        Prefs.Plugins.AU_EXTRA_DIRECTORY, getPreferences(),
         getApplicationDefaults(), listDirectoryDialogController);
     lv2Fragment = new PluginPathFragmentController(PluginFormat.LV2,
-        ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.LV2_DIRECTORY_KEY,
-        ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY, getPreferences(),
+        Prefs.Plugins.LV2_DISCOVERY_ENABLED, Prefs.Plugins.LV2_DIRECTORY,
+        Prefs.Plugins.LV2_EXTRA_DIRECTORY, getPreferences(),
         getApplicationDefaults(), listDirectoryDialogController);
 
     formatsContainer.getChildren().addAll(
@@ -88,7 +89,7 @@ public class PluginScanOptionsController extends BaseController {
         lv2Fragment.getNode());
 
     pluginNativeCheckbox.selectedProperty().addListener((obs, o, n) -> {
-      getPreferences().putBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, n);
+      getPreferences().putBoolean(Prefs.Plugins.NativeHost.ENABLED, n);
       pluginNativeComboBox.setDisable(!n);
       updateScannerTimeoutFieldState();
     });
@@ -97,7 +98,7 @@ public class PluginScanOptionsController extends BaseController {
         FXCollections.observableArrayList(nativeHostService.getAvailablePluginLoaders()));
     pluginNativeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
       if (n != null) {
-        getPreferences().put(ApplicationDefaults.PREFERRED_NATIVE_LOADER, n.getId());
+        getPreferences().put(Prefs.Plugins.NativeHost.PREFERRED_LOADER, n.getId());
         nativeHostService.setCurrentPluginLoader(n);
         updateScannerTimeoutFieldState();
       }
@@ -106,14 +107,14 @@ public class PluginScanOptionsController extends BaseController {
     loaderTimeoutSpinner.setValueFactory(
         new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 3600, 10));
     loaderTimeoutSpinner.valueProperty().addListener((obs, o, n) -> {
-      getPreferences().putLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, n.longValue());
+      getPreferences().putLong(Prefs.Plugins.NativeHost.LOADER_TIMEOUT, n.longValue());
       nativeHostService.setScannerTimeout(n.longValue());
     });
 
     syncPluginsCheckBox.selectedProperty().addListener((obs, o, n) ->
-        getPreferences().putBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, n));
+        getPreferences().putBoolean(Prefs.App.SYNC_PLUGINS_ON_STARTUP, n));
     syncFileStatCheckbox.selectedProperty().addListener((obs, o, n) ->
-        getPreferences().putBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, n));
+        getPreferences().putBoolean(Prefs.App.SYNC_FILE_STAT, n));
   }
 
   public void refresh() {
@@ -126,19 +127,19 @@ public class PluginScanOptionsController extends BaseController {
     pluginNativeCheckbox.setDisable(!nativeAvailable);
     pluginNativeComboBox.setDisable(!nativeAvailable);
     pluginNativeCheckbox.setSelected(
-        getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false));
+        getPreferences().getBoolean(Prefs.Plugins.NativeHost.ENABLED, false));
 
     NativePluginLoader loader = nativeHostService.getCurrentPluginLoader();
     pluginNativeComboBox.getSelectionModel().select(loader);
 
-    int timeout = (int) getPreferences().getLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 10L);
+    int timeout = (int) getPreferences().getLong(Prefs.Plugins.NativeHost.LOADER_TIMEOUT, 10L);
     loaderTimeoutSpinner.getValueFactory().setValue(timeout);
     updateScannerTimeoutFieldState();
 
     syncPluginsCheckBox.setSelected(
-        getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false));
+        getPreferences().getBoolean(Prefs.App.SYNC_PLUGINS_ON_STARTUP, false));
     syncFileStatCheckbox.setSelected(
-        getPreferences().getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true));
+        getPreferences().getBoolean(Prefs.App.SYNC_FILE_STAT, true));
 
     if (!getApplicationDefaults().getRuntimePlatform()
         .getOperatingSystem().equals(OperatingSystem.MAC)) {

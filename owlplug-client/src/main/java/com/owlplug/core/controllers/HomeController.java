@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.TimeUtils;
@@ -242,7 +243,7 @@ public class HomeController extends BaseController {
         pluginService.getDirectoriesExplorationSet().size(),
         projectService.getProjectDirectories().size(),
         fileStatRepository.findTop5ByParentIsNullOrderByLengthDesc(),
-        getPreferences().getLong(ApplicationDefaults.LAST_PLUGIN_SCAN_DATE_KEY, 0L)
+        getPreferences().getLong(Prefs.Plugins.LAST_SCAN_DATE, 0L)
     )).thenAccept(data -> FX.run(() -> {
       lastScanLabel.setText(data.lastScanTimestamp() == 0L ? "Never scanned"
           : "Last scan: " + TimeUtils.getHumanReadableDurationFrom(new Date(data.lastScanTimestamp())));

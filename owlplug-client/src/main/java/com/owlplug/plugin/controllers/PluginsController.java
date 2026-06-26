@@ -19,6 +19,7 @@
 package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FX;
 import com.owlplug.plugin.components.PluginTaskFactory;
@@ -162,24 +163,24 @@ public class PluginsController extends BaseController {
         treeViewController.setNodeManaged(true);
         tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
-        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "LIST");
+        this.getPreferences().put(Prefs.Plugins.PREFERRED_DISPLAY, "LIST");
       } else if (newTab.equals(displayDirectoriesTab)) {
         treeViewController.setDisplayMode(PluginTreeViewController.Display.DirectoryTree);
         treeViewController.setNodeManaged(true);
         tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
-        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "DIRECTORIES");
+        this.getPreferences().put(Prefs.Plugins.PREFERRED_DISPLAY, "DIRECTORIES");
       } else {
         treeViewController.setNodeManaged(false);
         tableController.setNodeManaged(true);
         setInfoPaneDisplay(false);
-        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "TABLE");
+        this.getPreferences().put(Prefs.Plugins.PREFERRED_DISPLAY, "TABLE");
       }
     });
 
-    if (this.getPreferences().get(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "").equals("TABLE")) {
+    if (this.getPreferences().get(Prefs.Plugins.PREFERRED_DISPLAY, "").equals("TABLE")) {
       displaySwitchTabPane.getSelectionModel().select(displayTableTab);
-    } else if (this.getPreferences().get(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "").equals("DIRECTORIES")) {
+    } else if (this.getPreferences().get(Prefs.Plugins.PREFERRED_DISPLAY, "").equals("DIRECTORIES")) {
       displaySwitchTabPane.getSelectionModel().select(displayDirectoriesTab);
     } else {
       displaySwitchTabPane.getSelectionModel().select(displayListTab);

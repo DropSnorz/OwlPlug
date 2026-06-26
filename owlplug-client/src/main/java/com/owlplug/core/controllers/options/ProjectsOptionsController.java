@@ -19,6 +19,7 @@
 package com.owlplug.core.controllers.options;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import java.io.File;
 import java.util.ArrayList;
@@ -61,12 +62,12 @@ public class ProjectsOptionsController extends BaseController {
     removeDirButton.setGraphic(removeIcon);
 
     projectDirectories = FXCollections.observableArrayList(
-        getPreferences().getList(ApplicationDefaults.PROJECT_DIRECTORY_KEY, new ArrayList<>()));
+        getPreferences().getList(Prefs.Projects.DIRECTORY, new ArrayList<>()));
     projectListView.setItems(projectDirectories);
 
     projectDirectories.addListener((ListChangeListener<String>) change ->
         getPreferences().putList(
-            ApplicationDefaults.PROJECT_DIRECTORY_KEY, new ArrayList<>(projectDirectories)));
+            Prefs.Projects.DIRECTORY, new ArrayList<>(projectDirectories)));
 
     addDirButton.setOnAction(e -> {
       DirectoryChooser chooser = new DirectoryChooser();
@@ -86,7 +87,7 @@ public class ProjectsOptionsController extends BaseController {
 
   public void refresh() {
     projectDirectories.setAll(
-        getPreferences().getList(ApplicationDefaults.PROJECT_DIRECTORY_KEY, new ArrayList<>()));
+        getPreferences().getList(Prefs.Projects.DIRECTORY, new ArrayList<>()));
   }
 
 }

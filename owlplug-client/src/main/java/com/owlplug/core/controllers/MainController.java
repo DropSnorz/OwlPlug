@@ -28,6 +28,7 @@ import com.owlplug.auth.ui.AccountMenuItem;
 import com.owlplug.controls.Drawer;
 import com.owlplug.controls.transitions.AnimatedTabListener;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationMonitor;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
@@ -145,7 +146,7 @@ public class MainController extends BaseController {
 
       }
       if (newValue instanceof UserAccount userAccount) {
-        this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
+        this.getPreferences().putLong(Prefs.Auth.SELECTED_ACCOUNT, userAccount.getId());
 
       }
       accountComboBox.hide();
@@ -183,14 +184,14 @@ public class MainController extends BaseController {
 
     refreshAccounts();
 
-    boolean firstLaunch = this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true);
+    boolean firstLaunch = this.getPreferences().getBoolean(Prefs.App.FIRST_LAUNCH, true);
     if (!this.applicationMonitor.isPreviousExecutionSafelyTerminated()) {
       log.info("Previous execution not terminated safely, opening crash recovery dialog");
       crashRecoveryDialogController.show();
     } else if (firstLaunch) {
       welcomeDialogController.show();
       exploreTaskFactory.createSourceSyncTask().schedule();
-      this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
+      this.getPreferences().putBoolean(Prefs.App.FIRST_LAUNCH, false);
       publisher.publishEvent(new PreferencesChangedEvent());
     }
 
@@ -201,7 +202,7 @@ public class MainController extends BaseController {
     // Startup plugin sync only triggered if configured and previous application
     // instance safely terminated
     if (this.applicationMonitor.isPreviousExecutionSafelyTerminated()
-            && this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
+            && this.getPreferences().getBoolean(Prefs.App.SYNC_PLUGINS_ON_STARTUP, false)) {
       log.info("Starting auto plugin sync");
       pluginService.scanPlugins(false);
     }
@@ -228,7 +229,7 @@ public class MainController extends BaseController {
     accountComboBox.getItems().setAll(accounts);
     accountComboBox.getItems().add(new AccountMenuItem(" + New Account"));
 
-    long selectedAccountId = this.getPreferences().getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
+    long selectedAccountId = this.getPreferences().getLong(Prefs.Auth.SELECTED_ACCOUNT, -1);
     if (selectedAccountId != -1) {
       Optional<UserAccount> selectedAccount = authenticationService.getUserAccountById(selectedAccountId);
       if (selectedAccount.isPresent()) {

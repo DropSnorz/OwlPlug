@@ -19,6 +19,7 @@
 package com.owlplug.plugin.services;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.services.BaseService;
 import com.owlplug.host.NativePlugin;
 import com.owlplug.host.loaders.DummyPluginLoader;
@@ -53,13 +54,13 @@ public class NativeHostService extends BaseService {
       loader.init();
     }
     configureCurrentPluginLoader();
-    long timeoutSeconds = this.getPreferences().getLong(ApplicationDefaults.NATIVE_LOADER_TIMEOUT_KEY, 30L);
+    long timeoutSeconds = this.getPreferences().getLong(Prefs.Plugins.NativeHost.LOADER_TIMEOUT, 10L);
     EmbeddedScannerPluginLoader.getInstance().setTimeout(timeoutSeconds * 1000);
   }
 
   private void configureCurrentPluginLoader() {
 
-    String prefLoaderId = this.getPreferences().get(ApplicationDefaults.PREFERRED_NATIVE_LOADER, null);
+    String prefLoaderId = this.getPreferences().get(Prefs.Plugins.NativeHost.PREFERRED_LOADER, null);
 
     // If a preferred loader as been set
     if (prefLoaderId != null) {
@@ -127,7 +128,7 @@ public class NativeHostService extends BaseService {
   }
 
   public boolean isNativeHostEnabled() {
-    return this.getPreferences().getBoolean(ApplicationDefaults.NATIVE_HOST_ENABLED_KEY, false);
+    return this.getPreferences().getBoolean(Prefs.Plugins.NativeHost.ENABLED, false);
   }
 
   public boolean isNativeHostAvailable() {

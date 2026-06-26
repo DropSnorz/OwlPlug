@@ -46,13 +46,13 @@ public class ApplicationMonitor {
       previousExecutionSafelyTerminated = false;
     }
     
-    preferences.put(ApplicationDefaults.APPLICATION_STATE_KEY, ApplicationState.RUNNING.getText());
+    preferences.put(ApplicationDefaults.Prefs.App.STATE, ApplicationState.RUNNING.getText());
   }
   
   @PreDestroy
   private void destroy() {
     log.info("Application monitor received shutdown event");
-    preferences.put(ApplicationDefaults.APPLICATION_STATE_KEY, ApplicationState.TERMINATED.getText());
+    preferences.put(ApplicationDefaults.Prefs.App.STATE, ApplicationState.TERMINATED.getText());
     
   }
   
@@ -61,7 +61,7 @@ public class ApplicationMonitor {
    * @return state
    */
   public ApplicationState getState() {
-    String stateValue = preferences.get(ApplicationDefaults.APPLICATION_STATE_KEY, "UNKNOWN");
+    String stateValue = preferences.get(ApplicationDefaults.Prefs.App.STATE, "UNKNOWN");
     return ApplicationState.fromString(stateValue);
     
   }

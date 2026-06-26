@@ -19,6 +19,7 @@
 package com.owlplug.plugin.components;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.BaseTaskFactory;
 import com.owlplug.core.tasks.TaskExecutionContext;
@@ -96,18 +97,18 @@ public class PluginTaskFactory extends BaseTaskFactory {
 
     PluginScanTaskParameters parameters = new PluginScanTaskParameters();
     parameters.setPlatform(applicationDefaults.getRuntimePlatform());
-    parameters.setVst2Directory(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-    parameters.setVst3Directory(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
-    parameters.setAuDirectory(prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
-    parameters.setLv2Directory(prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, ""));
-    parameters.setFindVst2(prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false));
-    parameters.setFindVst3(prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false));
-    parameters.setFindAu(prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false));
-    parameters.setFindLv2(prefs.getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false));
-    parameters.setVst2ExtraDirectories(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
-    parameters.setVst3ExtraDirectories(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
-    parameters.setAuExtraDirectories(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
-    parameters.setLv2ExtraDirectories(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
+    parameters.setVst2Directory(prefs.get(Prefs.Plugins.VST2_DIRECTORY, ""));
+    parameters.setVst3Directory(prefs.get(Prefs.Plugins.VST3_DIRECTORY, ""));
+    parameters.setAuDirectory(prefs.get(Prefs.Plugins.AU_DIRECTORY, ""));
+    parameters.setLv2Directory(prefs.get(Prefs.Plugins.LV2_DIRECTORY, ""));
+    parameters.setFindVst2(prefs.getBoolean(Prefs.Plugins.VST2_DISCOVERY_ENABLED, false));
+    parameters.setFindVst3(prefs.getBoolean(Prefs.Plugins.VST3_DISCOVERY_ENABLED, false));
+    parameters.setFindAu(prefs.getBoolean(Prefs.Plugins.AU_DISCOVERY_ENABLED, false));
+    parameters.setFindLv2(prefs.getBoolean(Prefs.Plugins.LV2_DISCOVERY_ENABLED, false));
+    parameters.setVst2ExtraDirectories(prefs.getList(Prefs.Plugins.VST2_EXTRA_DIRECTORY));
+    parameters.setVst3ExtraDirectories(prefs.getList(Prefs.Plugins.VST3_EXTRA_DIRECTORY));
+    parameters.setAuExtraDirectories(prefs.getList(Prefs.Plugins.AU_EXTRA_DIRECTORY));
+    parameters.setLv2ExtraDirectories(prefs.getList(Prefs.Plugins.LV2_EXTRA_DIRECTORY));
 
     parameters.setDifferential(differential);
 
@@ -124,11 +125,11 @@ public class PluginTaskFactory extends BaseTaskFactory {
     scanTask.setOnRunning(e -> publisher.publishEvent(new PluginScanStartedEvent()));
 
     scanTask.setOnSucceeded(scanEvent -> {
-      prefs.putLong(ApplicationDefaults.LAST_PLUGIN_SCAN_DATE_KEY, System.currentTimeMillis());
+      prefs.putLong(Prefs.Plugins.LAST_SCAN_DATE, System.currentTimeMillis());
       publisher.publishEvent(new PluginScanCompletedEvent());
       TaskExecutionContext lookupTask = projectTaskFactory.createLookupTask();
 
-      if (prefs.getBoolean(ApplicationDefaults.SYNC_FILE_STAT_KEY, true)
+      if (prefs.getBoolean(Prefs.App.SYNC_FILE_STAT, true)
           && !parameters.isDifferential()) {
         lookupTask.getTask().setOnScheduled(lookupEvent -> {
           if (directoryScope != null) {

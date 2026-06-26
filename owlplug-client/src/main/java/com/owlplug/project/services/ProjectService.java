@@ -19,6 +19,7 @@
 package com.owlplug.project.services;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.services.BaseService;
 import com.owlplug.project.components.ProjectTaskFactory;
 import com.owlplug.project.model.DawProject;
@@ -46,7 +47,7 @@ public class ProjectService extends BaseService {
   }
 
   public Set<String> getProjectDirectories() {
-    return new HashSet<>(this.getPreferences().getList(ApplicationDefaults.PROJECT_DIRECTORY_KEY));
+    return new HashSet<>(this.getPreferences().getList(Prefs.Projects.DIRECTORY));
   }
 
 }
