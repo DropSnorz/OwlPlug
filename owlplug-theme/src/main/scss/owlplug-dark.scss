@@ -50,29 +50,29 @@
   $success-8: #033a16,
   $success-9: #04260f,
 
-  // Warning (identical to Primer Dark)
-  $warning-0: #f8e3a1,
-  $warning-1: #f2cc60,
-  $warning-2: #e3b341,
-  $warning-3: #d29922,
-  $warning-4: #bb8009,
-  $warning-5: #9e6a03,
-  $warning-6: #845306,
-  $warning-7: #693e00,
-  $warning-8: #4b2900,
-  $warning-9: #341a00,
+  // Warning — shifted toward clean yellow (~53°) to separate from warm terracotta accent
+  $warning-0: #fef3c0,
+  $warning-1: #fde96a,
+  $warning-2: #f5d030,
+  $warning-3: #dbb820,
+  $warning-4: #b89610,
+  $warning-5: #927508,
+  $warning-6: #6e5706,
+  $warning-7: #4e3d04,
+  $warning-8: #312602,
+  $warning-9: #1c1601,
 
-  // Danger (identical to Primer Dark)
-  $danger-0: #ffdcd7,
-  $danger-1: #ffc1ba,
-  $danger-2: #ffa198,
-  $danger-3: #ff7b72,
-  $danger-4: #f85149,
-  $danger-5: #da3633,
-  $danger-6: #b62324,
-  $danger-7: #8e1519,
-  $danger-8: #67060c,
-  $danger-9: #490202
+  // Danger — cooler crimson to separate clearly from the warm terracotta accent
+  $danger-0: #ffe0de,
+  $danger-1: #ffbcba,
+  $danger-2: #f4948f,
+  $danger-3: #e06560,
+  $danger-4: #d45050,
+  $danger-5: #a82f2f,
+  $danger-6: #8b2020,
+  $danger-7: #6b1515,
+  $danger-8: #480d0d,
+  $danger-9: #2e0606
 );
 
 @use "../../../target/atlantafx/styles/settings/color-scale" as scale;

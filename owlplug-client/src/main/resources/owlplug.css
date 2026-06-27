@@ -1,8 +1,6 @@
 /****************************************************************
  Global Theme rules
 ****************************************************************/
-
-
 .root {
 
     /* Atlantafx colors mapping
@@ -49,16 +47,8 @@
 
      */
     -fx-font-family: "Segoe UI";
-
-    disabled-color: -color-fg-muted;
-    danger-color: -color-danger-emphasis;
-    warning-color: -color-warning-emphasis;
-    success-color: -color-success-emphasis;
-
-    theme-primary-color: -color-accent-fg;
-
-    text-color: -color-fg-default;
-    text-emphase-color: -color-fg-emphasis;
+    -owlplug-color-text: -color-fg-default;
+    -owlplug-color-text-emphasis: -color-fg-emphasis;
 }
 
 #mainPane {
@@ -69,40 +59,38 @@
     -fx-background-color: -color-bg-default;
 }
 
-Label {
-    -fx-text-fill: text-color;
+.label {
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .label-success {
-    -fx-text-fill: success-color;
+    -fx-text-fill: -color-success-fg;
 }
 
 .label-danger {
-    -fx-text-fill: danger-color;
+    -fx-text-fill: -color-danger-fg;
 }
 
 .label-warning {
-    -fx-text-fill: warning-color;
+    -fx-text-fill: -color-warning-emphasis;
 }
 
 .label-disabled {
-    -fx-text-fill: disabled-color;
+    -fx-text-fill: -color-fg-muted;
 }
 
 .label-emphase {
-    -fx-text-fill: text-emphase-color;
+    -fx-text-fill: -owlplug-color-text-emphasis;
 }
 
 .heading-title {
     -fx-font-size: 30px;
     -fx-font-weight: bold;
-    -fx-margin: 0, 0, 8, 0;
 }
 
 .heading-1 {
     -fx-font-size: 25px;
     -fx-font-weight: bold;
-    -fx-margin: 0, 0, 8, 0;
 }
 
 .heading-2 {
@@ -120,15 +108,15 @@ Label {
 }
 
 Text {
-    -fx-fill: text-color;
+    -fx-fill: -owlplug-color-text;
 }
 
 .text-disabled {
-    -fx-fill: disabled-color;
+    -fx-fill: -color-fg-muted;
 }
 
 .text-danger {
-    -fx-fill: danger-color;
+    -fx-fill: -color-danger-emphasis;
 }
 
 
@@ -138,15 +126,15 @@ Text {
 }
 
 .status-icon-found {
-    -fx-icon-color: success-color;
+    -fx-icon-color: -color-success-emphasis;
 }
 
 .status-icon-missing {
-    -fx-icon-color: danger-color;
+    -fx-icon-color: -color-danger-emphasis;
 }
 
 .status-icon-unknown {
-    -fx-icon-color: disabled-color;
+    -fx-icon-color: -color-fg-muted;
 }
 
 .search-bar-chip-view {
@@ -160,7 +148,7 @@ Text {
 }
 
 .chip-view .chips-pane .text-area {
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .chip Button {
@@ -172,10 +160,6 @@ Text {
 }
 
 .chip-view .chip Label {
-    -fx-text-fill: -color-fg-muted;
-}
-
-.chip Label {
     -fx-text-fill: -color-fg-muted;
 }
 
@@ -227,43 +211,31 @@ Text {
 }
 
 .button-danger {
-    -fx-background-color: danger-color;
-}
-
-.button-danger:hover {
-    -fx-background-color: #c9302c;
-}
-
-.button-danger:pressed {
-    -fx-background-color: #ac2925;
+    -fx-background-color: -color-danger-emphasis;
 }
 
 .button-success {
-    -fx-background-color: success-color;
-}
-
-.button-default {
-    -fx-background-color: -color-fg-default;
+    -fx-background-color: -color-success-emphasis;
 }
 
 
 .hyperlink-button {
     -fx-underline: false;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .hyperlink-button:hover {
     -fx-underline: false;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .hyperlink-button:visited {
     -fx-underline: false;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .hyperlink-dark {
-    -fx-text-fill: rgb(40, 40, 40);
+    -fx-text-fill: -color-fg-muted
 }
 
 .hyperlink-dark:focused {
@@ -280,10 +252,6 @@ Text {
     -fx-border-color: null;
     -fx-border-style: solid;
     -fx-border-width: 0px;
-}
-
-.hyperlink-web:visited {
-    -fx-text-fill: disabled-color;
 }
 
 .combo-box .combo-box-popup .list-view,
@@ -316,7 +284,7 @@ Text {
 
 
 .autocomplete-list .list-cell {
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .popup,
@@ -325,21 +293,17 @@ Text {
     -fx-background-color: -color-bg-default;
 }
 
-.progress-bar-link {
-    dot_color: rgb(143, 143, 143);
-}
-
 ProgressIndicator {
-    -fx-progress-color: theme-primary-color;
+    -fx-progress-color: -color-accent-fg;;
 }
 
 .context-menu {
     -fx-background-color: -color-bg-default;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .tooltip {
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 /****************************************************************
@@ -353,7 +317,7 @@ ProgressIndicator {
 .header .combo-box-base {
     -fx-background-radius: 0;
     -fx-border-radius: 0;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 /* Collapse the unused content area of the navigation TabPane */
@@ -421,16 +385,15 @@ ProgressIndicator {
 }
 
 .pane-card .card-title {
-    -fx-height: 37;
+    -fx-pref-height: 37;
     -fx-padding: 5, 5, 5, 5;
     -fx-background-color: -color-bg-subtle;
-    -fx-margin: 0, 0, 10, 0;
 }
 
 .pane-card .card-title Label {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: disabled-color;
+    -fx-text-fill: -color-fg-muted;
 }
 
 /* Plugin info view */
@@ -438,19 +401,12 @@ ProgressIndicator {
 .info-field-label {
     -fx-font-size: 10px;
     -fx-font-weight: bold;
-    -fx-text-fill: disabled-color;
+    -fx-text-fill: -color-fg-muted;
 }
 
 .info-field-value {
     -fx-font-size: 13px;
-    -fx-text-fill: text-emphase-color;
-}
-
-.plugin-action-bar {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color: -color-border-default;
-    -fx-padding: 8 16 8 16;
+    -fx-text-fill: -owlplug-color-text-emphasis;
 }
 
 .package-bloc-title {
@@ -461,12 +417,12 @@ ProgressIndicator {
 
 .package-source-badge {
     -fx-background-color: rgba(245, 245, 241, 1);
-    -fx-text-fill: disabled-color;
+    -fx-text-fill: -color-fg-muted;
     -fx-background-radius: 0 0 0 5px;
     -fx-border-radius: 0 0 0 5px;
     -fx-padding: 5;
     -fx-border-style: solid;
-    -fx-border-color: disabled-color;
+    -fx-border-color: -color-fg-muted;
     -fx-border-width: 0 0 1 1;
 }
 
@@ -477,11 +433,11 @@ ProgressIndicator {
 }
 
 .shape-state-active {
-    -fx-fill: success-color;
+    -fx-fill: -color-success-emphasis;
 }
 
 .shape-state-unstable {
-    -fx-fill: danger-color;
+    -fx-fill: -color-danger-emphasis;
 }
 
 .shape-state-installed {
@@ -489,7 +445,7 @@ ProgressIndicator {
 }
 
 .shape-state-disabled {
-    -fx-fill: disabled-color;
+    -fx-fill: -color-fg-muted;
 }
 
 /****************************************************************
@@ -561,11 +517,11 @@ ProgressIndicator {
 }
 
 .chart-legend>.label {
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .chart-pie-label {
-    -fx-fill: text-color;
+    -fx-fill: -owlplug-color-text;
 }
 
 .chart-pie-label-line {
@@ -578,7 +534,7 @@ ProgressIndicator {
 }
 
 .preloader .progress-bar {
-    dot_color: disabled-color;
+    dot_color: -color-fg-muted;
 }
 
 /****************************************************************
@@ -812,7 +768,7 @@ ProgressIndicator {
 }
 
 .dashboard-bar-chart .axis-line {
-    visibility: hidden;
+    -fx-opacity: 0
 }
 
 .dashboard-bar-label {
