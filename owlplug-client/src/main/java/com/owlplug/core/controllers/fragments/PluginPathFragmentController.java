@@ -238,11 +238,11 @@ public class PluginPathFragmentController {
     if (checks.getExists().status()) {
       directoryExistLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: disabled-color;");
+      imv.setStyle("-fx-background-color: -color-fg-muted;");
     } else {
       directoryExistLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
-      imv.setStyle("-fx-background-color: danger-color;");
+      imv.setStyle("-fx-background-color: -color-danger-emphasis;");
     }
     directoryExistLabel.setTooltip(new Tooltip(checks.getExists().message()));
 
@@ -251,11 +251,11 @@ public class PluginPathFragmentController {
     if (checks.getCanRead().status()) {
       canReadLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: disabled-color;");
+      imv.setStyle("-fx-background-color: -color-fg-muted;");
     } else {
       canReadLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
-      imv.setStyle("-fx-background-color: danger-color;");
+      imv.setStyle("-fx-background-color: -color-danger-emphasis;");
     }
     canReadLabel.setTooltip(new Tooltip(checks.getCanRead().message()));
 
@@ -264,11 +264,11 @@ public class PluginPathFragmentController {
     if (checks.getCanWrite().status()) {
       canWriteLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: disabled-color;");
+      imv.setStyle("-fx-background-color: -color-fg-muted;");
     } else {
       canWriteLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
-      imv.setStyle("-fx-background-color: danger-color;");
+      imv.setStyle("-fx-background-color: -color-danger-emphasis;");
     }
     canWriteLabel.setTooltip(new Tooltip(checks.getCanWrite().message()));
   }

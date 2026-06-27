@@ -45,9 +45,6 @@
     </center>
     <right>
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets left="20.0"/>
-            </padding>
             <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0"
                   VBox.vgrow="NEVER" spacing="5.0">
                 <Button fx:id="syncProjectButton" text="Sync" defaultButton="true">

@@ -54,7 +54,7 @@
         </HBox>
 
         <!-- Setup Suggestions (conditionally shown) -->
-        <VBox fx:id="setupPane" spacing="14.0" styleClass="pane-card">
+        <VBox fx:id="setupPane" spacing="14.0" styleClass="dashboard-card">
             <Label styleClass="dashboard-section-title" text="GET STARTED"/>
 
             <VBox fx:id="noPluginDirectorySuggestion" spacing="6.0">
@@ -183,9 +183,7 @@
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
                     </padding>
                     <HBox alignment="CENTER_LEFT" spacing="5.0">
-                        <ImageView fitHeight="12.0" fitWidth="12.0" preserveRatio="true">
-                            <Image url="@../icons/cross-red-16.png"/>
-                        </ImageView>
+                        <FontIcon iconLiteral="mdi2a-alert-circle-outline" />
                         <Label styleClass="dashboard-tile-label" text="Unresolved"/>
                     </HBox>
                     <Label fx:id="unresolvedPluginCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
@@ -216,7 +214,7 @@
         <!-- Storage / File Size Chart -->
         <VBox spacing="8.0">
             <Label styleClass="dashboard-section-title" text="STORAGE"/>
-            <VBox spacing="8.0" styleClass="pane-card">
+            <VBox spacing="8.0" styleClass="dashboard-card">
                 <VBox fx:id="fileSizeChartContainer" prefHeight="160.0"/>
                 <Label fx:id="fileSizeEmptyLabel" styleClass="label-disabled"
                        text="No file statistics available. Run a plugin scan with file stat sync enabled in Options."/>
