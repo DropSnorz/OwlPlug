@@ -24,6 +24,7 @@ import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
+import com.owlplug.plugin.ui.PluginKindBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -82,13 +83,15 @@ public class ComponentInfoController extends BaseController {
   public void initialize() {
     componentProperty.addListener(e -> refresh());
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
+    pluginFormatBadgeContainer.setSpacing(5);
 
   }
 
   public void refresh() {
     PluginComponent component = componentProperty.get();
     pluginFormatBadgeContainer.getChildren().setAll(
-        new PluginFormatBadgeView(component.getPlugin().getFormat(), this.getApplicationDefaults()));
+        new PluginKindBadgeView(component, this.getApplicationDefaults()),
+        new Label(component.asPlugin().getFormat().getName() + " Component"));
     pluginTitleLabel.setText(component.getName());
     pluginNameLabel.setText(Optional.ofNullable(component.getDescriptiveName()).orElse(component.getName()));
     pluginVersionLabel.setText(Optional.ofNullable(component.getVersion()).orElse("Unknown"));

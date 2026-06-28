@@ -24,14 +24,13 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class PluginComponentCellFactory implements Callback<ListView<PluginComponent>, ListCell<PluginComponent>> {
 
-  private ApplicationDefaults applicationDefaults;
 
-  public PluginComponentCellFactory(ApplicationDefaults applicationDefaults) {
+  public PluginComponentCellFactory() {
 
-    this.applicationDefaults = applicationDefaults;
 
   }
 
@@ -46,10 +45,9 @@ public class PluginComponentCellFactory implements Callback<ListView<PluginCompo
           setText(null);
           setGraphic(null);
         } else {
-          ImageView imageView = new ImageView();
-          imageView.setImage(applicationDefaults.pluginComponentImage);
+          FontIcon icon = new FontIcon("mdi2t-toy-brick-outline");
           setText(plugin.getName());
-          setGraphic(imageView);
+          setGraphic(icon);
         }
       }
     };

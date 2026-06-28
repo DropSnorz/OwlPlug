@@ -29,7 +29,7 @@ import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.plugin.ui.PluginFormatBadgeView;
+import com.owlplug.plugin.ui.PluginKindBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
 import com.owlplug.core.utils.Async;
@@ -48,7 +48,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -114,17 +113,16 @@ public class PluginTableController extends BaseController {
     TableColumn<IPlugin, String> nameColumn = new TableColumn<>("Name");
     nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     TableColumn<IPlugin, PluginFormat> formatColumn = new TableColumn<>("Format");
-    formatColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().asPlugin().getFormat()));
+    formatColumn.setCellValueFactory(
+        cellData -> new SimpleObjectProperty<>(cellData.getValue().asPlugin().getFormat()));
     formatColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(PluginFormat item, boolean empty) {
         super.updateItem(item, empty);
         if (item == null || empty) {
-          setText(null);
           setGraphic(null);
         } else {
-          setText(null);
-          setGraphic(new HBox(new PluginFormatBadgeView(item, getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.ICON_ONLY)));
+          setGraphic(new PluginKindBadgeView(getTableRow().getItem(), getApplicationDefaults()));
         }
       }
     });

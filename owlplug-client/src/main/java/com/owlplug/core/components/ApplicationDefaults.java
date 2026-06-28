@@ -20,7 +20,6 @@ package com.owlplug.core.components;
 
 import com.owlplug.core.model.OperatingSystem;
 import com.owlplug.core.model.RuntimePlatform;
-import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginType;
 import com.owlplug.project.model.DawApplication;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.scene.image.Image;
-import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +62,7 @@ public class ApplicationDefaults {
   public final Image vst3Image = new Image(getClass().getResourceAsStream("/icons/vst3-green-16.png"));
   public final Image auImage = new Image(getClass().getResourceAsStream("/icons/au-purple-16.png"));
   public final Image lv2Image = new Image(getClass().getResourceAsStream("/icons/lv2-orange-16.png"));
-  public final Image pluginComponentImage = new Image(getClass().getResourceAsStream("/icons/cube-white-16.png"));
+  public final Image defaultFormat = new Image(getClass().getResourceAsStream("/icons/format-white-16.png"));
   public final Image verifiedSourceImage = new Image(getClass().getResourceAsStream("/icons/doublecheck-grey-16.png"));
   public final Image suggestedSourceImage = new Image(
       ApplicationDefaults.class.getResourceAsStream("/icons/check-grey-16.png"));
@@ -160,14 +158,14 @@ public class ApplicationDefaults {
    */
   public Image getPluginFormatIcon(PluginFormat format) {
     if (format == null) {
-      return pluginComponentImage;
+      return defaultFormat;
     }
     return switch (format) {
       case VST2 -> vst2Image;
       case VST3 -> vst3Image;
       case AU -> auImage;
       case LV2 -> lv2Image;
-      default -> pluginComponentImage;
+      default -> defaultFormat;
     };
   }
 
