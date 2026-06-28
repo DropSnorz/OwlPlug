@@ -794,3 +794,53 @@ ProgressIndicator {
 .dashboard-scan-indicator .label {
     -fx-text-fill: -color-accent-fg;
 }
+
+/****************************************************************
+ * Plugin filter sidebar
+ ****************************************************************/
+
+.plugin-filter-sidebar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 1 0 0;
+}
+
+.plugin-filter-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.plugin-filter-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.plugin-filter-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.plugin-filter-section-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-muted;
+    -fx-padding: 4 0 2 0;
+}
+
+.plugin-filter-clear {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-underline: false;
+    -fx-padding: 0;
+}
+
+.plugin-filter-clear:hover {
+    -fx-text-fill: -color-fg-default;
+}
+
+.plugin-filter-view-more {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-accent-fg;
+    -fx-underline: false;
+    -fx-padding: 2 0 0 0;
+}
+

@@ -23,6 +23,7 @@ import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.plugin.components.PluginFilterModel;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
 import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
@@ -31,6 +32,7 @@ import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.ui.PluginKindBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
+import java.util.function.Predicate;
 import java.io.File;
 import com.owlplug.core.utils.Async;
 import javafx.beans.binding.Bindings;
@@ -67,6 +69,7 @@ public class PluginTableController extends BaseController {
   private PluginService pluginService;
 
   private final SimpleStringProperty search = new SimpleStringProperty();
+  private final SimpleObjectProperty<Predicate<IPlugin>> filterPredicate = new SimpleObjectProperty<>();
   private final TableView<IPlugin> tableView;
 
   private final ObservableList<IPlugin> pluginList;
@@ -95,13 +98,20 @@ public class PluginTableController extends BaseController {
     FilteredList<IPlugin> filteredPluginList = new FilteredList<>(pluginList);
 
     filteredPluginList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (search.getValue() == null || search.getValue().isEmpty()) {
+      String searchVal = search.getValue();
+      boolean hasSearch = searchVal != null && !searchVal.isEmpty();
+      Predicate<IPlugin> fp = filterPredicate.get();
+      if (!hasSearch && fp == null) {
         return null;
       }
-      return (plugin) -> plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
-                 || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(
-                     search.getValue().toLowerCase()));
-    }, search));
+      return plugin -> {
+        boolean searchMatch = !hasSearch
+            || plugin.getName().toLowerCase().contains(searchVal.toLowerCase())
+            || (plugin.getCategory() != null
+                && plugin.getCategory().toLowerCase().contains(searchVal.toLowerCase()));
+        return searchMatch && (fp == null || fp.test(plugin));
+      };
+    }, search, filterPredicate));
 
     SortedList<IPlugin> sortedPluginList = new SortedList<>(filteredPluginList);
     tableView.setItems(sortedPluginList);
@@ -187,6 +197,10 @@ public class PluginTableController extends BaseController {
     tableView.getColumns().addAll(formatColumn, nameColumn, versionColumn,
         manufacturerColumn, categoryColumn, directoryColumn, scanDirectoryColumn, stateColumn);
 
+  }
+
+  public void bindFilterModel(PluginFilterModel filterModel) {
+    filterPredicate.bind(filterModel.predicateProperty());
   }
 
   public void setPlugins(Iterable<Plugin> plugins) {

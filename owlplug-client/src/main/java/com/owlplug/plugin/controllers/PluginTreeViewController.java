@@ -20,6 +20,7 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.ui.FilterableTreeItem;
+import com.owlplug.plugin.components.PluginFilterModel;
 import com.owlplug.plugin.model.IDirectory;
 import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
@@ -33,7 +34,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -51,6 +54,7 @@ public class PluginTreeViewController extends BaseController {
   private SymlinkRepository symlinkRepository;
 
   private final SimpleStringProperty search = new SimpleStringProperty();
+  private final SimpleObjectProperty<Predicate<IPlugin>> filterPredicate = new SimpleObjectProperty<>();
   private final TreeView<Object> pluginTreeView;
   private final FilterableTreeItem<Object> treePluginNode;
   private final FilterableTreeItem<Object> treeFileRootNode;
@@ -68,41 +72,40 @@ public class PluginTreeViewController extends BaseController {
 
     pluginTreeView.setRoot(treePluginNode);
 
-    // Binds search property to plugin tree filter
-    treePluginNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (search.getValue() == null || search.getValue().isEmpty()) {
-        return null;
-      }
-      return (item) -> {
-        if (item instanceof IPlugin plugin) {
-          return plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
-                  || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(
-                      search.getValue().toLowerCase()));
-        } else {
-          return item.toString().toLowerCase().contains(search.getValue().toLowerCase());
-        }
-      };
-    }, search));
+    treePluginNode.predicateProperty().bind(
+        Bindings.createObjectBinding(() -> buildTreePredicate(search.getValue(), filterPredicate.get()),
+            search, filterPredicate));
 
-    // Binds search property to file tree filter
-    treeFileRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (search.getValue() == null || search.getValue().isEmpty()) {
-        return null;
-      }
-      return (item) -> {
-        if (item instanceof IPlugin plugin) {
-          return plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
-                  || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(search.getValue().toLowerCase()));
-        } else {
-          return item.toString().toLowerCase().contains(search.getValue().toLowerCase());
-        }
-      };
-    }, search));
+    treeFileRootNode.predicateProperty().bind(
+        Bindings.createObjectBinding(() -> buildTreePredicate(search.getValue(), filterPredicate.get()),
+            search, filterPredicate));
 
   }
 
   public SimpleStringProperty searchProperty() {
     return this.search;
+  }
+
+  public void bindFilterModel(PluginFilterModel filterModel) {
+    filterPredicate.bind(filterModel.predicateProperty());
+  }
+
+  private Predicate<Object> buildTreePredicate(String searchVal, Predicate<IPlugin> fp) {
+    boolean hasSearch = searchVal != null && !searchVal.isEmpty();
+    if (!hasSearch && fp == null) {
+      return null;
+    }
+    return item -> {
+      if (item instanceof IPlugin plugin) {
+        boolean searchMatch = !hasSearch
+            || plugin.getName().toLowerCase().contains(searchVal.toLowerCase())
+            || (plugin.getCategory() != null
+                && plugin.getCategory().toLowerCase().contains(searchVal.toLowerCase()));
+        return searchMatch && (fp == null || fp.test(plugin));
+      } else {
+        return !hasSearch || item.toString().toLowerCase().contains(searchVal.toLowerCase());
+      }
+    };
   }
 
   public TreeView<Object> getTreeView() {

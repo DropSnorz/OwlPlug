@@ -22,15 +22,18 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FX;
+import com.owlplug.plugin.components.PluginFilterModel;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
 import com.owlplug.plugin.events.PluginRefreshEvent;
 import com.owlplug.plugin.events.PluginScanCompletedEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
+import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.utils.Async;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
@@ -38,6 +41,7 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -62,6 +66,10 @@ public class PluginsController extends BaseController {
   protected PluginTreeViewController treeViewController;
   @Autowired
   protected PluginTableController tableController;
+  @Autowired
+  protected PluginFilterController filterController;
+  @Autowired
+  protected PluginFilterModel filterModel;
 
   @FXML
   private SplitMenuButton scanMenuButton;
@@ -85,9 +93,13 @@ public class PluginsController extends BaseController {
   @FXML
   private Button newLinkButton;
   @FXML
+  private Button filterToggleButton;
+  @FXML
   private VBox pluginInfoPane;
   @FXML
   private VBox pluginsContainer;
+  @FXML
+  private HBox filterContainer;
 
   /**
    * FXML initialize method.
@@ -98,6 +110,11 @@ public class PluginsController extends BaseController {
     newLinkButton.setOnAction(e -> {
       newLinkController.show();
     });
+
+    // Wire filter sidebar and predicate into sub-controllers
+    filterContainer.getChildren().add(0, filterController.getView());
+    tableController.bindFilterModel(filterModel);
+    treeViewController.bindFilterModel(filterModel);
 
     // Add Plugin Table and TreeView to the scene graph
     pluginsContainer.getChildren().add(treeViewController.getTreeView());
@@ -215,6 +232,7 @@ public class PluginsController extends BaseController {
         .thenAccept(plugins -> FX.run(() -> {
           treeViewController.setPlugins(plugins);
           tableController.setPlugins(plugins);
+          filterController.refresh(plugins);
         }));
   }
 
@@ -229,6 +247,11 @@ public class PluginsController extends BaseController {
   public void refresh() {
     treeViewController.refresh();
     tableController.refresh();
+  }
+
+  @FXML
+  public void toggleFilter() {
+    filterController.getView().toggle();
   }
 
   public void setSearch(String query) {
