@@ -31,14 +31,14 @@ import javafx.collections.ObservableSet;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PluginFilterModel {
+public class PluginFilterState {
 
   private final ObservableSet<PluginFormat> selectedFormats = FXCollections.observableSet();
   private final ObservableSet<String> selectedManufacturers = FXCollections.observableSet();
   private final ObservableSet<String> selectedCategories = FXCollections.observableSet();
   private final ObjectProperty<Predicate<IPlugin>> predicate = new SimpleObjectProperty<>();
 
-  public PluginFilterModel() {
+  public PluginFilterState() {
     predicate.bind(Bindings.createObjectBinding(this::buildPredicate,
         selectedFormats, selectedManufacturers, selectedCategories));
   }

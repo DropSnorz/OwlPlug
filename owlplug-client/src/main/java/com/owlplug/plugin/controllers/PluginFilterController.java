@@ -20,9 +20,9 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.ui.SideBar;
-import com.owlplug.plugin.components.PluginFilterModel;
-import com.owlplug.plugin.model.Plugin;
+import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.plugin.repositories.PluginComponentRepository;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import jakarta.annotation.PostConstruct;
 import java.util.Comparator;
@@ -51,9 +51,11 @@ import org.springframework.stereotype.Controller;
 public class PluginFilterController {
 
   @Autowired
-  private PluginFilterModel filterModel;
+  private PluginFilterState filterState;
   @Autowired
   private ApplicationDefaults applicationDefaults;
+  @Autowired
+  private PluginComponentRepository pluginComponentRepository;
 
   private static final int PREVIEW_COUNT = 3;
 
@@ -73,16 +75,16 @@ public class PluginFilterController {
       CheckBox cb = new CheckBox(format.getName());
       cb.setGraphic(new PluginFormatBadgeView(format, applicationDefaults, PluginFormatBadgeView.DisplayMode.ICON_ONLY));
       cb.selectedProperty().addListener((obs, old, selected) -> {
-        if (selected != filterModel.getSelectedFormats().contains(format)) {
+        if (selected != filterState.getSelectedFormats().contains(format)) {
           if (selected) {
-            filterModel.getSelectedFormats().add(format);
+            filterState.getSelectedFormats().add(format);
           } else {
-            filterModel.getSelectedFormats().remove(format);
+            filterState.getSelectedFormats().remove(format);
           }
         }
       });
-      filterModel.getSelectedFormats().addListener(
-          (SetChangeListener<PluginFormat>) change -> cb.setSelected(filterModel.getSelectedFormats().contains(format)));
+      filterState.getSelectedFormats().addListener(
+          (SetChangeListener<PluginFormat>) change -> cb.setSelected(filterState.getSelectedFormats().contains(format)));
       formatCheckBoxes.put(format, cb);
       formatSection.getChildren().add(cb);
     }
@@ -110,7 +112,7 @@ public class PluginFilterController {
     HBox.setHgrow(spacer, Priority.ALWAYS);
     Hyperlink clearLink = new Hyperlink("Clear all");
     clearLink.getStyleClass().add("plugin-filter-clear");
-    clearLink.setOnAction(e -> filterModel.clearAll());
+    clearLink.setOnAction(e -> filterState.clearAll());
     header.getChildren().addAll(titleLabel, spacer, clearLink);
 
     Label formatLabel = new Label("Format");
@@ -129,31 +131,28 @@ public class PluginFilterController {
     return content;
   }
 
-  public void refresh(List<Plugin> plugins) {
-    Map<PluginFormat, Long> formatCounts = plugins.stream()
-        .filter(p -> p.getFormat() != null)
-        .collect(Collectors.groupingBy(Plugin::getFormat, Collectors.counting()));
+  public void refresh() {
+    Map<String, Long> formatCounts = pluginComponentRepository.countFormatsFromComponents()
+        .stream().collect(Collectors.toMap(e -> e.getLabel(), e -> e.getCnt()));
     formatCheckBoxes.forEach((format, cb) -> {
-      long count = formatCounts.getOrDefault(format, 0L);
+      long count = formatCounts.getOrDefault(format.name(), 0L);
       cb.setText(format.getName() + " (" + count + ")");
     });
 
-    Map<String, Long> manufacturerCounts = plugins.stream()
-        .filter(p -> p.getManufacturerName() != null && !p.getManufacturerName().isBlank())
-        .collect(Collectors.groupingBy(Plugin::getManufacturerName, Collectors.counting()));
+    Map<String, Long> manufacturerCounts = pluginComponentRepository.countManufacturerNamesFromComponents()
+        .stream().collect(Collectors.toMap(e -> e.getLabel(), e -> e.getCnt()));
     buildExpandableSection(
         manufacturerSection, manufacturerCounts,
-        value -> toggle(filterModel.getSelectedManufacturers(), value),
-        filterModel.getSelectedManufacturers()
+        value -> toggle(filterState.getSelectedManufacturers(), value),
+        filterState.getSelectedManufacturers()
     );
 
-    Map<String, Long> categoryCounts = plugins.stream()
-        .filter(p -> p.getCategory() != null && !p.getCategory().isBlank())
-        .collect(Collectors.groupingBy(Plugin::getCategory, Collectors.counting()));
+    Map<String, Long> categoryCounts = pluginComponentRepository.countCategoriesFromComponents()
+        .stream().collect(Collectors.toMap(e -> e.getLabel(), e -> e.getCnt()));
     buildExpandableSection(
         categorySection, categoryCounts,
-        value -> toggle(filterModel.getSelectedCategories(), value),
-        filterModel.getSelectedCategories()
+        value -> toggle(filterState.getSelectedCategories(), value),
+        filterState.getSelectedCategories()
     );
   }
 

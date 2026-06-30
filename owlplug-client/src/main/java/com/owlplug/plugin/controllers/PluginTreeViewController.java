@@ -20,7 +20,7 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.ui.FilterableTreeItem;
-import com.owlplug.plugin.components.PluginFilterModel;
+import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.model.IDirectory;
 import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
@@ -86,8 +86,8 @@ public class PluginTreeViewController extends BaseController {
     return this.search;
   }
 
-  public void bindFilterModel(PluginFilterModel filterModel) {
-    filterPredicate.bind(filterModel.predicateProperty());
+  public void bindFilterState(PluginFilterState filterState) {
+    filterPredicate.bind(filterState.predicateProperty());
   }
 
   private Predicate<Object> buildTreePredicate(String searchVal, Predicate<IPlugin> fp) {

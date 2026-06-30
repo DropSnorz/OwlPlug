@@ -18,22 +18,19 @@
  
 package com.owlplug.plugin.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FX;
-import com.owlplug.plugin.components.PluginFilterModel;
+import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
 import com.owlplug.plugin.events.PluginRefreshEvent;
 import com.owlplug.plugin.events.PluginScanCompletedEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
-import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.utils.Async;
-import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
@@ -69,7 +66,7 @@ public class PluginsController extends BaseController {
   @Autowired
   protected PluginFilterController filterController;
   @Autowired
-  protected PluginFilterModel filterModel;
+  protected PluginFilterState filterState;
 
   @FXML
   private SplitMenuButton scanMenuButton;
@@ -113,8 +110,8 @@ public class PluginsController extends BaseController {
 
     // Wire filter sidebar and predicate into sub-controllers
     filterContainer.getChildren().add(0, filterController.getView());
-    tableController.bindFilterModel(filterModel);
-    treeViewController.bindFilterModel(filterModel);
+    tableController.bindFilterState(filterState);
+    treeViewController.bindFilterState(filterState);
 
     // Add Plugin Table and TreeView to the scene graph
     pluginsContainer.getChildren().add(treeViewController.getTreeView());
@@ -232,7 +229,7 @@ public class PluginsController extends BaseController {
         .thenAccept(plugins -> FX.run(() -> {
           treeViewController.setPlugins(plugins);
           tableController.setPlugins(plugins);
-          filterController.refresh(plugins);
+          filterController.refresh();
         }));
   }
 

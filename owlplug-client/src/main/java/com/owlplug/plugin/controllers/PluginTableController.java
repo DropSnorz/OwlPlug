@@ -18,12 +18,11 @@
 
 package com.owlplug.plugin.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
-import com.owlplug.plugin.components.PluginFilterModel;
+import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
 import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
@@ -49,7 +48,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -199,8 +197,8 @@ public class PluginTableController extends BaseController {
 
   }
 
-  public void bindFilterModel(PluginFilterModel filterModel) {
-    filterPredicate.bind(filterModel.predicateProperty());
+  public void bindFilterState(PluginFilterState filterState) {
+    filterPredicate.bind(filterState.predicateProperty());
   }
 
   public void setPlugins(Iterable<Plugin> plugins) {
