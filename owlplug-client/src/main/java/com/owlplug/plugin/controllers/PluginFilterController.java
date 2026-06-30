@@ -20,13 +20,16 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.ui.SideBar;
+import com.owlplug.core.utils.StringUtils;
 import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.plugin.model.PluginType;
 import com.owlplug.plugin.repositories.PluginComponentRepository;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import jakarta.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -61,15 +64,43 @@ public class PluginFilterController {
 
   private SideBar sideBar;
   private VBox formatSection;
+  private VBox typeSection;
   private VBox manufacturerSection;
   private VBox categorySection;
   private final Map<PluginFormat, CheckBox> formatCheckBoxes = new EnumMap<>(PluginFormat.class);
+  private final Map<PluginType, CheckBox> typeCheckBoxes = new EnumMap<>(PluginType.class);
+  private final Map<String, CheckBox> manufacturerCheckBoxes = new HashMap<>();
+  private final Map<String, CheckBox> categoryCheckBoxes = new HashMap<>();
 
   @PostConstruct
   public void setup() {
     formatSection = new VBox(4);
+    typeSection = new VBox(4);
     manufacturerSection = new VBox(4);
     categorySection = new VBox(4);
+
+    // Format and Type checkboxes are fixed (one per enum value) so their listeners are
+    // wired directly: checkbox → filterState (selectedProperty) and filterState → checkbox
+    // (SetChangeListener). Both directions are safe here because the checkboxes are never
+    // discarded — they live as long as the sidebar.
+    for (PluginType type : PluginType.values()) {
+      CheckBox cb = new CheckBox(StringUtils.capitalize(type.getText()));
+      // checkbox → filterState: toggling the checkbox adds/removes the type from the active filter
+      cb.selectedProperty().addListener((obs, old, selected) -> {
+        if (selected != filterState.getSelectedTypes().contains(type)) {
+          if (selected) {
+            filterState.getSelectedTypes().add(type);
+          } else {
+            filterState.getSelectedTypes().remove(type);
+          }
+        }
+      });
+      // filterState → checkbox: external changes (e.g. "Clear all") keep the checkbox in sync
+      filterState.getSelectedTypes().addListener(
+          (SetChangeListener<PluginType>) change -> cb.setSelected(filterState.getSelectedTypes().contains(type)));
+      typeCheckBoxes.put(type, cb);
+      typeSection.getChildren().add(cb);
+    }
 
     for (PluginFormat format : PluginFormat.values()) {
       CheckBox cb = new CheckBox(format.getName());
@@ -88,6 +119,20 @@ public class PluginFilterController {
       formatCheckBoxes.put(format, cb);
       formatSection.getChildren().add(cb);
     }
+
+    // Shared listeners keep expandable-section checkboxes in sync with the filter state.
+    // Each listener holds a reference only to the value-to-checkbox map, not to individual
+    // CheckBox instances, so rebuilt checkboxes are not retained past their section lifetime.
+    filterState.getSelectedManufacturers().addListener((SetChangeListener<String>) change -> {
+      String v = change.wasAdded() ? change.getElementAdded() : change.getElementRemoved();
+      CheckBox cb = manufacturerCheckBoxes.get(v);
+      if (cb != null) cb.setSelected(change.wasAdded());
+    });
+    filterState.getSelectedCategories().addListener((SetChangeListener<String>) change -> {
+      String v = change.wasAdded() ? change.getElementAdded() : change.getElementRemoved();
+      CheckBox cb = categoryCheckBoxes.get(v);
+      if (cb != null) cb.setSelected(change.wasAdded());
+    });
 
     ScrollPane scrollPane = new ScrollPane(buildContent());
     scrollPane.setFitToWidth(true);
@@ -117,6 +162,8 @@ public class PluginFilterController {
 
     Label formatLabel = new Label("Format");
     formatLabel.getStyleClass().add("plugin-filter-section-title");
+    Label typeLabel = new Label("Type");
+    typeLabel.getStyleClass().add("plugin-filter-section-title");
     Label manufacturerLabel = new Label("Manufacturer");
     manufacturerLabel.getStyleClass().add("plugin-filter-section-title");
     Label categoryLabel = new Label("Category");
@@ -125,13 +172,21 @@ public class PluginFilterController {
     content.getChildren().addAll(
         header, new Separator(),
         formatLabel, formatSection,
+        new Separator(), typeLabel, typeSection,
         new Separator(), manufacturerLabel, manufacturerSection,
         new Separator(), categoryLabel, categorySection
     );
     return content;
   }
 
+  /**
+   * Refreshes filter section counts from the database and rebuilds expandable sections.
+   * Called after each plugin scan or data reload. Format and Type labels are updated
+   * in-place; Manufacturer and Category sections are fully rebuilt because their values
+   * are dynamic (any string from component metadata).
+   */
   public void refresh() {
+    // Format counts: keyed by enum name() because the DB stores EnumType.STRING values
     Map<String, Long> formatCounts = pluginComponentRepository.countFormatsFromComponents()
         .stream().collect(Collectors.toMap(e -> e.getLabel(), e -> e.getCnt()));
     formatCheckBoxes.forEach((format, cb) -> {
@@ -139,10 +194,15 @@ public class PluginFilterController {
       cb.setText(format.getName() + " (" + count + ")");
     });
 
+    typeCheckBoxes.forEach((type, cb) ->
+        cb.setText(StringUtils.capitalize(type.getText()) + " (" + pluginComponentRepository.countByType(type) + ")"));
+
+    // Manufacturer and Category sections are rebuilt on each refresh: values are dynamic
+    // and the set of visible checkboxes changes with each scan result.
     Map<String, Long> manufacturerCounts = pluginComponentRepository.countManufacturerNamesFromComponents()
         .stream().collect(Collectors.toMap(e -> e.getLabel(), e -> e.getCnt()));
     buildExpandableSection(
-        manufacturerSection, manufacturerCounts,
+        manufacturerSection, manufacturerCheckBoxes, manufacturerCounts,
         value -> toggle(filterState.getSelectedManufacturers(), value),
         filterState.getSelectedManufacturers()
     );
@@ -150,7 +210,7 @@ public class PluginFilterController {
     Map<String, Long> categoryCounts = pluginComponentRepository.countCategoriesFromComponents()
         .stream().collect(Collectors.toMap(e -> e.getLabel(), e -> e.getCnt()));
     buildExpandableSection(
-        categorySection, categoryCounts,
+        categorySection, categoryCheckBoxes, categoryCounts,
         value -> toggle(filterState.getSelectedCategories(), value),
         filterState.getSelectedCategories()
     );
@@ -164,9 +224,19 @@ public class PluginFilterController {
     }
   }
 
-  private void buildExpandableSection(VBox container, Map<String, Long> countMap,
-      Consumer<String> onToggle, ObservableSet<String> selectedSet) {
+  /**
+   * Rebuilds a dynamic filter section. The first PREVIEW_COUNT values are always visible;
+   * the rest are hidden behind a "View more" toggle. Entries are sorted by count desc,
+   * then alphabetically so the most common values appear first.
+   *
+   * checkBoxMap is cleared and repopulated on every call so the shared SetChangeListeners
+   * registered in setup() always resolve to a live checkbox, never a stale one.
+   */
+  private void buildExpandableSection(VBox container, Map<String, CheckBox> checkBoxMap,
+      Map<String, Long> countMap, Consumer<String> onToggle, ObservableSet<String> selectedSet) {
     container.getChildren().clear();
+    // Clearing the map releases references to the previous generation of CheckBox instances
+    checkBoxMap.clear();
     if (countMap.isEmpty()) {
       return;
     }
@@ -184,14 +254,21 @@ public class PluginFilterController {
 
     VBox previewBox = new VBox(4);
     for (String value : preview) {
-      previewBox.getChildren().add(createCheckBox(value, countMap.get(value), onToggle, selectedSet));
+      CheckBox cb = createCheckBox(value, countMap.get(value), onToggle, selectedSet);
+      checkBoxMap.put(value, cb);
+      previewBox.getChildren().add(cb);
     }
     container.getChildren().add(previewBox);
 
     if (!remaining.isEmpty()) {
+      // Overflow values are rendered in a hidden VBox toggled by the "View more" hyperlink.
+      // Both visible and hidden checkboxes are registered in checkBoxMap so the shared
+      // listener can reach them regardless of the expanded/collapsed state.
       VBox fullBox = new VBox(4);
       for (String value : remaining) {
-        fullBox.getChildren().add(createCheckBox(value, countMap.get(value), onToggle, selectedSet));
+        CheckBox cb = createCheckBox(value, countMap.get(value), onToggle, selectedSet);
+        checkBoxMap.put(value, cb);
+        fullBox.getChildren().add(cb);
       }
       fullBox.setVisible(false);
       fullBox.setManaged(false);
@@ -208,17 +285,21 @@ public class PluginFilterController {
     }
   }
 
+  /**
+   * Creates a filter checkbox for a single string value. The checkbox→filterState direction
+   * is wired here via selectedProperty. The reverse direction (filterState→checkbox) is
+   * handled by the shared SetChangeListeners in setup() to avoid leaking stale checkboxes.
+   */
   private CheckBox createCheckBox(String value, long count, Consumer<String> onToggle,
       ObservableSet<String> selectedSet) {
     CheckBox cb = new CheckBox(value + " (" + count + ")");
     cb.setSelected(selectedSet.contains(value));
+    // Guard against feedback loops: only propagate when the UI state diverges from the model
     cb.selectedProperty().addListener((obs, old, selected) -> {
       if (selected != selectedSet.contains(value)) {
         onToggle.accept(value);
       }
     });
-    selectedSet.addListener(
-        (SetChangeListener<String>) change -> cb.setSelected(selectedSet.contains(value)));
     return cb;
   }
 

@@ -22,6 +22,7 @@ import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.plugin.model.PluginType;
 import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -34,27 +35,32 @@ import org.springframework.stereotype.Component;
 public class PluginFilterState {
 
   private final ObservableSet<PluginFormat> selectedFormats = FXCollections.observableSet();
+  private final ObservableSet<PluginType> selectedTypes = FXCollections.observableSet();
   private final ObservableSet<String> selectedManufacturers = FXCollections.observableSet();
   private final ObservableSet<String> selectedCategories = FXCollections.observableSet();
   private final ObjectProperty<Predicate<IPlugin>> predicate = new SimpleObjectProperty<>();
 
   public PluginFilterState() {
     predicate.bind(Bindings.createObjectBinding(this::buildPredicate,
-        selectedFormats, selectedManufacturers, selectedCategories));
+        selectedFormats, selectedTypes, selectedManufacturers, selectedCategories));
   }
 
   private Predicate<IPlugin> buildPredicate() {
-    if (selectedFormats.isEmpty() && selectedManufacturers.isEmpty() && selectedCategories.isEmpty()) {
+    if (selectedFormats.isEmpty() && selectedTypes.isEmpty()
+        && selectedManufacturers.isEmpty() && selectedCategories.isEmpty()) {
       return null;
     }
     return plugin -> {
       if (plugin instanceof PluginComponent component) {
         return matchesFormat(component.asPlugin().getFormat())
+            && matchesType(component.getType())
             && matchesManufacturer(component.getManufacturerName())
             && matchesCategory(component.getCategory());
       } else {
         Plugin p = (Plugin) plugin;
         return matchesFormat(p.getFormat())
+            && (matchesType(p.getType())
+                || p.getComponents().stream().anyMatch(c -> matchesType(c.getType())))
             && (matchesManufacturer(p.getManufacturerName())
                 || p.getComponents().stream().anyMatch(c -> matchesManufacturer(c.getManufacturerName())))
             && (matchesCategory(p.getCategory())
@@ -67,6 +73,10 @@ public class PluginFilterState {
     return selectedFormats.isEmpty() || selectedFormats.contains(format);
   }
 
+  private boolean matchesType(PluginType type) {
+    return selectedTypes.isEmpty() || selectedTypes.contains(type);
+  }
+
   private boolean matchesManufacturer(String manufacturer) {
     return selectedManufacturers.isEmpty() || selectedManufacturers.contains(manufacturer);
   }
@@ -77,6 +87,10 @@ public class PluginFilterState {
 
   public ObservableSet<PluginFormat> getSelectedFormats() {
     return selectedFormats;
+  }
+
+  public ObservableSet<PluginType> getSelectedTypes() {
+    return selectedTypes;
   }
 
   public ObservableSet<String> getSelectedManufacturers() {
@@ -93,6 +107,7 @@ public class PluginFilterState {
 
   public void clearAll() {
     selectedFormats.clear();
+    selectedTypes.clear();
     selectedManufacturers.clear();
     selectedCategories.clear();
   }

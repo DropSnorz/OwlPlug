@@ -19,6 +19,7 @@
 package com.owlplug.plugin.repositories;
 
 import com.owlplug.plugin.model.PluginComponent;
+import com.owlplug.plugin.model.PluginType;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -39,4 +40,6 @@ public interface PluginComponentRepository extends JpaRepository<PluginComponent
   @Query("SELECT p.format AS label, COUNT(pc) AS cnt FROM PluginComponent pc "
              + "JOIN pc.plugin p WHERE p.format IS NOT NULL GROUP BY p.format")
   List<StringCountEntry> countFormatsFromComponents();
+
+  long countByType(PluginType type);
 }
