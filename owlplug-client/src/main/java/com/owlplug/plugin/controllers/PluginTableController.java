@@ -18,19 +18,20 @@
 
 package com.owlplug.plugin.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
 import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.plugin.ui.PluginFormatBadgeView;
+import com.owlplug.plugin.ui.PluginKindBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
+import java.util.function.Predicate;
 import java.io.File;
 import com.owlplug.core.utils.Async;
 import javafx.beans.binding.Bindings;
@@ -47,8 +48,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -68,6 +67,7 @@ public class PluginTableController extends BaseController {
   private PluginService pluginService;
 
   private final SimpleStringProperty search = new SimpleStringProperty();
+  private final SimpleObjectProperty<Predicate<IPlugin>> filterPredicate = new SimpleObjectProperty<>();
   private final TableView<IPlugin> tableView;
 
   private final ObservableList<IPlugin> pluginList;
@@ -96,13 +96,20 @@ public class PluginTableController extends BaseController {
     FilteredList<IPlugin> filteredPluginList = new FilteredList<>(pluginList);
 
     filteredPluginList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (search.getValue() == null || search.getValue().isEmpty()) {
+      String searchVal = search.getValue();
+      boolean hasSearch = searchVal != null && !searchVal.isEmpty();
+      Predicate<IPlugin> fp = filterPredicate.get();
+      if (!hasSearch && fp == null) {
         return null;
       }
-      return (plugin) -> plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
-                 || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(
-                     search.getValue().toLowerCase()));
-    }, search));
+      return plugin -> {
+        boolean searchMatch = !hasSearch
+            || plugin.getName().toLowerCase().contains(searchVal.toLowerCase())
+            || (plugin.getCategory() != null
+                && plugin.getCategory().toLowerCase().contains(searchVal.toLowerCase()));
+        return searchMatch && (fp == null || fp.test(plugin));
+      };
+    }, search, filterPredicate));
 
     SortedList<IPlugin> sortedPluginList = new SortedList<>(filteredPluginList);
     tableView.setItems(sortedPluginList);
@@ -114,17 +121,16 @@ public class PluginTableController extends BaseController {
     TableColumn<IPlugin, String> nameColumn = new TableColumn<>("Name");
     nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     TableColumn<IPlugin, PluginFormat> formatColumn = new TableColumn<>("Format");
-    formatColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().asPlugin().getFormat()));
+    formatColumn.setCellValueFactory(
+        cellData -> new SimpleObjectProperty<>(cellData.getValue().asPlugin().getFormat()));
     formatColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(PluginFormat item, boolean empty) {
         super.updateItem(item, empty);
         if (item == null || empty) {
-          setText(null);
           setGraphic(null);
         } else {
-          setText(null);
-          setGraphic(new HBox(new PluginFormatBadgeView(item, getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.ICON_ONLY)));
+          setGraphic(new PluginKindBadgeView(getTableRow().getItem(), getApplicationDefaults()));
         }
       }
     });
@@ -189,6 +195,10 @@ public class PluginTableController extends BaseController {
     tableView.getColumns().addAll(formatColumn, nameColumn, versionColumn,
         manufacturerColumn, categoryColumn, directoryColumn, scanDirectoryColumn, stateColumn);
 
+  }
+
+  public void bindFilterState(PluginFilterState filterState) {
+    filterPredicate.bind(filterState.predicateProperty());
   }
 
   public void setPlugins(Iterable<Plugin> plugins) {

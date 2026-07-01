@@ -157,7 +157,7 @@ public class PluginInfoController extends BaseController {
       Async.run(() -> pluginService.enablePlugin(plugin));
     });
 
-    pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
+    pluginComponentListView.setCellFactory(new PluginComponentCellFactory());
     lastScanErrorLabel.managedProperty().bind(lastScanErrorLabel.visibleProperty());
     lastScanErrorLabel.setVisible(false);
 

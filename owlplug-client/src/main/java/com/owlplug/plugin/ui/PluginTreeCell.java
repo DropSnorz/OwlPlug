@@ -30,7 +30,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -39,8 +38,8 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 public class PluginTreeCell extends TreeCell<Object> {
 
-  private PluginService pluginService;
-  private ApplicationDefaults applicationDefaults;
+  private final PluginService pluginService;
+  private final ApplicationDefaults applicationDefaults;
 
   public PluginTreeCell(ApplicationDefaults applicationDefaults, PluginService pluginService) {
     this.applicationDefaults = applicationDefaults;
@@ -106,7 +105,7 @@ public class PluginTreeCell extends TreeCell<Object> {
 
   private void renderComponent(PluginComponent pluginComponent) {
     Label label = new Label(pluginComponent.getName());
-    label.setGraphic(new ImageView(applicationDefaults.pluginComponentImage));
+    label.setGraphic(new FontIcon("mdi2t-toy-brick-outline"));
     setGraphic(label);
     setText(null);
   }

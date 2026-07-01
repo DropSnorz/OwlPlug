@@ -185,6 +185,7 @@ public class PluginScanTask extends AbstractTask {
 
             for (NativePlugin nativePlugin : nativePlugins) {
               PluginComponent component = createComponentFromNative(nativePlugin);
+              component.setPluginFormat(plugin.getFormat());
               component.setPlugin(plugin);
               plugin.getComponents().add(component);
               log.debug("Created component {} for plugin {}", component.getName(), plugin.getName());
@@ -199,6 +200,17 @@ public class PluginScanTask extends AbstractTask {
               e.getMessage(), 240, "..."
           ));
         }
+      }
+
+      // If no component has been added from native discovery (disabled, unscannable, ...)
+      // A fallback inactive component reference is added.
+      if (plugin.getComponents().isEmpty()) {
+        PluginComponent inactiveComponent = new PluginComponent();
+        inactiveComponent.setActive(false);
+        inactiveComponent.setName(plugin.getName());
+        inactiveComponent.setPluginFormat(plugin.getFormat());
+        inactiveComponent.setPlugin(plugin);
+        plugin.getComponents().add(inactiveComponent);
       }
 
       plugin.setScanComplete(true);
@@ -230,7 +242,9 @@ public class PluginScanTask extends AbstractTask {
       pluginComponent.setType(PluginType.EFFECT);
     }
 
+    pluginComponent.setActive(true);
     return pluginComponent;
+
   }
 
   private void mapPluginPropertiesFromNative(Plugin plugin, NativePlugin nativePlugin) {

@@ -17,15 +17,20 @@
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.plugin.controllers.PluginsController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
+            <Button fx:id="filterToggleButton" onAction="#toggleFilter">
+                <graphic>
+                    <FontIcon iconLiteral="mdi2f-filter-outline" />
+                </graphic>
+            </Button>
+            <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search"
+                       HBox.hgrow="ALWAYS"/>
+            <!--Fixed size pane to align search box-->
+            <Pane prefWidth="190.0" />
             <Button fx:id="newLinkButton" alignment="BASELINE_CENTER" text="New link">
                 <graphic>
                     <FontIcon iconLiteral="mdi2f-folder-arrow-right" />
                 </graphic>
             </Button>
-            <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search"
-                       HBox.hgrow="ALWAYS"/>
-            <!--Fixed size pane to align search box, can be replaced by a V-grow property-->
-            <Pane prefWidth="365.0" />
             <Button fx:id="exportButton" text="Export">
                 <graphic>
                     <FontIcon iconLiteral="mdi2e-export" />
@@ -55,8 +60,10 @@
     <center>
       <BorderPane BorderPane.alignment="CENTER">
       	<center>
-            <VBox fx:id="pluginsContainer">
-            </VBox>
+            <HBox fx:id="filterContainer">
+                <VBox fx:id="pluginsContainer" HBox.hgrow="ALWAYS">
+                </VBox>
+            </HBox>
       	</center>
       	<left>
             <TabPane fx:id="displaySwitchTabPane" side="LEFT"

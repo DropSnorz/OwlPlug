@@ -49,10 +49,21 @@ public class PluginComponent implements IPlugin {
   @Enumerated(EnumType.STRING)
   protected PluginType type;
 
-
   @ManyToOne
   @JsonIgnore
   private Plugin plugin;
+
+
+  // Computed during scan based on parent plugin
+  @Enumerated(EnumType.STRING)
+  protected PluginFormat pluginFormat;
+
+  /* Active if the component has been successfully scanned.
+   Otherwise, component is a ghost placeholder representing
+   a fallback reference of an expected component. */
+  @Column(columnDefinition = "boolean default true")
+  protected boolean active = true;
+
 
   public Long getId() {
     return id;
@@ -140,6 +151,22 @@ public class PluginComponent implements IPlugin {
 
   public void setPlugin(Plugin plugin) {
     this.plugin = plugin;
+  }
+
+  public PluginFormat getPluginFormat() {
+    return pluginFormat;
+  }
+
+  public void setPluginFormat(PluginFormat pluginFormat) {
+    this.pluginFormat = pluginFormat;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 
   @Override
