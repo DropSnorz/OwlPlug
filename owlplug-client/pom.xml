@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<springboot.version>4.0.1</springboot.version>
+		<springboot.version>4.1.0</springboot.version>
         <mockito.version>5.20.0</mockito.version>
         <ikonli.version>12.4.0</ikonli.version>
 	</properties>
