@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.owlplug.plugin.controllers.NodeInfoController">
-    <fx:include fx:id="pluginInfoView" source="PluginInfoView.fxml" AnchorPane.topAnchor="0.0"
-                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                AnchorPane.bottomAnchor="0.0"/>
-    <fx:include fx:id="directoryInfoView" source="DirectoryInfoView.fxml" AnchorPane.topAnchor="0.0"
-                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                AnchorPane.bottomAnchor="0.0"/>
-    <fx:include fx:id="symlinkInfoView" source="SymlinkInfoView.fxml" AnchorPane.topAnchor="0.0"
-                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                AnchorPane.bottomAnchor="0.0"/>
-    <fx:include fx:id="componentInfoView" source="ComponentInfoView.fxml" AnchorPane.topAnchor="0.0"
-                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                AnchorPane.bottomAnchor="0.0"/>
-</AnchorPane>
+<?import javafx.scene.layout.HBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<HBox fx:id="nodeInfoContainer" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.owlplug.plugin.controllers.NodeInfoController">
+    <AnchorPane fx:id="nodeInfoContent" HBox.hgrow="ALWAYS">
+        <fx:include fx:id="pluginInfoView" source="PluginInfoView.fxml" AnchorPane.topAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.bottomAnchor="0.0"/>
+        <fx:include fx:id="directoryInfoView" source="DirectoryInfoView.fxml" AnchorPane.topAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.bottomAnchor="0.0"/>
+        <fx:include fx:id="symlinkInfoView" source="SymlinkInfoView.fxml" AnchorPane.topAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.bottomAnchor="0.0"/>
+        <fx:include fx:id="componentInfoView" source="ComponentInfoView.fxml" AnchorPane.topAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.bottomAnchor="0.0"/>
+        <Button fx:id="closeButton" styleClass="package-bloc-title"
+                AnchorPane.topAnchor="1.0" AnchorPane.leftAnchor="0.0">
+            <graphic>
+                <FontIcon iconLiteral="mdi2a-arrow-left" iconSize="20"/>
+            </graphic>
+        </Button>
+    </AnchorPane>
+</HBox>
