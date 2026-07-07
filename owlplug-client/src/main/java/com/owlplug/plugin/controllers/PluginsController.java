@@ -92,8 +92,6 @@ public class PluginsController extends BaseController {
   @FXML
   private Button filterToggleButton;
   @FXML
-  private VBox pluginInfoPane;
-  @FXML
   private VBox pluginsContainer;
   @FXML
   private HBox filterContainer;
@@ -256,13 +254,15 @@ public class PluginsController extends BaseController {
   }
 
   public void setInfoPaneDisplay(boolean display) {
-    pluginInfoPane.setManaged(display);
-    pluginInfoPane.setVisible(display);
+    if (display) {
+      nodeInfoController.show();
+    } else {
+      nodeInfoController.hide();
+    }
   }
 
   public void toggleInfoPaneDisplay() {
-    pluginInfoPane.setManaged(!pluginInfoPane.isManaged());
-    pluginInfoPane.setVisible(!pluginInfoPane.isVisible());
+    nodeInfoController.toggleVisibility();
   }
 
   @EventListener
