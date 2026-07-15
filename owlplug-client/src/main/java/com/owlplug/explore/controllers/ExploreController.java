@@ -26,6 +26,7 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
@@ -46,7 +47,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import javafx.collections.ListChangeListener;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -68,6 +68,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -76,6 +78,9 @@ public class ExploreController extends BaseController {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private static final int PARTITION_SIZE = 20;
+
+  /** Number of packages fetched from the database per remote call, used to bound query size. */
+  private static final int DB_PAGE_SIZE = 100;
 
   @Autowired
   private ExploreService exploreService;
@@ -139,7 +144,25 @@ public class ExploreController extends BaseController {
    * When the user scrolls the entire partition, the next one is appended in the UI.
    */
   private Iterable<List<RemotePackage>> loadedPackagePartitions;
-  private Iterable<RemotePackage> loadedRemotePackages = new ArrayList<>();
+  private List<RemotePackage> loadedRemotePackages = new ArrayList<>();
+
+  /** Total number of packages matching the current search, as reported by the database. */
+  private long totalRemotePackages = 0;
+
+  /** Criteria of the currently displayed search, reused when fetching further database pages. */
+  private List<ExploreFilterCriteria> currentCriteriaList = new ArrayList<>();
+
+  /** Next database page to fetch when the user scrolls past all currently loaded packages. */
+  private int nextDbPage = 0;
+
+  /** Guards against firing overlapping "load next page" database calls. */
+  private boolean fetchingNextDbPage = false;
+
+  /**
+   * Drops results from a search or "load next page" call superseded by a more recent one
+   * (e.g. rapid filter changes), so a slow, stale database call can never overwrite fresher data.
+   */
+  private final Async.Sequence searchSequence = new Async.Sequence();
 
   /** Counter of loaded partitions on UI — masonry view. */
   private int displayedPartitions = 0;
@@ -294,36 +317,68 @@ public class ExploreController extends BaseController {
       criteriaList.add(new ExploreFilterCriteria(formats, ExploreFilterCriteriaType.FORMAT_LIST));
     }
 
-    Task<Iterable<RemotePackage>> task = new Task<>() {
-      @Override
-      protected Iterable<RemotePackage> call() {
-        return exploreService.getRemotePackages(criteriaList);
-      }
-    };
-    task.setOnSucceeded(e -> displayPackages(task.getValue()));
-    new Thread(task).start();
+    currentCriteriaList = criteriaList;
+    // A new search supersedes any "load next page" call from the previous search.
+    fetchingNextDbPage = false;
+
+    searchSequence.supply(() -> exploreService.getRemotePackages(criteriaList, PageRequest.of(0, DB_PAGE_SIZE)))
+        .thenAccept(page -> FX.run(() -> {
+          nextDbPage = 1;
+          displayPackages(page);
+        }));
   }
 
   /**
-   * Display remote source package list.
+   * Display the first page of a remote source package search result.
    *
-   * @param remotePackages - Remote package list
+   * @param packagePage - First page of remote packages
    */
-  public synchronized void displayPackages(Iterable<RemotePackage> remotePackages) {
-    if (shouldRefreshPackages(remotePackages)) {
+  public synchronized void displayPackages(Page<RemotePackage> packagePage) {
+    if (shouldRefreshPackages(packagePage)) {
       this.masonryPane.getChildren().clear();
       this.masonryPane.requestLayout();
 
       // Remove all list rows (keep the lazyLoadBar at the end)
       listPane.getChildren().removeIf(node -> node instanceof PackageListRowView);
 
-      loadedRemotePackages = remotePackages;
+      loadedRemotePackages = new ArrayList<>(packagePage.getContent());
+      totalRemotePackages = packagePage.getTotalElements();
       loadedPackagePartitions = Iterables.partition(loadedRemotePackages, PARTITION_SIZE);
       displayedPartitions = 0;
       listDisplayedPartitions = 0;
       displayNewPackagePartition();
       displayNewListPartition();
     }
+  }
+
+  /**
+   * Fetches the next database page in the background and appends it to {@link #loadedRemotePackages}
+   * once available, then runs the given continuation to resume displaying partitions.
+   */
+  private void fetchNextDbPage(Runnable onLoaded) {
+    if (fetchingNextDbPage) {
+      return;
+    }
+    fetchingNextDbPage = true;
+    final int pageToFetch = nextDbPage;
+    final List<ExploreFilterCriteria> criteriaList = currentCriteriaList;
+
+    searchSequence.supply(() -> exploreService.getRemotePackages(criteriaList, PageRequest.of(pageToFetch, DB_PAGE_SIZE)))
+        .thenAccept(page -> FX.run(() -> {
+          fetchingNextDbPage = false;
+          loadedRemotePackages.addAll(page.getContent());
+          totalRemotePackages = page.getTotalElements();
+          nextDbPage += 1;
+          onLoaded.run();
+        }))
+        .exceptionally(ex -> {
+          FX.run(() -> fetchingNextDbPage = false);
+          return null;
+        });
+  }
+
+  private boolean hasMoreRemotePackages() {
+    return loadedRemotePackages.size() < totalRemotePackages;
   }
 
   private void displayNewPackagePartition() {
@@ -339,13 +394,16 @@ public class ExploreController extends BaseController {
       }
       displayedPartitions += 1;
 
-      boolean allLoaded = Iterables.size(loadedPackagePartitions) == displayedPartitions;
+      boolean allLoaded = Iterables.size(loadedPackagePartitions) == displayedPartitions && !hasMoreRemotePackages();
       lazyLoadBar.setVisible(!allLoaded);
 
       FX.run(() -> {
         masonryPane.requestLayout();
         scrollPane.requestLayout();
       });
+    } else if (hasMoreRemotePackages()) {
+      fetchNextDbPage(this::displayNewPackagePartition);
+      return;
     }
 
     refreshResultCounter();
@@ -369,26 +427,36 @@ public class ExploreController extends BaseController {
       }
       listDisplayedPartitions += 1;
 
-      boolean allLoaded = Iterables.size(loadedPackagePartitions) == listDisplayedPartitions;
+      boolean allLoaded = Iterables.size(loadedPackagePartitions) == listDisplayedPartitions
+          && !hasMoreRemotePackages();
       listLazyLoadBar.setVisible(!allLoaded);
 
       refreshResultCounter();
+    } else if (hasMoreRemotePackages()) {
+      fetchNextDbPage(this::displayNewListPartition);
+      return;
     }
   }
 
   private void refreshResultCounter() {
-    resultCounter.setText(this.masonryPane.getChildren().size() + " / " + Iterables.size(this.loadedRemotePackages));
+    boolean listActive = displaySwitchTabPane.getSelectionModel().getSelectedItem() == displayListTab;
+    int displayedCount = listActive
+        ? listPane.getChildren().size() - 1 // exclude the fixed lazyLoadBar row
+        : masonryPane.getChildren().size();
+    resultCounter.setText(displayedCount + " / " + totalRemotePackages);
   }
 
   /**
-   * Returns true if the given package list is different from the previously loaded package list.
+   * Returns true if the given first page result is different from the currently loaded search.
    */
-  private boolean shouldRefreshPackages(Iterable<RemotePackage> newPackages) {
-    if (Iterables.size(newPackages) != Iterables.size(loadedRemotePackages)) {
+  private boolean shouldRefreshPackages(Page<RemotePackage> newFirstPage) {
+    if (newFirstPage.getTotalElements() != totalRemotePackages) {
       return true;
     }
-    for (int i = 0; i < Iterables.size(newPackages); i++) {
-      if (!Iterables.get(newPackages, i).getId().equals(Iterables.get(loadedRemotePackages, i).getId())) {
+    List<RemotePackage> newContent = newFirstPage.getContent();
+    int compareSize = Math.min(newContent.size(), loadedRemotePackages.size());
+    for (int i = 0; i < compareSize; i++) {
+      if (!newContent.get(i).getId().equals(loadedRemotePackages.get(i).getId())) {
         return true;
       }
     }

@@ -35,6 +35,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(indexes = { @Index(name = "IDX_PACKAGE_ID", columnList = "id"),
@@ -70,6 +71,7 @@ public class RemotePackage {
   private Set<PackageBundle> bundles = new HashSet<>();
   @OneToMany(mappedBy = "remotePackage", orphanRemoval = true, fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
       CascadeType.REMOVE })
+  @BatchSize(size = 100)
   private Set<PackageTag> tags = new HashSet<>();
 
   public Long getId() {

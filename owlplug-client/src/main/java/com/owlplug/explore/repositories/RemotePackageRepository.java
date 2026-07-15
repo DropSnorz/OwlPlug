@@ -67,10 +67,10 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
    * @param format - The platformTag to find
    * @return The JPA Specification
    */
-  @SuppressWarnings("unchecked")
   static Specification<RemotePackage> hasFormat(String format) {
     return (remotePackage, cq, cb) -> {
-      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
+      cq.distinct(true);
+      Join<RemotePackage, Object> bundles = remotePackage.join("bundles", JoinType.INNER);
       return bundles.join("formats").in(format);
     };
   }
@@ -82,10 +82,10 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
    * @param formatList - The compatible platformTagList to find
    * @return The JPA Specification
    */
-  @SuppressWarnings("unchecked")
   static Specification<RemotePackage> hasFormat(List<String> formatList) {
     return (remotePackage, cq, cb) -> {
-      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
+      cq.distinct(true);
+      Join<RemotePackage, Object> bundles = remotePackage.join("bundles", JoinType.INNER);
       return bundles.join("formats").in(formatList);
 
     };
@@ -93,14 +93,14 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
 
   /**
    * Platform filtering JPA Specification Filter packages matching the given platformTag.
-   * 
+   *
    * @param platformTag - The platformTag to find
    * @return The JPA Specification
    */
-  @SuppressWarnings("unchecked")
   static Specification<RemotePackage> hasPlatformTag(String platformTag) {
     return (remotePackage, cq, cb) -> {
-      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
+      cq.distinct(true);
+      Join<RemotePackage, Object> bundles = remotePackage.join("bundles", JoinType.INNER);
       return bundles.join("targets").in(platformTag);
     };
   }
@@ -108,14 +108,14 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
   /**
    * Platform filtering JPA Specification Filter packages matching the given
    * platformTag or packages without platform assignment.
-   * 
+   *
    * @param platformTagList - The compatible platformTagList to find
    * @return The JPA Specification
    */
-  @SuppressWarnings("unchecked")
   static Specification<RemotePackage> hasPlatformTag(List<String> platformTagList) {
     return (remotePackage, cq, cb) -> {
-      Join<Object, Object> bundles = (Join<Object, Object>) remotePackage.fetch("bundles", JoinType.INNER);
+      cq.distinct(true);
+      Join<RemotePackage, Object> bundles = remotePackage.join("bundles", JoinType.INNER);
       return bundles.join("targets").in(platformTagList);
 
     };
@@ -129,6 +129,7 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
   @SuppressWarnings("unchecked")
   static Specification<RemotePackage> fetchBundlesAndTargets() {
     return (root, query, cb) -> {
+      query.distinct(true);
       Fetch<Object, Object> bundlesFetch = root.fetch("bundles", JoinType.INNER);
       bundlesFetch.fetch("targets", JoinType.LEFT);
 
@@ -143,13 +144,35 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
    * @param tag - The tag to find
    * @return The JPA Specification
    */
-  @SuppressWarnings("unchecked")
   static Specification<RemotePackage> hasTag(String tag) {
     return (remotePackage, cq, cb) -> {
-      Join<Object, Object> groupPath = (Join<Object, Object>) remotePackage.fetch("tags", JoinType.INNER);
+      cq.distinct(true);
+      Join<RemotePackage, Object> groupPath = remotePackage.join("tags", JoinType.INNER);
       return cb.equal(cb.lower(groupPath.get("name")), tag.toLowerCase());
 
     };
+  }
+
+  /**
+   * Id filtering JPA Specification. Used together with {@link #fetchBundlesAndTargets()}
+   * to hydrate a page of ids without applying pagination on top of a collection fetch join,
+   * which Hibernate cannot translate to a SQL-level LIMIT/OFFSET.
+   *
+   * @param ids - The package ids to find
+   * @return The JPA Specification
+   */
+  static Specification<RemotePackage> hasIdIn(List<Long> ids) {
+    return (remotePackage, cq, cb) -> remotePackage.get("id").in(ids);
+  }
+
+  /**
+   * Bundle presence filtering JPA Specification. Filter packages that have at least one bundle.
+   * Uses an EXISTS check rather than a join so it doesn't fan out rows.
+   *
+   * @return The JPA Specification
+   */
+  static Specification<RemotePackage> hasBundles() {
+    return (remotePackage, cq, cb) -> cb.isNotEmpty(remotePackage.get("bundles"));
   }
 
   /**

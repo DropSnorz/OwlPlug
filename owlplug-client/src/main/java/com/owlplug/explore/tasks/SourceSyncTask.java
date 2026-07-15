@@ -194,8 +194,13 @@ public class SourceSyncTask extends AbstractTask {
             remotePackage.setVersion(version);
 
             // Only add package if at least on bundle is present
-            if (!remotePackage.getBundles().isEmpty()) {
+            // and if type is known.
+            if (!remotePackage.getBundles().isEmpty()
+                && remotePackage.getType() != null) {
               remotePackagePartition.add(remotePackage);
+            } else {
+              log.debug("Skipping OAS package '{}' ({}): {}", packageMapper.getSlug(), version,
+                  remotePackage.getBundles().isEmpty() ? "no bundles" : "unresolved plugin type");
             }
           }
         }
