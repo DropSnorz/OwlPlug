@@ -47,6 +47,8 @@ public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCel
           setGraphic(new PluginFormatBadgeView(plugin.getFormat(), applicationDefaults,
               PluginFormatBadgeView.DisplayMode.ICON_ONLY));
         }
+        // Force re-rendering immediately to avoid blinking cell
+        applyCss();
       }
     };
   }

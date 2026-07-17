@@ -39,28 +39,32 @@ import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
-import com.owlplug.explore.ui.PackageListRowView;
+import com.owlplug.explore.ui.PackageListRowCellFactory;
 import com.owlplug.plugin.model.PluginFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.slf4j.Logger;
@@ -123,9 +127,9 @@ public class ExploreController extends BaseController {
   @FXML
   private Hyperlink lazyLoadLink;
   @FXML
-  private ScrollPane listScrollPane;
+  private StackPane listWrapper;
   @FXML
-  private VBox listPane;
+  private ListView<RemotePackage> packageListView;
   @FXML
   private HBox listLazyLoadBar;
   @FXML
@@ -167,8 +171,8 @@ public class ExploreController extends BaseController {
   /** Counter of loaded partitions on UI — masonry view. */
   private int displayedPartitions = 0;
 
-  /** Counter of loaded partitions on UI — list view. */
-  private int listDisplayedPartitions = 0;
+  /** Backing items of the virtualized list view — kept in sync with {@link #loadedRemotePackages}. */
+  private final ObservableList<RemotePackage> listViewItems = FXCollections.observableArrayList();
 
   /**
    * FXML initialize.
@@ -261,21 +265,39 @@ public class ExploreController extends BaseController {
     lazyLoadLink.setOnAction(e -> displayNewPackagePartition());
     lazyLoadBar.setVisible(false);
 
-    // List view scroll → load next partition
-    listScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue.doubleValue() == 1) {
-        displayNewListPartition();
+    // List view — virtualized ListView backed by listViewItems
+    packageListView.setItems(listViewItems);
+    packageListView.setCellFactory(new PackageListRowCellFactory(this.getApplicationDefaults(), imageCache, this));
+    packageListView.getSelectionModel().selectedItemProperty().addListener((observable, oldPkg, newPkg) -> {
+      if (newPkg != null) {
+        selectPackage(newPkg);
       }
     });
-    listLazyLoadLink.setOnAction(e -> displayNewListPartition());
+    // Load next database page when the user scrolls the ListView to its bottom.
+    packageListView.skinProperty().addListener((observable, oldSkin, newSkin) -> {
+      if (newSkin != null) {
+        FX.run(() -> {
+          ScrollBar bar = (ScrollBar) packageListView.lookup(".scroll-bar:vertical");
+          if (bar != null) {
+            bar.valueProperty().addListener((o, oldValue, newValue) -> {
+              if (bar.getMax() > 0 && newValue.doubleValue() >= bar.getMax()) {
+                loadMoreListItems();
+              }
+            });
+          }
+        });
+      }
+    });
+    listLazyLoadLink.setOnAction(e -> loadMoreListItems());
     listLazyLoadBar.setVisible(false);
+    listLazyLoadBar.setManaged(false);
 
     displaySwitchTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
       boolean listActive = newTab.equals(displayListTab);
       scrollPane.setVisible(!listActive);
       scrollPane.setManaged(!listActive);
-      listScrollPane.setVisible(listActive);
-      listScrollPane.setManaged(listActive);
+      listWrapper.setVisible(listActive);
+      listWrapper.setManaged(listActive);
       if (!listActive) {
         FX.run(() -> {
           masonryPane.requestLayout();
@@ -338,16 +360,12 @@ public class ExploreController extends BaseController {
       this.masonryPane.getChildren().clear();
       this.masonryPane.requestLayout();
 
-      // Remove all list rows (keep the lazyLoadBar at the end)
-      listPane.getChildren().removeIf(node -> node instanceof PackageListRowView);
-
       loadedRemotePackages = new ArrayList<>(packagePage.getContent());
       totalRemotePackages = packagePage.getTotalElements();
       loadedPackagePartitions = Iterables.partition(loadedRemotePackages, PARTITION_SIZE);
       displayedPartitions = 0;
-      listDisplayedPartitions = 0;
       displayNewPackagePartition();
-      displayNewListPartition();
+      syncListViewItems();
     }
   }
 
@@ -409,39 +427,29 @@ public class ExploreController extends BaseController {
     refreshResultCounter();
   }
 
-  private void displayNewListPartition() {
-    if (Iterables.size(loadedPackagePartitions) > listDisplayedPartitions) {
-      // Insert rows before the lazyLoadBar (always the last child)
-      int lazyBarIndex = listPane.getChildren().size() - 1;
-      int insertIndex = lazyBarIndex;
-      for (RemotePackage remotePackage : Iterables.get(loadedPackagePartitions, listDisplayedPartitions)) {
-        Image image = imageCache.get(remotePackage.getScreenshotUrl());
-        PackageListRowView row = new PackageListRowView(
-            this.getApplicationDefaults(), remotePackage, image, this);
-        row.setOnMouseClicked(e -> {
-          if (e.getButton().equals(MouseButton.PRIMARY)) {
-            selectPackage(remotePackage);
-          }
-        });
-        listPane.getChildren().add(insertIndex++, row);
-      }
-      listDisplayedPartitions += 1;
+  /**
+   * Syncs the virtualized list view's items with {@link #loadedRemotePackages}. Unlike the masonry
+   * view, ListView virtualizes cells regardless of item count, so the full list is synced in one call
+   * instead of being revealed in {@link #PARTITION_SIZE}-sized chunks.
+   */
+  private void syncListViewItems() {
+    listViewItems.setAll(loadedRemotePackages);
+    boolean hasMore = hasMoreRemotePackages();
+    listLazyLoadBar.setVisible(hasMore);
+    listLazyLoadBar.setManaged(hasMore);
+    refreshResultCounter();
+  }
 
-      boolean allLoaded = Iterables.size(loadedPackagePartitions) == listDisplayedPartitions
-          && !hasMoreRemotePackages();
-      listLazyLoadBar.setVisible(!allLoaded);
-
-      refreshResultCounter();
-    } else if (hasMoreRemotePackages()) {
-      fetchNextDbPage(this::displayNewListPartition);
-      return;
+  private void loadMoreListItems() {
+    if (hasMoreRemotePackages()) {
+      fetchNextDbPage(this::syncListViewItems);
     }
   }
 
   private void refreshResultCounter() {
     boolean listActive = displaySwitchTabPane.getSelectionModel().getSelectedItem() == displayListTab;
     int displayedCount = listActive
-        ? listPane.getChildren().size() - 1 // exclude the fixed lazyLoadBar row
+        ? listViewItems.size()
         : masonryPane.getChildren().size();
     resultCounter.setText(displayedCount + " / " + totalRemotePackages);
   }
