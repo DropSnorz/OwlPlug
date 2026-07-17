@@ -30,6 +30,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javax.sql.DataSource;
 import org.ehcache.CacheManager;
@@ -37,6 +38,7 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.EntryUnit;
 import org.ehcache.config.units.MemoryUnit;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
@@ -170,10 +172,20 @@ public class OwlPlug extends Application {
         .with(CacheManagerBuilder.persistence(
                 Paths.get(ApplicationDefaults.getUserDataDirectory(),  "cache").toString())
         )
-        .withCache("image-cache", CacheConfigurationBuilder
+        // Disk tier: persists encoded image bytes (PNG/JPEG) across app restarts,
+        // so images don't need to be re-downloaded across sessions.
+        .withCache("image-disk-cache", CacheConfigurationBuilder
             .newCacheConfigurationBuilder(String.class, byte[].class,
                 ResourcePoolsBuilder.newResourcePoolsBuilder().heap(200, MemoryUnit.MB).disk(700, MemoryUnit.MB, true))
             .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofDays(10))))
+        // Memory tier: holds live, GPU-backed javafx.scene.image.Image instances.
+        // Heap-only, bounded LRU, not persisted. Reusing the same Image/texture
+        // instance per URL avoids creating/disposing native D3D textures on
+        // every UI redraw (e.g. fast scrolling), which otherwise races the
+        // JavaFX render thread and can crash the Prism D3D pipeline.
+        .withCache("image-memory-cache", CacheConfigurationBuilder
+            .newCacheConfigurationBuilder(String.class, Image.class,
+                ResourcePoolsBuilder.newResourcePoolsBuilder().heap(200, EntryUnit.ENTRIES)))
         .build();
     cacheManager.init();
 
