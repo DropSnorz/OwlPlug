@@ -81,10 +81,10 @@ public class ExploreController extends BaseController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private static final int PARTITION_SIZE = 20;
+  private static final int PARTITION_SIZE = 25;
 
   /** Number of packages fetched from the database per remote call, used to bound query size. */
-  private static final int DB_PAGE_SIZE = 100;
+  private static final int DB_PAGE_SIZE = 25;
 
   @Autowired
   private ExploreService exploreService;
@@ -340,14 +340,26 @@ public class ExploreController extends BaseController {
     }
 
     currentCriteriaList = criteriaList;
-    // A new search supersedes any "load next page" call from the previous search.
-    fetchingNextDbPage = false;
+    nextDbPage = 0;
+    // Lock out "load next page" calls until this search resolves. Any previous
+    // fetchNextDbPage() call still in flight is superseded by searchSequence below and its
+    // own completion (including its flag reset) will simply never run, so this method's own
+    // success/failure handler is what's responsible for releasing the lock.
+    fetchingNextDbPage = true;
 
     searchSequence.supply(() -> exploreService.getRemotePackages(criteriaList, PageRequest.of(0, DB_PAGE_SIZE)))
-        .thenAccept(page -> FX.run(() -> {
-          nextDbPage = 1;
-          displayPackages(page);
-        }));
+        .thenAccept(page -> {
+          warmImageCache(page.getContent());
+          FX.run(() -> {
+            fetchingNextDbPage = false;
+            nextDbPage = 1;
+            displayPackages(page);
+          });
+        })
+        .exceptionally(ex -> {
+          FX.run(() -> fetchingNextDbPage = false);
+          return null;
+        });
   }
 
   /**
@@ -382,17 +394,35 @@ public class ExploreController extends BaseController {
     final List<ExploreFilterCriteria> criteriaList = currentCriteriaList;
 
     searchSequence.supply(() -> exploreService.getRemotePackages(criteriaList, PageRequest.of(pageToFetch, DB_PAGE_SIZE)))
-        .thenAccept(page -> FX.run(() -> {
-          fetchingNextDbPage = false;
-          loadedRemotePackages.addAll(page.getContent());
-          totalRemotePackages = page.getTotalElements();
-          nextDbPage += 1;
-          onLoaded.run();
-        }))
+        .thenAccept(page -> {
+          warmImageCache(page.getContent());
+          FX.run(() -> {
+            fetchingNextDbPage = false;
+            loadedRemotePackages.addAll(page.getContent());
+            totalRemotePackages = page.getTotalElements();
+            nextDbPage += 1;
+            onLoaded.run();
+          });
+        })
         .exceptionally(ex -> {
           FX.run(() -> fetchingNextDbPage = false);
           return null;
         });
+  }
+
+  /**
+   * Warms the image cache for a freshly loaded database page, ahead of the packages
+   * actually being scrolled into view. Runs on a single background thread, sequentially,
+   * so prefetching never contends with an on-screen cell's own cache lookup.
+   *
+   * @param packages - packages from the database page that just resolved
+   */
+  private void warmImageCache(List<RemotePackage> packages) {
+    Async.run(() -> {
+      for (RemotePackage remotePackage : packages) {
+        imageCache.warm(remotePackage.getScreenshotUrl());
+      }
+    });
   }
 
   private boolean hasMoreRemotePackages() {

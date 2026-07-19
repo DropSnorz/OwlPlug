@@ -18,6 +18,7 @@
  
 package com.owlplug.core.components;
 
+import com.owlplug.core.utils.Async;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -146,6 +147,11 @@ public class ImageCache {
       log.trace("Retrieving image {} from disk cache", url);
       ByteArrayInputStream s = new ByteArrayInputStream(cachedElement);
       BufferedImage bufImage = ImageIO.read(s);
+      if (bufImage == null) {
+        log.error("Invalid image data in disk cache for {}, evicting entry", url);
+        getDiskCache().remove(url);
+        return null;
+      }
       Image image = SwingFXUtils.toFXImage(bufImage, null);
       getMemoryCache().put(url, image);
       return image;
@@ -168,16 +174,19 @@ public class ImageCache {
    */
   private Image fetchFromUrl(String url, String type, boolean asyncFetch) {
     Image fetchedImage = new Image(url, asyncFetch);
-    getMemoryCache().put(url, fetchedImage);
 
     // In case of async fetch, persist to the disk cache on complete
     fetchedImage.progressProperty().addListener((observable, oldValue, progress) -> {
       if ((Double) progress == 1.0 && !fetchedImage.isError()) {
-        persistToDiskCache(url, fetchedImage, type);
+        Async.runAsync(() -> {
+          getMemoryCache().put(url, fetchedImage);
+          persistToDiskCache(url, fetchedImage, type);
+        });
       }
     });
     // In case of sync fetch, persist image in the disk cache immediately
     if (!asyncFetch && !fetchedImage.isError()) {
+      getMemoryCache().put(url, fetchedImage);
       persistToDiskCache(url, fetchedImage, type);
     }
 
@@ -185,9 +194,19 @@ public class ImageCache {
   }
 
   /**
+   * Warms the memory (and disk) tiers for the given url without touching any UI element.
+   * Safe to call from a background thread.
+   *
+   * @param url Image url
+   */
+  public void warm(String url) {
+    get(url, "png", true);
+  }
+
+  /**
    * Load asynchronously an Image from cache on the given ImageView. If image
    * don't exist in cache, it will be created retrieving the image from url.
-   * 
+   *
    * @param url       Image url
    * @param imageView Target image view
    */
