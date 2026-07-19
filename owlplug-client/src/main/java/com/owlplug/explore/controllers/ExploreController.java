@@ -298,6 +298,7 @@ public class ExploreController extends BaseController {
       scrollPane.setManaged(!listActive);
       listWrapper.setVisible(listActive);
       listWrapper.setManaged(listActive);
+      refreshActiveView();
       if (!listActive) {
         FX.run(() -> {
           masonryPane.requestLayout();
@@ -376,8 +377,32 @@ public class ExploreController extends BaseController {
       totalRemotePackages = packagePage.getTotalElements();
       loadedPackagePartitions = Iterables.partition(loadedRemotePackages, PARTITION_SIZE);
       displayedPartitions = 0;
-      displayNewPackagePartition();
+      listViewItems.clear();
+      refreshActiveView();
+    }
+  }
+
+  /**
+   * Returns true if the list view (as opposed to the grid/masonry view) is the currently
+   * selected display mode.
+   */
+  private boolean isListActive() {
+    return displaySwitchTabPane.getSelectionModel().getSelectedItem() == displayListTab;
+  }
+
+  /**
+   * Builds/syncs only the currently selected view from {@link #loadedRemotePackages}, leaving
+   * the inactive view untouched. Both views were previously populated unconditionally on every
+   * page load, which meant the hidden view's cells/nodes were still realized (and requesting
+   * images) off-screen, competing with the visible view and with {@link #warmImageCache} for the
+   * same URLs. Calling this on every load and on every tab switch keeps whichever view is
+   * visible in sync while the other one simply stays empty until it becomes active.
+   */
+  private void refreshActiveView() {
+    if (isListActive()) {
       syncListViewItems();
+    } else if (loadedPackagePartitions != null) {
+      displayNewPackagePartition();
     }
   }
 
@@ -477,8 +502,7 @@ public class ExploreController extends BaseController {
   }
 
   private void refreshResultCounter() {
-    boolean listActive = displaySwitchTabPane.getSelectionModel().getSelectedItem() == displayListTab;
-    int displayedCount = listActive
+    int displayedCount = isListActive()
         ? listViewItems.size()
         : masonryPane.getChildren().size();
     resultCounter.setText(displayedCount + " / " + totalRemotePackages);

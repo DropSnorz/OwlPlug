@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -55,6 +56,11 @@ import org.springframework.stereotype.Component;
  * image. The result is stored in the memory tier immediately, and persisted
  * to the disk tier once fully loaded.</li>
  * </ol>
+ *
+ * Concurrent lookups for the same URL that both miss the memory tier (e.g. the background
+ * {@link #warm(String)} thread racing an on-screen cell factory) are coalesced: only the first
+ * caller performs the disk/network lookup, and every other caller for that URL receives the
+ * exact same {@link Image} instance instead of racing to create and cache its own.
  */
 @Component
 public class ImageCache {
@@ -63,6 +69,8 @@ public class ImageCache {
 
   @Autowired
   private CacheManager cacheManager;
+
+  private final ConcurrentHashMap<String, Image> pendingFetches = new ConcurrentHashMap<>();
 
   ImageCache() {
 
@@ -111,12 +119,33 @@ public class ImageCache {
       return memoryImage;
     }
 
-    Image diskImage = lookupDiskCache(url);
-    if (diskImage != null) {
-      return diskImage;
+    // Concurrent misses for the same URL must not each create their own Image instance:
+    // ConcurrentHashMap#computeIfAbsent is atomic per key, so only the first caller runs the
+    // disk/network lookup below, while every other caller for this URL blocks briefly and
+    // receives that exact same instance instead of a separate one that would otherwise lose
+    // the race to be the one left in the memory cache (see class Javadoc). Only the thread
+    // that actually runs the mapping function (i.e. the first caller) can ever see
+    // resolvedImmediately == true, since a piggybacking caller's own local flag is never
+    // touched by the other thread's lambda invocation.
+    boolean[] resolvedImmediately = new boolean[1];
+    Image image = pendingFetches.computeIfAbsent(url, u -> {
+      Image diskImage = lookupDiskCache(u);
+      if (diskImage != null) {
+        resolvedImmediately[0] = true;
+        return diskImage;
+      }
+      Image fetchedImage = fetchFromUrl(u, type, asyncFetch);
+      // A disk hit and a synchronous fetch both commit to the memory cache before returning
+      // here, so it's safe to stop coalescing this URL immediately. An async network fetch
+      // instead returns before it has loaded, so its pendingFetches entry is released later,
+      // by fetchFromUrl's own listeners, once the image is actually committed (or has failed).
+      resolvedImmediately[0] = !asyncFetch;
+      return fetchedImage;
+    });
+    if (resolvedImmediately[0]) {
+      pendingFetches.remove(url, image);
     }
-
-    return fetchFromUrl(url, type, asyncFetch);
+    return image;
   }
 
   /**
@@ -181,7 +210,15 @@ public class ImageCache {
         Async.runAsync(() -> {
           getMemoryCache().put(url, fetchedImage);
           persistToDiskCache(url, fetchedImage, type);
+          pendingFetches.remove(url, fetchedImage);
         });
+      }
+    });
+    // An async fetch that fails never reaches progress 1.0 above, so its pendingFetches
+    // entry would otherwise never be released, permanently blocking any retry of this URL.
+    fetchedImage.errorProperty().addListener((observable, oldValue, isError) -> {
+      if (isError) {
+        pendingFetches.remove(url, fetchedImage);
       }
     });
     // In case of sync fetch, persist image in the disk cache immediately

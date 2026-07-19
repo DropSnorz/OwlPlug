@@ -176,7 +176,7 @@ public class OwlPlug extends Application {
         // so images don't need to be re-downloaded across sessions.
         .withCache("image-disk-cache", CacheConfigurationBuilder
             .newCacheConfigurationBuilder(String.class, byte[].class,
-                ResourcePoolsBuilder.newResourcePoolsBuilder().heap(200, MemoryUnit.MB).disk(700, MemoryUnit.MB, true))
+                ResourcePoolsBuilder.newResourcePoolsBuilder().disk(700, MemoryUnit.MB, true))
             .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofDays(10))))
         // Memory tier: holds live, GPU-backed javafx.scene.image.Image instances.
         // Heap-only, bounded LRU, not persisted. Reusing the same Image/texture
@@ -185,7 +185,7 @@ public class OwlPlug extends Application {
         // JavaFX render thread and can crash the Prism D3D pipeline.
         .withCache("image-memory-cache", CacheConfigurationBuilder
             .newCacheConfigurationBuilder(String.class, Image.class,
-                ResourcePoolsBuilder.newResourcePoolsBuilder().heap(200, EntryUnit.ENTRIES)))
+                ResourcePoolsBuilder.newResourcePoolsBuilder().heap(100, EntryUnit.ENTRIES)))
         .build();
     cacheManager.init();
 
