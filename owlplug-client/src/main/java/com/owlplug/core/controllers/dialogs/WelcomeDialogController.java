@@ -20,10 +20,9 @@ package com.owlplug.core.controllers.dialogs;
 
 import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.controls.DialogLayout;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.LazyViewRegistry;
-import com.owlplug.core.controllers.OptionsController;
+import com.owlplug.core.controllers.SettingsController;
 import com.owlplug.core.model.OperatingSystem;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.model.PluginFormat;
@@ -47,7 +46,7 @@ public class WelcomeDialogController extends AbstractDialogController {
   @Autowired
   private PluginTaskFactory taskFactory;
   @Autowired
-  private OptionsController optionsController;
+  private SettingsController settingsController;
 
   @FXML
   private VBox stepWelcome;
@@ -82,7 +81,7 @@ public class WelcomeDialogController extends AbstractDialogController {
     skipButton.setOnAction(e -> this.close());
     okButton.setOnAction(e -> {
       this.close();
-      optionsController.refreshView();
+      settingsController.refreshView();
       taskFactory.createPluginScanTask().schedule();
     });
 

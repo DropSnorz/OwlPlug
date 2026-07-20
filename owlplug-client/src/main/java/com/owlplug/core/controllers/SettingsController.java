@@ -19,10 +19,10 @@
 package com.owlplug.core.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.core.controllers.options.ApplicationOptionsController;
-import com.owlplug.core.controllers.options.InstallationOptionsController;
-import com.owlplug.core.controllers.options.PluginScanOptionsController;
-import com.owlplug.core.controllers.options.ProjectsOptionsController;
+import com.owlplug.core.controllers.settings.ApplicationSettingsController;
+import com.owlplug.core.controllers.settings.InstallationSettingsController;
+import com.owlplug.core.controllers.settings.PluginScanSettingsController;
+import com.owlplug.core.controllers.settings.ProjectSettingsController;
 import com.owlplug.core.events.PreferencesChangedEvent;
 import com.owlplug.core.ui.SlidingLabel;
 import com.owlplug.core.utils.FX;
@@ -41,7 +41,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class OptionsController extends BaseController {
+public class SettingsController extends BaseController {
 
   @FXML
   private VBox navContainer;
@@ -54,23 +54,23 @@ public class OptionsController extends BaseController {
 
   // Section root nodes injected via fx:include fx:id convention
   @FXML
-  private ScrollPane pluginScanOptions;
+  private ScrollPane pluginScanSettings;
   @FXML
-  private ScrollPane installationOptions;
+  private ScrollPane installationSettings;
   @FXML
-  private ScrollPane projectsOptions;
+  private ScrollPane projectSettings;
   @FXML
-  private ScrollPane applicationOptions;
+  private ScrollPane applicationSettings;
 
   // Section controllers injected via {fx:id}Controller convention
   @FXML
-  private PluginScanOptionsController pluginScanOptionsController;
+  private PluginScanSettingsController pluginScanSettingsController;
   @FXML
-  private InstallationOptionsController installationOptionsController;
+  private InstallationSettingsController installationSettingsController;
   @FXML
-  private ProjectsOptionsController projectsOptionsController;
+  private ProjectSettingsController projectSettingsController;
   @FXML
-  private ApplicationOptionsController applicationOptionsController;
+  private ApplicationSettingsController applicationSettingsController;
 
   private final ToggleGroup navToggleGroup = new ToggleGroup();
 
@@ -81,15 +81,15 @@ public class OptionsController extends BaseController {
 
   @FXML
   public void initialize() {
-    hideSection(pluginScanOptions);
-    hideSection(installationOptions);
-    hideSection(projectsOptions);
-    hideSection(applicationOptions);
+    hideSection(pluginScanSettings);
+    hideSection(installationSettings);
+    hideSection(projectSettings);
+    hideSection(applicationSettings);
 
-    addNavButton("Plugin Scan",  "mdi2m-magnify",             pluginScanOptions);
-    addNavButton("Installation", "mdi2d-download-outline",     installationOptions);
-    addNavButton("Projects",     "mdi2f-folder-music-outline", projectsOptions);
-    addNavButton("Application",  "mdi2c-cog-outline",          applicationOptions);
+    addNavButton("Plugin Scan",  "mdi2m-magnify", pluginScanSettings);
+    addNavButton("Installation", "mdi2d-download-outline", installationSettings);
+    addNavButton("Projects",     "mdi2f-folder-music-outline", projectSettings);
+    addNavButton("Application",  "mdi2c-cog-outline", applicationSettings);
 
     // Prevent deselecting all buttons
     navToggleGroup.selectedToggleProperty().addListener((obs, prev, next) -> {
@@ -114,7 +114,7 @@ public class OptionsController extends BaseController {
     btn.setToggleGroup(navToggleGroup);
     btn.setMaxWidth(Double.MAX_VALUE);
     btn.setAlignment(Pos.CENTER_LEFT);
-    btn.getStyleClass().add("options-nav-button");
+    btn.getStyleClass().add("settings-nav-button");
     btn.setGraphicTextGap(10);
 
     btn.selectedProperty().addListener((obs, wasSelected, isSelected) -> {
@@ -143,10 +143,10 @@ public class OptionsController extends BaseController {
   }
 
   public void refreshView() {
-    pluginScanOptionsController.refresh();
-    installationOptionsController.refresh();
-    projectsOptionsController.refresh();
-    applicationOptionsController.refresh();
+    pluginScanSettingsController.refresh();
+    installationSettingsController.refresh();
+    projectSettingsController.refresh();
+    applicationSettingsController.refresh();
   }
 
   @EventListener

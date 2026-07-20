@@ -20,7 +20,6 @@ package com.owlplug.core.services;
 
 import com.owlplug.auth.repositories.GoogleCredentialRepository;
 import com.owlplug.auth.repositories.UserAccountRepository;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.ImageCache;
@@ -39,7 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OptionsService extends BaseService {
+public class SettingsService extends BaseService {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -64,7 +63,7 @@ public class OptionsService extends BaseService {
   private void initialize() {
     
     ApplicationPreferences prefs = this.getPreferences();
-    // Init default options
+    // Init default settings
     if (prefs.get(Prefs.Plugins.VST2_DIRECTORY, null) == null) {
       prefs.put(Prefs.Plugins.VST2_DIRECTORY,
           this.getApplicationDefaults().getDefaultPluginPath(PluginFormat.VST2));
@@ -99,7 +98,7 @@ public class OptionsService extends BaseService {
   }
 
   /**
-   * Clear all user data including Options, configured stores and cache.
+   * Clear all user data including Settings, configured stores and cache.
    */
   public void clearAllUserData() {
 

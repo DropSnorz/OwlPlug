@@ -8,10 +8,10 @@
 <BorderPane minHeight="620.0" minWidth="820.0"
     xmlns="http://javafx.com/javafx/17.0.2-ea"
     xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.owlplug.core.controllers.OptionsController">
+    fx:controller="com.owlplug.core.controllers.SettingsController">
 
     <left>
-        <VBox styleClass="options-sidebar" prefWidth="190.0" BorderPane.alignment="CENTER">
+        <VBox styleClass="settings-sidebar" prefWidth="190.0" BorderPane.alignment="CENTER">
             <VBox fx:id="navContainer" spacing="2.0" VBox.vgrow="ALWAYS">
                 <padding>
                     <Insets top="12.0" bottom="4.0" left="8.0" right="8.0" />
@@ -23,7 +23,7 @@
                 </padding>
                 <Label fx:id="versionLabel" text="OwlPlug" />
             </VBox>
-            <VBox styleClass="options-sidebar-footer" spacing="4.0">
+            <VBox styleClass="settings-sidebar-footer" spacing="4.0">
                 <padding>
                     <Insets topRightBottomLeft="10.0" />
                 </padding>
@@ -35,10 +35,10 @@
 
     <center>
         <StackPane fx:id="contentArea" BorderPane.alignment="CENTER">
-            <fx:include fx:id="pluginScanOptions" source="options/PluginScanOptionsView.fxml"/>
-            <fx:include fx:id="installationOptions" source="options/InstallationOptionsView.fxml"/>
-            <fx:include fx:id="projectsOptions" source="options/ProjectsOptionsView.fxml"/>
-            <fx:include fx:id="applicationOptions" source="options/ApplicationOptionsView.fxml"/>
+            <fx:include fx:id="pluginScanSettings" source="settings/PluginScanSettingsView.fxml"/>
+            <fx:include fx:id="installationSettings" source="settings/InstallationSettingsView.fxml"/>
+            <fx:include fx:id="projectSettings" source="settings/ProjectSettingsView.fxml"/>
+            <fx:include fx:id="applicationSettings" source="settings/ApplicationSettingsView.fxml"/>
         </StackPane>
     </center>
 

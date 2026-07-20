@@ -46,7 +46,7 @@
                         <FontIcon iconLiteral="mdi2f-folder-music-outline" />
                     </graphic>
                 </Tab>
-                <Tab text="Options" closable="false">
+                <Tab text="Settings" closable="false">
                     <graphic>
                         <FontIcon iconLiteral="mdi2c-cog-outline" />
                     </graphic>
@@ -85,8 +85,8 @@
                                 <Tab closable="false" text="Projects">
                                     <fx:include fx:id="projectView" source="projects/ProjectsView.fxml"/>
                                 </Tab>
-                                <Tab closable="false" text="Options">
-                                    <fx:include fx:id="optionView" source="OptionsView.fxml"/>
+                                <Tab closable="false" text="Settings">
+                                    <fx:include fx:id="settingsView" source="SettingsView.fxml"/>
                                 </Tab>
                             </TabPane>
                         </VBox>

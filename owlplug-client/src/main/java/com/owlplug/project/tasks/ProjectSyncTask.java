@@ -102,7 +102,7 @@ public class ProjectSyncTask extends AbstractTask {
     }
 
     if (hasParseErrors) {
-      this.updateMessage("Projects synchronized. Some files cannot be parsed, check application logs in Options.");
+      this.updateMessage("Projects synchronized. Some files cannot be parsed, check application logs in Settings.");
     } else {
       this.updateMessage("All projects are synchronized");
     }
