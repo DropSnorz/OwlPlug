@@ -541,6 +541,29 @@ ProgressIndicator {
  * Package list view
  ****************************************************************/
 
+.package-list-view {
+    -fx-background-color: transparent;
+}
+
+.package-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 1 0 1 0;
+}
+
+.package-list-view .list-cell:filled:hover,
+.package-list-view .list-cell:filled:selected {
+    -fx-background-color: transparent;
+}
+
+.list-load-more-bar {
+    -fx-background-color: -color-bg-overlay;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1px;
+    -fx-border-color: -color-border-muted;
+    -fx-padding: 4 16 4 16;
+}
+
 .package-list-row {
     -fx-background-color: -color-bg-subtle;
     -fx-background-radius: 6px;
@@ -555,10 +578,18 @@ ProgressIndicator {
     -fx-border-color: -color-accent-muted;
 }
 
+.package-list-view .list-cell:filled:selected .package-list-row {
+    -fx-border-color: -color-accent-emphasis;
+}
+
 .package-list-thumb {
     -fx-background-color: -color-bg-inset;
     -fx-background-radius: 4px;
     -fx-border-radius: 4px;
+}
+
+.image-loading-pane {
+    -fx-background-color: -color-bg-inset;
 }
 
 .package-list-name {

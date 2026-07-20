@@ -5,6 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -96,15 +97,15 @@
                         </HBox>
                      </VBox>
                   </ScrollPane>
-                  <ScrollPane fx:id="listScrollPane" style="-fx-background-color: transparent;"
-                              fitToWidth="true" pannable="false">
-                     <VBox fx:id="listPane" spacing="2">
-                        <padding><Insets top="2" bottom="2"/></padding>
-                        <HBox fx:id="listLazyLoadBar" alignment="CENTER" prefHeight="74.0" spacing="5.0">
-                           <Hyperlink fx:id="listLazyLoadLink" styleClass="hyperlink-dark" text="Load more..."/>
-                        </HBox>
-                     </VBox>
-                  </ScrollPane>
+                  <StackPane fx:id="listWrapper">
+                     <ListView fx:id="packageListView" styleClass="package-list-view"/>
+                     <HBox fx:id="listLazyLoadBar" styleClass="list-load-more-bar" alignment="CENTER"
+                           spacing="5.0" maxWidth="-Infinity" maxHeight="-Infinity"
+                           StackPane.alignment="BOTTOM_CENTER">
+                        <StackPane.margin><Insets bottom="12.0"/></StackPane.margin>
+                        <Hyperlink fx:id="listLazyLoadLink" styleClass="hyperlink-dark" text="Load more..."/>
+                     </HBox>
+                  </StackPane>
                </StackPane>
             </center>
          </BorderPane>

@@ -15,37 +15,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
-package com.owlplug.plugin.ui;
+
+package com.owlplug.explore.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
-import com.owlplug.plugin.model.Plugin;
+import com.owlplug.core.components.ImageCache;
+import com.owlplug.explore.controllers.ExploreController;
+import com.owlplug.explore.model.RemotePackage;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
-public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCell<Plugin>> {
+public class PackageListRowCellFactory implements Callback<ListView<RemotePackage>, ListCell<RemotePackage>> {
 
-  private ApplicationDefaults applicationDefaults;
+  private final ApplicationDefaults applicationDefaults;
+  private final ImageCache imageCache;
+  private final ExploreController parentController;
 
-  public PluginListCellFactory(ApplicationDefaults applicationDefaults) {
-
+  public PackageListRowCellFactory(ApplicationDefaults applicationDefaults, ImageCache imageCache,
+      ExploreController parentController) {
     this.applicationDefaults = applicationDefaults;
+    this.imageCache = imageCache;
+    this.parentController = parentController;
   }
 
   @Override
-  public ListCell<Plugin> call(ListView<Plugin> arg0) {
+  public ListCell<RemotePackage> call(ListView<RemotePackage> listView) {
     return new ListCell<>() {
       @Override
-      public void updateItem(Plugin plugin, boolean empty) {
-        super.updateItem(plugin, empty);
-        if (empty) {
-          setText(null);
+      protected void updateItem(RemotePackage remotePackage, boolean empty) {
+        super.updateItem(remotePackage, empty);
+        if (empty || remotePackage == null) {
           setGraphic(null);
         } else {
-          setText(plugin.getName());
-          setGraphic(new PluginFormatBadgeView(plugin.getFormat(), applicationDefaults,
-              PluginFormatBadgeView.DisplayMode.ICON_ONLY));
+          setGraphic(new PackageListRowView(applicationDefaults, imageCache, remotePackage, parentController));
         }
         // Force re-rendering immediately to avoid blinking cell
         applyCss();

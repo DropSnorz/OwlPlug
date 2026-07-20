@@ -29,6 +29,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 public class PackageBundle {
@@ -48,9 +49,11 @@ public class PackageBundle {
   private String version;
   private long fileSize;
   @ElementCollection(fetch = FetchType.EAGER)
+  @BatchSize(size = 100)
   private List<String> targets;
 
   @ElementCollection(fetch = FetchType.EAGER)
+  @BatchSize(size = 100)
   private List<String> formats;
 
   @ManyToOne
