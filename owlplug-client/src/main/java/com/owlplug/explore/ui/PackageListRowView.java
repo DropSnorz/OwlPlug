@@ -19,6 +19,8 @@
 package com.owlplug.explore.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ImageCache;
+import com.owlplug.core.ui.VirtualizedImageView;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.StringUtils;
@@ -36,8 +38,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -52,8 +52,8 @@ public class PackageListRowView extends HBox {
   private static final int THUMB_WIDTH = 80;
   private static final int THUMB_HEIGHT = 56;
 
-  public PackageListRowView(ApplicationDefaults applicationDefaults, RemotePackage remotePackage,
-                            Image image, ExploreController parentController) {
+  public PackageListRowView(ApplicationDefaults applicationDefaults, ImageCache imageCache,
+                            RemotePackage remotePackage, ExploreController parentController) {
     super();
     this.getStyleClass().add("package-list-row");
     this.setAlignment(Pos.CENTER_LEFT);
@@ -61,7 +61,7 @@ public class PackageListRowView extends HBox {
     this.setPadding(new Insets(8, 12, 8, 12));
 
     // Thumbnail
-    StackPane thumb = buildThumbnail(image, remotePackage);
+    StackPane thumb = buildThumbnail(imageCache, remotePackage);
     this.getChildren().add(thumb);
 
     // Name + creator + tags
@@ -77,21 +77,15 @@ public class PackageListRowView extends HBox {
     buildContextMenu(remotePackage, parentController);
   }
 
-  private StackPane buildThumbnail(Image image, RemotePackage remotePackage) {
+  private StackPane buildThumbnail(ImageCache imageCache, RemotePackage remotePackage) {
     StackPane thumb = new StackPane();
     thumb.setPrefSize(THUMB_WIDTH, THUMB_HEIGHT);
     thumb.setMinSize(THUMB_WIDTH, THUMB_HEIGHT);
     thumb.setMaxSize(THUMB_WIDTH, THUMB_HEIGHT);
     thumb.getStyleClass().add("package-list-thumb");
 
-    ImageView imageView = new ImageView();
-    imageView.setFitWidth(THUMB_WIDTH);
-    imageView.setFitHeight(THUMB_HEIGHT);
-    imageView.setPreserveRatio(true);
-    imageView.setSmooth(true);
-    if (image != null) {
-      imageView.setImage(image);
-    }
+    VirtualizedImageView imageView = new VirtualizedImageView(imageCache, THUMB_WIDTH, THUMB_HEIGHT);
+    imageView.setImageUrl(remotePackage.getScreenshotUrl());
     thumb.getChildren().add(imageView);
 
     if (remotePackage.getStage() != null && remotePackage.getStage() != PluginStage.RELEASE) {

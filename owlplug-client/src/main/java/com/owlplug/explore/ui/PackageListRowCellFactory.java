@@ -24,7 +24,6 @@ import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.model.RemotePackage;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 import javafx.util.Callback;
 
 public class PackageListRowCellFactory implements Callback<ListView<RemotePackage>, ListCell<RemotePackage>> {
@@ -49,8 +48,7 @@ public class PackageListRowCellFactory implements Callback<ListView<RemotePackag
         if (empty || remotePackage == null) {
           setGraphic(null);
         } else {
-          Image image = imageCache.get(remotePackage.getScreenshotUrl());
-          setGraphic(new PackageListRowView(applicationDefaults, remotePackage, image, parentController));
+          setGraphic(new PackageListRowView(applicationDefaults, imageCache, remotePackage, parentController));
         }
         // Force re-rendering immediately to avoid blinking cell
         applyCss();
