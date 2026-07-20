@@ -16,9 +16,8 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.core.controllers.options;
+package com.owlplug.core.controllers.settings;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import java.io.File;
@@ -36,7 +35,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ProjectsOptionsController extends BaseController {
+public class ProjectSettingsController extends BaseController {
 
   @FXML
   private ListView<String> projectListView;

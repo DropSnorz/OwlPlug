@@ -27,7 +27,6 @@ import com.owlplug.auth.ui.AccountItem;
 import com.owlplug.auth.ui.AccountMenuItem;
 import com.owlplug.controls.Drawer;
 import com.owlplug.controls.transitions.AnimatedTabListener;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationMonitor;
 import com.owlplug.core.components.ImageCache;
@@ -115,7 +114,7 @@ public class MainController extends BaseController {
   public static int PLUGINS_TAB_INDEX = 1;
   public static int EXPLORE_TAB_INDEX = 2;
   public static int PROJECTS_TAB_INDEX = 3;
-  public static int OPTIONS_TAB_INDEX = 4;
+  public static int SETTINGS_TAB_INDEX = 4;
 
   /**
    * FXML initialize method.

@@ -677,21 +677,21 @@ ProgressIndicator {
 }
 
 /****************************************************************
- * Options view
+ * Settings view
  ****************************************************************/
 
-.options-sidebar {
+.settings-sidebar {
     -fx-background-color: -color-bg-subtle;
     -fx-border-color: -color-border-default;
     -fx-border-width: 0 1 0 0;
 }
 
-.options-sidebar-footer {
+.settings-sidebar-footer {
     -fx-border-color: -color-border-default;
     -fx-border-width: 1 0 0 0;
 }
 
-.options-nav-button {
+.settings-nav-button {
     -fx-background-color: transparent;
     -fx-background-radius: 6px;
     -fx-padding: 8 12 8 12;
@@ -701,17 +701,17 @@ ProgressIndicator {
     -fx-max-width: Infinity;
 }
 
-.options-nav-button:hover {
+.settings-nav-button:hover {
     -fx-background-color: -color-neutral-subtle;
 }
 
-.options-nav-button:selected {
+.settings-nav-button:selected {
     -fx-background-color: -color-accent-subtle;
     -fx-text-fill: -color-accent-fg;
     -fx-font-weight: bold;
 }
 
-.options-nav-button:selected .ikonli-font-icon {
+.settings-nav-button:selected .ikonli-font-icon {
     -fx-icon-color: -color-accent-fg;
 }
 

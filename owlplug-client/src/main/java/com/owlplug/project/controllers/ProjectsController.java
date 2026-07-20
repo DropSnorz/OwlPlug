@@ -20,7 +20,7 @@ package com.owlplug.project.controllers;
 
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
-import com.owlplug.core.controllers.OptionsController;
+import com.owlplug.core.controllers.SettingsController;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.core.utils.FX;
 import com.owlplug.project.events.ProjectSyncEvent;
@@ -48,7 +48,7 @@ public class ProjectsController extends BaseController {
   @Autowired
   private MainController mainController;
   @Autowired
-  private OptionsController optionsController;
+  private SettingsController settingsController;
   @Autowired
   private ProjectInfoController projectInfoController;
 
@@ -83,8 +83,8 @@ public class ProjectsController extends BaseController {
     });
 
     projectDirectoryButton.setOnAction(e -> {
-      optionsController.navigateToSection(OptionsController.PROJECTS_SECTION_INDEX);
-      mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX);
+      settingsController.navigateToSection(SettingsController.PROJECTS_SECTION_INDEX);
+      mainController.navigateToMainTab(MainController.SETTINGS_TAB_INDEX);
     });
 
     projectTreeNode = new FilterableTreeItem<>("(all)");

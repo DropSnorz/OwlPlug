@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.core.controllers.options;
+package com.owlplug.core.controllers.settings;
 
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
@@ -24,7 +24,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.dialogs.DonateDialogController;
-import com.owlplug.core.services.OptionsService;
+import com.owlplug.core.services.SettingsService;
 import com.owlplug.core.utils.PlatformUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,10 +35,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ApplicationOptionsController extends BaseController {
+public class ApplicationSettingsController extends BaseController {
 
   @Autowired
-  private OptionsService optionsService;
+  private SettingsService settingsService;
   @Autowired
   private DonateDialogController donateDialogController;
 
@@ -65,7 +65,7 @@ public class ApplicationOptionsController extends BaseController {
     telemetryHyperlink.setOnAction(e -> PlatformUtils.openDefaultBrowser(
         getApplicationDefaults().getEnvProperty("owlplug.github.wiki.url") + "/Telemetry"));
 
-    clearCacheButton.setOnAction(e -> optionsService.clearCache());
+    clearCacheButton.setOnAction(e -> settingsService.clearCache());
 
     removeDataButton.setOnAction(e -> {
       Dialog dialog = getDialogManager().newDialog();
@@ -80,7 +80,7 @@ public class ApplicationOptionsController extends BaseController {
       confirmButton.getStyleClass().add("button-danger");
       confirmButton.setOnAction(ce -> {
         dialog.close();
-        optionsService.clearAllUserData();
+        settingsService.clearAllUserData();
       });
       layout.setActions(confirmButton, cancelButton);
       dialog.setContent(layout);

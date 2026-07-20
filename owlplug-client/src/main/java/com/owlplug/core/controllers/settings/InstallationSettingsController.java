@@ -16,9 +16,8 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.core.controllers.options;
+package com.owlplug.core.controllers.settings;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
@@ -34,7 +33,7 @@ import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class InstallationOptionsController extends BaseController {
+public class InstallationSettingsController extends BaseController {
 
   @FXML
   private CheckBox storeDirectoryCheckBox;

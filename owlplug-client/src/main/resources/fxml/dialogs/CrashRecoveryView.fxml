@@ -29,7 +29,7 @@
       <VBox.margin>
          <Insets bottom="10.0" top="10.0" />
       </VBox.margin>
-      <Label text="You can try to change the scanner implementation or disable native discovery globally in Options:" wrapText="true" />
+      <Label text="You can try to change the scanner implementation or disable native discovery globally in Settings:" wrapText="true" />
       <HBox spacing="5.0">
          <CheckBox fx:id="nativeDiscoveryCheckbox" text="Global Native plugin discovery using" />
          <ComboBox fx:id="pluginNativeComboBox" prefHeight="25.0" HBox.hgrow="SOMETIMES" />

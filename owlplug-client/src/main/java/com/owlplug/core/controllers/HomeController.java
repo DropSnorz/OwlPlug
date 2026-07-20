@@ -18,7 +18,6 @@
 
 package com.owlplug.core.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
@@ -86,7 +85,7 @@ public class HomeController extends BaseController {
   private PluginsController pluginsController;
   @Autowired
   @Lazy
-  private OptionsController optionsController;
+  private SettingsController settingsController;
 
   @FXML
   private Label pluginCountLabel;
@@ -172,12 +171,12 @@ public class HomeController extends BaseController {
     pluginTile.setOnMouseClicked(e -> mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX));
     projectTile.setOnMouseClicked(e -> mainController.navigateToMainTab(MainController.PROJECTS_TAB_INDEX));
     pluginDirTile.setOnMouseClicked(e -> {
-      mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX);
-      optionsController.navigateToSection(OptionsController.SCAN_SECTION_INDEX);
+      mainController.navigateToMainTab(MainController.SETTINGS_TAB_INDEX);
+      settingsController.navigateToSection(SettingsController.SCAN_SECTION_INDEX);
     });
     projectDirTile.setOnMouseClicked(e -> {
-      mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX);
-      optionsController.navigateToSection(OptionsController.PROJECTS_SECTION_INDEX);
+      mainController.navigateToMainTab(MainController.SETTINGS_TAB_INDEX);
+      settingsController.navigateToSection(SettingsController.PROJECTS_SECTION_INDEX);
     });
 
     pluginSearchField.setOnAction(e -> {
@@ -188,13 +187,13 @@ public class HomeController extends BaseController {
     scanPluginsButton.setOnAction(e -> pluginService.scanPlugins());
     exploreButton.setOnAction(e -> mainController.navigateToMainTab(MainController.EXPLORE_TAB_INDEX));
     syncProjectsButton.setOnAction(e -> projectService.syncProjects());
-    settingsButton.setOnAction(e -> mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX));
+    settingsButton.setOnAction(e -> mainController.navigateToMainTab(MainController.SETTINGS_TAB_INDEX));
 
-    setupPluginDirButton.setOnAction(e -> mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX));
+    setupPluginDirButton.setOnAction(e -> mainController.navigateToMainTab(MainController.SETTINGS_TAB_INDEX));
     scanSuggestionButton.setOnAction(e -> pluginService.scanPlugins());
     setupProjectDirButton.setOnAction(e -> {
-      mainController.navigateToMainTab(MainController.OPTIONS_TAB_INDEX);
-      optionsController.navigateToSection(OptionsController.PROJECTS_SECTION_INDEX);
+      mainController.navigateToMainTab(MainController.SETTINGS_TAB_INDEX);
+      settingsController.navigateToSection(SettingsController.PROJECTS_SECTION_INDEX);
     });
 
     scanRotation = new RotateTransition(Duration.millis(700), scanIcon);

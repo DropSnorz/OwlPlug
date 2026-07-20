@@ -7,7 +7,7 @@
 <ScrollPane fitToWidth="true" hbarPolicy="NEVER"
     xmlns="http://javafx.com/javafx/17.0.2-ea"
     xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.owlplug.core.controllers.options.PluginScanOptionsController">
+    fx:controller="com.owlplug.core.controllers.settings.PluginScanSettingsController">
 
     <VBox spacing="16.0">
         <padding><Insets top="24.0" right="24.0" bottom="24.0" left="24.0"/></padding>
