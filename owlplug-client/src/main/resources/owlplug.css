@@ -126,11 +126,11 @@ Text {
 }
 
 .status-icon-found {
-    -fx-icon-color: -color-success-emphasis;
+    -fx-icon-color: -color-success-fg;
 }
 
 .status-icon-missing {
-    -fx-icon-color: -color-danger-emphasis;
+    -fx-icon-color: -color-danger-fg;
 }
 
 .status-icon-unknown {

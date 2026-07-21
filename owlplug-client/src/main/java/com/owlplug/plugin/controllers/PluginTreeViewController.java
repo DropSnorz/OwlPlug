@@ -328,11 +328,36 @@ public class PluginTreeViewController extends BaseController {
     for (TreeItem item : items) {
       if (item.getValue() instanceof Plugin plugin
               && plugin.getId().equals(id)) {
-        int row = pluginTreeView.getRow(item);
-        pluginTreeView.getSelectionModel().select(row);
+        pluginTreeView.getSelectionModel().select(item);
       }
     }
 
+  }
+
+  /**
+   * Selects the tree row for the given component id. Components only appear as
+   * their own tree row when the parent plugin has more than one component
+   * (shell plugins); otherwise the parent plugin row is selected instead.
+   */
+  public void selectComponentById(long id) {
+    List<TreeItem> items = getNestedChildren(pluginTreeView.getRoot());
+    TreeItem fallback = null;
+
+    for (TreeItem item : items) {
+      if (item.getValue() instanceof PluginComponent treeComponent
+              && treeComponent.getId().equals(id)) {
+        pluginTreeView.getSelectionModel().select(item);
+        return;
+      }
+      if (item.getValue() instanceof Plugin plugin
+              && plugin.getComponents().stream().anyMatch(c -> c.getId().equals(id))) {
+        fallback = item;
+      }
+    }
+
+    if (fallback != null) {
+      pluginTreeView.getSelectionModel().select(fallback);
+    }
   }
 
   private List<TreeItem> getNestedChildren(TreeItem item) {

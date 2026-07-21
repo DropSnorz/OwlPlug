@@ -19,13 +19,27 @@
 package com.owlplug.plugin.repositories;
 
 import com.owlplug.plugin.model.PluginComponent;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginType;
 import java.util.List;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 public interface PluginComponentRepository extends JpaRepository<PluginComponent, Long>, JpaSpecificationExecutor<PluginComponent> {
+
+  static Specification<PluginComponent> nameContains(String name) {
+    return (component, cq, cb) -> cb.like(cb.lower(component.get("name")), "%" + name.toLowerCase() + "%");
+  }
+
+  static Specification<PluginComponent> hasFormat(PluginFormat format) {
+    return (component, cq, cb) -> cb.equal(component.get("pluginFormat"), format);
+  }
+
+  static Specification<PluginComponent> isActive(boolean active) {
+    return (component, cq, cb) -> cb.equal(component.get("active"), active);
+  }
 
   @Query("SELECT pc.manufacturerName AS label, COUNT(pc) AS cnt "
              + "FROM PluginComponent pc WHERE pc.manufacturerName IS NOT NULL AND pc.manufacturerName <> '' "

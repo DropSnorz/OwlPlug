@@ -24,7 +24,7 @@ import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.plugin.controllers.PluginsController;
-import com.owlplug.plugin.model.Plugin;
+import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawProject;
@@ -100,7 +100,7 @@ public class ProjectInfoController extends BaseController {
   @FXML
   private TableColumn<DawPlugin, String> pluginTableStatusColumn;
   @FXML
-  private TableColumn<DawPlugin, Plugin> pluginTableLinkColumn;
+  private TableColumn<DawPlugin, PluginComponent> pluginTableLinkColumn;
 
   private final ObjectProperty<DawProject> projectProperty = new SimpleObjectProperty<>();
 
@@ -179,14 +179,14 @@ public class ProjectInfoController extends BaseController {
 
     pluginTableLinkColumn.setCellValueFactory(cellData -> {
       if (cellData.getValue().getLookup() != null) {
-        return new SimpleObjectProperty<>(cellData.getValue().getLookup().getPlugin());
+        return new SimpleObjectProperty<>(cellData.getValue().getLookup().getComponent());
       }
       return null;
     });
 
     pluginTableLinkColumn.setCellFactory(e -> new TableCell<>() {
       @Override
-      public void updateItem(Plugin item, boolean empty) {
+      public void updateItem(PluginComponent item, boolean empty) {
         super.updateItem(item, empty);
         if (item == null || empty) {
           setText(null);
@@ -195,7 +195,7 @@ public class ProjectInfoController extends BaseController {
           Hyperlink link = new Hyperlink();
           link.setGraphic(new FontIcon("mdi2p-power-plug-outline"));
           link.setOnAction(ev -> {
-            pluginsController.selectPluginById(item.getId());
+            pluginsController.selectComponentById(item.getId());
             mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
           });
           setGraphic(link);
