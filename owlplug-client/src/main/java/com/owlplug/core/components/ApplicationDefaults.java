@@ -71,9 +71,6 @@ public class ApplicationDefaults {
   public final Image reaperLogoImage = new Image(getClass().getResourceAsStream("/icons/reaper-white-16.png"));
   public final Image studioOneLogoImage = new Image(getClass().getResourceAsStream("/icons/studioone-white-16.png"));
 
-  public final Image errorIconImage = new Image(
-          getClass().getResourceAsStream("/icons/error-red-16.png"));
-
   public final Image pluginPlaceholderImage = new Image(
       getClass().getResourceAsStream("/media/plugin-placeholder.png"));
   public final Image abletonPlaceholderImage = new Image(

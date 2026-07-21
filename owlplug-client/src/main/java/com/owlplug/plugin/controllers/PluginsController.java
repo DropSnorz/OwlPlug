@@ -238,6 +238,14 @@ public class PluginsController extends BaseController {
       treeViewController.selectPluginById(id);
     }
   }
+
+  public void selectComponentById(long id) {
+    if (displaySwitchTabPane.getSelectionModel().getSelectedItem().equals(displayTableTab)) {
+      tableController.selectComponentById(id);
+    } else {
+      treeViewController.selectComponentById(id);
+    }
+  }
   
   public void refresh() {
     treeViewController.refresh();

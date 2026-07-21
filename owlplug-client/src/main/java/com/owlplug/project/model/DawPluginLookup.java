@@ -18,7 +18,7 @@
 
 package com.owlplug.project.model;
 
-import com.owlplug.plugin.model.Plugin;
+import com.owlplug.plugin.model.PluginComponent;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -42,8 +42,8 @@ public class DawPluginLookup {
   private DawPlugin dawPlugin;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "plugin_id")
-  private Plugin plugin;
+  @JoinColumn(name = "component_id")
+  private PluginComponent component;
   @Enumerated(EnumType.STRING)
   private LookupResult result;
 
@@ -63,12 +63,12 @@ public class DawPluginLookup {
     this.dawPlugin = dawPlugin;
   }
 
-  public Plugin getPlugin() {
-    return plugin;
+  public PluginComponent getComponent() {
+    return component;
   }
 
-  public void setPlugin(Plugin plugin) {
-    this.plugin = plugin;
+  public void setComponent(PluginComponent component) {
+    this.component = component;
   }
 
   public LookupResult getResult() {

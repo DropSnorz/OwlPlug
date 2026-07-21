@@ -26,6 +26,7 @@ import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
 import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
+import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
@@ -228,6 +229,29 @@ public class PluginTableController extends BaseController {
         tableView.getSelectionModel().select(plugin);
         break;
       }
+    }
+  }
+
+  /**
+   * Selects the table row for the given component id. Components only appear as
+   * their own table row when the parent plugin has more than one component
+   * (shell plugins); otherwise the parent plugin row is selected instead.
+   */
+  public void selectComponentById(long id) {
+    IPlugin fallback = null;
+
+    for (IPlugin p : pluginList) {
+      if (p instanceof PluginComponent tableComponent && tableComponent.getId().equals(id)) {
+        tableView.getSelectionModel().select(p);
+        return;
+      }
+      if (p instanceof Plugin plugin && plugin.getComponents().stream().anyMatch(c -> c.getId().equals(id))) {
+        fallback = p;
+      }
+    }
+
+    if (fallback != null) {
+      tableView.getSelectionModel().select(fallback);
     }
   }
 

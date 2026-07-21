@@ -20,8 +20,6 @@ package com.owlplug.plugin.repositories;
 
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginFormat;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,15 +36,6 @@ public interface PluginRepository extends JpaRepository<Plugin, Long>, JpaSpecif
   static Specification<Plugin> hasFormat(PluginFormat format) {
     return (plugin, cq, cb) -> cb.equal(plugin.get("format"), format);
   }
-
-  static Specification<Plugin> hasComponentName(String name) {
-    return (plugin, cq, cb) -> {
-      Join<Object, Object> component = (Join<Object, Object>) plugin.fetch("components", JoinType.INNER);
-      return cb.equal(cb.lower(component.get("name")), name.toLowerCase());
-
-    };
-  }
-
 
   Plugin findByPath(String path);
 

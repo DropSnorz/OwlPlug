@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -179,22 +178,6 @@ public class PluginService extends BaseService {
       return PluginState.ACTIVE;
     }
     return PluginState.INSTALLED;
-  }
-
-  public Iterable<Plugin> find(String name, PluginFormat pluginFormat) {
-    Specification<Plugin> spec = PluginRepository.nameContains(name)
-            .and(PluginRepository.hasFormat(pluginFormat));
-
-
-    return pluginRepository.findAll(spec);
-  }
-
-  public Iterable<Plugin> findByComponentName(String name, PluginFormat pluginFormat) {
-    Specification<Plugin> spec = PluginRepository.hasComponentName(name)
-            .and(PluginRepository.hasFormat(pluginFormat));
-
-    return pluginRepository.findAll(spec);
-
   }
 
   /**

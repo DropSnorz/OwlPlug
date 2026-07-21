@@ -19,23 +19,23 @@
 package com.owlplug.project.services;
 
 import com.owlplug.core.services.BaseService;
-import com.owlplug.plugin.model.Plugin;
-import com.owlplug.plugin.services.PluginService;
+import com.owlplug.plugin.model.PluginComponent;
+import com.owlplug.plugin.repositories.PluginComponentRepository;
 import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawPluginLookup;
 import com.owlplug.project.model.LookupResult;
 import com.owlplug.project.repositories.DawPluginRepository;
 import com.owlplug.project.repositories.PluginLookupRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PluginLookupService extends BaseService {
 
   @Autowired
-  @Lazy
-  private PluginService pluginService;
+  private PluginComponentRepository pluginComponentRepository;
   @Autowired
   private PluginLookupRepository pluginLookupRepository;
   @Autowired
@@ -54,20 +54,21 @@ public class PluginLookupService extends BaseService {
     lookup.setDawPlugin(projectPlugin);
     lookup.setResult(LookupResult.MISSING);
 
-    Iterable<Plugin> plugins = pluginService.find(projectPlugin.getName(), projectPlugin.getFormat());
+    Specification<PluginComponent> baseSpec = PluginComponentRepository.nameContains(projectPlugin.getName())
+            .and(PluginComponentRepository.hasFormat(projectPlugin.getFormat()));
 
-    if (plugins.iterator().hasNext()) {
-      lookup.setPlugin(plugins.iterator().next());
+    // Prefer an active (successfully scanned, platform-compatible) component.
+    // Fall back to inactive/ghost components only if no active match exists.
+    List<PluginComponent> components = pluginComponentRepository.findAll(
+            baseSpec.and(PluginComponentRepository.isActive(true)));
+
+    if (components.isEmpty()) {
+      components = pluginComponentRepository.findAll(baseSpec);
+    }
+
+    if (!components.isEmpty()) {
+      lookup.setComponent(components.get(0));
       lookup.setResult(LookupResult.FOUND);
-    } else {
-      // Resolve the Plugin file (based on known subcomponents)
-      plugins = pluginService.findByComponentName(projectPlugin.getName(), projectPlugin.getFormat());
-
-      if (plugins.iterator().hasNext()) {
-        lookup.setPlugin(plugins.iterator().next());
-        lookup.setResult(LookupResult.FOUND);
-      }
-
     }
 
     return lookup;

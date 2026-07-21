@@ -19,6 +19,7 @@
 package com.owlplug.plugin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.owlplug.project.model.DawPluginLookup;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,7 +29,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(indexes = { @Index(name = "IDX_PLUGIN_COMPONENT_ID", columnList = "id") })
@@ -63,6 +68,10 @@ public class PluginComponent implements IPlugin {
    a fallback reference of an expected component. */
   @Column(columnDefinition = "boolean default true")
   protected boolean active = true;
+
+  @OneToMany(mappedBy = "component")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<DawPluginLookup> lookups;
 
 
   public Long getId() {
