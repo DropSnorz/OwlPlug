@@ -32,8 +32,6 @@ public class PreloaderController extends BaseController {
   @FXML
   private Hyperlink owlplugHyperlink;
   @FXML
-  private Hyperlink statusHyperlink;
-  @FXML
   private Hyperlink documentationHyperlink;
   @FXML
   private Hyperlink roadmapHyperlink;
@@ -46,10 +44,8 @@ public class PreloaderController extends BaseController {
   public void initialize() {
     
     owlplugHyperlink.setOnAction((e) -> PlatformUtils.openDefaultBrowser("https://owlplug.com"));
-    statusHyperlink.setOnAction((e) -> PlatformUtils.openDefaultBrowser("http://status.owlplug.com"));
     roadmapHyperlink.setOnAction((e) -> PlatformUtils.openDefaultBrowser("https://owlplug.com/roadmap"));
     documentationHyperlink.setOnAction((e) -> PlatformUtils.openDefaultBrowser("https://github.com/DropSnorz/OwlPlug/wiki"));
-
     contributorsPane.getChildren().add(new SlidingLabel(ApplicationDefaults.getContributors()));
 
   }
