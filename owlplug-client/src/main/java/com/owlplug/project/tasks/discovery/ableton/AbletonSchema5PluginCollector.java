@@ -91,7 +91,7 @@ public class AbletonSchema5PluginCollector {
     plugin.setFormat(PluginFormat.VST2);
     NodeList fileNameNodes = DomUtils.getDirectDescendantElementsByTagName(pluginElement, "FileName");
     if (fileNameNodes.getLength() >= 1) {
-      plugin.setFileName(fileNameNodes.item(0).getAttributes().getNamedItem("Value").getNodeValue());
+      plugin.setPath(fileNameNodes.item(0).getAttributes().getNamedItem("Value").getNodeValue());
 
     }
 
