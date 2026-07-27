@@ -28,4 +28,8 @@ public interface ProjectExplorer {
 
   DawProject explore(File file) throws ProjectExplorerException;
 
+  default boolean isBackupFile(File file) {
+    return BackupFileDetector.isGenericBackupFile(file);
+  }
+
 }

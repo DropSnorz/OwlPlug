@@ -61,6 +61,14 @@ public class ProjectTreeCell extends TreeCell<Object> {
           missingLabel.getStyleClass().add("label-danger");
           hbox.getChildren().add(missingLabel);
         }
+        if (project.isBackup()) {
+          Label backupLabel = new Label("Backup");
+          FontIcon backupIcon = new FontIcon("mdi2h-history");
+          backupIcon.getStyleClass().add("status-icon-backup");
+          backupLabel.setGraphic(backupIcon);
+          backupLabel.getStyleClass().add("label-warning");
+          hbox.getChildren().add(backupLabel);
+        }
 
         setGraphic(hbox);
       } else {

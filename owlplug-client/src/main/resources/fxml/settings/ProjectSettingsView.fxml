@@ -28,5 +28,12 @@
             <Button fx:id="removeDirButton" text="Remove Selected"/>
         </HBox>
 
+        <!-- Backup Files -->
+        <Separator/>
+        <Label text="Backup Files" styleClass="heading-2"/>
+        <Label text="DAW applications automatically generate backup or autosave copies of your projects (e.g. Ableton Backup folder, Reaper .rpp-bak files, Studio One autosaves). These are ignored during sync unless enabled below."
+               styleClass="label-disabled" wrapText="true"/>
+        <CheckBox fx:id="collectBackupFilesCheckbox" text="Collect backup files"/>
+
     </VBox>
 </ScrollPane>

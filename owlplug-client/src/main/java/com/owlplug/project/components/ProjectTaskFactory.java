@@ -53,8 +53,9 @@ public class ProjectTaskFactory extends BaseTaskFactory {
   public TaskExecutionContext createSyncTask() {
 
     List<String> directories = prefs.getList(Prefs.Projects.DIRECTORY);
+    boolean collectBackupFiles = prefs.getBoolean(Prefs.Projects.COLLECT_BACKUP_FILES, false);
 
-    ProjectSyncTask task = new ProjectSyncTask(projectRepository, directories);
+    ProjectSyncTask task = new ProjectSyncTask(projectRepository, directories, collectBackupFiles);
     task.setOnSucceeded(e -> {
       createLookupTask().scheduleNow();
       publisher.publishEvent(new ProjectSyncEvent());

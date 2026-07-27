@@ -27,6 +27,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.DirectoryChooser;
@@ -43,6 +44,8 @@ public class ProjectSettingsController extends BaseController {
   private Button addDirButton;
   @FXML
   private Button removeDirButton;
+  @FXML
+  private CheckBox collectBackupFilesCheckbox;
 
   private ObservableList<String> projectDirectories;
 
@@ -82,11 +85,18 @@ public class ProjectSettingsController extends BaseController {
       String selected = projectListView.getSelectionModel().getSelectedItem();
       if (selected != null) projectDirectories.remove(selected);
     });
+
+    collectBackupFilesCheckbox.setSelected(
+        getPreferences().getBoolean(Prefs.Projects.COLLECT_BACKUP_FILES, false));
+    collectBackupFilesCheckbox.selectedProperty().addListener((obs, o, n) ->
+        getPreferences().putBoolean(Prefs.Projects.COLLECT_BACKUP_FILES, n));
   }
 
   public void refresh() {
     projectDirectories.setAll(
         getPreferences().getList(Prefs.Projects.DIRECTORY, new ArrayList<>()));
+    collectBackupFilesCheckbox.setSelected(
+        getPreferences().getBoolean(Prefs.Projects.COLLECT_BACKUP_FILES, false));
   }
 
 }

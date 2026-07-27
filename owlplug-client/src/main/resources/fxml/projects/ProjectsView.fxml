@@ -34,7 +34,7 @@
             </left>
             <top>
                 <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
-                    <Button fx:id="filterToggleButton" onAction="#toggleFilter">
+                    <Button fx:id="filterToggleButton" onAction="#toggleFilter" accessibleText="Filter">
                         <graphic>
                             <FontIcon iconLiteral="mdi2f-filter-outline" />
                         </graphic>

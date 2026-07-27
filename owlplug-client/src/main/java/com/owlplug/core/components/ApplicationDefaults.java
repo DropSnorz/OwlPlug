@@ -120,6 +120,7 @@ public class ApplicationDefaults {
 
     public static final class Projects {
       public static final String DIRECTORY = "projects.directory";
+      public static final String COLLECT_BACKUP_FILES = "projects.collect_backup_files";
     }
 
     public static final class Telemetry {
