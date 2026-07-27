@@ -42,8 +42,13 @@ public class DawPlugin {
   private String uid;
   private String name;
 
-  @Deprecated
-  private String fileName;
+  /**
+   * Plugin file locator as recorded by the host DAW project.
+   * Depending on the DAW, this may be a bare file name (e.g. Reaper stores
+   * only "reacomp.dll") or a full absolute path (e.g. Ableton stores
+   * "C:\Program Files\VSTPlugins\Serum.dll"). It is not guaranteed to exist
+   * or to be usable to locate the plugin on the current machine.
+   */
   private String path;
 
   @Enumerated(EnumType.STRING)
@@ -74,16 +79,6 @@ public class DawPlugin {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  @Deprecated
-  public String getFileName() {
-    return fileName;
-  }
-
-  @Deprecated
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
   }
 
   public String getPath() {
@@ -128,13 +123,13 @@ public class DawPlugin {
     }
     DawPlugin that = (DawPlugin) o;
     return Objects.equals(id, that.id) && Objects.equals(name, that.name)
-            && Objects.equals(fileName, that.fileName) && Objects.equals(path, that.path)
+            && Objects.equals(path, that.path)
             && format == that.format && Objects.equals(project, that.project);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, fileName, path, format, project);
+    return Objects.hash(id, name, path, format, project);
   }
 }
 

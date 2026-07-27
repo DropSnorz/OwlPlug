@@ -32,11 +32,6 @@ public enum PluginFormat {
     this.fullName = fullName;
   }
 
-  @Deprecated
-  public String getText() {
-    return name;
-  }
-
   public String getName() {
     return name;
   }

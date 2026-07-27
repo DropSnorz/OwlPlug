@@ -41,11 +41,11 @@ public class PluginFormatBadgeView extends HBox {
   }
 
   public PluginFormatBadgeView(PluginFormat format, ApplicationDefaults applicationDefaults) {
-    this(format, format != null ? format.getText() : "?", applicationDefaults, DisplayMode.DEFAULT);
+    this(format, format != null ? format.getName() : "?", applicationDefaults, DisplayMode.DEFAULT);
   }
 
   public PluginFormatBadgeView(PluginFormat format, ApplicationDefaults applicationDefaults, DisplayMode mode) {
-    this(format, format != null ? format.getText() : "?", applicationDefaults, mode);
+    this(format, format != null ? format.getName() : "?", applicationDefaults, mode);
   }
 
   private PluginFormatBadgeView(PluginFormat format, String displayText, ApplicationDefaults applicationDefaults,

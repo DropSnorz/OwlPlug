@@ -142,7 +142,7 @@ public class CrashRecoveryDialogController extends AbstractDialogController {
           p.put("nativeDiscoveryLoader", this.getPreferences().get(
               Prefs.Plugins.NativeHost.PREFERRED_LOADER, "unknown"));
           p.put("pluginName", plugin.getName());
-          p.put("pluginFormat", plugin.getFormat().getText());
+          p.put("pluginFormat", plugin.getFormat().getName());
         });
       }
     } else {

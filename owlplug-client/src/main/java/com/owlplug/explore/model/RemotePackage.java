@@ -49,8 +49,6 @@ public class RemotePackage {
   private String name;
   private String slug;
   private String pageUrl;
-  @Deprecated
-  private String downloadUrl;
   private String screenshotUrl;
   private String donateUrl;
   private String creator;
@@ -104,16 +102,6 @@ public class RemotePackage {
 
   public void setPageUrl(String pageUrl) {
     this.pageUrl = pageUrl;
-  }
-
-  @Deprecated
-  public String getDownloadUrl() {
-    return downloadUrl;
-  }
-
-  @Deprecated
-  public void setDownloadUrl(String downloadUrl) {
-    this.downloadUrl = downloadUrl;
   }
 
   public String getScreenshotUrl() {

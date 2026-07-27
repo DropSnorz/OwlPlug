@@ -187,8 +187,8 @@ public class ExploreController extends BaseController {
     });
 
     for (PluginFormat format : PluginFormat.values()) {
-      CheckBox checkbox = new CheckBox(format.getText());
-      formatsFilterCheckBoxes.put(format.getText().toLowerCase(), checkbox);
+      CheckBox checkbox = new CheckBox(format.getName());
+      formatsFilterCheckBoxes.put(format.getName().toLowerCase(), checkbox);
       checkbox.setSelected(false);
       checkbox.setOnAction(e -> performPackageSearch());
     }
