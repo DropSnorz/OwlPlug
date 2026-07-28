@@ -24,13 +24,19 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.tasks.discovery.studioone.StudioOneProjectExplorer;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class StudioOneProjectExplorerTest {
 
@@ -62,5 +68,42 @@ public class StudioOneProjectExplorerTest {
             hasProperty("format", is(PluginFormat.VST2))
         )
     ));
+  }
+
+  @Test
+  public void canExploreAutosavedFile(@TempDir Path tempDir) throws IOException {
+    StudioOneProjectExplorer explorer = new StudioOneProjectExplorer();
+    File file = Files.createFile(tempDir.resolve("Song (Autosaved).song")).toFile();
+    assertTrue(explorer.canExploreFile(file));
+  }
+
+  @Test
+  public void canExploreFileInHistoryFolder(@TempDir Path tempDir) throws IOException {
+    StudioOneProjectExplorer explorer = new StudioOneProjectExplorer();
+    Path historyDir = Files.createDirectory(tempDir.resolve("History"));
+    File file = Files.createFile(historyDir.resolve("Song.song")).toFile();
+    assertTrue(explorer.canExploreFile(file));
+  }
+
+  @Test
+  public void autosavedFileIsBackupFile() {
+    StudioOneProjectExplorer explorer = new StudioOneProjectExplorer();
+    File file = new File("/projects/Song (Autosaved).song");
+    assertTrue(explorer.isBackupFile(file));
+  }
+
+  @Test
+  public void fileInHistoryFolderIsBackupFile() {
+    StudioOneProjectExplorer explorer = new StudioOneProjectExplorer();
+    File file = new File("/projects/History/Song.song");
+    assertTrue(explorer.isBackupFile(file));
+  }
+
+  @Test
+  public void regularSongFileIsNotBackupFile() {
+    StudioOneProjectExplorer explorer = new StudioOneProjectExplorer();
+    File file = new File(this.getClass().getClassLoader()
+                             .getResource("projects/studioone/studioone7schema8.song").getFile());
+    assertFalse(explorer.isBackupFile(file));
   }
 }

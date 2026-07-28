@@ -55,20 +55,19 @@ public class StudioOneProjectExplorer implements ProjectExplorer {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   public boolean canExploreFile(File file) {
-    if (!file.isFile() || !file.getAbsolutePath().endsWith(".song")) {
-      return false;
-    }
-    
-    // Skip autosave files - they have "(Autosaved)" in the name or are in History folders
+    return file.isFile() && file.getAbsolutePath().endsWith(".song");
+  }
+
+  @Override
+  public boolean isBackupFile(File file) {
+    // Studio One autosave files have "(Autosaved)" in the name or are in History folders
     String fileName = file.getName();
     String filePath = file.getAbsolutePath();
-    
+
     if (fileName.contains("(Autosaved)") || filePath.contains("\\History\\") || filePath.contains("/History/")) {
-      log.debug("Skipping autosave file: {}", file.getAbsolutePath());
-      return false;
+      return true;
     }
-    
-    return true;
+    return ProjectExplorer.super.isBackupFile(file);
   }
 
   public DawProject explore(File file) throws ProjectExplorerException {

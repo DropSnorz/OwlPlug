@@ -16,9 +16,11 @@
     <center>
         <BorderPane BorderPane.alignment="CENTER">
             <center>
-                <TreeView fx:id="projectTreeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="SOMETIMES" VBox.vgrow="ALWAYS">
+                <HBox fx:id="filterContainer">
+                    <TreeView fx:id="projectTreeView" prefHeight="215.0" prefWidth="521.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
 
-                </TreeView>
+                    </TreeView>
+                </HBox>
             </center>
             <left>
                 <TabPane fx:id="projectTreeViewTabPane" side="LEFT"
@@ -32,6 +34,11 @@
             </left>
             <top>
                 <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
+                    <Button fx:id="filterToggleButton" onAction="#toggleFilter" accessibleText="Filter">
+                        <graphic>
+                            <FontIcon iconLiteral="mdi2f-filter-outline" />
+                        </graphic>
+                    </Button>
                     <Button fx:id="projectDirectoryButton" text="Project Directories">
                         <graphic>
                             <FontIcon iconLiteral="mdi2f-folder-multiple"/>

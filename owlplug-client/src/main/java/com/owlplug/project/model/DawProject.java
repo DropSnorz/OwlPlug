@@ -19,6 +19,7 @@
 package com.owlplug.project.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -48,6 +49,13 @@ public class DawProject {
   private Set<DawPlugin> plugins = new HashSet<>();
   private Date lastModifiedAt;
   private Date createdAt;
+
+  /* True if this project file was detected as a DAW-generated backup/autosave file
+     (e.g. Ableton "Backup" folder, Reaper .rpp-bak / "Backups" folder, Studio One
+     autosave / "History" folder). Only ever true when the "Collect backup files"
+     setting is enabled - otherwise backup files are never persisted at all. */
+  @Column(columnDefinition = "boolean default false")
+  private boolean backup = false;
 
   public Long getId() {
     return id;
@@ -115,6 +123,14 @@ public class DawProject {
 
   public void setCreatedAt(Date createdAt) {
     this.createdAt = createdAt;
+  }
+
+  public boolean isBackup() {
+    return backup;
+  }
+
+  public void setBackup(boolean backup) {
+    this.backup = backup;
   }
 
   public List<DawPlugin> getPluginByLookupResult(LookupResult result) {
