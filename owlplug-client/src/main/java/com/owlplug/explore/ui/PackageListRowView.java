@@ -65,11 +65,11 @@ public class PackageListRowView extends HBox {
     this.getChildren().add(thumb);
 
     // Name + creator + tags
-    VBox meta = buildMeta(applicationDefaults, remotePackage, parentController);
+    VBox meta = buildMeta(remotePackage, parentController);
     HBox.setHgrow(meta, Priority.ALWAYS);
     this.getChildren().add(meta);
 
-    // Right side: type + formats + source badge + install
+    // Right side: type + formats + source name + install
     HBox rightSection = buildRightSection(applicationDefaults, remotePackage, parentController);
     this.getChildren().add(rightSection);
 
@@ -103,18 +103,16 @@ public class PackageListRowView extends HBox {
     return thumb;
   }
 
-  private VBox buildMeta(ApplicationDefaults applicationDefaults, RemotePackage remotePackage,
-                         ExploreController parentController) {
+  private VBox buildMeta(RemotePackage remotePackage, ExploreController parentController) {
     VBox meta = new VBox(3);
     meta.setAlignment(Pos.CENTER_LEFT);
 
-    // Name + source badge
+    // Name
     HBox nameRow = new HBox(6);
     nameRow.setAlignment(Pos.CENTER_LEFT);
     Label nameLabel = new Label(remotePackage.getName());
     nameLabel.getStyleClass().add("package-list-name");
     nameRow.getChildren().add(nameLabel);
-    nameRow.getChildren().add(new PackageSourceBadgeView(remotePackage.getRemoteSource(), applicationDefaults, true));
 
     // Creator
     HBox subRow = new HBox(6);
@@ -186,8 +184,13 @@ public class PackageListRowView extends HBox {
       infoStack.getChildren().add(typeAndFormats);
     }
 
-    // Install button group stacked under type+formats
+    // Install button group stacked under type+formats, with the registry name as its first segment
     InputGroup inputGroup = new InputGroup();
+    if (remotePackage.getRemoteSource() != null) {
+      Label sourceLabel = new Label(remotePackage.getRemoteSource().getName());
+      sourceLabel.setDisable(true);
+      inputGroup.getChildren().add(sourceLabel);
+    }
     Label versionLabel = new Label("v" + remotePackage.getVersion());
     versionLabel.setDisable(true);
     versionLabel.setMaxWidth(USE_COMPUTED_SIZE);
@@ -196,6 +199,7 @@ public class PackageListRowView extends HBox {
     installButton.getStyleClass().add("button-primary");
     installButton.setOnAction(e -> parentController.installPackage(remotePackage));
     inputGroup.getChildren().add(installButton);
+
     HBox installRow = new HBox(inputGroup);
     installRow.setAlignment(Pos.CENTER_RIGHT);
     infoStack.getChildren().add(installRow);

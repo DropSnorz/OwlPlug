@@ -9,8 +9,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -30,11 +28,11 @@
          <Insets left="5.0" right="5.0" top="5.0" bottom="10.0"/>
       </padding>
       <top>
-         <HBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+         <HBox alignment="TOP_CENTER" spacing="5.0" BorderPane.alignment="CENTER">
             <padding><Insets bottom="10.0"/></padding>
-            <Button fx:id="sourcesButton" text="Sources">
+            <Button fx:id="filterToggleButton" onAction="#toggleFilter" accessibleText="Filter">
                <graphic>
-                  <FontIcon iconLiteral="mdi2w-warehouse"/>
+                  <FontIcon iconLiteral="mdi2f-filter-outline"/>
                </graphic>
             </Button>
             <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
@@ -53,18 +51,6 @@
                   <Text text=" plugins"/>
                </TextFlow>
             </HBox>
-            <Button fx:id="formatFilterButton" text="Format">
-               <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../../icons/format-white-16.png"/>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="platformFilterButton" text="System">
-               <graphic>
-                   <FontIcon iconLiteral="mdi2c-cogs"/>
-               </graphic>
-            </Button>
             <Button fx:id="syncSourcesButton" text="Sync" defaultButton="true">
                <graphic>
                   <FontIcon iconLiteral="mdi2s-sync"/>
@@ -86,27 +72,29 @@
                </TabPane>
             </left>
             <center>
-               <!-- Grid / Masonry view and List view are stacked; only one is visible at a time -->
-               <StackPane BorderPane.alignment="CENTER">
-                  <ScrollPane fx:id="scrollPane" style="-fx-background-color: transparent;"
-                              fitToWidth="true" pannable="true" visible="false" managed="false">
-                     <VBox fx:id="masonryWrapper">
-                        <MasonryPane fx:id="masonryPane" VBox.vgrow="ALWAYS"/>
-                        <HBox fx:id="lazyLoadBar" alignment="CENTER" prefHeight="74.0" spacing="5.0">
-                           <Hyperlink fx:id="lazyLoadLink" styleClass="hyperlink-dark" text="Load more..."/>
+               <HBox fx:id="filterContainer">
+                  <!-- Grid / Masonry view and List view are stacked; only one is visible at a time -->
+                  <StackPane HBox.hgrow="ALWAYS">
+                     <ScrollPane fx:id="scrollPane" style="-fx-background-color: transparent;"
+                                 fitToWidth="true" pannable="true" visible="false" managed="false">
+                        <VBox fx:id="masonryWrapper">
+                           <MasonryPane fx:id="masonryPane" VBox.vgrow="ALWAYS"/>
+                           <HBox fx:id="lazyLoadBar" alignment="CENTER" prefHeight="74.0" spacing="5.0">
+                              <Hyperlink fx:id="lazyLoadLink" styleClass="hyperlink-dark" text="Load more..."/>
+                           </HBox>
+                        </VBox>
+                     </ScrollPane>
+                     <StackPane fx:id="listWrapper">
+                        <ListView fx:id="packageListView" styleClass="package-list-view"/>
+                        <HBox fx:id="listLazyLoadBar" styleClass="list-load-more-bar" alignment="CENTER"
+                              spacing="5.0" maxWidth="-Infinity" maxHeight="-Infinity"
+                              StackPane.alignment="BOTTOM_CENTER">
+                           <StackPane.margin><Insets bottom="12.0"/></StackPane.margin>
+                           <Hyperlink fx:id="listLazyLoadLink" styleClass="hyperlink-dark" text="Load more..."/>
                         </HBox>
-                     </VBox>
-                  </ScrollPane>
-                  <StackPane fx:id="listWrapper">
-                     <ListView fx:id="packageListView" styleClass="package-list-view"/>
-                     <HBox fx:id="listLazyLoadBar" styleClass="list-load-more-bar" alignment="CENTER"
-                           spacing="5.0" maxWidth="-Infinity" maxHeight="-Infinity"
-                           StackPane.alignment="BOTTOM_CENTER">
-                        <StackPane.margin><Insets bottom="12.0"/></StackPane.margin>
-                        <Hyperlink fx:id="listLazyLoadLink" styleClass="hyperlink-dark" text="Load more..."/>
-                     </HBox>
+                     </StackPane>
                   </StackPane>
-               </StackPane>
+               </HBox>
             </center>
          </BorderPane>
       </center>

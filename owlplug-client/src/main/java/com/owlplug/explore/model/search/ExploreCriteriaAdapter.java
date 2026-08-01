@@ -62,6 +62,12 @@ public class ExploreCriteriaAdapter {
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.FORMAT_LIST)) {
       return RemotePackageRepository.hasFormat((List<String>) criteria.getValue());
     }
+    if (criteria.getFilterType().equals(ExploreFilterCriteriaType.TYPE_LIST)) {
+      return RemotePackageRepository.isTyped((List<PluginType>) criteria.getValue());
+    }
+    if (criteria.getFilterType().equals(ExploreFilterCriteriaType.SOURCE_LIST)) {
+      return RemotePackageRepository.hasSource((List<Long>) criteria.getValue());
+    }
 
     return Specification.unrestricted();
 
