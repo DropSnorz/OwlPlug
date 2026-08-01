@@ -47,6 +47,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -85,6 +86,7 @@ public class PluginFilterController {
     // discarded — they live as long as the sidebar.
     for (PluginType type : PluginType.values()) {
       CheckBox cb = new CheckBox(StringUtils.capitalize(type.getText()));
+      cb.setGraphic(new FontIcon(applicationDefaults.getPackageTypeIconLiteral(type)));
       // checkbox → filterState: toggling the checkbox adds/removes the type from the active filter
       cb.selectedProperty().addListener((obs, old, selected) -> {
         if (selected != filterState.getSelectedTypes().contains(type)) {

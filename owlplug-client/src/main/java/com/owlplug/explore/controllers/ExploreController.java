@@ -20,12 +20,9 @@ package com.owlplug.explore.controllers;
 
 import com.google.common.collect.Iterables;
 import com.owlplug.controls.MasonryPane;
-import com.owlplug.controls.Popup;
 import com.owlplug.controls.Rippler;
 import com.owlplug.core.components.ImageCache;
-import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.explore.components.ExploreTaskFactory;
@@ -35,26 +32,18 @@ import com.owlplug.explore.events.SourceSyncEvent;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
-import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
 import com.owlplug.explore.ui.PackageListRowCellFactory;
-import com.owlplug.plugin.model.PluginFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -65,12 +54,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -91,23 +78,18 @@ public class ExploreController extends BaseController {
   @Autowired
   private ImageCache imageCache;
   @Autowired
-  private LazyViewRegistry viewRegistry;
-  @Autowired
   private PackageInfoController packageInfoController;
   @Autowired
-  @Lazy
-  private MainController mainController;
+  private ExploreFilterController exploreFilterController;
   @Autowired
   private InstallStepDialogController installStepDialogController;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
 
   @FXML
-  private Button sourcesButton;
+  private Button filterToggleButton;
   @FXML
-  private Button formatFilterButton;
-  @FXML
-  private Button platformFilterButton;
+  private HBox filterContainer;
   @FXML
   private Button syncSourcesButton;
   @FXML
@@ -136,9 +118,6 @@ public class ExploreController extends BaseController {
   private Hyperlink listLazyLoadLink;
   @FXML
   private Pane exploreChipViewContainer;
-
-  private final HashMap<String, CheckBox> targetFilterCheckBoxes = new HashMap<>();
-  private final HashMap<String, CheckBox> formatsFilterCheckBoxes = new HashMap<>();
 
   private ExploreChipView exploreChipView;
   private PackageBlocViewBuilder packageBlocViewBuilder = null;
@@ -181,67 +160,9 @@ public class ExploreController extends BaseController {
 
     packageBlocViewBuilder = new PackageBlocViewBuilder(this.getApplicationDefaults(), imageCache, this);
 
-    sourcesButton.setOnAction(e -> {
-      mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.SOURCE_MENU_VIEW));
-      mainController.getLeftDrawer().open();
-    });
-
-    for (PluginFormat format : PluginFormat.values()) {
-      CheckBox checkbox = new CheckBox(format.getName());
-      formatsFilterCheckBoxes.put(format.getName().toLowerCase(), checkbox);
-      checkbox.setSelected(false);
-      checkbox.setOnAction(e -> performPackageSearch());
-    }
-
-    VBox formatFilterVbox = new VBox();
-    formatFilterVbox.setSpacing(5);
-    formatFilterVbox.setPadding(new Insets(5,10,5,10));
-    Label formatLabel = new Label("Plugin format");
-    formatLabel.getStyleClass().add("label-disabled");
-    formatFilterVbox.getChildren().add(formatLabel);
-    for (Entry<String, CheckBox> entry : formatsFilterCheckBoxes.entrySet()) {
-      formatFilterVbox.getChildren().add(entry.getValue());
-    }
-
-    formatFilterButton.setOnAction(e -> {
-      Popup popup = new Popup(formatFilterVbox);
-      popup.show(formatFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
-    });
-
-    targetFilterCheckBoxes.put("win-x32", new CheckBox("Windows x32"));
-    targetFilterCheckBoxes.put("win-x64", new CheckBox("Windows x64"));
-    targetFilterCheckBoxes.put("win-arm64", new CheckBox("Windows arm64"));
-    targetFilterCheckBoxes.put("win-arm64ec", new CheckBox("Windows arm64 E.C."));
-    targetFilterCheckBoxes.put("mac-x64", new CheckBox("MacOS x64"));
-    targetFilterCheckBoxes.put("mac-arm64", new CheckBox("MacOS arm64"));
-    targetFilterCheckBoxes.put("linux-x32", new CheckBox("Linux x32 / amd32"));
-    targetFilterCheckBoxes.put("linux-x64", new CheckBox("Linux x64 / amd64"));
-    targetFilterCheckBoxes.put("linux-arm32", new CheckBox("Linux arm32"));
-    targetFilterCheckBoxes.put("linux-arm64", new CheckBox("Linux arm64"));
-    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
-      Set<String> preselected = this.getApplicationDefaults().getRuntimePlatform().getCompatiblePlatformsTags();
-      entry.getValue().setSelected(preselected.contains(entry.getKey()));
-      entry.getValue().setOnAction(e -> performPackageSearch());
-    }
-
-    VBox platformFilterVbox = new VBox();
-    platformFilterVbox.setSpacing(5);
-    platformFilterVbox.setPadding(new Insets(5,10,5,10));
-    Label popupLabel = new Label("Target environment contains");
-    popupLabel.getStyleClass().add("label-disabled");
-    platformFilterVbox.getChildren().add(popupLabel);
-    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()
-            .stream()
-            .sorted(Entry.<String, CheckBox>comparingByKey().reversed())
-            .toList()
-    ) {
-      platformFilterVbox.getChildren().add(entry.getValue());
-    }
-
-    platformFilterButton.setOnAction(e -> {
-      Popup popup = new Popup(platformFilterVbox);
-      popup.show(platformFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
-    });
+    filterContainer.getChildren().add(0, exploreFilterController.getView());
+    exploreFilterController.getFilterState().criteriaListProperty()
+        .addListener((obs, oldVal, newVal) -> performPackageSearch());
 
     syncSourcesButton.setOnAction(e -> {
       this.getTelemetryService().event("/Explore/SyncSources");
@@ -316,29 +237,15 @@ public class ExploreController extends BaseController {
     masonryPane.setCellWidth(130);
   }
 
+  @FXML
+  public void toggleFilter() {
+    exploreFilterController.getView().toggle();
+  }
+
   private synchronized void performPackageSearch() {
     final List<ExploreFilterCriteria> criteriaChipList = exploreChipView.getChips();
     List<ExploreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
-
-    List<String> targets = new ArrayList<>();
-    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
-      if (entry.getValue().isSelected()) {
-        targets.add(entry.getKey());
-      }
-    }
-    if (targets.size() > 0) {
-      criteriaList.add(new ExploreFilterCriteria(targets, ExploreFilterCriteriaType.PLATFORM_LIST));
-    }
-
-    List<String> formats = new ArrayList<>();
-    for (Entry<String, CheckBox> entry : formatsFilterCheckBoxes.entrySet()) {
-      if (entry.getValue().isSelected()) {
-        formats.add(entry.getKey());
-      }
-    }
-    if (formats.size() > 0) {
-      criteriaList.add(new ExploreFilterCriteria(formats, ExploreFilterCriteriaType.FORMAT_LIST));
-    }
+    criteriaList.addAll(exploreFilterController.getFilterState().criteriaListProperty().get());
 
     currentCriteriaList = criteriaList;
     nextDbPage = 0;

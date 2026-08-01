@@ -18,23 +18,53 @@
 
 package com.owlplug.core.controllers.settings;
 
+import atlantafx.base.controls.ToggleSwitch;
+import atlantafx.base.theme.Styles;
+import com.owlplug.controls.Dialog;
+import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.FX;
+import com.owlplug.explore.controllers.NewSourceDialogController;
+import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
+import com.owlplug.explore.model.RemoteSource;
+import com.owlplug.explore.services.ExploreService;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class InstallationSettingsController extends BaseController {
 
+  @Autowired
+  private ExploreService exploreService;
+  @Autowired
+  private NewSourceDialogController newSourceDialogController;
+
+  @FXML
+  private ListView<RemoteSource> sourceListView;
+  @FXML
+  private Button addSourceButton;
   @FXML
   private CheckBox storeDirectoryCheckBox;
   @FXML
@@ -50,6 +80,8 @@ public class InstallationSettingsController extends BaseController {
   @FXML
   private VBox pathPreviewContainer;
 
+  private final ObservableList<RemoteSource> sourceItems = FXCollections.observableArrayList();
+
   private Label vst2PathLabel;
   private Label vst3PathLabel;
   private Label auPathLabel;
@@ -57,6 +89,29 @@ public class InstallationSettingsController extends BaseController {
 
   @FXML
   public void initialize() {
+    Label sourcePlaceholder = new Label("No remote sources configured.");
+    sourcePlaceholder.getStyleClass().add("label-disabled");
+    sourceListView.setPlaceholder(sourcePlaceholder);
+    sourceListView.setItems(sourceItems);
+    sourceListView.setCellFactory(lv -> new ListCell<>() {
+      @Override
+      protected void updateItem(RemoteSource remoteSource, boolean empty) {
+        super.updateItem(remoteSource, empty);
+        setText(null);
+        setGraphic(empty || remoteSource == null ? null : buildSourceRow(remoteSource));
+      }
+    });
+
+    FontIcon addSourceIcon = new FontIcon("mdi2p-plus");
+    addSourceIcon.setIconSize(14);
+    addSourceButton.setGraphic(addSourceIcon);
+    addSourceButton.setOnAction(e -> {
+      newSourceDialogController.show();
+      newSourceDialogController.startCreateSequence();
+    });
+
+    refreshSources();
+
     storeDirectoryRow.visibleProperty().bind(storeDirectoryCheckBox.selectedProperty());
     storeDirectoryRow.managedProperty().bind(storeDirectoryCheckBox.selectedProperty());
     warningSubDirectory.managedProperty().bind(warningSubDirectory.visibleProperty());
@@ -102,6 +157,74 @@ public class InstallationSettingsController extends BaseController {
     storeDirectoryTextField.setText(
         getPreferences().get(Prefs.Explore.STORE_DIRECTORY, ""));
     refreshPathPreview();
+    refreshSources();
+  }
+
+  private void refreshSources() {
+    List<RemoteSource> sources = new ArrayList<>();
+    exploreService.getRemoteSources().forEach(sources::add);
+    sourceItems.setAll(sources);
+  }
+
+  private HBox buildSourceRow(RemoteSource remoteSource) {
+    VBox infoBox = new VBox(2);
+    Label nameLabel = new Label(remoteSource.getName());
+    Label urlLabel = new Label(formatUrl(remoteSource.getDisplayUrl()));
+    urlLabel.getStyleClass().add("label-disabled");
+    infoBox.getChildren().addAll(nameLabel, urlLabel);
+    HBox.setHgrow(infoBox, Priority.ALWAYS);
+
+    ToggleSwitch enabledToggle = new ToggleSwitch();
+    enabledToggle.setSelected(remoteSource.isEnabled());
+    Tooltip.install(enabledToggle, new Tooltip("Enable or disable this source"));
+    enabledToggle.selectedProperty().addListener((obs, old, selected) ->
+        exploreService.enableSource(remoteSource, selected));
+
+    Button deleteButton = new Button();
+    deleteButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
+    deleteButton.setGraphic(new FontIcon("mdi2d-delete-outline"));
+    Tooltip.install(deleteButton, new Tooltip("Remove source"));
+    deleteButton.setOnAction(e -> confirmAndDeleteSource(remoteSource));
+
+    HBox row = new HBox(12, infoBox, enabledToggle, deleteButton);
+    row.setAlignment(Pos.CENTER_LEFT);
+    row.setPadding(new Insets(4));
+    return row;
+  }
+
+  private void confirmAndDeleteSource(RemoteSource remoteSource) {
+    Dialog dialog = this.getDialogManager().newDialog();
+    DialogLayout layout = new DialogLayout();
+    layout.setHeading(new Label("Remove source"));
+    layout.setBody(new Label("Do you really want to remove \"" + remoteSource.getName()
+        + "\" ? Packages from this source will no longer be available in Explore."));
+
+    Button cancelButton = new Button("Cancel");
+    cancelButton.setOnAction(e -> dialog.close());
+
+    Button removeButton = new Button("Remove");
+    removeButton.getStyleClass().add("button-danger");
+    removeButton.setOnAction(e -> {
+      dialog.close();
+      exploreService.delete(remoteSource);
+      refreshSources();
+    });
+
+    layout.setActions(removeButton, cancelButton);
+    dialog.setContent(layout);
+    dialog.show();
+  }
+
+  private String formatUrl(String url) {
+    if (url == null) {
+      return null;
+    }
+    return url.replace("http://", "").replace("https://", "");
+  }
+
+  @EventListener
+  private void handle(RemoteSourceUpdatedEvent event) {
+    FX.run(this::refreshSources);
   }
 
   private void refreshPathPreview() {

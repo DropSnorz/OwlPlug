@@ -188,6 +188,26 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
     };
   }
 
+  /**
+   * Package type filtering specification. Filter packages matching any of the given types.
+   *
+   * @param types - The types to find
+   * @return The JPA Specification
+   */
+  static Specification<RemotePackage> isTyped(List<PluginType> types) {
+    return (remotePackage, cq, cb) -> remotePackage.get("type").in(types);
+  }
+
+  /**
+   * Remote source filtering specification. Filter packages belonging to any of the given sources.
+   *
+   * @param sourceIds - The remote source ids to find
+   * @return The JPA Specification
+   */
+  static Specification<RemotePackage> hasSource(List<Long> sourceIds) {
+    return (remotePackage, cq, cb) -> remotePackage.get("remoteSource").get("id").in(sourceIds);
+  }
+
   Iterable<RemotePackage> findByNameContainingIgnoreCase(String name);
   
   @Query("SELECT DISTINCT p.creator FROM RemotePackage p")

@@ -18,6 +18,17 @@
                styleClass="label-disabled" wrapText="true"/>
         <Separator/>
 
+        <!-- Remote Sources -->
+        <Label text="Remote Sources" styleClass="heading-2"/>
+        <Label text="Manage the plugin registries OwlPlug syncs packages from in Explore."
+               styleClass="label-disabled" wrapText="true"/>
+        <ListView fx:id="sourceListView" prefHeight="160.0"/>
+        <HBox spacing="8.0" alignment="CENTER_LEFT">
+            <Button fx:id="addSourceButton" text="Add Source"/>
+        </HBox>
+
+        <Separator/>
+
         <!-- Organization -->
         <Label text="Download Organization" styleClass="heading-2"/>
         <CheckBox fx:id="storeDirectoryCheckBox" text="Save downloaded plugins in a dedicated subdirectory"/>

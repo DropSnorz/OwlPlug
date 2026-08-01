@@ -39,11 +39,6 @@
                             <FontIcon iconLiteral="mdi2f-filter-outline" />
                         </graphic>
                     </Button>
-                    <Button fx:id="projectDirectoryButton" text="Project Directories">
-                        <graphic>
-                            <FontIcon iconLiteral="mdi2f-folder-multiple"/>
-                        </graphic>
-                    </Button>
                     <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search"
                                styleClass="label-dark" HBox.hgrow="ALWAYS"/>
                 </HBox>
@@ -54,6 +49,11 @@
         <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
             <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0"
                   VBox.vgrow="NEVER" spacing="5.0">
+                <Button fx:id="projectDirectoryButton" text="Project Directories">
+                    <graphic>
+                        <FontIcon iconLiteral="mdi2f-folder-multiple"/>
+                    </graphic>
+                </Button>
                 <Button fx:id="syncProjectButton" text="Sync" defaultButton="true">
                     <graphic>
                         <FontIcon iconLiteral="mdi2s-sync" />
