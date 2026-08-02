@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import com.owlplug.controls.NotificationBadge?>
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.project.controllers.ProjectsController">
@@ -34,11 +35,13 @@
             </left>
             <top>
                 <HBox alignment="CENTER_LEFT" prefHeight="40.0" spacing="5">
-                    <Button fx:id="filterToggleButton" onAction="#toggleFilter" accessibleText="Filter">
-                        <graphic>
-                            <FontIcon iconLiteral="mdi2f-filter-outline" />
-                        </graphic>
-                    </Button>
+                    <NotificationBadge fx:id="filterBadge" offsetY="0.0" offsetX="4.0">
+                        <Button fx:id="filterToggleButton" onAction="#toggleFilter" accessibleText="Filter">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi2f-filter-outline" />
+                            </graphic>
+                        </Button>
+                    </NotificationBadge>
                     <TextField fx:id="searchTextField" prefHeight="27.0" prefWidth="170.0" promptText="Search"
                                styleClass="label-dark" HBox.hgrow="ALWAYS"/>
                 </HBox>
@@ -67,9 +70,6 @@
         </VBox>
     </right>
     <padding>
-        <Insets bottom="10.0" left="5.0" right="5.0" top="2.0" />
+        <Insets bottom="5.0" left="5.0" right="5.0" top="2.0" />
     </padding>
-    <bottom>
-        <VBox minHeight="5.0" prefHeight="5.0" prefWidth="537.0" BorderPane.alignment="CENTER" />
-    </bottom>
 </BorderPane>

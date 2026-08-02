@@ -18,6 +18,7 @@
 
 package com.owlplug.project.controllers;
 
+import com.owlplug.controls.NotificationBadge;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.controllers.SettingsController;
@@ -66,6 +67,8 @@ public class ProjectsController extends BaseController {
   @FXML
   private Button filterToggleButton;
   @FXML
+  private NotificationBadge filterBadge;
+  @FXML
   private TextField searchTextField;
   @FXML
   private TabPane projectTreeViewTabPane;
@@ -100,6 +103,8 @@ public class ProjectsController extends BaseController {
 
     // Wire filter sidebar into the scene graph
     filterContainer.getChildren().add(0, filterController.getView());
+    filterBadge.textProperty().bind(Bindings.convert(filterState.activeFilterCountProperty()));
+    filterBadge.badgeVisibleProperty().bind(filterState.activeFilterCountProperty().greaterThan(0));
 
     projectTreeNode = new FilterableTreeItem<>("(all)");
     projectTreeView.setRoot(projectTreeNode);

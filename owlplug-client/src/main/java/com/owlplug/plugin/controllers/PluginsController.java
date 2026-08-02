@@ -21,6 +21,7 @@ package com.owlplug.plugin.controllers;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FX;
+import com.owlplug.controls.NotificationBadge;
 import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
@@ -31,6 +32,7 @@ import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.utils.Async;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
@@ -92,6 +94,8 @@ public class PluginsController extends BaseController {
   @FXML
   private Button filterToggleButton;
   @FXML
+  private NotificationBadge filterBadge;
+  @FXML
   private VBox pluginsContainer;
   @FXML
   private HBox filterContainer;
@@ -110,6 +114,8 @@ public class PluginsController extends BaseController {
     filterContainer.getChildren().add(0, filterController.getView());
     tableController.bindFilterState(filterState);
     treeViewController.bindFilterState(filterState);
+    filterBadge.textProperty().bind(Bindings.convert(filterState.activeFilterCountProperty()));
+    filterBadge.badgeVisibleProperty().bind(filterState.activeFilterCountProperty().greaterThan(0));
 
     // Add Plugin Table and TreeView to the scene graph
     pluginsContainer.getChildren().add(treeViewController.getTreeView());

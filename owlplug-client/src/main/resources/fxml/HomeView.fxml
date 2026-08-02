@@ -106,7 +106,7 @@
                     <Label fx:id="pluginCountLabel" styleClass="dashboard-tile-value" text="0"/>
                     <Label styleClass="dashboard-tile-label" text="Total Plugins"/>
                 </VBox>
-                <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <VBox fx:id="vst2Tile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
                     <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
                     </padding>
@@ -118,7 +118,7 @@
                     </HBox>
                     <Label fx:id="vst2CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
                 </VBox>
-                <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <VBox fx:id="vst3Tile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
                     <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
                     </padding>
@@ -130,7 +130,7 @@
                     </HBox>
                     <Label fx:id="vst3CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
                 </VBox>
-                <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <VBox fx:id="auTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
                     <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
                     </padding>
@@ -142,7 +142,7 @@
                     </HBox>
                     <Label fx:id="auCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
                 </VBox>
-                <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <VBox fx:id="lv2Tile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
                     <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
                     </padding>
@@ -154,7 +154,7 @@
                     </HBox>
                     <Label fx:id="lv2CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
                 </VBox>
-                <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <VBox fx:id="disabledTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
                     <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
                     </padding>
@@ -178,7 +178,7 @@
                     <Label fx:id="projectCountLabel" styleClass="dashboard-tile-value" text="0"/>
                     <Label styleClass="dashboard-tile-label" text="Total Projects"/>
                 </VBox>
-                <VBox styleClass="dashboard-tile" HBox.hgrow="SOMETIMES">
+                <VBox fx:id="unresolvedTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
                     <padding>
                         <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
                     </padding>

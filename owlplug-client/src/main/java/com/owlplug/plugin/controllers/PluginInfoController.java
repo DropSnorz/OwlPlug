@@ -50,6 +50,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -113,6 +114,8 @@ public class PluginInfoController extends BaseController {
   private ToggleSwitch nativeDiscoveryToggleButton;
   @FXML
   private Label lastScanErrorLabel;
+  @FXML
+  private HBox lastScanErrorContainer;
 
   private final ObjectProperty<Plugin> pluginProperty = new SimpleObjectProperty<Plugin>();
   private final ArrayList<String> knownPluginImages = new ArrayList<>();
@@ -129,6 +132,10 @@ public class PluginInfoController extends BaseController {
 
     pluginProperty.addListener(e -> refresh());
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
+
+    Tooltip pluginPathTooltip = new Tooltip();
+    pluginPathTooltip.textProperty().bind(pluginPathLabel.textProperty());
+    pluginPathLabel.setTooltip(pluginPathTooltip);
 
     openDirectoryButton.setText("");
     openDirectoryButton.setOnAction(e -> {
@@ -159,6 +166,8 @@ public class PluginInfoController extends BaseController {
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory());
     lastScanErrorLabel.managedProperty().bind(lastScanErrorLabel.visibleProperty());
+    lastScanErrorContainer.visibleProperty().bind(lastScanErrorLabel.visibleProperty());
+    lastScanErrorContainer.managedProperty().bind(lastScanErrorContainer.visibleProperty());
     lastScanErrorLabel.setVisible(false);
 
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {

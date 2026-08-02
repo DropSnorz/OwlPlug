@@ -41,6 +41,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -110,6 +111,11 @@ public class ProjectInfoController extends BaseController {
 
     projectScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.8, 0));
     projectProperty.addListener(e -> refresh());
+
+    Tooltip projectPathTooltip = new Tooltip();
+    projectPathTooltip.textProperty().bind(projectPathLabel.textProperty());
+    projectPathLabel.setTooltip(projectPathTooltip);
+
     openDirectoryButton.setOnAction(e -> {
       File projectFile = new File(projectPathLabel.getText());
       PlatformUtils.openFromDesktop(projectFile.getParentFile());

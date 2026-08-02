@@ -111,8 +111,8 @@
          <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2147483647">
             <Label text="PATH" styleClass="info-field-label"/>
             <HBox alignment="CENTER_LEFT" spacing="8.0">
-               <Label fx:id="pluginPathLabel" styleClass="info-field-value" text="UNKNOWN" wrapText="true"
-                      HBox.hgrow="ALWAYS"/>
+               <Label fx:id="pluginPathLabel" styleClass="info-field-value" text="UNKNOWN"
+                      minWidth="0.0" HBox.hgrow="ALWAYS"/>
                <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0">
                     <graphic>
                          <FontIcon iconLiteral="mdi2f-folder"/>
@@ -127,7 +127,7 @@
          <Label text="Components"/>
       </HBox>
       <ListView fx:id="pluginComponentListView" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                minWidth="-Infinity" prefHeight="100.0" prefWidth="440.0" VBox.vgrow="SOMETIMES"
+                minWidth="-Infinity" prefHeight="84.0" prefWidth="440.0" VBox.vgrow="SOMETIMES"
                 styleClass="dense">
          <opaqueInsets>
             <Insets/>
@@ -147,7 +147,7 @@
       </HBox>
 
       <!-- Last scan error -->
-      <HBox alignment="CENTER_LEFT">
+      <HBox fx:id="lastScanErrorContainer" VBox.vgrow="ALWAYS">
          <Label fx:id="lastScanErrorLabel" wrapText="true" styleClass="label-danger">
             <HBox.margin>
                <Insets top="5" bottom="5" left="5"/>

@@ -22,6 +22,7 @@ import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.TimeUtils;
+import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.controllers.PluginsController;
 import com.owlplug.plugin.events.PluginScanCompletedEvent;
 import com.owlplug.plugin.events.PluginScanStartedEvent;
@@ -31,6 +32,7 @@ import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.repositories.FileStatRepository;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
+import com.owlplug.project.components.ProjectFilterState;
 import com.owlplug.project.model.LookupResult;
 import com.owlplug.project.repositories.DawProjectRepository;
 import com.owlplug.project.repositories.PluginLookupRepository;
@@ -86,6 +88,10 @@ public class HomeController extends BaseController {
   @Autowired
   @Lazy
   private SettingsController settingsController;
+  @Autowired
+  private PluginFilterState pluginFilterState;
+  @Autowired
+  private ProjectFilterState projectFilterState;
 
   @FXML
   private Label pluginCountLabel;
@@ -118,7 +124,19 @@ public class HomeController extends BaseController {
   @FXML
   private VBox pluginTile;
   @FXML
+  private VBox vst2Tile;
+  @FXML
+  private VBox vst3Tile;
+  @FXML
+  private VBox auTile;
+  @FXML
+  private VBox lv2Tile;
+  @FXML
+  private VBox disabledTile;
+  @FXML
   private VBox projectTile;
+  @FXML
+  private VBox unresolvedTile;
   @FXML
   private VBox pluginDirTile;
   @FXML
@@ -168,8 +186,43 @@ public class HomeController extends BaseController {
    */
   @FXML
   public void initialize() {
-    pluginTile.setOnMouseClicked(e -> mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX));
-    projectTile.setOnMouseClicked(e -> mainController.navigateToMainTab(MainController.PROJECTS_TAB_INDEX));
+    pluginTile.setOnMouseClicked(e -> {
+      pluginFilterState.clearAll();
+      mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
+    });
+    vst2Tile.setOnMouseClicked(e -> {
+      pluginFilterState.clearAll();
+      pluginFilterState.getSelectedFormats().add(PluginFormat.VST2);
+      mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
+    });
+    vst3Tile.setOnMouseClicked(e -> {
+      pluginFilterState.clearAll();
+      pluginFilterState.getSelectedFormats().add(PluginFormat.VST3);
+      mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
+    });
+    auTile.setOnMouseClicked(e -> {
+      pluginFilterState.clearAll();
+      pluginFilterState.getSelectedFormats().add(PluginFormat.AU);
+      mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
+    });
+    lv2Tile.setOnMouseClicked(e -> {
+      pluginFilterState.clearAll();
+      pluginFilterState.getSelectedFormats().add(PluginFormat.LV2);
+      mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
+    });
+    disabledTile.setOnMouseClicked(e -> {
+      pluginFilterState.clearAll();
+      pluginFilterState.setDisabledOnly(true);
+      mainController.navigateToMainTab(MainController.PLUGINS_TAB_INDEX);
+    });
+    projectTile.setOnMouseClicked(e -> {
+      projectFilterState.clearAll();
+      mainController.navigateToMainTab(MainController.PROJECTS_TAB_INDEX);
+    });
+    unresolvedTile.setOnMouseClicked(e -> {
+      projectFilterState.clearAll();
+      mainController.navigateToMainTab(MainController.PROJECTS_TAB_INDEX);
+    });
     pluginDirTile.setOnMouseClicked(e -> {
       mainController.navigateToMainTab(MainController.SETTINGS_TAB_INDEX);
       settingsController.navigateToSection(SettingsController.SCAN_SECTION_INDEX);

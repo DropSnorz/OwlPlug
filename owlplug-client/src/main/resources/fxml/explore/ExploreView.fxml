@@ -2,6 +2,7 @@
 
 
 <?import com.owlplug.controls.MasonryPane?>
+<?import com.owlplug.controls.NotificationBadge?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
@@ -25,16 +26,18 @@
          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
          AnchorPane.topAnchor="0.0">
       <padding>
-         <Insets left="5.0" right="5.0" top="5.0" bottom="10.0"/>
+         <Insets left="5.0" right="5.0" top="5.0" bottom="5.0"/>
       </padding>
       <top>
          <HBox alignment="TOP_CENTER" spacing="5.0" BorderPane.alignment="CENTER">
-            <padding><Insets bottom="10.0"/></padding>
-            <Button fx:id="filterToggleButton" onAction="#toggleFilter" accessibleText="Filter">
-               <graphic>
-                  <FontIcon iconLiteral="mdi2f-filter-outline"/>
-               </graphic>
-            </Button>
+            <padding><Insets bottom="2.0"/></padding>
+            <NotificationBadge fx:id="filterBadge" offsetY="0.0" offsetX="4.0">
+               <Button fx:id="filterToggleButton" onAction="#toggleFilter" accessibleText="Filter">
+                  <graphic>
+                     <FontIcon iconLiteral="mdi2f-filter-outline"/>
+                  </graphic>
+               </Button>
+            </NotificationBadge>
             <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                 <padding><Insets left="5.0"/></padding>
                 <styleClass>

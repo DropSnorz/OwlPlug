@@ -22,7 +22,9 @@ import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.DawProject;
 import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
@@ -33,9 +35,11 @@ public class ProjectFilterState {
 
   private final ObservableSet<DawApplication> selectedApplications = FXCollections.observableSet();
   private final ObjectProperty<Predicate<DawProject>> predicate = new SimpleObjectProperty<>();
+  private final IntegerProperty activeFilterCount = new SimpleIntegerProperty();
 
   public ProjectFilterState() {
     predicate.bind(Bindings.createObjectBinding(this::buildPredicate, selectedApplications));
+    activeFilterCount.bind(Bindings.createIntegerBinding(selectedApplications::size, selectedApplications));
   }
 
   private Predicate<DawProject> buildPredicate() {
@@ -51,6 +55,10 @@ public class ProjectFilterState {
 
   public ObjectProperty<Predicate<DawProject>> predicateProperty() {
     return predicate;
+  }
+
+  public IntegerProperty activeFilterCountProperty() {
+    return activeFilterCount;
   }
 
   public void clearAll() {

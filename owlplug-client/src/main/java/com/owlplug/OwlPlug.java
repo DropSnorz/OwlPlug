@@ -119,8 +119,8 @@ public class OwlPlug extends Application {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
-    double width = 1050;
-    double height = 800;
+    double width = 1100;
+    double height = 820;
 
     Application.setUserAgentStylesheet(new OwlPlugDarkTheme().getUserAgentStylesheet());
 
@@ -130,8 +130,8 @@ public class OwlPlug extends Application {
     String owlplugControlsCss = OwlPlugControlsResources.load("/css/owlplug-controls.css").toExternalForm();
     String owlplugCss = OwlPlug.class.getResource("/owlplug.css").toExternalForm();
 
-    scene.getStylesheets().add(owlplugCss);
     scene.getStylesheets().add(owlplugControlsCss);
+    scene.getStylesheets().add(owlplugCss);
 
     primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
