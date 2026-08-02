@@ -114,6 +114,8 @@ public class PluginInfoController extends BaseController {
   private ToggleSwitch nativeDiscoveryToggleButton;
   @FXML
   private Label lastScanErrorLabel;
+  @FXML
+  private HBox lastScanErrorContainer;
 
   private final ObjectProperty<Plugin> pluginProperty = new SimpleObjectProperty<Plugin>();
   private final ArrayList<String> knownPluginImages = new ArrayList<>();
@@ -164,6 +166,8 @@ public class PluginInfoController extends BaseController {
 
     pluginComponentListView.setCellFactory(new PluginComponentCellFactory());
     lastScanErrorLabel.managedProperty().bind(lastScanErrorLabel.visibleProperty());
+    lastScanErrorContainer.visibleProperty().bind(lastScanErrorLabel.visibleProperty());
+    lastScanErrorContainer.managedProperty().bind(lastScanErrorContainer.visibleProperty());
     lastScanErrorLabel.setVisible(false);
 
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {

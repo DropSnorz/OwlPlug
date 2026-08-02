@@ -880,3 +880,7 @@ ProgressIndicator {
     -fx-padding: 2 0 0 0;
 }
 
+.notification-badge-label {
+    -fx-background-color: -color-accent-emphasis;
+    -fx-text-fill: -color-fg-emphasis;
+}

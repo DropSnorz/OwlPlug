@@ -20,6 +20,7 @@ package com.owlplug.explore.controllers;
 
 import com.google.common.collect.Iterables;
 import com.owlplug.controls.MasonryPane;
+import com.owlplug.controls.NotificationBadge;
 import com.owlplug.controls.Rippler;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
@@ -38,6 +39,8 @@ import com.owlplug.explore.ui.PackageBlocViewBuilder;
 import com.owlplug.explore.ui.PackageListRowCellFactory;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -88,6 +91,8 @@ public class ExploreController extends BaseController {
 
   @FXML
   private Button filterToggleButton;
+  @FXML
+  private NotificationBadge filterBadge;
   @FXML
   private HBox filterContainer;
   @FXML
@@ -163,6 +168,10 @@ public class ExploreController extends BaseController {
     filterContainer.getChildren().add(0, exploreFilterController.getView());
     exploreFilterController.getFilterState().criteriaListProperty()
         .addListener((obs, oldVal, newVal) -> performPackageSearch());
+
+    IntegerProperty exploreFilterCount = exploreFilterController.activeFilterCountProperty();
+    filterBadge.textProperty().bind(Bindings.convert(exploreFilterCount));
+    filterBadge.badgeVisibleProperty().bind(exploreFilterCount.greaterThan(0));
 
     syncSourcesButton.setOnAction(e -> {
       this.getTelemetryService().event("/Explore/SyncSources");

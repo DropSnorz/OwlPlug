@@ -37,6 +37,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.SetChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -58,6 +61,27 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ExploreFilterController {
 
+  /**
+   * Platform tags that have a checkbox in the filter panel, mapped to their display label.
+   * {@link ExploreFilterState#getSelectedPlatformTags()} can also contain entries outside this
+   * set (OS codes, tag aliases) used only for broader remote-package matching; only entries in
+   * this map represent a filter the user can actually see/toggle.
+   */
+  private static final Map<String, String> PLATFORM_LABELS = new LinkedHashMap<>();
+
+  static {
+    PLATFORM_LABELS.put("win-x32", "Windows x32");
+    PLATFORM_LABELS.put("win-x64", "Windows x64");
+    PLATFORM_LABELS.put("win-arm64", "Windows arm64");
+    PLATFORM_LABELS.put("win-arm64ec", "Windows arm64 E.C.");
+    PLATFORM_LABELS.put("mac-x64", "MacOS x64");
+    PLATFORM_LABELS.put("mac-arm64", "MacOS arm64");
+    PLATFORM_LABELS.put("linux-x32", "Linux x32 / amd32");
+    PLATFORM_LABELS.put("linux-x64", "Linux x64 / amd64");
+    PLATFORM_LABELS.put("linux-arm32", "Linux arm32");
+    PLATFORM_LABELS.put("linux-arm64", "Linux arm64");
+  }
+
   @Autowired
   private ExploreFilterState filterState;
   @Autowired
@@ -72,6 +96,8 @@ public class ExploreFilterController {
   private VBox formatSection;
   private VBox typeSection;
   private VBox platformSection;
+
+  private final IntegerProperty activeFilterCount = new SimpleIntegerProperty();
 
   @PostConstruct
   public void setup() {
@@ -99,6 +125,16 @@ public class ExploreFilterController {
     sideBar.getStyleClass().add("plugin-filter-sidebar");
     sideBar.setVisible(false);
     sideBar.setPrefWidth(0);
+
+    // Only platform tags with a visible checkbox (PLATFORM_LABELS) count as an active filter;
+    // selectedPlatformTags can also hold OS-code/alias entries used only for package matching.
+    activeFilterCount.bind(Bindings.createIntegerBinding(
+        () -> filterState.getSelectedSourceIds().size() + filterState.getSelectedFormats().size()
+            + filterState.getSelectedTypes().size()
+            + (int) filterState.getSelectedPlatformTags().stream()
+                .filter(PLATFORM_LABELS::containsKey).count(),
+        filterState.getSelectedSourceIds(), filterState.getSelectedFormats(),
+        filterState.getSelectedTypes(), filterState.getSelectedPlatformTags()));
   }
 
   private void buildFormatSection() {
@@ -140,19 +176,7 @@ public class ExploreFilterController {
   }
 
   private void buildPlatformSection() {
-    Map<String, String> platformLabels = new LinkedHashMap<>();
-    platformLabels.put("win-x32", "Windows x32");
-    platformLabels.put("win-x64", "Windows x64");
-    platformLabels.put("win-arm64", "Windows arm64");
-    platformLabels.put("win-arm64ec", "Windows arm64 E.C.");
-    platformLabels.put("mac-x64", "MacOS x64");
-    platformLabels.put("mac-arm64", "MacOS arm64");
-    platformLabels.put("linux-x32", "Linux x32 / amd32");
-    platformLabels.put("linux-x64", "Linux x64 / amd64");
-    platformLabels.put("linux-arm32", "Linux arm32");
-    platformLabels.put("linux-arm64", "Linux arm64");
-
-    for (Entry<String, String> entry : platformLabels.entrySet()) {
+    for (Entry<String, String> entry : PLATFORM_LABELS.entrySet()) {
       String tag = entry.getKey();
       CheckBox cb = new CheckBox(entry.getValue());
       cb.setGraphic(new FontIcon(platformIconLiteral(tag)));
@@ -304,6 +328,10 @@ public class ExploreFilterController {
 
   public ExploreFilterState getFilterState() {
     return filterState;
+  }
+
+  public IntegerProperty activeFilterCountProperty() {
+    return activeFilterCount;
   }
 
   public SideBar getView() {

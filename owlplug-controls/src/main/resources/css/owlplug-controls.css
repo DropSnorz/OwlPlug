@@ -115,3 +115,13 @@
     -fx-shape: " ";
     -fx-padding: 0;
 }
+
+.notification-badge-label {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 0 4 0 4;
+    -fx-font-size: 10px;
+    -fx-min-width: 16px;
+    -fx-alignment: center;
+}

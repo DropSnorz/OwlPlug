@@ -147,7 +147,7 @@
       </HBox>
 
       <!-- Last scan error -->
-      <HBox VBox.vgrow="ALWAYS">
+      <HBox fx:id="lastScanErrorContainer" VBox.vgrow="ALWAYS">
          <Label fx:id="lastScanErrorLabel" wrapText="true" styleClass="label-danger">
             <HBox.margin>
                <Insets top="5" bottom="5" left="5"/>

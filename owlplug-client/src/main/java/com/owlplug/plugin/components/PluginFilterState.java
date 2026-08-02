@@ -26,8 +26,10 @@ import com.owlplug.plugin.model.PluginType;
 import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
@@ -42,9 +44,14 @@ public class PluginFilterState {
   private final ObservableSet<String> selectedCategories = FXCollections.observableSet();
   private final BooleanProperty disabledOnly = new SimpleBooleanProperty(false);
   private final ObjectProperty<Predicate<IPlugin>> predicate = new SimpleObjectProperty<>();
+  private final IntegerProperty activeFilterCount = new SimpleIntegerProperty();
 
   public PluginFilterState() {
     predicate.bind(Bindings.createObjectBinding(this::buildPredicate,
+        selectedFormats, selectedTypes, selectedManufacturers, selectedCategories, disabledOnly));
+    activeFilterCount.bind(Bindings.createIntegerBinding(
+        () -> selectedFormats.size() + selectedTypes.size() + selectedManufacturers.size()
+            + selectedCategories.size() + (disabledOnly.get() ? 1 : 0),
         selectedFormats, selectedTypes, selectedManufacturers, selectedCategories, disabledOnly));
   }
 
@@ -112,6 +119,10 @@ public class PluginFilterState {
 
   public ObjectProperty<Predicate<IPlugin>> predicateProperty() {
     return predicate;
+  }
+
+  public IntegerProperty activeFilterCountProperty() {
+    return activeFilterCount;
   }
 
   public BooleanProperty disabledOnlyProperty() {
