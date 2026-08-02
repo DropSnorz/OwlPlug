@@ -547,6 +547,7 @@ ProgressIndicator {
 
 .package-list-view {
     -fx-background-color: transparent;
+    -fx-border-width: 0;
 }
 
 .package-list-view .list-cell {

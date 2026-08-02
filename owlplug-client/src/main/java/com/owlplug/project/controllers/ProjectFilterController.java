@@ -76,7 +76,7 @@ public class ProjectFilterController {
     scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     scrollPane.getStyleClass().add("plugin-filter-scroll");
 
-    sideBar = new SideBar(360, scrollPane);
+    sideBar = new SideBar(220, scrollPane);
     sideBar.getStyleClass().add("plugin-filter-sidebar");
     sideBar.setVisible(false);
     sideBar.setPrefWidth(0);

@@ -92,7 +92,7 @@
                 <Label text="PATH" styleClass="info-field-label"/>
                 <HBox alignment="CENTER_LEFT" spacing="8.0">
                     <Label fx:id="projectPathLabel" styleClass="info-field-value" text="UNKNOWN"
-                           wrapText="true" HBox.hgrow="ALWAYS"/>
+                           minWidth="0.0" HBox.hgrow="ALWAYS"/>
                     <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0">
                         <graphic>
                             <FontIcon iconLiteral="mdi2f-folder" />
@@ -106,7 +106,7 @@
         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
             <Label text="Plugins"/>
         </HBox>
-        <TableView fx:id="pluginTable" prefHeight="200.0" prefWidth="200.0" styleClass="dense">
+        <TableView fx:id="pluginTable" prefHeight="150.0" prefWidth="200.0" styleClass="dense">
             <columns>
                 <TableColumn fx:id="pluginTableFormatColumn" minWidth="75.0" maxWidth="75.0" resizable="false"
                              text="Format"/>

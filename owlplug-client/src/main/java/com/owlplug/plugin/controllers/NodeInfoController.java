@@ -71,7 +71,8 @@ public class NodeInfoController extends BaseController {
     nodeInfoContainer.getChildren().add(sidebar);
 
     closeButton.setOnAction(e -> sidebar.collapse());
-    closeButton.visibleProperty().bind(pluginInfoView.visibleProperty());
+    closeButton.visibleProperty().bind(pluginInfoView.visibleProperty()
+        .or(componentInfoView.visibleProperty()));
 
     pluginInfoView.setVisible(false);
     directoryInfoView.setVisible(false);
