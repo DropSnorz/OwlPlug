@@ -68,6 +68,7 @@ public class PluginFilterController {
   private VBox typeSection;
   private VBox manufacturerSection;
   private VBox categorySection;
+  private CheckBox disabledOnlyCheckBox;
   private final Map<PluginFormat, CheckBox> formatCheckBoxes = new EnumMap<>(PluginFormat.class);
   private final Map<PluginType, CheckBox> typeCheckBoxes = new EnumMap<>(PluginType.class);
   private final Map<String, CheckBox> manufacturerCheckBoxes = new HashMap<>();
@@ -121,6 +122,15 @@ public class PluginFilterController {
       formatCheckBoxes.put(format, cb);
       formatSection.getChildren().add(cb);
     }
+
+    disabledOnlyCheckBox = new CheckBox("Disabled plugins");
+    disabledOnlyCheckBox.selectedProperty().addListener((obs, old, selected) -> {
+      if (selected != filterState.isDisabledOnly()) {
+        filterState.setDisabledOnly(selected);
+      }
+    });
+    filterState.disabledOnlyProperty().addListener(
+        (obs, old, selected) -> disabledOnlyCheckBox.setSelected(selected));
 
     // Shared listeners keep expandable-section checkboxes in sync with the filter state.
     // Each listener holds a reference only to the value-to-checkbox map, not to individual
@@ -176,7 +186,8 @@ public class PluginFilterController {
         formatLabel, formatSection,
         new Separator(), typeLabel, typeSection,
         new Separator(), manufacturerLabel, manufacturerSection,
-        new Separator(), categoryLabel, categorySection
+        new Separator(), categoryLabel, categorySection,
+        new Separator(), disabledOnlyCheckBox
     );
     return content;
   }

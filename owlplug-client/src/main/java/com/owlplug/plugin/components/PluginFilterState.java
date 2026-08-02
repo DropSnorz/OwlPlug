@@ -25,7 +25,9 @@ import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginType;
 import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
@@ -38,16 +40,17 @@ public class PluginFilterState {
   private final ObservableSet<PluginType> selectedTypes = FXCollections.observableSet();
   private final ObservableSet<String> selectedManufacturers = FXCollections.observableSet();
   private final ObservableSet<String> selectedCategories = FXCollections.observableSet();
+  private final BooleanProperty disabledOnly = new SimpleBooleanProperty(false);
   private final ObjectProperty<Predicate<IPlugin>> predicate = new SimpleObjectProperty<>();
 
   public PluginFilterState() {
     predicate.bind(Bindings.createObjectBinding(this::buildPredicate,
-        selectedFormats, selectedTypes, selectedManufacturers, selectedCategories));
+        selectedFormats, selectedTypes, selectedManufacturers, selectedCategories, disabledOnly));
   }
 
   private Predicate<IPlugin> buildPredicate() {
     if (selectedFormats.isEmpty() && selectedTypes.isEmpty()
-        && selectedManufacturers.isEmpty() && selectedCategories.isEmpty()) {
+        && selectedManufacturers.isEmpty() && selectedCategories.isEmpty() && !disabledOnly.get()) {
       return null;
     }
     return plugin -> {
@@ -55,7 +58,8 @@ public class PluginFilterState {
         return matchesFormat(component.asPlugin().getFormat())
             && matchesType(component.getType())
             && matchesManufacturer(component.getManufacturerName())
-            && matchesCategory(component.getCategory());
+            && matchesCategory(component.getCategory())
+            && matchesDisabled(component.asPlugin().isDisabled());
       } else {
         Plugin p = (Plugin) plugin;
         return matchesFormat(p.getFormat())
@@ -64,9 +68,14 @@ public class PluginFilterState {
             && (matchesManufacturer(p.getManufacturerName())
                 || p.getComponents().stream().anyMatch(c -> matchesManufacturer(c.getManufacturerName())))
             && (matchesCategory(p.getCategory())
-                || p.getComponents().stream().anyMatch(c -> matchesCategory(c.getCategory())));
+                || p.getComponents().stream().anyMatch(c -> matchesCategory(c.getCategory())))
+            && matchesDisabled(p.isDisabled());
       }
     };
+  }
+
+  private boolean matchesDisabled(boolean disabled) {
+    return !disabledOnly.get() || disabled;
   }
 
   private boolean matchesFormat(PluginFormat format) {
@@ -105,10 +114,23 @@ public class PluginFilterState {
     return predicate;
   }
 
+  public BooleanProperty disabledOnlyProperty() {
+    return disabledOnly;
+  }
+
+  public boolean isDisabledOnly() {
+    return disabledOnly.get();
+  }
+
+  public void setDisabledOnly(boolean disabledOnly) {
+    this.disabledOnly.set(disabledOnly);
+  }
+
   public void clearAll() {
     selectedFormats.clear();
     selectedTypes.clear();
     selectedManufacturers.clear();
     selectedCategories.clear();
+    disabledOnly.set(false);
   }
 }
