@@ -47,6 +47,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -61,6 +62,9 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -273,13 +277,26 @@ public class PluginInfoController extends BaseController {
   
   private void showUninstallDialog() {
     Plugin plugin = pluginProperty.get();
-    
+
     Dialog dialog = this.getDialogManager().newDialog();
     DialogLayout layout = new DialogLayout();
 
     layout.setHeading(new Label("Remove plugin"));
-    layout.setBody(new Label("Do you really want to remove " + plugin.getName()
-        + " ? This will permanently delete the file from your hard drive."));
+
+    VBox vbox = new VBox(10);
+
+    Text messageText = new Text("This will permanently delete the file from your hard drive.");
+    vbox.getChildren().add(new TextFlow(messageText));
+
+    HBox pluginRow = new HBox(8);
+    pluginRow.setAlignment(Pos.CENTER_LEFT);
+    Label pluginNameLabel = new Label(plugin.getName());
+    pluginNameLabel.getStyleClass().add("label-emphase");
+    pluginRow.getChildren().addAll(
+        new PluginFormatBadgeView(plugin.getFormat(), this.getApplicationDefaults()), pluginNameLabel);
+    vbox.getChildren().add(pluginRow);
+
+    layout.setBody(vbox);
 
     Button cancelButton = new Button("Cancel");
     cancelButton.setOnAction(cancelEvent -> {
