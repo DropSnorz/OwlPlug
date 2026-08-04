@@ -114,18 +114,23 @@ public class TaskRunner {
         log.error("Error while running task", ex);
         FX.run(() -> {
           if (ex != null) {
+            Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(ex);
             taskBarController.setErrorLog(
                 currentTask,
                 ex.getMessage(),
                 StringUtils.getStackTraceAsString(ex),
-                NestedExceptionUtils.getMostSpecificCause(ex).getMessage()
+                ex.getClass().getSimpleName(),
+                rootCause.getClass().getSimpleName(),
+                rootCause.getMessage()
             );
           } else {
             taskBarController.setErrorLog(
                 currentTask,
                 "Task failed",
                 "No error information available.",
-                "No summary available"
+                "Unknown",
+                "Unknown",
+                "No root cause available"
             );
           }
           removeCurrentTask();

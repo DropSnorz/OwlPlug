@@ -115,16 +115,20 @@ public class TaskBarController extends BaseController {
     ).show();
   }
 
-  public void setErrorLog(AbstractTask task, String title, String content, String summary) {
+  public void setErrorLog(AbstractTask task, String error, String content, String errorClass,
+      String rootCauseClass, String rootCauseMessage) {
     this.getTelemetryService().event("/Error/TaskExecution", p -> {
       p.put("taskName", task.getName());
-      p.put("error", title);
-      p.put("summary", summary);
+      p.put("taskClass", task.getClass().getSimpleName());
+      p.put("errorClass", errorClass);
+      p.put("error", error);
+      p.put("rootCauseClass", rootCauseClass);
+      p.put("rootCauseMessage", rootCauseMessage);
     });
     taskProgressBar.getStyleClass().add("progress-bar-error");
     logsButton.setVisible(true);
     logsButton.setManaged(true);
-    logsButton.setOnAction(e -> showErrorDialog(title, content));
+    logsButton.setOnAction(e -> showErrorDialog(error, content));
   }
 
   public void resetErrorLog() {

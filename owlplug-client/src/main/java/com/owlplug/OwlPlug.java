@@ -21,6 +21,7 @@ package com.owlplug;
 import com.owlplug.theme.OwlPlugDarkTheme;
 import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.telemetry.StartupFailureTelemetry;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.FX;
 import com.zaxxer.hikari.HikariDataSource;
@@ -86,6 +87,7 @@ public class OwlPlug extends Application {
     try {
       SpringApplicationBuilder builder = new SpringApplicationBuilder(OwlPlug.class);
       builder.headless(false);
+      builder.listeners(new StartupFailureTelemetry());
       context = builder.run(getParameters().getRaw().toArray(new String[0]));
 
       FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
