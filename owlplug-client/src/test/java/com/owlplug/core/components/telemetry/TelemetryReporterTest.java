@@ -1,20 +1,19 @@
-package com.owlplug.core.services;
+package com.owlplug.core.components.telemetry;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TelemetryServiceTest {
-
-  private final TelemetryService telemetryService = new TelemetryService();
+public class TelemetryReporterTest {
 
   @Test
   public void testShouldRedactUnixAbsolutePath() {
     Map<String, String> params = new HashMap<>();
     params.put("key", "Error reading /var/log/app/error.log file");
 
-    telemetryService.sanitize(params);
+    TelemetryReporter.sanitize(params);
 
     assertEquals("Error reading <path> file", params.get("key"));
   }
@@ -24,7 +23,7 @@ public class TelemetryServiceTest {
     Map<String, String> params = new HashMap<>();
     params.put("key", "Failed at C:\\\\Users\\\\john\\\\secret.txt");
 
-    telemetryService.sanitize(params);
+    TelemetryReporter.sanitize(params);
 
     assertEquals("Failed at <path>", params.get("key"));
   }
@@ -34,7 +33,7 @@ public class TelemetryServiceTest {
     Map<String, String> params = new HashMap<>();
     params.put("key", "at com.example.service.MyClass.method(MyClass.java:42)");
 
-    telemetryService.sanitize(params);
+    TelemetryReporter.sanitize(params);
 
     assertEquals(
             "at com.example.service.MyClass.method(MyClass.java:42)",
@@ -47,7 +46,7 @@ public class TelemetryServiceTest {
     Map<String, String> params = new HashMap<>();
     params.put("key", "abcdefghijklmnopqrstuvwxyz");
 
-    telemetryService.sanitize(params,20);
+    TelemetryReporter.sanitize(params, 20);
 
     assertEquals("abcdefghijklmnopqrst…", params.get("key"));
   }
@@ -58,9 +57,21 @@ public class TelemetryServiceTest {
     params.put("path", "/etc/passwd");
     params.put("text", "hello world");
 
-    telemetryService.sanitize(params);
+    TelemetryReporter.sanitize(params);
 
     assertEquals("<path>", params.get("path"));
     assertEquals("hello world", params.get("text"));
+  }
+
+  @Test
+  public void testShouldSkipNullValuesWithoutThrowing() {
+    Map<String, String> params = new HashMap<>();
+    params.put("error", null);
+    params.put("path", "/etc/passwd");
+
+    TelemetryReporter.sanitize(params);
+
+    assertNull(params.get("error"));
+    assertEquals("<path>", params.get("path"));
   }
 }

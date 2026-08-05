@@ -19,48 +19,37 @@
 package com.owlplug.core.services;
 
 
-import com.mixpanel.mixpanelapi.ClientDelivery;
-import com.mixpanel.mixpanelapi.MessageBuilder;
-import com.mixpanel.mixpanelapi.MixpanelAPI;
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
+import com.owlplug.core.components.telemetry.TelemetryReporter;
 import jakarta.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TelemetryService extends BaseService {
 
-  private final Logger log = LoggerFactory.getLogger(this.getClass());
-  private MessageBuilder messageBuilder;
-  private MixpanelAPI mixpanel;
+  private TelemetryReporter reporter;
   private String userId = null;
-
-  private static final int MAX_PROPS_LENGTH = 2000;
 
   private static final List<String> allowedEvents = List.of(
       "/Startup",
       "/Error/PluginScanIncomplete",
-      "/Error/TaskExecution"
+      "/Error/TaskExecution",
+      "/Error/StartupFailure"
   );
 
   @PostConstruct
   private void initialize() {
-    mixpanel = new MixpanelAPI("https://api-eu.mixpanel.com/track",
-        "https://api-eu.mixpanel.com/engage");
-    messageBuilder = new MessageBuilder(this.getApplicationDefaults().getEnvProperty("owlplug.telemetry.code"));
-
     userId = this.getPreferences().get(Prefs.Telemetry.USER_ID, UUID.randomUUID().toString());
     this.getPreferences().put(Prefs.Telemetry.USER_ID, userId);
 
+    reporter = new TelemetryReporter("https://api-eu.mixpanel.com/track",
+        "https://api-eu.mixpanel.com/engage",
+        this.getApplicationDefaults().getEnvProperty("owlplug.telemetry.code"), userId);
   }
 
   public void event(String name) {
@@ -79,47 +68,13 @@ public class TelemetryService extends BaseService {
       Map<String, String> params = new HashMap<>();
       builder.accept(params);
 
-      sanitize(params);
+      TelemetryReporter.sanitize(params);
       params.put("appVersion", this.getApplicationDefaults().getVersion());
       params.put("systemTag", this.getApplicationDefaults().getRuntimePlatform().getTag());
 
-      send(name, params);
+      reporter.send(name, params);
     });
 
-  }
-
-  private void send(String name, Map<String, String> params) {
-    JSONObject props = new JSONObject(params);
-
-    // Create an event
-    JSONObject event = messageBuilder.event(userId, name, props);
-
-    ClientDelivery delivery = new ClientDelivery();
-    delivery.addMessage(event);
-
-    try {
-      mixpanel.deliver(delivery);
-    } catch (IOException e) {
-      // Exception can be ignored (Network connection lost, backend offline, ...)
-      log.debug("Telemetry event '{}' not sent: {}", name, e.getMessage());
-    }
-  }
-
-  void sanitize(Map<String, String> params) {
-    sanitize(params, MAX_PROPS_LENGTH);
-  }
-  void sanitize(Map<String, String> params, int maxLength) {
-    for (Map.Entry<String, String> entry : params.entrySet()) {
-      String value = entry.getValue();
-      if (value.length() > maxLength) {
-        value = value.substring(0, maxLength) + "…";
-      }
-
-      // Redact absolute paths (Unix & Windows)
-      value = value.replaceAll("([A-Za-z]:\\\\\\\\[^\\s]+)|(/[^\\s]+)", "<path>");
-      entry.setValue(value);
-
-    }
   }
 
 }
