@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+    xmlns="http://javafx.com/javafx/17.0.2-ea"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.owlplug.core.controllers.settings.ApplicationSettingsController">
+
+    <VBox spacing="16.0">
+        <padding><Insets top="24.0" right="24.0" bottom="24.0" left="24.0"/></padding>
+
+        <!-- Section header -->
+        <Label text="Application" styleClass="heading-1"/>
+        <Label text="General application settings, data management, and about information."
+               styleClass="label-disabled" wrapText="true"/>
+        <Separator/>
+
+        <!-- Diagnostics -->
+        <Label text="Diagnostics" styleClass="heading-2"/>
+        <HBox alignment="CENTER_LEFT">
+            <CheckBox fx:id="telemetryCheckBox" text="Send "/>
+            <Hyperlink fx:id="telemetryHyperlink" text="Diagnostic Telemetry Data"/>
+            <Label text=" over the network"/>
+        </HBox>
+        <Label text="Anonymous usage statistics help improve OwlPlug. No personal data or plugin paths are collected."
+               styleClass="label-disabled" wrapText="true"/>
+
+        <Separator/>
+
+        <!-- Data &amp; Cache -->
+        <Label text="Data &amp; Cache" styleClass="heading-2"/>
+        <Label text="Remove data cached by OwlPlug such as screenshots and remote plugin metadata."
+               styleClass="label-disabled" wrapText="true"/>
+        <Button fx:id="clearCacheButton" text="Clear Cache"/>
+        <Label text="Permanently delete all stored user data including settings, remote sources, and accounts. Plugin and project files on disk will not be deleted."
+               styleClass="label-disabled" wrapText="true"/>
+        <Button fx:id="removeDataButton" text="Remove User Data" styleClass="button-danger"/>
+
+        <Separator/>
+
+        <!-- About -->
+        <Label text="About" styleClass="heading-2"/>
+        <Hyperlink fx:id="websiteLink" text="https://owlplug.com" styleClass="hyperlink-disabled"/>
+        <HBox spacing="8.0" alignment="CENTER_LEFT">
+            <Button fx:id="contributeButton" text="Contribute">
+                <graphic><FontIcon iconLiteral="mdi2h-heart-outline" iconSize="14"/></graphic>
+            </Button>
+            <Button fx:id="openLogsButton" text="Open Logs">
+                <graphic><FontIcon iconLiteral="mdi2f-folder-open-outline" iconSize="14"/></graphic>
+            </Button>
+        </HBox>
+
+    </VBox>
+</ScrollPane>

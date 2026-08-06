@@ -15,10 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.controllers;
 
-import com.owlplug.controls.Popup;
 import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.tasks.AbstractTask;
 import java.util.ArrayList;
@@ -32,17 +31,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Region;
-import javafx.util.Callback;
 import javafx.util.Duration;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -62,69 +59,54 @@ public class TaskBarController extends BaseController {
   private Button logsButton;
 
   private final DoubleProperty progressProperty = new SimpleDoubleProperty();
-
   private final StringProperty taskNameProperty = new SimpleStringProperty();
 
   private Timeline progressTimeline;
-
 
   /**
    * FXML initialize.
    */
   public void initialize() {
-
     taskHistoryButton.setOnAction(e -> openTaskHistory());
     resetErrorLog();
 
-    progressProperty.addListener((obs, oldVal, newVal) -> {
-      updateProgress(newVal.doubleValue());
-    });
+    progressProperty.addListener((obs, oldVal, newVal) -> updateProgress(newVal.doubleValue()));
     taskLabel.textProperty().bind(taskNameProperty);
+    taskNameProperty.set("Application is ready");
   }
 
   private void openTaskHistory() {
-
-    if (!taskRunner.getTaskHistory().isEmpty()) {
-      ListView<AbstractTask> list = new ListView<>();
-      list.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
-
-      ArrayList<AbstractTask> tasks = new ArrayList<>(taskRunner.getTaskHistory());
-      tasks.addAll(taskRunner.getPendingTasks());
-      list.getItems().addAll(tasks);
-
-      list.setCellFactory(new Callback<>() {
-        @Override
-        public ListCell<AbstractTask> call(ListView<AbstractTask> param) {
-          return new ListCell<>() {
-            @Override
-            public void updateItem(AbstractTask item, boolean empty) {
-              super.updateItem(item, empty);
-              if (item != null && !empty) {
-                Image icon = getApplicationDefaults().taskPendingImage;
-                if (item.isRunning()) {
-                  icon = getApplicationDefaults().taskRunningImage;
-                } else if (item.isDone()) {
-                  icon = getApplicationDefaults().taskSuccessImage;
-                }
-                if (item.getState().equals(State.FAILED)) {
-                  icon = getApplicationDefaults().taskFailImage;
-                  setOnMouseClicked(e -> {
-                    showErrorDialog(item.getException().getMessage(), item.getException().toString());
-                  });
-                }
-                ImageView imageView = new ImageView(icon);
-                setGraphic(imageView);
-                setText(item.getName());
-              }
-            }
-          };
-        }
-      });
-
-      Popup popup = new Popup(list);
-      popup.show(taskHistoryButton, Popup.PopupVPosition.BOTTOM, Popup.PopupHPosition.RIGHT);
+    ArrayList<AbstractTask> tasks = new ArrayList<>(taskRunner.getTaskHistory());
+    tasks.addAll(taskRunner.getPendingTasks());
+    if (tasks.isEmpty()) {
+      return;
     }
 
+    ContextMenu menu = new ContextMenu();
+    for (AbstractTask task : tasks) {
+      MenuItem item = new MenuItem(task.getName(), buildTaskIcon(task));
+      if (task.getState().equals(State.FAILED)) {
+        item.setOnAction(e -> showErrorDialog(
+            task.getException().getMessage(), task.getException().toString()));
+      }
+      menu.getItems().add(item);
+    }
+    menu.show(taskHistoryButton, Side.TOP, 0, 0);
+  }
+
+  private FontIcon buildTaskIcon(AbstractTask task) {
+    FontIcon icon;
+    if (task.getState().equals(State.FAILED)) {
+      icon = new FontIcon("mdi2a-alert-circle-outline");
+    } else if (task.isRunning()) {
+      icon = new FontIcon("mdi2s-sync");
+    } else if (task.isDone()) {
+      icon = new FontIcon("mdi2c-check-circle-outline");
+    } else {
+      icon = new FontIcon("mdi2c-clock-outline");
+    }
+    icon.setIconSize(14);
+    return icon;
   }
 
   private void showErrorDialog(String title, String content) {
@@ -133,19 +115,20 @@ public class TaskBarController extends BaseController {
     ).show();
   }
 
-  public void setErrorLog(AbstractTask task, String title, String content, String summary) {
-
+  public void setErrorLog(AbstractTask task, String error, String content, String errorClass,
+      String rootCauseClass, String rootCauseMessage) {
     this.getTelemetryService().event("/Error/TaskExecution", p -> {
       p.put("taskName", task.getName());
-      p.put("error", title);
-      p.put("summary", summary);
+      p.put("taskClass", task.getClass().getSimpleName());
+      p.put("errorClass", errorClass);
+      p.put("error", error);
+      p.put("rootCauseClass", rootCauseClass);
+      p.put("rootCauseMessage", rootCauseMessage);
     });
     taskProgressBar.getStyleClass().add("progress-bar-error");
     logsButton.setVisible(true);
     logsButton.setManaged(true);
-    logsButton.setOnAction(e -> {
-      showErrorDialog(title, content);
-    });
+    logsButton.setOnAction(e -> showErrorDialog(error, content));
   }
 
   public void resetErrorLog() {
@@ -153,7 +136,6 @@ public class TaskBarController extends BaseController {
     logsButton.setManaged(false);
     logsButton.setVisible(false);
   }
-
 
   public StringProperty taskNameProperty() {
     return taskNameProperty;
@@ -206,6 +188,6 @@ public class TaskBarController extends BaseController {
     progressTimeline = new Timeline(kf);
     progressTimeline.setOnFinished(ev -> progressTimeline = null);
     progressTimeline.play();
-
   }
+
 }

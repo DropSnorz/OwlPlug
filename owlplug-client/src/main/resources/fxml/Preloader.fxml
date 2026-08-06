@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0"
-      style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, #dfa579, #464646 100%);"
+      style="-fx-background-color: linear-gradient(from 100px 200px to 101px 201px, -color-accent-fg, -color-bg-subtle 100%);"
       styleClass="preloader" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.core.controllers.PreloaderController">
    <HBox fx:id="contributorsPane" layoutX="360.0" layoutY="130.0" prefHeight="30.0" prefWidth="212.0" spacing="5">
@@ -26,13 +26,10 @@
       <Image url="@../media/powered-by-open-audio-stack.png"/>
    </ImageView>
    <HBox alignment="CENTER" layoutX="94.0" layoutY="247.0">
-      <Hyperlink fx:id="owlplugHyperlink" styleClass="hyperlink-disabled" text="owlplug.com"/>
+      <Hyperlink fx:id="owlplugHyperlink" styleClass="hyperlink-disabled" text="Website"/>
       <Label styleClass="label-disabled" text=" - "/>
-      <Hyperlink fx:id="statusHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled"
-                 text="Status"/>
-      <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - "/>
       <Hyperlink fx:id="documentationHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled"
-                 text="Docs"/>
+                 text="Documentation"/>
       <Label layoutX="125.0" layoutY="13.0" styleClass="label-disabled" text=" - "/>
       <Hyperlink fx:id="roadmapHyperlink" layoutX="10.0" layoutY="10.0" styleClass="hyperlink-disabled"
                  text="Roadmap"/>

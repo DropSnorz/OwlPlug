@@ -27,7 +27,7 @@ import com.owlplug.auth.ui.AccountItem;
 import com.owlplug.auth.ui.AccountMenuItem;
 import com.owlplug.controls.Drawer;
 import com.owlplug.controls.transitions.AnimatedTabListener;
-import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationMonitor;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
@@ -39,9 +39,9 @@ import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.ExploreController;
-import com.owlplug.explore.services.ExploreService;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.services.AppUpdateService;
+import atlantafx.base.theme.Styles;
 import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -56,7 +56,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +110,11 @@ public class MainController extends BaseController {
   @FXML
   private Button downloadUpdateButton;
 
+  public static int HOME_TAB_INDEX = 0;
   public static int PLUGINS_TAB_INDEX = 1;
+  public static int EXPLORE_TAB_INDEX = 2;
+  public static int PROJECTS_TAB_INDEX = 3;
+  public static int SETTINGS_TAB_INDEX = 4;
 
   /**
    * FXML initialize method.
@@ -122,7 +125,7 @@ public class MainController extends BaseController {
     viewRegistry.preload();
     this.getDialogManager().setDialogContainer(this.getRootPane());
 
-    this.tabPaneHeader.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
+    tabPaneHeader.getStyleClass().add(Styles.TABS_BORDER_TOP);
     this.tabPaneHeader.getSelectionModel().selectedIndexProperty().addListener((options, oldValue, newValue) -> {
       tabPaneContent.getSelectionModel().select(newValue.intValue());
       leftDrawer.close();
@@ -142,7 +145,7 @@ public class MainController extends BaseController {
 
       }
       if (newValue instanceof UserAccount userAccount) {
-        this.getPreferences().putLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, userAccount.getId());
+        this.getPreferences().putLong(Prefs.Auth.SELECTED_ACCOUNT, userAccount.getId());
 
       }
       accountComboBox.hide();
@@ -180,14 +183,14 @@ public class MainController extends BaseController {
 
     refreshAccounts();
 
-    boolean firstLaunch = this.getPreferences().getBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, true);
+    boolean firstLaunch = this.getPreferences().getBoolean(Prefs.App.FIRST_LAUNCH, true);
     if (!this.applicationMonitor.isPreviousExecutionSafelyTerminated()) {
       log.info("Previous execution not terminated safely, opening crash recovery dialog");
       crashRecoveryDialogController.show();
     } else if (firstLaunch) {
       welcomeDialogController.show();
       exploreTaskFactory.createSourceSyncTask().schedule();
-      this.getPreferences().putBoolean(ApplicationDefaults.FIRST_LAUNCH_KEY, false);
+      this.getPreferences().putBoolean(Prefs.App.FIRST_LAUNCH, false);
       publisher.publishEvent(new PreferencesChangedEvent());
     }
 
@@ -198,14 +201,14 @@ public class MainController extends BaseController {
     // Startup plugin sync only triggered if configured and previous application
     // instance safely terminated
     if (this.applicationMonitor.isPreviousExecutionSafelyTerminated()
-            && this.getPreferences().getBoolean(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY, false)) {
+            && this.getPreferences().getBoolean(Prefs.App.SYNC_PLUGINS_ON_STARTUP, false)) {
       log.info("Starting auto plugin sync");
       pluginService.scanPlugins(false);
     }
 
   }
 
-  public void selectMainTab(int index) {
+  public void navigateToMainTab(int index) {
     this.tabPaneHeader.getSelectionModel().select(index);
   }
 
@@ -225,7 +228,7 @@ public class MainController extends BaseController {
     accountComboBox.getItems().setAll(accounts);
     accountComboBox.getItems().add(new AccountMenuItem(" + New Account"));
 
-    long selectedAccountId = this.getPreferences().getLong(ApplicationDefaults.SELECTED_ACCOUNT_KEY, -1);
+    long selectedAccountId = this.getPreferences().getLong(Prefs.Auth.SELECTED_ACCOUNT, -1);
     if (selectedAccountId != -1) {
       Optional<UserAccount> selectedAccount = authenticationService.getUserAccountById(selectedAccountId);
       if (selectedAccount.isPresent()) {

@@ -31,7 +31,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -159,10 +159,9 @@ public class NewSourceDialogController extends AbstractDialogController implemen
     Label title = new Label("Add a new source");
     title.getStyleClass().add("heading-3");
 
-    ImageView iv = new ImageView(this.getApplicationDefaults().serverImage);
-    iv.setFitHeight(20);
-    iv.setFitWidth(20);
-    title.setGraphic(iv);
+    FontIcon icon = new FontIcon("mdi2w-warehouse");
+    icon.setIconSize(20);
+    title.setGraphic(icon);
 
     DialogLayout layout = new DialogLayout();
     layout.setHeading(title);

@@ -29,6 +29,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 public class PackageBundle {
@@ -41,16 +42,15 @@ public class PackageBundle {
   private String downloadUrl;
 
   private String downloadSha256;
-  @Deprecated
-  @Enumerated(EnumType.STRING)
-  private PluginFormat format;
   private String technicalUid;
   private String version;
   private long fileSize;
   @ElementCollection(fetch = FetchType.EAGER)
+  @BatchSize(size = 100)
   private List<String> targets;
 
   @ElementCollection(fetch = FetchType.EAGER)
+  @BatchSize(size = 100)
   private List<String> formats;
 
   @ManyToOne
@@ -128,16 +128,6 @@ public class PackageBundle {
 
   public void setRemotePackage(RemotePackage remotePackage) {
     this.remotePackage = remotePackage;
-  }
-
-  @Deprecated
-  public PluginFormat getFormat() {
-    return format;
-  }
-
-  @Deprecated
-  public void setFormat(PluginFormat format) {
-    this.format = format;
   }
 
   public List<String> getFormats() {

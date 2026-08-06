@@ -18,7 +18,9 @@
  
 package com.owlplug;
 
+import com.owlplug.theme.OwlPlugDarkTheme;
 import com.owlplug.core.components.ApplicationDefaults;
+import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.application.Preloader.StateChangeNotification.Type;
 import javafx.fxml.FXMLLoader;
@@ -28,8 +30,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
 
 public class OwlPlugPreloader extends Preloader {
 
@@ -42,9 +42,9 @@ public class OwlPlugPreloader extends Preloader {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Preloader.fxml"));
     Parent root = loader.load();
 
+    Application.setUserAgentStylesheet(new OwlPlugDarkTheme().getUserAgentStylesheet());
+
     Scene scene = new Scene(root);
-    JMetro jMetro = new JMetro(Style.DARK);
-    jMetro.setScene(scene);
     String owlplugCss = OwlPlugPreloader.class.getResource("/owlplug.css").toExternalForm();
     scene.getStylesheets().add(owlplugCss);
 

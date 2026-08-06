@@ -24,6 +24,8 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawApplication;
@@ -59,5 +61,19 @@ public class AbletonProjectExplorerTest {
                     hasProperty("format", is(PluginFormat.VST3))
             )
     ));
+  }
+
+  @Test
+  public void fileInBackupFolderIsBackupFile() {
+    AbletonProjectExplorer explorer = new AbletonProjectExplorer();
+    File file = new File("/projects/MyProject/Backup/MyProject [1].als");
+    assertTrue(explorer.isBackupFile(file));
+  }
+
+  @Test
+  public void fileInRegularFolderIsNotBackupFile() {
+    AbletonProjectExplorer explorer = new AbletonProjectExplorer();
+    File file = new File("/projects/MyProject/MyProject.als");
+    assertFalse(explorer.isBackupFile(file));
   }
 }

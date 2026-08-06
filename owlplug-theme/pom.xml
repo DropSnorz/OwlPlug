@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.owlplug</groupId>
+        <artifactId>owlplug</artifactId>
+        <version>1.33.1</version>
+    </parent>
+
+    <artifactId>owlplug-theme</artifactId>
+    <packaging>jar</packaging>
+    <name>owlplug-theme</name>
+    <description>OwlPlug custom AtlantaFX theme</description>
+
+    <properties>
+        <sass.version>1.87.0</sass.version>
+        <atlantafx.styles.unpack.dir>${project.build.directory}</atlantafx.styles.unpack.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>atlantafx-base</artifactId>
+            <version>${atlantafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Step 1: Unpack atlantafx-styles to expose its SCSS source tree -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>unpack-atlantafx-styles</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>io.github.mkpaz</groupId>
+                                    <artifactId>atlantafx-styles</artifactId>
+                                    <version>${atlantafx.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${atlantafx.styles.unpack.dir}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Step 2: Compile SCSS → CSS using the native Dart SASS binary -->
+            <plugin>
+                <groupId>us.hebi.sass</groupId>
+                <artifactId>sass-cli-maven-plugin</artifactId>
+                <version>1.0.4</version>
+                <executions>
+                    <execution>
+                        <id>compile-scss</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <sassVersion>${sass.version}</sassVersion>
+                            <args>
+                                <arg>--no-source-map</arg>
+                                <arg>--load-path=${atlantafx.styles.unpack.dir}/atlantafx/styles/src</arg>
+                                <arg>${project.basedir}/src/main/scss/owlplug-dark.scss:${project.basedir}/src/main/resources/com/owlplug/theme/owlplug-dark.css</arg>
+                            </args>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <!-- Watch mode: mvn generate-resources -pl owlplug-theme -Pwatch -->
+    <profiles>
+        <profile>
+            <id>watch</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>us.hebi.sass</groupId>
+                        <artifactId>sass-cli-maven-plugin</artifactId>
+                        <version>1.0.4</version>
+                        <executions>
+                            <execution>
+                                <id>watch-scss</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <sassVersion>${sass.version}</sassVersion>
+                                    <args>
+                                        <arg>--no-source-map</arg>
+                                        <arg>--load-path=${atlantafx.styles.unpack.dir}/atlantafx/styles/src</arg>
+                                        <arg>--watch</arg>
+                                        <arg>${project.basedir}/src/main/scss/owlplug-dark.scss:${project.basedir}/src/main/resources/com/owlplug/theme/owlplug-dark.css</arg>
+                                    </args>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

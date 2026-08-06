@@ -22,7 +22,6 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.plugin.model.Plugin;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
 public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCell<Plugin>> {
@@ -37,8 +36,6 @@ public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCel
   @Override
   public ListCell<Plugin> call(ListView<Plugin> arg0) {
     return new ListCell<>() {
-      private ImageView imageView = new ImageView();
-
       @Override
       public void updateItem(Plugin plugin, boolean empty) {
         super.updateItem(plugin, empty);
@@ -46,10 +43,12 @@ public class PluginListCellFactory implements Callback<ListView<Plugin>, ListCel
           setText(null);
           setGraphic(null);
         } else {
-          imageView.setImage(applicationDefaults.getPluginFormatIcon(plugin.getFormat()));
           setText(plugin.getName());
-          setGraphic(imageView);
+          setGraphic(new PluginFormatBadgeView(plugin.getFormat(), applicationDefaults,
+              PluginFormatBadgeView.DisplayMode.ICON_ONLY));
         }
+        // Force re-rendering immediately to avoid blinking cell
+        applyCss();
       }
     };
   }

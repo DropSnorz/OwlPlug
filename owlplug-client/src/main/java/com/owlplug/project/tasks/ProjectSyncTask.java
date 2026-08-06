@@ -41,11 +41,14 @@ public class ProjectSyncTask extends AbstractTask {
   private boolean hasParseErrors = false;
   private final DawProjectRepository projectRepository;
   private final List<String> projectDirectories;
+  private final boolean collectBackupFiles;
 
   public ProjectSyncTask(DawProjectRepository projectRepository,
-                         List<String> projectDirectories) {
+                         List<String> projectDirectories,
+                         boolean collectBackupFiles) {
     this.projectRepository = projectRepository;
     this.projectDirectories = projectDirectories;
+    this.collectBackupFiles = collectBackupFiles;
     setName("Sync DAW projects");
   }
 
@@ -86,10 +89,16 @@ public class ProjectSyncTask extends AbstractTask {
       this.commitProgress(1);
       for (ProjectExplorer explorer : explorers) {
         if (explorer.canExploreFile(file)) {
+          boolean isBackup = explorer.isBackupFile(file);
+          if (isBackup && !collectBackupFiles) {
+            log.debug("Skipping backup file (backup collection disabled): {}", file.getAbsolutePath());
+            break;
+          }
           try {
             this.updateMessage("Analyzing project file: " + file.getAbsolutePath());
             DawProject project = explorer.explore(file);
             if (project != null) {
+              project.setBackup(isBackup);
               projectRepository.save(project);
             }
           } catch (ProjectExplorerException e) {
@@ -102,7 +111,7 @@ public class ProjectSyncTask extends AbstractTask {
     }
 
     if (hasParseErrors) {
-      this.updateMessage("Projects synchronized. Some files cannot be parsed, check application logs in Options.");
+      this.updateMessage("Projects synchronized. Some files cannot be parsed, check application logs in Settings.");
     } else {
       this.updateMessage("All projects are synchronized");
     }

@@ -4,8 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
-		<springboot.version>4.0.1</springboot.version>
+		<springboot.version>4.1.0</springboot.version>
         <mockito.version>5.20.0</mockito.version>
+        <ikonli.version>12.4.0</ikonli.version>
 	</properties>
 	
 	<parent>
@@ -35,6 +36,11 @@
 		<dependency>
 			<groupId>com.owlplug</groupId>
 			<artifactId>owlplug-host</artifactId>
+			<version>1.33.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.owlplug</groupId>
+			<artifactId>owlplug-theme</artifactId>
 			<version>1.33.1</version>
 		</dependency>
 		<dependency>
@@ -120,18 +126,21 @@
 			<artifactId>controlsfx</artifactId>
 			<version>11.1.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jfxtras</groupId>
-			<artifactId>jmetro</artifactId>
-			<version>11.6.16</version>
-			<exclusions>
-				<exclusion>
-					<!-- Exclude embedded javafx -->
-					<groupId>org.openjfx</groupId>
-					<artifactId>javafx-base</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>atlantafx-base</artifactId>
+            <version>${atlantafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-javafx</artifactId>
+            <version>${ikonli.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-materialdesign2-pack</artifactId>
+            <version>${ikonli.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>com.googlecode.plist</groupId>
 			<artifactId>dd-plist</artifactId>

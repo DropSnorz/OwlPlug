@@ -47,7 +47,20 @@ public class ReaperProjectExplorer implements ProjectExplorer {
 
   @Override
   public boolean canExploreFile(File file) {
-    return file.isFile() && file.getAbsolutePath().endsWith(".rpp");
+    String path = file.getAbsolutePath();
+    return file.isFile() && (path.endsWith(".rpp") || path.endsWith(".rpp-bak"));
+  }
+
+  @Override
+  public boolean isBackupFile(File file) {
+    if (FileUtils.convertPath(file.getAbsolutePath()).toLowerCase().endsWith(".rpp-bak")) {
+      return true;
+    }
+    File parent = file.getParentFile();
+    if (parent != null && parent.getName().equalsIgnoreCase("Backups")) {
+      return true;
+    }
+    return ProjectExplorer.super.isBackupFile(file);
   }
 
 
@@ -67,12 +80,13 @@ public class ReaperProjectExplorer implements ProjectExplorer {
       FileTime fileTime = attr.creationTime();
       project.setCreatedAt(Date.from(fileTime.toInstant()));
 
-      InputStream is = new FileInputStream(file);
-
-      ReaperProjectLexer lexer = new ReaperProjectLexer(CharStreams.fromStream(is));
-      CommonTokenStream tokens = new CommonTokenStream(lexer);
-      ReaperProjectParser parser = new ReaperProjectParser(tokens);
-      ParseTree pt = parser.node();
+      ParseTree pt;
+      try (InputStream is = new FileInputStream(file)) {
+        ReaperProjectLexer lexer = new ReaperProjectLexer(CharStreams.fromStream(is));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        ReaperProjectParser parser = new ReaperProjectParser(tokens);
+        pt = parser.node();
+      }
 
       ParseTreeWalker walker = new ParseTreeWalker();
       PluginNodeListener pluginListener = new PluginNodeListener();

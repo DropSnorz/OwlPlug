@@ -42,6 +42,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -53,6 +56,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
@@ -108,18 +116,58 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Retrieves packages from store with name matching the given criteria and
+   * Retrieves a page of packages from store with name matching the given criteria and
    * compatible with the current platform.
    *
+   * <p>Pagination is applied on package ids first (without the bundles/targets fetch join), then
+   * the matching page of entities is hydrated with its collections in a second query. Applying a
+   * {@link Pageable} directly on top of a to-many fetch join is not supported by Hibernate: it
+   * would fall back to fetching every matching row and paginating in memory.
+   *
    * @param criteriaList criteria list
-   * @return list of remote packages
+   * @param pageable page request
+   * @return page of remote packages
    */
-  public Iterable<RemotePackage> getRemotePackages(List<ExploreFilterCriteria> criteriaList) {
-    Specification<RemotePackage> spec = RemotePackageRepository.sourceEnabled()
-        .and(RemotePackageRepository.fetchBundlesAndTargets());
-    spec = spec.and(ExploreCriteriaAdapter.toSpecification(criteriaList));
+  public Page<RemotePackage> getRemotePackages(List<ExploreFilterCriteria> criteriaList, Pageable pageable) {
+    Specification<RemotePackage> filterSpec = RemotePackageRepository.sourceEnabled()
+        .and(RemotePackageRepository.hasBundles())
+        .and(ExploreCriteriaAdapter.toSpecification(criteriaList));
 
-    return remotePackageRepository.findAll(spec);
+    // Append id as a stable tie-breaker so rows with equal sort keys keep a deterministic order
+    // across pages; without it, LIMIT/OFFSET pagination can skip or duplicate rows between calls.
+    Sort deterministicSort = pageable.getSort().and(Sort.by(Sort.Direction.ASC, "id"));
+    Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), deterministicSort);
+
+    Page<RemotePackage> idPage = remotePackageRepository.findAll(filterSpec, sortedPageable);
+    List<Long> ids = idPage.getContent().stream().map(RemotePackage::getId).toList();
+
+    if (ids.isEmpty()) {
+      return new PageImpl<>(List.of(), sortedPageable, idPage.getTotalElements());
+    }
+
+    // findAll(fetchSpec) is not guaranteed to return rows in the same order as ids (the paginated
+    // order from idPage), so this map is keyed by id purely to look entities up and rebuild that
+    // order below - it is not a dedup mechanism. fetchBundlesAndTargets() sets distinct(true), so
+    // the fetch join is not expected to yield more than one row per id; toMap is left merge-free
+    // (throwing on a duplicate key) so a regression there fails loudly instead of being masked.
+    Specification<RemotePackage> fetchSpec = RemotePackageRepository.hasIdIn(ids)
+        .and(RemotePackageRepository.fetchBundlesAndTargets());
+    Map<Long, RemotePackage> fetchedById = remotePackageRepository.findAll(fetchSpec).stream()
+        .collect(Collectors.toMap(RemotePackage::getId, Function.identity()));
+
+    // A package can be absent here if it was deleted between the id query above and this one
+    // (e.g. a concurrent source sync); skip it rather than returning a null page entry.
+    List<RemotePackage> orderedPage = ids.stream()
+        .map(fetchedById::get)
+        .filter(remotePackage -> {
+          if (remotePackage == null) {
+            log.debug("Skipping package id no longer present during Explore page hydration");
+          }
+          return remotePackage != null;
+        })
+        .toList();
+
+    return new PageImpl<>(orderedPage, sortedPageable, idPage.getTotalElements());
   }
 
   public Iterable<RemotePackage> getPackagesByName(String name) {

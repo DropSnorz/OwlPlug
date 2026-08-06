@@ -60,6 +60,15 @@ public class AbletonProjectExplorer implements ProjectExplorer {
     return file.isFile() && file.getAbsolutePath().endsWith(".als");
   }
 
+  @Override
+  public boolean isBackupFile(File file) {
+    File parent = file.getParentFile();
+    if (parent != null && parent.getName().equalsIgnoreCase("Backup")) {
+      return true;
+    }
+    return ProjectExplorer.super.isBackupFile(file);
+  }
+
   public DawProject explore(File file) throws ProjectExplorerException {
 
     if (!canExploreFile(file)) {

@@ -15,25 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.core.controllers.dialogs;
 
+import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.controls.DialogLayout;
-import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.LazyViewRegistry;
-import com.owlplug.core.controllers.OptionsController;
-import com.owlplug.core.controllers.fragments.PluginPathFragmentController;
-import com.owlplug.core.events.PreferencesChangedEvent;
+import com.owlplug.core.controllers.SettingsController;
 import com.owlplug.core.model.OperatingSystem;
-import com.owlplug.core.utils.FX;
 import com.owlplug.plugin.components.PluginTaskFactory;
+import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -44,109 +46,104 @@ public class WelcomeDialogController extends AbstractDialogController {
   @Autowired
   private PluginTaskFactory taskFactory;
   @Autowired
-  private OptionsController optionsController;
-  @Autowired
-  private ListDirectoryDialogController listDirectoryDialogController;
+  private SettingsController settingsController;
 
   @FXML
-  private VBox pluginPathContainer;
+  private VBox stepWelcome;
   @FXML
-  private Button okButton;
+  private VBox stepFormats;
+  @FXML
+  private VBox formatTogglesContainer;
+  @FXML
+  private Button startButton;
   @FXML
   private Button cancelButton;
-
-  private PluginPathFragmentController vst2PluginPathFragment;
-  private PluginPathFragmentController vst3PluginPathFragment;
-  private PluginPathFragmentController auPluginPathFragment;
-  private PluginPathFragmentController lv2PluginPathFragment;
+  @FXML
+  private Button backButton;
+  @FXML
+  private Button skipButton;
+  @FXML
+  private Button okButton;
 
   WelcomeDialogController() {
-    super(700, 300);
+    super(640, 480);
     this.setOverlayClose(false);
   }
 
   /**
    * FXML initialize.
    */
+  @FXML
   public void initialize() {
-
-    vst2PluginPathFragment = new PluginPathFragmentController("VST2",
-      ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, ApplicationDefaults.VST_DIRECTORY_KEY,
-      ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
-      this.listDirectoryDialogController);
-    vst3PluginPathFragment = new PluginPathFragmentController("VST3",
-      ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY,
-      ApplicationDefaults.VST3_DIRECTORY_KEY,
-      ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
-      this.listDirectoryDialogController);
-    auPluginPathFragment = new PluginPathFragmentController("AU",
-      ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY,
-      ApplicationDefaults.AU_DIRECTORY_KEY,
-      ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
-      this.listDirectoryDialogController);
-    lv2PluginPathFragment = new PluginPathFragmentController("LV2",
-      ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY,
-      ApplicationDefaults.LV2_DIRECTORY_KEY,
-      ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY,
-      this.getPreferences(),
-      this.listDirectoryDialogController);
-
-    pluginPathContainer.getChildren().add(vst2PluginPathFragment.getNode());
-    pluginPathContainer.getChildren().add(vst3PluginPathFragment.getNode());
-    pluginPathContainer.getChildren().add(auPluginPathFragment.getNode());
-    pluginPathContainer.getChildren().add(lv2PluginPathFragment.getNode());
-
+    startButton.setOnAction(e -> showStep(2));
+    cancelButton.setOnAction(e -> this.close());
+    backButton.setOnAction(e -> showStep(1));
+    skipButton.setOnAction(e -> this.close());
     okButton.setOnAction(e -> {
       this.close();
-      optionsController.refreshView();
+      settingsController.refreshView();
       taskFactory.createPluginScanTask().schedule();
     });
 
-    cancelButton.setOnAction(e -> this.close());
-
-    refreshView();
-
+    buildFormatToggles();
   }
 
-  public void refreshView() {
-    vst2PluginPathFragment.refresh();
-    vst3PluginPathFragment.refresh();
-    auPluginPathFragment.refresh();
-    lv2PluginPathFragment.refresh();
+  private void buildFormatToggles() {
+    formatTogglesContainer.getChildren().addAll(
+        buildFormatRow(PluginFormat.VST2, Prefs.Plugins.VST2_DISCOVERY_ENABLED,
+            "VST2", "Legacy format, broadly supported across DAWs"),
+        buildFormatRow(PluginFormat.VST3, Prefs.Plugins.VST3_DISCOVERY_ENABLED,
+            "VST3", "Modern Steinberg format — recommended"),
+        buildFormatRow(PluginFormat.AU, Prefs.Plugins.AU_DISCOVERY_ENABLED,
+            "AU", "Audio Units — macOS only"),
+        buildFormatRow(PluginFormat.LV2, Prefs.Plugins.LV2_DISCOVERY_ENABLED,
+            "LV2", "Open standard, primarily for Linux")
+    );
 
     // Disable AU options for non MAC users
     if (!this.getApplicationDefaults().getRuntimePlatform()
         .getOperatingSystem().equals(OperatingSystem.MAC)) {
-      auPluginPathFragment.disable();
+      formatTogglesContainer.getChildren().get(2).setDisable(true);
     }
-
   }
 
-  @EventListener
-  private void handle(PreferencesChangedEvent event) {
-    FX.run(this::refreshView);
+  private HBox buildFormatRow(PluginFormat format, String enableKey, String name, String desc) {
+    HBox row = new HBox(14);
+    row.setAlignment(Pos.CENTER_LEFT);
+    row.setPadding(new Insets(10, 4, 10, 4));
+
+    PluginFormatBadgeView badge = new PluginFormatBadgeView(
+        format, this.getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.DEFAULT);
+
+    VBox labels = new VBox(2);
+    Label nameLabel = new Label(name);
+    nameLabel.getStyleClass().add("label-emphase");
+    Label descLabel = new Label(desc);
+    descLabel.getStyleClass().add("label-disabled");
+    labels.getChildren().addAll(nameLabel, descLabel);
+    HBox.setHgrow(labels, Priority.ALWAYS);
+
+    ToggleSwitch toggle = new ToggleSwitch();
+    toggle.setSelected(this.getPreferences().getBoolean(enableKey, false));
+    toggle.selectedProperty().addListener((obs, old, v) ->
+        this.getPreferences().putBoolean(enableKey, v));
+
+    row.getChildren().addAll(badge, labels, toggle);
+    return row;
   }
 
-  @Override
-  protected void onDialogShow() {
-    this.refreshView();
+  private void showStep(int step) {
+    boolean onStep1 = step == 1;
+    stepWelcome.setVisible(onStep1);
+    stepWelcome.setManaged(onStep1);
+    stepFormats.setVisible(!onStep1);
+    stepFormats.setManaged(!onStep1);
   }
 
   @Override
   protected DialogLayout getLayout() {
-    Label title = new Label("Owlplug is almost ready !");
-    title.getStyleClass().add("heading-3");
-    ImageView iv = new ImageView(this.getApplicationDefaults().rocketImage);
-    iv.setFitHeight(20);
-    iv.setFitWidth(20);
-    title.setGraphic(iv);
     DialogLayout layout = new DialogLayout();
-    layout.setHeading(title);
     layout.setBody(lazyViewRegistry.get(LazyViewRegistry.WELCOME_VIEW));
-
     return layout;
   }
 

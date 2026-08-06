@@ -1,222 +1,245 @@
 /****************************************************************
  Global Theme rules
 ****************************************************************/
-
-
 .root {
+
+    /* Atlantafx colors mapping
+
+     -color-fg-default;
+     -color-fg-muted;
+     -color-fg-subtle;
+     -color-fg-emphasis;
+
+     -color-bg-default;
+     -color-bg-overlay;
+     -color-bg-subtle;
+     -color-bg-inset;
+
+     -color-border-default;
+     -color-border-muted;
+     -color-border-subtle;
+     -color-shadow-default;
+
+     -color-neutral-emphasis-plus;
+     -color-neutral-emphasis;
+     -color-neutral-muted;
+     -color-neutral-subtle;
+
+     -color-accent-fg;
+     -color-accent-emphasis;
+     -color-accent-muted;
+     -color-accent-subtle;
+
+     -color-success-fg;
+     -color-success-emphasis;
+     -color-success-muted;
+     -color-success-subtle;
+
+     -color-warning-fg;
+     -color-warning-emphasis;
+     -color-warning-muted;
+     -color-warning-subtle;
+
+     -color-danger-fg;
+     -color-danger-emphasis;
+     -color-danger-muted;
+     -color-danger-subtle;
+
+     */
     -fx-font-family: "Segoe UI";
-    card-pane-darkshade-color: rgb(37, 37, 37);
-    card-pane-color: rgb(46, 46, 46);
-    card-pane-lightshade-color: rgb(96, 96, 96);
-
-    disabled-color: rgb(160, 160, 160);
-    danger-color: #d9534f;
-    warning-color: #ffc107;
-    success-color: rgb(40, 167, 69);
-    prompt-text-color: #4D4D4D;
-
-    theme-primary-color: #e5dd92;
-    theme-secondary-color: #ebc8ae;
-
-    text-color: #F5F5F1;
-    text-emphase-color: lightgrey;
+    -owlplug-color-text: -color-fg-default;
+    -owlplug-color-text-emphasis: -color-fg-emphasis;
 }
 
 #mainPane {
-    -fx-background-color: linear-gradient(to top, #c79081 0%, #dfa579 100%);
+    -fx-background-color: -color-bg-default;
 }
 
 .dialog-overlay-pane>StackPane {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
 }
 
-Label {
-    -fx-text-fill: text-color;
+.label {
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .label-success {
-    -fx-text-fill: success-color;
+    -fx-text-fill: -color-success-fg;
 }
 
 .label-danger {
-    -fx-text-fill: danger-color;
+    -fx-text-fill: -color-danger-fg;
 }
 
 .label-warning {
-    -fx-text-fill: warning-color;
+    -fx-text-fill: -color-warning-emphasis;
 }
 
 .label-disabled {
-    -fx-text-fill: disabled-color;
+    -fx-text-fill: -color-fg-muted;
 }
 
 .label-emphase {
-    -fx-text-fill: text-emphase-color;
+    -fx-text-fill: -owlplug-color-text-emphasis;
 }
 
 .heading-title {
     -fx-font-size: 30px;
     -fx-font-weight: bold;
-    -fx-margin: 0, 0, 8, 0;
 }
 
 .heading-1 {
-    -fx-font-size: 22px;
-    -fx-margin: 0, 0, 8, 0;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
 }
 
 .heading-2 {
-    -fx-font-size: 20px;
+    -fx-font-size: 21px;
+    -fx-font-weight: bold;
+}
+
+.heading-3 {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.heading-4 {
+    -fx-font-size: 14px;
 }
 
 Text {
-    -fx-fill: text-color;
+    -fx-fill: -owlplug-color-text;
 }
 
 .text-disabled {
-    -fx-fill: disabled-color;
+    -fx-fill: -color-fg-muted;
 }
 
 .text-danger {
-    -fx-fill: disabled-color;
+    -fx-fill: -color-danger-emphasis;
 }
 
-TextArea {
-    -fx-text-fill: text-color;
-    -fx-background-color: rgb(55, 55, 55);
 
+.lookup-status-badge {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 5px;
 }
 
-TextArea .content {
-    -fx-background-color: rgb(55, 55, 55);
-
+.status-icon-found {
+    -fx-icon-color: -color-success-fg;
 }
 
-.table-view .cell-unknown-link,
-.table-view .cell-unknown-link:hover {
-    -fx-background-color: disabled-color;
+.status-icon-missing {
+    -fx-icon-color: -color-danger-fg;
 }
 
-.table-view .cell-found-link,
-.table-view .cell-found-link:hover {
-    -fx-background-color: success-color;
+.status-icon-unknown {
+    -fx-icon-color: -color-fg-muted;
 }
 
-.table-view .cell-missing-link,
-.table-view .cell-missing-link:hover {
-    -fx-background-color: danger-color;
+.status-icon-backup {
+    -fx-icon-color: -color-warning-emphasis;
 }
 
-.table-view {
-    -fx-background-color: card-pane-color;
-    -fx-border-width: 0px;
+.search-bar-chip-view {
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-border-color: -color-border-default;
 }
 
 .chip-view {
     -fx-max-height: 100px;
-    -fx-background-color: card-pane-color;
 }
 
 .chip-view .chips-pane .text-area {
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .chip Button {
     -fx-background-color: transparent;
     -fx-max-height: 20px;
     -fx-max-width: 20px;
-    -fx-text-fill: black;
+    -fx-text-fill: -color-fg-muted;
     -fx-border-width: 0px;
-}
-
-.chip Button:pressed {
-    -fx-background-color: transparent;
-    -fx-max-height: 20px;
-    -fx-max-width: 20px;
-    -fx-text-fill: black;
-    -fx-border-width: 0px;
-}
-
-.chip-label {
-    -fx-font-size: 12.0;
-    -fx-background-color: #E0E0E0;
-    -fx-background-radius: 40px;
-    -fx-padding: 2px 8px 2px 8px;
-    -fx-pref-height: 32px;
-    -fx-alignment: center-left;
-    -fx-spacing: 8;
-    -fx-text-fill: black;
 }
 
 .chip-view .chip Label {
-    -fx-text-fill: black;
-}
-
-/* Used for FakeChip rendering outside of a ChipView */
-.chip Label {
-    -fx-text-fill: black;
+    -fx-text-fill: -color-fg-muted;
 }
 
 .chip-view .chip-brown {
-    -fx-background-color: #b2675e;
+    -fx-background-color: rgba(178, 103, 94, 0.15);
+}
+
+.chip-view .chip-brown Label {
+    -fx-text-fill: #b2675e;
 }
 
 .chip-view .chip-red {
-    -fx-background-color: #A1887F;
+    -fx-background-color: rgba(161, 136, 127, 0.15);
+}
+
+.chip-view .chip-red Label {
+    -fx-text-fill: #A1887F;
 }
 
 .chip-view .chip-green {
-    -fx-background-color: #C5E1A5;
+    -fx-background-color: rgba(197, 225, 165, 0.15);
+}
+
+.chip-view .chip-green Label {
+    -fx-text-fill: #7cb342;
 }
 
 .chip-view .chip-blue {
-    -fx-background-color: #657899
+    -fx-background-color: rgba(101, 120, 153, 0.15);
 }
 
-.fake-chip:hover {
+.chip-view .chip-blue Label {
+    -fx-text-fill: #657899;
+}
+
+.package-tag-badge {
+    -fx-background-color: -color-neutral-subtle;
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-padding: 1 5 1 5;
+    -fx-font-size: 10px;
+    -fx-text-fill: -color-fg-muted;
     -fx-cursor: hand;
-    -fx-background-color: #D4D4D4;
+}
+
+.package-tag-badge:hover {
+    -fx-background-color: -color-accent-subtle;
+    -fx-text-fill: -color-accent-fg;
 }
 
 .button-danger {
-    -fx-background-color: danger-color;
-
-}
-
-.button-danger:hover {
-    -fx-background-color: #c9302c;
-}
-
-.button-danger:pressed {
-    -fx-background-color: #ac2925;
+    -fx-background-color: -color-danger-emphasis;
 }
 
 .button-success {
-    -fx-background-color: success-color;
-}
-
-.button-info {
-    -fx-background-color: #2980b9;
+    -fx-background-color: -color-success-emphasis;
 }
 
 
 .hyperlink-button {
     -fx-underline: false;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .hyperlink-button:hover {
     -fx-underline: false;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .hyperlink-button:visited {
     -fx-underline: false;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .hyperlink-dark {
-    -fx-text-fill: rgb(40, 40, 40);
+    -fx-text-fill: -color-fg-muted
 }
 
 .hyperlink-dark:focused {
@@ -226,7 +249,7 @@ TextArea .content {
 }
 
 .hyperlink-disabled {
-    -fx-text-fill: disabled-color;
+    -fx-text-fill: -color-fg-muted;
 }
 
 .hyperlink-disabled:focused {
@@ -235,93 +258,56 @@ TextArea .content {
     -fx-border-width: 0px;
 }
 
-.hyperlink-web:visited {
-    -fx-text-fill: disabled-color;
-}
-
-.list-view {
-    list_view_background_color: card-pane-color;
-}
-
 .combo-box .combo-box-popup .list-view,
 .combo-box .combo-box-popup .list-cell {
-    -fx-background-color: card-pane-color;
     -fx-text-fill: white;
 }
 
 .combo-box .combo-box-popup .list-cell:hover {
     -fx-text-fill: white;
-    -fx-background-color: card-pane-lightshade-color;
+    -fx-background-color: -color-bg-subtle;
 }
 
 .combo-box .list-cell {
     -fx-text-fill: white;
 }
 
-#accountComboBox {
-    -fx-prompt-text-fill: transparent;
-}
-
 .no-header-tab-pane {
     -fx-tab-max-height: 0;
 }
 
-.no-header-tab-pane>.tab-header-area {
-    visibility: hidden;
-}
-
-.small-tab-pane-container {
-    -fx-background-color: card-pane-color;
-}
-
-.small-tab-pane *.tab *.tab-label {
-    -fx-font-size: 15px;
-    -fx-font-weight: normal;
+.no-header-tab-pane > .tab-header-area {
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
 }
 
 .drawer-side-pane {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
 }
 
-.autocomplete-list {
-    -fx-background-color: card-pane-color;
-}
 
 .autocomplete-list .list-cell {
-    -fx-background-color: card-pane-color;
-    -fx-text-fill: text-color;
-}
-
-/* ControlsFx Autocomplete Popup */
-.auto-complete-popup>.list-view {
-    -fx-background-color: card-pane-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .popup,
 .popup .popup-container,
 .popup .list-view {
-    -fx-background-color: card-pane-color;
-}
-
-.progress-bar-error>.bar {
-    -fx-background-color: red;
-}
-
-.progress-bar-link {
-    dot_color: rgb(143, 143, 143);
+    -fx-background-color: -color-bg-default;
 }
 
 ProgressIndicator {
-    -fx-progress-color: theme-primary-color;
+    -fx-progress-color: -color-accent-fg;;
 }
 
 .context-menu {
-    -fx-background-color: card-pane-color;
-    -fx-text-fill: text-color;
+    -fx-background-color: -color-bg-default;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .tooltip {
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 /****************************************************************
@@ -329,33 +315,102 @@ ProgressIndicator {
 ****************************************************************/
 
 .header {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-subtle;
 }
 
 .header .combo-box-base {
-    -fx-background-color: card-pane-color;
     -fx-background-radius: 0;
     -fx-border-radius: 0;
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
+/* Collapse the unused content area of the navigation TabPane */
+/* JavaFX always renders a content area below the tab strip even when tabs have no content */
+#tabPaneHeader .tab-content-area {
+    -fx-background-color: -color-bg-subtle;
+    -fx-padding: 0;
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
+
+/* Change the tab header area background */
+#tabPaneHeader .tab-header-area .tab-header-background {
+    -fx-background-color: -color-bg-subtle;
+}
+
+#accountComboBox {
+    -fx-prompt-text-fill: transparent;
+    -fx-background-color: -color-bg-subtle;
+}
+
+.task-bar-footer {
+    -fx-background-color: -color-bg-inset;
+    -fx-border-color: -color-border-muted transparent transparent transparent;
+    -fx-border-width: 1px;
+}
+
+.task-bar-progress {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+}
+
+.task-bar-progress > .track {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.task-bar-progress > .bar {
+    -fx-background-color: -color-accent-fg;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.task-bar-progress.progress-bar-error > .bar {
+    -fx-background-color: -color-danger-fg;
+}
+
+
 .pane-card {
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
-    -fx-background-color: card-pane-color;
-    -fx-padding: 10, 10, 10, 10;
+    -fx-padding: 10;
+    -fx-border-width: 1px;
+    -fx-border-color: -color-border-default;
+}
+
+.dashboard-card {
+    -fx-padding: 14;
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-border-color: -color-border-default;
 }
 
 .pane-card .card-title {
-    -fx-height: 37;
+    -fx-pref-height: 37;
     -fx-padding: 5, 5, 5, 5;
-    -fx-background-color: card-pane-darkshade-color;
-    -fx-margin: 0, 0, 10, 0;
+    -fx-background-color: -color-bg-subtle;
 }
 
 .pane-card .card-title Label {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: disabled-color;
+    -fx-text-fill: -color-fg-muted;
+}
+
+/* Plugin info view */
+
+.info-field-label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.info-field-value {
+    -fx-font-size: 13px;
+    -fx-text-fill: -owlplug-color-text-emphasis;
 }
 
 .package-bloc-title {
@@ -366,12 +421,12 @@ ProgressIndicator {
 
 .package-source-badge {
     -fx-background-color: rgba(245, 245, 241, 1);
-    -fx-text-fill: disabled-color;
+    -fx-text-fill: -color-fg-muted;
     -fx-background-radius: 0 0 0 5px;
     -fx-border-radius: 0 0 0 5px;
     -fx-padding: 5;
     -fx-border-style: solid;
-    -fx-border-color: disabled-color;
+    -fx-border-color: -color-fg-muted;
     -fx-border-width: 0 0 1 1;
 }
 
@@ -382,11 +437,11 @@ ProgressIndicator {
 }
 
 .shape-state-active {
-    -fx-fill: success-color;
+    -fx-fill: -color-success-emphasis;
 }
 
 .shape-state-unstable {
-    -fx-fill: danger-color;
+    -fx-fill: -color-danger-emphasis;
 }
 
 .shape-state-installed {
@@ -394,7 +449,7 @@ ProgressIndicator {
 }
 
 .shape-state-disabled {
-    -fx-fill: disabled-color;
+    -fx-fill: -color-fg-muted;
 }
 
 /****************************************************************
@@ -404,33 +459,57 @@ ProgressIndicator {
 .default-color0.chart-pie {
     -fx-pie-color: #116A7B;
 }
+.default-color0.chart-bar {
+    -fx-bar-fill: #116A7B;
+}
 
 .default-color1.chart-pie {
     -fx-pie-color: #85586F;
+}
+.default-color1.chart-bar {
+    -fx-bar-fill: #85586F;
 }
 
 .default-color2.chart-pie {
     -fx-pie-color: #7F8B52;
 }
+.default-color2.chart-bar {
+    -fx-bar-fill: #7F8B52;
+}
 
 .default-color3.chart-pie {
     -fx-pie-color: #FFDBA4;
+}
+.default-color3.chart-bar {
+    -fx-bar-fill: #FFDBA4;
 }
 
 .default-color4.chart-pie {
     -fx-pie-color: #47A992;
 }
+.default-color4.chart-bar {
+    -fx-bar-fill: #47A992;
+}
 
 .default-color5.chart-pie {
     -fx-pie-color: #C84B31;
+}
+.default-color5.chart-bar {
+    -fx-bar-fill: #C84B31;
 }
 
 .default-color6.chart-pie {
     -fx-pie-color: #BCCC9A;
 }
+.default-color6.chart-bar {
+    -fx-bar-fill: #BCCC9A;
+}
 
 .default-color7.chart-pie {
     -fx-pie-color: #968C83;
+}
+.default-color7.chart-bar {
+    -fx-bar-fill: #968C83;
 }
 
 .chart-pie {
@@ -438,23 +517,207 @@ ProgressIndicator {
 }
 
 .chart-legend {
-    -fx-background-color: card-pane-color;
+    -fx-background-color: -color-bg-default;
 }
 
 .chart-legend>.label {
-    -fx-text-fill: text-color;
+    -fx-text-fill: -owlplug-color-text;
 }
 
 .chart-pie-label {
-    -fx-fill: text-color;
+    -fx-fill: -owlplug-color-text;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: -color-fg-subtle;
+    -fx-fill: -color-fg-subtle;
 }
 
 .doughnut-inner-circle {
-    -fx-fill: card-pane-color;
+    -fx-fill: -color-bg-default;
 }
 
 .preloader .progress-bar {
-    dot_color: disabled-color;
+    dot_color: -color-fg-muted;
+}
+
+/****************************************************************
+ * Package list view
+ ****************************************************************/
+
+.package-list-view {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+.package-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 1 0 1 0;
+}
+
+.package-list-view .list-cell:filled:hover,
+.package-list-view .list-cell:filled:selected {
+    -fx-background-color: transparent;
+}
+
+.list-load-more-bar {
+    -fx-background-color: -color-bg-overlay;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 1px;
+    -fx-border-color: -color-border-muted;
+    -fx-padding: 4 16 4 16;
+}
+
+.package-list-row {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-border-color: -color-border-muted;
+    -fx-cursor: hand;
+}
+
+.package-list-row:hover {
+    -fx-background-color: -color-bg-overlay;
+    -fx-border-color: -color-accent-muted;
+}
+
+.package-list-view .list-cell:filled:selected .package-list-row {
+    -fx-border-color: -color-accent-emphasis;
+}
+
+.package-list-thumb {
+    -fx-background-color: -color-bg-inset;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.image-loading-pane {
+    -fx-background-color: -color-bg-inset;
+}
+
+.package-list-name {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-fg-default;
+}
+
+.package-list-creator {
+    -fx-text-fill: -color-fg-muted;
+    -fx-font-size: 11px;
+}
+
+.plugin-format-badge {
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-padding: 2 5 2 4;
+}
+
+.plugin-format-badge .label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 0;
+}
+
+.plugin-format-badge-vst2 {
+    -fx-background-color: rgba(52, 152, 219, 0.15);
+}
+.plugin-format-badge-vst2 .label {
+    -fx-text-fill: #3498db;
+}
+
+.plugin-format-badge-vst3 {
+    -fx-background-color: rgba(46, 204, 113, 0.15);
+}
+.plugin-format-badge-vst3 .label {
+    -fx-text-fill: #27ae60;
+}
+
+.plugin-format-badge-au {
+    -fx-background-color: rgba(155, 89, 182, 0.15);
+}
+.plugin-format-badge-au .label {
+    -fx-text-fill: #9b59b6;
+}
+
+.plugin-format-badge-lv2 {
+    -fx-background-color: rgba(230, 126, 34, 0.15);
+}
+.plugin-format-badge-lv2 .label {
+    -fx-text-fill: #e67e22;
+}
+
+.plugin-format-badge-default {
+    -fx-background-color: rgba(149, 165, 166, 0.15);
+}
+.plugin-format-badge-default .label {
+    -fx-text-fill: #95a5a6;
+}
+
+.package-stage-badge {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 1 4 1 4;
+    -fx-background-radius: 0 3px 0 0;
+    -fx-text-fill: white;
+}
+
+.package-stage-beta {
+    -fx-background-color: rgba(231, 76, 60, 0.85);
+}
+
+.package-stage-demo {
+    -fx-background-color: rgba(155, 89, 182, 0.85);
+}
+
+
+
+/****************************************************************
+ * Install step dialog
+ ****************************************************************/
+
+.install-step-screenshot .progress-bar > .bar {
+    -fx-background-radius: 0;
+}
+
+/****************************************************************
+ * Settings view
+ ****************************************************************/
+
+.settings-sidebar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 1 0 0;
+}
+
+.settings-sidebar-footer {
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1 0 0 0;
+}
+
+.settings-nav-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-padding: 8 12 8 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+    -fx-max-width: Infinity;
+}
+
+.settings-nav-button:hover {
+    -fx-background-color: -color-neutral-subtle;
+}
+
+.settings-nav-button:selected {
+    -fx-background-color: -color-accent-subtle;
+    -fx-text-fill: -color-accent-fg;
+    -fx-font-weight: bold;
+}
+
+.settings-nav-button:selected .ikonli-font-icon {
+    -fx-icon-color: -color-accent-fg;
 }
 
 /****************************************************************
@@ -467,6 +730,157 @@ ProgressIndicator {
     -fx-background-color: transparent;
 }
 
+/****************************************************************
+ *
+ * Home Dashboard
+ *
+ * **************************************************************/
+
+.dashboard-tile {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1px;
+    -fx-spacing: 4;
+    -fx-min-width: 90px;
+}
+
+.dashboard-tile-clickable {
+    -fx-cursor: hand;
+}
+
+.dashboard-tile-clickable:hover {
+    -fx-background-color: -color-bg-overlay;
+    -fx-border-color: -color-accent-fg;
+}
+
+.dashboard-tile-value {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-emphasis;
+}
+
+.dashboard-tile-value-small {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-default;
+}
+
+.dashboard-tile-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.dashboard-section-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-subtle;
+}
+
+.dashboard-bar-chart {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.dashboard-bar-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.dashboard-bar-chart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.dashboard-bar-chart .chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.dashboard-bar-chart .axis {
+    -fx-tick-label-fill: -color-fg-muted;
+}
+
+.dashboard-bar-chart .axis-label {
+    -fx-text-fill: -color-fg-muted;
+}
+
+.dashboard-bar-chart .axis-line {
+    -fx-opacity: 0
+}
+
+.dashboard-bar-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-emphasis;
+}
+
 .no-padding {
     -fx-padding: 0;
+}
+
+.dashboard-scan-indicator {
+    -fx-background-color: -color-accent-subtle;
+    -fx-background-radius: 6px;
+    -fx-padding: 6 12 6 12;
+}
+
+.dashboard-scan-indicator .ikonli-font-icon {
+    -fx-icon-color: -color-accent-fg;
+}
+
+.dashboard-scan-indicator .label {
+    -fx-text-fill: -color-accent-fg;
+}
+
+/****************************************************************
+ * Plugin filter sidebar
+ ****************************************************************/
+
+.plugin-filter-sidebar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 1 0 0;
+}
+
+.plugin-filter-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.plugin-filter-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.plugin-filter-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.plugin-filter-section-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-muted;
+    -fx-padding: 4 0 2 0;
+}
+
+.plugin-filter-clear {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-underline: false;
+    -fx-padding: 0;
+}
+
+.plugin-filter-clear:hover {
+    -fx-text-fill: -color-fg-default;
+}
+
+.plugin-filter-view-more {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-accent-fg;
+    -fx-underline: false;
+    -fx-padding: 2 0 0 0;
+}
+
+.notification-badge-label {
+    -fx-background-color: -color-accent-emphasis;
+    -fx-text-fill: -color-fg-emphasis;
 }

@@ -27,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class ProjectTreeCell extends TreeCell<Object> {
 
@@ -54,9 +55,19 @@ public class ProjectTreeCell extends TreeCell<Object> {
         List<DawPlugin> failedLookups = project.getPluginByLookupResult(LookupResult.MISSING);
         if (!failedLookups.isEmpty()) {
           Label missingLabel = new Label(failedLookups.size() + " Missing plugin(s)");
-          missingLabel.setGraphic(new ImageView(applicationDefaults.errorIconImage));
+          FontIcon statusIcon = new FontIcon("mdi2a-alert-circle-outline");
+          statusIcon.getStyleClass().add("status-icon-missing");
+          missingLabel.setGraphic(statusIcon);
           missingLabel.getStyleClass().add("label-danger");
           hbox.getChildren().add(missingLabel);
+        }
+        if (project.isBackup()) {
+          Label backupLabel = new Label("Backup");
+          FontIcon backupIcon = new FontIcon("mdi2h-history");
+          backupIcon.getStyleClass().add("status-icon-backup");
+          backupLabel.setGraphic(backupIcon);
+          backupLabel.getStyleClass().add("label-warning");
+          hbox.getChildren().add(backupLabel);
         }
 
         setGraphic(hbox);

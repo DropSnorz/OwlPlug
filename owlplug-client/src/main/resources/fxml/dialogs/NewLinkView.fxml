@@ -7,6 +7,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <VBox prefWidth="589.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.plugin.controllers.dialogs.NewLinkController">
    <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
@@ -52,15 +53,11 @@
          <HBox.margin>
             <Insets top="5.0"/>
          </HBox.margin>
-         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../../icons/folderlink-grey-16.png"/>
-         </ImageView>
+         <FontIcon iconLiteral="mdi2f-folder-arrow-right" />
          <SVGPath
                  content="M 11,21.883 4.765,14.356 4,15 11.521,24 19,15 18.236,14.355 12,21.884 12,-9.6875002 h -1 z"
                  fill="#8f8f8f"/>
-         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../../icons/folder-grey-16.png"/>
-         </ImageView>
+         <FontIcon iconLiteral="mdi2f-folder" />
       </VBox>
       <VBox maxWidth="1.7976931348623157E308" spacing="20.0" HBox.hgrow="ALWAYS">
          <VBox>

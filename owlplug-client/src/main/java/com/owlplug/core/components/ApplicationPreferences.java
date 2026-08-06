@@ -28,12 +28,14 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 /**
  * Preferences wrapper supporting string list persistence.
  */
 @Component
+@DependsOn("preferencesMigration")
 public class ApplicationPreferences {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -59,6 +61,14 @@ public class ApplicationPreferences {
 
   public void putBoolean(String key, boolean value) {
     basePreferences.putBoolean(key, value);
+  }
+
+  public int getInt(String key, int def) {
+    return basePreferences.getInt(key, def);
+  }
+
+  public void putInt(String key, int value) {
+    basePreferences.putInt(key, value);
   }
 
   public long getLong(String key, long def) {
@@ -99,6 +109,10 @@ public class ApplicationPreferences {
     } catch (JsonProcessingException e) {
       log.error("List value can't be serialized to Preferences using key {}", key, e);
     }
+  }
+
+  public void remove(String key) {
+    basePreferences.remove(key);
   }
 
   public void clear() throws BackingStoreException {

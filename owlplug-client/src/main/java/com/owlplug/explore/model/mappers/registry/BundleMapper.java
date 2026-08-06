@@ -22,25 +22,15 @@ import java.util.List;
 
 public class BundleMapper {
 
-  @Deprecated
-  private String name;
   private List<String> targets;
   private String downloadUrl;
 
   private String downloadSha256;
 
-  @Deprecated
-  private String format;
-
   private List<String> formats;
   private String version;
   private String technicalUid;
   private long fileSize;
-
-  @Deprecated
-  public String getName() {
-    return name;
-  }
 
   public List<String> getFormats() {
     return formats;
@@ -48,11 +38,6 @@ public class BundleMapper {
 
   public void setFormats(List<String> formats) {
     this.formats = formats;
-  }
-
-  @Deprecated
-  public void setName(String name) {
-    this.name = name;
   }
 
   public List<String> getTargets() {
@@ -87,11 +72,6 @@ public class BundleMapper {
     this.fileSize = fileSize;
   }
 
-  @Deprecated
-  public String getFormat() {
-    return format;
-  }
-
   public String getVersion() {
     return version;
   }
@@ -106,11 +86,6 @@ public class BundleMapper {
 
   public void setTechnicalUid(String technicalUid) {
     this.technicalUid = technicalUid;
-  }
-
-  @Deprecated
-  public void setFormat(String format) {
-    this.format = format;
   }
 
 }

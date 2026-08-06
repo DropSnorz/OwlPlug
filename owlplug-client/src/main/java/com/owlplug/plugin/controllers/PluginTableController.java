@@ -18,17 +18,21 @@
 
 package com.owlplug.plugin.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.controllers.dialogs.DisablePluginDialogController;
 import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
+import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
+import com.owlplug.plugin.ui.PluginKindBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
+import java.util.function.Predicate;
 import java.io.File;
 import com.owlplug.core.utils.Async;
 import javafx.beans.binding.Bindings;
@@ -45,9 +49,9 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -64,6 +68,7 @@ public class PluginTableController extends BaseController {
   private PluginService pluginService;
 
   private final SimpleStringProperty search = new SimpleStringProperty();
+  private final SimpleObjectProperty<Predicate<IPlugin>> filterPredicate = new SimpleObjectProperty<>();
   private final TableView<IPlugin> tableView;
 
   private final ObservableList<IPlugin> pluginList;
@@ -92,13 +97,20 @@ public class PluginTableController extends BaseController {
     FilteredList<IPlugin> filteredPluginList = new FilteredList<>(pluginList);
 
     filteredPluginList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (search.getValue() == null || search.getValue().isEmpty()) {
+      String searchVal = search.getValue();
+      boolean hasSearch = searchVal != null && !searchVal.isEmpty();
+      Predicate<IPlugin> fp = filterPredicate.get();
+      if (!hasSearch && fp == null) {
         return null;
       }
-      return (plugin) -> plugin.getName().toLowerCase().contains(search.getValue().toLowerCase())
-                 || (plugin.getCategory() != null && plugin.getCategory().toLowerCase().contains(
-                     search.getValue().toLowerCase()));
-    }, search));
+      return plugin -> {
+        boolean searchMatch = !hasSearch
+            || plugin.getName().toLowerCase().contains(searchVal.toLowerCase())
+            || (plugin.getCategory() != null
+                && plugin.getCategory().toLowerCase().contains(searchVal.toLowerCase()));
+        return searchMatch && (fp == null || fp.test(plugin));
+      };
+    }, search, filterPredicate));
 
     SortedList<IPlugin> sortedPluginList = new SortedList<>(filteredPluginList);
     tableView.setItems(sortedPluginList);
@@ -110,17 +122,16 @@ public class PluginTableController extends BaseController {
     TableColumn<IPlugin, String> nameColumn = new TableColumn<>("Name");
     nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
     TableColumn<IPlugin, PluginFormat> formatColumn = new TableColumn<>("Format");
-    formatColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().asPlugin().getFormat()));
+    formatColumn.setCellValueFactory(
+        cellData -> new SimpleObjectProperty<>(cellData.getValue().asPlugin().getFormat()));
     formatColumn.setCellFactory(e -> new TableCell<>() {
       @Override
       public void updateItem(PluginFormat item, boolean empty) {
         super.updateItem(item, empty);
         if (item == null || empty) {
-          setText(null);
           setGraphic(null);
         } else {
-          setText(item.getText());
-          setGraphic(new ImageView(getApplicationDefaults().getPluginFormatIcon(item)));
+          setGraphic(new PluginKindBadgeView(getTableRow().getItem(), getApplicationDefaults()));
         }
       }
     });
@@ -144,7 +155,7 @@ public class PluginTableController extends BaseController {
           setGraphic(null);
         } else {
           setText(item);
-          setGraphic(new ImageView(getApplicationDefaults().directoryImage));
+          setGraphic(new FontIcon("mdi2f-folder"));
         }
       }
     });
@@ -161,7 +172,7 @@ public class PluginTableController extends BaseController {
           setGraphic(null);
         } else {
           setText(item);
-          setGraphic(new ImageView(getApplicationDefaults().scanDirectoryImage));
+          setGraphic(new FontIcon("mdi2f-folder-search"));
         }
       }
     });
@@ -185,6 +196,10 @@ public class PluginTableController extends BaseController {
     tableView.getColumns().addAll(formatColumn, nameColumn, versionColumn,
         manufacturerColumn, categoryColumn, directoryColumn, scanDirectoryColumn, stateColumn);
 
+  }
+
+  public void bindFilterState(PluginFilterState filterState) {
+    filterPredicate.bind(filterState.predicateProperty());
   }
 
   public void setPlugins(Iterable<Plugin> plugins) {
@@ -217,6 +232,29 @@ public class PluginTableController extends BaseController {
     }
   }
 
+  /**
+   * Selects the table row for the given component id. Components only appear as
+   * their own table row when the parent plugin has more than one component
+   * (shell plugins); otherwise the parent plugin row is selected instead.
+   */
+  public void selectComponentById(long id) {
+    IPlugin fallback = null;
+
+    for (IPlugin p : pluginList) {
+      if (p instanceof PluginComponent tableComponent && tableComponent.getId().equals(id)) {
+        tableView.getSelectionModel().select(p);
+        return;
+      }
+      if (p instanceof Plugin plugin && plugin.getComponents().stream().anyMatch(c -> c.getId().equals(id))) {
+        fallback = p;
+      }
+    }
+
+    if (fallback != null) {
+      tableView.getSelectionModel().select(fallback);
+    }
+  }
+
   public SimpleStringProperty searchProperty() {
     return this.search;
   }
@@ -246,7 +284,7 @@ public class PluginTableController extends BaseController {
       } else {
         MenuItem disableItem = new MenuItem("Disable plugin");
         disableItem.setOnAction(e -> {
-          if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
+          if (this.getPreferences().getBoolean(Prefs.App.SHOW_DIALOG_DISABLE_PLUGIN, true)) {
             this.disableController.setPlugin(p);
             this.disableController.show();
           } else {

@@ -60,12 +60,11 @@
 
 .chip-view .chip>HBox {
     -fx-font-size: 11.0;
-    -fx-background-color: #E0E0E0;
-    -fx-background-radius: 40px;
-    -fx-padding: 5px 8px 5px 12px;
-    -fx-pref-height: 32px;
+    -fx-background-radius: 3px;
+    -fx-padding: 2px 2px 2px 4px;
+    -fx-pref-height: 18px;
     -fx-alignment: center-left;
-    -fx-spacing: 8;
+    -fx-spacing: 2;
 }
 
 .chip-view>.scroll-pane,
@@ -115,4 +114,14 @@
 .chip-view>.scroll-pane>.scroll-bar .decrement-arrow {
     -fx-shape: " ";
     -fx-padding: 0;
+}
+
+.notification-badge-label {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 0 4 0 4;
+    -fx-font-size: 10px;
+    -fx-min-width: 16px;
+    -fx-alignment: center;
 }

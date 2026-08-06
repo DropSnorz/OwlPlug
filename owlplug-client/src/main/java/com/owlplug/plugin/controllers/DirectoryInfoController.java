@@ -18,8 +18,6 @@
  
 package com.owlplug.plugin.controllers;
 
-import com.owlplug.controls.Dialog;
-import com.owlplug.controls.DialogLayout;
 import com.owlplug.controls.DoughnutChart;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.Async;
@@ -27,12 +25,11 @@ import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.StringUtils;
-import com.owlplug.plugin.components.PluginTaskFactory;
+import com.owlplug.plugin.controllers.dialogs.RemoveDirectoryDialogController;
 import com.owlplug.plugin.model.FileStat;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginDirectory;
 import com.owlplug.plugin.repositories.FileStatRepository;
-import com.owlplug.plugin.tasks.DirectoryRemoveTask;
 import com.owlplug.plugin.ui.PluginListCellFactory;
 import java.io.File;
 import java.util.List;
@@ -49,12 +46,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -62,7 +61,7 @@ import org.springframework.stereotype.Controller;
 public class DirectoryInfoController extends BaseController {
 
   @Autowired
-  private PluginTaskFactory taskFactory;
+  private RemoveDirectoryDialogController removeDirectoryDialogController;
   @Autowired
   private FileStatRepository fileStatRepository;
 
@@ -114,33 +113,8 @@ public class DirectoryInfoController extends BaseController {
     pluginDirectoryListView.setCellFactory(new PluginListCellFactory(this.getApplicationDefaults()));
 
     deleteDirectoryButton.setOnAction(e -> {
-      Dialog dialog = this.getDialogManager().newDialog();
-      DialogLayout layout = new DialogLayout();
-
-      PluginDirectory pluginDirectory = pluginDirectoryProperty.get();
-
-      layout.setHeading(new Label("Remove directory"));
-      layout.setBody(new Label("Do you really want to remove " + pluginDirectory.getName()
-          + " and all of its content ? This will permanently delete the file from your hard drive."));
-
-      Button cancelButton = new Button("Cancel");
-
-      cancelButton.setOnAction(cancelEvent -> {
-        dialog.close();
-      });
-
-      Button removeButton = new Button("Remove");
-      removeButton.setOnAction(removeEvent -> {
-        dialog.close();
-        taskFactory.create(new DirectoryRemoveTask(pluginDirectory))
-            .setOnSucceeded(x -> taskFactory.createPluginScanTask(pluginDirectory.getPath()).schedule())
-            .schedule();
-      });
-      removeButton.getStyleClass().add("button-danger");
-
-      layout.setActions(removeButton, cancelButton);
-      dialog.setContent(layout);
-      dialog.show();
+      removeDirectoryDialogController.setDirectory(pluginDirectoryProperty.get());
+      removeDirectoryDialogController.show();
     });
 
     pieChart = new DoughnutChart() {
@@ -166,6 +140,20 @@ public class DirectoryInfoController extends BaseController {
 
     fileNameColumn.setCellValueFactory(cellData ->
             new SimpleStringProperty(cellData.getValue().getName()));
+    fileNameColumn.setCellFactory(e -> new TableCell<>() {
+      @Override
+      public void updateItem(String item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item == null || empty) {
+          setText(null);
+          setGraphic(null);
+        } else {
+          setText(item);
+          boolean isDirectory = new File(getTableRow().getItem().getPath()).isDirectory();
+          setGraphic(new FontIcon(isDirectory ? "mdi2f-folder" : "mdi2f-file-outline"));
+        }
+      }
+    });
 
     fileSizeColumn.setCellValueFactory(cellData ->
             new SimpleStringProperty(

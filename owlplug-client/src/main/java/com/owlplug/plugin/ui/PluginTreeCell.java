@@ -30,16 +30,16 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class PluginTreeCell extends TreeCell<Object> {
 
-  private PluginService pluginService;
-  private ApplicationDefaults applicationDefaults;
+  private final PluginService pluginService;
+  private final ApplicationDefaults applicationDefaults;
 
   public PluginTreeCell(ApplicationDefaults applicationDefaults, PluginService pluginService) {
     this.applicationDefaults = applicationDefaults;
@@ -75,7 +75,7 @@ public class PluginTreeCell extends TreeCell<Object> {
   private void renderPlugin(Plugin plugin) {
     HBox hbox = new HBox(4);
     hbox.setAlignment(Pos.CENTER_LEFT);
-    hbox.getChildren().add(new ImageView(applicationDefaults.getPluginFormatIcon(plugin.getFormat())));
+    hbox.getChildren().add(new PluginFormatBadgeView(plugin.getFormat(), applicationDefaults, PluginFormatBadgeView.DisplayMode.ICON_ONLY));
     hbox.getChildren().add(new Label(plugin.getName()));
     Circle circle = new Circle(0, 0, 2);
     hbox.getChildren().add(circle);
@@ -105,7 +105,7 @@ public class PluginTreeCell extends TreeCell<Object> {
 
   private void renderComponent(PluginComponent pluginComponent) {
     Label label = new Label(pluginComponent.getName());
-    label.setGraphic(new ImageView(applicationDefaults.pluginComponentImage));
+    label.setGraphic(new FontIcon("mdi2t-toy-brick-outline"));
     setGraphic(label);
     setText(null);
   }
@@ -135,15 +135,15 @@ public class PluginTreeCell extends TreeCell<Object> {
 
     Node icon;
     if (dir instanceof Symlink) {
-      icon = new ImageView(applicationDefaults.symlinkImage);
+      icon = new FontIcon("mdi2f-folder-arrow-right");
     } else if (dir instanceof PluginDirectory pluginDirectory) {
       if (pluginDirectory.isRootDirectory()) {
-        icon = new ImageView(applicationDefaults.scanDirectoryImage);
+        icon = new FontIcon("mdi2f-folder-search");
       } else {
-        icon = new ImageView(applicationDefaults.directoryImage);
+        icon = new FontIcon("mdi2f-folder");
       }
     } else {
-      icon = new ImageView(applicationDefaults.directoryImage);
+      icon = new FontIcon("mdi2f-folder");
     }
     HBox hbox = new HBox(5);
     hbox.getChildren().add(icon);

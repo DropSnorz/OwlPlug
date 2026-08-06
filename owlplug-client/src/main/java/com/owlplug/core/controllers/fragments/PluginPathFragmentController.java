@@ -18,10 +18,14 @@
 
 package com.owlplug.core.controllers.fragments;
 
+import atlantafx.base.controls.ToggleSwitch;
+import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationPreferences;
+import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
 import com.owlplug.core.ui.SVGPaths;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
+import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -33,11 +37,11 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
-import org.controlsfx.control.ToggleSwitch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +51,8 @@ public class PluginPathFragmentController {
 
   @FXML
   private Node mainNode;
+  @FXML
+  private HBox headerBox;
   @FXML
   private Label headerLabel;
   @FXML
@@ -69,21 +75,24 @@ public class PluginPathFragmentController {
   private SVGPath crossPath = new SVGPath();
 
 
-  private String name;
+  private PluginFormat pluginFormat;
   private String enableOptionKey;
   private String directoryOptionKey;
   private String extraDirectoryOptionKey;
   private ApplicationPreferences prefs;
+  private ApplicationDefaults applicationDefaults;
   private ListDirectoryDialogController listDirectoryDialogController;
 
-  public PluginPathFragmentController(String name, String enableOptionKey, String directoryOptionKey,
+  public PluginPathFragmentController(PluginFormat pluginFormat, String enableOptionKey, String directoryOptionKey,
                                       String extraDirectoryOptionKey, ApplicationPreferences prefs,
+                                      ApplicationDefaults applicationDefaults,
                                       ListDirectoryDialogController listDirectoryDialogController) {
-    this.name = name;
+    this.pluginFormat = pluginFormat;
     this.enableOptionKey = enableOptionKey;
     this.directoryOptionKey = directoryOptionKey;
     this.extraDirectoryOptionKey = extraDirectoryOptionKey;
     this.prefs = prefs;
+    this.applicationDefaults = applicationDefaults;
     this.listDirectoryDialogController = listDirectoryDialogController;
 
     init();
@@ -104,10 +113,14 @@ public class PluginPathFragmentController {
     checkPath.setContent(SVGPaths.check);
     crossPath.setContent(SVGPaths.cross);
 
-    headerLabel.setText(name);
-    directoryTextField.setPromptText(name + " plugin directory");
+    PluginFormatBadgeView badge = new PluginFormatBadgeView(
+        pluginFormat, applicationDefaults, PluginFormatBadgeView.DisplayMode.DEFAULT);
+    headerBox.getChildren().add(0, badge);
 
-    activationToggleButton.setText("Explore " + name + " plugins");
+    headerLabel.setText(pluginFormat.getFullName());
+    directoryTextField.setPromptText(pluginFormat.getName() + " plugin directory");
+
+    activationToggleButton.setText("Scan " + pluginFormat.getName() + " plugins");
     activationToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
       prefs.putBoolean(enableOptionKey, newValue);
       refresh();
@@ -225,11 +238,11 @@ public class PluginPathFragmentController {
     if (checks.getExists().status()) {
       directoryExistLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: disabled-color;");
+      imv.setStyle("-fx-background-color: -color-fg-muted;");
     } else {
       directoryExistLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
-      imv.setStyle("-fx-background-color: danger-color;");
+      imv.setStyle("-fx-background-color: -color-danger-emphasis;");
     }
     directoryExistLabel.setTooltip(new Tooltip(checks.getExists().message()));
 
@@ -238,11 +251,11 @@ public class PluginPathFragmentController {
     if (checks.getCanRead().status()) {
       canReadLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: disabled-color;");
+      imv.setStyle("-fx-background-color: -color-fg-muted;");
     } else {
       canReadLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
-      imv.setStyle("-fx-background-color: danger-color;");
+      imv.setStyle("-fx-background-color: -color-danger-emphasis;");
     }
     canReadLabel.setTooltip(new Tooltip(checks.getCanRead().message()));
 
@@ -251,11 +264,11 @@ public class PluginPathFragmentController {
     if (checks.getCanWrite().status()) {
       canWriteLabel.getStyleClass().add("label-disabled");
       imv.setShape(checkPath);
-      imv.setStyle("-fx-background-color: disabled-color;");
+      imv.setStyle("-fx-background-color: -color-fg-muted;");
     } else {
       canWriteLabel.getStyleClass().add("label-danger");
       imv.setShape(crossPath);
-      imv.setStyle("-fx-background-color: danger-color;");
+      imv.setStyle("-fx-background-color: -color-danger-emphasis;");
     }
     canWriteLabel.setTooltip(new Tooltip(checks.getCanWrite().message()));
   }

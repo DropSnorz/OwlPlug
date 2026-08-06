@@ -35,6 +35,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(indexes = { @Index(name = "IDX_PACKAGE_ID", columnList = "id"),
@@ -48,8 +49,6 @@ public class RemotePackage {
   private String name;
   private String slug;
   private String pageUrl;
-  @Deprecated
-  private String downloadUrl;
   private String screenshotUrl;
   private String donateUrl;
   private String creator;
@@ -70,6 +69,7 @@ public class RemotePackage {
   private Set<PackageBundle> bundles = new HashSet<>();
   @OneToMany(mappedBy = "remotePackage", orphanRemoval = true, fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST,
       CascadeType.REMOVE })
+  @BatchSize(size = 100)
   private Set<PackageTag> tags = new HashSet<>();
 
   public Long getId() {
@@ -102,16 +102,6 @@ public class RemotePackage {
 
   public void setPageUrl(String pageUrl) {
     this.pageUrl = pageUrl;
-  }
-
-  @Deprecated
-  public String getDownloadUrl() {
-    return downloadUrl;
-  }
-
-  @Deprecated
-  public void setDownloadUrl(String downloadUrl) {
-    this.downloadUrl = downloadUrl;
   }
 
   public String getScreenshotUrl() {

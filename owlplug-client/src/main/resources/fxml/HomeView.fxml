@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="no-padding"
+            xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.owlplug.core.controllers.HomeController">
+    <VBox spacing="24.0">
+        <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+        </padding>
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT">
+            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                <Label styleClass="heading-2" text="Overview"/>
+                <Label styleClass="label-disabled" text="Your plugin library at a glance"/>
+            </VBox>
+            <Label fx:id="lastScanLabel" styleClass="label-disabled"/>
+        </HBox>
+
+        <!-- Quick Actions -->
+        <HBox alignment="CENTER_LEFT" spacing="8.0">
+            <FontIcon iconLiteral="mdi2m-magnify" iconSize="16"/>
+            <TextField fx:id="pluginSearchField" promptText="Search plugins and press Enter..." HBox.hgrow="ALWAYS"/>
+            <Button fx:id="scanPluginsButton" text="Scan Plugins">
+                <graphic><FontIcon iconLiteral="mdi2s-sync" iconSize="14"/></graphic>
+            </Button>
+            <Button fx:id="exploreButton" text="Explore">
+                <graphic><FontIcon iconLiteral="mdi2c-compass-outline" iconSize="14"/></graphic>
+            </Button>
+            <Button fx:id="syncProjectsButton" text="Sync Projects">
+                <graphic><FontIcon iconLiteral="mdi2s-sync" iconSize="14"/></graphic>
+            </Button>
+            <Button fx:id="settingsButton" text="Settings">
+                <graphic><FontIcon iconLiteral="mdi2c-cog-outline" iconSize="14"/></graphic>
+            </Button>
+        </HBox>
+
+        <!-- Scan in progress indicator -->
+        <HBox fx:id="scanProgressPane" alignment="CENTER_LEFT" managed="false" spacing="8.0"
+              styleClass="dashboard-scan-indicator" visible="false">
+            <FontIcon fx:id="scanIcon" iconLiteral="mdi2s-sync" iconSize="14"/>
+            <Label text="Scanning plugins..."/>
+        </HBox>
+
+        <!-- Setup Suggestions (conditionally shown) -->
+        <VBox fx:id="setupPane" spacing="14.0" styleClass="dashboard-card">
+            <Label styleClass="dashboard-section-title" text="GET STARTED"/>
+
+            <VBox fx:id="noPluginDirectorySuggestion" spacing="6.0">
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <FontIcon iconLiteral="mdi2a-alert-circle-outline" iconSize="14"
+                              style="-fx-icon-color: -color-danger-fg;"/>
+                    <Label styleClass="label-emphase" text="No plugin directories configured"/>
+                </HBox>
+                <Label styleClass="label-disabled"
+                       text="Enable at least one plugin format and set a directory in Settings to start scanning."/>
+                <Button fx:id="setupPluginDirButton" text="Open Settings">
+                    <graphic><FontIcon iconLiteral="mdi2c-cog-outline" iconSize="14"/></graphic>
+                </Button>
+            </VBox>
+
+            <VBox fx:id="noPluginSuggestion" spacing="6.0">
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <FontIcon iconLiteral="mdi2f-folder-search-outline" iconSize="14"/>
+                    <Label styleClass="label-emphase" text="No plugins scanned yet"/>
+                </HBox>
+                <Label styleClass="label-disabled"
+                       text="Plugin directories are configured. Run a scan to discover your installed plugins."/>
+                <Button fx:id="scanSuggestionButton" text="Scan Plugins Now">
+                    <graphic><FontIcon iconLiteral="mdi2s-sync" iconSize="14"/></graphic>
+                </Button>
+            </VBox>
+
+            <VBox fx:id="noProjectSuggestion" spacing="6.0">
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <FontIcon iconLiteral="mdi2f-folder-outline" iconSize="14"/>
+                    <Label styleClass="label-emphase" text="No projects found"/>
+                </HBox>
+                <Label styleClass="label-disabled"
+                       text="Configure a project directory to track your DAW projects and their plugin dependencies."/>
+                <Button fx:id="setupProjectDirButton" text="Configure Project Directory">
+                    <graphic><FontIcon iconLiteral="mdi2f-folder-music-outline" iconSize="14"/></graphic>
+                </Button>
+            </VBox>
+        </VBox>
+
+        <!-- Plugins Stats -->
+        <VBox spacing="8.0">
+            <Label styleClass="dashboard-section-title" text="PLUGINS"/>
+            <HBox spacing="10.0">
+                <VBox fx:id="pluginTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets bottom="16.0" left="20.0" right="20.0" top="16.0"/>
+                    </padding>
+                    <Label fx:id="pluginCountLabel" styleClass="dashboard-tile-value" text="0"/>
+                    <Label styleClass="dashboard-tile-label" text="Total Plugins"/>
+                </VBox>
+                <VBox fx:id="vst2Tile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/vst2-blue-16.png"/>
+                        </ImageView>
+                        <Label styleClass="dashboard-tile-label" text="VST2"/>
+                    </HBox>
+                    <Label fx:id="vst2CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+                <VBox fx:id="vst3Tile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/vst3-green-16.png"/>
+                        </ImageView>
+                        <Label styleClass="dashboard-tile-label" text="VST3"/>
+                    </HBox>
+                    <Label fx:id="vst3CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+                <VBox fx:id="auTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/au-purple-16.png"/>
+                        </ImageView>
+                        <Label styleClass="dashboard-tile-label" text="AU"/>
+                    </HBox>
+                    <Label fx:id="auCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+                <VBox fx:id="lv2Tile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@../icons/lv2-orange-16.png"/>
+                        </ImageView>
+                        <Label styleClass="dashboard-tile-label" text="LV2"/>
+                    </HBox>
+                    <Label fx:id="lv2CountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+                <VBox fx:id="disabledTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <FontIcon iconLiteral="mdi2e-eye-off-outline" iconSize="12"/>
+                        <Label styleClass="dashboard-tile-label" text="Disabled"/>
+                    </HBox>
+                    <Label fx:id="disabledCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Projects Stats -->
+        <VBox spacing="8.0">
+            <Label styleClass="dashboard-section-title" text="PROJECTS"/>
+            <HBox spacing="10.0">
+                <VBox fx:id="projectTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets bottom="16.0" left="20.0" right="20.0" top="16.0"/>
+                    </padding>
+                    <Label fx:id="projectCountLabel" styleClass="dashboard-tile-value" text="0"/>
+                    <Label styleClass="dashboard-tile-label" text="Total Projects"/>
+                </VBox>
+                <VBox fx:id="unresolvedTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <FontIcon iconLiteral="mdi2a-alert-circle-outline" />
+                        <Label styleClass="dashboard-tile-label" text="Unresolved"/>
+                    </HBox>
+                    <Label fx:id="unresolvedPluginCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+                <VBox fx:id="pluginDirTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <FontIcon iconLiteral="mdi2p-power-plug-outline" iconSize="12"/>
+                        <Label styleClass="dashboard-tile-label" text="Plugin Dirs"/>
+                    </HBox>
+                    <Label fx:id="pluginDirectoryCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+                <VBox fx:id="projectDirTile" styleClass="dashboard-tile, dashboard-tile-clickable" HBox.hgrow="SOMETIMES">
+                    <padding>
+                        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                        <FontIcon iconLiteral="mdi2f-folder-music-outline" iconSize="12"/>
+                        <Label styleClass="dashboard-tile-label" text="Project Dirs"/>
+                    </HBox>
+                    <Label fx:id="projectDirectoryCountLabel" styleClass="dashboard-tile-value-small" text="0"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Storage / File Size Chart -->
+        <VBox spacing="8.0">
+            <Label styleClass="dashboard-section-title" text="STORAGE"/>
+            <VBox spacing="8.0" styleClass="dashboard-card">
+                <VBox fx:id="fileSizeChartContainer" prefHeight="160.0"/>
+                <Label fx:id="fileSizeEmptyLabel" styleClass="label-disabled"
+                       text="No file statistics available. Run a plugin scan with file stat sync enabled in Options."/>
+            </VBox>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

@@ -71,12 +71,10 @@ public class SymlinkInfoController extends BaseController {
   public void initialize() {
 
     symlinkProperty.addListener(e -> refresh());
-    openLinkButton.setGraphic(new ImageView(this.getApplicationDefaults().symlinkImage));
     openLinkButton.setOnAction(e -> {
       PlatformUtils.openFromDesktop(symlinkProperty.get().getPath());
     });
     
-    openTargetButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
     openTargetButton.setOnAction(e -> {
       PlatformUtils.openFromDesktop(symlinkProperty.get().getTargetPath());
     });

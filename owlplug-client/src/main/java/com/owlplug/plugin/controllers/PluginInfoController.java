@@ -18,9 +18,11 @@
 
 package com.owlplug.plugin.controllers;
 
+import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.controls.Dialog;
 import com.owlplug.controls.DialogLayout;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.Async;
@@ -34,6 +36,7 @@ import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.plugin.ui.PluginComponentCellFactory;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
@@ -44,19 +47,24 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
-import org.controlsfx.control.ToggleSwitch;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -79,9 +87,7 @@ public class PluginInfoController extends BaseController {
   @FXML
   private Pane pluginScreenshotPane;
   @FXML
-  private ImageView pluginFormatIcon;
-  @FXML
-  private Label pluginFormatLabel;
+  private HBox pluginFormatBadgeContainer;
   @FXML
   private Label pluginTitleLabel;
   @FXML
@@ -112,6 +118,8 @@ public class PluginInfoController extends BaseController {
   private ToggleSwitch nativeDiscoveryToggleButton;
   @FXML
   private Label lastScanErrorLabel;
+  @FXML
+  private HBox lastScanErrorContainer;
 
   private final ObjectProperty<Plugin> pluginProperty = new SimpleObjectProperty<Plugin>();
   private final ArrayList<String> knownPluginImages = new ArrayList<>();
@@ -129,7 +137,10 @@ public class PluginInfoController extends BaseController {
     pluginProperty.addListener(e -> refresh());
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
 
-    openDirectoryButton.setGraphic(new ImageView(this.getApplicationDefaults().directoryImage));
+    Tooltip pluginPathTooltip = new Tooltip();
+    pluginPathTooltip.textProperty().bind(pluginPathLabel.textProperty());
+    pluginPathLabel.setTooltip(pluginPathTooltip);
+
     openDirectoryButton.setText("");
     openDirectoryButton.setOnAction(e -> {
       File pluginFile = new File(pluginPathLabel.getText());
@@ -144,7 +155,7 @@ public class PluginInfoController extends BaseController {
 
     disableButton.setOnAction(e -> {
       Plugin plugin = pluginProperty.get();
-      if (this.getPreferences().getBoolean(ApplicationDefaults.SHOW_DIALOG_DISABLE_PLUGIN_KEY, true)) {
+      if (this.getPreferences().getBoolean(Prefs.App.SHOW_DIALOG_DISABLE_PLUGIN, true)) {
         this.disableController.setPlugin(plugin);
         this.disableController.show();
       } else {
@@ -157,8 +168,10 @@ public class PluginInfoController extends BaseController {
       Async.run(() -> pluginService.enablePlugin(plugin));
     });
 
-    pluginComponentListView.setCellFactory(new PluginComponentCellFactory(this.getApplicationDefaults()));
+    pluginComponentListView.setCellFactory(new PluginComponentCellFactory());
     lastScanErrorLabel.managedProperty().bind(lastScanErrorLabel.visibleProperty());
+    lastScanErrorContainer.visibleProperty().bind(lastScanErrorLabel.visibleProperty());
+    lastScanErrorContainer.managedProperty().bind(lastScanErrorContainer.visibleProperty());
     lastScanErrorLabel.setVisible(false);
 
     nativeDiscoveryToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -178,8 +191,9 @@ public class PluginInfoController extends BaseController {
       return;
     }
 
-    pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(plugin.getFormat()));
-    pluginFormatLabel.setText(plugin.getFormat().getText() + " Plugin");
+    pluginFormatBadgeContainer.getChildren().setAll(
+        new PluginFormatBadgeView(plugin.getFormat(), this.getApplicationDefaults()));
+
     pluginTitleLabel.setText(plugin.getName());
     pluginNameLabel.setText(Optional.ofNullable(plugin.getDescriptiveName()).orElse(plugin.getName()));
     pluginVersionLabel.setText(Optional.ofNullable(plugin.getVersion()).orElse("Unknown"));
@@ -263,13 +277,26 @@ public class PluginInfoController extends BaseController {
   
   private void showUninstallDialog() {
     Plugin plugin = pluginProperty.get();
-    
+
     Dialog dialog = this.getDialogManager().newDialog();
     DialogLayout layout = new DialogLayout();
 
     layout.setHeading(new Label("Remove plugin"));
-    layout.setBody(new Label("Do you really want to remove " + plugin.getName()
-        + " ? This will permanently delete the file from your hard drive."));
+
+    VBox vbox = new VBox(10);
+
+    Text messageText = new Text("This will permanently delete the file from your hard drive.");
+    vbox.getChildren().add(new TextFlow(messageText));
+
+    HBox pluginRow = new HBox(8);
+    pluginRow.setAlignment(Pos.CENTER_LEFT);
+    Label pluginNameLabel = new Label(plugin.getName());
+    pluginNameLabel.getStyleClass().add("label-emphase");
+    pluginRow.getChildren().addAll(
+        new PluginFormatBadgeView(plugin.getFormat(), this.getApplicationDefaults()), pluginNameLabel);
+    vbox.getChildren().add(pluginRow);
+
+    layout.setBody(vbox);
 
     Button cancelButton = new Button("Cancel");
     cancelButton.setOnAction(cancelEvent -> {

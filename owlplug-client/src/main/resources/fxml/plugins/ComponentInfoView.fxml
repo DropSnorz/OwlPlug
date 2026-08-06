@@ -3,20 +3,15 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.TextFlow?>
 
 <?import com.owlplug.plugin.ui.PluginStateView?>
-
-<?import javafx.scene.image.Image?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.owlplug.plugin.controllers.ComponentInfoController">
    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -25,6 +20,8 @@
          <String fx:value="pane-card"/>
          <String fx:value="no-padding"/>
       </styleClass>
+
+      <!-- Header: screenshot pane with title and format badge -->
       <StackPane maxHeight="180.0" prefHeight="180.0" prefWidth="500.0">
          <Pane fx:id="pluginScreenshotPane" prefHeight="180.0" prefWidth="500.0"/>
          <VBox alignment="CENTER_LEFT" spacing="5.0">
@@ -35,68 +32,68 @@
                <Insets left="20.0"/>
             </padding>
             <Label fx:id="pluginTitleLabel" styleClass="heading-title" text="UNKNOWN"/>
-            <Label fx:id="pluginFormatLabel" text="Plugin Format">
-               <graphic>
-                  <HBox spacing="5">
-                     <ImageView fx:id="pluginFormatIcon" fitHeight="16.0" fitWidth="16.0"
-                                pickOnBounds="true" preserveRatio="true"/>
-                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true"
-                                preserveRatio="true">
-                        <Image url="@../../icons/cube-white-16.png"/>
-                     </ImageView>
-                  </HBox>
-               </graphic>
-            </Label>
+            <HBox fx:id="pluginFormatBadgeContainer" alignment="CENTER_LEFT"/>
          </VBox>
       </StackPane>
+
+      <!-- General section header -->
       <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="card-title" prefHeight="34">
          <Label text="General"/>
          <Pane HBox.hgrow="ALWAYS"/>
       </HBox>
-      <GridPane>
+
+      <!-- Metadata grid -->
+      <GridPane hgap="16.0" vgap="14.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="242.0" minWidth="10.0" prefWidth="230.0"/>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.0" minWidth="10.0" prefWidth="230.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="230.0"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="230.0"/>
          </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-         </rowConstraints>
          <padding>
-            <Insets bottom="10.0" left="20.0" right="20.0" top="14.0"/>
+            <Insets left="20.0" right="20.0" top="18.0" bottom="18.0"/>
          </padding>
-         <TextFlow prefWidth="200.0">
-            <Label text="Plugin Name: "/>
-            <Label fx:id="pluginNameLabel" styleClass="label-emphase" text="UNKNOWN"/>
-         </TextFlow>
-         <TextFlow prefWidth="200.0" GridPane.columnIndex="1">
-            <Label text="Plugin Version: "/>
-            <Label fx:id="pluginVersionLabel" styleClass="label-emphase" text="UNKNOWN"/>
-         </TextFlow>
-         <TextFlow prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <Label text="Identifier: "/>
-            <Label fx:id="pluginIdentifierLabel" styleClass="label-emphase" text="UNKNOWN"/>
-         </TextFlow>
-         <HBox prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <Label text="State: "/>
-            <PluginStateView fx:id="pluginStateView" styleClass="label-emphase"/>
-         </HBox>
-         <TextFlow prefWidth="200.0" GridPane.rowIndex="1">
-            <Label text="Manufacturer: "/>
-            <Label fx:id="pluginManufacturerLabel" styleClass="label-emphase" text="UNKNOWN"/>
-         </TextFlow>
-         <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-            <Label text="Category: "/>
-            <Label fx:id="pluginCategoryLabel" styleClass="label-emphase" text="UNKNOWN"/>
-         </TextFlow>
-         <HBox alignment="BASELINE_LEFT" spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
-            <TextFlow GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
-               <Label text="Ref: "/>
-               <Label fx:id="pluginReferenceLabel" styleClass="label-emphase" text="UNKNOWN"/>
-            </TextFlow>
-         </HBox>
+
+         <!-- Name -->
+         <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <Label text="NAME" styleClass="info-field-label"/>
+            <Label fx:id="pluginNameLabel" styleClass="info-field-value" text="UNKNOWN"/>
+         </VBox>
+
+         <!-- Version -->
+         <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <Label text="VERSION" styleClass="info-field-label"/>
+            <Label fx:id="pluginVersionLabel" styleClass="info-field-value" text="UNKNOWN"/>
+         </VBox>
+
+         <!-- Manufacturer -->
+         <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <Label text="MANUFACTURER" styleClass="info-field-label"/>
+            <Label fx:id="pluginManufacturerLabel" styleClass="info-field-value" text="UNKNOWN"/>
+         </VBox>
+
+         <!-- Category -->
+         <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="CATEGORY" styleClass="info-field-label"/>
+            <Label fx:id="pluginCategoryLabel" styleClass="info-field-value" text="UNKNOWN"/>
+         </VBox>
+
+         <!-- Identifier -->
+         <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <Label text="IDENTIFIER" styleClass="info-field-label"/>
+            <Label fx:id="pluginIdentifierLabel" styleClass="info-field-value" text="UNKNOWN"/>
+         </VBox>
+
+         <!-- State -->
+         <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Label text="STATE" styleClass="info-field-label"/>
+            <PluginStateView fx:id="pluginStateView"/>
+         </VBox>
+
+         <!-- Reference (full width) -->
+         <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2147483647">
+            <Label text="REFERENCE" styleClass="info-field-label"/>
+            <Label fx:id="pluginReferenceLabel" styleClass="info-field-value" text="UNKNOWN"
+                   wrapText="true" maxWidth="440.0"/>
+         </VBox>
       </GridPane>
    </VBox>
 </AnchorPane>

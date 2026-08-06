@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
             xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.owlplug.plugin.controllers.SymlinkInfoController">
@@ -24,16 +25,12 @@
       </padding>
       <Label fx:id="directoryPathLabel" text="DirectoryPath">
          <graphic>
-            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../../icons/folderlink-grey-16.png"/>
-            </ImageView>
+            <FontIcon iconLiteral="mdi2f-folder-arrow-right" />
          </graphic>
       </Label>
       <Label fx:id="targetPathLabel" styleClass="label-disabled" text="TargetPath">
          <graphic>
-            <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-               <Image url="@../../icons/folder-grey-16.png"/>
-            </ImageView>
+            <FontIcon iconLiteral="mdi2f-folder" />
          </graphic>
          <VBox.margin>
             <Insets top="4.0"/>
@@ -46,15 +43,21 @@
          <HBox alignment="CENTER_LEFT" HBox.hgrow="SOMETIMES">
             <Button fx:id="deleteLinkButton" styleClass="button-danger" text="Unlink">
                <graphic>
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                     <Image url="@../../icons/trash-white-16.png"/>
-                  </ImageView>
+                  <FontIcon iconLiteral="mdi2d-delete-outline"/>
                </graphic>
             </Button>
          </HBox>
          <HBox alignment="CENTER_RIGHT" prefHeight="37.0" spacing="4.0" HBox.hgrow="ALWAYS">
-            <Button fx:id="openLinkButton" text="Open link"/>
-            <Button fx:id="openTargetButton" text="Open target"/>
+            <Button fx:id="openLinkButton" text="Open link">
+               <graphic>
+                  <FontIcon iconLiteral="mdi2f-folder-arrow-right" />
+               </graphic>
+            </Button>
+            <Button fx:id="openTargetButton" text="Open target">
+               <graphic>
+                  <FontIcon iconLiteral="mdi2f-folder"></FontIcon>
+               </graphic>
+            </Button>
          </HBox>
       </HBox>
       <ListView fx:id="pluginDirectoryListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"

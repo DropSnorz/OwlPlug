@@ -18,38 +18,38 @@
 
 package com.owlplug.plugin.ui;
 
-import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.plugin.model.PluginComponent;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.ImageView;
 import javafx.util.Callback;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public class PluginComponentCellFactory implements Callback<ListView<PluginComponent>, ListCell<PluginComponent>> {
 
-  private ApplicationDefaults applicationDefaults;
 
-  public PluginComponentCellFactory(ApplicationDefaults applicationDefaults) {
-
-    this.applicationDefaults = applicationDefaults;
+  public PluginComponentCellFactory() {
 
   }
 
   @Override
   public ListCell<PluginComponent> call(ListView<PluginComponent> arg0) {
-
     return new ListCell<>() {
       @Override
-      public void updateItem(PluginComponent plugin, boolean empty) {
-        super.updateItem(plugin, empty);
+      public void updateItem(PluginComponent component, boolean empty) {
+        super.updateItem(component, empty);
         if (empty) {
           setText(null);
           setGraphic(null);
         } else {
-          ImageView imageView = new ImageView();
-          imageView.setImage(applicationDefaults.pluginComponentImage);
-          setText(plugin.getName());
-          setGraphic(imageView);
+          FontIcon icon;
+          if (component.isActive()) {
+            icon = new FontIcon("mdi2t-toy-brick-outline");
+            setText(component.getName());
+          } else {
+            icon = new FontIcon("mdi2t-toy-brick-remove-outline");
+            setText(component.getName() + " (Unscannable)");
+          }
+          setGraphic(icon);
         }
       }
     };

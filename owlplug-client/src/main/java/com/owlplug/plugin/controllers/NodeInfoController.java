@@ -19,12 +19,16 @@
 package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.ui.SideBar;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginDirectory;
 import com.owlplug.plugin.model.Symlink;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -41,6 +45,12 @@ public class NodeInfoController extends BaseController {
   private ComponentInfoController componentInfoController;
 
   @FXML
+  private HBox nodeInfoContainer;
+  @FXML
+  private AnchorPane nodeInfoContent;
+  @FXML
+  private Button closeButton;
+  @FXML
   private Node pluginInfoView;
   @FXML
   private Node directoryInfoView;
@@ -49,15 +59,39 @@ public class NodeInfoController extends BaseController {
   @FXML
   private Node componentInfoView;
 
+  private SideBar sidebar;
+
   /**
    * FXML initialize.
    */
   public void initialize() {
 
+    nodeInfoContainer.getChildren().remove(nodeInfoContent);
+    sidebar = new SideBar(500, nodeInfoContent);
+    nodeInfoContainer.getChildren().add(sidebar);
+
+    closeButton.setOnAction(e -> sidebar.collapse());
+    closeButton.visibleProperty().bind(pluginInfoView.visibleProperty()
+        .or(componentInfoView.visibleProperty()));
+
     pluginInfoView.setVisible(false);
     directoryInfoView.setVisible(false);
     symlinkInfoView.setVisible(false);
     componentInfoView.setVisible(false);
+  }
+
+  public void show() {
+    if (sidebar.isCollapsed()) {
+      sidebar.expand();
+    }
+  }
+
+  public void hide() {
+    sidebar.collapse();
+  }
+
+  public void toggleVisibility() {
+    sidebar.toggle();
   }
 
   public void setNode(Object node) {

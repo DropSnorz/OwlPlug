@@ -19,16 +19,25 @@
 package com.owlplug.plugin.model;
 
 public enum PluginFormat {
-  VST2("VST2"), VST3("VST3"), AU("AU"), LV2("LV2");
+  VST2("VST2", "Virtual Instrument (v2)"),
+  VST3("VST3", "Virtual Instrument (v3)"),
+  AU("AU", "Audio Unit"),
+  LV2("LV2", "LADSPA (v2)");
 
-  private final String text;
+  private final String name;
+  private final String fullName;
 
-  PluginFormat(String text) {
-    this.text = text;
+  PluginFormat(String name, String fullName) {
+    this.name = name;
+    this.fullName = fullName;
   }
 
-  public String getText() {
-    return text;
+  public String getName() {
+    return name;
+  }
+
+  public String getFullName() {
+    return fullName;
   }
 
   /**
@@ -43,7 +52,7 @@ public enum PluginFormat {
       return PluginFormat.VST2;
     }
     for (PluginFormat f : PluginFormat.values()) {
-      if (f.text.equalsIgnoreCase(text)) {
+      if (f.name.equalsIgnoreCase(text)) {
         return f;
       }
     }

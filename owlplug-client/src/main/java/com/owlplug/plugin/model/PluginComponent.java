@@ -19,6 +19,7 @@
 package com.owlplug.plugin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.owlplug.project.model.DawPluginLookup;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,7 +29,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(indexes = { @Index(name = "IDX_PLUGIN_COMPONENT_ID", columnList = "id") })
@@ -49,10 +54,25 @@ public class PluginComponent implements IPlugin {
   @Enumerated(EnumType.STRING)
   protected PluginType type;
 
-
   @ManyToOne
   @JsonIgnore
   private Plugin plugin;
+
+
+  // Computed during scan based on parent plugin
+  @Enumerated(EnumType.STRING)
+  protected PluginFormat pluginFormat;
+
+  /* Active if the component has been successfully scanned.
+   Otherwise, component is a ghost placeholder representing
+   a fallback reference of an expected component. */
+  @Column(columnDefinition = "boolean default true")
+  protected boolean active = true;
+
+  @OneToMany(mappedBy = "component")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<DawPluginLookup> lookups;
+
 
   public Long getId() {
     return id;
@@ -140,6 +160,22 @@ public class PluginComponent implements IPlugin {
 
   public void setPlugin(Plugin plugin) {
     this.plugin = plugin;
+  }
+
+  public PluginFormat getPluginFormat() {
+    return pluginFormat;
+  }
+
+  public void setPluginFormat(PluginFormat pluginFormat) {
+    this.pluginFormat = pluginFormat;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 
   @Override

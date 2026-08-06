@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane minHeight="620.0" minWidth="820.0"
+    xmlns="http://javafx.com/javafx/17.0.2-ea"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.owlplug.core.controllers.SettingsController">
+
+    <left>
+        <VBox styleClass="settings-sidebar" prefWidth="190.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="navContainer" spacing="2.0" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets top="12.0" bottom="4.0" left="8.0" right="8.0" />
+                </padding>
+            </VBox>
+            <VBox>
+                <padding>
+                    <Insets topRightBottomLeft="10.0" />
+                </padding>
+                <Label fx:id="versionLabel" text="OwlPlug" />
+            </VBox>
+            <VBox styleClass="settings-sidebar-footer" spacing="4.0">
+                <padding>
+                    <Insets topRightBottomLeft="10.0" />
+                </padding>
+                <Label styleClass="label-disabled" text="Thanks to" />
+                <TextFlow fx:id="contributorsFlow" prefWidth="164.0" />
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentArea" BorderPane.alignment="CENTER">
+            <fx:include fx:id="pluginScanSettings" source="settings/PluginScanSettingsView.fxml"/>
+            <fx:include fx:id="installationSettings" source="settings/InstallationSettingsView.fxml"/>
+            <fx:include fx:id="projectSettings" source="settings/ProjectSettingsView.fxml"/>
+            <fx:include fx:id="applicationSettings" source="settings/ApplicationSettingsView.fxml"/>
+        </StackPane>
+    </center>
+
+</BorderPane>

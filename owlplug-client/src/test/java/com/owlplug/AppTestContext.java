@@ -19,6 +19,7 @@
 package com.owlplug;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import java.io.File;
 import java.util.prefs.Preferences;
 
@@ -47,13 +48,13 @@ public class AppTestContext {
             Object[] args = invocation.getArguments();
             Object mock = invocation.getMock();
     
-            if (((String) args[0]).equals(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY)) {
+            if (((String) args[0]).equals(Prefs.Plugins.VST2_DISCOVERY_ENABLED)) {
               return true;
             }
-            if (((String) args[0]).equals(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY)) {
+            if (((String) args[0]).equals(Prefs.Plugins.VST3_DISCOVERY_ENABLED)) {
               return true;
             }
-            if (((String) args[0]).equals(ApplicationDefaults.SYNC_PLUGINS_STARTUP_KEY)) {
+            if (((String) args[0]).equals(Prefs.App.SYNC_PLUGINS_ON_STARTUP)) {
               return false;
             }
             return false;
@@ -66,7 +67,7 @@ public class AppTestContext {
             Object[] args = invocation.getArguments();
             Object mock = invocation.getMock();
     
-            if (((String) args[0]).equals(ApplicationDefaults.VST_DIRECTORY_KEY)) {
+            if (((String) args[0]).equals(Prefs.Plugins.VST2_DIRECTORY)) {
               return vstDirectoryTestPath;
             }
     

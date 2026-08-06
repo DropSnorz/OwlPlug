@@ -1,21 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox prefWidth="500.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
+<VBox prefWidth="580.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.owlplug.core.controllers.dialogs.WelcomeDialogController">
-   <VBox>
-      <Label text="Hi ! It's looks like this is the first time you are using OwlPlug. " wrapText="true"/>
-      <Label text="Select paths where your plugins are installed. You can change this configuration later."
-             wrapText="true"/>
-   </VBox>
-   <VBox fx:id="pluginPathContainer" spacing="10.0">
-   </VBox>
-   <HBox alignment="TOP_RIGHT" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
-      <Button fx:id="cancelButton" text="Ignore step"/>
-      <Button fx:id="okButton" text="Next"/>
-   </HBox>
+
+    <!-- Step 1: Welcome -->
+    <VBox fx:id="stepWelcome" spacing="24.0">
+
+        <!-- Hero -->
+        <VBox alignment="CENTER" spacing="10.0">
+            <padding>
+                <Insets top="8.0"/>
+            </padding>
+            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../media/owlplug-logo.png"/>
+            </ImageView>
+            <Label styleClass="heading-1" text="Welcome to OwlPlug"/>
+            <Label styleClass="label-disabled" text="Your plugin library, organized."/>
+        </VBox>
+
+        <!-- Feature highlights -->
+        <VBox spacing="14.0" styleClass="pane-card">
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+                <FontIcon iconLiteral="mdi2p-power-plug-outline" iconSize="18"/>
+                <VBox spacing="2.0">
+                    <Label styleClass="label-emphase" text="Scan and manage plugins"/>
+                    <Label styleClass="label-disabled" text="VST2, VST3, AU and LV2. All in one place"/>
+                </VBox>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+                <FontIcon iconLiteral="mdi2c-compass-outline" iconSize="18"/>
+                <VBox spacing="2.0">
+                    <Label styleClass="label-emphase" text="Explore the store"/>
+                    <Label styleClass="label-disabled" text="Browse and install free plugins from the community"/>
+                </VBox>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+                <FontIcon iconLiteral="mdi2a-archive-music-outline" iconSize="18"/>
+                <VBox spacing="2.0">
+                    <Label styleClass="label-emphase" text="Track your projects"/>
+                    <Label styleClass="label-disabled" text="Know which plugins each DAW session depends on"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Step 1 actions -->
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <Button fx:id="cancelButton" styleClass="flat" text="Skip setup"/>
+            <Button fx:id="startButton" text="Get Started">
+                <graphic><FontIcon iconLiteral="mdi2a-arrow-right" iconSize="14"/></graphic>
+            </Button>
+        </HBox>
+
+    </VBox>
+
+    <!-- Step 2: Format selection -->
+    <VBox fx:id="stepFormats" managed="false" spacing="20.0" visible="false">
+
+        <VBox spacing="4.0">
+            <Label styleClass="heading-3" text="Which formats do you use?"/>
+            <Label styleClass="label-disabled" wrapText="true"
+                   text="Enable the formats you want to scan. Directories can be customized later in Settings."/>
+        </VBox>
+
+        <VBox fx:id="formatTogglesContainer" spacing="0.0" styleClass="pane-card"/>
+
+        <!-- Step 2 actions -->
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <Button fx:id="backButton" styleClass="flat" text="Back"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="skipButton" styleClass="flat" text="Skip for now"/>
+            <Button fx:id="okButton" text="Scan Now">
+                <graphic><FontIcon iconLiteral="mdi2a-arrow-right" iconSize="14"/></graphic>
+            </Button>
+        </HBox>
+
+    </VBox>
+
 </VBox>

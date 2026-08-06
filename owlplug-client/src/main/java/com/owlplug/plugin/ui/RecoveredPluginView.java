@@ -17,18 +17,17 @@
  */
 
 package com.owlplug.plugin.ui;
- 
+
+import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.utils.Async;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import org.controlsfx.control.ToggleSwitch;
 
 public class RecoveredPluginView extends HBox {
   
@@ -44,12 +43,10 @@ public class RecoveredPluginView extends HBox {
     
     this.setAlignment(Pos.BASELINE_LEFT);
 
+    PluginFormatBadgeView badge = new PluginFormatBadgeView(plugin.getFormat(), applicationDefaults,
+        PluginFormatBadgeView.DisplayMode.ICON_ONLY);
     Label label = new Label(plugin.getName());
-    ImageView imageView = new ImageView();
-    imageView.setImage(applicationDefaults.getPluginFormatIcon(plugin.getFormat()));
-
-    label.setGraphic(imageView);
-    this.getChildren().add(label);
+    this.getChildren().addAll(badge, label);
     
     Pane transparentPane = new Pane();
     HBox.setHgrow(transparentPane, Priority.ALWAYS);

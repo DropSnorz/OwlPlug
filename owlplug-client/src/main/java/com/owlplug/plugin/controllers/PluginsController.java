@@ -18,27 +18,30 @@
  
 package com.owlplug.plugin.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.FX;
+import com.owlplug.controls.NotificationBadge;
+import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
 import com.owlplug.plugin.events.PluginRefreshEvent;
-import com.owlplug.plugin.events.PluginScanEvent;
+import com.owlplug.plugin.events.PluginScanCompletedEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
-import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.core.utils.Async;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
@@ -62,9 +65,15 @@ public class PluginsController extends BaseController {
   protected PluginTreeViewController treeViewController;
   @Autowired
   protected PluginTableController tableController;
+  @Autowired
+  protected PluginFilterController filterController;
+  @Autowired
+  protected PluginFilterState filterState;
 
   @FXML
-  private Button scanButton;
+  private SplitMenuButton scanMenuButton;
+  @FXML
+  private MenuItem scanMenuItem;
   @FXML
   private MenuItem fullScanMenuItem;
   @FXML
@@ -83,9 +92,13 @@ public class PluginsController extends BaseController {
   @FXML
   private Button newLinkButton;
   @FXML
-  private VBox pluginInfoPane;
+  private Button filterToggleButton;
+  @FXML
+  private NotificationBadge filterBadge;
   @FXML
   private VBox pluginsContainer;
+  @FXML
+  private HBox filterContainer;
 
   /**
    * FXML initialize method.
@@ -96,6 +109,13 @@ public class PluginsController extends BaseController {
     newLinkButton.setOnAction(e -> {
       newLinkController.show();
     });
+
+    // Wire filter sidebar and predicate into sub-controllers
+    filterContainer.getChildren().add(0, filterController.getView());
+    tableController.bindFilterState(filterState);
+    treeViewController.bindFilterState(filterState);
+    filterBadge.textProperty().bind(Bindings.convert(filterState.activeFilterCountProperty()));
+    filterBadge.badgeVisibleProperty().bind(filterState.activeFilterCountProperty().greaterThan(0));
 
     // Add Plugin Table and TreeView to the scene graph
     pluginsContainer.getChildren().add(treeViewController.getTreeView());
@@ -146,8 +166,6 @@ public class PluginsController extends BaseController {
      * ===================
      */
 
-    displaySwitchTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
-
     // Set default display (flat plugin tree)
     treeViewController.setDisplayMode(PluginTreeViewController.Display.FlatTree);
     treeViewController.getTreeView().setVisible(true);
@@ -163,30 +181,35 @@ public class PluginsController extends BaseController {
         treeViewController.setNodeManaged(true);
         tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
-        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "LIST");
+        this.getPreferences().put(Prefs.Plugins.PREFERRED_DISPLAY, "LIST");
       } else if (newTab.equals(displayDirectoriesTab)) {
         treeViewController.setDisplayMode(PluginTreeViewController.Display.DirectoryTree);
         treeViewController.setNodeManaged(true);
         tableController.setNodeManaged(false);
         setInfoPaneDisplay(true);
-        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "DIRECTORIES");
+        this.getPreferences().put(Prefs.Plugins.PREFERRED_DISPLAY, "DIRECTORIES");
       } else {
         treeViewController.setNodeManaged(false);
         tableController.setNodeManaged(true);
         setInfoPaneDisplay(false);
-        this.getPreferences().put(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "TABLE");
+        this.getPreferences().put(Prefs.Plugins.PREFERRED_DISPLAY, "TABLE");
       }
     });
 
-    if (this.getPreferences().get(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "").equals("TABLE")) {
+    if (this.getPreferences().get(Prefs.Plugins.PREFERRED_DISPLAY, "").equals("TABLE")) {
       displaySwitchTabPane.getSelectionModel().select(displayTableTab);
-    } else if (this.getPreferences().get(ApplicationDefaults.PLUGIN_PREFERRED_DISPLAY_KEY, "").equals("DIRECTORIES")) {
+    } else if (this.getPreferences().get(Prefs.Plugins.PREFERRED_DISPLAY, "").equals("DIRECTORIES")) {
       displaySwitchTabPane.getSelectionModel().select(displayDirectoriesTab);
     } else {
       displaySwitchTabPane.getSelectionModel().select(displayListTab);
     }
 
-    scanButton.setOnAction(e -> {
+    scanMenuButton.setOnAction(e -> {
+      this.getTelemetryService().event("/Plugins/Scan");
+      pluginService.scanPlugins();
+    });
+
+    scanMenuItem.setOnAction(e -> {
       this.getTelemetryService().event("/Plugins/Scan");
       pluginService.scanPlugins();
     });
@@ -210,6 +233,7 @@ public class PluginsController extends BaseController {
         .thenAccept(plugins -> FX.run(() -> {
           treeViewController.setPlugins(plugins);
           tableController.setPlugins(plugins);
+          filterController.refresh();
         }));
   }
 
@@ -220,24 +244,43 @@ public class PluginsController extends BaseController {
       treeViewController.selectPluginById(id);
     }
   }
+
+  public void selectComponentById(long id) {
+    if (displaySwitchTabPane.getSelectionModel().getSelectedItem().equals(displayTableTab)) {
+      tableController.selectComponentById(id);
+    } else {
+      treeViewController.selectComponentById(id);
+    }
+  }
   
   public void refresh() {
     treeViewController.refresh();
     tableController.refresh();
   }
 
+  @FXML
+  public void toggleFilter() {
+    filterController.getView().toggle();
+  }
+
+  public void setSearch(String query) {
+    searchTextField.setText(query);
+  }
+
   public void setInfoPaneDisplay(boolean display) {
-    pluginInfoPane.setManaged(display);
-    pluginInfoPane.setVisible(display);
+    if (display) {
+      nodeInfoController.show();
+    } else {
+      nodeInfoController.hide();
+    }
   }
 
   public void toggleInfoPaneDisplay() {
-    pluginInfoPane.setManaged(!pluginInfoPane.isManaged());
-    pluginInfoPane.setVisible(!pluginInfoPane.isVisible());
+    nodeInfoController.toggleVisibility();
   }
 
   @EventListener
-  private void handle(PluginScanEvent event) {
+  private void handle(PluginScanCompletedEvent event) {
     FX.run(this::displayPlugins);
   }
 

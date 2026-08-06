@@ -15,17 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 package com.owlplug.explore.controllers;
 
 import com.google.common.collect.Iterables;
 import com.owlplug.controls.MasonryPane;
-import com.owlplug.controls.Popup;
+import com.owlplug.controls.NotificationBadge;
 import com.owlplug.controls.Rippler;
 import com.owlplug.core.components.ImageCache;
-import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
@@ -34,36 +33,37 @@ import com.owlplug.explore.events.SourceSyncEvent;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
-import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.ui.ExploreChipView;
 import com.owlplug.explore.ui.PackageBlocViewBuilder;
-import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.explore.ui.PackageListRowCellFactory;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.concurrent.Task;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -71,32 +71,38 @@ public class ExploreController extends BaseController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private static final int PARTITION_SIZE = 20;
+  private static final int PARTITION_SIZE = 25;
+
+  /** Number of packages fetched from the database per remote call, used to bound query size. */
+  private static final int DB_PAGE_SIZE = 25;
 
   @Autowired
   private ExploreService exploreService;
   @Autowired
   private ImageCache imageCache;
   @Autowired
-  private LazyViewRegistry viewRegistry;
-  @Autowired
   private PackageInfoController packageInfoController;
   @Autowired
-  @Lazy
-  private MainController mainController;
+  private ExploreFilterController exploreFilterController;
   @Autowired
   private InstallStepDialogController installStepDialogController;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
 
   @FXML
-  private Button sourcesButton;
+  private Button filterToggleButton;
   @FXML
-  private Button formatFilterButton;
+  private NotificationBadge filterBadge;
   @FXML
-  private Button platformFilterButton;
+  private HBox filterContainer;
   @FXML
   private Button syncSourcesButton;
+  @FXML
+  private TabPane displaySwitchTabPane;
+  @FXML
+  private Tab displayGridTab;
+  @FXML
+  private Tab displayListTab;
   @FXML
   private Text resultCounter;
   @FXML
@@ -108,28 +114,49 @@ public class ExploreController extends BaseController {
   @FXML
   private Hyperlink lazyLoadLink;
   @FXML
+  private StackPane listWrapper;
+  @FXML
+  private ListView<RemotePackage> packageListView;
+  @FXML
+  private HBox listLazyLoadBar;
+  @FXML
+  private Hyperlink listLazyLoadLink;
+  @FXML
   private Pane exploreChipViewContainer;
-  
-  private final HashMap<String, CheckBox> targetFilterCheckBoxes = new HashMap<>();
-
-  private final HashMap<String, CheckBox> formatsFilterCheckBoxes = new HashMap<>();
-  
 
   private ExploreChipView exploreChipView;
   private PackageBlocViewBuilder packageBlocViewBuilder = null;
 
   /**
    * Loaded packages from remote sources are displayed by partitions (like pagination).
-   * When the user scrolls the entire partition, the next one is appended in the
-   * UI.
+   * When the user scrolls the entire partition, the next one is appended in the UI.
    */
   private Iterable<List<RemotePackage>> loadedPackagePartitions;
-  private Iterable<RemotePackage> loadedRemotePackages = new ArrayList<>();
+  private List<RemotePackage> loadedRemotePackages = new ArrayList<>();
+
+  /** Total number of packages matching the current search, as reported by the database. */
+  private long totalRemotePackages = 0;
+
+  /** Criteria of the currently displayed search, reused when fetching further database pages. */
+  private List<ExploreFilterCriteria> currentCriteriaList = new ArrayList<>();
+
+  /** Next database page to fetch when the user scrolls past all currently loaded packages. */
+  private int nextDbPage = 0;
+
+  /** Guards against firing overlapping "load next page" database calls. */
+  private boolean fetchingNextDbPage = false;
 
   /**
-   * Counter of loaded partitions on UI.
+   * Drops results from a search or "load next page" call superseded by a more recent one
+   * (e.g. rapid filter changes), so a slow, stale database call can never overwrite fresher data.
    */
+  private final Async.Sequence searchSequence = new Async.Sequence();
+
+  /** Counter of loaded partitions on UI — masonry view. */
   private int displayedPartitions = 0;
+
+  /** Backing items of the virtualized list view — kept in sync with {@link #loadedRemotePackages}. */
+  private final ObservableList<RemotePackage> listViewItems = FXCollections.observableArrayList();
 
   /**
    * FXML initialize.
@@ -138,73 +165,13 @@ public class ExploreController extends BaseController {
 
     packageBlocViewBuilder = new PackageBlocViewBuilder(this.getApplicationDefaults(), imageCache, this);
 
-    sourcesButton.setOnAction(e -> {
-      mainController.setLeftDrawer(viewRegistry.get(LazyViewRegistry.SOURCE_MENU_VIEW));
-      mainController.getLeftDrawer().open();
+    filterContainer.getChildren().add(0, exploreFilterController.getView());
+    exploreFilterController.getFilterState().criteriaListProperty()
+        .addListener((obs, oldVal, newVal) -> performPackageSearch());
 
-    });
-
-    for (PluginFormat format : PluginFormat.values()) {
-      CheckBox checkbox = new CheckBox(format.getText());
-      formatsFilterCheckBoxes.put(format.getText().toLowerCase(), checkbox);
-      checkbox.setSelected(false);
-      checkbox.setOnAction(e -> {
-        performPackageSearch();
-      });
-    }
-
-    VBox formatFilterVbox = new VBox();
-    formatFilterVbox.setSpacing(5);
-    formatFilterVbox.setPadding(new Insets(5,10,5,10));
-    Label formatLabel = new Label("Plugin format");
-    formatLabel.getStyleClass().add("label-disabled");
-    formatFilterVbox.getChildren().add(formatLabel);
-    for (Entry<String, CheckBox> entry : formatsFilterCheckBoxes.entrySet()) {
-      formatFilterVbox.getChildren().add(entry.getValue());
-    }
-
-    formatFilterButton.setOnAction(e -> {
-      Popup popup = new Popup(formatFilterVbox);
-      popup.show(formatFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
-    });
-
-    
-    targetFilterCheckBoxes.put("win-x32", new CheckBox("Windows x32"));
-    targetFilterCheckBoxes.put("win-x64", new CheckBox("Windows x64"));
-    targetFilterCheckBoxes.put("win-arm64", new CheckBox("Windows arm64"));
-    targetFilterCheckBoxes.put("win-arm64ec", new CheckBox("Windows arm64 E.C."));
-    targetFilterCheckBoxes.put("mac-x64", new CheckBox("MacOS x64"));
-    targetFilterCheckBoxes.put("mac-arm64", new CheckBox("MacOS arm64"));
-    targetFilterCheckBoxes.put("linux-x32", new CheckBox("Linux x32 / amd32"));
-    targetFilterCheckBoxes.put("linux-x64", new CheckBox("Linux x64 / amd64"));
-    targetFilterCheckBoxes.put("linux-arm32", new CheckBox("Linux arm32"));
-    targetFilterCheckBoxes.put("linux-arm64", new CheckBox("Linux arm64"));
-    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
-      Set<String> preselected = this.getApplicationDefaults().getRuntimePlatform().getCompatiblePlatformsTags();
-      entry.getValue().setSelected(preselected.contains(entry.getKey()));
-      entry.getValue().setOnAction(e -> {
-        performPackageSearch();
-      });
-    }
-    
-    VBox platformFilterVbox = new VBox();
-    platformFilterVbox.setSpacing(5);
-    platformFilterVbox.setPadding(new Insets(5,10,5,10));
-    Label popupLabel = new Label("Target environment contains");
-    popupLabel.getStyleClass().add("label-disabled");
-    platformFilterVbox.getChildren().add(popupLabel);
-    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()
-            .stream()
-            .sorted(Entry.<String, CheckBox>comparingByKey().reversed())
-            .toList()
-    ) {
-      platformFilterVbox.getChildren().add(entry.getValue());
-    }
-
-    platformFilterButton.setOnAction(e -> {
-      Popup popup = new Popup(platformFilterVbox);
-      popup.show(platformFilterButton, Popup.PopupVPosition.TOP, Popup.PopupHPosition.RIGHT);
-    });
+    IntegerProperty exploreFilterCount = exploreFilterController.activeFilterCountProperty();
+    filterBadge.textProperty().bind(Bindings.convert(exploreFilterCount));
+    filterBadge.badgeVisibleProperty().bind(exploreFilterCount.greaterThan(0));
 
     syncSourcesButton.setOnAction(e -> {
       this.getTelemetryService().event("/Explore/SyncSources");
@@ -219,84 +186,191 @@ public class ExploreController extends BaseController {
       performPackageSearch();
     });
 
+    // Grid view scroll → load next partition
     scrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue.doubleValue() == 1) {
         displayNewPackagePartition();
       }
     });
-
-    lazyLoadLink.setOnAction(e -> {
-      displayNewPackagePartition();
-    });
+    lazyLoadLink.setOnAction(e -> displayNewPackagePartition());
     lazyLoadBar.setVisible(false);
+
+    // List view — virtualized ListView backed by listViewItems
+    packageListView.setItems(listViewItems);
+    packageListView.setCellFactory(new PackageListRowCellFactory(this.getApplicationDefaults(), imageCache, this));
+    packageListView.getSelectionModel().selectedItemProperty().addListener((observable, oldPkg, newPkg) -> {
+      if (newPkg != null) {
+        selectPackage(newPkg);
+      }
+    });
+    // Load next database page when the user scrolls the ListView to its bottom.
+    packageListView.skinProperty().addListener((observable, oldSkin, newSkin) -> {
+      if (newSkin != null) {
+        FX.run(() -> {
+          ScrollBar bar = (ScrollBar) packageListView.lookup(".scroll-bar:vertical");
+          if (bar != null) {
+            bar.valueProperty().addListener((o, oldValue, newValue) -> {
+              if (bar.getMax() > 0 && newValue.doubleValue() >= bar.getMax()) {
+                loadMoreListItems();
+              }
+            });
+          }
+        });
+      }
+    });
+    listLazyLoadLink.setOnAction(e -> loadMoreListItems());
+    listLazyLoadBar.setVisible(false);
+    listLazyLoadBar.setManaged(false);
+
+    displaySwitchTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+      boolean listActive = newTab.equals(displayListTab);
+      scrollPane.setVisible(!listActive);
+      scrollPane.setManaged(!listActive);
+      listWrapper.setVisible(listActive);
+      listWrapper.setManaged(listActive);
+      refreshActiveView();
+      if (!listActive) {
+        FX.run(() -> {
+          masonryPane.requestLayout();
+          scrollPane.requestLayout();
+        });
+      }
+    });
+    displaySwitchTabPane.getSelectionModel().select(displayListTab);
 
     performPackageSearch();
 
     masonryPane.setHSpacing(5);
     masonryPane.setVSpacing(5);
-
     masonryPane.setCellHeight(130);
     masonryPane.setCellWidth(130);
-
   }
-  
+
+  @FXML
+  public void toggleFilter() {
+    exploreFilterController.getView().toggle();
+  }
+
   private synchronized void performPackageSearch() {
     final List<ExploreFilterCriteria> criteriaChipList = exploreChipView.getChips();
     List<ExploreFilterCriteria> criteriaList = new ArrayList<>(criteriaChipList);
+    criteriaList.addAll(exploreFilterController.getFilterState().criteriaListProperty().get());
 
-    List<String> targets = new ArrayList<>();
-    for (Entry<String, CheckBox> entry : targetFilterCheckBoxes.entrySet()) {
-      if (entry.getValue().isSelected()) {
-        targets.add(entry.getKey());
-      }
-    }
-    if (targets.size() > 0) {
-      criteriaList.add(new ExploreFilterCriteria(targets, ExploreFilterCriteriaType.PLATFORM_LIST));
-    }
+    currentCriteriaList = criteriaList;
+    nextDbPage = 0;
+    // Lock out "load next page" calls until this search resolves. Any previous
+    // fetchNextDbPage() call still in flight is superseded by searchSequence below and its
+    // own completion (including its flag reset) will simply never run, so this method's own
+    // success/failure handler is what's responsible for releasing the lock.
+    fetchingNextDbPage = true;
 
-    List<String> formats = new ArrayList<>();
-    for (Entry<String, CheckBox> entry : formatsFilterCheckBoxes.entrySet()) {
-      if (entry.getValue().isSelected()) {
-        formats.add(entry.getKey());
-      }
-    }
-    if (formats.size() > 0) {
-      criteriaList.add(new ExploreFilterCriteria(formats, ExploreFilterCriteriaType.FORMAT_LIST));
-    }
-
-    Task<Iterable<RemotePackage>> task = new Task<>() {
-      @Override
-      protected Iterable<RemotePackage> call() {
-        return exploreService.getRemotePackages(criteriaList);
-      }
-    };
-    task.setOnSucceeded(e -> {
-      displayPackages(task.getValue());
-    });
-    new Thread(task).start();
-
+    searchSequence.supply(() -> exploreService.getRemotePackages(criteriaList, PageRequest.of(0, DB_PAGE_SIZE)))
+        .thenAccept(page -> {
+          warmImageCache(page.getContent());
+          FX.run(() -> {
+            fetchingNextDbPage = false;
+            nextDbPage = 1;
+            displayPackages(page);
+          });
+        })
+        .exceptionally(ex -> {
+          FX.run(() -> fetchingNextDbPage = false);
+          return null;
+        });
   }
 
   /**
-   * Display remote source package list.
-   * 
-   * @param remotePackages - Remote package list
+   * Display the first page of a remote source package search result.
+   *
+   * @param packagePage - First page of remote packages
    */
-  public synchronized void displayPackages(Iterable<RemotePackage> remotePackages) {
-
-    if (shouldRefreshPackages(remotePackages)) {
+  public synchronized void displayPackages(Page<RemotePackage> packagePage) {
+    if (shouldRefreshPackages(packagePage)) {
       this.masonryPane.getChildren().clear();
       this.masonryPane.requestLayout();
 
-      loadedRemotePackages = remotePackages;
+      loadedRemotePackages = new ArrayList<>(packagePage.getContent());
+      totalRemotePackages = packagePage.getTotalElements();
       loadedPackagePartitions = Iterables.partition(loadedRemotePackages, PARTITION_SIZE);
       displayedPartitions = 0;
+      listViewItems.clear();
+      refreshActiveView();
+    }
+  }
+
+  /**
+   * Returns true if the list view (as opposed to the grid/masonry view) is the currently
+   * selected display mode.
+   */
+  private boolean isListActive() {
+    return displaySwitchTabPane.getSelectionModel().getSelectedItem() == displayListTab;
+  }
+
+  /**
+   * Builds/syncs only the currently selected view from {@link #loadedRemotePackages}, leaving
+   * the inactive view untouched. Both views were previously populated unconditionally on every
+   * page load, which meant the hidden view's cells/nodes were still realized (and requesting
+   * images) off-screen, competing with the visible view and with {@link #warmImageCache} for the
+   * same URLs. Calling this on every load and on every tab switch keeps whichever view is
+   * visible in sync while the other one simply stays empty until it becomes active.
+   */
+  private void refreshActiveView() {
+    if (isListActive()) {
+      syncListViewItems();
+    } else if (loadedPackagePartitions != null) {
       displayNewPackagePartition();
     }
   }
 
-  private void displayNewPackagePartition() {
+  /**
+   * Fetches the next database page in the background and appends it to {@link #loadedRemotePackages}
+   * once available, then runs the given continuation to resume displaying partitions.
+   */
+  private void fetchNextDbPage(Runnable onLoaded) {
+    if (fetchingNextDbPage) {
+      return;
+    }
+    fetchingNextDbPage = true;
+    final int pageToFetch = nextDbPage;
+    final List<ExploreFilterCriteria> criteriaList = currentCriteriaList;
 
+    searchSequence.supply(() -> exploreService.getRemotePackages(criteriaList, PageRequest.of(pageToFetch, DB_PAGE_SIZE)))
+        .thenAccept(page -> {
+          warmImageCache(page.getContent());
+          FX.run(() -> {
+            fetchingNextDbPage = false;
+            loadedRemotePackages.addAll(page.getContent());
+            totalRemotePackages = page.getTotalElements();
+            nextDbPage += 1;
+            onLoaded.run();
+          });
+        })
+        .exceptionally(ex -> {
+          FX.run(() -> fetchingNextDbPage = false);
+          return null;
+        });
+  }
+
+  /**
+   * Warms the image cache for a freshly loaded database page, ahead of the packages
+   * actually being scrolled into view. Runs on a single background thread, sequentially,
+   * so prefetching never contends with an on-screen cell's own cache lookup.
+   *
+   * @param packages - packages from the database page that just resolved
+   */
+  private void warmImageCache(List<RemotePackage> packages) {
+    Async.run(() -> {
+      for (RemotePackage remotePackage : packages) {
+        imageCache.warm(remotePackage.getScreenshotUrl());
+      }
+    });
+  }
+
+  private boolean hasMoreRemotePackages() {
+    return loadedRemotePackages.size() < totalRemotePackages;
+  }
+
+  private void displayNewPackagePartition() {
     if (Iterables.size(loadedPackagePartitions) > displayedPartitions) {
       for (RemotePackage remotePackage : Iterables.get(loadedPackagePartitions, displayedPartitions)) {
         Rippler rippler = new Rippler(packageBlocViewBuilder.build(remotePackage));
@@ -309,48 +383,67 @@ public class ExploreController extends BaseController {
       }
       displayedPartitions += 1;
 
-      if (Iterables.size(loadedPackagePartitions) == displayedPartitions) {
-        lazyLoadBar.setVisible(false);
-      } else {
-        lazyLoadBar.setVisible(true);
-
-      }
+      boolean allLoaded = Iterables.size(loadedPackagePartitions) == displayedPartitions && !hasMoreRemotePackages();
+      lazyLoadBar.setVisible(!allLoaded);
 
       FX.run(() -> {
         masonryPane.requestLayout();
         scrollPane.requestLayout();
       });
+    } else if (hasMoreRemotePackages()) {
+      fetchNextDbPage(this::displayNewPackagePartition);
+      return;
     }
-    
-    resultCounter.setText(this.masonryPane.getChildren().size() + " / " + Iterables.size(this.loadedRemotePackages));
 
+    refreshResultCounter();
   }
 
   /**
-   * Returns true if the given package list is different from the previously
-   * loaded package list.
-   * 
-   * @param newPackages - the new package list
-   * @return
+   * Syncs the virtualized list view's items with {@link #loadedRemotePackages}. Unlike the masonry
+   * view, ListView virtualizes cells regardless of item count, so the full list is synced in one call
+   * instead of being revealed in {@link #PARTITION_SIZE}-sized chunks.
    */
-  private boolean shouldRefreshPackages(Iterable<RemotePackage> newPackages) {
+  private void syncListViewItems() {
+    listViewItems.setAll(loadedRemotePackages);
+    boolean hasMore = hasMoreRemotePackages();
+    listLazyLoadBar.setVisible(hasMore);
+    listLazyLoadBar.setManaged(hasMore);
+    refreshResultCounter();
+  }
 
-    if (Iterables.size(newPackages) != Iterables.size(loadedRemotePackages)) {
+  private void loadMoreListItems() {
+    if (hasMoreRemotePackages()) {
+      fetchNextDbPage(this::syncListViewItems);
+    }
+  }
+
+  private void refreshResultCounter() {
+    int displayedCount = isListActive()
+        ? listViewItems.size()
+        : masonryPane.getChildren().size();
+    resultCounter.setText(displayedCount + " / " + totalRemotePackages);
+  }
+
+  /**
+   * Returns true if the given first page result is different from the currently loaded search.
+   */
+  private boolean shouldRefreshPackages(Page<RemotePackage> newFirstPage) {
+    if (newFirstPage.getTotalElements() != totalRemotePackages) {
       return true;
     }
-
-    for (int i = 0; i < Iterables.size(newPackages); i++) {
-      if (!Iterables.get(newPackages, i).getId().equals(Iterables.get(loadedRemotePackages, i).getId())) {
+    List<RemotePackage> newContent = newFirstPage.getContent();
+    int compareSize = Math.min(newContent.size(), loadedRemotePackages.size());
+    for (int i = 0; i < compareSize; i++) {
+      if (!newContent.get(i).getId().equals(loadedRemotePackages.get(i).getId())) {
         return true;
       }
     }
-
     return false;
   }
 
   /**
    * Displays full package information.
-   * 
+   *
    * @param remotePackage - package
    */
   public void selectPackage(RemotePackage remotePackage) {
@@ -365,9 +458,8 @@ public class ExploreController extends BaseController {
   }
 
   /**
-   * Trigger package installation. The best bundle will be selected based on the
-   * current user platform.
-   * 
+   * Trigger package installation. The best bundle will be selected based on the current user platform.
+   *
    * @param remotePackage Package to install
    */
   public boolean installPackage(RemotePackage remotePackage) {

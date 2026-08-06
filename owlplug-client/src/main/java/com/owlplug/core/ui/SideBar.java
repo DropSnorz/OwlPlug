@@ -23,6 +23,7 @@ import javafx.animation.Transition;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -36,6 +37,7 @@ public class SideBar extends VBox {
    */
   public SideBar(final double expandedWidth, Node node) {
     this.setPrefWidth(expandedWidth);
+    this.setMinWidth(Region.USE_PREF_SIZE);
 
     // create a bar to hide and show.
     setAlignment(Pos.TOP_CENTER);

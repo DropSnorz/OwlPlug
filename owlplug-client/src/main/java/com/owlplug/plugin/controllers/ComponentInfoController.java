@@ -23,6 +23,8 @@ import com.owlplug.core.controllers.BaseController;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.services.PluginService;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
+import com.owlplug.plugin.ui.PluginKindBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -32,12 +34,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,9 +55,7 @@ public class ComponentInfoController extends BaseController {
   @FXML
   private Pane pluginScreenshotPane;
   @FXML
-  private ImageView pluginFormatIcon;
-  @FXML
-  private Label pluginFormatLabel;
+  private HBox pluginFormatBadgeContainer;
   @FXML
   private Label pluginTitleLabel;
   @FXML
@@ -83,13 +83,15 @@ public class ComponentInfoController extends BaseController {
   public void initialize() {
     componentProperty.addListener(e -> refresh());
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
+    pluginFormatBadgeContainer.setSpacing(5);
 
   }
 
   public void refresh() {
     PluginComponent component = componentProperty.get();
-    pluginFormatIcon.setImage(this.getApplicationDefaults().getPluginFormatIcon(component.getPlugin().getFormat()));
-    pluginFormatLabel.setText(component.getPlugin().getFormat().getText() + " Plugin Component");
+    pluginFormatBadgeContainer.getChildren().setAll(
+        new PluginKindBadgeView(component, this.getApplicationDefaults()),
+        new Label(component.asPlugin().getFormat().getName() + " Component"));
     pluginTitleLabel.setText(component.getName());
     pluginNameLabel.setText(Optional.ofNullable(component.getDescriptiveName()).orElse(component.getName()));
     pluginVersionLabel.setText(Optional.ofNullable(component.getVersion()).orElse("Unknown"));

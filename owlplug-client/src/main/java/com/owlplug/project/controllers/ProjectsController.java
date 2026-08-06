@@ -18,15 +18,18 @@
 
 package com.owlplug.project.controllers;
 
-import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.controls.NotificationBadge;
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.core.controllers.dialogs.ListDirectoryDialogController;
+import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.controllers.SettingsController;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.core.utils.FX;
+import com.owlplug.project.components.ProjectFilterState;
 import com.owlplug.project.events.ProjectSyncEvent;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.services.ProjectService;
 import com.owlplug.project.ui.ProjectTreeCell;
+import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,8 +38,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-import jfxtras.styles.jmetro.JMetroStyleClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
@@ -47,20 +50,32 @@ public class ProjectsController extends BaseController {
   @Autowired
   private ProjectService projectService;
   @Autowired
-  private ListDirectoryDialogController listDirectoryDialogController;
+  private MainController mainController;
+  @Autowired
+  private SettingsController settingsController;
   @Autowired
   private ProjectInfoController projectInfoController;
+  @Autowired
+  private ProjectFilterController filterController;
+  @Autowired
+  private ProjectFilterState filterState;
 
   @FXML
   private Button syncProjectButton;
   @FXML
   private Button projectDirectoryButton;
   @FXML
+  private Button filterToggleButton;
+  @FXML
+  private NotificationBadge filterBadge;
+  @FXML
   private TextField searchTextField;
   @FXML
   private TabPane projectTreeViewTabPane;
   @FXML
   private TreeView projectTreeView;
+  @FXML
+  private HBox filterContainer;
 
   private FilterableTreeItem<Object> projectTreeNode;
 
@@ -70,8 +85,6 @@ public class ProjectsController extends BaseController {
       this.getTelemetryService().event("/Projects/Scan");
       projectService.syncProjects();
     });
-
-    projectTreeViewTabPane.getStyleClass().add(JMetroStyleClass.UNDERLINE_TAB_PANE);
 
     projectTreeView.setCellFactory((Callback<TreeView<Object>, TreeCell<Object>>)
                                        p -> new ProjectTreeCell(getApplicationDefaults()));
@@ -84,30 +97,41 @@ public class ProjectsController extends BaseController {
     });
 
     projectDirectoryButton.setOnAction(e -> {
-      listDirectoryDialogController.configure(ApplicationDefaults.PROJECT_DIRECTORY_KEY);
-      listDirectoryDialogController.show();
+      settingsController.navigateToSection(SettingsController.PROJECTS_SECTION_INDEX);
+      mainController.navigateToMainTab(MainController.SETTINGS_TAB_INDEX);
     });
+
+    // Wire filter sidebar into the scene graph
+    filterContainer.getChildren().add(0, filterController.getView());
+    filterBadge.textProperty().bind(Bindings.convert(filterState.activeFilterCountProperty()));
+    filterBadge.badgeVisibleProperty().bind(filterState.activeFilterCountProperty().greaterThan(0));
 
     projectTreeNode = new FilterableTreeItem<>("(all)");
     projectTreeView.setRoot(projectTreeNode);
 
-    // Binds search property to plugin tree filter
-    projectTreeNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-      if (searchTextField.getText() == null || searchTextField.getText().isEmpty()) {
-        return null;
-      }
-      return (item) -> {
-        if (item instanceof DawProject project) {
-          return project.getName().toLowerCase().contains(searchTextField.getText().toLowerCase());
-        } else {
-          return item.toString().toLowerCase().contains(searchTextField.getText().toLowerCase());
-        }
-      };
-    }, searchTextField.textProperty()));
-
+    // Binds search text and type filter to the project tree predicate
+    projectTreeNode.predicateProperty().bind(Bindings.createObjectBinding(
+        () -> buildTreePredicate(searchTextField.getText(), filterState.predicateProperty().get()),
+        searchTextField.textProperty(), filterState.predicateProperty()));
 
     refresh();
 
+  }
+
+  private Predicate<Object> buildTreePredicate(String searchVal, Predicate<DawProject> filterPredicate) {
+    boolean hasSearch = searchVal != null && !searchVal.isEmpty();
+    if (!hasSearch && filterPredicate == null) {
+      return null;
+    }
+    return (item) -> {
+      if (item instanceof DawProject project) {
+        boolean searchMatch = !hasSearch
+            || project.getName().toLowerCase().contains(searchVal.toLowerCase());
+        return searchMatch && (filterPredicate == null || filterPredicate.test(project));
+      } else {
+        return !hasSearch || item.toString().toLowerCase().contains(searchVal.toLowerCase());
+      }
+    };
   }
 
   public void refresh() {
@@ -119,7 +143,13 @@ public class ProjectsController extends BaseController {
     }
 
     projectTreeNode.setExpanded(true);
+    filterController.refresh(projects);
 
+  }
+
+  @FXML
+  public void toggleFilter() {
+    filterController.getView().toggle();
   }
 
   @EventListener

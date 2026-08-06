@@ -20,6 +20,7 @@ package com.owlplug.plugin.services;
 
 import com.google.common.collect.Iterables;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.services.BaseService;
 import com.owlplug.core.utils.FileUtils;
@@ -44,7 +45,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -180,22 +180,6 @@ public class PluginService extends BaseService {
     return PluginState.INSTALLED;
   }
 
-  public Iterable<Plugin> find(String name, PluginFormat pluginFormat) {
-    Specification<Plugin> spec = PluginRepository.nameContains(name)
-            .and(PluginRepository.hasFormat(pluginFormat));
-
-
-    return pluginRepository.findAll(spec);
-  }
-
-  public Iterable<Plugin> findByComponentName(String name, PluginFormat pluginFormat) {
-    Specification<Plugin> spec = PluginRepository.hasComponentName(name)
-            .and(PluginRepository.hasFormat(pluginFormat));
-
-    return pluginRepository.findAll(spec);
-
-  }
-
   /**
    * Get the primary plugin path defined in preferences based on plugin format.
    * @param format plugin format
@@ -204,16 +188,16 @@ public class PluginService extends BaseService {
   public String getPrimaryPluginPathByFormat(PluginFormat format) {
 
     if (PluginFormat.VST2.equals(format)) {
-      return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+      return this.getPreferences().get(Prefs.Plugins.VST2_DIRECTORY, "");
     } else if (PluginFormat.VST3.equals(format)) {
-      return this.getPreferences().get(ApplicationDefaults.VST3_DIRECTORY_KEY, "");
+      return this.getPreferences().get(Prefs.Plugins.VST3_DIRECTORY, "");
     } else if (PluginFormat.AU.equals(format)) {
-      return this.getPreferences().get(ApplicationDefaults.AU_DIRECTORY_KEY, "");
+      return this.getPreferences().get(Prefs.Plugins.AU_DIRECTORY, "");
     } else if (PluginFormat.LV2.equals(format)) {
-      return this.getPreferences().get(ApplicationDefaults.LV2_DIRECTORY_KEY, "");
+      return this.getPreferences().get(Prefs.Plugins.LV2_DIRECTORY, "");
     }
 
-    return this.getPreferences().get(ApplicationDefaults.VST_DIRECTORY_KEY, "");
+    return this.getPreferences().get(Prefs.Plugins.VST2_DIRECTORY, "");
   }
 
   /**
@@ -225,28 +209,28 @@ public class PluginService extends BaseService {
     Set<String> directorySet = new HashSet<>();
 
     ApplicationPreferences prefs = this.getPreferences();
-    if (prefs.getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false)
-            && !prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, "").isBlank()) {
-      directorySet.add(prefs.get(ApplicationDefaults.VST_DIRECTORY_KEY, ""));
-      directorySet.addAll(prefs.getList(ApplicationDefaults.VST2_EXTRA_DIRECTORY_KEY));
+    if (prefs.getBoolean(Prefs.Plugins.VST2_DISCOVERY_ENABLED, false)
+            && !prefs.get(Prefs.Plugins.VST2_DIRECTORY, "").isBlank()) {
+      directorySet.add(prefs.get(Prefs.Plugins.VST2_DIRECTORY, ""));
+      directorySet.addAll(prefs.getList(Prefs.Plugins.VST2_EXTRA_DIRECTORY));
     }
 
-    if (prefs.getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false)
-            && !prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, "").isBlank()) {
-      directorySet.add(prefs.get(ApplicationDefaults.VST3_DIRECTORY_KEY, ""));
-      directorySet.addAll(prefs.getList(ApplicationDefaults.VST3_EXTRA_DIRECTORY_KEY));
+    if (prefs.getBoolean(Prefs.Plugins.VST3_DISCOVERY_ENABLED, false)
+            && !prefs.get(Prefs.Plugins.VST3_DIRECTORY, "").isBlank()) {
+      directorySet.add(prefs.get(Prefs.Plugins.VST3_DIRECTORY, ""));
+      directorySet.addAll(prefs.getList(Prefs.Plugins.VST3_EXTRA_DIRECTORY));
     }
 
-    if (prefs.getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false)
-            && !prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, "").isBlank()) {
-      directorySet.add(prefs.get(ApplicationDefaults.AU_DIRECTORY_KEY, ""));
-      directorySet.addAll(prefs.getList(ApplicationDefaults.AU_EXTRA_DIRECTORY_KEY));
+    if (prefs.getBoolean(Prefs.Plugins.AU_DISCOVERY_ENABLED, false)
+            && !prefs.get(Prefs.Plugins.AU_DIRECTORY, "").isBlank()) {
+      directorySet.add(prefs.get(Prefs.Plugins.AU_DIRECTORY, ""));
+      directorySet.addAll(prefs.getList(Prefs.Plugins.AU_EXTRA_DIRECTORY));
     }
 
-    if (prefs.getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false)
-            && !prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, "").isBlank()) {
-      directorySet.add(prefs.get(ApplicationDefaults.LV2_DIRECTORY_KEY, ""));
-      directorySet.addAll(prefs.getList(ApplicationDefaults.LV2_EXTRA_DIRECTORY_KEY));
+    if (prefs.getBoolean(Prefs.Plugins.LV2_DISCOVERY_ENABLED, false)
+            && !prefs.get(Prefs.Plugins.LV2_DIRECTORY, "").isBlank()) {
+      directorySet.add(prefs.get(Prefs.Plugins.LV2_DIRECTORY, ""));
+      directorySet.addAll(prefs.getList(Prefs.Plugins.LV2_EXTRA_DIRECTORY));
     }
 
     return directorySet.stream()
@@ -262,13 +246,13 @@ public class PluginService extends BaseService {
   public boolean isFormatEnabled(PluginFormat format) {
 
     if (PluginFormat.VST2.equals(format)) {
-      return this.getPreferences().getBoolean(ApplicationDefaults.VST2_DISCOVERY_ENABLED_KEY, false);
+      return this.getPreferences().getBoolean(Prefs.Plugins.VST2_DISCOVERY_ENABLED, false);
     } else if (PluginFormat.VST3.equals(format)) {
-      return this.getPreferences().getBoolean(ApplicationDefaults.VST3_DISCOVERY_ENABLED_KEY, false);
+      return this.getPreferences().getBoolean(Prefs.Plugins.VST3_DISCOVERY_ENABLED, false);
     } else if (PluginFormat.AU.equals(format)) {
-      return this.getPreferences().getBoolean(ApplicationDefaults.AU_DISCOVERY_ENABLED_KEY, false);
+      return this.getPreferences().getBoolean(Prefs.Plugins.AU_DISCOVERY_ENABLED, false);
     } else if (PluginFormat.LV2.equals(format)) {
-      return this.getPreferences().getBoolean(ApplicationDefaults.LV2_DISCOVERY_ENABLED_KEY, false);
+      return this.getPreferences().getBoolean(Prefs.Plugins.LV2_DISCOVERY_ENABLED, false);
     }
 
     return false;
