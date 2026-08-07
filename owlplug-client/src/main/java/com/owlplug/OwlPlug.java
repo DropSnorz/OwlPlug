@@ -18,12 +18,12 @@
 
 package com.owlplug;
 
-import com.owlplug.theme.OwlPlugDarkTheme;
 import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.telemetry.StartupFailureTelemetry;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.FX;
+import com.owlplug.theme.OwlPlugDarkTheme;
 import com.zaxxer.hikari.HikariDataSource;
 import java.nio.file.Paths;
 import java.time.Duration;

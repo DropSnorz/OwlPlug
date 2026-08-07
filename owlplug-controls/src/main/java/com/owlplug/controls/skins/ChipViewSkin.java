@@ -328,7 +328,6 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
       final int managedChildrenSize = managedChildren.size();
       if (managedChildrenSize > 0) {
         Region lastChild = (Region) managedChildren.get(managedChildrenSize - 1);
-        double contentHeight = lastChild.getHeight() + lastChild.getLayoutY();
         availableWidth = insideWidth - lastChild.getBoundsInParent().getMaxX();
         double minWidth = editor.getMinWidth();
         minWidth = minWidth < 0 ? 100 : minWidth;
@@ -339,6 +338,7 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
         }
 
         if (availableWidth < minWidth || moveToNewLine) {
+          double contentHeight = lastChild.getHeight() + lastChild.getLayoutY();
           layoutInArea(editor,
               newLineEditorX,
               contentHeight + root.getVgap(),
@@ -361,8 +361,8 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
             newLineEditorX,
             top,
             insideWidth - initOffset,
-            editor.prefHeight(-1)
-            , 0, getColumnHAlignmentInternal(), VPos.TOP);
+            editor.prefHeight(-1),
+            0, getColumnHAlignmentInternal(), VPos.TOP);
         editorOnNewLine = true;
         ensureVisible(editor);
       }

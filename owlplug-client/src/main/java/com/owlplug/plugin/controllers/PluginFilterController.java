@@ -242,7 +242,7 @@ public class PluginFilterController {
    * the rest are hidden behind a "View more" toggle. Entries are sorted by count desc,
    * then alphabetically so the most common values appear first.
    *
-   * checkBoxMap is cleared and repopulated on every call so the shared SetChangeListeners
+   * <p>checkBoxMap is cleared and repopulated on every call so the shared SetChangeListeners
    * registered in setup() always resolve to a live checkbox, never a stale one.
    */
   private void buildExpandableSection(VBox container, Map<String, CheckBox> checkBoxMap,

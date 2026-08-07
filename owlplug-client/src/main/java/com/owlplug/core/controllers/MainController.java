@@ -18,6 +18,7 @@
 
 package com.owlplug.core.controllers;
 
+import atlantafx.base.theme.Styles;
 import com.owlplug.auth.controllers.AccountController;
 import com.owlplug.auth.events.AccountUpdateEvent;
 import com.owlplug.auth.model.UserAccount;
@@ -35,13 +36,12 @@ import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.controllers.dialogs.CrashRecoveryDialogController;
 import com.owlplug.core.controllers.dialogs.WelcomeDialogController;
 import com.owlplug.core.events.PreferencesChangedEvent;
+import com.owlplug.core.services.AppUpdateService;
 import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.core.services.AppUpdateService;
-import atlantafx.base.theme.Styles;
 import jakarta.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Optional;

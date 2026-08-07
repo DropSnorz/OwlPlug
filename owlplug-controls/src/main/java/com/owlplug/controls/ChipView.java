@@ -148,6 +148,7 @@ public class ChipView<T> extends Control {
   public void setPredicate(BiPredicate<T, String> predicate) {
     this.predicate.set(predicate);
   }
+
   private ObservableList<T> chips = FXCollections.observableArrayList();
 
   public ObservableList<T> getChips() {

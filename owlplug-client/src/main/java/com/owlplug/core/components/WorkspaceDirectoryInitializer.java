@@ -38,8 +38,8 @@ import org.springframework.stereotype.Component;
  * Performs data cleanup on the workspace directory User data migration are not
  * supported for now. Database schema is updated using hibernate auto-ddl=update
  * feature which is limited in case of major relational changes.
- * <p>
- * When the schema can't be updated by hibernate the database will be flushed.
+ *
+ * <p>When the schema can't be updated by hibernate the database will be flushed.
  * </p>
  *
  */

@@ -155,7 +155,9 @@ public class ExploreController extends BaseController {
   /** Counter of loaded partitions on UI — masonry view. */
   private int displayedPartitions = 0;
 
-  /** Backing items of the virtualized list view — kept in sync with {@link #loadedRemotePackages}. */
+  /**
+   * Backing items of the virtualized list view — kept in sync with {@link #loadedRemotePackages}.
+   */
   private final ObservableList<RemotePackage> listViewItems = FXCollections.observableArrayList();
 
   /**

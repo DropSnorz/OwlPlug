@@ -19,7 +19,14 @@
 package com.owlplug.controls;
 
 import com.owlplug.controls.skins.AutoCompletePopupSkin;
-import javafx.beans.property.*;
+import java.util.List;
+import java.util.function.Predicate;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -36,9 +43,6 @@ import javafx.scene.control.Skin;
 import javafx.scene.layout.Region;
 import javafx.stage.Window;
 import javafx.util.Callback;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * AutoCompletePopup is an animated popup list view that allow filtering.

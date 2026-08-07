@@ -58,13 +58,12 @@ public class FileSyncTask extends AbstractTask {
 
     log.info("Starting file sync task on {} directories", directories.size());
 
-    long length = 0;
     for (String directoryPath : directories) {
       try {
         log.info("Syncing file stats on directory {}", directoryPath);
         File directory = new File(directoryPath);
         if (directory.exists() && directory.isDirectory()) {
-          length = extractFolderSize(directory, null);
+          long length = extractFolderSize(directory, null);
           log.info("Completed file stat sync on directory {}, computed length: {}", directoryPath, length);
         }
 

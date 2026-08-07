@@ -31,7 +31,7 @@ public class SoVstFile extends PluginFile {
    */
   public static boolean formatCheck(File file) {
     return (file.getAbsolutePath().endsWith(".so") || file.getAbsolutePath().endsWith(".so.disabled"))
-      && file.isFile();
+        && file.isFile();
 
   }
 

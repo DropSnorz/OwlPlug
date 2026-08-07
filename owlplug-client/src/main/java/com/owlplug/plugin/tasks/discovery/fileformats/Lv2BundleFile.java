@@ -42,7 +42,7 @@ public class Lv2BundleFile extends PluginFile {
    */
   public static boolean formatCheck(File file) {
     return (file.getAbsolutePath().endsWith(".lv2") || file.getAbsolutePath().endsWith(".lv2.disabled"))
-      && file.isDirectory();
+        && file.isDirectory();
 
   }
 

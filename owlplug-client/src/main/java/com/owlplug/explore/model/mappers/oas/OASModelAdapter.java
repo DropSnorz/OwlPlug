@@ -141,6 +141,7 @@ public class OASModelAdapter {
         case "lv2" -> pluginFormats.add("lv2");
         case "vst3" -> pluginFormats.add("vst3");
         case "so", "vst", "dll" -> pluginFormats.add("vst2");
+        default -> { }
       }
     }
     return pluginFormats.stream().toList();

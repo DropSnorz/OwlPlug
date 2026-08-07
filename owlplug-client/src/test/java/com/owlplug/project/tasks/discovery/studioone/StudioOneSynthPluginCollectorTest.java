@@ -18,6 +18,9 @@
 
 package com.owlplug.project.tasks.discovery.studioone;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.owlplug.project.model.DawPlugin;
 import java.io.File;
 import java.util.List;
@@ -25,9 +28,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StudioOneSynthPluginCollectorTest {
 

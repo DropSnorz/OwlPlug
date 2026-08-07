@@ -293,8 +293,6 @@ public class InstallStepDialogController extends AbstractDialogController {
       return false;
     }
 
-    boolean result = true;
-
     File installationDirectory = installParams.getInstallationDirectory();
     installationDirectoryText.setText(installationDirectory.getAbsolutePath());
 
@@ -303,6 +301,8 @@ public class InstallStepDialogController extends AbstractDialogController {
     directoryOverrideText.getStyleClass().remove("label-warning");
     directoryChooserButton.setVisible(false);
     directoryChooserButton.setManaged(false);
+
+    boolean result = true;
 
     if (!installParams.isInstallationConfirmed()) {
       installParams.setInstallationConfirmed(true);

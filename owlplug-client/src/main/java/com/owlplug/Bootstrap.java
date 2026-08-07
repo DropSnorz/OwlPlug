@@ -19,7 +19,7 @@
 package com.owlplug;
 
 /**
- * OwlPlug Bootstrap Class
+ * OwlPlug Bootstrap Class.
  * As OwlPlug extends javafx.Application, an error is thrown if main method
  * is scoped to this class since JDK11
  *

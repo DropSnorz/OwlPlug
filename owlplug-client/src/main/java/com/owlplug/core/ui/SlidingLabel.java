@@ -59,9 +59,6 @@ public class SlidingLabel extends Label {
     fadeIn.setFromValue(0);
     fadeIn.setToValue(1);
 
-    // Pause
-    PauseTransition pause = new PauseTransition(Duration.seconds(2));
-
     // Fade and slide out
     TranslateTransition slideOut = new TranslateTransition(Duration.millis(500), this);
     slideOut.setFromY(0);
@@ -70,6 +67,9 @@ public class SlidingLabel extends Label {
     FadeTransition fadeOut = new FadeTransition(Duration.millis(500), this);
     fadeOut.setFromValue(1);
     fadeOut.setToValue(0);
+
+    // Pause
+    PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
     // Combine and repeat
     SequentialTransition sequence = new SequentialTransition(
