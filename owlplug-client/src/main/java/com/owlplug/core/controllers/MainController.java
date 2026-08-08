@@ -42,6 +42,7 @@ import java.util.concurrent.Executors;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -90,6 +91,8 @@ public class MainController extends BaseController {
   @FXML
   private Pane updatePane;
   @FXML
+  private Label updateLabel;
+  @FXML
   private Button downloadUpdateButton;
 
   public static int HOME_TAB_INDEX = 0;
@@ -127,10 +130,11 @@ public class MainController extends BaseController {
     updatePane.setVisible(false);
     Executor executor = Executors.newVirtualThreadPerTaskExecutor();
     CompletableFuture
-            .supplyAsync(() -> appUpdateService.isUpToDate(), executor)
-            .thenAccept(isUpToDate -> {
+            .supplyAsync(() -> appUpdateService.getAvailableUpdateVersion(), executor)
+            .thenAccept(availableVersion -> {
               FX.run(() -> {
-                if (!isUpToDate) {
+                if (availableVersion != null) {
+                  updateLabel.setText("New version available (v" + availableVersion + ")");
                   updatePane.setVisible(true);
                 }
               });
