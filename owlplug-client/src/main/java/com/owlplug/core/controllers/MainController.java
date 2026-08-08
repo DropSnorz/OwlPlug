@@ -19,13 +19,6 @@
 package com.owlplug.core.controllers;
 
 import atlantafx.base.theme.Styles;
-import com.owlplug.auth.controllers.AccountController;
-import com.owlplug.auth.events.AccountUpdateEvent;
-import com.owlplug.auth.model.UserAccount;
-import com.owlplug.auth.services.AuthenticationService;
-import com.owlplug.auth.ui.AccountCellFactory;
-import com.owlplug.auth.ui.AccountItem;
-import com.owlplug.auth.ui.AccountMenuItem;
 import com.owlplug.controls.Drawer;
 import com.owlplug.controls.transitions.AnimatedTabListener;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
@@ -43,16 +36,12 @@ import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.plugin.services.PluginService;
 import jakarta.annotation.PreDestroy;
-import java.util.ArrayList;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -60,7 +49,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -73,8 +61,6 @@ public class MainController extends BaseController {
   @Autowired
   private LazyViewRegistry viewRegistry;
   @Autowired
-  private AccountController accountController;
-  @Autowired
   private CrashRecoveryDialogController crashRecoveryDialogController;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
@@ -82,8 +68,6 @@ public class MainController extends BaseController {
   private WelcomeDialogController welcomeDialogController;
   @Autowired
   private ExploreController exploreController;
-  @Autowired
-  private AuthenticationService authenticationService;
   @Autowired
   private AppUpdateService appUpdateService;
   @Autowired
@@ -103,8 +87,6 @@ public class MainController extends BaseController {
   private TabPane tabPaneContent;
   @FXML
   private Drawer leftDrawer;
-  @FXML
-  private ComboBox<AccountItem> accountComboBox;
   @FXML
   private Pane updatePane;
   @FXML
@@ -137,22 +119,6 @@ public class MainController extends BaseController {
       }
     });
 
-    accountComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-      if (newValue instanceof AccountMenuItem) {
-        accountController.show();
-        // Delay comboBox selector change
-        FX.run(() -> accountComboBox.setValue(oldValue));
-
-      }
-      if (newValue instanceof UserAccount userAccount) {
-        this.getPreferences().putLong(Prefs.Auth.SELECTED_ACCOUNT, userAccount.getId());
-
-      }
-      accountComboBox.hide();
-    });
-
-    accountComboBox.setButtonCell(new AccountCellFactory(imageCache, Pos.CENTER_RIGHT).call(null));
-    accountComboBox.setCellFactory(new AccountCellFactory(authenticationService, imageCache, true));
 
     downloadUpdateButton.setOnAction(e -> {
       PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getDownloadUrl());
@@ -180,8 +146,6 @@ public class MainController extends BaseController {
    * called once in the application lifecycle.
    */
   public void dispatchPostInitialize() {
-
-    refreshAccounts();
 
     boolean firstLaunch = this.getPreferences().getBoolean(Prefs.App.FIRST_LAUNCH, true);
     if (!this.applicationMonitor.isPreviousExecutionSafelyTerminated()) {
@@ -212,41 +176,6 @@ public class MainController extends BaseController {
     this.tabPaneHeader.getSelectionModel().select(index);
   }
 
-  /**
-   * Refresh Account comboBox.
-   */
-  public void refreshAccounts() {
-
-    ArrayList<UserAccount> accounts = new ArrayList<>();
-
-    for (UserAccount account : authenticationService.getAccounts()) {
-      accounts.add(account);
-    }
-
-    accountComboBox.hide();
-    accountComboBox.getItems().clear();
-    accountComboBox.getItems().setAll(accounts);
-    accountComboBox.getItems().add(new AccountMenuItem(" + New Account"));
-
-    long selectedAccountId = this.getPreferences().getLong(Prefs.Auth.SELECTED_ACCOUNT, -1);
-    if (selectedAccountId != -1) {
-      Optional<UserAccount> selectedAccount = authenticationService.getUserAccountById(selectedAccountId);
-      if (selectedAccount.isPresent()) {
-
-        // Bug workaround. The only way to pre-select the account is to find its
-        // index in the list
-        // If not, the selected cell is not rendered correctly
-        accountComboBox.getItems().stream().filter(account -> account.getId().equals(selectedAccount.get().getId()))
-            .findAny().ifPresent(accountComboBox.getSelectionModel()::select);
-      } else {
-        accountComboBox.setValue(null);
-      }
-    } else {
-      accountComboBox.setValue(null);
-
-    }
-
-  }
 
   @PreDestroy
   private void destroy() {
@@ -271,11 +200,6 @@ public class MainController extends BaseController {
     if (node != null) {
       leftDrawer.setSidePane(node);
     }
-  }
-
-  @EventListener
-  private void handle(AccountUpdateEvent event) {
-    FX.run(this::refreshAccounts);
   }
 
 }
