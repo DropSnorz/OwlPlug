@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ComboBox?>
 
 <?import java.lang.String?>
 <?import com.owlplug.controls.Drawer?>
@@ -63,7 +62,6 @@
                     </graphic>
                 </Button>
             </HBox>
-            <ComboBox fx:id="accountComboBox" prefHeight="45.0" prefWidth="200.0" promptText="Accounts"/>
         </HBox>
         <Drawer fx:id="leftDrawer" defaultDrawerSize="250" prefHeight="400.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <content>

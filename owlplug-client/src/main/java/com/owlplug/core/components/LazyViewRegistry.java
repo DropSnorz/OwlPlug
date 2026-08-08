@@ -34,7 +34,6 @@ public class LazyViewRegistry {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  public static final String NEW_ACCOUNT_VIEW = "NEW_ACCOUNT_VIEW";
   public static final String NEW_LINK_VIEW = "NEW_LINK_VIEW";
   public static final String WELCOME_VIEW = "WELCOME_VIEW";
   public static final String NEW_SOURCE_VIEW = "NEW_SOURCE_VIEW";
@@ -59,7 +58,6 @@ public class LazyViewRegistry {
    * allow fxml bindings on controllers
    */
   public void preload() {
-    preloadFxml(NEW_ACCOUNT_VIEW, "/fxml/dialogs/NewAccount.fxml");
     preloadFxml(NEW_LINK_VIEW, "/fxml/dialogs/NewLinkView.fxml");
     preloadFxml(WELCOME_VIEW, "/fxml/dialogs/WelcomeView.fxml");
     preloadFxml(NEW_SOURCE_VIEW, "/fxml/dialogs/NewSourceView.fxml");
