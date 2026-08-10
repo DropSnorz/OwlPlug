@@ -235,7 +235,7 @@ public class Rippler extends StackPane {
   }
 
   /**
-   * show/hide the ripple overlay
+   * show/hide the ripple overlay.
    *
    * @param visible
    * @param forceOverlay used to hold the overlay after ripple action
@@ -549,7 +549,7 @@ public class Rippler extends StackPane {
   }
 
   /**
-   * the default color of the ripple effect
+   * the default color of the ripple effect.
    */
   private SimpleObjectProperty<Paint> ripplerFill = new SimpleObjectProperty<>(
           Rippler.this,

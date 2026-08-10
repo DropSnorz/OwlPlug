@@ -1,32 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.owlplug</groupId>
-	<artifactId>owlplug</artifactId>
-	<version>1.33.1</version>
-	<packaging>pom</packaging>
+    <groupId>com.owlplug</groupId>
+    <artifactId>owlplug</artifactId>
+    <version>2.0.0</version>
+    <packaging>pom</packaging>
 
 
-	<name>owlplug</name>
-	<url>https://owlplug.com</url>
+    <name>owlplug</name>
+    <url>https://owlplug.com</url>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>25</java.version>
-		<javafx.version>25.0.1</javafx.version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>25</java.version>
+        <javafx.version>25.0.1</javafx.version>
         <atlantafx.version>2.1.0</atlantafx.version>
-		<maven.compiler.source>25</maven.compiler.source>
-		<maven.compiler.target>25</maven.compiler.target>
-	</properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+    </properties>
 
     <modules>
-		<module>owlplug-client</module>
-		<module>owlplug-host</module>
+        <module>owlplug-client</module>
+        <module>owlplug-host</module>
         <module>owlplug-controls</module>
-		<module>owlplug-parsers</module>
-		<module>owlplug-theme</module>
-	</modules>
+        <module>owlplug-parsers</module>
+        <module>owlplug-theme</module>
+    </modules>
 
 </project>

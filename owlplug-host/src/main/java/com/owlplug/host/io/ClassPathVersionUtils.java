@@ -32,7 +32,7 @@ public class ClassPathVersionUtils {
 
     String filename = resource + ".version";
     InputStream inputStream = ClassPathVersionUtils.class.getClassLoader()
-      .getResourceAsStream(filename);
+        .getResourceAsStream(filename);
     if (inputStream == null) {
       throw new IOException("Resource " + filename + " not found");
     }

@@ -1,6 +1,5 @@
- 
 <p align="center">
-<img src="doc/owlplug-title-bg.png">
+<img src="doc/owlplug-title-bg.png" alt="OwlPlug">
 </p>
 <p align="center">
 <sup>
@@ -28,9 +27,19 @@ OwlPlug simplifies the way you organize, discover and install audio plugins. No 
 
 ![owlplug-demo](https://dropsnorz.com/projects/owlplug/owlplug.gif)
 
-## About
+:earth_africa: [OwlPlug Website](https://owlplug.com) | :pushpin: [Roadmap](https://github.com/users/DropSnorz/projects/13) | :page_facing_up: [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki) | :speech_balloon: [Discord](https://discord.gg/nEdHAMB)
 
-:earth_africa: [OwlPlug Website](https://owlplug.com) | :pushpin: [Roadmap](https://owlplug.com/roadmap) | :page_facing_up: [Documentation](https://github.com/Dropsnorz/OwlPlug/wiki)
+## Table of Contents
+
+- [About](#about)
+- [Installation](#installation)
+- [Features](#features)
+- [Supported Formats & DAWs](#supported-formats--daws)
+- [How to Contribute](#how-to-contribute)
+- [Development](#development)
+- [License](#license)
+
+## About
 
 OwlPlug is an open-source plugin manager designed to simplify the installation, discovery, and management of audio plugins.
 It was born out of frustration with the tedious process of installing and organizing plugins. Inspired by dependency managers and online content stores, OwlPlug offers a seamless way to manage your audio tools while also helping you discover new plugins from the community.
@@ -66,7 +75,7 @@ winget install --exact --id=OwlPlug.OwlPlug
 
 OwlPlug can discover VST2, VST3, AU and LV2 Plugins. OwlPlug is compatible with all previously installed plugins as long as they are all in a specific root directory, for example `C:/AudioPlugins`. Additional directories can be configured if your plugin setup is fragmented on the filesystem.
 
-After downloading Owlplug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.  
+After downloading OwlPlug, you can still organize (add, move, delete, ...) your plugins with a file explorer or with your favorite DAW without breaking anything.
 
 ## Links management
 
@@ -84,17 +93,17 @@ OwlPlug can be connected to several remote sources to download plugins. A Remote
 
 Here are some recommended compatible sources.
 
-#### OwlPlug Registry ⭐ 
+#### OwlPlug Registry ⭐
 
 OwlPlug official plugin registry for Free or Open Source plugins
 * kind: `registry`
 * url: `https://registry.owlplug.com/registry.min.json`
 
-#### Open Audio Stack Registry ⭐ 
+#### Open Audio Stack Registry ⭐
 
 Open Audio Stack registry plugins maintained by community.
 * kind: `registry`
-* url: `https://open-audio-stack.github.io/open-audio-stack-registry` 
+* url: `https://open-audio-stack.github.io/open-audio-stack-registry`
 
 **Discover more plugin sources in [this wiki page](https://github.com/DropSnorz/OwlPlug/wiki/Remote-plugin-sources).**
 
@@ -104,42 +113,90 @@ Open Audio Stack registry plugins maintained by community.
 * Distribute your plugins from the legacy [owlplug-registry](https://github.com/OwlPlug/owlplug-registry).
 * Setup and host a custom remote source to distribute multiple plugins, following the [open-audio-stack-registry](https://github.com/open-audio-stack/open-audio-stack-registry) or [owlplug-registry](https://github.com/OwlPlug/owlplug-registry) specification.
 
-# How to contribute?
+# Supported Formats & DAWs
+
+| Plugin Format | Supported |
+|---------------|-----------|
+| VST2          | ✅         |
+| VST3          | ✅         |
+| AU (macOS)    | ✅         |
+| LV2           | ✅         |
+
+| DAW Project Analysis | Supported |
+|----------------------|-----------|
+| Ableton Live         | ✅         |
+| Reaper               | ✅         |
+| Studio One           | ✅         |
+
+See the [full compatibility list](https://github.com/DropSnorz/OwlPlug/wiki/Projects-and-DAW-Support) for details and version notes.
+
+# How to Contribute
 
 There are several ways to support and get involved in the OwlPlug development.
 * [Downloading](https://github.com/DropSnorz/OwlPlug/releases) OwlPlug, using it, and talking about it around you.
 * [Reporting issues](https://github.com/DropSnorz/OwlPlug/issues) or feature suggestions. Most of the existing features have been inspired by the community feedback.
-* [Contributing](https://github.com/DropSnorz/OwlPlug) to the OwlPlug source code.
+* Contributing to the OwlPlug source code — see [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, branching conventions and PR checklist. Code contributions require agreeing to the [Contributor License Agreement](CLA.md).
 * [Submitting or requesting](https://github.com/OwlPlug/owlplug-registry) plugins to be distributed with OwlPlug.
-* [Donating](https://www.paypal.com/donate?hosted_button_id=7MJGDTQXAPJ22) to help support development and server costs
+* [Donating](https://www.paypal.com/donate?hosted_button_id=7MJGDTQXAPJ22) to help support development and server costs.
+
+Thanks to everyone who already contributed to OwlPlug 💛 — see the full list in [CONTRIBUTORS](CONTRIBUTORS).
 
 # Development
 
 ## Stack
 
-* Spring boot
-* JavaFx
-* Hibernate & H2
-* Maven
-* JUCE
+* **Client**: Spring Boot, Hibernate/JPA, H2
+* **UI**: JavaFX, AtlantaFX, ControlsFX, Ikonli
+* **Parsing**: ANTLR4, used to parse DAW project files
+* **Native plugin scanning**: a JUCE-based native host (`owlplug-host`) plus a companion native scanner binary
+* **Build**: Maven
 
+## Modules
+
+OwlPlug is a multi-module Maven project:
+
+| Module | Purpose |
+|---|---|
+| `owlplug-client` | Main JavaFX + Spring Boot desktop application |
+| `owlplug-host` | Native JUCE-based bridge used to scan and validate audio plugins |
+| `owlplug-controls` | Reusable JavaFX UI components library |
+| `owlplug-parsers` | ANTLR4 grammars and parsers for DAW project files |
+| `owlplug-theme` | Custom AtlantaFX theme (SCSS compiled to CSS) |
+
+## Requirements
+
+* JDK (Version referenced in `pom.xml`)
+* Maven (no wrapper is committed, so a local Maven install is required)
+* Building `owlplug-host` from source additionally requires the JUCE toolchain (Projucer and a platform build toolchain).
 
 ## Development Setup
 
-1. Clone or download project sources
+1. Clone the repository, including its submodules (JUCE, VST SDKs):
+   ```sh
+   git clone --recursive https://github.com/DropSnorz/OwlPlug.git
+   ```
 2. Run following commands
+   ```sh
+   # Install dependencies
+   mvn clean install
+   # Move to owlplug client folder
+   cd owlplug-client
+   # (Optional) Create the runnable JAR file in /target/ folder
+   mvn clean install spring-boot:repackage
+   # Run owlplug
+   mvn spring-boot:run
+   ```
+
+## Testing
+
 ```sh
-# Install dependencies
-mvn clean install
-# Move to owlplug client folder
-cd owlplug-client
-# (Optional) Create the runnable JAR file in /target/ folder
-mvn clean install spring-boot:repackage
-# Run owlplug
-mvn spring-boot:run
+mvn test
 ```
+
+Code style is enforced automatically via Checkstyle when running `mvn install` or `mvn validate` — a style violation will fail the build.
 
 # License
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug?ref=badge_large)
+OwlPlug is licensed under the [GNU General Public License v3.0](LICENSE).
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FDropSnorz%2FOwlPlug?ref=badge_large)

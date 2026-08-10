@@ -18,10 +18,11 @@
  
 package com.owlplug.plugin.controllers;
 
+import com.owlplug.controls.NotificationBadge;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
-import com.owlplug.controls.NotificationBadge;
 import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
@@ -31,7 +32,6 @@ import com.owlplug.plugin.events.PluginScanCompletedEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.core.utils.Async;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

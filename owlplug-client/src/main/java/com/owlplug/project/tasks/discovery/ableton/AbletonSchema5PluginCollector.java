@@ -18,8 +18,8 @@
 
 package com.owlplug.project.tasks.discovery.ableton;
 
-import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.core.utils.DomUtils;
+import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawPlugin;
 import java.util.ArrayList;
 import java.util.List;

@@ -60,6 +60,7 @@ public class Dialog extends StackPane {
   public enum DialogTransition {
     CENTER, TOP, RIGHT, BOTTOM, LEFT, NONE
   }
+
   private StackPane contentHolder;
 
   private double offsetX = 0;
@@ -199,13 +200,12 @@ public class Dialog extends StackPane {
     this.cacheContainer.set(cacheContainer);
   }
 
+  private ArrayList<Node> tempContent;
+
   public void show(StackPane dialogContainer) {
     this.setDialogContainer(dialogContainer);
     showDialog();
   }
-
-  private ArrayList<Node> tempContent;
-
 
   public void show() {
     this.setDialogContainer(dialogContainer);
@@ -272,41 +272,41 @@ public class Dialog extends StackPane {
     Transition animation = null;
     if (contentHolder != null) {
       switch (transitionType) {
-      case LEFT:
-        contentHolder.setScaleX(1);
-        contentHolder.setScaleY(1);
-        contentHolder.setTranslateX(-offsetX);
-        animation = new LeftTransition();
-        break;
-      case RIGHT:
-        contentHolder.setScaleX(1);
-        contentHolder.setScaleY(1);
-        contentHolder.setTranslateX(offsetX);
-        animation = new RightTransition();
-        break;
-      case TOP:
-        contentHolder.setScaleX(1);
-        contentHolder.setScaleY(1);
-        contentHolder.setTranslateY(-offsetY);
-        animation = new TopTransition();
-        break;
-      case BOTTOM:
-        contentHolder.setScaleX(1);
-        contentHolder.setScaleY(1);
-        contentHolder.setTranslateY(offsetY);
-        animation = new BottomTransition();
-        break;
-      case CENTER:
-        contentHolder.setScaleX(0);
-        contentHolder.setScaleY(0);
-        animation = new CenterTransition();
-        break;
-      default:
-        contentHolder.setScaleX(1);
-        contentHolder.setScaleY(1);
-        contentHolder.setTranslateX(0);
-        contentHolder.setTranslateY(0);
-        break;
+        case LEFT:
+          contentHolder.setScaleX(1);
+          contentHolder.setScaleY(1);
+          contentHolder.setTranslateX(-offsetX);
+          animation = new LeftTransition();
+          break;
+        case RIGHT:
+          contentHolder.setScaleX(1);
+          contentHolder.setScaleY(1);
+          contentHolder.setTranslateX(offsetX);
+          animation = new RightTransition();
+          break;
+        case TOP:
+          contentHolder.setScaleX(1);
+          contentHolder.setScaleY(1);
+          contentHolder.setTranslateY(-offsetY);
+          animation = new TopTransition();
+          break;
+        case BOTTOM:
+          contentHolder.setScaleX(1);
+          contentHolder.setScaleY(1);
+          contentHolder.setTranslateY(offsetY);
+          animation = new BottomTransition();
+          break;
+        case CENTER:
+          contentHolder.setScaleX(0);
+          contentHolder.setScaleY(0);
+          animation = new CenterTransition();
+          break;
+        default:
+          contentHolder.setScaleX(1);
+          contentHolder.setScaleY(1);
+          contentHolder.setTranslateX(0);
+          contentHolder.setTranslateY(0);
+          break;
       }
     }
     if (animation != null) {

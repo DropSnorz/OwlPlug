@@ -47,13 +47,13 @@ import javafx.util.Duration;
  * A Masonry implements asymmetrical grid layoutMode, it places the child nodes according to
  * one of the modes:
  *
- * <p><h3>Masonry Layout</h3> Nodes will be added one after another, first in the horizontal direction
+ * <h3>Masonry Layout</h3> Nodes will be added one after another, first in the horizontal direction
  * , then vertically. sort of like a mason fitting stones in a wall.
  *
- * <p><h3>Bin Packing Layout(First Fit)</h3> it works similar to masonry layoutMode, however it tries to
+ * <h3>Bin Packing Layout(First Fit)</h3> it works similar to masonry layoutMode, however it tries to
  * fill the empty gaps caused in masonry layoutMode.
  *
- * <p> Based on JFXMasonryPane from Jfoenix</p>
+ * <p>Based on JFXMasonryPane from Jfoenix</p>
  *
  * <b>Note:</b> children that doesn't fit in the grid will be hidden.
  */
@@ -108,8 +108,6 @@ public class MasonryPane extends Pane {
     int row = getLimitRow();
 
     matrix = new int[row][col];
-    double minWidth = -1;
-    double minHeight = -1;
 
     List<BoundingBox> newBoxes;
     List<Region> managedChildren = getManagedChildren();
@@ -137,6 +135,9 @@ public class MasonryPane extends Pane {
     if (dirtyBoxes) {
       boundingBoxes = new HashMap<>();
     }
+
+    double minWidth = -1;
+    double minHeight = -1;
 
     for (int i = 0; i < managedChildren.size() && i < newBoxes.size(); i++) {
       final Region child = managedChildren.get(i);
@@ -187,7 +188,8 @@ public class MasonryPane extends Pane {
                 new KeyValue(child.opacityProperty(), 1, Interpolator.LINEAR),
                 new KeyValue(child.layoutXProperty(), blockX, Interpolator.LINEAR),
                 new KeyValue(child.layoutYProperty(), blockY, Interpolator.LINEAR));
-            animationMap.put(child, new CachedTransition(child, new Timeline(keyFrame)) {{
+            animationMap.put(child, new CachedTransition(child, new Timeline(keyFrame)) {
+              {
                 setCycleDuration(Duration.seconds(0.320));
                 setDelay(Duration.seconds(0));
                 setOnFinished((finish) -> {
@@ -195,7 +197,8 @@ public class MasonryPane extends Pane {
                   child.setLayoutY(blockY);
                   child.setOpacity(1);
                 });
-              }});
+              }
+            });
 
           } else {
             // handle children is being hidden ( cause it can't fit in the pane )
@@ -329,42 +332,42 @@ public class MasonryPane extends Pane {
   }
 
 
-  private DoubleProperty hSpacing = new SimpleDoubleProperty(5) {
+  private DoubleProperty horizontalSpacing = new SimpleDoubleProperty(5) {
     @Override
     protected void invalidated() {
       requestLayout();
     }
   };
 
-  public final DoubleProperty hSpacingProperty() {
-    return this.hSpacing;
+  public final DoubleProperty horizontalSpacingProperty() {
+    return this.horizontalSpacing;
   }
 
   public final double getHSpacing() {
-    return this.hSpacingProperty().get();
+    return this.horizontalSpacingProperty().get();
   }
 
   public final void setHSpacing(final double spacing) {
-    this.hSpacingProperty().set(spacing);
+    this.horizontalSpacingProperty().set(spacing);
   }
 
-  private DoubleProperty vSpacing = new SimpleDoubleProperty(5) {
+  private DoubleProperty verticalSpacing = new SimpleDoubleProperty(5) {
     @Override
     protected void invalidated() {
       requestLayout();
     }
   };
 
-  public final DoubleProperty vSpacingProperty() {
-    return this.vSpacing;
+  public final DoubleProperty verticalSpacingProperty() {
+    return this.verticalSpacing;
   }
 
   public final double getVSpacing() {
-    return this.vSpacingProperty().get();
+    return this.verticalSpacingProperty().get();
   }
 
   public final void setVSpacing(final double spacing) {
-    this.vSpacingProperty().set(spacing);
+    this.verticalSpacingProperty().set(spacing);
   }
 
   private IntegerProperty limitColumn = new SimpleIntegerProperty(-1) {

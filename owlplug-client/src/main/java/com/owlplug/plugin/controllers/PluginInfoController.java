@@ -36,8 +36,8 @@ import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.plugin.ui.PluginComponentCellFactory;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
 import java.io.File;
 import java.util.ArrayList;
@@ -56,11 +56,11 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -276,9 +276,6 @@ public class PluginInfoController extends BaseController {
   }
   
   private void showUninstallDialog() {
-    Plugin plugin = pluginProperty.get();
-
-    Dialog dialog = this.getDialogManager().newDialog();
     DialogLayout layout = new DialogLayout();
 
     layout.setHeading(new Label("Remove plugin"));
@@ -288,6 +285,7 @@ public class PluginInfoController extends BaseController {
     Text messageText = new Text("This will permanently delete the file from your hard drive.");
     vbox.getChildren().add(new TextFlow(messageText));
 
+    Plugin plugin = pluginProperty.get();
     HBox pluginRow = new HBox(8);
     pluginRow.setAlignment(Pos.CENTER_LEFT);
     Label pluginNameLabel = new Label(plugin.getName());
@@ -298,6 +296,7 @@ public class PluginInfoController extends BaseController {
 
     layout.setBody(vbox);
 
+    Dialog dialog = this.getDialogManager().newDialog();
     Button cancelButton = new Button("Cancel");
     cancelButton.setOnAction(cancelEvent -> {
       dialog.close();

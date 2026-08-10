@@ -112,9 +112,6 @@ public class WelcomeDialogController extends AbstractDialogController {
     row.setAlignment(Pos.CENTER_LEFT);
     row.setPadding(new Insets(10, 4, 10, 4));
 
-    PluginFormatBadgeView badge = new PluginFormatBadgeView(
-        format, this.getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.DEFAULT);
-
     VBox labels = new VBox(2);
     Label nameLabel = new Label(name);
     nameLabel.getStyleClass().add("label-emphase");
@@ -128,6 +125,8 @@ public class WelcomeDialogController extends AbstractDialogController {
     toggle.selectedProperty().addListener((obs, old, v) ->
         this.getPreferences().putBoolean(enableKey, v));
 
+    PluginFormatBadgeView badge = new PluginFormatBadgeView(
+        format, this.getApplicationDefaults(), PluginFormatBadgeView.DisplayMode.DEFAULT);
     row.getChildren().addAll(badge, labels, toggle);
     return row;
   }

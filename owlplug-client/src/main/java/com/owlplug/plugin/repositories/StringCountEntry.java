@@ -20,5 +20,6 @@ package com.owlplug.plugin.repositories;
 
 public interface StringCountEntry {
   String getLabel();
+
   Long getCnt();
 }

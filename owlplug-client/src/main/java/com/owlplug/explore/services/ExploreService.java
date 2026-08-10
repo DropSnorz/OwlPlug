@@ -38,6 +38,7 @@ import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.services.PluginService;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -63,7 +64,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import jakarta.annotation.PostConstruct;
 
 @Service
 public class ExploreService extends BaseService {
@@ -94,17 +94,17 @@ public class ExploreService extends BaseService {
 
     remoteSourceRepository.save(owlplugRegistry);
 
-    RemoteSource OASRegistry = remoteSourceRepository.findByUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl());
+    RemoteSource oasRegistry = remoteSourceRepository.findByUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl());
 
-    if (OASRegistry == null) {
-      OASRegistry = new RemoteSource();
-      OASRegistry.setName("Open Audio Registry");
+    if (oasRegistry == null) {
+      oasRegistry = new RemoteSource();
+      oasRegistry.setName("Open Audio Registry");
     }
-    OASRegistry.setUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl());
-    OASRegistry.setDisplayUrl("https://github.com/open-audio-stack");
-    OASRegistry.setType(SourceType.OAS_REGISTRY);
+    oasRegistry.setUrl(this.getApplicationDefaults().getOpenAudioRegistryUrl());
+    oasRegistry.setDisplayUrl("https://github.com/open-audio-stack");
+    oasRegistry.setType(SourceType.OAS_REGISTRY);
 
-    remoteSourceRepository.save(OASRegistry);
+    remoteSourceRepository.save(oasRegistry);
   }
 
   public Iterable<RemoteSource> getRemoteSources() {

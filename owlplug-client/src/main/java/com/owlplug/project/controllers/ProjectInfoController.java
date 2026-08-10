@@ -19,13 +19,13 @@
 package com.owlplug.project.controllers;
 
 import com.owlplug.core.controllers.BaseController;
-import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.plugin.controllers.PluginsController;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginFormat;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.LookupResult;

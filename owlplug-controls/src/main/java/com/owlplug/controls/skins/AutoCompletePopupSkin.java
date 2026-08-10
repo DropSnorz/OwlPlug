@@ -105,15 +105,15 @@ public class AutoCompletePopupSkin<T> implements Skin<AutoCompletePopup<T>> {
 
     suggestionList.setOnKeyPressed(event -> {
       switch (event.getCode()) {
-      case ENTER:
-        selectItem();
-        getSkinnable().hide();
-        break;
-      case ESCAPE:
-        getSkinnable().hide();
-        break;
-      default:
-        break;
+        case ENTER:
+          selectItem();
+          getSkinnable().hide();
+          break;
+        case ESCAPE:
+          getSkinnable().hide();
+          break;
+        default:
+          break;
       }
     });
   }

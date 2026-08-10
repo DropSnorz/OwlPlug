@@ -36,17 +36,27 @@ public class AppUpdateService extends BaseService {
    * @return true if app is up-to-date, false otherwise
    */
   public boolean isUpToDate() {
-    
+    return getAvailableUpdateVersion() == null;
+  }
+
+  /**
+   * Checks OwlPlug Hub remote version and returns the latest version number if a
+   * newer version is available.
+   * @return the latest available version, or null if the app is up-to-date or the check failed
+   */
+  public String getAvailableUpdateVersion() {
+
     String lastVersion = getLastVersion();
-    
+
     if (lastVersion != null) {
       log.debug("Last app version retrieved: {}", lastVersion);
       Semver lastSemver = new Semver(lastVersion);
       Semver currentSemver = new Semver(this.getApplicationDefaults().getVersion());
-      return lastSemver.isLowerThanOrEqualTo(currentSemver);
-
+      if (lastSemver.isGreaterThan(currentSemver)) {
+        return lastVersion;
+      }
     }
-    return true;
+    return null;
   }
 
   private String getLastVersion() {

@@ -22,7 +22,6 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import java.io.File;
 import java.util.prefs.Preferences;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;

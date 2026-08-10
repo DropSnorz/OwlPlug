@@ -18,10 +18,10 @@
 
 package com.owlplug.explore.ui;
 
+import atlantafx.base.layout.InputGroup;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.ui.VirtualizedImageView;
-import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.controllers.ExploreController;
@@ -29,6 +29,7 @@ import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.plugin.model.PluginStage;
+import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -45,7 +46,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.kordamp.ikonli.javafx.FontIcon;
-import atlantafx.base.layout.InputGroup;
 
 public class PackageListRowView extends HBox {
 

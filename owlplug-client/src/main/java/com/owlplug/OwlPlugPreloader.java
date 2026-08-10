@@ -18,8 +18,8 @@
  
 package com.owlplug;
 
-import com.owlplug.theme.OwlPlugDarkTheme;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.theme.OwlPlugDarkTheme;
 import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.application.Preloader.StateChangeNotification.Type;

@@ -18,8 +18,6 @@
  
 package com.owlplug.core.services;
 
-import com.owlplug.auth.repositories.GoogleCredentialRepository;
-import com.owlplug.auth.repositories.UserAccountRepository;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ApplicationPreferences;
 import com.owlplug.core.components.ImageCache;
@@ -44,10 +42,6 @@ public class SettingsService extends BaseService {
 
   @Autowired
   private PluginRepository pluginRepository;
-  @Autowired
-  private UserAccountRepository userAccountRepository;
-  @Autowired
-  private GoogleCredentialRepository googleCredentialRepository;
   @Autowired
   private RemoteSourceRepository remoteSourceRepository;
   @Autowired
@@ -105,9 +99,6 @@ public class SettingsService extends BaseService {
     try {
       this.getPreferences().clear();
       pluginRepository.deleteAll();
-
-      googleCredentialRepository.deleteAll();
-      userAccountRepository.deleteAll();
       packageRepository.deleteAll();
       remoteSourceRepository.deleteAll();
       fileStatRepository.deleteAll();

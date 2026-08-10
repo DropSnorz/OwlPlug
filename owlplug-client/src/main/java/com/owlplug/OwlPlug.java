@@ -18,12 +18,12 @@
 
 package com.owlplug;
 
-import com.owlplug.theme.OwlPlugDarkTheme;
 import com.owlplug.controls.OwlPlugControlsResources;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.telemetry.StartupFailureTelemetry;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.utils.FX;
+import com.owlplug.theme.OwlPlugDarkTheme;
 import com.zaxxer.hikari.HikariDataSource;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -121,7 +121,7 @@ public class OwlPlug extends Application {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
-    double width = 1100;
+    double width = 1200;
     double height = 820;
 
     Application.setUserAgentStylesheet(new OwlPlugDarkTheme().getUserAgentStylesheet());

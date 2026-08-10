@@ -82,7 +82,6 @@ public class ScopedScanEntityCollector {
       // Plugins are retrieved from regulars directories
       String vst2Directory = parameters.getVst2Directory();
       String vst3Directory = parameters.getVst3Directory();
-      String auDirectory = parameters.getAuDirectory();
       String lv2Directory = parameters.getLv2Directory();
 
       if (parameters.isFindLv2()) {
@@ -113,6 +112,7 @@ public class ScopedScanEntityCollector {
       }
 
       if (parameters.isFindAu()) {
+        String auDirectory = parameters.getAuDirectory();
         collectedPluginFiles.addAll(pluginCollector.collect(auDirectory, PluginFormat.AU));
         collectedSymlinks.addAll(symlinkCollector.collect(auDirectory));
         for (String path : parameters.getAuExtraDirectories()) {

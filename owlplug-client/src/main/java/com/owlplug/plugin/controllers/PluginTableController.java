@@ -20,6 +20,7 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.plugin.components.PluginFilterState;
@@ -32,9 +33,8 @@ import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.ui.PluginKindBadgeView;
 import com.owlplug.plugin.ui.PluginStateView;
-import java.util.function.Predicate;
 import java.io.File;
-import com.owlplug.core.utils.Async;
+import java.util.function.Predicate;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

@@ -20,9 +20,9 @@ package com.owlplug.plugin.ui;
 
 import atlantafx.base.controls.ToggleSwitch;
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.utils.Async;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.services.PluginService;
-import com.owlplug.core.utils.Async;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;

@@ -1,3 +1,21 @@
+/* OwlPlug
+ * Copyright (C) 2021 Arthur <dropsnorz@gmail.com>
+ *
+ * This file is part of OwlPlug.
+ *
+ * OwlPlug is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3
+ * as published by the Free Software Foundation.
+ *
+ * OwlPlug is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.owlplug.core.utils;
 
 
@@ -12,31 +30,31 @@ import org.junit.jupiter.api.Test;
 public class StringUtilsTest {
 
   @Test
-  void testTruncate_NormalCase() {
+  void testTruncateNormalCase() {
     String result = StringUtils.truncate("HelloWorld", 5, "...");
     assertEquals("He...", result);
   }
 
   @Test
-  void testTruncate_NoTruncationNeeded() {
+  void testTruncateNoTruncationNeeded() {
     String result = StringUtils.truncate("Hi", 5, "...");
     assertEquals("Hi", result);
   }
 
   @Test
-  void testTruncate_NullInput() {
+  void testTruncateNullInput() {
     String result = StringUtils.truncate(null, 5, "...");
     assertEquals("", result);
   }
 
   @Test
-  void testTruncate_NegativeSize() {
+  void testTruncateNegativeSize() {
     String result = StringUtils.truncate("Hello", -1, "...");
     assertEquals("", result);
   }
 
   @Test
-  void testTruncate_SuffixLongerThanSize() {
+  void testTruncateSuffixLongerThanSize() {
     String result = StringUtils.truncate("HelloWorld", 2, "...");
     // max(0, 2 - 3) = 0 → only suffix remains
     assertEquals("...", result);
@@ -45,26 +63,26 @@ public class StringUtilsTest {
   // ---------------- ellipsis() ----------------
 
   @Test
-  void testEllipsis_NormalCase() {
+  void testEllipsisNormalCase() {
     String result = StringUtils.ellipsis("HelloWorld", 7, 2);
     // "HelloWorld" → first (7 - 2)=5 chars "Hello" + "..." + last 2 chars "ld"
     assertEquals("Hello...ld", result);
   }
 
   @Test
-  void testEllipsis_ShortString_NoChange() {
+  void testEllipsisShortStringNoChange() {
     String result = StringUtils.ellipsis("Hi", 5, 2);
     assertEquals("Hi", result);
   }
 
   @Test
-  void testEllipsis_ClearEndTooLarge() {
+  void testEllipsisClearEndTooLarge() {
     String result = StringUtils.ellipsis("HelloWorld", 5, 6);
     assertEquals("HelloWorld", result);
   }
 
   @Test
-  void testEllipsis_NullInput() {
+  void testEllipsisNullInput() {
     String result = StringUtils.ellipsis(null, 10, 2);
     assertNull(result);
   }
@@ -72,7 +90,7 @@ public class StringUtilsTest {
   // ---------------- getStackTraceAsString() ----------------
 
   @Test
-  void testGetStackTraceAsString_ContainsExceptionMessage() {
+  void testGetStackTraceAsStringContainsExceptionMessage() {
     Exception e = new Exception("Something went wrong");
     String stackTrace = StringUtils.getStackTraceAsString(e);
 
@@ -82,7 +100,7 @@ public class StringUtilsTest {
   }
 
   @Test
-  void testGetStackTraceAsString_HandlesCustomThrowable() {
+  void testGetStackTraceAsStringHandlesCustomThrowable() {
     Throwable t = new Throwable("Custom throwable");
     String stackTrace = StringUtils.getStackTraceAsString(t);
 
@@ -91,7 +109,7 @@ public class StringUtilsTest {
   }
 
   @Test
-  void testGetStackTraceAsString_NullInput() {
+  void testGetStackTraceAsStringNullInput() {
     String result = StringUtils.getStackTraceAsString(null);
     assertEquals("null throwable", result);
   }

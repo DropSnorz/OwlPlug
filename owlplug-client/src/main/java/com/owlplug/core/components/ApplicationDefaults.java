@@ -77,8 +77,8 @@ public class ApplicationDefaults {
       getClass().getResourceAsStream("/media/ableton-placeholder.png"));
   public final Image reaperPlaceholderImage = new Image(
       getClass().getResourceAsStream("/media/reaper-placeholder.png"));
-    public final Image studioOnePlaceholderImage = new Image(
-        getClass().getResourceAsStream("/media/studioone-placeholder.png"));
+  public final Image studioOnePlaceholderImage = new Image(
+      getClass().getResourceAsStream("/media/studioone-placeholder.png"));
 
   // CHECKSTYLE:ON
 
