@@ -121,7 +121,7 @@ public class OwlPlug extends Application {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
-    double width = 1100;
+    double width = 1200;
     double height = 820;
 
     Application.setUserAgentStylesheet(new OwlPlugDarkTheme().getUserAgentStylesheet());
