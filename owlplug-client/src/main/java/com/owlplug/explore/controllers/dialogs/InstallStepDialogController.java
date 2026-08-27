@@ -29,6 +29,9 @@ import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.services.ExploreService;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
@@ -51,11 +54,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class InstallStepDialogController extends AbstractDialogController {
+
+  private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   @Autowired
   private ExploreService exploreService;
@@ -133,10 +140,10 @@ public class InstallStepDialogController extends AbstractDialogController {
         baseDir = this.getPreferences().get(Prefs.Plugins.LV2_DIRECTORY, "");
       }
       if (baseDir != null) {
-        File installationDirectory = generateInstallationDirectoryFromBasePath(baseDir);
+        Path installationDirectory = generateInstallationDirectoryFromBasePath(baseDir);
         installParams.setInstallationDirectory(installationDirectory);
         if (installationDirectory != null) {
-          installationDirectoryTextField.setText(installationDirectory.getAbsolutePath());
+          installationDirectoryTextField.setText(installationDirectory.toAbsolutePath().toString());
         }
 
       } else {
@@ -153,7 +160,7 @@ public class InstallStepDialogController extends AbstractDialogController {
         Window mainWindow = directoryChooserButton.getScene().getWindow();
         File selectedDirectory = directoryChooser.showDialog(mainWindow);
         if (selectedDirectory != null) {
-          installParams.setInstallationDirectory(selectedDirectory);
+          installParams.setInstallationDirectory(selectedDirectory.toPath());
           // reset the confirmation flag if directory changed
           installParams.setInstallationConfirmed(false);
         }
@@ -265,7 +272,7 @@ public class InstallStepDialogController extends AbstractDialogController {
     // Compute base directory using format if possible
     if (exploreService.canDeterminateBundleInstallFolder(installParams.getBundle())) {
       String baseDirectoryPath = exploreService.getBundleInstallFolder(installParams.getBundle());
-      File selectedDirectory = generateInstallationDirectoryFromBasePath(baseDirectoryPath);
+      Path selectedDirectory = generateInstallationDirectoryFromBasePath(baseDirectoryPath);
 
       if (selectedDirectory != null) {
         installParams.setInstallationDirectory(selectedDirectory);
@@ -293,8 +300,8 @@ public class InstallStepDialogController extends AbstractDialogController {
       return false;
     }
 
-    File installationDirectory = installParams.getInstallationDirectory();
-    installationDirectoryText.setText(installationDirectory.getAbsolutePath());
+    Path installationDirectory = installParams.getInstallationDirectory();
+    installationDirectoryText.setText(installationDirectory.toAbsolutePath().toString());
 
     // Reset validation styles
     directoryValidText.getStyleClass().removeAll("label-success", "label-danger");
@@ -309,19 +316,20 @@ public class InstallStepDialogController extends AbstractDialogController {
       result = false;
     }
 
-    if (installationDirectory.exists() && !installationDirectory.isDirectory()) {
-      directoryValidText.setText(installationDirectory.getName() + " is not a valid installation directory.");
+    String directoryName = installationDirectory.getFileName().toString();
+    if (Files.exists(installationDirectory) && !Files.isDirectory(installationDirectory)) {
+      directoryValidText.setText(directoryName + " is not a valid installation directory.");
       directoryValidText.getStyleClass().add("label-danger");
       directoryChooserButton.setVisible(true);
       directoryChooserButton.setManaged(true);
       result = false;
     } else {
-      directoryValidText.setText(installationDirectory.getName() + " directory is a valid installation path.");
+      directoryValidText.setText(directoryName + " directory is a valid installation path.");
       directoryValidText.getStyleClass().add("label-success");
     }
 
-    if (installationDirectory.exists()) {
-      directoryOverrideText.setText("Directory " + installationDirectory.getName()
+    if (Files.exists(installationDirectory)) {
+      directoryOverrideText.setText("Directory " + directoryName
           + " already exists. Existing files may be overwritten. Please confirm below to continue.");
       directoryOverrideText.getStyleClass().add("label-warning");
       directoryOverrideCheckBox.setDisable(false);
@@ -329,7 +337,7 @@ public class InstallStepDialogController extends AbstractDialogController {
         result = false;
       }
     } else {
-      directoryOverrideText.setText("A new directory will be created: " + installationDirectory.getName());
+      directoryOverrideText.setText("A new directory will be created: " + directoryName);
       directoryOverrideCheckBox.setDisable(true);
     }
 
@@ -337,21 +345,26 @@ public class InstallStepDialogController extends AbstractDialogController {
   }
 
 
-  private File generateInstallationDirectoryFromBasePath(String baseDirectoryPath) {
+  private Path generateInstallationDirectoryFromBasePath(String baseDirectoryPath) {
 
-    File selectedDirectory = null;
+    Path selectedDirectory = null;
     // A custom root directory to store plugin is defined and the base directory for
     // the bundle format is defined or not blank.
     if (baseDirectoryPath != null && !baseDirectoryPath.isBlank()) {
 
-      selectedDirectory = new File(baseDirectoryPath);
+      try {
+        selectedDirectory = Path.of(baseDirectoryPath);
+      } catch (InvalidPathException e) {
+        log.error("Invalid installation base directory path: {}", baseDirectoryPath, e);
+        return null;
+      }
       boolean shouldStoreInDirectory = this.getPreferences().getBoolean(
               Prefs.Explore.STORE_DIRECTORY_ENABLED, false);
       //if the user wishes to group plugins in a dedicated directory
       //then we need to include the subdirectory as well.
       if (shouldStoreInDirectory) {
         String relativeDirectoryPath = this.getPreferences().get(Prefs.Explore.STORE_DIRECTORY, "");
-        selectedDirectory = new File(selectedDirectory, relativeDirectoryPath);
+        selectedDirectory = selectedDirectory.resolve(relativeDirectoryPath);
       }
 
       boolean shouldGroupByCreator = this.getPreferences().getBoolean(Prefs.Explore.STORE_BY_CREATOR_ENABLED, false);
@@ -359,7 +372,7 @@ public class InstallStepDialogController extends AbstractDialogController {
       //then we need to include the subdirectory as well.
       if (shouldGroupByCreator) {
         String creator = FileUtils.sanitizeFileName(installParams.getBundle().getRemotePackage().getCreator());
-        selectedDirectory = new File(selectedDirectory, creator);
+        selectedDirectory = selectedDirectory.resolve(creator);
       }
 
       boolean shouldWrapSubDirectory = this.getPreferences().getBoolean(Prefs.Explore.STORE_SUBDIRECTORY_ENABLED, true);
@@ -367,7 +380,7 @@ public class InstallStepDialogController extends AbstractDialogController {
         // If the plugin is wrapped into a subdirectory, checks for already existing
         // directory
         String subDirectory = FileUtils.sanitizeFileName(installParams.getBundle().getRemotePackage().getName());
-        selectedDirectory = new File(selectedDirectory, subDirectory);
+        selectedDirectory = selectedDirectory.resolve(subDirectory);
       }
     }
     return selectedDirectory;
@@ -428,7 +441,7 @@ public class InstallStepDialogController extends AbstractDialogController {
     // Bundle being installed
     private PackageBundle bundle;
     // Target installation directory
-    private File installationDirectory;
+    private Path installationDirectory;
     // User confirmation for override
     private boolean directoryOverrideAllowed = false;
     // User confirmation for installation
@@ -442,11 +455,11 @@ public class InstallStepDialogController extends AbstractDialogController {
       this.bundle = bundle;
     }
 
-    public File getInstallationDirectory() {
+    public Path getInstallationDirectory() {
       return installationDirectory;
     }
 
-    public void setInstallationDirectory(File installationDirectory) {
+    public void setInstallationDirectory(Path installationDirectory) {
       this.installationDirectory = installationDirectory;
     }
 

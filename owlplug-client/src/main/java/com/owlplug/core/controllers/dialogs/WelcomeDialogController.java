@@ -93,9 +93,9 @@ public class WelcomeDialogController extends AbstractDialogController {
         buildFormatRow(PluginFormat.VST2, Prefs.Plugins.VST2_DISCOVERY_ENABLED,
             "VST2", "Legacy format, broadly supported across DAWs"),
         buildFormatRow(PluginFormat.VST3, Prefs.Plugins.VST3_DISCOVERY_ENABLED,
-            "VST3", "Modern Steinberg format — recommended"),
+            "VST3", "Modern Steinberg format"),
         buildFormatRow(PluginFormat.AU, Prefs.Plugins.AU_DISCOVERY_ENABLED,
-            "AU", "Audio Units — macOS only"),
+            "AU", "Audio Units, macOS only"),
         buildFormatRow(PluginFormat.LV2, Prefs.Plugins.LV2_DISCOVERY_ENABLED,
             "LV2", "Open standard, primarily for Linux")
     );

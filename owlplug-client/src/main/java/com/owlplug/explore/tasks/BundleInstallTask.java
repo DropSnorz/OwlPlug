@@ -28,16 +28,20 @@ import com.owlplug.core.utils.CryptoUtils;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.nio.CallbackByteChannel;
 import com.owlplug.explore.model.PackageBundle;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +50,7 @@ public class BundleInstallTask extends AbstractTask {
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
   private PackageBundle bundle;
-  private File targetDirectory;
+  private Path targetDirectory;
   private ApplicationDefaults applicationDefaults;
 
   /**
@@ -57,7 +61,7 @@ public class BundleInstallTask extends AbstractTask {
    *                            stored
    * @param applicationDefaults Owlplug ApplicationDefaults
    */
-  public BundleInstallTask(PackageBundle bundle, File targetDirectory, ApplicationDefaults applicationDefaults) {
+  public BundleInstallTask(PackageBundle bundle, Path targetDirectory, ApplicationDefaults applicationDefaults) {
 
     this.bundle = bundle;
     this.targetDirectory = targetDirectory;
@@ -70,18 +74,16 @@ public class BundleInstallTask extends AbstractTask {
   protected TaskResult start() throws Exception {
 
     try {
-      boolean created = targetDirectory.mkdirs();
-      if (!targetDirectory.exists() && !created) {
-        this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Can't create installation directory");
-        log.error("Can't create installation directory. ");
-        throw new TaskException("Can't create installation directory");
-      } else if (!targetDirectory.isDirectory()) {
+      try {
+        Files.createDirectories(targetDirectory);
+      } catch (FileAlreadyExistsException e) {
+        // targetDirectory (or a parent segment) exists and is a regular file
         this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Invalid installation directory");
-        log.error("Invalid plugin installation target directory");
-        throw new TaskException("Invalid plugin installation target directory");
+        log.error("Invalid plugin installation target directory", e);
+        throw new TaskException("Invalid plugin installation target directory", e);
       }
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Downloading files...");
-      File archiveFile = downloadInTempDirectory(bundle);
+      Path archiveFile = downloadInTempDirectory(bundle);
 
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Verifying files...");
 
@@ -91,7 +93,7 @@ public class BundleInstallTask extends AbstractTask {
           String errorMessage = "An error occurred during plugin installation: Downloaded file is invalid, corrupted or can't be verified";
           this.updateMessage(errorMessage);
           log.error(errorMessage);
-          archiveFile.delete();
+          Files.delete(archiveFile);
           this.updateProgress(1, 1);
           throw new TaskException(errorMessage);
         }
@@ -99,9 +101,9 @@ public class BundleInstallTask extends AbstractTask {
 
       this.commitProgress(100);
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Extracting files...");
-      File extractedArchiveFolder = new File(ApplicationDefaults.getTempDownloadDirectory() + File.separator + "temp-"
-                                                 + archiveFile.getName().replace(".owlpack", ""));
-      ArchiveUtils.extract(archiveFile.getAbsolutePath(), extractedArchiveFolder.getAbsolutePath());
+      Path extractedArchiveFolder = Path.of(ApplicationDefaults.getTempDownloadDirectory())
+          .resolve("temp-" + archiveFile.getFileName().toString().replace(".owlpack", ""));
+      ArchiveUtils.extract(archiveFile, extractedArchiveFolder);
 
       this.commitProgress(30);
 
@@ -111,15 +113,16 @@ public class BundleInstallTask extends AbstractTask {
       this.commitProgress(20);
 
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Cleaning files...");
-      archiveFile.delete();
+      Files.delete(archiveFile);
       FileUtils.deleteDirectory(extractedArchiveFolder);
 
       this.commitProgress(10);
       this.updateMessage("Plugin " + bundle.getRemotePackage().getName() + " successfully Installed");
 
     } catch (IOException e) {
-      this.updateMessage("An error occurred during plugin install: " + e.getMessage());
-      log.error("An error occurred during plugin install: " + e.getMessage());
+      this.updateMessage("An error occurred during plugin install: "
+                             + e.getClass().getSimpleName() + ": " + e.getMessage());
+      log.error("An error occurred during plugin install: {}", e.getMessage(), e);
       this.updateProgress(1, 1);
       throw new TaskException("An error occurred during plugin install", e);
     }
@@ -127,7 +130,7 @@ public class BundleInstallTask extends AbstractTask {
     return completed();
   }
 
-  private File downloadInTempDirectory(PackageBundle bundle) throws TaskException {
+  private Path downloadInTempDirectory(PackageBundle bundle) throws TaskException {
 
     URL website;
     try {
@@ -139,25 +142,21 @@ public class BundleInstallTask extends AbstractTask {
     }
 
     SimpleDateFormat horodateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
-    new File(ApplicationDefaults.getTempDownloadDirectory()).mkdirs();
+    Path tempDir = Path.of(ApplicationDefaults.getTempDownloadDirectory());
     String outPutFileName = horodateFormat.format(new Date()) + ".owlpack";
-    String outputFilePath = ApplicationDefaults.getTempDownloadDirectory() + File.separator + outPutFileName;
-    File outputFile = new File(outputFilePath);
+    Path outputFile = tempDir.resolve(outPutFileName);
 
     try (
         CallbackByteChannel rbc = new CallbackByteChannel(Channels.newChannel(website.openStream()),
             contentLength(website));
-        FileOutputStream fos = new FileOutputStream(outputFile)) {
+        FileChannel fos = openOutputChannel(tempDir, outputFile)) {
 
       rbc.setCallback(p -> computeTotalProgress(p));
-      fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+      fos.transferFrom(rbc, 0, Long.MAX_VALUE);
       return outputFile;
 
     } catch (MalformedURLException e) {
       this.updateMessage("Installation of " + bundle.getRemotePackage().getName() + " canceled: Can't download plugin files");
-      throw new TaskException(e);
-    } catch (FileNotFoundException e) {
-      this.updateMessage("Installation of " + bundle.getRemotePackage().getName() + " canceled: File not found");
       throw new TaskException(e);
     } catch (IOException e) {
       this.updateMessage("Installation of " + bundle.getRemotePackage().getName() + " canceled: Can't write file on disk");
@@ -166,15 +165,24 @@ public class BundleInstallTask extends AbstractTask {
 
   }
 
-  private void installToPluginDirectory(File source, File target) throws IOException {
+  /**
+   * Opens a writable channel to the given output file, creating the parent
+   * temp directory first if needed.
+   */
+  private FileChannel openOutputChannel(Path tempDir, Path outputFile) throws IOException {
+    Files.createDirectories(tempDir);
+    return FileChannel.open(outputFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+  }
+
+  private void installToPluginDirectory(Path source, Path target) throws IOException {
 
     OwlPackStructureType structure = getStructureType(source);
     // Choose the folder to copy from the downloaded source
-    File newSource = source;
+    Path newSource = source;
     switch (structure) {
-      case NESTED -> newSource = source.listFiles()[0];
+      case NESTED -> newSource = listDirectory(source).get(0);
       case ENV -> newSource = getSubFileByPlatformTag(source);
-      case NESTED_ENV -> newSource = getSubFileByPlatformTag(source.listFiles()[0]);
+      case NESTED_ENV -> newSource = getSubFileByPlatformTag(listDirectory(source).get(0));
       default -> log.debug("Can't determine owlpack structure type (NESTED, ENV or NESTED_ENV)."
                                + " Directory will be used as it.");
     }
@@ -182,23 +190,24 @@ public class BundleInstallTask extends AbstractTask {
     FileUtils.copyDirectory(newSource, target);
   }
 
-  private OwlPackStructureType getStructureType(File directory) {
+  private OwlPackStructureType getStructureType(Path directory) throws IOException {
 
     RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
     OwlPackStructureType structure = OwlPackStructureType.DIRECT;
 
-    if (directory.listFiles().length == 1 && directory.listFiles()[0].isDirectory()
-            && !runtimePlatform.getCompatiblePlatformsTags().contains(directory.listFiles()[0].getName())) {
+    List<Path> entries = listDirectory(directory);
+    if (entries.size() == 1 && Files.isDirectory(entries.get(0))
+            && !runtimePlatform.getCompatiblePlatformsTags().contains(entries.get(0).getFileName().toString())) {
       structure = OwlPackStructureType.NESTED;
-      for (File f : directory.listFiles()[0].listFiles()) {
-        if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
+      for (Path f : listDirectory(entries.get(0))) {
+        if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getFileName().toString())) {
           structure = OwlPackStructureType.NESTED_ENV;
         }
       }
-    } else if (directory.listFiles().length >= 1) {
+    } else if (entries.size() >= 1) {
       // if the directory describes an environment related bundle
-      for (File f : directory.listFiles()) {
-        if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getName())) {
+      for (Path f : entries) {
+        if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getFileName().toString())) {
           return OwlPackStructureType.ENV;
         }
       }
@@ -218,14 +227,14 @@ public class BundleInstallTask extends AbstractTask {
     return contentLength;
   }
 
-  private File getSubFileByPlatformTag(File parent) {
+  private Path getSubFileByPlatformTag(Path parent) throws IOException {
 
     RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
-    File[] subFiles = parent.listFiles();
+    List<Path> subFiles = listDirectory(parent);
 
     for (String platformTag : runtimePlatform.getCompatiblePlatformsTags()) {
-      for (File f : subFiles) {
-        if (f.getName().equals(platformTag)) {
+      for (Path f : subFiles) {
+        if (f.getFileName().toString().equals(platformTag)) {
           return f;
         }
       }
@@ -233,7 +242,18 @@ public class BundleInstallTask extends AbstractTask {
     return null;
   }
 
-  private boolean verifyHash(File file, String expectedHash) {
+  /**
+   * Lists the direct children of a directory as a {@link Path} list.
+   * {@code Files.list} returns a stream that must be closed, hence the
+   * try-with-resources.
+   */
+  private List<Path> listDirectory(Path dir) throws IOException {
+    try (var stream = Files.list(dir)) {
+      return stream.collect(Collectors.toList());
+    }
+  }
+
+  private boolean verifyHash(Path file, String expectedHash) {
 
     String fileHash;
     try {

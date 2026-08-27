@@ -29,7 +29,7 @@ import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.explore.tasks.BundleInstallTask;
 import com.owlplug.explore.tasks.SourceSyncTask;
 import com.owlplug.plugin.components.PluginTaskFactory;
-import java.io.File;
+import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -70,8 +70,8 @@ public class ExploreTaskFactory extends BaseTaskFactory {
    * @param targetDirectory - target install directory
    * @return task execution context
    */
-  public TaskExecutionContext createBundleInstallTask(PackageBundle bundle, File targetDirectory) {
-    String path = FileUtils.convertPath(targetDirectory.getAbsolutePath());
+  public TaskExecutionContext createBundleInstallTask(PackageBundle bundle, Path targetDirectory) {
+    String path = FileUtils.convertPath(targetDirectory.toAbsolutePath().toString());
     return create(new BundleInstallTask(bundle, targetDirectory, applicationDefaults))
         .setOnSucceeded(e -> pluginTaskFactory.createPluginScanTask(path).scheduleNow());
   }
