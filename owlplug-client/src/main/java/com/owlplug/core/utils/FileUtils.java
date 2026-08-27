@@ -111,12 +111,28 @@ public class FileUtils {
     }
   }
 
+  /**
+   * @deprecated use {@link #copyDirectory(Path, Path)}
+   */
+  @Deprecated
   public static void copyDirectory(File source, File target) throws IOException {
-    org.apache.commons.io.FileUtils.copyDirectory(source, target);
+    copyDirectory(source.toPath(), target.toPath());
   }
 
+  public static void copyDirectory(Path source, Path target) throws IOException {
+    org.apache.commons.io.FileUtils.copyDirectory(source.toFile(), target.toFile());
+  }
+
+  /**
+   * @deprecated use {@link #deleteDirectory(Path)}
+   */
+  @Deprecated
   public static void deleteDirectory(File source) throws IOException {
-    org.apache.commons.io.FileUtils.deleteDirectory(source);
+    deleteDirectory(source.toPath());
+  }
+
+  public static void deleteDirectory(Path source) throws IOException {
+    org.apache.commons.io.FileUtils.deleteDirectory(source.toFile());
   }
 
   public static String getParentDirectoryName(String path) {

@@ -20,11 +20,11 @@ package com.owlplug.core.utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
@@ -51,9 +51,18 @@ public class ArchiveUtils {
    * @param dest the destination directory where the archive should be extracted (path as string)
    */
   public static void extract(String archive, String dest) {
-    File sourceFile = new File(archive);
-    File destDirectory = new File(dest);
-    extract(sourceFile, destDirectory);
+    extract(Path.of(archive), Path.of(dest));
+  }
+
+  /**
+   * Extract entire archive into destination directory.
+   * @param archive the archive file to extract
+   * @param dest the destination directory where the archive should be extracted
+   * @deprecated use {@link #extract(Path, Path)}
+   */
+  @Deprecated
+  public static void extract(File archive, File dest) {
+    extract(archive.toPath(), dest.toPath());
   }
 
   /**
@@ -61,12 +70,12 @@ public class ArchiveUtils {
    * @param archive the archive file to extract
    * @param dest the destination directory where the archive should be extracted
    */
-  public static void extract(File archive, File dest) {
+  public static void extract(Path archive, Path dest) {
     try {
       uncompress(archive, dest);
     } catch (Exception e) {
-      log.error("Error extracting archive {} at {}", archive.getAbsolutePath(),
-          dest.getAbsolutePath(), e);
+      log.error("Error extracting archive {} at {}", archive.toAbsolutePath(),
+          dest.toAbsolutePath(), e);
       throw new RuntimeException(e);
     }
   }
@@ -77,8 +86,21 @@ public class ArchiveUtils {
    * @param archive the archive file to extract
    * @param dest the destination directory where the archive should be extracted
    * @param targetPaths collection of entry paths to extract (relative paths inside the archive)
+   * @deprecated use {@link #extract(Path, Path, Collection)}
    */
+  @Deprecated
   public static void extract(File archive, File dest, Collection<String> targetPaths) throws IOException {
+    extract(archive.toPath(), dest.toPath(), targetPaths);
+  }
+
+  /**
+   * Extract only specific files from an archive.
+   * Backwards-compatible wrapper that uses the unified uncompress method.
+   * @param archive the archive file to extract
+   * @param dest the destination directory where the archive should be extracted
+   * @param targetPaths collection of entry paths to extract (relative paths inside the archive)
+   */
+  public static void extract(Path archive, Path dest, Collection<String> targetPaths) throws IOException {
     Objects.requireNonNull(targetPaths, "targetPaths cannot be null");
     Set<String> normalized = targetPaths.stream()
                                  .filter(Objects::nonNull)
@@ -88,9 +110,9 @@ public class ArchiveUtils {
     uncompress(archive, dest, filter);
   }
 
-  private static boolean isCompressed(File file) throws IOException {
-    log.debug("Verify file compression: {}", file.getAbsolutePath());
-    try (InputStream inputStream = new FileInputStream(file);
+  private static boolean isCompressed(Path file) throws IOException {
+    log.debug("Verify file compression: {}", file.toAbsolutePath());
+    try (InputStream inputStream = Files.newInputStream(file);
           InputStream bufferedIn = new BufferedInputStream(inputStream)) {
       String comp = CompressorStreamFactory.detect(bufferedIn);
       log.debug("Compression signature found: {}", comp);
@@ -105,7 +127,7 @@ public class ArchiveUtils {
   /**
    * Uncompress archive into destination (all entries).
    */
-  private static void uncompress(File sourceFile, File destinationDirectory) throws IOException {
+  private static void uncompress(Path sourceFile, Path destinationDirectory) throws IOException {
     uncompress(sourceFile, destinationDirectory, (Predicate<String>) null);
   }
 
@@ -113,12 +135,12 @@ public class ArchiveUtils {
    * Uncompress archive into destination but only entries accepted by the filter (if provided).
    * If filter is null, all entries are extracted.
    */
-  private static void uncompress(File sourceFile, File destinationDirectory, Predicate<String> filter) throws IOException {
+  private static void uncompress(Path sourceFile, Path destinationDirectory, Predicate<String> filter) throws IOException {
     Objects.requireNonNull(sourceFile, "sourceFile cannot be null");
     Objects.requireNonNull(destinationDirectory, "destinationDirectory cannot be null");
 
     if (isCompressed(sourceFile)) {
-      try (InputStream fi = new FileInputStream(sourceFile);
+      try (InputStream fi = Files.newInputStream(sourceFile);
            InputStream bi = new BufferedInputStream(fi);
            CompressorInputStream gzi = new CompressorStreamFactory().createCompressorInputStream(bi);
            InputStream bgzi = new BufferedInputStream(gzi);
@@ -126,19 +148,19 @@ public class ArchiveUtils {
 
         uncompress(o, destinationDirectory, filter);
       } catch (CompressorException e) {
-        throw new IOException("Error while uncompressing the archive stream: " + sourceFile.getAbsolutePath(), e);
+        throw new IOException("Error while uncompressing the archive stream: " + sourceFile.toAbsolutePath(), e);
       } catch (ArchiveException e) {
-        throw new IOException("Error while extracting the archive stream: " + sourceFile.getAbsolutePath(), e);
+        throw new IOException("Error while extracting the archive stream: " + sourceFile.toAbsolutePath(), e);
       }
 
     } else {
-      try (InputStream fi = new FileInputStream(sourceFile);
+      try (InputStream fi = Files.newInputStream(sourceFile);
            InputStream bi = new BufferedInputStream(fi);
            ArchiveInputStream o = new ArchiveStreamFactory().createArchiveInputStream(bi)) {
 
         uncompress(o, destinationDirectory, filter);
       } catch (ArchiveException e) {
-        throw new IOException("Error while extracting the archive stream: " + sourceFile.getAbsolutePath(), e);
+        throw new IOException("Error while extracting the archive stream: " + sourceFile.toAbsolutePath(), e);
       }
     }
   }
@@ -146,13 +168,14 @@ public class ArchiveUtils {
   /**
    * Core extraction from an ArchiveInputStream with optional filter and Zip Slip protection.
    */
-  private static void uncompress(ArchiveInputStream ais, File destinationDirectory, Predicate<String> filter) throws IOException {
+  private static void uncompress(ArchiveInputStream ais, Path destinationDirectory, Predicate<String> filter) throws IOException {
     // Ensure destination directory exists
-    if (!destinationDirectory.exists() && !destinationDirectory.mkdirs()) {
-      throw new IOException("Failed to create destination directory: " + destinationDirectory.getAbsolutePath());
-    }
+    Files.createDirectories(destinationDirectory);
 
-    String destCanonical = destinationDirectory.getCanonicalPath();
+    // Zip Slip protection relies on File#getCanonicalPath: it resolves symlinks
+    // syntactically without requiring the target to already exist, unlike
+    // Path#toRealPath (requires existence) or Path#normalize (doesn't resolve symlinks).
+    String destCanonical = destinationDirectory.toFile().getCanonicalPath();
     if (!destCanonical.endsWith(File.separator)) {
       destCanonical = destCanonical + File.separator;
     }
@@ -173,24 +196,20 @@ public class ArchiveUtils {
         continue;
       }
 
-      File out = new File(destinationDirectory, entryName);
+      Path out = destinationDirectory.resolve(entryName);
 
       // Zip Slip protection: check canonical path
-      String outCanonical = out.getCanonicalPath();
+      String outCanonical = out.toFile().getCanonicalPath();
       if (!outCanonical.startsWith(destCanonical)) {
         throw new IOException("Entry is outside of the target dir: " + entry.getName());
       }
 
       if (entry.isDirectory()) {
-        if (!out.isDirectory() && !out.mkdirs()) {
-          throw new IOException("failed to create directory " + out);
-        }
+        Files.createDirectories(out);
       } else {
-        File parent = out.getParentFile();
-        if (!parent.isDirectory() && !parent.mkdirs()) {
-          throw new IOException("failed to create directory " + parent);
-        }
-        try (OutputStream outStream = Files.newOutputStream(out.toPath())) {
+        Path parent = out.getParent();
+        Files.createDirectories(parent);
+        try (OutputStream outStream = Files.newOutputStream(out)) {
           IOUtils.copy(ais, outStream);
         }
       }

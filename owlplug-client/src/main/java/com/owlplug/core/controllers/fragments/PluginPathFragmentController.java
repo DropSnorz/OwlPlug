@@ -28,6 +28,9 @@ import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -171,8 +174,16 @@ public class PluginPathFragmentController {
       return checks;
     }
 
-    File dir = new File(path);
-    boolean exists = dir.exists() && dir.isDirectory();
+    Path dir;
+    try {
+      dir = Path.of(path);
+    } catch (InvalidPathException e) {
+      checks.setExists(new DirectoryCheck(false, "Directory path is invalid."));
+      checks.setCanRead(new DirectoryCheck(false, "Cannot check read permission: path is invalid."));
+      checks.setCanWrite(new DirectoryCheck(false, "Cannot check write permission: path is invalid."));
+      return checks;
+    }
+    boolean exists = Files.isDirectory(dir);
 
     // Exists check
     DirectoryCheck existsCheck;
@@ -187,7 +198,7 @@ public class PluginPathFragmentController {
     DirectoryCheck readCheck;
     if (!exists) {
       readCheck = new DirectoryCheck(false, "Cannot check read permissions: directory does not exist.");
-    } else if (dir.canRead()) {
+    } else if (Files.isReadable(dir)) {
       readCheck = new DirectoryCheck(true, "Directory is readable.");
     } else {
       readCheck = new DirectoryCheck(false, "Directory is not readable.");
@@ -198,7 +209,7 @@ public class PluginPathFragmentController {
     DirectoryCheck writeCheck;
     if (!exists) {
       writeCheck = new DirectoryCheck(false, "Cannot check write permission: directory does not exist.");
-    } else if (dir.canWrite()) {
+    } else if (Files.isWritable(dir)) {
       writeCheck = new DirectoryCheck(true, "Directory is writable.");
     } else {
       writeCheck = new DirectoryCheck(false, "Directory is not writable.");
