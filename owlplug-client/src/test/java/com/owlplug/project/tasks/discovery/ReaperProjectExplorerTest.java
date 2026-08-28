@@ -46,6 +46,20 @@ public class ReaperProjectExplorerTest {
   }
 
   @Test
+  public void canExploreUppercaseRppFile(@TempDir Path tempDir) throws IOException {
+    ReaperProjectExplorer explorer = new ReaperProjectExplorer();
+    File file = Files.createFile(tempDir.resolve("project.RPP")).toFile();
+    assertTrue(explorer.canExploreFile(file));
+  }
+
+  @Test
+  public void canExploreUppercaseRppBakFile(@TempDir Path tempDir) throws IOException {
+    ReaperProjectExplorer explorer = new ReaperProjectExplorer();
+    File file = Files.createFile(tempDir.resolve("project.RPP-BAK")).toFile();
+    assertTrue(explorer.canExploreFile(file));
+  }
+
+  @Test
   public void cannotExploreUnrelatedFile(@TempDir Path tempDir) throws IOException {
     ReaperProjectExplorer explorer = new ReaperProjectExplorer();
     File file = Files.createFile(tempDir.resolve("notes.txt")).toFile();
