@@ -47,7 +47,7 @@ public class ReaperProjectExplorer implements ProjectExplorer {
 
   @Override
   public boolean canExploreFile(File file) {
-    String path = file.getAbsolutePath();
+    String path = file.getAbsolutePath().toLowerCase();
     return file.isFile() && (path.endsWith(".rpp") || path.endsWith(".rpp-bak"));
   }
 
