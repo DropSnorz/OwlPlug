@@ -19,6 +19,7 @@
 package com.owlplug.explore.model;
 
 import com.owlplug.plugin.model.PluginFormat;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,6 +31,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 public class PackageBundle {
@@ -45,6 +47,16 @@ public class PackageBundle {
   private String technicalUid;
   private String version;
   private long fileSize;
+  // Position of this bundle's source file in its parent OAS plugin version's files array.
+  // Used to re-fetch this file's download details from the OAS registry detail endpoint
+  // when they are not provided by the bulk registry sync. Defaults to 0, which is harmless
+  // for OwlPlug-registry bundles that never read it.
+  // Column explicitly named to avoid "order", a reserved SQL keyword that ddl-auto: update's
+  // incremental ALTER TABLE path does not reliably quote (unlike full CREATE TABLE DDL).
+  // ColumnDefault backfills existing rows (NOT NULL int column) when added via ALTER TABLE.
+  @Column(name = "bundle_order")
+  @ColumnDefault("0")
+  private int order;
   @ElementCollection(fetch = FetchType.EAGER)
   @BatchSize(size = 100)
   private List<String> targets;
@@ -112,6 +124,14 @@ public class PackageBundle {
 
   public void setFileSize(long fileSize) {
     this.fileSize = fileSize;
+  }
+
+  public int getOrder() {
+    return order;
+  }
+
+  public void setOrder(int order) {
+    this.order = order;
   }
 
   public List<String> getTargets() {

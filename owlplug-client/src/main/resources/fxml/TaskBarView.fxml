@@ -22,8 +22,7 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="logsButton" contentDisplay="GRAPHIC_ONLY" styleClass="flat"
                 accessibleText="Logs">
-            <graphic><FontIcon iconLiteral="mdi2a-alert-circle-outline" iconSize="14"
-                               style="-fx-icon-color: -color-danger-fg;"/></graphic>
+            <graphic><FontIcon iconLiteral="mdi2a-alert-circle-outline" iconSize="14"/></graphic>
             <tooltip><Tooltip text="Logs"/></tooltip>
         </Button>
         <Button fx:id="taskHistoryButton" contentDisplay="GRAPHIC_ONLY" styleClass="flat"

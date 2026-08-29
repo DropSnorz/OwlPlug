@@ -26,6 +26,7 @@ import com.owlplug.explore.events.SourceSyncEvent;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
+import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.tasks.BundleInstallTask;
 import com.owlplug.explore.tasks.SourceSyncTask;
 import com.owlplug.plugin.components.PluginTaskFactory;
@@ -47,6 +48,8 @@ public class ExploreTaskFactory extends BaseTaskFactory {
   private RemotePackageRepository remotePackageRepository;
   @Autowired
   private ApplicationEventPublisher publisher;
+  @Autowired
+  private ExploreService exploreService;
 
 
   /**
@@ -72,7 +75,7 @@ public class ExploreTaskFactory extends BaseTaskFactory {
    */
   public TaskExecutionContext createBundleInstallTask(PackageBundle bundle, Path targetDirectory) {
     String path = FileUtils.convertPath(targetDirectory.toAbsolutePath().toString());
-    return create(new BundleInstallTask(bundle, targetDirectory, applicationDefaults))
+    return create(new BundleInstallTask(bundle, targetDirectory, applicationDefaults, exploreService))
         .setOnSucceeded(e -> pluginTaskFactory.createPluginScanTask(path).scheduleNow());
   }
 

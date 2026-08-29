@@ -112,7 +112,8 @@ public class OASModelAdapter {
   private static void addBundlesToPackage(RemotePackage remotePackage, List<OASFile> files) {
     HashSet<PackageBundle> bundles = new HashSet<>();
     if (files != null) {
-      for (OASFile file : files) {
+      for (int i = 0; i < files.size(); i++) {
+        OASFile file = files.get(i);
 
         // Skipping. If a file contains only unmappable plugins formats
         if (getPluginFormatsFromFileFormats(file.getContains()).isEmpty()) {
@@ -126,6 +127,9 @@ public class OASModelAdapter {
 
         PackageBundle bundle = mapperToEntity(file, remotePackage.getName());
         bundle.setRemotePackage(remotePackage);
+        // Position in the unfiltered files array, kept stable so download details can be
+        // re-fetched by index from the OAS registry detail endpoint at install time.
+        bundle.setOrder(i);
         bundles.add(bundle);
       }
     }

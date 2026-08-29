@@ -28,7 +28,9 @@ import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
+import com.owlplug.explore.model.mappers.oas.OASFile;
 import com.owlplug.explore.model.mappers.oas.OASModelAdapter;
+import com.owlplug.explore.model.mappers.oas.OASPlugin;
 import com.owlplug.explore.model.mappers.oas.OASRegistry;
 import com.owlplug.explore.model.mappers.registry.RegistryMapper;
 import com.owlplug.explore.model.mappers.registry.RegistryModelAdapter;
@@ -240,6 +242,48 @@ public class ExploreService extends BaseService {
       return null;
     }
 
+  }
+
+  /**
+   * Fetches a single file's download details from the OAS registry detail endpoint
+   * (GET {registryUrl}/plugins/{slug}/{version}), using the bundle's order as the
+   * positional index into the returned files array.
+   *
+   * @param remoteSource the OAS_REGISTRY remote source the package belongs to
+   * @param remotePackage the package the bundle belongs to
+   * @param bundle the bundle whose file details need to be resolved
+   * @return the matching OASFile, or null if it can't be resolved
+   */
+  public OASFile fetchOASFile(RemoteSource remoteSource, RemotePackage remotePackage, PackageBundle bundle) {
+
+    String url = remoteSource.getUrl() + "/plugins/" + remotePackage.getSlug() + "/" + remotePackage.getVersion();
+    HttpGet httpGet = new HttpGet(url);
+
+    try (CloseableHttpClient httpclient = HttpClients.createDefault();
+         CloseableHttpResponse response = httpclient.execute(httpGet)) {
+
+      HttpEntity entity = response.getEntity();
+      String content = new String(entity.getContent().readAllBytes(), StandardCharsets.UTF_8);
+
+      ObjectMapper objectMapper = new ObjectMapper().configure(
+          DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      OASPlugin plugin = objectMapper.readValue(content, OASPlugin.class);
+
+      if (plugin.getFiles() == null) {
+        return null;
+      }
+
+      int index = bundle.getOrder();
+      if (index < 0 || index >= plugin.getFiles().size()) {
+        return null;
+      }
+
+      return plugin.getFiles().get(index);
+
+    } catch (IOException e) {
+      log.error("Error fetching OAS file details for {} {}", remotePackage.getSlug(), remotePackage.getVersion(), e);
+      return null;
+    }
   }
 
   /**
