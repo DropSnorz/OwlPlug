@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
+import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.model.SourceType;
@@ -54,6 +55,11 @@ public class SourceSyncTask extends AbstractTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+  // TODO temporary check used to validate the OAS lazy download details fetch at install time.
+  // Remove once the lazy fetch has been proven reliable against the official registry.
+  private static final String OFFICIAL_OAS_REGISTRY_URL =
+      "https://open-audio-stack.github.io/open-audio-stack-registry";
+
   private RemoteSourceRepository remoteSourceRepository;
   private RemotePackageRepository remotePackageRepository;
 
@@ -62,7 +68,7 @@ public class SourceSyncTask extends AbstractTask {
 
   /**
    * Creates a new SourceSync tasks.
-   * 
+   *
    * @param remoteSourceRepository  remoteSource Repository
    * @param remotePackageRepository remotePackage Repository
    */
@@ -193,6 +199,19 @@ public class SourceSyncTask extends AbstractTask {
             remotePackage.setRemoteSource(remoteSource);
             remotePackage.setVersion(version);
 
+            // Download details are intentionally dropped for the official Open Audio Stack
+            // registry so they get lazily re-fetched from the registry detail endpoint at
+            // install time. This validates that BundleInstallTask#resolveMissingFileDetails
+            // correctly backfills them. Third-party sources that merely implement the OAS
+            // format are left untouched, since they are not guaranteed to expose a working
+            // detail endpoint.
+            // This can be completely removed once the lazy fetch has been proven reliable
+            // and following PR is merged:
+            // https://github.com/open-audio-stack/open-audio-stack-registry/pull/933
+            if (isOfficialOasRegistry(remoteSource)) {
+              clearLazyDownloadDetails(remotePackage);
+            }
+
             // Only add package if at least on bundle is present
             // and if type is known.
             if (!remotePackage.getBundles().isEmpty()
@@ -209,6 +228,32 @@ public class SourceSyncTask extends AbstractTask {
 
     } catch (Exception e) {
       throw new StoreParsingException(e);
+    }
+  }
+
+  /**
+   * Checks whether the given remote source is the official Open Audio Stack registry, as
+   * opposed to a third-party source that only implements the OAS format.
+   *
+   * @param remoteSource remote source to check
+   * @return true if remoteSource is the official OAS registry
+   */
+  @Deprecated
+  private boolean isOfficialOasRegistry(RemoteSource remoteSource) {
+    return OFFICIAL_OAS_REGISTRY_URL.equals(remoteSource.getUrl());
+  }
+
+  /**
+   * Clears the download url and sha256 of every bundle of the given package, forcing them
+   * to be lazily re-fetched from the OAS registry detail endpoint at install time.
+   *
+   * @param remotePackage package whose bundles' download details are cleared
+   */
+  @Deprecated
+  private void clearLazyDownloadDetails(RemotePackage remotePackage) {
+    for (PackageBundle bundle : remotePackage.getBundles()) {
+      bundle.setDownloadUrl(null);
+      bundle.setDownloadSha256(null);
     }
   }
 

@@ -369,7 +369,7 @@ ProgressIndicator {
 }
 
 .task-bar-progress.progress-bar-error > .bar {
-    -fx-background-color: -color-danger-fg;
+    -fx-background-color: -color-danger-emphasis;
 }
 
 

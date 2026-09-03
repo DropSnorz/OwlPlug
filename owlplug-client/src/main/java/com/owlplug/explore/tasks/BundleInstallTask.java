@@ -28,6 +28,11 @@ import com.owlplug.core.utils.CryptoUtils;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.nio.CallbackByteChannel;
 import com.owlplug.explore.model.PackageBundle;
+import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.explore.model.RemoteSource;
+import com.owlplug.explore.model.SourceType;
+import com.owlplug.explore.model.mappers.oas.OASFile;
+import com.owlplug.explore.services.ExploreService;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -52,6 +57,7 @@ public class BundleInstallTask extends AbstractTask {
   private PackageBundle bundle;
   private Path targetDirectory;
   private ApplicationDefaults applicationDefaults;
+  private ExploreService exploreService;
 
   /**
    * Creates a new Package Bundle installation task.
@@ -60,12 +66,15 @@ public class BundleInstallTask extends AbstractTask {
    * @param targetDirectory     Target directory where downloaded package is
    *                            stored
    * @param applicationDefaults Owlplug ApplicationDefaults
+   * @param exploreService      Explore service, used to resolve missing OAS file download details
    */
-  public BundleInstallTask(PackageBundle bundle, Path targetDirectory, ApplicationDefaults applicationDefaults) {
+  public BundleInstallTask(PackageBundle bundle, Path targetDirectory, ApplicationDefaults applicationDefaults,
+                            ExploreService exploreService) {
 
     this.bundle = bundle;
     this.targetDirectory = targetDirectory;
     this.applicationDefaults = applicationDefaults;
+    this.exploreService = exploreService;
     setName("Install plugin - " + bundle.getRemotePackage().getName());
     setMaxProgress(150);
   }
@@ -82,6 +91,8 @@ public class BundleInstallTask extends AbstractTask {
         log.error("Invalid plugin installation target directory", e);
         throw new TaskException("Invalid plugin installation target directory", e);
       }
+      resolveMissingFileDetails(bundle);
+
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Downloading files...");
       Path archiveFile = downloadInTempDirectory(bundle);
 
@@ -128,6 +139,38 @@ public class BundleInstallTask extends AbstractTask {
     }
 
     return completed();
+  }
+
+  /**
+   * Resolves a bundle's download details from the OAS registry detail endpoint when they were
+   * not provided by the bulk registry sync. No-op for bundles that already have a download url,
+   * or that don't originate from an OAS_REGISTRY source.
+   */
+  private void resolveMissingFileDetails(PackageBundle bundle) throws TaskException {
+
+    if (bundle.getDownloadUrl() != null && !bundle.getDownloadUrl().isBlank()) {
+      return;
+    }
+
+    RemotePackage remotePackage = bundle.getRemotePackage();
+    RemoteSource remoteSource = remotePackage.getRemoteSource();
+    if (remoteSource == null || remoteSource.getType() != SourceType.OAS_REGISTRY) {
+      return;
+    }
+
+    this.updateMessage("Installing plugin " + remotePackage.getName() + " - Fetching download details...");
+    OASFile file = exploreService.fetchOASFile(remoteSource, remotePackage, bundle);
+
+    if (file == null || file.getUrl() == null) {
+      String errorMessage = "An error occurred during plugin installation: "
+          + "Can't retrieve download details from registry";
+      this.updateMessage(errorMessage);
+      log.error(errorMessage);
+      throw new TaskException(errorMessage);
+    }
+
+    bundle.setDownloadUrl(file.getUrl());
+    bundle.setDownloadSha256(file.getSha256());
   }
 
   private Path downloadInTempDirectory(PackageBundle bundle) throws TaskException {
