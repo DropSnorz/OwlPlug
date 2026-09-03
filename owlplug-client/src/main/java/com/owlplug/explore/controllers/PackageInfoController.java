@@ -29,6 +29,9 @@ import com.owlplug.explore.ui.PackageBundlesView;
 import com.owlplug.explore.ui.PackageSourceBadgeView;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginType;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -210,9 +213,12 @@ public class PackageInfoController extends BaseController {
       tagContainer.getChildren().add(chip);
     }
 
-    // Bundle list display
+    // Bundle list display. Bundles are held in a HashSet, they are sorted by their registry
+    // order to keep a stable display order between two openings of the same package.
     bundlesView.clear();
-    for (PackageBundle bundle : remotePackage.getBundles()) {
+    List<PackageBundle> bundles = new ArrayList<>(remotePackage.getBundles());
+    bundles.sort(Comparator.comparingInt(PackageBundle::getOrder));
+    for (PackageBundle bundle : bundles) {
       bundlesView.addPackageBundle(bundle, e -> exploreController.installBundle(bundle));
     }
 

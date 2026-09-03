@@ -47,10 +47,11 @@ public class PackageBundle {
   private String technicalUid;
   private String version;
   private long fileSize;
-  // Position of this bundle's source file in its parent OAS plugin version's files array.
-  // Used to re-fetch this file's download details from the OAS registry detail endpoint
-  // when they are not provided by the bulk registry sync. Defaults to 0, which is harmless
-  // for OwlPlug-registry bundles that never read it.
+  // Position of this bundle in its parent package version's bundles/files array, as declared
+  // by the source registry. Used to display bundles in the registry's own order instead of the
+  // backing HashSet's order, and, for OAS sources specifically, to re-fetch this bundle's
+  // download details from the OAS registry detail endpoint when they are not provided by the
+  // bulk registry sync (see ExploreService#fetchOASFile).
   // Column explicitly named to avoid "order", a reserved SQL keyword that ddl-auto: update's
   // incremental ALTER TABLE path does not reliably quote (unlike full CREATE TABLE DDL).
   // ColumnDefault backfills existing rows (NOT NULL int column) when added via ALTER TABLE.

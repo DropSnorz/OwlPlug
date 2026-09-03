@@ -49,7 +49,7 @@
                      <Label styleClass="label-disabled" text="-"/>
                      <Label fx:id="remoteSourceLabel" styleClass="label-disabled" text="RemoteSource"/>
                      <Region HBox.hgrow="ALWAYS"/>
-                     <Button fx:id="installButton" styleClass="button-success" text="Install">
+                     <Button fx:id="installButton" minWidth="-Infinity" styleClass="button-success" text="Install">
                         <graphic>
                            <FontIcon iconLiteral="mdi2d-download" />
                         </graphic>
@@ -147,7 +147,7 @@
                      <Insets bottom="10.0" left="5.0" right="5.0" top="10.0"/>
                   </VBox.margin>
                   <padding>
-                     <Insets left="60.0" right="60.0"/>
+                     <Insets left="10.0" right="10.0"/>
                   </padding>
                </VBox>
             </VBox>
