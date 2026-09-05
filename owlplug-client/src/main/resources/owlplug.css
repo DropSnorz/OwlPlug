@@ -671,6 +671,50 @@ ProgressIndicator {
     -fx-background-color: rgba(155, 89, 182, 0.85);
 }
 
+.package-bundle-row {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-border-color: -color-border-muted;
+    -fx-padding: 8 8 8 10;
+}
+
+.package-bundle-row:hover {
+    -fx-border-color: -color-accent-muted;
+}
+
+.package-bundle-target {
+    -fx-background-color: -color-neutral-subtle;
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-padding: 2 6 2 5;
+}
+
+.package-bundle-target .ikonli-font-icon {
+    -fx-icon-color: -color-fg-muted;
+}
+
+.package-bundle-target-os {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-default;
+}
+
+.package-bundle-target-arch {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.package-bundle-size {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.package-bundle-install {
+    -fx-font-size: 11px;
+}
+
 
 
 /****************************************************************

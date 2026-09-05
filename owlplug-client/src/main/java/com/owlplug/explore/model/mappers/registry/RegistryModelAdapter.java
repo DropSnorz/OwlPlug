@@ -70,9 +70,13 @@ public class RegistryModelAdapter {
 
     HashSet<PackageBundle> bundles = new HashSet<>();
     if (packageVersionMapper.getBundles() != null) {
-      for (BundleMapper bundleMapper : packageVersionMapper.getBundles()) {
-        PackageBundle bundle = jsonMapperToEntity(bundleMapper, remotePackage.getName());
+      List<BundleMapper> bundleMappers = packageVersionMapper.getBundles();
+      for (int i = 0; i < bundleMappers.size(); i++) {
+        PackageBundle bundle = jsonMapperToEntity(bundleMappers.get(i), remotePackage.getName());
         bundle.setRemotePackage(remotePackage);
+        // Position in the registry's bundles array, kept so bundle display order matches the
+        // order declared by the registry maintainer instead of the backing HashSet's own order.
+        bundle.setOrder(i);
         bundles.add(bundle);
       }
     }

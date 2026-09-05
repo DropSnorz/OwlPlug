@@ -339,7 +339,10 @@ public class HomeController extends BaseController {
     fileSizeChart.getData().clear();
 
     XYChart.Series<Number, String> series = new XYChart.Series<>();
-    for (FileStat stat : topStats) {
+    // topStats is ordered biggest first. The category axis stacks the first added entry at
+    // the bottom, so entries are added in reverse to get the biggest file on top.
+    for (int i = topStats.size() - 1; i >= 0; i--) {
+      FileStat stat = topStats.get(i);
       final double mb = stat.getLength() / (1024.0 * 1024.0);
       series.getData().add(new XYChart.Data<>(mb, stat.getName()));
     }
