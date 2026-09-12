@@ -9,8 +9,10 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.owlplug.project.controllers.ProjectInfoController">
-    <VBox fx:id="projectInfoPane" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
-          minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0">
+    <VBox fx:id="projectInfoPane" alignment="TOP_CENTER" maxWidth="-Infinity"
+          minHeight="-Infinity" minWidth="-Infinity" prefWidth="500.0"
+          AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <styleClass>
             <String fx:value="pane-card"/>
             <String fx:value="no-padding"/>
@@ -106,7 +108,8 @@
         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
             <Label text="Plugins"/>
         </HBox>
-        <TableView fx:id="pluginTable" prefHeight="150.0" prefWidth="200.0" styleClass="dense">
+        <TableView fx:id="pluginTable" prefHeight="150.0" prefWidth="200.0" styleClass="dense"
+                   VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="pluginTableFormatColumn" minWidth="75.0" maxWidth="75.0" resizable="false"
                              text="Format"/>
