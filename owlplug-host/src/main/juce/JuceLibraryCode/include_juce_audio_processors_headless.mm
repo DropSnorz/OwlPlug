@@ -6,4 +6,4 @@
 */
 
 #include "AppConfig.h"
-#include <juce_graphics/juce_graphics_Sheenbidi.c>
+#include <juce_audio_processors_headless/juce_audio_processors_headless.mm>

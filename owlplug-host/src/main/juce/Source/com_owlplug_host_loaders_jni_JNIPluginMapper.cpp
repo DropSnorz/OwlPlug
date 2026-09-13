@@ -101,16 +101,14 @@ JNIEXPORT jobject JNICALL Java_com_owlplug_host_loaders_jni_JNIPluginMapper_mapP
 	const char* pathCharPointer = env->GetStringUTFChars(pluginPath, NULL);
 
 	AudioPluginFormatManager pluginFormatManager;
-	pluginFormatManager.addDefaultFormats();
-	KnownPluginList plugList;
-	
+	juce::addHeadlessDefaultFormatsToManager (pluginFormatManager);
+
 	// Array of plugin description
 	OwnedArray<juce::PluginDescription> pluginDescriptions;
 
 	// For each managed format, we try to fill pluginDescriptions array.
 	for (int i = 0; i < pluginFormatManager.getNumFormats(); ++i) {
-		plugList.scanAndAddFile(pathCharPointer, false, pluginDescriptions,
-			*pluginFormatManager.getFormat(i));
+		pluginFormatManager.getFormat(i)->findAllTypesForFile(pluginDescriptions, pathCharPointer);
 	}
 
 	if (pluginDescriptions.size() == 0) {
