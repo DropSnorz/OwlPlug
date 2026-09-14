@@ -6,4 +6,4 @@
 */
 
 #include "AppConfig.h"
-#include <juce_data_structures/juce_data_structures.cpp>
+#include <juce_core/juce_core_zlib.c>

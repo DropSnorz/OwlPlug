@@ -6,4 +6,4 @@
 */
 
 #include "AppConfig.h"
-#include <juce_gui_extra/juce_gui_extra.cpp>
+#include <juce_audio_processors_headless/juce_audio_processors_headless_ara.cpp>
