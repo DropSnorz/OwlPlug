@@ -58,6 +58,11 @@ public class PackageBundle {
   @Column(name = "bundle_order")
   @ColumnDefault("0")
   private int order;
+  @ColumnDefault("0")
+  private int downloadCount;
+  @ColumnDefault("false")
+  private boolean attested;
+
   @ElementCollection(fetch = FetchType.EAGER)
   @BatchSize(size = 100)
   private List<String> targets;
@@ -157,5 +162,21 @@ public class PackageBundle {
 
   public void setFormats(List<String> formats) {
     this.formats = formats;
+  }
+
+  public int getDownloadCount() {
+    return downloadCount;
+  }
+
+  public void setDownloadCount(int downloadCount) {
+    this.downloadCount = downloadCount;
+  }
+
+  public boolean isAttested() {
+    return attested;
+  }
+
+  public void setAttested(boolean attested) {
+    this.attested = attested;
   }
 }

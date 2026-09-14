@@ -711,6 +711,15 @@ ProgressIndicator {
     -fx-text-fill: -color-fg-muted;
 }
 
+.package-bundle-downloads {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.package-bundle-downloads .ikonli-font-icon {
+    -fx-icon-color: -color-fg-muted;
+}
+
 .package-bundle-install {
     -fx-font-size: 11px;
 }

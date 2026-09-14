@@ -175,7 +175,33 @@ public class PackageBundlesView extends VBox {
       pane.getChildren().add(sizeLabel);
     }
 
+    if (bundle.getDownloadCount() > 0) {
+      pane.getChildren().add(buildDownloadCountLabel(bundle.getDownloadCount()));
+    }
+
     return pane;
+  }
+
+  /**
+   * Builds the download count indicator, shown next to the bundle size when the source
+   * reports a non-zero download count.
+   */
+  private HBox buildDownloadCountLabel(int downloadCount) {
+
+    HBox downloadCountNode = new HBox(2);
+    downloadCountNode.setAlignment(Pos.CENTER_LEFT);
+    downloadCountNode.getStyleClass().add("package-bundle-downloads");
+
+    FontIcon icon = new FontIcon("mdi2d-download");
+    icon.setIconSize(11);
+    downloadCountNode.getChildren().add(icon);
+
+    Label countLabel = new Label(String.valueOf(downloadCount));
+    downloadCountNode.getChildren().add(countLabel);
+
+    Tooltip.install(downloadCountNode, new Tooltip(downloadCount + " downloads"));
+
+    return downloadCountNode;
   }
 
   /**

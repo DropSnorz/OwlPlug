@@ -29,6 +29,8 @@ public class OASFile {
   private int size;
   private String sha256;
   private String url;
+  private int downloads;
+  private boolean attested;
 
   public List<System> getSystems() {
     return systems;
@@ -84,6 +86,22 @@ public class OASFile {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public int getDownloads() {
+    return downloads;
+  }
+
+  public void setDownloads(int downloads) {
+    this.downloads = downloads;
+  }
+
+  public boolean isAttested() {
+    return attested;
+  }
+
+  public void setAttested(boolean attested) {
+    this.attested = attested;
   }
 
   public static class System {
