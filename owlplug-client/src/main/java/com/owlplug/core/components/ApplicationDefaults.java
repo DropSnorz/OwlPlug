@@ -206,16 +206,49 @@ public class ApplicationDefaults {
         return "/Library/Audio/Plug-Ins/LV2";
       }
     } else if (runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX)) {
+      // Default to user-level directories rather than system-wide ones (e.g. /usr/lib/vst3),
+      // which are package-manager owned and not writable without root privileges.
+      // These paths also match the default search paths of most Linux plugin hosts (e.g. Reaper)
+      // and are documented as standard user-level locations by the VST3 SDK and LV2 spec.
+      String userHome = System.getProperty("user.home");
       if (format.equals(PluginFormat.VST2)) {
-        return "/usr/lib/vst";
+        return Paths.get(userHome, ".vst").toString();
       } else if (format.equals(PluginFormat.VST3)) {
-        return "/usr/lib/vst3";
+        return Paths.get(userHome, ".vst3").toString();
       } else if (format.equals(PluginFormat.LV2)) {
-        return "/usr/lib/lv2";
+        return Paths.get(userHome, ".lv2").toString();
       }
     }
 
     return "/path/to/audio/plugins";
+  }
+
+  /**
+   * Returns the legacy Linux system-wide plugin directory for a given format, used to seed
+   * a default additional scan directory so distro-packaged plugins remain discoverable even
+   * though they are no longer the default install target (see {@link #getDefaultPluginPath}).
+   * Returns null for other operating systems or unsupported formats.
+   *
+   * @param format - plugin format
+   * @return Linux system-wide plugin directory, or null
+   */
+  public String getLinuxSystemPluginPath(PluginFormat format) {
+
+    RuntimePlatform runtimePlatform = runtimePlatformResolver.getCurrentPlatform();
+
+    if (!runtimePlatform.getOperatingSystem().equals(OperatingSystem.LINUX)) {
+      return null;
+    }
+
+    if (format.equals(PluginFormat.VST2)) {
+      return "/usr/lib/vst";
+    } else if (format.equals(PluginFormat.VST3)) {
+      return "/usr/lib/vst3";
+    } else if (format.equals(PluginFormat.LV2)) {
+      return "/usr/lib/lv2";
+    }
+
+    return null;
   }
 
   public Image getDawApplicationImage(DawApplication application) {
