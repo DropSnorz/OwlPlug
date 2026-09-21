@@ -90,6 +90,8 @@ public class OASModelAdapter {
     PackageBundle packageBundle = new PackageBundle();
     packageBundle.setDownloadUrl(file.getUrl());
     packageBundle.setDownloadSha256(file.getSha256());
+    packageBundle.setDownloadCount(file.getDownloads());
+    packageBundle.setAttested(file.isAttested());
 
     List<String> targets = new ArrayList<>();
     for (OASFile.System system : file.getSystems()) {
