@@ -104,8 +104,7 @@ public class OASModelAdapter {
     String bundleName = name + " - " + String.join(" ", targets);
     packageBundle.setName(bundleName);
 
-    // Size in OAS registry is in bits not in bytes.
-    packageBundle.setFileSize(file.getSize() / 8);
+    packageBundle.setFileSize(file.getSize());
     packageBundle.setFormats(getPluginFormatsFromFileFormats(file.getContains()));
 
     return packageBundle;
