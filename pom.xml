@@ -15,7 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>25</java.version>
-        <javafx.version>25.0.1</javafx.version>
+        <javafx.version>27</javafx.version>
         <atlantafx.version>2.1.0</atlantafx.version>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
