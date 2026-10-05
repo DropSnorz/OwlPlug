@@ -33,6 +33,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.sql.DataSource;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
@@ -126,6 +127,7 @@ public class OwlPlug extends Application {
 
     Application.setUserAgentStylesheet(new OwlPlugDarkTheme().getUserAgentStylesheet());
 
+    MainController mainController = context.getBean(MainController.class);
 
     Scene scene = new Scene(rootNode, width, height);
 
@@ -134,16 +136,20 @@ public class OwlPlug extends Application {
 
     scene.getStylesheets().add(owlplugControlsCss);
     scene.getStylesheets().add(owlplugCss);
+    scene.getStylesheets().add(mainController.getWindowDecorationStylesheet());
 
     primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
 
+    primaryStage.initStyle(StageStyle.EXTENDED);
     primaryStage.setScene(scene);
     primaryStage.setHeight(height);
     primaryStage.setWidth(width);
     primaryStage.setMinHeight(height);
     primaryStage.setMinWidth(width);
     primaryStage.centerOnScreen();
+
+    mainController.setupWindowControls(primaryStage);
 
     primaryStage.show();
 
