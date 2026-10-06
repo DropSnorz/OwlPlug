@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.core.components;
+package com.owlplug.core.migration;
 
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import jakarta.annotation.PostConstruct;
