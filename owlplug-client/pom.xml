@@ -132,6 +132,11 @@
             <version>${atlantafx.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>atlantafx-decorations</artifactId>
+            <version>${atlantafx.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
             <version>${ikonli.version}</version>

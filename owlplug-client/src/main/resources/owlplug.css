@@ -339,6 +339,17 @@ ProgressIndicator {
     -fx-background-color: -color-bg-subtle;
 }
 
+/* tabPaneHeader is a fixed navigation bar (tabs are never added/removed), so
+   the overflow dropdown menu should never be shown, even if the header bar
+   layout ever assigns it a width tight enough to trip JavaFX's overflow
+   detection. */
+#tabPaneHeader .tab-header-area .control-buttons-tab {
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+    -fx-min-width: 0;
+    visibility: hidden;
+}
+
 #accountComboBox {
     -fx-prompt-text-fill: transparent;
     -fx-background-color: -color-bg-subtle;

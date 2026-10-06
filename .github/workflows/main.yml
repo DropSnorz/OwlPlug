@@ -25,11 +25,11 @@ jobs:
         fetch-depth: 0
         submodules: recursive
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
-        java-version: 25
+        distribution: 'temurin'
+        java-version: 27
     - name: "Download Projucer"
       run: ./build/download-projucer.sh
       shell: bash
@@ -66,11 +66,13 @@ jobs:
         fetch-depth: 0
         submodules: recursive
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
-        java-version: 25
+        # Temurin no longer publishes macOS x64 builds; osx-x64 is on borrowed
+        # time and will be dropped once the macOS x64 build is deprecated.
+        distribution: ${{ matrix.platform == 'osx-x64' && 'corretto' || 'temurin' }}
+        java-version: 27
     - name: "Download Projucer"
       run: ./build/download-projucer.sh
       shell: bash
@@ -110,11 +112,11 @@ jobs:
         fetch-depth: 0
         submodules: recursive
         token: ${{ secrets.REPO_ACCESS_TOKEN }}
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
-        java-version: 25
+        distribution: 'temurin'
+        java-version: 27
     - name: "Download Projucer"
       run: ./build/download-projucer.sh
       shell: bash
@@ -158,11 +160,13 @@ jobs:
     needs: [ build-host-win, build-host-osx, build-host-linux ]
     steps:
     - uses: actions/checkout@v7
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
-        java-version: 25
+        # Temurin no longer publishes macOS x64 builds; osx-x64 is on borrowed
+        # time and will be dropped once the macOS x64 build is deprecated.
+        distribution: ${{ matrix.platform == 'osx-x64' && 'corretto' || 'temurin' }}
+        java-version: 27
     - name: Get version
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       shell: bash
@@ -199,11 +203,11 @@ jobs:
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v7
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
-        java-version: 25
+        distribution: 'temurin'
+        java-version: 27
     - name: Get version
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       shell: bash
@@ -235,11 +239,13 @@ jobs:
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v7
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
-        java-version: 25
+        # Temurin no longer publishes macOS x64 builds; osx-x64 is on borrowed
+        # time and will be dropped once the macOS x64 build is deprecated.
+        distribution: ${{ matrix.platform == 'osx-x64' && 'corretto' || 'temurin' }}
+        java-version: 27
     - name: Get version
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
@@ -267,11 +273,11 @@ jobs:
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v7
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
-        java-version: 25
+        distribution: 'temurin'
+        java-version: 27
     - name: Get version
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version
@@ -300,11 +306,11 @@ jobs:
     needs: [build-jar]
     steps:
     - uses: actions/checkout@v7
-    - name: Set up JDK 25
-      uses: actions/setup-java@v5
+    - name: Set up JDK 27
+      uses: actions/setup-java@v6
       with:
-        distribution: 'adopt'
-        java-version: 25
+        distribution: 'temurin'
+        java-version: 27
     - name: Get version
       run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
       id: get-version

@@ -19,6 +19,9 @@
 package com.owlplug.core.controllers;
 
 import atlantafx.base.theme.Styles;
+import atlantafx.decorations.Alignment;
+import atlantafx.decorations.Decoration;
+import atlantafx.decorations.HeaderButtonGroup;
 import com.owlplug.controls.Drawer;
 import com.owlplug.controls.transitions.AnimatedTabListener;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
@@ -39,13 +42,18 @@ import jakarta.annotation.PreDestroy;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.HeaderBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +90,10 @@ public class MainController extends BaseController {
 
   @FXML
   private StackPane rootPane;
+  @FXML
+  private HeaderBar headerBar;
+  @FXML
+  private HBox headerControlsBox;
   @FXML
   private TabPane tabPaneHeader;
   @FXML
@@ -178,6 +190,46 @@ public class MainController extends BaseController {
 
   public void navigateToMainTab(int index) {
     this.tabPaneHeader.getSelectionModel().select(index);
+  }
+
+  /**
+   * Returns the stylesheet of the window decoration theme used to style the
+   * custom header bar window control buttons.
+   *
+   * @return the decoration stylesheet URL
+   */
+  public String getWindowDecorationStylesheet() {
+    return Decoration.CHROME_OS_DARK.getStylesheet();
+  }
+
+  /**
+   * Installs the custom header bar window control buttons (minimize, maximize,
+   * close) on the given stage. The stage is expected to use
+   * {@link StageStyle#EXTENDED} so that the header bar can replace
+   * the system-provided title bar.
+   *
+   * @param stage the primary stage
+   */
+  public void setupWindowControls(Stage stage) {
+
+    HeaderButtonGroup windowButtons = HeaderButtonGroup.standardGroup(Alignment.TRAILING);
+    headerControlsBox.getChildren().add(windowButtons);
+
+    HeaderBar.setSystemButtonHeight(stage, 0);
+
+    PseudoClass maximizedPseudoClass = PseudoClass.getPseudoClass("maximized");
+    PseudoClass inactivePseudoClass = PseudoClass.getPseudoClass("inactive");
+
+    stage.maximizedProperty().subscribe(() -> {
+      if (stage.getScene() != null && stage.getScene().getRoot() != null) {
+        stage.getScene().getRoot().pseudoClassStateChanged(maximizedPseudoClass, stage.isMaximized());
+      }
+    });
+    stage.focusedProperty().subscribe(() -> {
+      if (stage.getScene() != null && stage.getScene().getRoot() != null) {
+        stage.getScene().getRoot().pseudoClassStateChanged(inactivePseudoClass, !stage.isFocused());
+      }
+    });
   }
 
 
