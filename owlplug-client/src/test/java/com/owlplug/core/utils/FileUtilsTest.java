@@ -49,4 +49,36 @@ public class FileUtilsTest {
     assertEquals("filename", sanitizedFileName);
   }
 
+  @Test
+  public void testExpandUserHomeWithLeadingTilde() {
+    String userHome = System.getProperty("user.home");
+    String expandedPath = FileUtils.expandUserHome("~/.vst3");
+    assertEquals(userHome + "/.vst3", expandedPath);
+  }
+
+  @Test
+  public void testExpandUserHomeWithOnlyTilde() {
+    String userHome = System.getProperty("user.home");
+    String expandedPath = FileUtils.expandUserHome("~");
+    assertEquals(userHome, expandedPath);
+  }
+
+  @Test
+  public void testExpandUserHomeWithoutLeadingTilde() {
+    String expandedPath = FileUtils.expandUserHome("/home/user/.vst3");
+    assertEquals("/home/user/.vst3", expandedPath);
+  }
+
+  @Test
+  public void testExpandUserHomeWithTildeNotAtStart() {
+    String expandedPath = FileUtils.expandUserHome("/home/user/~backup/.vst3");
+    assertEquals("/home/user/~backup/.vst3", expandedPath);
+  }
+
+  @Test
+  public void testExpandUserHomeWithNullPath() {
+    String expandedPath = FileUtils.expandUserHome(null);
+    assertEquals(null, expandedPath);
+  }
+
 }

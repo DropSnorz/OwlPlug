@@ -140,7 +140,9 @@ public class PluginPathFragmentController {
     });
 
     directoryTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-      prefs.put(directoryOptionKey, FileUtils.convertPath(newValue));
+      // Expand a leading "~" (e.g. from a pasted path) to the user home directory, since Java
+      // doesn't resolve this shell convention on its own.
+      prefs.put(directoryOptionKey, FileUtils.convertPath(FileUtils.expandUserHome(newValue)));
       refresh();
     });
 
