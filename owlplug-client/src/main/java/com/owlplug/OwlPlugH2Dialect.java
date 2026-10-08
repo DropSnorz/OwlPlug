@@ -26,8 +26,9 @@ import org.hibernate.engine.jdbc.dialect.spi.DialectResolutionInfo;
  * A Custom H2 Dialect with disabled check for enumerated values.
  * Since Hibernate 6, checks constraints are added to enumerated fields.
  * These checks are not updated with ddl-auto: update. Owlplug rely on
- * this feature to update the schema to avoid using a more complex solution
- * like Liquibase or flyway.
+ * this feature to update the schema, complemented by lightweight versioned
+ * migrations (see {@link com.owlplug.core.migration.DatabaseMigrator})
+ * instead of a more complex solution like Liquibase or flyway.
  * Disabling the checks is a hack to allows adding new entries to enum
  * without breaking the SQL schema.
  */

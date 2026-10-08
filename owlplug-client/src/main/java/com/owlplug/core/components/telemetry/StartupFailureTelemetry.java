@@ -19,6 +19,7 @@
 package com.owlplug.core.components.telemetry;
 
 import com.owlplug.core.components.RuntimePlatformResolver;
+import com.owlplug.core.migration.DatabaseMigrationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -62,8 +63,14 @@ public class StartupFailureTelemetry implements ApplicationListener<ApplicationF
   public void onApplicationEvent(ApplicationFailedEvent event) {
     try {
       Throwable ex = event.getException();
-      report(ex.getClass().getSimpleName(), rootCauseClassName(ex), rootCauseMessage(ex),
-          determinePhase(ex), ex.getMessage());
+      Map<String, String> params = new HashMap<>();
+      params.put("errorClass", ex.getClass().getSimpleName());
+      params.put("phase", determinePhase(ex));
+      putIfNotNull(params, "error", ex.getMessage());
+      putIfNotNull(params, "rootCauseClass", rootCauseClassName(ex));
+      putIfNotNull(params, "rootCauseMessage", rootCauseMessage(ex));
+      putMigrationDetails(params, ex);
+      report(params);
     } catch (Exception e) {
       // Best-effort only; must never interfere with the startup failure being propagated.
       log.debug("Could not report startup failure telemetry", e);
@@ -71,6 +78,9 @@ public class StartupFailureTelemetry implements ApplicationListener<ApplicationF
   }
 
   static String determinePhase(Throwable ex) {
+    if (findMigrationException(ex) != null) {
+      return "database_migration";
+    }
     if (ex instanceof BeanCreationException) {
       Throwable rootCause = NestedExceptionUtils.getMostSpecificCause(ex);
       return rootCause instanceof HibernateException ? "already_running" : "bean_creation";
@@ -88,8 +98,38 @@ public class StartupFailureTelemetry implements ApplicationListener<ApplicationF
     return rootCause != ex ? rootCause.getMessage() : null;
   }
 
-  private void report(String errorClass, String rootCauseClass, String rootCauseMessage,
-      String phase, String error) {
+  /**
+   * Adds the failing migration step and version, and the migration error message
+   * which is otherwise lost between the outer and root cause exceptions.
+   */
+  static void putMigrationDetails(Map<String, String> params, Throwable ex) {
+    DatabaseMigrationException migrationEx = findMigrationException(ex);
+    if (migrationEx != null) {
+      params.put("migrationStep", migrationEx.getStep());
+      putIfNotNull(params, "migrationVersion",
+          migrationEx.getVersion() != null ? String.valueOf(migrationEx.getVersion()) : null);
+      putIfNotNull(params, "migrationError", migrationEx.getMessage());
+    }
+  }
+
+  static DatabaseMigrationException findMigrationException(Throwable ex) {
+    Throwable current = ex;
+    while (current != null) {
+      if (current instanceof DatabaseMigrationException migrationEx) {
+        return migrationEx;
+      }
+      current = current.getCause() != current ? current.getCause() : null;
+    }
+    return null;
+  }
+
+  private static void putIfNotNull(Map<String, String> params, String key, String value) {
+    if (value != null) {
+      params.put(key, value);
+    }
+  }
+
+  private void report(Map<String, String> params) {
     Preferences prefs = Preferences.userRoot().node(PREFS_NODE);
     if (!prefs.getBoolean(PREF_TELEMETRY_ENABLED, false)) {
       return;
@@ -108,18 +148,6 @@ public class StartupFailureTelemetry implements ApplicationListener<ApplicationF
       return;
     }
 
-    Map<String, String> params = new HashMap<>();
-    params.put("errorClass", errorClass);
-    params.put("phase", phase);
-    if (error != null) {
-      params.put("error", error);
-    }
-    if (rootCauseClass != null) {
-      params.put("rootCauseClass", rootCauseClass);
-    }
-    if (rootCauseMessage != null) {
-      params.put("rootCauseMessage", rootCauseMessage);
-    }
     TelemetryReporter.sanitize(params);
     params.put("appVersion", appProps.getProperty("owlplug.version"));
     params.put("systemTag", new RuntimePlatformResolver().getCurrentPlatform().getTag());

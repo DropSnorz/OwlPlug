@@ -19,8 +19,12 @@
 package com.owlplug.core.components.telemetry;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.owlplug.core.migration.DatabaseMigrationException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import org.hibernate.HibernateException;
@@ -105,5 +109,52 @@ public class StartupFailureTelemetryTest {
     // path portion starting at the first "/" is redacted (confirms the caveat noted in the plan:
     // the H2 lock-file path is caught, but scheme prefixes like "jdbc:h2:file:" are not).
     assertEquals("Timed out waiting for lock at jdbc:h2:file:<path>", params.get("error"));
+  }
+
+  @Test
+  public void testShouldDetectDatabaseMigrationPhaseBeforeHibernateRootCause() {
+    HibernateException rootCause = new HibernateException("Database may be already in use");
+    DatabaseMigrationException migrationEx = new DatabaseMigrationException("Database migration 3 failed: test",
+        "BEFORE_SCHEMA_UPDATE", 3, rootCause);
+    BeanCreationException ex = new BeanCreationException("databaseMigrator", "Failed", migrationEx);
+
+    assertEquals("database_migration", StartupFailureTelemetry.determinePhase(ex));
+  }
+
+  @Test
+  public void testShouldReportMigrationDetails() {
+    SQLException rootCause = new SQLException("Column not found");
+    DatabaseMigrationException migrationEx = new DatabaseMigrationException("Database migration 3 failed: test",
+        "AFTER_SCHEMA_UPDATE", 3, rootCause);
+    BeanCreationException ex = new BeanCreationException("entityManagerFactory", "Failed", migrationEx);
+    Map<String, String> params = new HashMap<>();
+
+    StartupFailureTelemetry.putMigrationDetails(params, ex);
+
+    assertEquals("AFTER_SCHEMA_UPDATE", params.get("migrationStep"));
+    assertEquals("3", params.get("migrationVersion"));
+    assertEquals("Database migration 3 failed: test", params.get("migrationError"));
+  }
+
+  @Test
+  public void testShouldOmitMigrationVersionForInitFailure() {
+    DatabaseMigrationException migrationEx = new DatabaseMigrationException("Database migration initialization failed",
+        DatabaseMigrationException.INIT_STEP, null, new SQLException("boom"));
+    Map<String, String> params = new HashMap<>();
+
+    StartupFailureTelemetry.putMigrationDetails(params, migrationEx);
+
+    assertEquals("INIT", params.get("migrationStep"));
+    assertFalse(params.containsKey("migrationVersion"));
+  }
+
+  @Test
+  public void testShouldNotReportMigrationDetailsForOtherFailures() {
+    BeanCreationException ex = new BeanCreationException("someBean", "Failed", new IllegalStateException("boom"));
+    Map<String, String> params = new HashMap<>();
+
+    StartupFailureTelemetry.putMigrationDetails(params, ex);
+
+    assertTrue(params.isEmpty());
   }
 }
