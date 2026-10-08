@@ -26,6 +26,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -56,6 +57,9 @@ public class DawProject {
      setting is enabled - otherwise backup files are never persisted at all. */
   @Column(columnDefinition = "boolean default false")
   private boolean backup = false;
+
+  @OneToOne
+  private ProjectFootprint footprint;
 
   public Long getId() {
     return id;
@@ -131,6 +135,14 @@ public class DawProject {
 
   public void setBackup(boolean backup) {
     this.backup = backup;
+  }
+
+  public ProjectFootprint getFootprint() {
+    return footprint;
+  }
+
+  public void setFootprint(ProjectFootprint footprint) {
+    this.footprint = footprint;
   }
 
   public List<DawPlugin> getPluginByLookupResult(LookupResult result) {

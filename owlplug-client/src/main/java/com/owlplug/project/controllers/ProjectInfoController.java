@@ -20,6 +20,8 @@ package com.owlplug.project.controllers;
 
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.ui.NoteTextArea;
+import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.core.utils.TimeUtils;
 import com.owlplug.plugin.controllers.PluginsController;
@@ -29,6 +31,8 @@ import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.LookupResult;
+import com.owlplug.project.model.ProjectFootprint;
+import com.owlplug.project.services.ProjectService;
 import java.io.File;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -63,6 +67,8 @@ public class ProjectInfoController extends BaseController {
   @Autowired
   private PluginsController pluginsController;
   @Autowired
+  private ProjectService projectService;
+  @Autowired
   @Lazy
   private MainController mainController;
 
@@ -92,6 +98,8 @@ public class ProjectInfoController extends BaseController {
   private Label projectPathLabel;
   @FXML
   private Button openDirectoryButton;
+  @FXML
+  private NoteTextArea noteTextArea;
   @FXML
   private TableView<DawPlugin> pluginTable;
   @FXML
@@ -241,6 +249,18 @@ public class ProjectInfoController extends BaseController {
     projectPathLabel.setText(project.getPath());
 
     pluginTable.setItems(FXCollections.observableList(project.getPlugins().stream().toList()));
+
+    // Projects synced before footprints were introduced have none until the next sync
+    ProjectFootprint footprint = project.getFootprint();
+    if (footprint != null) {
+      noteTextArea.setTarget(footprint.getNote(), note -> {
+        // Keep the in-memory entity in sync so re-selecting the project shows the latest note
+        footprint.setNote(note);
+        Async.run(() -> projectService.save(footprint));
+      });
+    } else {
+      noteTextArea.clearTarget();
+    }
 
     BackgroundImage bgImg = new BackgroundImage(this.getApplicationDefaults().getDawApplicationImage(project.getApplication()),
         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,

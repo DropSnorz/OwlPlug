@@ -23,7 +23,9 @@ import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.services.BaseService;
 import com.owlplug.project.components.ProjectTaskFactory;
 import com.owlplug.project.model.DawProject;
+import com.owlplug.project.model.ProjectFootprint;
 import com.owlplug.project.repositories.DawProjectRepository;
+import com.owlplug.project.repositories.ProjectFootprintRepository;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,6 +38,8 @@ public class ProjectService extends BaseService {
   @Autowired
   private DawProjectRepository dawProjectRepository;
   @Autowired
+  private ProjectFootprintRepository projectFootprintRepository;
+  @Autowired
   private ProjectTaskFactory taskFactory;
 
   public void syncProjects() {
@@ -44,6 +48,10 @@ public class ProjectService extends BaseService {
 
   public Iterable<DawProject> getAllProjects() {
     return dawProjectRepository.findAll();
+  }
+
+  public ProjectFootprint save(ProjectFootprint projectFootprint) {
+    return projectFootprintRepository.save(projectFootprint);
   }
 
   public Set<String> getProjectDirectories() {

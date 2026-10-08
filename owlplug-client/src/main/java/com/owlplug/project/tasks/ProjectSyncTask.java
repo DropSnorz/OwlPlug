@@ -22,7 +22,9 @@ import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskResult;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.DawProject;
+import com.owlplug.project.model.ProjectFootprint;
 import com.owlplug.project.repositories.DawProjectRepository;
+import com.owlplug.project.repositories.ProjectFootprintRepository;
 import com.owlplug.project.tasks.discovery.ProjectExplorer;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
@@ -40,13 +42,16 @@ public class ProjectSyncTask extends AbstractTask {
 
   private boolean hasParseErrors = false;
   private final DawProjectRepository projectRepository;
+  private final ProjectFootprintRepository projectFootprintRepository;
   private final List<String> projectDirectories;
   private final boolean collectBackupFiles;
 
   public ProjectSyncTask(DawProjectRepository projectRepository,
+                         ProjectFootprintRepository projectFootprintRepository,
                          List<String> projectDirectories,
                          boolean collectBackupFiles) {
     this.projectRepository = projectRepository;
+    this.projectFootprintRepository = projectFootprintRepository;
     this.projectDirectories = projectDirectories;
     this.collectBackupFiles = collectBackupFiles;
     setName("Sync DAW projects");
@@ -99,6 +104,11 @@ public class ProjectSyncTask extends AbstractTask {
             DawProject project = explorer.explore(file);
             if (project != null) {
               project.setBackup(isBackup);
+              ProjectFootprint footprint = projectFootprintRepository.findByPath(project.getPath());
+              if (footprint == null) {
+                footprint = projectFootprintRepository.saveAndFlush(new ProjectFootprint(project.getPath()));
+              }
+              project.setFootprint(footprint);
               projectRepository.save(project);
             }
           } catch (ProjectExplorerException e) {
