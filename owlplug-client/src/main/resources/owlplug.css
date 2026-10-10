@@ -794,6 +794,14 @@ ProgressIndicator {
     -fx-background-color: transparent;
 }
 
+/* Info panes wrapped in a ScrollPane: the inner card draws the border */
+.info-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+
 /****************************************************************
  *
  * Home Dashboard

@@ -49,7 +49,8 @@
         </BorderPane>
     </center>
     <right>
-        <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+        <!-- Fixed width owned by the column itself, independent of the info pane content or visibility -->
+        <VBox prefHeight="200.0" minWidth="-Infinity" prefWidth="500.0" BorderPane.alignment="CENTER">
             <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="38.0" prefWidth="500.0"
                   VBox.vgrow="NEVER" spacing="5.0">
                 <Button fx:id="projectDirectoryButton" text="Project Directories">

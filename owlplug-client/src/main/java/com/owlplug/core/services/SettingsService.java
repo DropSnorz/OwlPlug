@@ -26,8 +26,10 @@ import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.repositories.FileStatRepository;
+import com.owlplug.plugin.repositories.PluginFootprintRepository;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.project.repositories.DawProjectRepository;
+import com.owlplug.project.repositories.ProjectFootprintRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.prefs.BackingStoreException;
 import org.slf4j.Logger;
@@ -50,6 +52,10 @@ public class SettingsService extends BaseService {
   private FileStatRepository fileStatRepository;
   @Autowired
   private DawProjectRepository projectRepository;
+  @Autowired
+  private PluginFootprintRepository pluginFootprintRepository;
+  @Autowired
+  private ProjectFootprintRepository projectFootprintRepository;
   @Autowired
   private ImageCache imageCache;
 
@@ -103,6 +109,9 @@ public class SettingsService extends BaseService {
       remoteSourceRepository.deleteAll();
       fileStatRepository.deleteAll();
       projectRepository.deleteAll();
+      // Footprints are referenced by plugins and projects: delete them last
+      pluginFootprintRepository.deleteAll();
+      projectFootprintRepository.deleteAll();
 
       clearCache();
 

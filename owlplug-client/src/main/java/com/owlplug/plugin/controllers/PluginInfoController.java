@@ -25,6 +25,7 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.ui.NoteTextArea;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.PlatformUtils;
@@ -34,6 +35,7 @@ import com.owlplug.plugin.events.PluginRefreshEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
+import com.owlplug.plugin.model.PluginFootprint;
 import com.owlplug.plugin.model.PluginState;
 import com.owlplug.plugin.services.PluginService;
 import com.owlplug.plugin.ui.PluginComponentCellFactory;
@@ -114,6 +116,8 @@ public class PluginInfoController extends BaseController {
   private Button uninstallButton;
   @FXML
   private ListView<PluginComponent> pluginComponentListView;
+  @FXML
+  private NoteTextArea noteTextArea;
   @FXML
   private ToggleSwitch nativeDiscoveryToggleButton;
   @FXML
@@ -215,13 +219,20 @@ public class PluginInfoController extends BaseController {
       disableButton.setVisible(true);
     }
 
-    if (plugin.getFootprint() != null) {
-      nativeDiscoveryToggleButton.setSelected(plugin.getFootprint().isNativeDiscoveryEnabled());
-      String scanError = plugin.getFootprint().getLastScanStatus();
+    PluginFootprint footprint = plugin.getFootprint();
+    if (footprint != null) {
+      nativeDiscoveryToggleButton.setSelected(footprint.isNativeDiscoveryEnabled());
+      String scanError = footprint.getLastScanStatus();
       lastScanErrorLabel.setText(scanError != null ? scanError : "");
       lastScanErrorLabel.setVisible(scanError != null);
+      noteTextArea.setTarget(footprint.getNote(), note -> {
+        // Keep the in-memory entity in sync so re-selecting the plugin shows the latest note
+        footprint.setNote(note);
+        Async.run(() -> pluginService.save(footprint));
+      });
     } else {
       lastScanErrorLabel.setVisible(false);
+      noteTextArea.clearTarget();
     }
 
     setPluginImage();

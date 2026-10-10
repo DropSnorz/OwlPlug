@@ -27,6 +27,7 @@ import com.owlplug.core.tasks.TaskExecutionContext;
 import com.owlplug.project.events.ProjectSyncEvent;
 import com.owlplug.project.repositories.DawPluginRepository;
 import com.owlplug.project.repositories.DawProjectRepository;
+import com.owlplug.project.repositories.ProjectFootprintRepository;
 import com.owlplug.project.services.PluginLookupService;
 import com.owlplug.project.tasks.PluginLookupTask;
 import com.owlplug.project.tasks.ProjectSyncTask;
@@ -46,6 +47,8 @@ public class ProjectTaskFactory extends BaseTaskFactory {
   @Autowired
   private DawProjectRepository projectRepository;
   @Autowired
+  private ProjectFootprintRepository projectFootprintRepository;
+  @Autowired
   private DawPluginRepository dawPluginRepository;
   @Autowired
   private ApplicationEventPublisher publisher;
@@ -55,7 +58,8 @@ public class ProjectTaskFactory extends BaseTaskFactory {
     List<String> directories = prefs.getList(Prefs.Projects.DIRECTORY);
     boolean collectBackupFiles = prefs.getBoolean(Prefs.Projects.COLLECT_BACKUP_FILES, false);
 
-    ProjectSyncTask task = new ProjectSyncTask(projectRepository, directories, collectBackupFiles);
+    ProjectSyncTask task = new ProjectSyncTask(projectRepository, projectFootprintRepository,
+        directories, collectBackupFiles);
     task.setOnSucceeded(e -> {
       createLookupTask().scheduleNow();
       publisher.publishEvent(new ProjectSyncEvent());

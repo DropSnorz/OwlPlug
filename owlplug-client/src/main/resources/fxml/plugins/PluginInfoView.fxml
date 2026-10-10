@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -13,20 +14,22 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import com.owlplug.core.ui.NoteTextArea?>
 <?import com.owlplug.plugin.ui.PluginStateView?>
 <?import atlantafx.base.controls.ToggleSwitch?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.owlplug.plugin.controllers.PluginInfoController">
-   <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         prefWidth="500.0">
+   <VBox alignment="TOP_CENTER" prefWidth="500.0"
+         AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+         AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <styleClass>
          <String fx:value="pane-card"/>
          <String fx:value="no-padding"/>
       </styleClass>
 
-      <!-- Header: screenshot pane with title and format badge -->
-      <StackPane maxHeight="180.0" prefHeight="180.0" prefWidth="500.0">
+      <!-- Header: screenshot pane with title and format badge, kept outside the ScrollPane to stay on top -->
+      <StackPane maxHeight="180.0" minHeight="180.0" prefHeight="180.0" prefWidth="500.0">
          <Pane fx:id="pluginScreenshotPane" prefHeight="180.0" prefWidth="500.0"/>
          <VBox alignment="CENTER_LEFT" spacing="5.0">
             <opaqueInsets>
@@ -40,119 +43,136 @@
          </VBox>
       </StackPane>
 
-      <!-- General section with action buttons -->
-      <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="card-title">
-         <Label text="General"/>
-         <Pane HBox.hgrow="ALWAYS"/>
-         <Button fx:id="enableButton" layoutX="353.0" layoutY="10.0" text="Enable">
-            <graphic>
-               <FontIcon iconLiteral="mdi2e-eye-outline"/>
-            </graphic>
-         </Button>
-         <Button fx:id="disableButton" layoutX="428.0" layoutY="10.0" text="Disable">
-            <graphic>
-               <FontIcon iconLiteral="mdi2e-eye-off-outline"/>
-            </graphic>
-         </Button>
-         <Button fx:id="uninstallButton" styleClass="button-danger" text="Uninstall">
-            <graphic>
-               <FontIcon iconLiteral="mdi2d-delete-outline"/>
-            </graphic>
-         </Button>
-      </HBox>
-
-      <!-- Metadata grid -->
-      <GridPane hgap="16.0" vgap="14.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="230.0"/>
-            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="230.0"/>
-         </columnConstraints>
-         <padding>
-            <Insets left="20.0" right="20.0" top="18.0" bottom="18.0"/>
-         </padding>
-
-         <!-- Name -->
-         <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
-            <Label text="NAME" styleClass="info-field-label"/>
-            <Label fx:id="pluginNameLabel" styleClass="info-field-value" text="UNKNOWN"/>
-         </VBox>
-
-         <!-- Version -->
-         <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
-            <Label text="VERSION" styleClass="info-field-label"/>
-            <Label fx:id="pluginVersionLabel" styleClass="info-field-value" text="UNKNOWN"/>
-         </VBox>
-
-         <!-- Manufacturer -->
-         <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
-            <Label text="MANUFACTURER" styleClass="info-field-label"/>
-            <Label fx:id="pluginManufacturerLabel" styleClass="info-field-value" text="UNKNOWN"/>
-         </VBox>
-
-         <!-- Category -->
-         <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <Label text="CATEGORY" styleClass="info-field-label"/>
-            <Label fx:id="pluginCategoryLabel" styleClass="info-field-value" text="UNKNOWN"/>
-         </VBox>
-
-         <!-- Identifier -->
-         <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
-            <Label text="IDENTIFIER" styleClass="info-field-label"/>
-            <Label fx:id="pluginIdentifierLabel" styleClass="info-field-value" text="UNKNOWN"/>
-         </VBox>
-
-         <!-- State -->
-         <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <Label text="STATE" styleClass="info-field-label"/>
-            <PluginStateView fx:id="pluginStateView"/>
-         </VBox>
-
-         <!-- Path (full width) with open folder button -->
-         <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2147483647">
-            <Label text="PATH" styleClass="info-field-label"/>
-            <HBox alignment="CENTER_LEFT" spacing="8.0">
-               <Label fx:id="pluginPathLabel" styleClass="info-field-value" text="UNKNOWN"
-                      minWidth="0.0" HBox.hgrow="ALWAYS"/>
-               <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0">
-                    <graphic>
-                         <FontIcon iconLiteral="mdi2f-folder"/>
-                    </graphic>
+      <!-- fitToHeight + VBox minHeight=USE_PREF_SIZE: content fills the viewport when there is room
+           (the components list grows), and the pane scrolls once it gets smaller than the content. -->
+      <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" styleClass="info-scroll-pane"
+                  VBox.vgrow="ALWAYS">
+         <VBox alignment="TOP_CENTER" minHeight="-Infinity">
+            <!-- General section with action buttons -->
+            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="card-title">
+               <Label text="General"/>
+               <Pane HBox.hgrow="ALWAYS"/>
+               <Button fx:id="enableButton" layoutX="353.0" layoutY="10.0" text="Enable">
+                  <graphic>
+                     <FontIcon iconLiteral="mdi2e-eye-outline"/>
+                  </graphic>
+               </Button>
+               <Button fx:id="disableButton" layoutX="428.0" layoutY="10.0" text="Disable">
+                  <graphic>
+                     <FontIcon iconLiteral="mdi2e-eye-off-outline"/>
+                  </graphic>
+               </Button>
+               <Button fx:id="uninstallButton" styleClass="button-danger" text="Uninstall">
+                  <graphic>
+                     <FontIcon iconLiteral="mdi2d-delete-outline"/>
+                  </graphic>
                </Button>
             </HBox>
+
+            <!-- Metadata grid -->
+            <GridPane hgap="16.0" vgap="14.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="230.0"/>
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="230.0"/>
+               </columnConstraints>
+               <padding>
+                  <Insets left="20.0" right="20.0" top="18.0" bottom="18.0"/>
+               </padding>
+
+               <!-- Name -->
+               <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                  <Label text="NAME" styleClass="info-field-label"/>
+                  <Label fx:id="pluginNameLabel" styleClass="info-field-value" text="UNKNOWN"/>
+               </VBox>
+
+               <!-- Version -->
+               <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                  <Label text="VERSION" styleClass="info-field-label"/>
+                  <Label fx:id="pluginVersionLabel" styleClass="info-field-value" text="UNKNOWN"/>
+               </VBox>
+
+               <!-- Manufacturer -->
+               <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                  <Label text="MANUFACTURER" styleClass="info-field-label"/>
+                  <Label fx:id="pluginManufacturerLabel" styleClass="info-field-value" text="UNKNOWN"/>
+               </VBox>
+
+               <!-- Category -->
+               <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label text="CATEGORY" styleClass="info-field-label"/>
+                  <Label fx:id="pluginCategoryLabel" styleClass="info-field-value" text="UNKNOWN"/>
+               </VBox>
+
+               <!-- Identifier -->
+               <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                  <Label text="IDENTIFIER" styleClass="info-field-label"/>
+                  <Label fx:id="pluginIdentifierLabel" styleClass="info-field-value" text="UNKNOWN"/>
+               </VBox>
+
+               <!-- State -->
+               <VBox spacing="3.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <Label text="STATE" styleClass="info-field-label"/>
+                  <PluginStateView fx:id="pluginStateView"/>
+               </VBox>
+
+               <!-- Path (full width) with open folder button -->
+               <VBox spacing="3.0" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2147483647">
+                  <Label text="PATH" styleClass="info-field-label"/>
+                  <HBox alignment="CENTER_LEFT" spacing="8.0">
+                     <Label fx:id="pluginPathLabel" styleClass="info-field-value" text="UNKNOWN"
+                            minWidth="0.0" HBox.hgrow="ALWAYS"/>
+                     <Button fx:id="openDirectoryButton" minHeight="-Infinity" prefHeight="23.0">
+                          <graphic>
+                               <FontIcon iconLiteral="mdi2f-folder"/>
+                          </graphic>
+                     </Button>
+                  </HBox>
+               </VBox>
+            </GridPane>
+
+            <!-- Components section -->
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
+               <Label text="Components"/>
+            </HBox>
+            <ListView fx:id="pluginComponentListView" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+                      minWidth="-Infinity" prefHeight="84.0" prefWidth="440.0" VBox.vgrow="SOMETIMES"
+                      styleClass="dense">
+               <opaqueInsets>
+                  <Insets/>
+               </opaqueInsets>
+            </ListView>
+
+            <!-- Notes section -->
+            <HBox alignment="CENTER_LEFT" styleClass="card-title">
+               <Label text="Notes"/>
+            </HBox>
+            <NoteTextArea fx:id="noteTextArea" maxHeight="-Infinity" VBox.vgrow="NEVER">
+               <VBox.margin>
+                  <Insets left="8.0" right="8.0" top="6.0" bottom="6.0"/>
+               </VBox.margin>
+            </NoteTextArea>
+
+            <!-- Extras section -->
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
+               <Label text="Extras"/>
+               <Pane HBox.hgrow="ALWAYS"/>
+               <ToggleSwitch fx:id="nativeDiscoveryToggleButton" maxHeight="30.0" minHeight="30.0" prefHeight="30.0"
+                             scaleX="0.8" scaleY="0.8" selected="true" text=" Native Discovery">
+                  <HBox.margin>
+                     <Insets/>
+                  </HBox.margin>
+               </ToggleSwitch>
+            </HBox>
+
+            <!-- Last scan error -->
+            <HBox fx:id="lastScanErrorContainer" VBox.vgrow="ALWAYS">
+               <Label fx:id="lastScanErrorLabel" wrapText="true" styleClass="label-danger">
+                  <HBox.margin>
+                     <Insets top="5" bottom="5" left="5"/>
+                  </HBox.margin>
+               </Label>
+            </HBox>
          </VBox>
-      </GridPane>
-
-      <!-- Components section -->
-      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
-         <Label text="Components"/>
-      </HBox>
-      <ListView fx:id="pluginComponentListView" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
-                minWidth="-Infinity" prefHeight="84.0" prefWidth="440.0" VBox.vgrow="SOMETIMES"
-                styleClass="dense">
-         <opaqueInsets>
-            <Insets/>
-         </opaqueInsets>
-      </ListView>
-
-      <!-- Extras section -->
-      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="190.0" styleClass="card-title">
-         <Label text="Extras"/>
-         <Pane HBox.hgrow="ALWAYS"/>
-         <ToggleSwitch fx:id="nativeDiscoveryToggleButton" maxHeight="30.0" minHeight="30.0" prefHeight="30.0"
-                       scaleX="0.8" scaleY="0.8" selected="true" text=" Native Discovery">
-            <HBox.margin>
-               <Insets/>
-            </HBox.margin>
-         </ToggleSwitch>
-      </HBox>
-
-      <!-- Last scan error -->
-      <HBox fx:id="lastScanErrorContainer" VBox.vgrow="ALWAYS">
-         <Label fx:id="lastScanErrorLabel" wrapText="true" styleClass="label-danger">
-            <HBox.margin>
-               <Insets top="5" bottom="5" left="5"/>
-            </HBox.margin>
-         </Label>
-      </HBox>
+      </ScrollPane>
    </VBox>
 </AnchorPane>

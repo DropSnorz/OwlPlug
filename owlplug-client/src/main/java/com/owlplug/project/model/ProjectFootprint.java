@@ -16,7 +16,7 @@
  * along with OwlPlug.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.owlplug.plugin.model;
+package com.owlplug.project.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,30 +26,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/**
+ * User data attached to a project path. Unlike {@link DawProject}, footprints
+ * are not deleted on project sync, so their content survives re-synchronizations.
+ */
 @Entity
-@Table(indexes = { @Index(name = "IDX_PLUGIN_FOOTPRINT_ID", columnList = "id"),
-    @Index(name = "IDX_PLUGIN_FOOTPRINT_PATH", columnList = "path") })
-public class PluginFootprint {
-  
+@Table(indexes = { @Index(name = "IDX_PROJECT_FOOTPRINT_PATH", columnList = "path") })
+public class ProjectFootprint {
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  protected Long id;
+  private Long id;
   @Column(length = 512)
-  protected String path;
-  protected boolean nativeDiscoveryEnabled = true;
-
-  protected String screenshotUrl;
-
-  private String lastScanStatus;
+  private String path;
 
   @Column(length = 2000)
   private String note;
 
-  public PluginFootprint() {
+  public ProjectFootprint() {
   }
-  
-  public PluginFootprint(String path) {
+
+  public ProjectFootprint(String path) {
     this.path = path;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   public String getPath() {
@@ -58,34 +60,6 @@ public class PluginFootprint {
 
   public void setPath(String path) {
     this.path = path;
-  }
-
-  public boolean isNativeDiscoveryEnabled() {
-    return nativeDiscoveryEnabled;
-  }
-
-  public void setNativeDiscoveryEnabled(boolean nativeDiscoveryEnabled) {
-    this.nativeDiscoveryEnabled = nativeDiscoveryEnabled;
-  }
-
-  public String getScreenshotUrl() {
-    return screenshotUrl;
-  }
-
-  public void setScreenshotUrl(String screenshotUrl) {
-    this.screenshotUrl = screenshotUrl;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public String getLastScanStatus() {
-    return lastScanStatus;
-  }
-
-  public void setLastScanStatus(String lastScanStatus) {
-    this.lastScanStatus = lastScanStatus;
   }
 
   public String getNote() {
