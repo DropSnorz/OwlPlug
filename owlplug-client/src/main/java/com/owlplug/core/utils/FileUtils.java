@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,15 +52,18 @@ public class FileUtils {
    * @return
    */
   public static Collection<File> listUniqueFilesAndDirs(File directory) {
+    return listUniqueFilesAndDirs(directory, file -> true);
+  }
 
-
-    //Find files
+  public static Collection<File> listUniqueFilesAndDirs(File directory, Predicate<File> shouldTraverse) {
     ArrayList<File> files = new ArrayList<>();
     if (directory.isDirectory()) {
       files.add(directory);
     }
 
-    innerListFiles(files, directory, true, new ArrayList<>());
+    if (shouldTraverse.test(directory)) {
+      innerListFiles(files, directory, true, new ArrayList<>(), shouldTraverse);
+    }
     return files;
 
   }
@@ -75,7 +79,7 @@ public class FileUtils {
    * @param symlinksContext - Current symlink context
    */
   private static void innerListFiles(List<File> files, File directory, boolean includeSubDirectories, 
-      List<String> symlinksContext) {
+      List<String> symlinksContext, Predicate<File> shouldTraverse) {
     
     File[] found = directory.listFiles();
 
@@ -90,8 +94,10 @@ public class FileUtils {
               // We explore the symlink only if we are not currently resolving its target path.
               if (!currentSymlinksContext.contains(targetPath.toString())) {
                 files.add(file);
-                currentSymlinksContext.add(targetPath.toString());
-                innerListFiles(files, file, includeSubDirectories, currentSymlinksContext);
+                if (shouldTraverse.test(file)) {
+                  currentSymlinksContext.add(targetPath.toString());
+                  innerListFiles(files, file, includeSubDirectories, currentSymlinksContext, shouldTraverse);
+                }
               }
 
             } catch (IOException e) {
@@ -100,7 +106,9 @@ public class FileUtils {
             }
           } else {
             files.add(file);
-            innerListFiles(files, file, includeSubDirectories, symlinksContext);
+            if (shouldTraverse.test(file)) {
+              innerListFiles(files, file, includeSubDirectories, symlinksContext, shouldTraverse);
+            }
           }
 
         } else {

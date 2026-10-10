@@ -125,10 +125,13 @@ Open Audio Stack registry plugins maintained by community.
 | DAW Project Analysis | Supported |
 |----------------------|-----------|
 | Ableton Live         | ✅         |
+| Logic Pro            | Partial (AU on active audio/instrument tracks) |
 | Reaper               | ✅         |
 | Studio One           | ✅         |
 
 See the [full compatibility list](https://github.com/DropSnorz/OwlPlug/wiki/Projects-and-DAW-Support) for details and version notes.
+
+Logic project analysis is read-only and currently reads the first available project alternative. The `.logicx` format is undocumented; parsing has been checked against a Logic Pro 12.3.1 project, and other versions may differ. Bus, aux, and output channel strips are not included yet.
 
 # How to Contribute
 

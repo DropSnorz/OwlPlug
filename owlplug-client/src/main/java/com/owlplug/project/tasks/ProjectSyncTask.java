@@ -28,6 +28,7 @@ import com.owlplug.project.repositories.ProjectFootprintRepository;
 import com.owlplug.project.tasks.discovery.ProjectExplorer;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
+import com.owlplug.project.tasks.discovery.logic.LogicProjectExplorer;
 import com.owlplug.project.tasks.discovery.reaper.ReaperProjectExplorer;
 import com.owlplug.project.tasks.discovery.studioone.StudioOneProjectExplorer;
 import java.io.File;
@@ -66,13 +67,21 @@ public class ProjectSyncTask extends AbstractTask {
 
     projectRepository.deleteAll();
 
+    List<ProjectExplorer> explorers = List.of(
+        new AbletonProjectExplorer(),
+        new LogicProjectExplorer(),
+        new ReaperProjectExplorer(),
+        new StudioOneProjectExplorer()
+    );
+
     // Collect files from all project directories
     List<File> baseFiles = new ArrayList<>();
     for (String directory : projectDirectories) {
       File dir = new File(directory);
       this.updateMessage("Syncing projects from: " + dir.getAbsolutePath());
       if (dir.isDirectory()) {
-        baseFiles.addAll(FileUtils.listUniqueFilesAndDirs(dir));
+        baseFiles.addAll(FileUtils.listUniqueFilesAndDirs(dir,
+            candidate -> explorers.stream().noneMatch(explorer -> explorer.canExploreFile(candidate))));
       }
     }
 
@@ -83,12 +92,6 @@ public class ProjectSyncTask extends AbstractTask {
                                    .toList();
 
     this.setMaxProgress(filteredFiles.size());
-
-    List<ProjectExplorer> explorers = List.of(
-        new AbletonProjectExplorer(),
-        new ReaperProjectExplorer(),
-        new StudioOneProjectExplorer()
-    );
 
     for (File file : filteredFiles) {
       this.commitProgress(1);

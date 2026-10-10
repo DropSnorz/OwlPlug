@@ -180,6 +180,7 @@ public class ApplicationDefaults {
       case ABLETON -> abletonLogoImage;
       case REAPER -> reaperLogoImage;
       case STUDIO_ONE -> studioOneLogoImage;
+      case LOGIC -> owlplugLogoSmall;
     };
   }
 
@@ -223,6 +224,7 @@ public class ApplicationDefaults {
       case ABLETON -> abletonPlaceholderImage;
       case REAPER -> reaperPlaceholderImage;
       case STUDIO_ONE -> studioOnePlaceholderImage;
+      case LOGIC -> owlplugLogo;
     };
   }
 
