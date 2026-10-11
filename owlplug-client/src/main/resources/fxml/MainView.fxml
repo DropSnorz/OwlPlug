@@ -53,7 +53,7 @@
                 </TabPane>
             </left>
             <right>
-                <HBox fx:id="headerControlsBox" alignment="CENTER_RIGHT" fillHeight="false" prefHeight="45.0" spacing="10.0">
+                <HBox fx:id="headerControlsBox" alignment="CENTER_RIGHT" fillHeight="true" prefHeight="45.0" spacing="0.0">
                     <HBox fx:id="updatePane" alignment="CENTER_LEFT" prefHeight="45.0" spacing="5.0">
                         <padding>
                             <Insets left="10.0" right="10.0"/>

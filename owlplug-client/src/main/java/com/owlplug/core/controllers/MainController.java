@@ -19,9 +19,6 @@
 package com.owlplug.core.controllers;
 
 import atlantafx.base.theme.Styles;
-import atlantafx.decorations.Alignment;
-import atlantafx.decorations.Decoration;
-import atlantafx.decorations.HeaderButtonGroup;
 import com.owlplug.controls.Drawer;
 import com.owlplug.controls.transitions.AnimatedTabListener;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
@@ -50,10 +47,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HeaderBar;
+import javafx.scene.layout.HeaderButtonType;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,16 +192,6 @@ public class MainController extends BaseController {
   }
 
   /**
-   * Returns the stylesheet of the window decoration theme used to style the
-   * custom header bar window control buttons.
-   *
-   * @return the decoration stylesheet URL
-   */
-  public String getWindowDecorationStylesheet() {
-    return Decoration.CHROME_OS_DARK.getStylesheet();
-  }
-
-  /**
    * Installs the custom header bar window control buttons (minimize, maximize,
    * close) on the given stage. The stage is expected to use
    * {@link StageStyle#EXTENDED} so that the header bar can replace
@@ -212,8 +201,13 @@ public class MainController extends BaseController {
    */
   public void setupWindowControls(Stage stage) {
 
-    HeaderButtonGroup windowButtons = HeaderButtonGroup.standardGroup(Alignment.TRAILING);
-    headerControlsBox.getChildren().add(windowButtons);
+    // Buttons are added directly to the controls box so they fill the header bar height.
+    // The header bar type lets the toolkit handle the window actions natively.
+    FontIcon maximizeIcon = new FontIcon("mdi2w-window-maximize");
+    headerControlsBox.getChildren().addAll(
+        createWindowButton(HeaderButtonType.ICONIFY, new FontIcon("mdi2w-window-minimize"), "minimize"),
+        createWindowButton(HeaderButtonType.MAXIMIZE, maximizeIcon, "maximize"),
+        createWindowButton(HeaderButtonType.CLOSE, new FontIcon("mdi2w-window-close"), "close"));
 
     HeaderBar.setSystemButtonHeight(stage, 0);
 
@@ -221,6 +215,7 @@ public class MainController extends BaseController {
     PseudoClass inactivePseudoClass = PseudoClass.getPseudoClass("inactive");
 
     stage.maximizedProperty().subscribe(() -> {
+      maximizeIcon.setIconLiteral(stage.isMaximized() ? "mdi2w-window-restore" : "mdi2w-window-maximize");
       if (stage.getScene() != null && stage.getScene().getRoot() != null) {
         stage.getScene().getRoot().pseudoClassStateChanged(maximizedPseudoClass, stage.isMaximized());
       }
@@ -232,6 +227,15 @@ public class MainController extends BaseController {
     });
   }
 
+
+  private Button createWindowButton(HeaderButtonType type, FontIcon icon, String styleClass) {
+    Button button = new Button();
+    button.setGraphic(icon);
+    button.setFocusTraversable(false);
+    button.getStyleClass().addAll("window-control-button", styleClass);
+    HeaderBar.setButtonType(button, type);
+    return button;
+  }
 
   @PreDestroy
   private void destroy() {

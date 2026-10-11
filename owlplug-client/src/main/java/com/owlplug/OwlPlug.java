@@ -136,7 +136,6 @@ public class OwlPlug extends Application {
 
     scene.getStylesheets().add(owlplugControlsCss);
     scene.getStylesheets().add(owlplugCss);
-    scene.getStylesheets().add(mainController.getWindowDecorationStylesheet());
 
     primaryStage.getIcons().add(ApplicationDefaults.owlplugLogo);
     primaryStage.setTitle(ApplicationDefaults.APPLICATION_NAME);
