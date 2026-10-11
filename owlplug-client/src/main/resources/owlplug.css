@@ -956,3 +956,29 @@ ProgressIndicator {
     -fx-background-color: -color-accent-emphasis;
     -fx-text-fill: -color-fg-emphasis;
 }
+
+/* Window controls: square buttons filling the header bar height */
+.header .window-control-button {
+    -fx-pref-width: 46;
+    -fx-max-height: infinity;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-padding: 0;
+}
+.header .window-control-button .ikonli-font-icon {
+    -fx-icon-size: 14;
+    -fx-icon-color: -color-fg-default;
+}
+.header .window-control-button:hover {
+    -fx-background-color: -color-border-muted;
+}
+.header .window-control-button.close:hover {
+    -fx-background-color: -color-danger-emphasis;
+}
+.header .window-control-button.close:hover .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+.root:inactive .header .window-control-button .ikonli-font-icon {
+    -fx-icon-color: -color-fg-muted;
+}
