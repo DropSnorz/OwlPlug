@@ -455,7 +455,10 @@ public class ExploreController extends BaseController {
 
   public void addSearchChip(String chip) {
     if (chip != null && !chip.trim().isEmpty()) {
-      exploreChipView.getChips().add(exploreChipView.getConverter().fromString(chip));
+      ExploreFilterCriteria criteria = exploreChipView.getConverter().fromString(chip);
+      if (!exploreChipView.getChips().contains(criteria)) {
+        exploreChipView.getChips().add(criteria);
+      }
     }
   }
 
