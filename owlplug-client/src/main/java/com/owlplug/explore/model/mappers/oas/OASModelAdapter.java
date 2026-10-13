@@ -19,9 +19,9 @@
 package com.owlplug.explore.model.mappers.oas;
 
 import com.owlplug.explore.model.PackageBundle;
-import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
+import com.owlplug.explore.model.mappers.PackageTagMapper;
 import com.owlplug.plugin.model.PluginType;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,13 +68,7 @@ public class OASModelAdapter {
 
     addBundlesToPackage(remotePackage, plugin.getFiles());
 
-    HashSet<PackageTag> tags = new HashSet<>();
-    if (plugin.getTags() != null) {
-      for (String tag : plugin.getTags()) {
-        tags.add(new PackageTag(tag, remotePackage));
-      }
-    }
-    remotePackage.setTags(tags);
+    remotePackage.setTags(PackageTagMapper.toEntities(plugin.getTags(), remotePackage));
 
     return remotePackage;
   }

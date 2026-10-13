@@ -212,6 +212,16 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
   
   @Query("SELECT DISTINCT p.creator FROM RemotePackage p")
   List<String> findDistinctCreators();
-  
+
+  /**
+   * Returns the usage count of each exact tag spelling. Spellings that only differ by case or
+   * surrounding whitespace are returned as separate rows and must be merged by the caller.
+   *
+   * @return tag usages
+   */
+  @Query("SELECT new com.owlplug.explore.repositories.TagUsage(t.name, COUNT(t)) FROM PackageTag t "
+      + "WHERE t.name IS NOT NULL AND TRIM(t.name) <> '' GROUP BY t.name")
+  List<TagUsage> findTagUsages();
+
 
 }
