@@ -20,9 +20,9 @@ package com.owlplug.explore.model.mappers.registry;
 
 import com.owlplug.core.utils.UrlUtils;
 import com.owlplug.explore.model.PackageBundle;
-import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
+import com.owlplug.explore.model.mappers.PackageTagMapper;
 import com.owlplug.plugin.model.PluginStage;
 import com.owlplug.plugin.model.PluginType;
 import java.util.ArrayList;
@@ -82,13 +82,7 @@ public class RegistryModelAdapter {
     }
     remotePackage.setBundles(bundles);
 
-    HashSet<PackageTag> tags = new HashSet<>();
-    if (packageVersionMapper.getTags() != null) {
-      for (String tag : packageVersionMapper.getTags()) {
-        tags.add(new PackageTag(tag, remotePackage));
-      }
-    }
-    remotePackage.setTags(tags);
+    remotePackage.setTags(PackageTagMapper.toEntities(packageVersionMapper.getTags(), remotePackage));
 
     return remotePackage;
   }

@@ -111,7 +111,9 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
       if (getSkinnable().getSelectionHandler() != null) {
         selectedItem = (T) getSkinnable().getSelectionHandler().apply(selectedItem);
       }
-      getSkinnable().getChips().add(selectedItem);
+      if (!getSkinnable().getChips().contains(selectedItem)) {
+        getSkinnable().getChips().add(selectedItem);
+      }
       editor.clear();
     });
     // add position listener to auto complete
@@ -147,7 +149,7 @@ public class ChipViewSkin<T> implements Skin<ChipView> {
             try {
               final StringConverter<T> sc = control.getConverter();
               final T item = sc.fromString(editor.getText());
-              if (item != null) {
+              if (item != null && !getSkinnable().getChips().contains(item)) {
                 getSkinnable().getChips().add(item);
               }
               editor.clear();
