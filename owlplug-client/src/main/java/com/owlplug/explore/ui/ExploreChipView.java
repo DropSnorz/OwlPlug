@@ -24,9 +24,10 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.plugin.model.PluginType;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.ListCell;
 import javafx.util.StringConverter;
@@ -35,7 +36,9 @@ import org.kordamp.ikonli.javafx.FontIcon;
 public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
 
   private final ApplicationDefaults applicationDefaults;
-  private final List<String> pluginCreators;
+  // Suggestions keyed by their trimmed, lowercase label so the converter
+  // resolves user input regardless of case or surrounding whitespace.
+  private final Map<String, ExploreFilterCriteria> suggestionsByKey = new LinkedHashMap<>();
 
   private static final String PROMPT_TEXT = "Enter your search query by Name, Authors, Category...";
 
@@ -43,82 +46,69 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
    * Creates an ExploreChipView.
    *
    * @param applicationDefaults - OwlPlug application defaults
+   * @param tags - package tags to suggest
+   * @param creators - package creators to suggest
    */
-  public ExploreChipView(ApplicationDefaults applicationDefaults, List<String> pluginCreators) {
+  public ExploreChipView(ApplicationDefaults applicationDefaults, List<String> tags, List<String> creators) {
     super();
     this.applicationDefaults = applicationDefaults;
-    this.pluginCreators = pluginCreators;
     this.setPromptText(PROMPT_TEXT);
     init();
+    updateSuggestions(tags, creators);
+  }
+
+  /**
+   * Rebuilds the suggestions from the given tags and creators.
+   * Package type suggestions are always included.
+   *
+   * @param tags - package tags to suggest
+   * @param creators - package creators to suggest
+   */
+  public void updateSuggestions(List<String> tags, List<String> creators) {
+    suggestionsByKey.clear();
+
+    addSuggestion(new ExploreFilterCriteria(PluginType.EFFECT, ExploreFilterCriteriaType.TYPE,
+        applicationDefaults.getPackageTypeIconLiteral(PluginType.EFFECT), "Effect"));
+    addSuggestion(new ExploreFilterCriteria(PluginType.INSTRUMENT, ExploreFilterCriteriaType.TYPE,
+        applicationDefaults.getPackageTypeIconLiteral(PluginType.INSTRUMENT), "Instrument"));
+
+    for (String tag : tags) {
+      if (tag != null && !tag.isBlank()) {
+        addSuggestion(createTagCriteria(tag));
+      }
+    }
+
+    for (String creator : creators) {
+      if (creator != null && !creator.isBlank()) {
+        addSuggestion(new ExploreFilterCriteria(creator, ExploreFilterCriteriaType.CREATOR,
+            "mdi2a-account-group-outline"));
+      }
+    }
+
+    this.getSuggestions().setAll(suggestionsByKey.values());
+  }
+
+  /**
+   * Creates a tag filter criteria.
+   *
+   * @param tag - tag name
+   * @return the tag filter criteria
+   */
+  public static ExploreFilterCriteria createTagCriteria(String tag) {
+    return new ExploreFilterCriteria(tag.trim(), ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline");
+  }
+
+  private void addSuggestion(ExploreFilterCriteria criteria) {
+    // On label collision the first suggestion wins: types, then tags, then creators.
+    suggestionsByKey.putIfAbsent(toKey(criteria.toString()), criteria);
+  }
+
+  private static String toKey(String label) {
+    return label.trim().toLowerCase(Locale.ROOT);
   }
 
   private void init() {
 
-    HashMap<String, ExploreFilterCriteria> suggestions = new LinkedHashMap<>();
-
-    suggestions.put("Effect", new ExploreFilterCriteria(PluginType.EFFECT, ExploreFilterCriteriaType.TYPE,
-        applicationDefaults.getPackageTypeIconLiteral(PluginType.EFFECT), "Effect"));
-    suggestions.put("Instrument", new ExploreFilterCriteria(PluginType.INSTRUMENT, ExploreFilterCriteriaType.TYPE,
-        applicationDefaults.getPackageTypeIconLiteral(PluginType.INSTRUMENT), "Instrument"));
-
-    suggestions.put("Amp",
-        new ExploreFilterCriteria("Amp", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Analog",
-        new ExploreFilterCriteria("Analog", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Ambient",
-        new ExploreFilterCriteria("Ambient", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Bass", new ExploreFilterCriteria("Bass", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Brass",
-        new ExploreFilterCriteria("Brass", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Compressor",
-        new ExploreFilterCriteria("Compressor", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Delay",
-        new ExploreFilterCriteria("Delay", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Distortion",
-        new ExploreFilterCriteria("Distortion", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Drum", new ExploreFilterCriteria("Drum", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Equalizer",
-        new ExploreFilterCriteria("Equalizer", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Filter",
-        new ExploreFilterCriteria("Filter", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Flanger",
-        new ExploreFilterCriteria("Flanger", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Gate", new ExploreFilterCriteria("Gate", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Guitar",
-        new ExploreFilterCriteria("Guitar", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("LFO", new ExploreFilterCriteria("LFO", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Limiter",
-        new ExploreFilterCriteria("Limiter", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Maximizer",
-        new ExploreFilterCriteria("Maximizer", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Monophonic",
-        new ExploreFilterCriteria("Monophonic", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Orchestral",
-        new ExploreFilterCriteria("Orchestral", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Organ",
-        new ExploreFilterCriteria("Organ", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Panner",
-        new ExploreFilterCriteria("Panner", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Phaser",
-        new ExploreFilterCriteria("Phaser", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Piano",
-        new ExploreFilterCriteria("Piano", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Reverb",
-        new ExploreFilterCriteria("Reverb", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Tremolo",
-        new ExploreFilterCriteria("Tremolo", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Tube", new ExploreFilterCriteria("Tube", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Synth",
-        new ExploreFilterCriteria("Synth", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-    suggestions.put("Vintage",
-        new ExploreFilterCriteria("Vintage", ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline"));
-
-    for (String creator : pluginCreators) {
-      suggestions.put(creator, new ExploreFilterCriteria(creator, ExploreFilterCriteriaType.CREATOR,
-          "mdi2a-account-group-outline"));
-    }
-
-    this.getSuggestions().addAll(suggestions.values());
     this.setConverter(new StringConverter<>() {
       @Override
       public String toString(ExploreFilterCriteria object) {
@@ -128,7 +118,7 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
       @Override
       public ExploreFilterCriteria fromString(String string) {
         String filter = string.trim();
-        ExploreFilterCriteria found = suggestions.get(filter);
+        ExploreFilterCriteria found = suggestionsByKey.get(toKey(filter));
         return found == null ? new ExploreFilterCriteria(filter, ExploreFilterCriteriaType.NAME) : found;
       }
     });

@@ -152,6 +152,13 @@ public class ExploreController extends BaseController {
    */
   private final Async.Sequence searchSequence = new Async.Sequence();
 
+  /** Drops search suggestions refreshes superseded by a more recent one. */
+  private final Async.Sequence suggestionsSequence = new Async.Sequence();
+
+  /** Tags and creators fetched off the FX thread to rebuild the search suggestions. */
+  private record SearchSuggestions(List<String> tags, List<String> creators) {
+  }
+
   /** Counter of loaded partitions on UI — masonry view. */
   private int displayedPartitions = 0;
 
@@ -180,7 +187,8 @@ public class ExploreController extends BaseController {
       exploreTaskFactory.createSourceSyncTask().schedule();
     });
 
-    exploreChipView = new ExploreChipView(this.getApplicationDefaults(), this.exploreService.getDistinctCreators());
+    exploreChipView = new ExploreChipView(this.getApplicationDefaults(),
+        this.exploreService.getDistinctTags(), this.exploreService.getDistinctCreators());
     HBox.setHgrow(exploreChipView, Priority.ALWAYS);
     exploreChipViewContainer.getChildren().add(exploreChipView);
 
@@ -463,6 +471,27 @@ public class ExploreController extends BaseController {
   }
 
   /**
+   * Adds a tag filter chip, even if the tag is not part of the search suggestions.
+   *
+   * @param tag - tag name
+   */
+  public void addTagSearchChip(String tag) {
+    if (tag != null && !tag.trim().isEmpty()) {
+      ExploreFilterCriteria criteria = ExploreChipView.createTagCriteria(tag);
+      if (!exploreChipView.getChips().contains(criteria)) {
+        exploreChipView.getChips().add(criteria);
+      }
+    }
+  }
+
+  private void refreshSearchSuggestions() {
+    suggestionsSequence.supply(() -> new SearchSuggestions(
+            exploreService.getDistinctTags(), exploreService.getDistinctCreators()))
+        .thenAccept(suggestions -> FX.run(() ->
+            exploreChipView.updateSuggestions(suggestions.tags(), suggestions.creators())));
+  }
+
+  /**
    * Trigger package installation. The best bundle will be selected based on the current user platform.
    *
    * @param remotePackage Package to install
@@ -501,11 +530,13 @@ public class ExploreController extends BaseController {
   @EventListener
   private void handle(SourceSyncEvent event) {
     FX.run(this::performPackageSearch);
+    refreshSearchSuggestions();
   }
 
   @EventListener
   private void handle(RemoteSourceUpdatedEvent event) {
     FX.run(this::performPackageSearch);
+    refreshSearchSuggestions();
   }
 
 }
