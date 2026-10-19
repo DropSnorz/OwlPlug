@@ -31,6 +31,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Skin;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Scale;
@@ -100,6 +102,18 @@ public class AutoCompletePopupSkin<T> implements Skin<AutoCompletePopup<T>> {
     control.showingProperty().addListener((o, oldVal, newVal) -> {
       if (newVal) {
         animate();
+      }
+    });
+
+    // While showing, the popup window receives key events before its owner, so the list is
+    // the focus owner here. Filter before ListView's own UP handling to dismiss the popup on
+    // UP from the first row, and on RIGHT, letting the owner treat the input as plain text.
+    suggestionList.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+      boolean upFromTop = event.getCode() == KeyCode.UP
+          && suggestionList.getSelectionModel().getSelectedIndex() <= 0;
+      if (upFromTop || event.getCode() == KeyCode.RIGHT) {
+        getSkinnable().hide();
+        event.consume();
       }
     });
 

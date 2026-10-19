@@ -111,7 +111,7 @@ public class PackageInfoController extends BaseController {
     packageInfoContainer.getChildren().add(sidebar);
 
     creatorLink.setOnAction(e -> {
-      exploreController.addSearchChip(creatorLink.getText());
+      exploreController.addCreatorSearchChip(creatorLink.getText());
     });
 
     closeButton.setOnAction(e -> {
@@ -208,7 +208,7 @@ public class PackageInfoController extends BaseController {
     for (PackageTag tag : remotePackage.getTags()) {
       FakeChip chip = new FakeChip(tag.getName());
       chip.setOnMouseClicked(e -> {
-        exploreController.addSearchChip(tag.getName());
+        exploreController.addTagSearchChip(tag.getName());
       });
       tagContainer.getChildren().add(chip);
     }

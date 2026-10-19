@@ -38,13 +38,17 @@ import com.owlplug.explore.model.search.ExploreCriteriaAdapter;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
+import com.owlplug.explore.repositories.TagUsage;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.services.PluginService;
 import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -399,5 +403,40 @@ public class ExploreService extends BaseService {
    */
   public List<String> getDistinctCreators() {
     return remotePackageRepository.findDistinctCreators();
+  }
+
+  /**
+   * Returns all distinct package tags, most used first. Tags are compared ignoring case and
+   * surrounding whitespace, each tag is returned with its most frequent spelling.
+   *
+   * @return list of tags
+   */
+  public List<String> getDistinctTags() {
+    // Usage count of each trimmed spelling, grouped by case-insensitive tag key.
+    Map<String, Map<String, Long>> spellingsByTag = new HashMap<>();
+    for (TagUsage usage : remotePackageRepository.findTagUsages()) {
+      String spelling = usage.name().trim();
+      spellingsByTag.computeIfAbsent(spelling.toLowerCase(Locale.ROOT), k -> new HashMap<>())
+          .merge(spelling, usage.count(), Long::sum);
+    }
+
+    // Most frequent spelling first, ties broken by natural order to keep a stable display
+    Comparator<Map.Entry<String, Long>> mostFrequentSpelling = Map.Entry.<String, Long>comparingByValue()
+        .reversed().thenComparing(Map.Entry.comparingByKey());
+
+    record RankedTag(String name, long count) { }
+
+    List<RankedTag> rankedTags = new ArrayList<>();
+    for (Map<String, Long> spellings : spellingsByTag.values()) {
+      String name = spellings.entrySet().stream().min(mostFrequentSpelling).orElseThrow().getKey();
+      long count = spellings.values().stream().mapToLong(Long::longValue).sum();
+      rankedTags.add(new RankedTag(name, count));
+    }
+
+    return rankedTags.stream()
+        .sorted(Comparator.comparingLong(RankedTag::count).reversed()
+            .thenComparing(RankedTag::name, String.CASE_INSENSITIVE_ORDER))
+        .map(RankedTag::name)
+        .toList();
   }
 }

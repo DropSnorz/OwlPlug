@@ -112,11 +112,12 @@ public class ExploreFilterCriteria {
       return false;
     }
     ExploreFilterCriteria criteria = (ExploreFilterCriteria) o;
-    return Objects.equals(value, criteria.getValue());
+    return Objects.equals(value, criteria.getValue())
+        && filterType == criteria.getFilterType();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(value);
+    return Objects.hash(value, filterType);
   }
 }

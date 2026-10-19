@@ -148,7 +148,9 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
     return (remotePackage, cq, cb) -> {
       cq.distinct(true);
       Join<RemotePackage, Object> groupPath = remotePackage.join("tags", JoinType.INNER);
-      return cb.equal(cb.lower(groupPath.get("name")), tag.toLowerCase());
+      // Trim stored names too: tags persisted before sync-time normalization may keep whitespace,
+      // while getDistinctTags() suggests them trimmed.
+      return cb.equal(cb.lower(cb.trim(groupPath.get("name"))), tag.trim().toLowerCase());
 
     };
   }
@@ -212,6 +214,16 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
   
   @Query("SELECT DISTINCT p.creator FROM RemotePackage p")
   List<String> findDistinctCreators();
-  
+
+  /**
+   * Returns the usage count of each exact tag spelling. Spellings that only differ by case or
+   * surrounding whitespace are returned as separate rows and must be merged by the caller.
+   *
+   * @return tag usages
+   */
+  @Query("SELECT new com.owlplug.explore.repositories.TagUsage(t.name, COUNT(t)) FROM PackageTag t "
+      + "WHERE t.name IS NOT NULL AND TRIM(t.name) <> '' GROUP BY t.name")
+  List<TagUsage> findTagUsages();
+
 
 }
