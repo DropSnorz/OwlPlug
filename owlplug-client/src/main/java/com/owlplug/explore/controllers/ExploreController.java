@@ -461,12 +461,14 @@ public class ExploreController extends BaseController {
     packageInfoController.show();
   }
 
-  public void addSearchChip(String chip) {
-    if (chip != null && !chip.trim().isEmpty()) {
-      ExploreFilterCriteria criteria = exploreChipView.getConverter().fromString(chip);
-      if (!exploreChipView.getChips().contains(criteria)) {
-        exploreChipView.getChips().add(criteria);
-      }
+  /**
+   * Adds a creator filter chip.
+   *
+   * @param creator - creator name
+   */
+  public void addCreatorSearchChip(String creator) {
+    if (creator != null && !creator.trim().isEmpty()) {
+      addSearchChip(ExploreChipView.createCreatorCriteria(creator));
     }
   }
 
@@ -477,10 +479,13 @@ public class ExploreController extends BaseController {
    */
   public void addTagSearchChip(String tag) {
     if (tag != null && !tag.trim().isEmpty()) {
-      ExploreFilterCriteria criteria = ExploreChipView.createTagCriteria(tag);
-      if (!exploreChipView.getChips().contains(criteria)) {
-        exploreChipView.getChips().add(criteria);
-      }
+      addSearchChip(ExploreChipView.createTagCriteria(tag));
+    }
+  }
+
+  private void addSearchChip(ExploreFilterCriteria criteria) {
+    if (!exploreChipView.getChips().contains(criteria)) {
+      exploreChipView.getChips().add(criteria);
     }
   }
 

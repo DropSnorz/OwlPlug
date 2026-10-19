@@ -111,7 +111,7 @@ public class PackageInfoController extends BaseController {
     packageInfoContainer.getChildren().add(sidebar);
 
     creatorLink.setOnAction(e -> {
-      exploreController.addSearchChip(creatorLink.getText());
+      exploreController.addCreatorSearchChip(creatorLink.getText());
     });
 
     closeButton.setOnAction(e -> {

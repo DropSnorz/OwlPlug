@@ -134,7 +134,7 @@ public class PackageListRowView extends HBox {
         if (shown >= 5) break;
         Label tagChip = new Label(tag.getName());
         tagChip.getStyleClass().add("package-tag-badge");
-        tagChip.setOnMouseClicked(e -> parentController.addSearchChip(tag.getName()));
+        tagChip.setOnMouseClicked(e -> parentController.addTagSearchChip(tag.getName()));
         tagsRow.getChildren().add(tagChip);
         shown++;
       }

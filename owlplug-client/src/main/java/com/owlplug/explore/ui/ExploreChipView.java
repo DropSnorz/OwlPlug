@@ -80,8 +80,7 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
 
     for (String creator : creators) {
       if (creator != null && !creator.isBlank()) {
-        addSuggestion(new ExploreFilterCriteria(creator, ExploreFilterCriteriaType.CREATOR,
-            "mdi2a-account-group-outline"));
+        addSuggestion(createCreatorCriteria(creator));
       }
     }
 
@@ -96,6 +95,17 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
    */
   public static ExploreFilterCriteria createTagCriteria(String tag) {
     return new ExploreFilterCriteria(tag.trim(), ExploreFilterCriteriaType.TAG, "mdi2t-tag-outline");
+  }
+
+  /**
+   * Creates a creator filter criteria.
+   *
+   * @param creator - creator name
+   * @return the creator filter criteria
+   */
+  public static ExploreFilterCriteria createCreatorCriteria(String creator) {
+    return new ExploreFilterCriteria(creator.trim(), ExploreFilterCriteriaType.CREATOR,
+        "mdi2a-account-group-outline");
   }
 
   private void addSuggestion(ExploreFilterCriteria criteria) {
@@ -117,9 +127,9 @@ public class ExploreChipView extends ChipView<ExploreFilterCriteria> {
 
       @Override
       public ExploreFilterCriteria fromString(String string) {
-        String filter = string.trim();
-        ExploreFilterCriteria found = suggestionsByKey.get(toKey(filter));
-        return found == null ? new ExploreFilterCriteria(filter, ExploreFilterCriteriaType.NAME) : found;
+        // Typed text is always a plain name search; suggestions are only applied
+        // when picked from the autocomplete popup.
+        return new ExploreFilterCriteria(string.trim(), ExploreFilterCriteriaType.NAME);
       }
     });
 
