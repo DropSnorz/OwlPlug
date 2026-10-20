@@ -39,6 +39,25 @@ public class FileUtils {
     return path.replace("\\", "/");
   }
 
+  /**
+   * Expands a leading "~" in a path to the current user's home directory.
+   * A leading "~" is a shell convention that Java does not resolve on its own, so paths
+   * entered or pasted with it (e.g. "~/.vst3") would otherwise be treated as a literal,
+   * non-existent relative directory named "~".
+   *
+   * @param path - path possibly starting with "~"
+   * @return path with a leading "~" expanded to the user home directory, unchanged otherwise
+   */
+  public static String expandUserHome(String path) {
+    boolean hasHomePrefix = path != null
+        && (path.equals("~") || path.startsWith("~/") || path.startsWith("~\\"));
+    if (!hasHomePrefix) {
+      return path;
+    }
+    String userHome = System.getProperty("user.home");
+    return userHome + path.substring(1);
+  }
+
   public static String sanitizeFileName(String fileName) {
 
     return fileName.replaceAll("[^-_.A-Za-z0-9 ]", "").trim().replaceAll("\\s+"," ");
