@@ -22,9 +22,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,69 +70,108 @@ public class FileUtils {
   }
 
   /**
-   * Recursively finds file in a given directory. 
+   * Maximum directory depth explored from the root directory. Prevents runaway
+   * exploration on unusual filesystems where loops can't be detected.
+   */
+  private static final int MAX_DEPTH = 64;
+
+  /**
+   * Recursively finds files and directories in a given directory, following symlinks.
+   * Each real directory is explored at most once, whatever the number of paths leading to it
+   * (symlinks, junctions, bind mounts). Physical directories are explored before symlinked
+   * ones, so a file reachable both ways is reported under its physical path.
+   * Symlinks are always included in the result, even when their target is not explored again.
+   *
    * @param directory - Directory path
-   * @return
+   * @return files and directories found, including the root directory
    */
   public static Collection<File> listUniqueFilesAndDirs(File directory) {
 
+    List<File> files = new ArrayList<>();
+    if (!directory.isDirectory()) {
+      return files;
+    }
+    files.add(directory);
 
-    //Find files
-    ArrayList<File> files = new ArrayList<>();
-    if (directory.isDirectory()) {
-      files.add(directory);
+    Set<Object> visitedDirectories = new HashSet<>();
+    Deque<DirectoryEntry> physicalDirectories = new ArrayDeque<>();
+    Deque<DirectoryEntry> symlinkedDirectories = new ArrayDeque<>();
+    boolean depthLimitReached = false;
+
+    if (markVisited(directory, visitedDirectories)) {
+      physicalDirectories.push(new DirectoryEntry(directory, 0));
     }
 
-    innerListFiles(files, directory, true, new ArrayList<>());
+    while (!physicalDirectories.isEmpty() || !symlinkedDirectories.isEmpty()) {
+      DirectoryEntry current;
+      if (!physicalDirectories.isEmpty()) {
+        current = physicalDirectories.pop();
+      } else {
+        current = symlinkedDirectories.pollFirst();
+        // Target already explored through another path
+        if (!markVisited(current.file(), visitedDirectories)) {
+          continue;
+        }
+      }
+
+      File[] found = current.file().listFiles();
+      if (found == null) {
+        continue;
+      }
+
+      for (File file : found) {
+        files.add(file);
+
+        if (!file.isDirectory()) {
+          continue;
+        }
+
+        if (current.depth() >= MAX_DEPTH) {
+          if (!depthLimitReached) {
+            depthLimitReached = true;
+            log.warn("Max depth of {} reached while exploring {}, deeper directories are ignored",
+                MAX_DEPTH, directory.getPath());
+          }
+          continue;
+        }
+
+        DirectoryEntry child = new DirectoryEntry(file, current.depth() + 1);
+        if (Files.isSymbolicLink(file.toPath())) {
+          // Symlinked directories are explored once all physical directories are known
+          symlinkedDirectories.addLast(child);
+        } else if (markVisited(file, visitedDirectories)) {
+          physicalDirectories.push(child);
+        }
+      }
+    }
+
     return files;
 
   }
 
   /**
-   * Finds files in a given directory. The symlinks context is used to track recursive symlink
-   * by resolving the real path. The algorithm keeps track of which symlink it is currently resolving 
-   * (or which symlinks in case of recursive links), it can detect if it is attempting to resolve a link again 
-   * recursively which it is still busy resolving. 
-   * @param files - List of already explored files
-   * @param directory - Directory to explore
-   * @param includeSubDirectories - Recursively explore subdirectories and symlinks
-   * @param symlinksContext - Current symlink context
+   * Registers a directory as visited using an identity that doesn't depend on the path used
+   * to reach it (file key on POSIX filesystems, real path otherwise).
+   *
+   * @param directory - directory to register
+   * @param visitedDirectories - identities of directories already visited
+   * @return true if the directory was not visited yet
    */
-  private static void innerListFiles(List<File> files, File directory, boolean includeSubDirectories, 
-      List<String> symlinksContext) {
-    
-    File[] found = directory.listFiles();
-
-    if (found != null) {
-      for (File file : found) {
-        if (file.isDirectory() && includeSubDirectories) {
-
-          if (Files.isSymbolicLink(file.toPath())) {
-            try {
-              List<String> currentSymlinksContext = new ArrayList<>(symlinksContext);
-              Path targetPath = Files.readSymbolicLink(file.toPath());
-              // We explore the symlink only if we are not currently resolving its target path.
-              if (!currentSymlinksContext.contains(targetPath.toString())) {
-                files.add(file);
-                currentSymlinksContext.add(targetPath.toString());
-                innerListFiles(files, file, includeSubDirectories, currentSymlinksContext);
-              }
-
-            } catch (IOException e) {
-              // If we fail to read symlink target, we add the symlink be we won't explore inner files.
-              files.add(file);
-            }
-          } else {
-            files.add(file);
-            innerListFiles(files, file, includeSubDirectories, symlinksContext);
-          }
-
-        } else {
-          files.add(file);
-
-        }
+  private static boolean markVisited(File directory, Set<Object> visitedDirectories) {
+    try {
+      Path path = directory.toPath();
+      Object key = Files.readAttributes(path, BasicFileAttributes.class).fileKey();
+      if (key == null) {
+        key = path.toRealPath().toString();
       }
+      return visitedDirectories.add(key);
+    } catch (IOException e) {
+      log.debug("Directory can't be resolved and won't be explored: {}", directory.getPath());
+      return false;
     }
+  }
+
+  private record DirectoryEntry(File file, int depth) {
   }
 
   /**
