@@ -124,6 +124,8 @@ public class OwlPlug extends Application {
   public void start(Stage primaryStage) throws Exception {
     double width = 1200;
     double height = 820;
+    double minWidth = 800;
+    double minHeight = 600;
 
     Application.setUserAgentStylesheet(new OwlPlugDarkTheme().getUserAgentStylesheet());
 
@@ -144,8 +146,8 @@ public class OwlPlug extends Application {
     primaryStage.setScene(scene);
     primaryStage.setHeight(height);
     primaryStage.setWidth(width);
-    primaryStage.setMinHeight(height);
-    primaryStage.setMinWidth(width);
+    primaryStage.setMinHeight(minHeight);
+    primaryStage.setMinWidth(minWidth);
     primaryStage.centerOnScreen();
 
     mainController.setupWindowControls(primaryStage);
