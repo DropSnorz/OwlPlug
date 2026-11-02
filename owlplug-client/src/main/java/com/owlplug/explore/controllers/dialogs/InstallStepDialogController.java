@@ -28,6 +28,7 @@ import com.owlplug.core.utils.FileUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.services.ExploreService;
+import com.owlplug.plugin.model.PluginFormat;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -130,17 +131,22 @@ public class InstallStepDialogController extends AbstractDialogController {
         return;
       }
       String baseDir = null;
+      PluginFormat format = null;
       if (vst2ToggleButton.equals(obs.getValue())) {
         baseDir = this.getPreferences().get(Prefs.Plugins.VST2_DIRECTORY, "");
+        format = PluginFormat.VST2;
       } else if (vst3ToggleButton.equals(obs.getValue())) {
         baseDir = this.getPreferences().get(Prefs.Plugins.VST3_DIRECTORY, "");
+        format = PluginFormat.VST3;
       } else if (auToggleButton.equals(obs.getValue())) {
         baseDir = this.getPreferences().get(Prefs.Plugins.AU_DIRECTORY, "");
+        format = PluginFormat.AU;
       } else if (lv2ToggleButton.equals(obs.getValue())) {
         baseDir = this.getPreferences().get(Prefs.Plugins.LV2_DIRECTORY, "");
+        format = PluginFormat.LV2;
       }
       if (baseDir != null) {
-        Path installationDirectory = generateInstallationDirectoryFromBasePath(baseDir);
+        Path installationDirectory = generateInstallationDirectoryFromBasePath(baseDir, format);
         installParams.setInstallationDirectory(installationDirectory);
         if (installationDirectory != null) {
           installationDirectoryTextField.setText(installationDirectory.toAbsolutePath().toString());
@@ -272,7 +278,8 @@ public class InstallStepDialogController extends AbstractDialogController {
     // Compute base directory using format if possible
     if (exploreService.canDeterminateBundleInstallFolder(installParams.getBundle())) {
       String baseDirectoryPath = exploreService.getBundleInstallFolder(installParams.getBundle());
-      Path selectedDirectory = generateInstallationDirectoryFromBasePath(baseDirectoryPath);
+      PluginFormat format = exploreService.getBundleInstallFormat(installParams.getBundle());
+      Path selectedDirectory = generateInstallationDirectoryFromBasePath(baseDirectoryPath, format);
 
       if (selectedDirectory != null) {
         installParams.setInstallationDirectory(selectedDirectory);
@@ -345,7 +352,7 @@ public class InstallStepDialogController extends AbstractDialogController {
   }
 
 
-  private Path generateInstallationDirectoryFromBasePath(String baseDirectoryPath) {
+  private Path generateInstallationDirectoryFromBasePath(String baseDirectoryPath, PluginFormat format) {
 
     Path selectedDirectory = null;
     // A custom root directory to store plugin is defined and the base directory for
@@ -358,6 +365,13 @@ public class InstallStepDialogController extends AbstractDialogController {
         log.error("Invalid installation base directory path: {}", baseDirectoryPath, e);
         return null;
       }
+
+      // macOS only loads .component bundles located directly in the Components
+      // directory, so AU plugins must not be installed into any subdirectory.
+      if (format == PluginFormat.AU) {
+        return selectedDirectory;
+      }
+
       boolean shouldStoreInDirectory = this.getPreferences().getBoolean(
               Prefs.Explore.STORE_DIRECTORY_ENABLED, false);
       //if the user wishes to group plugins in a dedicated directory
