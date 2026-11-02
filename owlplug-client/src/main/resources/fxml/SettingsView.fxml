@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane minHeight="620.0" minWidth="820.0"
-    xmlns="http://javafx.com/javafx/17.0.2-ea"
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea"
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.owlplug.core.controllers.SettingsController">
 

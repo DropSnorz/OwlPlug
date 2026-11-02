@@ -138,6 +138,8 @@ public class MainController extends BaseController {
       PlatformUtils.openDefaultBrowser(this.getApplicationDefaults().getDownloadUrl());
     });
 
+    // Hidden update pane must not take header space, otherwise it blocks window dragging
+    updatePane.managedProperty().bind(updatePane.visibleProperty());
     updatePane.setVisible(false);
     Executor executor = Executors.newVirtualThreadPerTaskExecutor();
     CompletableFuture
