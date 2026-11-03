@@ -240,7 +240,8 @@ public class BundleInstallTask extends AbstractTask {
 
     List<Path> entries = listDirectory(directory);
     if (entries.size() == 1 && Files.isDirectory(entries.get(0))
-            && !runtimePlatform.getCompatiblePlatformsTags().contains(entries.get(0).getFileName().toString())) {
+            && !runtimePlatform.getCompatiblePlatformsTags().contains(entries.get(0).getFileName().toString())
+            && !isPluginBundle(entries.get(0))) {
       structure = OwlPackStructureType.NESTED;
       for (Path f : listDirectory(entries.get(0))) {
         if (runtimePlatform.getCompatiblePlatformsTags().contains(f.getFileName().toString())) {
@@ -256,6 +257,16 @@ public class BundleInstallTask extends AbstractTask {
       }
     }
     return structure;
+  }
+
+  /**
+   * A .component (AU) or .vst3 directory is the plugin bundle itself, not a wrapper
+   * folder. It must be copied as is, otherwise its inner Contents directory would be
+   * unwrapped directly into the plugin directory.
+   */
+  private boolean isPluginBundle(Path path) {
+    String name = path.getFileName().toString().toLowerCase();
+    return name.endsWith(".component") || name.endsWith(".vst3");
   }
 
   private int contentLength(URL url) {

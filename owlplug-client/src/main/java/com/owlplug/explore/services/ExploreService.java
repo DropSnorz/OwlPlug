@@ -353,36 +353,44 @@ public class ExploreService extends BaseService {
     remoteSourceRepository.delete(remoteSource);
   }
 
+  /**
+   * Returns true if the bundle installation folder can be determined automatically.
+   * This is only the case when exactly one of the bundle formats is enabled. With several
+   * enabled formats, each one may require a different directory layout (e.g. AU must be
+   * installed flat), so the target directory must be chosen by the user.
+   *
+   * @param bundle - bundle to install
+   * @return true if the installation folder can be determined
+   */
   public boolean canDeterminateBundleInstallFolder(PackageBundle bundle) {
-
-    List<PluginFormat> formats = filterEnabledFormats(bundle.getFormats());
-    if (formats.size() == 1) {
-      return true;
-    } else if (formats.size() > 1) {
-      List<String> paths = new ArrayList<>();
-      for (PluginFormat format : formats) {
-        paths.add(this.pluginService.getPrimaryPluginPathByFormat(format));
-      }
-      // check if all path are equals
-      return paths.stream().allMatch(s -> s.equals(paths.get(0)));
-    }
-
-    return false;
+    return filterEnabledFormats(bundle.getFormats()).size() == 1;
   }
 
   /**
    * Returns the bundle installation folder based on the plugin format.
-   * Multiple formats can be embedded in the same bundle, in this case
-   * an arbitrary path will be selected between formats.
+   * Must only be called when {@link #canDeterminateBundleInstallFolder(PackageBundle)}
+   * returns true.
    *
    * @param bundle - bundle to install
    * @return path to install directory
    */
   public String getBundleInstallFolder(PackageBundle bundle) {
 
-    PluginFormat format = filterEnabledFormats(bundle.getFormats()).getFirst();
+    PluginFormat format = getBundleInstallFormat(bundle);
     return pluginService.getPrimaryPluginPathByFormat(format);
 
+  }
+
+  /**
+   * Returns the plugin format used to determine the bundle installation folder.
+   * Must only be called when {@link #canDeterminateBundleInstallFolder(PackageBundle)}
+   * returns true.
+   *
+   * @param bundle - bundle to install
+   * @return plugin format
+   */
+  public PluginFormat getBundleInstallFormat(PackageBundle bundle) {
+    return filterEnabledFormats(bundle.getFormats()).getFirst();
   }
 
   private List<PluginFormat> filterEnabledFormats(List<String> formats) {
