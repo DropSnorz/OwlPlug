@@ -200,7 +200,9 @@ public class ArchiveUtils {
 
       // Zip Slip protection: check canonical path
       String outCanonical = out.toFile().getCanonicalPath();
-      if (!outCanonical.startsWith(destCanonical)) {
+      // The destination itself is allowed (e.g. a "./" root entry in tar archives)
+      if (!outCanonical.startsWith(destCanonical)
+          && !(outCanonical + File.separator).equals(destCanonical)) {
         throw new IOException("Entry is outside of the target dir: " + entry.getName());
       }
 
