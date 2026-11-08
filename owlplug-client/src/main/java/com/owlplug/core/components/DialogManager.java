@@ -30,6 +30,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class DialogManager {
 
+  private static final double SIMPLE_DIALOG_MIN_WIDTH = 400;
+  private static final double SIMPLE_DIALOG_MAX_WIDTH = 600;
+
   private StackPane dialogContainer;
 
   /**
@@ -89,6 +92,8 @@ public class DialogManager {
     DialogLayout layout = new DialogLayout();
     Dialog dialog = newDialog(layout);
 
+    layout.setMinWidth(SIMPLE_DIALOG_MIN_WIDTH);
+    layout.setMaxWidth(SIMPLE_DIALOG_MAX_WIDTH);
     layout.setHeading(title);
     layout.setBody(body);
 

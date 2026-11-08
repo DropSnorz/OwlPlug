@@ -20,6 +20,7 @@ package com.owlplug.core.controllers;
 
 import com.owlplug.core.components.TaskRunner;
 import com.owlplug.core.tasks.AbstractTask;
+import com.owlplug.core.utils.StringUtils;
 import java.util.ArrayList;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -87,7 +88,8 @@ public class TaskBarController extends BaseController {
       MenuItem item = new MenuItem(task.getName(), buildTaskIcon(task));
       if (task.getState().equals(State.FAILED)) {
         item.setOnAction(e -> showErrorDialog(
-            task.getException().getMessage(), task.getException().toString()));
+            task.getException().getMessage(),
+            StringUtils.getStackTraceAsString(task.getException())));
       }
       menu.getItems().add(item);
     }
@@ -110,9 +112,12 @@ public class TaskBarController extends BaseController {
   }
 
   private void showErrorDialog(String title, String content) {
-    this.getDialogManager().newSimpleInfoDialog(
-        new Label(title), new TextArea(content)
-    ).show();
+    Label titleLabel = new Label(title);
+    titleLabel.setWrapText(true);
+    TextArea contentArea = new TextArea(content);
+    contentArea.setEditable(false);
+    contentArea.setWrapText(true);
+    this.getDialogManager().newSimpleInfoDialog(titleLabel, contentArea).show();
   }
 
   public void setErrorLog(AbstractTask task, String error, String content, String errorClass,

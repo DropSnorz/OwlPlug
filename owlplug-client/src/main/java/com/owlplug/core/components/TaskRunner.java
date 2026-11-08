@@ -110,7 +110,10 @@ public class TaskRunner {
           removeCurrentTask();
           scheduleNext();
         });
-      }).exceptionally(ex -> {
+      }).exceptionally(wrapped -> {
+        // Unwrap CompletionException so the error matches the one shown from task history
+        Throwable ex = (wrapped instanceof java.util.concurrent.CompletionException
+            && wrapped.getCause() != null) ? wrapped.getCause() : wrapped;
         log.error("Error while running task", ex);
         FX.run(() -> {
           if (ex != null) {
