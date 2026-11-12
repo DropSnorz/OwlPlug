@@ -26,6 +26,7 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
+import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
 import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
@@ -45,6 +46,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
@@ -522,16 +524,86 @@ public class ExploreController extends BaseController {
    * @param bundle Package to install
    */
   public boolean installBundle(PackageBundle bundle) {
-    if (bundle != null) {
-      this.getTelemetryService().event("/Explore/Install", p -> {
-        p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
-        p.put("package", bundle.getRemotePackage().getName());
-        p.put("bundle", bundle.getName());
-      });
-      installStepDialogController.install(bundle);
-      return true;
+    if (bundle == null) {
+      return false;
     }
-    return false;
+    if (bundle.isInstaller()) {
+      return downloadInstaller(bundle);
+    }
+    this.getTelemetryService().event("/Explore/Install", p -> {
+      p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
+      p.put("package", bundle.getRemotePackage().getName());
+      p.put("bundle", bundle.getName());
+    });
+    installStepDialogController.install(bundle);
+    return true;
+  }
+
+  /**
+   * Downloads an installer bundle by opening its URL in the default browser.
+   * Downloaded installers are never executed by OwlPlug.
+   *
+   * @param bundle installer bundle to download
+   * @return true if the download action was started
+   */
+  public boolean downloadInstaller(PackageBundle bundle) {
+    if (bundle == null) {
+      return false;
+    }
+    this.getTelemetryService().event("/Explore/DownloadInstaller", p -> {
+      p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
+      p.put("package", bundle.getRemotePackage().getName());
+      p.put("bundle", bundle.getName());
+    });
+    Async.run(() -> openInstallerDownload(bundle));
+    return true;
+  }
+
+  /**
+   * Resolves an installer bundle's download URL and opens it. Runs off the FX thread.
+   *
+   * @param bundle installer bundle to download
+   */
+  void openInstallerDownload(PackageBundle bundle) {
+    String url = exploreService.getBundleDownloadUrl(bundle);
+    if (url == null || url.isBlank()) {
+      log.error("Can't resolve download URL for bundle {}", bundle.getName());
+      runOnFxThread(() -> showDownloadError(bundle.getRemotePackage()));
+      return;
+    }
+    openUrl(url);
+  }
+
+  /**
+   * Schedules a UI task on the FX thread. Overridable for tests.
+   *
+   * @param task task to run
+   */
+  void runOnFxThread(Runnable task) {
+    FX.run(task);
+  }
+
+  /**
+   * Opens a URL in the default browser. Overridable for tests.
+   *
+   * @param url URL to open
+   */
+  void openUrl(String url) {
+    PlatformUtils.openDefaultBrowser(url);
+  }
+
+  /**
+   * Reports an installer download failure to the user. Overridable for tests.
+   *
+   * @param remotePackage package whose installer could not be resolved
+   */
+  void showDownloadError(RemotePackage remotePackage) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Download failed");
+    alert.setHeaderText("Can't download " + remotePackage.getName());
+    alert.setContentText("The download URL could not be resolved from the registry. "
+        + "Try again later or open the plugin page.");
+    alert.show();
   }
 
   /**
