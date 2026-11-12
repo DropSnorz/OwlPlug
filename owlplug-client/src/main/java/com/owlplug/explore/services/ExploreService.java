@@ -189,27 +189,66 @@ public class ExploreService extends BaseService {
 
     RuntimePlatform runtimePlatform = this.getApplicationDefaults().getRuntimePlatform();
 
-    // Look for bundles matching runtimePlatform
+    // Prefer an installable archive over a downloadable installer, exact platform matches
+    // before compatible ones. The bundle collection is a HashSet, so the order of each pass
+    // is not meaningful; the four passes make the preference deterministic.
+    PackageBundle bundle = findCompatibleBundle(remotePackage, runtimePlatform, false, true);
+    if (bundle != null) {
+      return bundle;
+    }
+    bundle = findCompatibleBundle(remotePackage, runtimePlatform, false, false);
+    if (bundle != null) {
+      return bundle;
+    }
+    bundle = findCompatibleBundle(remotePackage, runtimePlatform, true, true);
+    if (bundle != null) {
+      return bundle;
+    }
+    return findCompatibleBundle(remotePackage, runtimePlatform, true, false);
+  }
+
+  private PackageBundle findCompatibleBundle(RemotePackage remotePackage, RuntimePlatform runtimePlatform,
+                                              boolean installer, boolean exactMatch) {
     for (PackageBundle bundle : remotePackage.getBundles()) {
+      if (bundle.isInstaller() != installer || bundle.getTargets() == null) {
+        continue;
+      }
       for (String platform : bundle.getTargets()) {
-        if (platform.equals(runtimePlatform.getTag())
-            || platform.equals(runtimePlatform.getOperatingSystem().getCode())) {
+        boolean matches = exactMatch
+            ? platform.equals(runtimePlatform.getTag())
+                || platform.equals(runtimePlatform.getOperatingSystem().getCode())
+            : runtimePlatform.getCompatiblePlatformsTags().contains(platform);
+        if (matches) {
           return bundle;
         }
       }
     }
-
-    // Look for bundles compatibles with current runtimePlatform
-    for (PackageBundle bundle : remotePackage.getBundles()) {
-      for (String platformTag : bundle.getTargets()) {
-        for (String compatibleTag : runtimePlatform.getCompatiblePlatformsTags()) {
-          if (platformTag.equals(compatibleTag)) {
-            return bundle;
-          }
-        }
-      }
-    }
     return null;
+  }
+
+  /**
+   * Returns the download URL for a bundle. Official OAS sources clear download details at sync
+   * time, so a missing URL is resolved lazily from the registry detail endpoint.
+   *
+   * @param bundle bundle to resolve
+   * @return the download URL, or null if it can't be resolved
+   */
+  public String getBundleDownloadUrl(PackageBundle bundle) {
+    if (bundle == null) {
+      return null;
+    }
+    if (bundle.getDownloadUrl() != null && !bundle.getDownloadUrl().isBlank()) {
+      return bundle.getDownloadUrl();
+    }
+
+    RemotePackage remotePackage = bundle.getRemotePackage();
+    RemoteSource remoteSource = remotePackage != null ? remotePackage.getRemoteSource() : null;
+    if (remoteSource == null || remoteSource.getType() != SourceType.OAS_REGISTRY) {
+      return null;
+    }
+
+    OASFile file = fetchOASFile(remoteSource, remotePackage, bundle);
+    return file != null ? file.getUrl() : null;
   }
 
   public RemoteSource fetchSourceFromRemoteUrl(String url) {
