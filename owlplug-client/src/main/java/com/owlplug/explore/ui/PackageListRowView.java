@@ -195,7 +195,7 @@ public class PackageListRowView extends HBox {
     versionLabel.setDisable(true);
     versionLabel.setMaxWidth(USE_COMPUTED_SIZE);
     inputGroup.getChildren().add(versionLabel);
-    Button installButton = new Button("Install");
+    Button installButton = new Button(PackageActions.labelFor(parentController.findBestBundle(remotePackage)));
     installButton.getStyleClass().add("button-primary");
     installButton.setOnAction(e -> parentController.installPackage(remotePackage));
     inputGroup.getChildren().add(installButton);
@@ -211,7 +211,7 @@ public class PackageListRowView extends HBox {
 
   private void buildContextMenu(RemotePackage remotePackage, ExploreController parentController) {
     TextFlow textFlow = new TextFlow();
-    textFlow.getChildren().add(new Label("Install"));
+    textFlow.getChildren().add(new Label(PackageActions.labelFor(parentController.findBestBundle(remotePackage))));
     Text autoText = new Text(" (Auto)");
     autoText.getStyleClass().add("text-disabled");
     textFlow.getChildren().add(autoText);
@@ -225,7 +225,7 @@ public class PackageListRowView extends HBox {
       Menu bundlesMenu = new Menu("Other Packages");
       for (PackageBundle bundle : remotePackage.getBundles()) {
         TextFlow bundleTextFlow = new TextFlow();
-        bundleTextFlow.getChildren().add(new Label("Install"));
+        bundleTextFlow.getChildren().add(new Label(PackageActions.labelFor(bundle)));
         Text bundleSource = new Text(" (" + StringUtils.truncate(bundle.getName(), 50, "...") + ")");
         bundleSource.getStyleClass().add("text-disabled");
         bundleTextFlow.getChildren().add(bundleSource);

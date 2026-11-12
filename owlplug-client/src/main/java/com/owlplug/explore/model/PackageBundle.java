@@ -62,6 +62,8 @@ public class PackageBundle {
   private int downloadCount;
   @ColumnDefault("false")
   private boolean attested;
+  @ColumnDefault("false")
+  private boolean installer;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @BatchSize(size = 100)
@@ -178,5 +180,13 @@ public class PackageBundle {
 
   public void setAttested(boolean attested) {
     this.attested = attested;
+  }
+
+  public boolean isInstaller() {
+    return installer;
+  }
+
+  public void setInstaller(boolean installer) {
+    this.installer = installer;
   }
 }

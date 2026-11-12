@@ -26,6 +26,7 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
+import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
 import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
@@ -39,12 +40,14 @@ import com.owlplug.explore.ui.PackageBlocViewBuilder;
 import com.owlplug.explore.ui.PackageListRowCellFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
@@ -497,6 +500,16 @@ public class ExploreController extends BaseController {
   }
 
   /**
+   * Returns the best bundle for the current runtime platform, preferring archives.
+   *
+   * @param remotePackage package to inspect
+   * @return the best bundle, or null if none is compatible
+   */
+  public PackageBundle findBestBundle(RemotePackage remotePackage) {
+    return exploreService.findBestBundle(remotePackage);
+  }
+
+  /**
    * Trigger package installation. The best bundle will be selected based on the current user platform.
    *
    * @param remotePackage Package to install
@@ -512,16 +525,80 @@ public class ExploreController extends BaseController {
    * @param bundle Package to install
    */
   public boolean installBundle(PackageBundle bundle) {
-    if (bundle != null) {
-      this.getTelemetryService().event("/Explore/Install", p -> {
-        p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
-        p.put("package", bundle.getRemotePackage().getName());
-        p.put("bundle", bundle.getName());
-      });
-      installStepDialogController.install(bundle);
-      return true;
+    if (bundle == null) {
+      return false;
     }
-    return false;
+    if (bundle.isInstaller()) {
+      return downloadInstaller(bundle);
+    }
+    this.getTelemetryService().event("/Explore/Install", p -> {
+      p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
+      p.put("package", bundle.getRemotePackage().getName());
+      p.put("bundle", bundle.getName());
+    });
+    installStepDialogController.install(bundle);
+    return true;
+  }
+
+  /**
+   * Downloads an installer bundle by opening its URL in the default browser.
+   * Downloaded installers are never executed by OwlPlug.
+   *
+   * @param bundle installer bundle to download
+   * @return true if the download action was started
+   */
+  public boolean downloadInstaller(PackageBundle bundle) {
+    if (bundle == null) {
+      return false;
+    }
+    this.getTelemetryService().event("/Explore/DownloadInstaller", p -> {
+      p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
+      p.put("package", bundle.getRemotePackage().getName());
+      p.put("bundle", bundle.getName());
+    });
+    resolveInstallerDownload(bundle, url -> handleInstallerDownload(bundle, url));
+    return true;
+  }
+
+  /**
+   * Resolves the installer URL off the FX thread and delivers the result on the FX thread.
+   * Overridable for tests.
+   *
+   * @param bundle     installer bundle to resolve
+   * @param onResolved callback receiving the resolved URL
+   */
+  void resolveInstallerDownload(PackageBundle bundle, Consumer<String> onResolved) {
+    Async.supply(() -> exploreService.getBundleDownloadUrl(bundle))
+        .thenAccept(url -> FX.run(() -> onResolved.accept(url)));
+  }
+
+  /**
+   * Opens a resolved installer URL, or reports the failure. Runs on the FX thread.
+   *
+   * @param bundle installer bundle to download
+   * @param url    resolved download URL, may be null
+   */
+  void handleInstallerDownload(PackageBundle bundle, String url) {
+    if (url == null || url.isBlank()) {
+      log.error("Can't resolve download URL for bundle {}", bundle.getName());
+      showDownloadError(bundle.getRemotePackage());
+      return;
+    }
+    PlatformUtils.openDefaultBrowser(url);
+  }
+
+  /**
+   * Reports an installer download failure to the user. Overridable for tests.
+   *
+   * @param remotePackage package whose installer could not be resolved
+   */
+  void showDownloadError(RemotePackage remotePackage) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Download failed");
+    alert.setHeaderText("Can't download " + remotePackage.getName());
+    alert.setContentText("The download URL could not be resolved from the registry. "
+        + "Try again later or open the plugin page.");
+    alert.show();
   }
 
   /**
