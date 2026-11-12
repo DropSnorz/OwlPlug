@@ -555,40 +555,23 @@ public class ExploreController extends BaseController {
       p.put("package", bundle.getRemotePackage().getName());
       p.put("bundle", bundle.getName());
     });
-    Async.run(() -> openInstallerDownload(bundle));
+    Async.supply(() -> exploreService.getBundleDownloadUrl(bundle))
+        .thenAccept(url -> FX.run(() -> handleInstallerDownload(bundle, url)));
     return true;
   }
 
   /**
-   * Resolves an installer bundle's download URL and opens it. Runs off the FX thread.
+   * Opens a resolved installer URL, or reports the failure. Runs on the FX thread.
    *
    * @param bundle installer bundle to download
+   * @param url    resolved download URL, may be null
    */
-  void openInstallerDownload(PackageBundle bundle) {
-    String url = exploreService.getBundleDownloadUrl(bundle);
+  void handleInstallerDownload(PackageBundle bundle, String url) {
     if (url == null || url.isBlank()) {
       log.error("Can't resolve download URL for bundle {}", bundle.getName());
-      runOnFxThread(() -> showDownloadError(bundle.getRemotePackage()));
+      showDownloadError(bundle.getRemotePackage());
       return;
     }
-    openUrl(url);
-  }
-
-  /**
-   * Schedules a UI task on the FX thread. Overridable for tests.
-   *
-   * @param task task to run
-   */
-  void runOnFxThread(Runnable task) {
-    FX.run(task);
-  }
-
-  /**
-   * Opens a URL in the default browser. Overridable for tests.
-   *
-   * @param url URL to open
-   */
-  void openUrl(String url) {
     PlatformUtils.openDefaultBrowser(url);
   }
 

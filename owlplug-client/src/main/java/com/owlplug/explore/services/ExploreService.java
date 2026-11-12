@@ -186,44 +186,15 @@ public class ExploreService extends BaseService {
    * @param remotePackage - The remote package
    */
   public PackageBundle findBestBundle(RemotePackage remotePackage) {
-
     RuntimePlatform runtimePlatform = this.getApplicationDefaults().getRuntimePlatform();
-
-    // Prefer an installable archive over a downloadable installer, exact platform matches
-    // before compatible ones. The bundle collection is a HashSet, so the order of each pass
-    // is not meaningful; the four passes make the preference deterministic.
-    PackageBundle bundle = findCompatibleBundle(remotePackage, runtimePlatform, false, true);
-    if (bundle != null) {
-      return bundle;
-    }
-    bundle = findCompatibleBundle(remotePackage, runtimePlatform, false, false);
-    if (bundle != null) {
-      return bundle;
-    }
-    bundle = findCompatibleBundle(remotePackage, runtimePlatform, true, true);
-    if (bundle != null) {
-      return bundle;
-    }
-    return findCompatibleBundle(remotePackage, runtimePlatform, true, false);
-  }
-
-  private PackageBundle findCompatibleBundle(RemotePackage remotePackage, RuntimePlatform runtimePlatform,
-                                              boolean installer, boolean exactMatch) {
-    for (PackageBundle bundle : remotePackage.getBundles()) {
-      if (bundle.isInstaller() != installer || bundle.getTargets() == null) {
-        continue;
-      }
-      for (String platform : bundle.getTargets()) {
-        boolean matches = exactMatch
-            ? platform.equals(runtimePlatform.getTag())
-                || platform.equals(runtimePlatform.getOperatingSystem().getCode())
-            : runtimePlatform.getCompatiblePlatformsTags().contains(platform);
-        if (matches) {
-          return bundle;
-        }
-      }
-    }
-    return null;
+    // The bundle collection is a HashSet: min() picks the best-ranked bundle, archives (false)
+    // before installers (true). Any compatible bundle of the same kind is equivalent here.
+    return remotePackage.getBundles().stream()
+        .filter(bundle -> bundle.getTargets() != null)
+        .filter(bundle -> bundle.getTargets().stream()
+            .anyMatch(runtimePlatform.getCompatiblePlatformsTags()::contains))
+        .min(Comparator.comparing(PackageBundle::isInstaller))
+        .orElse(null);
   }
 
   /**

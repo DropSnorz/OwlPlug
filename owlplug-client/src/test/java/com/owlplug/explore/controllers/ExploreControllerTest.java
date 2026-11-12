@@ -1,38 +1,23 @@
 package com.owlplug.explore.controllers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mockStatic;
 
+import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
-import com.owlplug.explore.services.ExploreService;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.mockito.MockedStatic;
 
 public class ExploreControllerTest {
 
   static class TestableController extends ExploreController {
-    String openedUrl;
     boolean errorShown;
     boolean downloadInvoked;
 
     @Override
-    void openUrl(String url) {
-      openedUrl = url;
-    }
-
-    @Override
     void showDownloadError(RemotePackage remotePackage) {
       errorShown = true;
-    }
-
-    @Override
-    void runOnFxThread(Runnable task) {
-      task.run();
     }
 
     @Override
@@ -43,34 +28,19 @@ public class ExploreControllerTest {
   }
 
   @Test
-  public void testInstallerBundleOpensResolvedUrl() {
-    ExploreService exploreService = mock(ExploreService.class);
-    PackageBundle bundle = new PackageBundle();
-    bundle.setInstaller(true);
-    when(exploreService.getBundleDownloadUrl(bundle)).thenReturn("https://example.test/plugin.dmg");
-
-    TestableController controller = new TestableController();
-    ReflectionTestUtils.setField(controller, "exploreService", exploreService);
-
-    controller.openInstallerDownload(bundle);
-
-    assertEquals("https://example.test/plugin.dmg", controller.openedUrl);
-    assertFalse(controller.errorShown);
+  public void testHandleInstallerDownloadOpensResolvedUrl() {
+    try (MockedStatic<PlatformUtils> platform = mockStatic(PlatformUtils.class)) {
+      new TestableController().handleInstallerDownload(new PackageBundle(), "https://example.test/plugin.dmg");
+      platform.verify(() -> PlatformUtils.openDefaultBrowser("https://example.test/plugin.dmg"));
+    }
   }
 
   @Test
-  public void testUnresolvedInstallerUrlShowsError() {
-    ExploreService exploreService = mock(ExploreService.class);
-    PackageBundle bundle = new PackageBundle();
-    bundle.setInstaller(true);
-    when(exploreService.getBundleDownloadUrl(bundle)).thenReturn(null);
-
+  public void testHandleInstallerDownloadShowsErrorWhenUnresolved() {
     TestableController controller = new TestableController();
-    ReflectionTestUtils.setField(controller, "exploreService", exploreService);
 
-    controller.openInstallerDownload(bundle);
+    controller.handleInstallerDownload(new PackageBundle(), null);
 
-    assertNull(controller.openedUrl);
     assertTrue(controller.errorShown);
   }
 
@@ -78,7 +48,6 @@ public class ExploreControllerTest {
   public void testInstallBundleRoutesInstallerToDownload() {
     PackageBundle bundle = new PackageBundle();
     bundle.setInstaller(true);
-
     TestableController controller = new TestableController();
 
     assertTrue(controller.installBundle(bundle));

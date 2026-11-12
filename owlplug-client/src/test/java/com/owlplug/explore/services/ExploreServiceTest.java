@@ -147,19 +147,12 @@ public class ExploreServiceTest extends AppTestContext {
   }
 
   @Test
-  public void testFindBestBundleShouldPreferArchiveOverInstaller() {
+  public void testFindBestBundleShouldPreferArchiveThenFallBackToInstaller() {
     when(applicationDefaults.getRuntimePlatform()).thenReturn(macArm64());
     PackageBundle installer = bundle(true, "mac-arm64");
     PackageBundle archive = bundle(false, "mac-arm64");
 
     assertSame(archive, exploreService.findBestBundle(packageWith(installer, archive)));
-  }
-
-  @Test
-  public void testFindBestBundleShouldReturnInstallerWhenNoArchiveMatches() {
-    when(applicationDefaults.getRuntimePlatform()).thenReturn(macArm64());
-    PackageBundle installer = bundle(true, "mac-arm64");
-
     assertSame(installer, exploreService.findBestBundle(packageWith(installer)));
   }
 
@@ -171,27 +164,23 @@ public class ExploreServiceTest extends AppTestContext {
   }
 
   @Test
-  public void testBundleDownloadUrlShouldUseDirectUrl() {
-    PackageBundle bundle = new PackageBundle();
-    bundle.setDownloadUrl("https://example.test/direct.dmg");
+  public void testBundleDownloadUrlShouldUseDirectUrlOrResolveOASDetailEndpoint() {
+    PackageBundle direct = new PackageBundle();
+    direct.setDownloadUrl("https://example.test/direct.dmg");
+    assertEquals("https://example.test/direct.dmg", exploreService.getBundleDownloadUrl(direct));
 
-    assertEquals("https://example.test/direct.dmg", exploreService.getBundleDownloadUrl(bundle));
-  }
-
-  @Test
-  public void testBundleDownloadUrlShouldResolveOASDetailEndpoint() {
     RemoteSource source = new RemoteSource();
     source.setType(SourceType.OAS_REGISTRY);
     RemotePackage remotePackage = new RemotePackage();
     remotePackage.setRemoteSource(source);
-    PackageBundle bundle = new PackageBundle();
-    bundle.setRemotePackage(remotePackage);
-    bundle.setOrder(2);
+    PackageBundle lazy = new PackageBundle();
+    lazy.setRemotePackage(remotePackage);
+    lazy.setOrder(2);
     OASFile file = new OASFile();
     file.setUrl("https://example.test/lazy.dmg");
-    doReturn(file).when(exploreService).fetchOASFile(source, remotePackage, bundle);
+    doReturn(file).when(exploreService).fetchOASFile(source, remotePackage, lazy);
 
-    assertEquals("https://example.test/lazy.dmg", exploreService.getBundleDownloadUrl(bundle));
+    assertEquals("https://example.test/lazy.dmg", exploreService.getBundleDownloadUrl(lazy));
   }
 
   @Test
