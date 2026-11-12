@@ -497,6 +497,16 @@ public class ExploreController extends BaseController {
   }
 
   /**
+   * Returns the best bundle for the current runtime platform, preferring archives.
+   *
+   * @param remotePackage package to inspect
+   * @return the best bundle, or null if none is compatible
+   */
+  public PackageBundle findBestBundle(RemotePackage remotePackage) {
+    return exploreService.findBestBundle(remotePackage);
+  }
+
+  /**
    * Trigger package installation. The best bundle will be selected based on the current user platform.
    *
    * @param remotePackage Package to install
