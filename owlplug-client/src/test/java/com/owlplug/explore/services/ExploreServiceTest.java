@@ -40,6 +40,7 @@ import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.plugin.services.PluginService;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -142,7 +143,7 @@ public class ExploreServiceTest extends AppTestContext {
 
   private RemotePackage packageWith(PackageBundle... bundles) {
     RemotePackage remotePackage = new RemotePackage();
-    remotePackage.setBundles(new HashSet<>(List.of(bundles)));
+    remotePackage.setBundles(new LinkedHashSet<>(List.of(bundles)));
     return remotePackage;
   }
 
@@ -154,6 +155,18 @@ public class ExploreServiceTest extends AppTestContext {
 
     assertSame(archive, exploreService.findBestBundle(packageWith(installer, archive)));
     assertSame(installer, exploreService.findBestBundle(packageWith(installer)));
+  }
+
+  @Test
+  public void testFindBestBundleShouldPreferExactPlatformOverCompatibleAlias() {
+    RuntimePlatform winX64 = new RuntimePlatform("win-x64", OperatingSystem.WIN, "x64", new String[]{"win64"});
+    when(applicationDefaults.getRuntimePlatform()).thenReturn(winX64);
+    PackageBundle alias = bundle(false, "win64");
+    PackageBundle exact = bundle(false, "win-x64");
+    RemotePackage remotePackage = new RemotePackage();
+    remotePackage.setBundles(new LinkedHashSet<>(List.of(alias, exact)));
+
+    assertSame(exact, exploreService.findBestBundle(remotePackage));
   }
 
   @Test

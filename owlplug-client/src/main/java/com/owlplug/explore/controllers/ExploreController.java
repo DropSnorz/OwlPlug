@@ -40,6 +40,7 @@ import com.owlplug.explore.ui.PackageBlocViewBuilder;
 import com.owlplug.explore.ui.PackageListRowCellFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
@@ -555,9 +556,20 @@ public class ExploreController extends BaseController {
       p.put("package", bundle.getRemotePackage().getName());
       p.put("bundle", bundle.getName());
     });
-    Async.supply(() -> exploreService.getBundleDownloadUrl(bundle))
-        .thenAccept(url -> FX.run(() -> handleInstallerDownload(bundle, url)));
+    resolveInstallerDownload(bundle, url -> handleInstallerDownload(bundle, url));
     return true;
+  }
+
+  /**
+   * Resolves the installer URL off the FX thread and delivers the result on the FX thread.
+   * Overridable for tests.
+   *
+   * @param bundle     installer bundle to resolve
+   * @param onResolved callback receiving the resolved URL
+   */
+  void resolveInstallerDownload(PackageBundle bundle, Consumer<String> onResolved) {
+    Async.supply(() -> exploreService.getBundleDownloadUrl(bundle))
+        .thenAccept(url -> FX.run(() -> onResolved.accept(url)));
   }
 
   /**
