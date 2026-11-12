@@ -19,12 +19,16 @@
 package com.owlplug.explore.model.mappers.oas;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
@@ -54,6 +58,108 @@ public class OASModelAdapterTest {
     RemotePackage remotePackage = OASModelAdapter.mapperToEntity(plugin);
 
     assertTrue(remotePackage.getTags().isEmpty());
+  }
+
+  @Test
+  public void testInstallerFileShouldBeMappedToInstallerBundle() {
+    OASFile file = new OASFile();
+    file.setType("installer");
+    OASFile.System system = new OASFile.System();
+    system.setType("mac");
+    file.setSystems(List.of(system));
+    file.setArchitectures(List.of("arm64"));
+    file.setContains(List.of("vst3", "component"));
+    file.setUrl("https://example.test/plugin.dmg");
+    file.setSha256("abc");
+    file.setSize(123L);
+
+    OASPlugin plugin = new OASPlugin();
+    plugin.setName("Plugin");
+    plugin.setFiles(List.of(file));
+
+    RemotePackage remotePackage = OASModelAdapter.mapperToEntity(plugin);
+
+    assertEquals(1, remotePackage.getBundles().size());
+    PackageBundle bundle = remotePackage.getBundles().iterator().next();
+    assertTrue(bundle.isInstaller());
+    assertEquals(List.of("mac-arm64"), bundle.getTargets());
+    assertEquals(Set.of("vst3", "au"), new HashSet<>(bundle.getFormats()));
+  }
+
+  @Test
+  public void testArchiveFileShouldNotBeMarkedAsInstaller() {
+    OASFile file = new OASFile();
+    file.setType("archive");
+    OASFile.System system = new OASFile.System();
+    system.setType("linux");
+    file.setSystems(List.of(system));
+    file.setArchitectures(List.of("x64"));
+    file.setContains(List.of("vst3"));
+    file.setUrl("https://example.test/plugin.zip");
+    file.setSha256("abc");
+    file.setSize(123L);
+
+    OASPlugin plugin = new OASPlugin();
+    plugin.setName("Plugin");
+    plugin.setFiles(List.of(file));
+
+    RemotePackage remotePackage = OASModelAdapter.mapperToEntity(plugin);
+
+    assertEquals(1, remotePackage.getBundles().size());
+    assertFalse(remotePackage.getBundles().iterator().next().isInstaller());
+  }
+
+  @Test
+  public void testInstallerWithoutSupportedPluginFormatShouldBeSkipped() {
+    OASFile file = new OASFile();
+    file.setType("installer");
+    OASFile.System system = new OASFile.System();
+    system.setType("win");
+    file.setSystems(List.of(system));
+    file.setArchitectures(List.of("x64"));
+    file.setContains(List.of("app"));
+    file.setUrl("https://example.test/plugin.msi");
+
+    OASPlugin plugin = new OASPlugin();
+    plugin.setName("Plugin");
+    plugin.setFiles(List.of(file));
+
+    assertTrue(OASModelAdapter.mapperToEntity(plugin).getBundles().isEmpty());
+  }
+
+  @Test
+  public void testFileWithUnknownTypeShouldBeSkipped() {
+    OASFile file = new OASFile();
+    file.setType("other");
+    OASFile.System system = new OASFile.System();
+    system.setType("linux");
+    file.setSystems(List.of(system));
+    file.setArchitectures(List.of("x64"));
+    file.setContains(List.of("vst3"));
+    file.setUrl("https://example.test/plugin.zip");
+
+    OASPlugin plugin = new OASPlugin();
+    plugin.setName("Plugin");
+    plugin.setFiles(List.of(file));
+
+    assertTrue(OASModelAdapter.mapperToEntity(plugin).getBundles().isEmpty());
+  }
+
+  @Test
+  public void testFileWithNullTypeShouldBeSkipped() {
+    OASFile file = new OASFile();
+    OASFile.System system = new OASFile.System();
+    system.setType("linux");
+    file.setSystems(List.of(system));
+    file.setArchitectures(List.of("x64"));
+    file.setContains(List.of("vst3"));
+    file.setUrl("https://example.test/plugin.zip");
+
+    OASPlugin plugin = new OASPlugin();
+    plugin.setName("Plugin");
+    plugin.setFiles(List.of(file));
+
+    assertTrue(OASModelAdapter.mapperToEntity(plugin).getBundles().isEmpty());
   }
 
 }
