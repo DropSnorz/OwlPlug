@@ -19,6 +19,8 @@
 package com.owlplug.plugin.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.services.LabelService;
+import com.owlplug.core.ui.LabelBadgeView;
 import com.owlplug.plugin.model.IDirectory;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
@@ -40,10 +42,13 @@ public class PluginTreeCell extends TreeCell<Object> {
 
   private final PluginService pluginService;
   private final ApplicationDefaults applicationDefaults;
+  private final LabelService labelService;
 
-  public PluginTreeCell(ApplicationDefaults applicationDefaults, PluginService pluginService) {
+  public PluginTreeCell(ApplicationDefaults applicationDefaults, PluginService pluginService,
+                        LabelService labelService) {
     this.applicationDefaults = applicationDefaults;
     this.pluginService = pluginService;
+    this.labelService = labelService;
   }
 
 
@@ -97,6 +102,9 @@ public class PluginTreeCell extends TreeCell<Object> {
       Label label = new Label("(disabled)");
       label.getStyleClass().add("label-disabled");
       hbox.getChildren().add(label);
+    }
+    if (labelService.isShowInLists() && plugin.getFootprint() != null) {
+      hbox.getChildren().addAll(LabelBadgeView.of(plugin.getFootprint().getLabels()));
     }
     setGraphic(hbox);
     setText(null);

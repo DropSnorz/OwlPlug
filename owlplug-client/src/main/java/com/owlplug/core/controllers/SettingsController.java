@@ -21,6 +21,7 @@ package com.owlplug.core.controllers;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.controllers.settings.ApplicationSettingsController;
 import com.owlplug.core.controllers.settings.InstallationSettingsController;
+import com.owlplug.core.controllers.settings.LabelsSettingsController;
 import com.owlplug.core.controllers.settings.PluginScanSettingsController;
 import com.owlplug.core.controllers.settings.ProjectSettingsController;
 import com.owlplug.core.events.PreferencesChangedEvent;
@@ -60,6 +61,8 @@ public class SettingsController extends BaseController {
   @FXML
   private ScrollPane projectSettings;
   @FXML
+  private ScrollPane labelsSettings;
+  @FXML
   private ScrollPane applicationSettings;
 
   // Section controllers injected via {fx:id}Controller convention
@@ -70,6 +73,8 @@ public class SettingsController extends BaseController {
   @FXML
   private ProjectSettingsController projectSettingsController;
   @FXML
+  private LabelsSettingsController labelsSettingsController;
+  @FXML
   private ApplicationSettingsController applicationSettingsController;
 
   private final ToggleGroup navToggleGroup = new ToggleGroup();
@@ -77,18 +82,21 @@ public class SettingsController extends BaseController {
   public static int SCAN_SECTION_INDEX = 0;
   public static int INSTALLATION_SECTION_INDEX = 1;
   public static int PROJECTS_SECTION_INDEX = 2;
-  public static int APPLICATION_SECTION_INDEX = 3;
+  public static int LABELS_SECTION_INDEX = 3;
+  public static int APPLICATION_SECTION_INDEX = 4;
 
   @FXML
   public void initialize() {
     hideSection(pluginScanSettings);
     hideSection(installationSettings);
     hideSection(projectSettings);
+    hideSection(labelsSettings);
     hideSection(applicationSettings);
 
     addNavButton("Plugin Scan",  "mdi2m-magnify", pluginScanSettings);
     addNavButton("Installation", "mdi2d-download-outline", installationSettings);
     addNavButton("Projects",     "mdi2f-folder-music-outline", projectSettings);
+    addNavButton("Labels",       "mdi2l-label-outline", labelsSettings);
     addNavButton("Application",  "mdi2c-cog-outline", applicationSettings);
 
     // Prevent deselecting all buttons
@@ -146,6 +154,7 @@ public class SettingsController extends BaseController {
     pluginScanSettingsController.refresh();
     installationSettingsController.refresh();
     projectSettingsController.refresh();
+    labelsSettingsController.refresh();
     applicationSettingsController.refresh();
   }
 

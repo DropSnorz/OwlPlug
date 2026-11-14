@@ -19,7 +19,7 @@
 package com.owlplug.plugin.events;
 
 /**
- * Plugin data has been updated in database.
+ * Plugin data has been updated in database: lists must re-read it (RELOAD).
  */
 public record PluginUpdateEvent() {
 }

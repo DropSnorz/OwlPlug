@@ -20,6 +20,8 @@ package com.owlplug.project.controllers;
 
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
+import com.owlplug.core.services.LabelService;
+import com.owlplug.core.ui.LabelEditorView;
 import com.owlplug.core.ui.NoteTextArea;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.PlatformUtils;
@@ -28,6 +30,7 @@ import com.owlplug.plugin.controllers.PluginsController;
 import com.owlplug.plugin.model.PluginComponent;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
+import com.owlplug.project.events.ProjectRefreshEvent;
 import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.LookupResult;
@@ -58,6 +61,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -71,7 +75,15 @@ public class ProjectInfoController extends BaseController {
   @Autowired
   @Lazy
   private MainController mainController;
+  @Autowired
+  private LabelService labelService;
+  @Autowired
+  private ApplicationEventPublisher publisher;
 
+  private LabelEditorView labelEditor;
+
+  @FXML
+  private HBox projectLabelsContainer;
   @FXML
   private VBox projectInfoPane;
   @FXML
@@ -117,6 +129,8 @@ public class ProjectInfoController extends BaseController {
   @FXML
   public void initialize() {
 
+    labelEditor = new LabelEditorView(labelService);
+    projectLabelsContainer.getChildren().add(labelEditor);
     projectScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.8, 0));
     projectProperty.addListener(e -> refresh());
 
@@ -258,8 +272,13 @@ public class ProjectInfoController extends BaseController {
         footprint.setNote(note);
         Async.run(() -> projectService.save(footprint));
       });
+      labelEditor.setTarget(footprint.getLabels(), () -> {
+        Async.run(() -> projectService.save(footprint));
+        publisher.publishEvent(new ProjectRefreshEvent());
+      });
     } else {
       noteTextArea.clearTarget();
+      labelEditor.clearTarget();
     }
 
     BackgroundImage bgImg = new BackgroundImage(this.getApplicationDefaults().getDawApplicationImage(project.getApplication()),

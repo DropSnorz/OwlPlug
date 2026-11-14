@@ -19,10 +19,17 @@
 package com.owlplug.plugin.repositories;
 
 import com.owlplug.plugin.model.PluginFootprint;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface PluginFootprintRepository extends JpaRepository<PluginFootprint, Long> {
-  
+
   PluginFootprint findByPath(String path);
+
+  List<PluginFootprint> findByLabelsId(Long labelId);
+
+  @Query("SELECT f FROM PluginFootprint f WHERE NOT EXISTS (SELECT p FROM Plugin p WHERE p.footprint = f)")
+  List<PluginFootprint> findOrphans();
 
 }

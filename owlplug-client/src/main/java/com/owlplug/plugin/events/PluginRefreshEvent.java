@@ -19,7 +19,8 @@
 package com.owlplug.plugin.events;
 
 /**
- * Plugin data has been updated in database.
+ * Plugins already in memory changed (e.g. enabled, disabled, labels): lists must be repainted (REFRESH),
+ * without re-reading the database.
  */
 public record PluginRefreshEvent() {
 }

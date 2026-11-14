@@ -18,6 +18,7 @@
 
 package com.owlplug.plugin.components;
 
+import com.owlplug.core.model.Label;
 import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginComponent;
@@ -42,22 +43,26 @@ public class PluginFilterState {
   private final ObservableSet<PluginType> selectedTypes = FXCollections.observableSet();
   private final ObservableSet<String> selectedManufacturers = FXCollections.observableSet();
   private final ObservableSet<String> selectedCategories = FXCollections.observableSet();
+  private final ObservableSet<Label> selectedLabels = FXCollections.observableSet();
   private final BooleanProperty disabledOnly = new SimpleBooleanProperty(false);
   private final ObjectProperty<Predicate<IPlugin>> predicate = new SimpleObjectProperty<>();
   private final IntegerProperty activeFilterCount = new SimpleIntegerProperty();
 
   public PluginFilterState() {
     predicate.bind(Bindings.createObjectBinding(this::buildPredicate,
-        selectedFormats, selectedTypes, selectedManufacturers, selectedCategories, disabledOnly));
+        selectedFormats, selectedTypes, selectedManufacturers, selectedCategories, selectedLabels,
+        disabledOnly));
     activeFilterCount.bind(Bindings.createIntegerBinding(
         () -> selectedFormats.size() + selectedTypes.size() + selectedManufacturers.size()
-            + selectedCategories.size() + (disabledOnly.get() ? 1 : 0),
-        selectedFormats, selectedTypes, selectedManufacturers, selectedCategories, disabledOnly));
+            + selectedCategories.size() + selectedLabels.size() + (disabledOnly.get() ? 1 : 0),
+        selectedFormats, selectedTypes, selectedManufacturers, selectedCategories, selectedLabels,
+        disabledOnly));
   }
 
   private Predicate<IPlugin> buildPredicate() {
     if (selectedFormats.isEmpty() && selectedTypes.isEmpty()
-        && selectedManufacturers.isEmpty() && selectedCategories.isEmpty() && !disabledOnly.get()) {
+        && selectedManufacturers.isEmpty() && selectedCategories.isEmpty()
+        && selectedLabels.isEmpty() && !disabledOnly.get()) {
       return null;
     }
     return plugin -> {
@@ -66,6 +71,7 @@ public class PluginFilterState {
             && matchesType(component.getType())
             && matchesManufacturer(component.getManufacturerName())
             && matchesCategory(component.getCategory())
+            && matchesLabels(component.asPlugin())
             && matchesDisabled(component.asPlugin().isDisabled());
       } else {
         Plugin p = (Plugin) plugin;
@@ -76,9 +82,18 @@ public class PluginFilterState {
                 || p.getComponents().stream().anyMatch(c -> matchesManufacturer(c.getManufacturerName())))
             && (matchesCategory(p.getCategory())
                 || p.getComponents().stream().anyMatch(c -> matchesCategory(c.getCategory())))
+            && matchesLabels(p)
             && matchesDisabled(p.isDisabled());
       }
     };
+  }
+
+  private boolean matchesLabels(Plugin plugin) {
+    if (selectedLabels.isEmpty()) {
+      return true;
+    }
+    return plugin.getFootprint() != null
+        && plugin.getFootprint().getLabels().stream().anyMatch(selectedLabels::contains);
   }
 
   private boolean matchesDisabled(boolean disabled) {
@@ -117,6 +132,10 @@ public class PluginFilterState {
     return selectedCategories;
   }
 
+  public ObservableSet<Label> getSelectedLabels() {
+    return selectedLabels;
+  }
+
   public ObjectProperty<Predicate<IPlugin>> predicateProperty() {
     return predicate;
   }
@@ -142,6 +161,7 @@ public class PluginFilterState {
     selectedTypes.clear();
     selectedManufacturers.clear();
     selectedCategories.clear();
+    selectedLabels.clear();
     disabledOnly.set(false);
   }
 }

@@ -27,11 +27,15 @@ import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import com.owlplug.plugin.controllers.dialogs.ExportDialogController;
 import com.owlplug.plugin.controllers.dialogs.NewLinkController;
+import com.owlplug.core.events.LabelsChangedEvent;
+import com.owlplug.core.events.PreferencesChangedEvent;
 import com.owlplug.plugin.events.PluginRefreshEvent;
+import com.owlplug.plugin.model.IPlugin;
 import com.owlplug.plugin.events.PluginScanCompletedEvent;
 import com.owlplug.plugin.events.PluginUpdateEvent;
 import com.owlplug.plugin.repositories.PluginRepository;
 import com.owlplug.plugin.services.PluginService;
+import java.util.Optional;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -40,6 +44,7 @@ import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,17 +229,55 @@ public class PluginsController extends BaseController {
       exportDialogController.show();
     });
 
-    this.displayPlugins();
+    this.reloadPlugins();
 
   }
 
-  public void displayPlugins() {
+  /**
+   * RELOAD: re-queries plugins from the database and rebuilds the tree and table with new instances.
+   * The selection is restored by path. Use {@link #refresh()} when only in-memory data changed.
+   */
+  public void reloadPlugins() {
     Async.supply(() -> pluginRepository.findAll())
         .thenAccept(plugins -> FX.run(() -> {
+          String selectedPath = currentSelectionPath();
           treeViewController.setPlugins(plugins);
           tableController.setPlugins(plugins);
           filterController.refresh();
+          refresh();
+          restoreSelection(selectedPath);
         }));
+  }
+
+  private boolean isTableDisplayed() {
+    return displaySwitchTabPane.getSelectionModel().getSelectedItem().equals(displayTableTab);
+  }
+
+  /**
+   * Path of the selected plugin (the parent plugin for a component). Database ids are regenerated
+   * by scans, so the path is what identifies a plugin across reloads.
+   */
+  private String currentSelectionPath() {
+    Object selected = isTableDisplayed()
+        ? tableController.getTableView().getSelectionModel().getSelectedItem()
+        : Optional.ofNullable(treeViewController.getTreeView().getSelectionModel().getSelectedItem())
+            .map(TreeItem::getValue).orElse(null);
+    return selected instanceof IPlugin plugin ? plugin.asPlugin().getPath() : null;
+  }
+
+  /**
+   * Reloading replaces every plugin instance. Selecting the matching new instance repoints the info pane,
+   * which would otherwise keep editing an instance that is no longer in the lists.
+   */
+  private void restoreSelection(String path) {
+    if (path == null) {
+      return;
+    }
+    if (isTableDisplayed()) {
+      tableController.selectByPath(path);
+    } else {
+      treeViewController.selectByPath(path);
+    }
   }
 
   public void selectPluginById(long id) {
@@ -253,6 +296,10 @@ public class PluginsController extends BaseController {
     }
   }
   
+  /**
+   * REFRESH: repaints the tree and table cells from the plugins already in memory. No database access,
+   * items and selection are untouched. Use {@link #reloadPlugins()} when stored data must be re-read.
+   */
   public void refresh() {
     treeViewController.refresh();
     tableController.refresh();
@@ -279,9 +326,22 @@ public class PluginsController extends BaseController {
     nodeInfoController.toggleVisibility();
   }
 
+  // Event handlers: events about stored data RELOAD, events about in-memory changes REFRESH.
+
   @EventListener
   private void handle(PluginScanCompletedEvent event) {
-    FX.run(this::displayPlugins);
+    FX.run(this::reloadPlugins);
+  }
+
+  @EventListener
+  private void handle(PluginUpdateEvent event) {
+    FX.run(this::reloadPlugins);
+  }
+
+  // Label definitions changed: reload so cached footprints get the updated labels
+  @EventListener
+  private void handle(LabelsChangedEvent event) {
+    FX.run(this::reloadPlugins);
   }
 
   @EventListener
@@ -289,9 +349,10 @@ public class PluginsController extends BaseController {
     FX.run(this::refresh);
   }
 
+  // "Show labels in lists" preference may have changed
   @EventListener
-  private void handle(PluginUpdateEvent event) {
-    FX.run(this::displayPlugins);
+  private void handle(PreferencesChangedEvent event) {
+    FX.run(this::refresh);
   }
 
 }

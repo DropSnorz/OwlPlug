@@ -37,6 +37,7 @@
             <fx:include fx:id="pluginScanSettings" source="settings/PluginScanSettingsView.fxml"/>
             <fx:include fx:id="installationSettings" source="settings/InstallationSettingsView.fxml"/>
             <fx:include fx:id="projectSettings" source="settings/ProjectSettingsView.fxml"/>
+            <fx:include fx:id="labelsSettings" source="settings/LabelsSettingsView.fxml"/>
             <fx:include fx:id="applicationSettings" source="settings/ApplicationSettingsView.fxml"/>
         </StackPane>
     </center>

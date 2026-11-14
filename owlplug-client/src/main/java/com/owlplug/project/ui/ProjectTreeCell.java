@@ -19,10 +19,13 @@
 package com.owlplug.project.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.services.LabelService;
+import com.owlplug.core.ui.LabelBadgeView;
 import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.model.LookupResult;
 import java.util.List;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
 import javafx.scene.image.ImageView;
@@ -32,9 +35,11 @@ import org.kordamp.ikonli.javafx.FontIcon;
 public class ProjectTreeCell extends TreeCell<Object> {
 
   private ApplicationDefaults applicationDefaults;
+  private LabelService labelService;
 
-  public ProjectTreeCell(ApplicationDefaults applicationDefaults) {
+  public ProjectTreeCell(ApplicationDefaults applicationDefaults, LabelService labelService) {
     this.applicationDefaults = applicationDefaults;
+    this.labelService = labelService;
   }
 
   @Override
@@ -48,6 +53,7 @@ public class ProjectTreeCell extends TreeCell<Object> {
       if (item instanceof DawProject project) {
         setText(null);
         HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER_LEFT);
         ImageView icon = new ImageView(applicationDefaults.getDAWApplicationIcon(project.getApplication()));
         hbox.getChildren().add(icon);
         Label label = new Label(project.getName());
@@ -68,6 +74,14 @@ public class ProjectTreeCell extends TreeCell<Object> {
           backupLabel.setGraphic(backupIcon);
           backupLabel.getStyleClass().add("label-warning");
           hbox.getChildren().add(backupLabel);
+        }
+        if (labelService.isShowInLists() && project.getFootprint() != null) {
+          // Grouped in their own container so badges are spaced like in the plugin list (4px),
+          // independently of the wider spacing between the other cell elements
+          HBox labelsBox = new HBox(4);
+          labelsBox.setAlignment(Pos.CENTER_LEFT);
+          labelsBox.getChildren().addAll(LabelBadgeView.of(project.getFootprint().getLabels()));
+          hbox.getChildren().add(labelsBox);
         }
 
         setGraphic(hbox);

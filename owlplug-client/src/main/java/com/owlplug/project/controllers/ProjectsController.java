@@ -22,9 +22,13 @@ import com.owlplug.controls.NotificationBadge;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.controllers.MainController;
 import com.owlplug.core.controllers.SettingsController;
+import com.owlplug.core.events.LabelsChangedEvent;
+import com.owlplug.core.events.PreferencesChangedEvent;
+import com.owlplug.core.services.LabelService;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.core.utils.FX;
 import com.owlplug.project.components.ProjectFilterState;
+import com.owlplug.project.events.ProjectRefreshEvent;
 import com.owlplug.project.events.ProjectSyncEvent;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.services.ProjectService;
@@ -59,6 +63,8 @@ public class ProjectsController extends BaseController {
   private ProjectFilterController filterController;
   @Autowired
   private ProjectFilterState filterState;
+  @Autowired
+  private LabelService labelService;
 
   @FXML
   private Button syncProjectButton;
@@ -87,7 +93,7 @@ public class ProjectsController extends BaseController {
     });
 
     projectTreeView.setCellFactory((Callback<TreeView<Object>, TreeCell<Object>>)
-                                       p -> new ProjectTreeCell(getApplicationDefaults()));
+                                       p -> new ProjectTreeCell(getApplicationDefaults(), labelService));
 
     projectTreeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue instanceof TreeItem treeItem
@@ -114,7 +120,7 @@ public class ProjectsController extends BaseController {
         () -> buildTreePredicate(searchTextField.getText(), filterState.predicateProperty().get()),
         searchTextField.textProperty(), filterState.predicateProperty()));
 
-    refresh();
+    reloadProjects();
 
   }
 
@@ -134,17 +140,48 @@ public class ProjectsController extends BaseController {
     };
   }
 
-  public void refresh() {
+  /**
+   * RELOAD: re-queries projects from the database and rebuilds the tree with new instances.
+   * The selection is restored by path. Use {@link #refresh()} when only in-memory data changed.
+   */
+  public void reloadProjects() {
+    // Reloading replaces every project instance: remember the selection (by path, ids change on sync)
+    // and select the matching new instance, so the info pane never keeps an instance missing from the list.
+    String selectedPath = null;
+    if (projectTreeView.getSelectionModel().getSelectedItem() instanceof TreeItem<?> selectedItem
+        && selectedItem.getValue() instanceof DawProject selectedProject) {
+      selectedPath = selectedProject.getPath();
+    }
+
     Iterable<DawProject> projects = projectService.getAllProjects();
     projectTreeNode.getInternalChildren().clear();
 
+    TreeItem<Object> toSelect = null;
     for (DawProject p : projects) {
-      projectTreeNode.getInternalChildren().add(new FilterableTreeItem<>(p));
+      FilterableTreeItem<Object> item = new FilterableTreeItem<>(p);
+      projectTreeNode.getInternalChildren().add(item);
+      if (p.getPath().equals(selectedPath)) {
+        toSelect = item;
+      }
     }
 
     projectTreeNode.setExpanded(true);
     filterController.refresh(projects);
 
+    // A row index below zero means the project is hidden by the current search or filter
+    if (toSelect != null && projectTreeView.getRow(toSelect) >= 0) {
+      projectTreeView.getSelectionModel().select(toSelect);
+      projectTreeView.scrollTo(projectTreeView.getRow(toSelect));
+    }
+
+  }
+
+  /**
+   * REFRESH: repaints the tree cells from the projects already in memory. No database access,
+   * items and selection are untouched. Use {@link #reloadProjects()} when stored data must be re-read.
+   */
+  public void refresh() {
+    projectTreeView.refresh();
   }
 
   @FXML
@@ -152,8 +189,27 @@ public class ProjectsController extends BaseController {
     filterController.getView().toggle();
   }
 
+  // Event handlers: events about stored data RELOAD, events about in-memory changes REFRESH.
+
   @EventListener
   private void handle(ProjectSyncEvent event) {
+    FX.run(this::reloadProjects);
+  }
+
+  // Label definitions changed: reload so cached footprints get the updated labels
+  @EventListener
+  private void handle(LabelsChangedEvent event) {
+    FX.run(this::reloadProjects);
+  }
+
+  @EventListener
+  private void handle(ProjectRefreshEvent event) {
+    FX.run(this::refresh);
+  }
+
+  // "Show labels in lists" preference may have changed
+  @EventListener
+  private void handle(PreferencesChangedEvent event) {
     FX.run(this::refresh);
   }
 }

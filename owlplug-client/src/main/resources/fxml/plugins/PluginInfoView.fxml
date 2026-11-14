@@ -40,6 +40,7 @@
             </padding>
             <Label fx:id="pluginTitleLabel" styleClass="heading-title" text="UNKNOWN"/>
             <HBox fx:id="pluginFormatBadgeContainer" alignment="CENTER_LEFT"/>
+            <HBox fx:id="pluginLabelsContainer" alignment="CENTER_LEFT"/>
          </VBox>
       </StackPane>
 

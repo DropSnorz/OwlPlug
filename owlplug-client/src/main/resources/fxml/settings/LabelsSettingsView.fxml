@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane fitToWidth="true" hbarPolicy="NEVER"
+    xmlns="http://javafx.com/javafx/17.0.2-ea"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.owlplug.core.controllers.settings.LabelsSettingsController">
+
+    <VBox spacing="16.0">
+        <padding><Insets top="24.0" right="24.0" bottom="24.0" left="24.0"/></padding>
+
+        <!-- Section header -->
+        <Label text="Labels" styleClass="heading-1"/>
+        <Label text="Create labels to organize plugins and projects. Labels are kept across scans."
+               styleClass="label-disabled" wrapText="true"/>
+        <Separator/>
+
+        <!-- Labels -->
+        <VBox fx:id="labelsContainer" spacing="8.0"/>
+        <HBox spacing="8.0" alignment="CENTER_LEFT">
+            <Button fx:id="addLabelButton" text="Add Label"/>
+        </HBox>
+
+        <!-- Display -->
+        <Separator/>
+        <Label text="Display" styleClass="heading-2"/>
+        <CheckBox fx:id="showInListsCheckbox" text="Show labels in plugin and project lists"/>
+
+        <!-- Orphans -->
+        <Separator/>
+        <Label text="Orphaned Labels Data" styleClass="heading-2"/>
+        <Label text="Labels and notes are stored per file path. When a plugin or project is moved or deleted, its data is kept here and restored if the file comes back. Remove entries that are no longer needed."
+               styleClass="label-disabled" wrapText="true"/>
+
+        <Label text="Plugins" styleClass="info-field-label"/>
+        <ListView fx:id="orphanPluginsListView" prefHeight="140.0"/>
+        <HBox spacing="8.0" alignment="CENTER_LEFT">
+            <Button fx:id="deleteSelectedPluginsButton" text="Delete Selected"/>
+            <Button fx:id="deleteAllPluginsButton" text="Delete All"/>
+        </HBox>
+
+        <Label text="Projects" styleClass="info-field-label"/>
+        <ListView fx:id="orphanProjectsListView" prefHeight="140.0"/>
+        <HBox spacing="8.0" alignment="CENTER_LEFT">
+            <Button fx:id="deleteSelectedProjectsButton" text="Delete Selected"/>
+            <Button fx:id="deleteAllProjectsButton" text="Delete All"/>
+        </HBox>
+
+    </VBox>
+</ScrollPane>

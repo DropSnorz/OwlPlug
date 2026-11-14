@@ -18,19 +18,26 @@
 
 package com.owlplug.project.model;
 
+import com.owlplug.core.model.Label;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import org.hibernate.annotations.BatchSize;
 
 /**
  * User data attached to a project path. Unlike {@link DawProject}, footprints
  * are not deleted on project sync, so their content survives re-synchronizations.
  */
 @Entity
+@BatchSize(size = 100)
 @Table(indexes = { @Index(name = "IDX_PROJECT_FOOTPRINT_PATH", columnList = "path") })
 public class ProjectFootprint {
 
@@ -42,6 +49,10 @@ public class ProjectFootprint {
 
   @Column(length = 2000)
   private String note;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @BatchSize(size = 100)
+  private Set<Label> labels = new HashSet<>();
 
   public ProjectFootprint() {
   }
@@ -68,6 +79,14 @@ public class ProjectFootprint {
 
   public void setNote(String note) {
     this.note = note;
+  }
+
+  public Set<Label> getLabels() {
+    return labels;
+  }
+
+  public void setLabels(Set<Label> labels) {
+    this.labels = labels;
   }
 
 }
