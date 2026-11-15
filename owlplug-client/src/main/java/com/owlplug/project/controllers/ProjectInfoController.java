@@ -250,6 +250,12 @@ public class ProjectInfoController extends BaseController {
 
   public void refresh() {
     DawProject project = projectProperty.get();
+    if (project == null) {
+      projectInfoPane.setVisible(false);
+      noteTextArea.clearTarget();
+      labelEditor.clearTarget();
+      return;
+    }
     projectInfoPane.setVisible(true);
     projectNameLabel.setText(project.getName());
     projectAppLabel.setText(project.getApplication().getName());

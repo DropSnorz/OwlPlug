@@ -155,8 +155,9 @@ public class LabelEditorView extends FlowPane {
       row.setPadding(new Insets(3, 8, 3, 8));
       row.setPrefWidth(Math.max(inputField.getWidth(), 140));
       row.getStyleClass().add("label-suggestion-row");
-      row.setOnMouseClicked(e -> assign(label));
       CustomMenuItem item = new CustomMenuItem(row, false);
+      // Fired by mouse click and keyboard activation alike
+      item.setOnAction(e -> assign(label));
       suggestionMenu.getItems().add(item);
     }
     if (suggestionMenu.getItems().isEmpty()) {

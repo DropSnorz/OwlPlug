@@ -172,6 +172,9 @@ public class ProjectsController extends BaseController {
     if (toSelect != null && projectTreeView.getRow(toSelect) >= 0) {
       projectTreeView.getSelectionModel().select(toSelect);
       projectTreeView.scrollTo(projectTreeView.getRow(toSelect));
+    } else if (selectedPath != null) {
+      // The project is gone or hidden: do not leave the info pane bound to a discarded instance
+      projectInfoController.projectProperty().set(null);
     }
 
   }

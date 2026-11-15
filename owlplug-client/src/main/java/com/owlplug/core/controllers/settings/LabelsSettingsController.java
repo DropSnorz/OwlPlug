@@ -134,7 +134,7 @@ public class LabelsSettingsController extends BaseController {
       if (name.equals(label.getName())) {
         return;
       }
-      boolean valid = !name.isEmpty() && name.length() <= MAX_NAME_LENGTH && !labelService.nameExists(name);
+      boolean valid = !name.isEmpty() && name.length() <= MAX_NAME_LENGTH && !labelService.nameExists(name, label);
       if (valid) {
         label.setName(name);
         labelService.save(label);

@@ -32,8 +32,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 public class LabelService extends BaseService {
@@ -78,6 +82,8 @@ public class LabelService extends BaseService {
     return showInLists;
   }
 
+  // Highest precedence: controllers repainting lists on the same event must see the updated cache
+  @Order(Ordered.HIGHEST_PRECEDENCE)
   @EventListener
   void handle(PreferencesChangedEvent event) {
     showInLists = getPreferences().getBoolean(Prefs.Labels.SHOW_IN_LISTS, true);
@@ -90,6 +96,13 @@ public class LabelService extends BaseService {
 
   public boolean nameExists(String name) {
     return labelRepository.existsByNameIgnoreCase(name);
+  }
+
+  /**
+   * Same check as {@link #nameExists(String)}, ignoring the given label (allows case-only renames).
+   */
+  public boolean nameExists(String name, Label excluded) {
+    return labelRepository.existsByNameIgnoreCaseAndIdNot(name, excluded.getId());
   }
 
   public Label save(Label label) {
@@ -112,7 +125,13 @@ public class LabelService extends BaseService {
     projectFootprintRepository.saveAll(projectFootprints);
 
     labelRepository.deleteById(label.getId());
-    publisher.publishEvent(new LabelsChangedEvent());
+    // Listeners reload from the database: notify once the deletion is committed
+    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+      @Override
+      public void afterCommit() {
+        publisher.publishEvent(new LabelsChangedEvent());
+      }
+    });
   }
 
   public List<PluginFootprint> findOrphanPluginFootprints() {

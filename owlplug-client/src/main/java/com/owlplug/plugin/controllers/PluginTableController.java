@@ -259,6 +259,14 @@ public class PluginTableController extends BaseController {
         return;
       }
     }
+    // The parent row may be hidden by the current search: fall back to a visible component of that plugin
+    for (IPlugin p : tableView.getItems()) {
+      if (path.equals(p.asPlugin().getPath())) {
+        tableView.getSelectionModel().select(p);
+        tableView.scrollTo(p);
+        return;
+      }
+    }
   }
 
   public void selectPluginById(long id) {
