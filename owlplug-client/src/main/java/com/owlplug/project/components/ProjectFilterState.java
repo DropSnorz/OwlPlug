@@ -18,6 +18,7 @@
 
 package com.owlplug.project.components;
 
+import com.owlplug.core.model.Label;
 import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.DawProject;
 import java.util.function.Predicate;
@@ -34,23 +35,39 @@ import org.springframework.stereotype.Component;
 public class ProjectFilterState {
 
   private final ObservableSet<DawApplication> selectedApplications = FXCollections.observableSet();
+  private final ObservableSet<Label> selectedLabels = FXCollections.observableSet();
   private final ObjectProperty<Predicate<DawProject>> predicate = new SimpleObjectProperty<>();
   private final IntegerProperty activeFilterCount = new SimpleIntegerProperty();
 
   public ProjectFilterState() {
-    predicate.bind(Bindings.createObjectBinding(this::buildPredicate, selectedApplications));
-    activeFilterCount.bind(Bindings.createIntegerBinding(selectedApplications::size, selectedApplications));
+    predicate.bind(Bindings.createObjectBinding(this::buildPredicate,
+        selectedApplications, selectedLabels));
+    activeFilterCount.bind(Bindings.createIntegerBinding(
+        () -> selectedApplications.size() + selectedLabels.size(), selectedApplications, selectedLabels));
   }
 
   private Predicate<DawProject> buildPredicate() {
-    if (selectedApplications.isEmpty()) {
+    if (selectedApplications.isEmpty() && selectedLabels.isEmpty()) {
       return null;
     }
-    return project -> selectedApplications.contains(project.getApplication());
+    return project -> (selectedApplications.isEmpty() || selectedApplications.contains(project.getApplication()))
+        && matchesLabels(project);
+  }
+
+  private boolean matchesLabels(DawProject project) {
+    if (selectedLabels.isEmpty()) {
+      return true;
+    }
+    return project.getFootprint() != null
+        && project.getFootprint().getLabels().stream().anyMatch(selectedLabels::contains);
   }
 
   public ObservableSet<DawApplication> getSelectedApplications() {
     return selectedApplications;
+  }
+
+  public ObservableSet<Label> getSelectedLabels() {
+    return selectedLabels;
   }
 
   public ObjectProperty<Predicate<DawProject>> predicateProperty() {
@@ -63,5 +80,6 @@ public class ProjectFilterState {
 
   public void clearAll() {
     selectedApplications.clear();
+    selectedLabels.clear();
   }
 }

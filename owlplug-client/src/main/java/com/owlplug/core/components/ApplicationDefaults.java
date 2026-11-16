@@ -123,6 +123,9 @@ public class ApplicationDefaults {
       public static final String COLLECT_BACKUP_FILES = "projects.collect_backup_files";
     }
 
+    public static final class Labels {
+      public static final String SHOW_IN_LISTS = "labels.show_in_lists";    }
+
     public static final class Telemetry {
       public static final String ENABLED = "telemetry.enabled";
       public static final String USER_ID = "telemetry.user_id";

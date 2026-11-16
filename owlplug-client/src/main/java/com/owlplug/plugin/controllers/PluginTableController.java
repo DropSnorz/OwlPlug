@@ -20,6 +20,8 @@ package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.services.LabelService;
+import com.owlplug.core.ui.LabelBadgeView;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
@@ -42,6 +44,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -49,6 +53,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -66,7 +71,10 @@ public class PluginTableController extends BaseController {
   private DisablePluginDialogController disableController;
   @Autowired
   private PluginService pluginService;
+  @Autowired
+  private LabelService labelService;
 
+  private final TableColumn<IPlugin, Plugin> labelsColumn = new TableColumn<>("Labels");
   private final SimpleStringProperty search = new SimpleStringProperty();
   private final SimpleObjectProperty<Predicate<IPlugin>> filterPredicate = new SimpleObjectProperty<>();
   private final TableView<IPlugin> tableView;
@@ -193,7 +201,24 @@ public class PluginTableController extends BaseController {
       }
     });
 
-    tableView.getColumns().addAll(formatColumn, nameColumn, versionColumn,
+    // Labels Column, only visible when enabled in settings
+    labelsColumn.setSortable(false);
+    labelsColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().asPlugin()));
+    labelsColumn.setCellFactory(e -> new TableCell<>() {
+      @Override
+      public void updateItem(Plugin item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item == null || empty || item.getFootprint() == null) {
+          setGraphic(null);
+        } else {
+          HBox box = new HBox(4, LabelBadgeView.of(item.getFootprint().getLabels()).toArray(new Node[0]));
+          box.setAlignment(Pos.CENTER_LEFT);
+          setGraphic(box);
+        }
+      }
+    });
+
+    tableView.getColumns().addAll(formatColumn, nameColumn, labelsColumn, versionColumn,
         manufacturerColumn, categoryColumn, directoryColumn, scanDirectoryColumn, stateColumn);
 
   }
@@ -220,6 +245,28 @@ public class PluginTableController extends BaseController {
   public void setNodeManaged(boolean isManaged) {
     this.tableView.setManaged(isManaged);
     this.tableView.setVisible(isManaged);
+  }
+
+  /**
+   * Selects the table row of the plugin with the given path. A previously selected component
+   * resolves to its parent plugin.
+   */
+  public void selectByPath(String path) {
+    for (IPlugin p : tableView.getItems()) {
+      if (p instanceof Plugin plugin && path.equals(plugin.getPath())) {
+        tableView.getSelectionModel().select(p);
+        tableView.scrollTo(p);
+        return;
+      }
+    }
+    // The parent row may be hidden by the current search: fall back to a visible component of that plugin
+    for (IPlugin p : tableView.getItems()) {
+      if (path.equals(p.asPlugin().getPath())) {
+        tableView.getSelectionModel().select(p);
+        tableView.scrollTo(p);
+        return;
+      }
+    }
   }
 
   public void selectPluginById(long id) {
@@ -260,6 +307,7 @@ public class PluginTableController extends BaseController {
   }
 
   public void refresh() {
+    labelsColumn.setVisible(labelService.isShowInLists());
     tableView.refresh();
   }
 

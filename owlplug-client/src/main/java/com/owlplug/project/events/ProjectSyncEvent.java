@@ -19,7 +19,7 @@
 package com.owlplug.project.events;
 
 /**
- * Project sync or plugin lookup task has completed successfully.
+ * Project sync or plugin lookup task has completed successfully: lists must re-read projects (RELOAD).
  */
 public record ProjectSyncEvent() {
 }

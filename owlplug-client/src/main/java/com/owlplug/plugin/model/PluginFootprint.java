@@ -18,15 +18,22 @@
 
 package com.owlplug.plugin.model;
 
+import com.owlplug.core.model.Label;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
+@BatchSize(size = 100)
 @Table(indexes = { @Index(name = "IDX_PLUGIN_FOOTPRINT_ID", columnList = "id"),
     @Index(name = "IDX_PLUGIN_FOOTPRINT_PATH", columnList = "path") })
 public class PluginFootprint {
@@ -44,6 +51,10 @@ public class PluginFootprint {
 
   @Column(length = 2000)
   private String note;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @BatchSize(size = 100)
+  private Set<Label> labels = new HashSet<>();
 
   public PluginFootprint() {
   }
@@ -94,6 +105,14 @@ public class PluginFootprint {
 
   public void setNote(String note) {
     this.note = note;
+  }
+
+  public Set<Label> getLabels() {
+    return labels;
+  }
+
+  public void setLabels(Set<Label> labels) {
+    this.labels = labels;
   }
 
 }

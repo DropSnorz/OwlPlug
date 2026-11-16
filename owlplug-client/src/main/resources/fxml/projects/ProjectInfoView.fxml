@@ -35,6 +35,7 @@
                                    pickOnBounds="true" preserveRatio="true"/>
                     </graphic>
                 </Label>
+                <HBox fx:id="projectLabelsContainer" alignment="CENTER_LEFT"/>
             </VBox>
         </StackPane>
 

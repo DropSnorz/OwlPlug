@@ -19,7 +19,11 @@
 package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.components.ApplicationDefaults;
+import com.owlplug.core.events.LabelsChangedEvent;
+import com.owlplug.core.services.LabelService;
+import com.owlplug.core.ui.LabelFilterSection;
 import com.owlplug.core.ui.SideBar;
+import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.StringUtils;
 import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.model.PluginFormat;
@@ -49,6 +53,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -60,6 +65,8 @@ public class PluginFilterController {
   private ApplicationDefaults applicationDefaults;
   @Autowired
   private PluginComponentRepository pluginComponentRepository;
+  @Autowired
+  private LabelService labelService;
 
   private static final int PREVIEW_COUNT = 3;
 
@@ -68,6 +75,7 @@ public class PluginFilterController {
   private VBox typeSection;
   private VBox manufacturerSection;
   private VBox categorySection;
+  private LabelFilterSection labelSection;
   private CheckBox disabledOnlyCheckBox;
   private final Map<PluginFormat, CheckBox> formatCheckBoxes = new EnumMap<>(PluginFormat.class);
   private final Map<PluginType, CheckBox> typeCheckBoxes = new EnumMap<>(PluginType.class);
@@ -80,6 +88,7 @@ public class PluginFilterController {
     typeSection = new VBox(4);
     manufacturerSection = new VBox(4);
     categorySection = new VBox(4);
+    labelSection = new LabelFilterSection(filterState.getSelectedLabels());
 
     // Format and Type checkboxes are fixed (one per enum value) so their listeners are
     // wired directly: checkbox → filterState (selectedProperty) and filterState → checkbox
@@ -180,6 +189,8 @@ public class PluginFilterController {
     manufacturerLabel.getStyleClass().add("plugin-filter-section-title");
     Label categoryLabel = new Label("Category");
     categoryLabel.getStyleClass().add("plugin-filter-section-title");
+    Label labelsLabel = new Label("Labels");
+    labelsLabel.getStyleClass().add("plugin-filter-section-title");
 
     content.getChildren().addAll(
         header, new Separator(),
@@ -187,6 +198,7 @@ public class PluginFilterController {
         new Separator(), typeLabel, typeSection,
         new Separator(), manufacturerLabel, manufacturerSection,
         new Separator(), categoryLabel, categorySection,
+        new Separator(), labelsLabel, labelSection,
         new Separator(), disabledOnlyCheckBox
     );
     return content;
@@ -198,7 +210,14 @@ public class PluginFilterController {
    * in-place; Manufacturer and Category sections are fully rebuilt because their values
    * are dynamic (any string from component metadata).
    */
+  @EventListener
+  private void handle(LabelsChangedEvent event) {
+    FX.run(() -> labelSection.setLabels(labelService.findAll()));
+  }
+
   public void refresh() {
+    labelSection.setLabels(labelService.findAll());
+
     // Format counts: keyed by enum name() because the DB stores EnumType.STRING values
     Map<String, Long> formatCounts = pluginComponentRepository.countFormatsFromComponents()
         .stream().collect(Collectors.toMap(e -> e.getLabel(), e -> e.getCnt()));

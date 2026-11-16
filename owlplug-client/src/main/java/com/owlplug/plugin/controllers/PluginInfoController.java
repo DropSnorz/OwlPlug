@@ -25,6 +25,8 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ApplicationDefaults.Prefs;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.services.LabelService;
+import com.owlplug.core.ui.LabelEditorView;
 import com.owlplug.core.ui.NoteTextArea;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
@@ -85,11 +87,17 @@ public class PluginInfoController extends BaseController {
   private PluginTaskFactory pluginTaskFactory;
   @Autowired
   private DisablePluginDialogController disableController;
+  @Autowired
+  private LabelService labelService;
+
+  private LabelEditorView labelEditor;
 
   @FXML
   private Pane pluginScreenshotPane;
   @FXML
   private HBox pluginFormatBadgeContainer;
+  @FXML
+  private HBox pluginLabelsContainer;
   @FXML
   private Label pluginTitleLabel;
   @FXML
@@ -139,6 +147,8 @@ public class PluginInfoController extends BaseController {
   public void initialize() {
 
     pluginProperty.addListener(e -> refresh());
+    labelEditor = new LabelEditorView(labelService);
+    pluginLabelsContainer.getChildren().add(labelEditor);
     pluginScreenshotPane.setEffect(new ColorAdjust(0, 0, -0.6, 0));
 
     Tooltip pluginPathTooltip = new Tooltip();
@@ -230,9 +240,14 @@ public class PluginInfoController extends BaseController {
         footprint.setNote(note);
         Async.run(() -> pluginService.save(footprint));
       });
+      labelEditor.setTarget(footprint.getLabels(), () -> {
+        Async.run(() -> pluginService.save(footprint));
+        publisher.publishEvent(new PluginRefreshEvent());
+      });
     } else {
       lastScanErrorLabel.setVisible(false);
       noteTextArea.clearTarget();
+      labelEditor.clearTarget();
     }
 
     setPluginImage();

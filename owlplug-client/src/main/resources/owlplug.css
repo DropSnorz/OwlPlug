@@ -619,6 +619,49 @@ ProgressIndicator {
     -fx-font-size: 11px;
 }
 
+.label-badge {
+    -fx-background-radius: 3px;
+    -fx-padding: 0 5 0 5;
+}
+
+.label-badge .label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 0;
+}
+
+.label-badge .label-badge-remove {
+    -fx-icon-color: -label-badge-text;
+    -fx-cursor: hand;
+}
+
+/* The row fills the whole menu item so the highlighted area and the clickable area are the same */
+.label-suggestion-menu .menu-item {
+    -fx-padding: 0;
+}
+
+.label-suggestion-row {
+    -fx-cursor: hand;
+}
+
+/* The editor sits over the header image: dark backing keeps the field readable */
+.label-editor-field {
+    -fx-font-size: 11px;
+    -fx-padding: 1 6 1 6;
+    -fx-pref-width: 110px;
+    -fx-background-color: rgba(0, 0, 0, 0.6);
+    -fx-background-radius: 3px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 3px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.65);
+}
+
+.label-editor-field:focused {
+    -fx-background-color: rgba(0, 0, 0, 0.75);
+    -fx-border-color: -color-accent-emphasis;
+}
+
 .plugin-format-badge {
     -fx-background-radius: 3px;
     -fx-border-radius: 3px;

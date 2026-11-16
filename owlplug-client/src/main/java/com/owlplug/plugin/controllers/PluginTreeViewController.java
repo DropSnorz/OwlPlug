@@ -19,6 +19,7 @@
 package com.owlplug.plugin.controllers;
 
 import com.owlplug.core.controllers.BaseController;
+import com.owlplug.core.services.LabelService;
 import com.owlplug.core.ui.FilterableTreeItem;
 import com.owlplug.plugin.components.PluginFilterState;
 import com.owlplug.plugin.model.IDirectory;
@@ -52,6 +53,8 @@ public class PluginTreeViewController extends BaseController {
   private PluginService pluginService;
   @Autowired
   private SymlinkRepository symlinkRepository;
+  @Autowired
+  private LabelService labelService;
 
   private final SimpleStringProperty search = new SimpleStringProperty();
   private final SimpleObjectProperty<Predicate<IPlugin>> filterPredicate = new SimpleObjectProperty<>();
@@ -68,7 +71,7 @@ public class PluginTreeViewController extends BaseController {
     treePluginNode = new FilterableTreeItem<>("(all)");
     treeFileRootNode = new FilterableTreeItem<>("(all)");
 
-    pluginTreeView.setCellFactory(p -> new PluginTreeCell(getApplicationDefaults(), pluginService));
+    pluginTreeView.setCellFactory(p -> new PluginTreeCell(getApplicationDefaults(), pluginService, labelService));
 
     pluginTreeView.setRoot(treePluginNode);
 
@@ -318,6 +321,20 @@ public class PluginTreeViewController extends BaseController {
           node.getInternalChildren().add(item);
           buildDirectoryTree(child, item, mergedParentName);
         }
+      }
+    }
+  }
+
+  /**
+   * Selects the tree row of the plugin with the given path. A previously selected component
+   * resolves to its parent plugin.
+   */
+  public void selectByPath(String path) {
+    for (TreeItem item : getNestedChildren(pluginTreeView.getRoot())) {
+      if (item.getValue() instanceof Plugin plugin && path.equals(plugin.getPath())) {
+        pluginTreeView.getSelectionModel().select(item);
+        pluginTreeView.scrollTo(pluginTreeView.getRow(item));
+        return;
       }
     }
   }

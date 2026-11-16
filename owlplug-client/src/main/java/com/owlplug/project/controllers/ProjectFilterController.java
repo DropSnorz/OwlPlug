@@ -18,7 +18,11 @@
 
 package com.owlplug.project.controllers;
 
+import com.owlplug.core.events.LabelsChangedEvent;
+import com.owlplug.core.services.LabelService;
+import com.owlplug.core.ui.LabelFilterSection;
 import com.owlplug.core.ui.SideBar;
+import com.owlplug.core.utils.FX;
 import com.owlplug.project.components.ProjectFilterState;
 import com.owlplug.project.model.DawApplication;
 import com.owlplug.project.model.DawProject;
@@ -38,6 +42,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -45,14 +50,18 @@ public class ProjectFilterController {
 
   @Autowired
   private ProjectFilterState filterState;
+  @Autowired
+  private LabelService labelService;
 
   private SideBar sideBar;
   private VBox typeSection;
+  private LabelFilterSection labelSection;
   private final Map<DawApplication, CheckBox> typeCheckBoxes = new EnumMap<>(DawApplication.class);
 
   @PostConstruct
   public void setup() {
     typeSection = new VBox(4);
+    labelSection = new LabelFilterSection(filterState.getSelectedLabels());
 
     for (DawApplication application : DawApplication.values()) {
       CheckBox cb = new CheckBox(application.getName());
@@ -100,8 +109,17 @@ public class ProjectFilterController {
     Label typeLabel = new Label("Type");
     typeLabel.getStyleClass().add("plugin-filter-section-title");
 
-    content.getChildren().addAll(header, new Separator(), typeLabel, typeSection);
+    Label labelsLabel = new Label("Labels");
+    labelsLabel.getStyleClass().add("plugin-filter-section-title");
+
+    content.getChildren().addAll(header, new Separator(), typeLabel, typeSection,
+        new Separator(), labelsLabel, labelSection);
     return content;
+  }
+
+  @EventListener
+  private void handle(LabelsChangedEvent event) {
+    FX.run(() -> labelSection.setLabels(labelService.findAll()));
   }
 
   /**
@@ -109,6 +127,7 @@ public class ProjectFilterController {
    * Called after each project sync or data reload.
    */
   public void refresh(Iterable<DawProject> projects) {
+    labelSection.setLabels(labelService.findAll());
     Map<DawApplication, Long> counts = new EnumMap<>(DawApplication.class);
     for (DawProject project : projects) {
       counts.merge(project.getApplication(), 1L, Long::sum);
