@@ -28,6 +28,7 @@ import com.owlplug.project.repositories.ProjectFootprintRepository;
 import com.owlplug.project.tasks.discovery.ProjectExplorer;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;
 import com.owlplug.project.tasks.discovery.ableton.AbletonProjectExplorer;
+import com.owlplug.project.tasks.discovery.dawproject.DawprojectProjectExplorer;
 import com.owlplug.project.tasks.discovery.reaper.ReaperProjectExplorer;
 import com.owlplug.project.tasks.discovery.studioone.StudioOneProjectExplorer;
 import java.io.File;
@@ -87,7 +88,8 @@ public class ProjectSyncTask extends AbstractTask {
     List<ProjectExplorer> explorers = List.of(
         new AbletonProjectExplorer(),
         new ReaperProjectExplorer(),
-        new StudioOneProjectExplorer()
+        new StudioOneProjectExplorer(),
+        new DawprojectProjectExplorer()
     );
 
     for (File file : filteredFiles) {
