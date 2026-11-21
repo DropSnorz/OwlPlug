@@ -121,7 +121,7 @@ public class PackageBlocView extends AnchorPane {
     this.setEffect(new InnerShadow(11, Color.BLACK));
 
     TextFlow textFlow = new TextFlow();
-    textFlow.getChildren().add(new Label("Install"));
+    textFlow.getChildren().add(new Label(PackageActions.labelFor(parentController.findBestBundle(remotePackage))));
     Text remoteSourceText = new Text(" (Auto)");
     remoteSourceText.getStyleClass().add("text-disabled");
     textFlow.getChildren().add(remoteSourceText);
@@ -138,7 +138,7 @@ public class PackageBlocView extends AnchorPane {
 
     for (PackageBundle bundle : remotePackage.getBundles()) {
       TextFlow bundleTextFlow = new TextFlow();
-      bundleTextFlow.getChildren().add(new Label("Install"));
+      bundleTextFlow.getChildren().add(new Label(PackageActions.labelFor(bundle)));
       Text bundleSource = new Text(" (" + StringUtils.truncate(bundle.getName(), 50, "...") + ")");
       bundleSource.getStyleClass().add("text-disabled");
       bundleTextFlow.getChildren().add(bundleSource);

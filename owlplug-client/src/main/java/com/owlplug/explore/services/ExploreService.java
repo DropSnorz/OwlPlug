@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -186,30 +187,49 @@ public class ExploreService extends BaseService {
    * @param remotePackage - The remote package
    */
   public PackageBundle findBestBundle(RemotePackage remotePackage) {
-
     RuntimePlatform runtimePlatform = this.getApplicationDefaults().getRuntimePlatform();
+    Set<String> compatibleTags = runtimePlatform.getCompatiblePlatformsTags();
+    // Rank: archive+exact (0), archive+compatible (1), installer+exact (2),
+    // installer+compatible (3). Hashes are not stable, so the rank comparator keeps the choice
+    // deterministic and prefers an exact platform build over an alias/emulated one.
+    return remotePackage.getBundles().stream()
+        .filter(bundle -> bundle.getTargets() != null)
+        .filter(bundle -> bundle.getTargets().stream().anyMatch(compatibleTags::contains))
+        .min(Comparator.comparingInt(bundle -> bundleRank(bundle, runtimePlatform)))
+        .orElse(null);
+  }
 
-    // Look for bundles matching runtimePlatform
-    for (PackageBundle bundle : remotePackage.getBundles()) {
-      for (String platform : bundle.getTargets()) {
-        if (platform.equals(runtimePlatform.getTag())
-            || platform.equals(runtimePlatform.getOperatingSystem().getCode())) {
-          return bundle;
-        }
-      }
+  private int bundleRank(PackageBundle bundle, RuntimePlatform runtimePlatform) {
+    int rank = bundle.isInstaller() ? 2 : 0;
+    boolean exact = bundle.getTargets().stream()
+        .anyMatch(platform -> platform.equals(runtimePlatform.getTag())
+            || platform.equals(runtimePlatform.getOperatingSystem().getCode()));
+    return exact ? rank : rank + 1;
+  }
+
+  /**
+   * Returns the download URL for a bundle. Official OAS sources clear download details at sync
+   * time, so a missing URL is resolved lazily from the registry detail endpoint.
+   *
+   * @param bundle bundle to resolve
+   * @return the download URL, or null if it can't be resolved
+   */
+  public String getBundleDownloadUrl(PackageBundle bundle) {
+    if (bundle == null) {
+      return null;
+    }
+    if (bundle.getDownloadUrl() != null && !bundle.getDownloadUrl().isBlank()) {
+      return bundle.getDownloadUrl();
     }
 
-    // Look for bundles compatibles with current runtimePlatform
-    for (PackageBundle bundle : remotePackage.getBundles()) {
-      for (String platformTag : bundle.getTargets()) {
-        for (String compatibleTag : runtimePlatform.getCompatiblePlatformsTags()) {
-          if (platformTag.equals(compatibleTag)) {
-            return bundle;
-          }
-        }
-      }
+    RemotePackage remotePackage = bundle.getRemotePackage();
+    RemoteSource remoteSource = remotePackage != null ? remotePackage.getRemoteSource() : null;
+    if (remoteSource == null || remoteSource.getType() != SourceType.OAS_REGISTRY) {
+      return null;
     }
-    return null;
+
+    OASFile file = fetchOASFile(remoteSource, remotePackage, bundle);
+    return file != null ? file.getUrl() : null;
   }
 
   public RemoteSource fetchSourceFromRemoteUrl(String url) {

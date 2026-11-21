@@ -115,12 +115,15 @@ public class OASModelAdapter {
           continue;
         }
 
-        // Skipping. OwlPlug only supports archives (installer not supported)
-        if (!file.getType().equals("archive")) {
+        // Skipping. OwlPlug only supports archive and installer files.
+        String fileType = file.getType();
+        boolean installer = "installer".equals(fileType);
+        if (!installer && !"archive".equals(fileType)) {
           continue;
         }
 
         PackageBundle bundle = mapperToEntity(file, remotePackage.getName());
+        bundle.setInstaller(installer);
         bundle.setRemotePackage(remotePackage);
         // Position in the unfiltered files array, kept stable so download details can be
         // re-fetched by index from the OAS registry detail endpoint at install time.

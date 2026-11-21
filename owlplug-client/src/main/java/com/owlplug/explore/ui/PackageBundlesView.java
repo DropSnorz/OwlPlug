@@ -98,7 +98,7 @@ public class PackageBundlesView extends VBox {
     }
     row.getChildren().add(details);
 
-    Button installButton = new Button("Install");
+    Button installButton = new Button(PackageActions.labelFor(bundle));
     installButton.getStyleClass().addAll(Styles.SMALL, "package-bundle-install");
     installButton.setOnAction(installHandler);
     installButton.setMinWidth(USE_PREF_SIZE);

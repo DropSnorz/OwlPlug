@@ -25,6 +25,7 @@ import com.owlplug.core.utils.PlatformUtils;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
+import com.owlplug.explore.ui.PackageActions;
 import com.owlplug.explore.ui.PackageBundlesView;
 import com.owlplug.explore.ui.PackageSourceBadgeView;
 import com.owlplug.plugin.model.Plugin;
@@ -164,6 +165,7 @@ public class PackageInfoController extends BaseController {
     }
 
     // Activate and configure install button
+    this.installButton.setText(PackageActions.labelFor(exploreController.findBestBundle(remotePackage)));
     this.installButton.setDisable(false);
     installButton.setOnAction(e -> {
       boolean installStarted = exploreController.installPackage(remotePackage);
