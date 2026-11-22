@@ -9,12 +9,29 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
+  # On push, check whether the branch already has an open pull request.
+  # If so, the pull_request run builds it and the push run is skipped.
+  check-pr:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      has_pr: ${{ steps.check.outputs.has_pr }}
+    steps:
+    - id: check
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        count=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open \
+          --json headRepositoryOwner \
+          --jq "[.[] | select(.headRepositoryOwner.login == \"$GITHUB_REPOSITORY_OWNER\")] | length")
+        if [ "$count" -gt 0 ]; then echo "has_pr=true" >> "$GITHUB_OUTPUT"; else echo "has_pr=false" >> "$GITHUB_OUTPUT"; fi
+
   test:
-    # Branches from this repository are already built on push: only run
-    # pull_request events for PRs coming from forks to avoid duplicate runs.
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    needs: check-pr
+    if: ${{ !cancelled() && (github.event_name == 'pull_request' || needs.check-pr.outputs.has_pr != 'true') }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
