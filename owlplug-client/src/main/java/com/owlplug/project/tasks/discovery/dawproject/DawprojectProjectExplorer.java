@@ -20,7 +20,6 @@ package com.owlplug.project.tasks.discovery.dawproject;
 
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.project.model.DawApplication;
-import com.owlplug.project.model.DawPlugin;
 import com.owlplug.project.model.DawProject;
 import com.owlplug.project.tasks.discovery.ProjectExplorer;
 import com.owlplug.project.tasks.discovery.ProjectExplorerException;
@@ -57,46 +56,27 @@ public class DawprojectProjectExplorer implements ProjectExplorer {
         throw new ProjectExplorerException("Missing project.xml in " + file.getAbsolutePath(), null);
       }
 
-      DawprojectXmlReader reader = new DawprojectXmlReader();
-      DawprojectXmlReader.ProjectContent content;
-      try (InputStream input = xmlInput(archive, projectEntry)) {
-        content = reader.readProject(input);
-      }
-
-      String name = FilenameUtils.removeExtension(file.getName());
-      ZipEntry metadataEntry = archive.getEntry("metadata.xml");
-      if (metadataEntry != null) {
-        try (InputStream input = xmlInput(archive, metadataEntry)) {
-          String title = reader.readTitle(input);
-          if (title != null && !title.isBlank()) {
-            name = title.strip();
-          }
-        }
-      }
-
       DawProject project = new DawProject();
       project.setApplication(DawApplication.DAWPROJECT);
       project.setPath(FileUtils.convertPath(file.getAbsolutePath()));
-      project.setName(name);
-      project.setFormatVersion(content.version());
+      project.setName(FilenameUtils.removeExtension(file.getName()));
 
-      String appName = content.applicationName();
-      if (appName == null || appName.isBlank()) {
-        project.setAppFullName("DAWproject");
-      } else {
-        String appVersion = content.applicationVersion();
-        project.setAppFullName(appName + (appVersion == null || appVersion.isBlank()
-            ? "" : " " + appVersion));
+      DawprojectXmlReader reader = new DawprojectXmlReader();
+      try (InputStream input = xmlInput(archive, projectEntry)) {
+        reader.readProject(input, project);
+      }
+
+      ZipEntry metadataEntry = archive.getEntry("metadata.xml");
+      if (metadataEntry != null) {
+        try (InputStream input = xmlInput(archive, metadataEntry)) {
+          reader.readMetadata(input, project);
+        }
       }
 
       BasicFileAttributes attributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
       project.setLastModifiedAt(new Date(file.lastModified()));
       project.setCreatedAt(Date.from(attributes.creationTime().toInstant()));
 
-      for (DawPlugin plugin : content.plugins()) {
-        plugin.setProject(project);
-        project.getPlugins().add(plugin);
-      }
       return project;
 
     } catch (IOException | XMLStreamException e) {

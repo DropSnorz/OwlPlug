@@ -135,6 +135,23 @@ public class DawprojectProjectExplorerTest {
   }
 
   @Test
+  public void keepsNonemptyNamesAfterNormalization() throws Exception {
+    Path file = projectFile("Names.dawproject", Map.of(
+        "project.xml", """
+            <Project version="1.0">
+              <Vst2Plugin deviceName="64" deviceID="1"/>
+              <Vst3Plugin deviceName="ModernSynth_x64" deviceID="2"/>
+            </Project>
+            """
+    ));
+
+    DawProject project = explorer.explore(file.toFile());
+    assertEquals(2, project.getPlugins().size());
+    assertPlugin(project, "64", "1", PluginFormat.VST2);
+    assertPlugin(project, "ModernSynth", "2", PluginFormat.VST3);
+  }
+
+  @Test
   public void rejectsArchivesWithoutProjectXml() throws Exception {
     Path file = projectFile("Empty.dawproject", Map.of(
         "metadata.xml", "<MetaData><Title>No project</Title></MetaData>"

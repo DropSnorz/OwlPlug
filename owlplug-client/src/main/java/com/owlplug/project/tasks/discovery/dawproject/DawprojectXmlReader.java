@@ -21,9 +21,8 @@ package com.owlplug.project.tasks.discovery.dawproject;
 import com.owlplug.core.utils.PluginUtils;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.project.model.DawPlugin;
+import com.owlplug.project.model.DawProject;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -31,17 +30,11 @@ import javax.xml.stream.XMLStreamReader;
 
 final class DawprojectXmlReader {
 
-  record ProjectContent(String version, String applicationName, String applicationVersion,
-                        List<DawPlugin> plugins) {
-  }
-
-  ProjectContent readProject(InputStream input) throws XMLStreamException {
+  void readProject(InputStream input, DawProject project) throws XMLStreamException {
     XMLStreamReader xml = createReader(input);
-    List<DawPlugin> plugins = new ArrayList<>();
     String version = null;
-    String applicationName = null;
-    String applicationVersion = null;
     boolean rootSeen = false;
+    project.setAppFullName("DAWproject");
 
     try {
       while (xml.hasNext()) {
@@ -57,8 +50,11 @@ final class DawprojectXmlReader {
           version = xml.getAttributeValue(null, "version");
           rootSeen = true;
         } else if ("Application".equals(element)) {
-          applicationName = xml.getAttributeValue(null, "name");
-          applicationVersion = xml.getAttributeValue(null, "version");
+          String appName = xml.getAttributeValue(null, "name");
+          String appVersion = xml.getAttributeValue(null, "version");
+          project.setAppFullName(appName == null || appName.isBlank()
+              ? "DAWproject"
+              : appName + (appVersion == null || appVersion.isBlank() ? "" : " " + appVersion));
         } else {
           PluginFormat format = pluginFormat(element);
           if (format == null) {
@@ -78,7 +74,8 @@ final class DawprojectXmlReader {
           plugin.setName(PluginUtils.absoluteName(name.strip()));
           plugin.setUid(uid == null ? null : uid.strip());
           plugin.setFormat(format);
-          plugins.add(plugin);
+          plugin.setProject(project);
+          project.getPlugins().add(plugin);
         }
       }
     } finally {
@@ -88,19 +85,22 @@ final class DawprojectXmlReader {
     if (version == null || version.isBlank()) {
       throw new XMLStreamException("Missing DAWproject format version");
     }
-    return new ProjectContent(version, applicationName, applicationVersion, plugins);
+    project.setFormatVersion(version);
   }
 
-  String readTitle(InputStream input) throws XMLStreamException {
+  void readMetadata(InputStream input, DawProject project) throws XMLStreamException {
     XMLStreamReader xml = createReader(input);
     try {
       while (xml.hasNext()) {
         if (xml.next() == XMLStreamConstants.START_ELEMENT
             && "Title".equals(xml.getLocalName())) {
-          return xml.getElementText();
+          String title = xml.getElementText();
+          if (title != null && !title.isBlank()) {
+            project.setName(title.strip());
+          }
+          return;
         }
       }
-      return null;
     } finally {
       xml.close();
     }
