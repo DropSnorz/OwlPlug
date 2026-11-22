@@ -5,9 +5,16 @@ on:
     branches:
       - '**'
       - '!master'
+  pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   test:
+    # Branches from this repository are already built on push: only run
+    # pull_request events for PRs coming from forks to avoid duplicate runs.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
