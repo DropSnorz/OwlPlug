@@ -54,6 +54,10 @@ public class PluginLookupService extends BaseService {
     lookup.setDawPlugin(projectPlugin);
     lookup.setResult(LookupResult.MISSING);
 
+    if (projectPlugin.getName() == null || projectPlugin.getName().isBlank()) {
+      return lookup;
+    }
+
     Specification<PluginComponent> baseSpec = PluginComponentRepository.nameContains(projectPlugin.getName())
             .and(PluginComponentRepository.hasFormat(projectPlugin.getFormat()));
 

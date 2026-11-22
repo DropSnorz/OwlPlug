@@ -80,7 +80,7 @@ public class StudioOneAudioMixerPluginCollector {
 
   private DawPlugin readPluginElement(Element pluginElement) {
     String pluginName = StudioOneDomUtils.extractPluginName(pluginElement);
-    if (pluginName == null || pluginName.isEmpty()) {
+    if (pluginName == null || pluginName.isBlank()) {
       return null;
     }
 

@@ -70,6 +70,7 @@ public class ApplicationDefaults {
   public final Image abletonLogoImage = new Image(getClass().getResourceAsStream("/icons/ableton-white-16.png"));
   public final Image reaperLogoImage = new Image(getClass().getResourceAsStream("/icons/reaper-white-16.png"));
   public final Image studioOneLogoImage = new Image(getClass().getResourceAsStream("/icons/studioone-white-16.png"));
+  public final Image dawprojectLogoImage = new Image(getClass().getResourceAsStream("/icons/dawproject-white-16.png"));
 
   public final Image pluginPlaceholderImage = new Image(
       getClass().getResourceAsStream("/media/plugin-placeholder.png"));
@@ -183,6 +184,7 @@ public class ApplicationDefaults {
       case ABLETON -> abletonLogoImage;
       case REAPER -> reaperLogoImage;
       case STUDIO_ONE -> studioOneLogoImage;
+      case DAWPROJECT -> dawprojectLogoImage;
     };
   }
 
@@ -259,6 +261,7 @@ public class ApplicationDefaults {
       case ABLETON -> abletonPlaceholderImage;
       case REAPER -> reaperPlaceholderImage;
       case STUDIO_ONE -> studioOnePlaceholderImage;
+      case DAWPROJECT -> pluginPlaceholderImage;
     };
   }
 

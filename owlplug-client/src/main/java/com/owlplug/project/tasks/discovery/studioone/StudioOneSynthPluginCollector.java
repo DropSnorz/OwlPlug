@@ -74,7 +74,7 @@ public class StudioOneSynthPluginCollector {
 
   private DawPlugin readSynthElement(Element synthElement) {
     String pluginName = StudioOneDomUtils.extractPluginName(synthElement);
-    if (pluginName == null || pluginName.isEmpty()) {
+    if (pluginName == null || pluginName.isBlank()) {
       return null;
     }
 

@@ -33,6 +33,9 @@ public class PluginUtils {
       return null;
     }
 
+    String originalName = name.strip();
+    name = originalName;
+
     // Remove trailing (XXbit)
     name = name.replaceAll("[(]64bit[)]$", "");
     name = name.replaceAll("[(]32bit[)]$", "");
@@ -54,7 +57,8 @@ public class PluginUtils {
     name = name.replaceAll("(_)*$", "");
     name = name.replaceAll("([.])*$", "");
 
-    return name.trim();
+    String normalizedName = name.trim();
+    return normalizedName.isEmpty() ? originalName : normalizedName;
 
   }
 

@@ -1,0 +1,42 @@
+/* OwlPlug
+ * Copyright (C) 2021 Arthur <dropsnorz@gmail.com>
+ *
+ * This file is part of OwlPlug.
+ *
+ * OwlPlug is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3
+ * as published by the Free Software Foundation.
+ *
+ * OwlPlug is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OwlPlug. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package com.owlplug.core.utils;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.junit.jupiter.api.Test;
+
+public class PluginUtilsTest {
+
+  @Test
+  public void preservesNamesStrippedEntirelyByNormalization() {
+    assertEquals("64", PluginUtils.absoluteName("64"));
+    assertEquals("x64", PluginUtils.absoluteName(" x64 "));
+    assertEquals("_", PluginUtils.absoluteName("_"));
+  }
+
+  @Test
+  public void keepsNormalSuffixRemovalAndMissingNameHandling() {
+    assertEquals("Reverb", PluginUtils.absoluteName("Reverb_x64"));
+    assertEquals("Synth", PluginUtils.absoluteName("Synth (64bit)"));
+    assertEquals("", PluginUtils.absoluteName("  "));
+    assertNull(PluginUtils.absoluteName(null));
+  }
+}

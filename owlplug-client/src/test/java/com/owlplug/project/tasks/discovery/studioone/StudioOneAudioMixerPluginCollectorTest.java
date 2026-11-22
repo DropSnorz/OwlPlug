@@ -23,11 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.owlplug.project.model.DawPlugin;
 import java.io.File;
+import java.io.StringReader;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 public class StudioOneAudioMixerPluginCollectorTest {
 
@@ -48,5 +50,35 @@ public class StudioOneAudioMixerPluginCollectorTest {
     DawPlugin firstPlugin = plugins.get(0);
     assertEquals("Reverb", firstPlugin.getName());
     assertEquals("VST2", firstPlugin.getFormat().name());
+  }
+  @Test
+  public void preservesShortNamesAndStripsOrdinarySuffixes() throws Exception {
+    String xml = """
+        <Root xmlns:x="urn:test">
+          <Attributes name="FX1">
+            <Attributes x:id="ghostData">
+              <Attributes x:id="classInfo" name="64" subCategory="VST2"/>
+            </Attributes>
+          </Attributes>
+          <Attributes name="FX2">
+            <Attributes x:id="ghostData">
+              <Attributes x:id="classInfo" name="Reverb_x64" subCategory="VST3"/>
+            </Attributes>
+          </Attributes>
+          <Attributes name="FX3">
+            <Attributes x:id="ghostData">
+              <Attributes x:id="classInfo" name="   " subCategory="VST2"/>
+            </Attributes>
+          </Attributes>
+        </Root>
+        """;
+    Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+        .parse(new InputSource(new StringReader(xml)));
+
+    List<DawPlugin> plugins = new StudioOneAudioMixerPluginCollector(document).collectPlugins();
+
+    assertEquals(2, plugins.size());
+    assertEquals("64", plugins.get(0).getName());
+    assertEquals("Reverb", plugins.get(1).getName());
   }
 }
