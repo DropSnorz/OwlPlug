@@ -18,6 +18,7 @@
  
 package com.owlplug.explore.repositories;
 
+import com.owlplug.explore.model.BundleType;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.plugin.model.PluginType;
 import jakarta.persistence.criteria.Fetch;
@@ -88,6 +89,21 @@ public interface RemotePackageRepository extends JpaRepository<RemotePackage, Lo
       Join<RemotePackage, Object> bundles = remotePackage.join("bundles", JoinType.INNER);
       return bundles.join("formats").in(formatList);
 
+    };
+  }
+
+  /**
+   * Bundle type filtering JPA Specification. Filters packages having at least one bundle of
+   * the given types.
+   *
+   * @param bundleTypes - The accepted bundle types
+   * @return The JPA Specification
+   */
+  static Specification<RemotePackage> hasBundleType(List<BundleType> bundleTypes) {
+    return (remotePackage, cq, cb) -> {
+      cq.distinct(true);
+      Join<RemotePackage, Object> bundles = remotePackage.join("bundles", JoinType.INNER);
+      return bundles.get("type").in(bundleTypes);
     };
   }
 

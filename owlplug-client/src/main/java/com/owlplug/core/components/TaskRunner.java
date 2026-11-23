@@ -25,6 +25,7 @@ import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -90,6 +91,30 @@ public class TaskRunner {
   }
 
   /**
+   * Cancels a task, whether it is still pending in the queue or currently running.
+   * A pending task is removed from the queue: the executor would otherwise run a cancelled
+   * task, which never completes and would block the queue.
+   *
+   * @param task - the task to cancel
+   */
+  public synchronized void cancelTask(AbstractTask task) {
+    if (taskQueue.remove(task)) {
+      log.debug("Pending task removed from queue - {} ", task.getClass().getName());
+    }
+    task.cancel();
+  }
+
+  /**
+   * Returns true if the task is waiting in the queue and not running yet.
+   *
+   * @param task - the task
+   * @return true if the task is pending
+   */
+  public boolean isPending(AbstractTask task) {
+    return taskQueue.contains(task);
+  }
+
+  /**
    * Refresh the task runner by submitting the next pending task for execution.
    * 
    */
@@ -114,6 +139,15 @@ public class TaskRunner {
         // Unwrap CompletionException so the error matches the one shown from task history
         Throwable ex = (wrapped instanceof java.util.concurrent.CompletionException
             && wrapped.getCause() != null) ? wrapped.getCause() : wrapped;
+        if (ex instanceof CancellationException) {
+          // Cancelled on purpose, not an error worth reporting in the task bar
+          log.debug("Task cancelled");
+          FX.run(() -> {
+            removeCurrentTask();
+            scheduleNext();
+          });
+          return null;
+        }
         log.error("Error while running task", ex);
         FX.run(() -> {
           if (ex != null) {

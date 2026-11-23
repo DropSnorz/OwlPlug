@@ -18,12 +18,18 @@
 
 package com.owlplug.explore.components;
 
+import com.owlplug.explore.model.BundleType;
+import com.owlplug.explore.model.PackageBundle;
+import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
 import com.owlplug.explore.model.search.ExploreFilterCriteriaType;
 import com.owlplug.plugin.model.PluginFormat;
 import com.owlplug.plugin.model.PluginType;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -39,16 +45,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExploreFilterState {
 
+  public static final Set<BundleType> DEFAULT_BUNDLE_TYPES = Set.of(BundleType.ARCHIVE);
+
   private final ObservableSet<Long> selectedSourceIds = FXCollections.observableSet();
   private final ObservableSet<PluginFormat> selectedFormats = FXCollections.observableSet();
   private final ObservableSet<PluginType> selectedTypes = FXCollections.observableSet();
   private final ObservableSet<String> selectedPlatformTags = FXCollections.observableSet();
+  // Installers are handed over to the OS and need manual confirmation, so only archives
+  // (installed by OwlPlug itself) are shown unless the user opts in.
+  private final ObservableSet<BundleType> selectedBundleTypes =
+      FXCollections.observableSet(EnumSet.copyOf(DEFAULT_BUNDLE_TYPES));
 
   private final ObjectProperty<List<ExploreFilterCriteria>> criteriaList = new SimpleObjectProperty<>();
 
   public ExploreFilterState() {
     criteriaList.bind(Bindings.createObjectBinding(this::buildCriteriaList,
-        selectedSourceIds, selectedFormats, selectedTypes, selectedPlatformTags));
+        selectedSourceIds, selectedFormats, selectedTypes, selectedPlatformTags,
+        selectedBundleTypes));
   }
 
   private List<ExploreFilterCriteria> buildCriteriaList() {
@@ -71,7 +84,46 @@ public class ExploreFilterState {
       criteria.add(new ExploreFilterCriteria(new ArrayList<>(selectedPlatformTags),
           ExploreFilterCriteriaType.PLATFORM_LIST));
     }
+    if (!selectedBundleTypes.isEmpty()) {
+      criteria.add(new ExploreFilterCriteria(new ArrayList<>(EnumSet.copyOf(selectedBundleTypes)),
+          ExploreFilterCriteriaType.BUNDLE_TYPE_LIST));
+    }
     return criteria;
+  }
+
+  public ObservableSet<BundleType> getSelectedBundleTypes() {
+    return selectedBundleTypes;
+  }
+
+  /**
+   * Returns whether bundles of the given type pass the current bundle type filter.
+   * An empty selection means no restriction, like every other filter section.
+   */
+  public boolean isBundleTypeVisible(BundleType type) {
+    return selectedBundleTypes.isEmpty() || selectedBundleTypes.contains(type);
+  }
+
+  /**
+   * Returns the bundle types accepted by the current filter, all types if none is selected.
+   */
+  public Set<BundleType> getVisibleBundleTypes() {
+    if (selectedBundleTypes.isEmpty()) {
+      return EnumSet.allOf(BundleType.class);
+    }
+    return EnumSet.copyOf(selectedBundleTypes);
+  }
+
+  /**
+   * Returns the package bundles matching the current bundle type filter, in registry order.
+   */
+  public List<PackageBundle> visibleBundles(RemotePackage remotePackage) {
+    if (remotePackage.getBundles() == null) {
+      return List.of();
+    }
+    return remotePackage.getBundles().stream()
+        .filter(bundle -> isBundleTypeVisible(bundle.getType()))
+        .sorted(Comparator.comparingInt(PackageBundle::getOrder))
+        .toList();
   }
 
   public ObservableSet<Long> getSelectedSourceIds() {
@@ -99,5 +151,8 @@ public class ExploreFilterState {
     selectedFormats.clear();
     selectedTypes.clear();
     selectedPlatformTags.clear();
+    // Reset to defaults rather than clearing, so installers don't reappear unexpectedly
+    selectedBundleTypes.retainAll(DEFAULT_BUNDLE_TYPES);
+    selectedBundleTypes.addAll(DEFAULT_BUNDLE_TYPES);
   }
 }

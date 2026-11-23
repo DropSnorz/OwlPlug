@@ -21,6 +21,8 @@ package com.owlplug.explore.ui;
 import atlantafx.base.theme.Styles;
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.utils.FileUtils;
+import com.owlplug.explore.controllers.ExploreFilterController;
+import com.owlplug.explore.model.BundleType;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
 import java.util.ArrayList;
@@ -98,7 +100,7 @@ public class PackageBundlesView extends VBox {
     }
     row.getChildren().add(details);
 
-    Button installButton = new Button("Install");
+    Button installButton = new Button(bundle.isInstaller() ? "Run installer" : "Install");
     installButton.getStyleClass().addAll(Styles.SMALL, "package-bundle-install");
     installButton.setOnAction(installHandler);
     installButton.setMinWidth(USE_PREF_SIZE);
@@ -109,7 +111,7 @@ public class PackageBundlesView extends VBox {
 
   /**
    * Builds the platform line, one chip per operating system, listing the architectures it is
-   * available for.
+   * available for, followed by an installer badge for installer bundles.
    */
   private FlowPane buildTargetsPane(PackageBundle bundle) {
 
@@ -123,6 +125,10 @@ public class PackageBundlesView extends VBox {
     // Bundles without any declared target are not restricted to a given platform.
     if (pane.getChildren().isEmpty()) {
       pane.getChildren().add(buildTargetChip(null, List.of()));
+    }
+
+    if (bundle.isInstaller()) {
+      pane.getChildren().add(buildInstallerBadge());
     }
     return pane;
   }
@@ -180,6 +186,15 @@ public class PackageBundlesView extends VBox {
     }
 
     return pane;
+  }
+
+  private Label buildInstallerBadge() {
+    FontIcon icon = new FontIcon(ExploreFilterController.bundleTypeIconLiteral(BundleType.INSTALLER));
+    icon.setIconSize(11);
+    Label badge = new Label(BundleType.INSTALLER.getLabel(), icon);
+    badge.getStyleClass().add("package-bundle-installer-badge");
+    Tooltip.install(badge, new Tooltip("Installed by your system's installer, outside of OwlPlug"));
+    return badge;
   }
 
   /**

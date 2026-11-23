@@ -18,6 +18,7 @@
  
 package com.owlplug.explore.model.search;
 
+import com.owlplug.explore.model.BundleType;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.plugin.model.PluginType;
@@ -67,6 +68,9 @@ public class ExploreCriteriaAdapter {
     }
     if (criteria.getFilterType().equals(ExploreFilterCriteriaType.SOURCE_LIST)) {
       return RemotePackageRepository.hasSource((List<Long>) criteria.getValue());
+    }
+    if (criteria.getFilterType().equals(ExploreFilterCriteriaType.BUNDLE_TYPE_LIST)) {
+      return RemotePackageRepository.hasBundleType((List<BundleType>) criteria.getValue());
     }
 
     return Specification.unrestricted();

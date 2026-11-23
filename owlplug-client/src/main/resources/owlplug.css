@@ -778,6 +778,27 @@ ProgressIndicator {
     -fx-font-size: 11px;
 }
 
+/* Same shape as the target chips next to it, in a discreet gray */
+.package-bundle-installer-badge {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-background-color: -color-neutral-subtle;
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-border-color: -color-border-muted;
+    -fx-padding: 1 6 1 5;
+    -fx-graphic-text-gap: 4px;
+}
+
+.package-bundle-installer-badge .ikonli-font-icon {
+    -fx-icon-color: -color-fg-muted;
+}
+
+.plugin-filter-hint {
+    -fx-font-size: 11px;
+    -fx-padding: 2 0 0 0;
+}
+
 
 
 /****************************************************************
@@ -786,6 +807,187 @@ ProgressIndicator {
 
 .install-step-screenshot .progress-bar > .bar {
     -fx-background-radius: 0;
+}
+
+/****************************************************************
+ * Installer dialog
+ ****************************************************************/
+
+.installer-dialog {
+    -fx-padding: 4 4 0 4;
+}
+
+.installer-thumbnail {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-muted;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+}
+
+.installer-thumbnail .ikonli-font-icon {
+    -fx-icon-color: -color-fg-muted;
+}
+
+.installer-package-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-emphasis;
+}
+
+/* Stepper */
+
+.installer-stepper {
+    -fx-padding: 4 12 4 12;
+}
+
+.installer-step-circle {
+    -fx-min-width: 28px;
+    -fx-min-height: 28px;
+    -fx-max-width: 28px;
+    -fx-max-height: 28px;
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
+    -fx-border-width: 2px;
+    -fx-border-color: -color-border-default;
+    -fx-background-color: -color-bg-default;
+}
+
+.installer-step-number {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.installer-step-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.installer-step-connector {
+    -fx-min-height: 2px;
+    -fx-max-height: 2px;
+    -fx-min-width: 24px;
+    -fx-background-color: -color-border-default;
+    /* The stepper is top aligned: moves the line to the step circles center (28px / 2 - 1px) */
+    -fx-translate-y: 13px;
+}
+
+.installer-step-connector:done {
+    -fx-background-color: -color-accent-emphasis;
+}
+
+.installer-step:active .installer-step-circle {
+    -fx-border-color: -color-accent-emphasis;
+    -fx-background-color: -color-accent-subtle;
+}
+
+.installer-step:active .installer-step-number,
+.installer-step:active .installer-step-label {
+    -fx-text-fill: -color-accent-fg;
+}
+
+.installer-step:done .installer-step-circle {
+    -fx-border-color: -color-accent-emphasis;
+    -fx-background-color: -color-accent-emphasis;
+}
+
+.installer-step:done .installer-step-check {
+    -fx-icon-color: -color-fg-emphasis;
+}
+
+.installer-step:done .installer-step-label {
+    -fx-text-fill: -color-fg-default;
+}
+
+.installer-step:error .installer-step-circle {
+    -fx-border-color: -color-danger-emphasis;
+    -fx-background-color: -color-danger-emphasis;
+}
+
+.installer-step:error .installer-step-cross {
+    -fx-icon-color: -color-fg-emphasis;
+}
+
+.installer-step:error .installer-step-label {
+    -fx-text-fill: -color-danger-fg;
+}
+
+/* State cards */
+
+.installer-card {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-muted;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 16px;
+}
+
+.installer-card-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-emphasis;
+}
+
+.installer-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.installer-progress {
+    -fx-pref-height: 8px;
+}
+
+.installer-icon-success {
+    -fx-icon-color: -color-success-fg;
+}
+
+.installer-icon-warning {
+    -fx-icon-color: -color-warning-emphasis;
+}
+
+.installer-icon-danger {
+    -fx-icon-color: -color-danger-fg;
+}
+
+.installer-hash {
+    -fx-background-color: -color-bg-inset;
+    -fx-background-radius: 5px;
+    -fx-padding: 4 4 4 10;
+}
+
+.installer-hash-title {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-fg-muted;
+}
+
+.installer-hash-value {
+    -fx-font-family: monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-default;
+    -fx-text-overrun: center-ellipsis;
+    -fx-wrap-text: false;
+}
+
+.installer-callout-warning {
+    -fx-background-color: -color-warning-subtle;
+    -fx-border-color: -color-warning-muted;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 10 12 10 12;
+}
+
+.installer-error-detail {
+    -fx-font-family: monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-background-color: -color-bg-inset;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px;
+}
+
+.installer-footer {
+    -fx-padding: 4 0 12 0;
 }
 
 /****************************************************************

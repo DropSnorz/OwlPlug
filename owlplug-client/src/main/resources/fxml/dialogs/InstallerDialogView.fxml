@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox styleClass="installer-dialog" spacing="18.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.InstallerDialogController">
+
+    <!-- Package summary -->
+    <HBox spacing="14.0" alignment="CENTER_LEFT" styleClass="installer-header">
+        <StackPane fx:id="thumbnailPane" styleClass="installer-thumbnail" minWidth="56.0" minHeight="56.0" maxWidth="56.0" maxHeight="56.0">
+            <ImageView fx:id="thumbnailImageView" fitWidth="56.0" fitHeight="56.0" smooth="true" />
+            <FontIcon fx:id="thumbnailPlaceholder" iconLiteral="mdi2p-puzzle-outline" iconSize="26" />
+        </StackPane>
+        <VBox spacing="4.0" HBox.hgrow="ALWAYS" minWidth="0.0">
+            <Label fx:id="packageNameLabel" styleClass="installer-package-name" />
+            <Label fx:id="packageMetaLabel" styleClass="label-disabled" />
+            <FlowPane fx:id="targetsPane" hgap="4.0" vgap="4.0" />
+        </VBox>
+    </HBox>
+
+    <!-- Step indicator, filled by the controller -->
+    <HBox fx:id="stepper" styleClass="installer-stepper" alignment="TOP_CENTER" />
+
+    <!-- One card per dialog state, only one visible at a time -->
+    <StackPane VBox.vgrow="ALWAYS" alignment="TOP_LEFT" minHeight="190.0">
+
+        <VBox fx:id="downloadCard" styleClass="installer-card" spacing="10.0">
+            <Label text="Downloading installer" styleClass="installer-card-title" />
+            <Label fx:id="downloadFileLabel" styleClass="label-disabled" wrapText="true" minHeight="-Infinity" />
+            <ProgressBar fx:id="downloadProgressBar" maxWidth="Infinity" styleClass="installer-progress" />
+            <Label fx:id="downloadStatusLabel" styleClass="installer-hint" wrapText="true" minHeight="-Infinity" />
+        </VBox>
+
+        <VBox fx:id="readyCard" styleClass="installer-card" spacing="12.0" visible="false">
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <FontIcon iconLiteral="mdi2s-shield-check-outline" iconSize="26" styleClass="installer-icon-success" />
+                <VBox spacing="2.0">
+                    <Label text="Installer verified" styleClass="installer-card-title" />
+                    <Label text="Its SHA-256 checksum matches the one published by the registry." styleClass="label-disabled" wrapText="true" minHeight="-Infinity" />
+                </VBox>
+            </HBox>
+            <HBox spacing="6.0" alignment="CENTER_LEFT" styleClass="installer-hash">
+                <Label text="SHA-256" styleClass="installer-hash-title" minWidth="-Infinity" />
+                <Label fx:id="hashLabel" styleClass="installer-hash-value" HBox.hgrow="ALWAYS" maxWidth="Infinity" minWidth="0.0" wrapText="false" />
+                <Button fx:id="copyHashButton" styleClass="flat, small">
+                    <graphic><FontIcon iconLiteral="mdi2c-content-copy" iconSize="14" /></graphic>
+                    <tooltip><Tooltip text="Copy checksum" /></tooltip>
+                </Button>
+            </HBox>
+            <HBox spacing="10.0" alignment="TOP_LEFT" styleClass="installer-callout-warning">
+                <FontIcon iconLiteral="mdi2a-alert-outline" iconSize="18" styleClass="installer-icon-warning" />
+                <Label fx:id="warningLabel" wrapText="true" minHeight="-Infinity" HBox.hgrow="ALWAYS" maxWidth="Infinity" />
+            </HBox>
+        </VBox>
+
+        <VBox fx:id="waitingCard" styleClass="installer-card" spacing="12.0" visible="false">
+            <HBox spacing="12.0" alignment="CENTER_LEFT">
+                <ProgressIndicator prefWidth="28.0" prefHeight="28.0" />
+                <Label text="Waiting for the installer to finish" styleClass="installer-card-title" />
+            </HBox>
+            <Label wrapText="true" minHeight="-Infinity" text="Follow the steps in the installer window. Once the installation is complete, come back here and click &quot;Installation complete&quot; so OwlPlug can find your new plugins." />
+            <Label wrapText="true" minHeight="-Infinity" styleClass="installer-hint" text="The installer didn't open? It may be hidden behind this window, or blocked by your system's security settings." />
+            <HBox spacing="4.0" alignment="CENTER_LEFT">
+                <Hyperlink fx:id="relaunchLink" text="Open installer again">
+                    <graphic><FontIcon iconLiteral="mdi2r-replay" iconSize="14" /></graphic>
+                </Hyperlink>
+                <Hyperlink fx:id="showInFolderLink" text="Show in folder">
+                    <graphic><FontIcon iconLiteral="mdi2f-folder-open-outline" iconSize="14" /></graphic>
+                </Hyperlink>
+            </HBox>
+        </VBox>
+
+        <VBox fx:id="doneCard" styleClass="installer-card" spacing="12.0" visible="false">
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <StackPane>
+                    <FontIcon fx:id="doneIcon" iconLiteral="mdi2c-check-circle-outline" iconSize="26" styleClass="installer-icon-success" />
+                    <ProgressIndicator fx:id="scanIndicator" prefWidth="26.0" prefHeight="26.0" />
+                </StackPane>
+                <Label fx:id="doneTitleLabel" styleClass="installer-card-title" />
+            </HBox>
+            <Label fx:id="doneMessageLabel" wrapText="true" minHeight="-Infinity" />
+        </VBox>
+
+        <VBox fx:id="errorCard" styleClass="installer-card" spacing="12.0" visible="false">
+            <HBox spacing="10.0" alignment="CENTER_LEFT">
+                <FontIcon iconLiteral="mdi2a-alert-circle-outline" iconSize="26" styleClass="installer-icon-danger" />
+                <Label fx:id="errorTitleLabel" styleClass="installer-card-title" wrapText="true" minHeight="-Infinity" />
+            </HBox>
+            <Label fx:id="errorMessageLabel" wrapText="true" minHeight="-Infinity" />
+            <Label fx:id="errorDetailLabel" wrapText="true" minHeight="-Infinity" styleClass="installer-error-detail" />
+        </VBox>
+    </StackPane>
+
+    <!-- Actions -->
+    <HBox spacing="8.0" alignment="CENTER_RIGHT" styleClass="installer-footer">
+        <Button fx:id="secondaryButton" mnemonicParsing="false" text="Cancel" />
+        <Button fx:id="primaryButton" mnemonicParsing="false" styleClass="accent" defaultButton="true" />
+    </HBox>
+</VBox>

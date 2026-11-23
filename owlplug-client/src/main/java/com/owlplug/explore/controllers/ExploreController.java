@@ -28,8 +28,10 @@ import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.explore.components.ExploreTaskFactory;
 import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
+import com.owlplug.explore.controllers.dialogs.InstallerDialogController;
 import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
 import com.owlplug.explore.events.SourceSyncEvent;
+import com.owlplug.explore.model.BundleType;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.search.ExploreFilterCriteria;
@@ -44,6 +46,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -86,6 +89,8 @@ public class ExploreController extends BaseController {
   private ExploreFilterController exploreFilterController;
   @Autowired
   private InstallStepDialogController installStepDialogController;
+  @Autowired
+  private InstallerDialogController installerDialogController;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
 
@@ -146,6 +151,9 @@ public class ExploreController extends BaseController {
   /** Guards against firing overlapping "load next page" database calls. */
   private boolean fetchingNextDbPage = false;
 
+  /** Rebuilds displayed packages on the next search result, even if the same packages match. */
+  private boolean forcePackageRefresh = false;
+
   /**
    * Drops results from a search or "load next page" call superseded by a more recent one
    * (e.g. rapid filter changes), so a slow, stale database call can never overwrite fresher data.
@@ -177,6 +185,10 @@ public class ExploreController extends BaseController {
     filterContainer.getChildren().add(0, exploreFilterController.getView());
     exploreFilterController.getFilterState().criteriaListProperty()
         .addListener((obs, oldVal, newVal) -> performPackageSearch());
+    // Package views render their visible bundles (formats, install menus), so they must be
+    // rebuilt when the bundle type filter changes even if the same packages match.
+    exploreFilterController.getFilterState().getSelectedBundleTypes()
+        .addListener((SetChangeListener<BundleType>) change -> forcePackageRefresh = true);
 
     IntegerProperty exploreFilterCount = exploreFilterController.activeFilterCountProperty();
     filterBadge.textProperty().bind(Bindings.convert(exploreFilterCount));
@@ -295,7 +307,8 @@ public class ExploreController extends BaseController {
    * @param packagePage - First page of remote packages
    */
   public synchronized void displayPackages(Page<RemotePackage> packagePage) {
-    if (shouldRefreshPackages(packagePage)) {
+    if (forcePackageRefresh || shouldRefreshPackages(packagePage)) {
+      forcePackageRefresh = false;
       this.masonryPane.getChildren().clear();
       this.masonryPane.requestLayout();
 
@@ -502,12 +515,14 @@ public class ExploreController extends BaseController {
    * @param remotePackage Package to install
    */
   public boolean installPackage(RemotePackage remotePackage) {
-    PackageBundle bundle = exploreService.findBestBundle(remotePackage);
+    PackageBundle bundle = exploreService.findBestBundle(remotePackage,
+        exploreFilterController.getFilterState().getVisibleBundleTypes());
     return installBundle(bundle);
   }
 
   /**
-   * Trigger bundle installation.
+   * Trigger bundle installation. Archives are installed by OwlPlug, installers are delegated
+   * to the operating system.
    *
    * @param bundle Package to install
    */
@@ -517,11 +532,26 @@ public class ExploreController extends BaseController {
         p.put("source", bundle.getRemotePackage().getRemoteSource().getName());
         p.put("package", bundle.getRemotePackage().getName());
         p.put("bundle", bundle.getName());
+        p.put("type", bundle.getType().name().toLowerCase());
       });
-      installStepDialogController.install(bundle);
+      if (bundle.isInstaller()) {
+        installerDialogController.start(bundle);
+      } else {
+        installStepDialogController.install(bundle);
+      }
       return true;
     }
     return false;
+  }
+
+  /**
+   * Returns the package bundles matching the current Explore filters, in registry order.
+   *
+   * @param remotePackage the remote package
+   * @return visible bundles
+   */
+  public List<PackageBundle> getVisibleBundles(RemotePackage remotePackage) {
+    return exploreFilterController.getFilterState().visibleBundles(remotePackage);
   }
 
   /**

@@ -42,6 +42,7 @@ public class LazyViewRegistry {
   public static final String EXPORT_VIEW = "EXPORT_VIEW";
   public static final String DONATE_VIEW = "DONATE_VIEW";
   public static final String INSTALL_STEP_VIEW = "INSTALL_STEP_VIEW";
+  public static final String INSTALLER_DIALOG_VIEW = "INSTALLER_DIALOG_VIEW";
 
 
   @Autowired
@@ -66,6 +67,7 @@ public class LazyViewRegistry {
     preloadFxml(EXPORT_VIEW, "/fxml/dialogs/ExportView.fxml");
     preloadFxml(DONATE_VIEW, "/fxml/dialogs/DonateView.fxml");
     preloadFxml(INSTALL_STEP_VIEW, "/fxml/dialogs/InstallStepView.fxml");
+    preloadFxml(INSTALLER_DIALOG_VIEW, "/fxml/dialogs/InstallerDialogView.fxml");
 
   }
 

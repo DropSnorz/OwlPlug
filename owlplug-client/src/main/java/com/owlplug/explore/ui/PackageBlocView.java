@@ -20,9 +20,7 @@ package com.owlplug.explore.ui;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.utils.PlatformUtils;
-import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.controllers.ExploreController;
-import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.plugin.model.PluginStage;
 import java.util.Random;
@@ -135,20 +133,7 @@ public class PackageBlocView extends AnchorPane {
 
     Menu bundlesListMenuItem = new Menu("Other Packages");
     contextMenu.getItems().add(bundlesListMenuItem);
-
-    for (PackageBundle bundle : remotePackage.getBundles()) {
-      TextFlow bundleTextFlow = new TextFlow();
-      bundleTextFlow.getChildren().add(new Label("Install"));
-      Text bundleSource = new Text(" (" + StringUtils.truncate(bundle.getName(), 50, "...") + ")");
-      bundleSource.getStyleClass().add("text-disabled");
-      bundleTextFlow.getChildren().add(bundleSource);
-      CustomMenuItem bundleMenuItem = new CustomMenuItem(bundleTextFlow);
-      bundleMenuItem.setOnAction(e -> {
-        this.parentController.installBundle(bundle);
-      });
-      bundlesListMenuItem.getItems().add(bundleMenuItem);
-
-    }
+    contextMenu.setOnShowing(e -> BundleMenuItems.fill(bundlesListMenuItem, remotePackage, parentController));
 
     MenuItem pluginPageMenuItem = new MenuItem("Browse plugin page...");
     pluginPageMenuItem.setOnAction(e -> {

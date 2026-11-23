@@ -28,6 +28,7 @@ import com.owlplug.explore.repositories.RemotePackageRepository;
 import com.owlplug.explore.repositories.RemoteSourceRepository;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.explore.tasks.BundleInstallTask;
+import com.owlplug.explore.tasks.InstallerDownloadTask;
 import com.owlplug.explore.tasks.SourceSyncTask;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import java.nio.file.Path;
@@ -80,5 +81,15 @@ public class ExploreTaskFactory extends BaseTaskFactory {
   }
 
 
+  /**
+   * Creates a task to download and verify a package installer. The installer is not executed,
+   * see {@link InstallerDownloadTask}.
+   * @param bundle - installer bundle to retrieve
+   * @return task execution context
+   */
+  public TaskExecutionContext createInstallerDownloadTask(PackageBundle bundle) {
+    return create(new InstallerDownloadTask(bundle, InstallerDownloadTask.createDownloadDirectoryPath(),
+        exploreService));
+  }
 
 }
