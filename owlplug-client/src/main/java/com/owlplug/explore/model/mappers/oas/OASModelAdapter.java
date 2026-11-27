@@ -18,6 +18,7 @@
 
 package com.owlplug.explore.model.mappers.oas;
 
+import com.owlplug.explore.model.BundleType;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
@@ -115,12 +116,14 @@ public class OASModelAdapter {
           continue;
         }
 
-        // Skipping. OwlPlug only supports archives (installer not supported)
-        if (!file.getType().equals("archive")) {
+        // Skipping. Unknown or missing file type (only archives and installers are supported)
+        BundleType bundleType = BundleType.fromOasType(file.getType());
+        if (bundleType == null) {
           continue;
         }
 
         PackageBundle bundle = mapperToEntity(file, remotePackage.getName());
+        bundle.setType(bundleType);
         bundle.setRemotePackage(remotePackage);
         // Position in the unfiltered files array, kept stable so download details can be
         // re-fetched by index from the OAS registry detail endpoint at install time.
@@ -134,6 +137,9 @@ public class OASModelAdapter {
 
   private static List<String> getPluginFormatsFromFileFormats(List<String> fileFormats) {
     HashSet<String> pluginFormats = new HashSet<>();
+    if (fileFormats == null) {
+      return List.of();
+    }
     for (String format : fileFormats) {
       switch (format) {
         case "component" -> pluginFormats.add("au");

@@ -22,8 +22,10 @@ import java.awt.Desktop;
 import java.awt.Desktop.Action;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,51 @@ public class PlatformUtils {
         Desktop.getDesktop().open(file);
       } catch (IOException e) {
         log.error("Application for the given file fails to be launched", e);
+      }
+    });
+  }
+
+  /**
+   * Opens a file with the application associated by the operating system, reporting failures
+   * to the caller unlike {@link #openFromDesktop(File)}. Also opens executables (installers),
+   * which the Desktop API refuses on Windows. Falls back to xdg-open when the Desktop API is
+   * not supported (some Linux desktop environments).
+   *
+   * @param file file to open
+   * @return future completed once the OS accepted the request, or failed with the cause
+   */
+  public static CompletableFuture<Void> openFile(File file) {
+    return Async.runAsync(() -> {
+      try {
+        if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+          // Desktop.open rejects executables on Windows ("Unsupported URI content"). The shell
+          // "start" command uses the same file associations and still lets Windows show the
+          // UAC elevation prompt, which a direct ProcessBuilder launch of the file would not.
+          // The empty argument is the window title expected by "start" before the path.
+          Process process = new ProcessBuilder("cmd.exe", "/c", "start", "", file.getAbsolutePath())
+              .redirectErrorStream(true)
+              .start();
+          if (process.waitFor(10, TimeUnit.SECONDS) && process.exitValue() != 0) {
+            String output = new String(process.getInputStream().readAllBytes()).trim();
+            throw new IOException("Windows can't open the file (exit code " + process.exitValue() + ")"
+                + (output.isEmpty() ? "" : ": " + output));
+          }
+          return;
+        }
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.OPEN)) {
+          Desktop.getDesktop().open(file);
+          return;
+        }
+        log.warn("Desktop API not supported, falling back to xdg-open");
+        Process process = new ProcessBuilder("xdg-open", file.getAbsolutePath()).start();
+        if (process.waitFor(5, TimeUnit.SECONDS) && process.exitValue() != 0) {
+          throw new IOException("xdg-open failed with exit code " + process.exitValue());
+        }
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        throw new IllegalStateException(e);
       }
     });
   }

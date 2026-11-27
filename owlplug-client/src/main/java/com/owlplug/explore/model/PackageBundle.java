@@ -18,7 +18,6 @@
  
 package com.owlplug.explore.model;
 
-import com.owlplug.plugin.model.PluginFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -62,6 +61,11 @@ public class PackageBundle {
   private int downloadCount;
   @ColumnDefault("false")
   private boolean attested;
+  // ColumnDefault backfills rows created before installer support, which were all archives.
+  @Enumerated(EnumType.STRING)
+  @Column(name = "bundle_type")
+  @ColumnDefault("'ARCHIVE'")
+  private BundleType type = BundleType.ARCHIVE;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @BatchSize(size = 100)
@@ -178,5 +182,17 @@ public class PackageBundle {
 
   public void setAttested(boolean attested) {
     this.attested = attested;
+  }
+
+  public BundleType getType() {
+    return type;
+  }
+
+  public void setType(BundleType type) {
+    this.type = type;
+  }
+
+  public boolean isInstaller() {
+    return type == BundleType.INSTALLER;
   }
 }

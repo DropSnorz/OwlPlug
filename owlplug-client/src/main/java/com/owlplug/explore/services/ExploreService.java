@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.owlplug.core.model.RuntimePlatform;
 import com.owlplug.core.services.BaseService;
 import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
+import com.owlplug.explore.model.BundleType;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.explore.model.RemoteSource;
@@ -46,10 +47,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -181,16 +184,47 @@ public class ExploreService extends BaseService {
   }
 
   /**
-   * Find the best bundle from a package based on the user current platform.
+   * Find the best bundle from a package based on the user current platform, considering all
+   * bundle types.
    *
    * @param remotePackage - The remote package
    */
   public PackageBundle findBestBundle(RemotePackage remotePackage) {
+    return findBestBundle(remotePackage, EnumSet.allOf(BundleType.class));
+  }
+
+  /**
+   * Find the best bundle from a package based on the user current platform, restricted to the
+   * given bundle types. Archives are preferred over installers since OwlPlug can install them
+   * without user interaction.
+   *
+   * @param remotePackage - The remote package
+   * @param allowedTypes - Bundle types that can be selected
+   * @return the best bundle, or null if no allowed bundle is compatible with the current platform
+   */
+  public PackageBundle findBestBundle(RemotePackage remotePackage, Set<BundleType> allowedTypes) {
+    for (BundleType type : List.of(BundleType.ARCHIVE, BundleType.INSTALLER)) {
+      if (!allowedTypes.contains(type)) {
+        continue;
+      }
+      List<PackageBundle> candidates = remotePackage.getBundles().stream()
+          .filter(bundle -> bundle.getType() == type)
+          .sorted(Comparator.comparingInt(PackageBundle::getOrder))
+          .toList();
+      PackageBundle bundle = findBestPlatformBundle(candidates);
+      if (bundle != null) {
+        return bundle;
+      }
+    }
+    return null;
+  }
+
+  private PackageBundle findBestPlatformBundle(List<PackageBundle> bundles) {
 
     RuntimePlatform runtimePlatform = this.getApplicationDefaults().getRuntimePlatform();
 
     // Look for bundles matching runtimePlatform
-    for (PackageBundle bundle : remotePackage.getBundles()) {
+    for (PackageBundle bundle : bundles) {
       for (String platform : bundle.getTargets()) {
         if (platform.equals(runtimePlatform.getTag())
             || platform.equals(runtimePlatform.getOperatingSystem().getCode())) {
@@ -200,7 +234,7 @@ public class ExploreService extends BaseService {
     }
 
     // Look for bundles compatibles with current runtimePlatform
-    for (PackageBundle bundle : remotePackage.getBundles()) {
+    for (PackageBundle bundle : bundles) {
       for (String platformTag : bundle.getTargets()) {
         for (String compatibleTag : runtimePlatform.getCompatiblePlatformsTags()) {
           if (platformTag.equals(compatibleTag)) {

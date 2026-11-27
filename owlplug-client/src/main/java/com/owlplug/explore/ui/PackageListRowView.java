@@ -23,13 +23,13 @@ import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.ui.VirtualizedImageView;
 import com.owlplug.core.utils.PlatformUtils;
-import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.controllers.ExploreController;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
 import com.owlplug.plugin.model.PluginStage;
 import com.owlplug.plugin.ui.PluginFormatBadgeView;
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -168,9 +168,10 @@ public class PackageListRowView extends HBox {
       typeAndFormats.getChildren().add(typeLabel);
     }
 
-    if (remotePackage.getBundles() != null && !remotePackage.getBundles().isEmpty()) {
+    List<PackageBundle> visibleBundles = parentController.getVisibleBundles(remotePackage);
+    if (!visibleBundles.isEmpty()) {
       java.util.Set<String> seenFormats = new java.util.LinkedHashSet<>();
-      for (PackageBundle bundle : remotePackage.getBundles()) {
+      for (PackageBundle bundle : visibleBundles) {
         if (bundle.getFormats() != null) {
           seenFormats.addAll(bundle.getFormats());
         }
@@ -221,20 +222,9 @@ public class PackageListRowView extends HBox {
     ContextMenu contextMenu = new ContextMenu();
     contextMenu.getItems().add(installMenuItem);
 
-    if (remotePackage.getBundles() != null) {
-      Menu bundlesMenu = new Menu("Other Packages");
-      for (PackageBundle bundle : remotePackage.getBundles()) {
-        TextFlow bundleTextFlow = new TextFlow();
-        bundleTextFlow.getChildren().add(new Label("Install"));
-        Text bundleSource = new Text(" (" + StringUtils.truncate(bundle.getName(), 50, "...") + ")");
-        bundleSource.getStyleClass().add("text-disabled");
-        bundleTextFlow.getChildren().add(bundleSource);
-        CustomMenuItem bundleMenuItem = new CustomMenuItem(bundleTextFlow);
-        bundleMenuItem.setOnAction(e -> parentController.installBundle(bundle));
-        bundlesMenu.getItems().add(bundleMenuItem);
-      }
-      contextMenu.getItems().add(bundlesMenu);
-    }
+    Menu bundlesMenu = new Menu("Other Packages");
+    contextMenu.getItems().add(bundlesMenu);
+    contextMenu.setOnShowing(e -> BundleMenuItems.fill(bundlesMenu, remotePackage, parentController));
 
     MenuItem pageMenuItem = new MenuItem("Browse plugin page...");
     pageMenuItem.setOnAction(e -> PlatformUtils.openDefaultBrowser(remotePackage.getPageUrl()));

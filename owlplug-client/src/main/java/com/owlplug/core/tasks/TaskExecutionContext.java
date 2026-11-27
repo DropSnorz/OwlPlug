@@ -44,6 +44,20 @@ public class TaskExecutionContext {
     taskRunner.submitTaskOnQueueHead(task);
   }
 
+  /**
+   * Cancels the task, removing it from the runner queue if it has not started yet.
+   */
+  public void cancel() {
+    taskRunner.cancelTask(task);
+  }
+
+  /**
+   * Returns true if the task is waiting for other tasks to complete before running.
+   */
+  public boolean isPending() {
+    return taskRunner.isPending(task);
+  }
+
   public TaskExecutionContext setOnSucceeded(EventHandler<WorkerStateEvent> value) {
     task.setOnSucceeded(value);
     return this;

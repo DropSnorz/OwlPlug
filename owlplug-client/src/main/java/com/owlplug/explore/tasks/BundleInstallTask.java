@@ -20,29 +20,16 @@ package com.owlplug.explore.tasks;
 
 import com.owlplug.core.components.ApplicationDefaults;
 import com.owlplug.core.model.RuntimePlatform;
-import com.owlplug.core.tasks.AbstractTask;
 import com.owlplug.core.tasks.TaskException;
 import com.owlplug.core.tasks.TaskResult;
 import com.owlplug.core.utils.ArchiveUtils;
-import com.owlplug.core.utils.CryptoUtils;
 import com.owlplug.core.utils.FileUtils;
-import com.owlplug.core.utils.nio.CallbackByteChannel;
 import com.owlplug.explore.model.PackageBundle;
-import com.owlplug.explore.model.RemotePackage;
-import com.owlplug.explore.model.RemoteSource;
-import com.owlplug.explore.model.SourceType;
-import com.owlplug.explore.model.mappers.oas.OASFile;
 import com.owlplug.explore.services.ExploreService;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -50,14 +37,12 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BundleInstallTask extends AbstractTask {
+public class BundleInstallTask extends AbstractBundleDownloadTask {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-  private PackageBundle bundle;
   private Path targetDirectory;
   private ApplicationDefaults applicationDefaults;
-  private ExploreService exploreService;
 
   /**
    * Creates a new Package Bundle installation task.
@@ -70,13 +55,16 @@ public class BundleInstallTask extends AbstractTask {
    */
   public BundleInstallTask(PackageBundle bundle, Path targetDirectory, ApplicationDefaults applicationDefaults,
                             ExploreService exploreService) {
-
-    this.bundle = bundle;
+    super(bundle, exploreService);
     this.targetDirectory = targetDirectory;
     this.applicationDefaults = applicationDefaults;
-    this.exploreService = exploreService;
     setName("Install plugin - " + bundle.getRemotePackage().getName());
     setMaxProgress(150);
+  }
+
+  @Override
+  protected String getMessagePrefix() {
+    return "Installing plugin " + bundle.getRemotePackage().getName();
   }
 
   @Override
@@ -91,10 +79,12 @@ public class BundleInstallTask extends AbstractTask {
         log.error("Invalid plugin installation target directory", e);
         throw new TaskException("Invalid plugin installation target directory", e);
       }
-      resolveMissingFileDetails(bundle);
+      resolveMissingFileDetails();
 
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Downloading files...");
-      Path archiveFile = downloadInTempDirectory(bundle);
+      SimpleDateFormat horodateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
+      Path archiveFile = download(Path.of(ApplicationDefaults.getTempDownloadDirectory())
+          .resolve(horodateFormat.format(new Date()) + ".owlpack"));
 
       this.updateMessage("Installing plugin " + bundle.getRemotePackage().getName() + " - Verifying files...");
 
@@ -139,82 +129,6 @@ public class BundleInstallTask extends AbstractTask {
     }
 
     return completed();
-  }
-
-  /**
-   * Resolves a bundle's download details from the OAS registry detail endpoint when they were
-   * not provided by the bulk registry sync. No-op for bundles that already have a download url,
-   * or that don't originate from an OAS_REGISTRY source.
-   */
-  private void resolveMissingFileDetails(PackageBundle bundle) throws TaskException {
-
-    if (bundle.getDownloadUrl() != null && !bundle.getDownloadUrl().isBlank()) {
-      return;
-    }
-
-    RemotePackage remotePackage = bundle.getRemotePackage();
-    RemoteSource remoteSource = remotePackage.getRemoteSource();
-    if (remoteSource == null || remoteSource.getType() != SourceType.OAS_REGISTRY) {
-      return;
-    }
-
-    this.updateMessage("Installing plugin " + remotePackage.getName() + " - Fetching download details...");
-    OASFile file = exploreService.fetchOASFile(remoteSource, remotePackage, bundle);
-
-    if (file == null || file.getUrl() == null) {
-      String errorMessage = "An error occurred during plugin installation: "
-          + "Can't retrieve download details from registry";
-      this.updateMessage(errorMessage);
-      log.error(errorMessage);
-      throw new TaskException(errorMessage);
-    }
-
-    bundle.setDownloadUrl(file.getUrl());
-    bundle.setDownloadSha256(file.getSha256());
-  }
-
-  private Path downloadInTempDirectory(PackageBundle bundle) throws TaskException {
-
-    URL website;
-    try {
-      website = new URL(bundle.getDownloadUrl());
-    } catch (MalformedURLException e) {
-      this.updateMessage("Installation of " + bundle.getRemotePackage().getName() + " canceled: Can't download plugin files");
-      throw new TaskException(e);
-
-    }
-
-    SimpleDateFormat horodateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
-    Path tempDir = Path.of(ApplicationDefaults.getTempDownloadDirectory());
-    String outPutFileName = horodateFormat.format(new Date()) + ".owlpack";
-    Path outputFile = tempDir.resolve(outPutFileName);
-
-    try (
-        CallbackByteChannel rbc = new CallbackByteChannel(Channels.newChannel(website.openStream()),
-            contentLength(website));
-        FileChannel fos = openOutputChannel(tempDir, outputFile)) {
-
-      rbc.setCallback(p -> computeTotalProgress(p));
-      fos.transferFrom(rbc, 0, Long.MAX_VALUE);
-      return outputFile;
-
-    } catch (MalformedURLException e) {
-      this.updateMessage("Installation of " + bundle.getRemotePackage().getName() + " canceled: Can't download plugin files");
-      throw new TaskException(e);
-    } catch (IOException e) {
-      this.updateMessage("Installation of " + bundle.getRemotePackage().getName() + " canceled: Can't write file on disk");
-      throw new TaskException(e);
-    }
-
-  }
-
-  /**
-   * Opens a writable channel to the given output file, creating the parent
-   * temp directory first if needed.
-   */
-  private FileChannel openOutputChannel(Path tempDir, Path outputFile) throws IOException {
-    Files.createDirectories(tempDir);
-    return FileChannel.open(outputFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
   }
 
   private void installToPluginDirectory(Path source, Path target) throws IOException {
@@ -269,18 +183,6 @@ public class BundleInstallTask extends AbstractTask {
     return name.endsWith(".component") || name.endsWith(".vst3");
   }
 
-  private int contentLength(URL url) {
-    HttpURLConnection connection;
-    int contentLength = -1;
-    try {
-      connection = (HttpURLConnection) url.openConnection();
-      contentLength = connection.getContentLength();
-    } catch (Exception e) {
-      return 1;
-    }
-    return contentLength;
-  }
-
   private Path getSubFileByPlatformTag(Path parent) throws IOException {
 
     RuntimePlatform runtimePlatform = applicationDefaults.getRuntimePlatform();
@@ -305,26 +207,6 @@ public class BundleInstallTask extends AbstractTask {
     try (var stream = Files.list(dir)) {
       return stream.collect(Collectors.toList());
     }
-  }
-
-  private boolean verifyHash(Path file, String expectedHash) {
-
-    String fileHash;
-    try {
-      fileHash = CryptoUtils.getFileSha256Digest(file);
-    } catch (IOException e) {
-      log.error("File hash can't be computed", e);
-      return false;
-    }
-
-    if (expectedHash.equalsIgnoreCase(fileHash)) {
-      log.debug("Valid SHA256 given: {}, expected: {}", fileHash, expectedHash);
-      return true;
-    } else {
-      log.warn("Invalid SHA256 given: {}, expected: {}", fileHash, expectedHash);
-      return false;
-    }
-
   }
 
   /**

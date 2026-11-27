@@ -22,6 +22,8 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.ui.SideBar;
 import com.owlplug.core.utils.PlatformUtils;
+import com.owlplug.explore.components.ExploreFilterState;
+import com.owlplug.explore.model.BundleType;
 import com.owlplug.explore.model.PackageBundle;
 import com.owlplug.explore.model.PackageTag;
 import com.owlplug.explore.model.RemotePackage;
@@ -29,9 +31,7 @@ import com.owlplug.explore.ui.PackageBundlesView;
 import com.owlplug.explore.ui.PackageSourceBadgeView;
 import com.owlplug.plugin.model.Plugin;
 import com.owlplug.plugin.model.PluginType;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -59,6 +59,8 @@ public class PackageInfoController extends BaseController {
   private ExploreController exploreController;
   @Autowired
   private ImageCache imageCache;
+  @Autowired
+  private ExploreFilterState filterState;
 
   @FXML
   private Pane packageInfoContainer;
@@ -97,6 +99,9 @@ public class PackageInfoController extends BaseController {
 
   private PackageBundlesView bundlesView;
 
+  /** Package currently displayed. */
+  private RemotePackage remotePackage;
+
   private SideBar sidebar;
 
   /**
@@ -121,9 +126,17 @@ public class PackageInfoController extends BaseController {
     bundlesView = new PackageBundlesView(this.getApplicationDefaults());
     bundlesContainer.getChildren().add(bundlesView);
 
+    // Displayed bundles depend on the bundle type filter, refresh the opened package.
+    filterState.getSelectedBundleTypes().addListener((SetChangeListener<BundleType>) change -> {
+      if (remotePackage != null) {
+        configureBody(remotePackage);
+      }
+    });
+
   }
 
   public void setPackage(RemotePackage remotePackage) {
+    this.remotePackage = remotePackage;
     configureHeader(remotePackage);
     configureBody(remotePackage);
 
@@ -213,12 +226,10 @@ public class PackageInfoController extends BaseController {
       tagContainer.getChildren().add(chip);
     }
 
-    // Bundle list display. Bundles are held in a HashSet, they are sorted by their registry
-    // order to keep a stable display order between two openings of the same package.
+    // Bundle list display, restricted to bundle types enabled in the Explore filters and sorted
+    // by registry order (see ExploreFilterState#visibleBundles).
     bundlesView.clear();
-    List<PackageBundle> bundles = new ArrayList<>(remotePackage.getBundles());
-    bundles.sort(Comparator.comparingInt(PackageBundle::getOrder));
-    for (PackageBundle bundle : bundles) {
+    for (PackageBundle bundle : exploreController.getVisibleBundles(remotePackage)) {
       bundlesView.addPackageBundle(bundle, e -> exploreController.installBundle(bundle));
     }
 

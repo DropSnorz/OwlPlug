@@ -24,6 +24,7 @@ import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.StringUtils;
 import com.owlplug.explore.components.ExploreFilterState;
 import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
+import com.owlplug.explore.model.BundleType;
 import com.owlplug.explore.model.RemoteSource;
 import com.owlplug.explore.services.ExploreService;
 import com.owlplug.plugin.model.PluginFormat;
@@ -96,6 +97,7 @@ public class ExploreFilterController {
   private VBox formatSection;
   private VBox typeSection;
   private VBox platformSection;
+  private VBox bundleTypeSection;
 
   private final IntegerProperty activeFilterCount = new SimpleIntegerProperty();
 
@@ -110,10 +112,12 @@ public class ExploreFilterController {
     formatSection = new VBox(4);
     typeSection = new VBox(4);
     platformSection = new VBox(4);
+    bundleTypeSection = new VBox(4);
 
     buildFormatSection();
     buildTypeSection();
     buildPlatformSection();
+    buildBundleTypeSection();
     rebuildSourceSection();
 
     ScrollPane scrollPane = new ScrollPane(buildContent());
@@ -132,9 +136,42 @@ public class ExploreFilterController {
         () -> filterState.getSelectedSourceIds().size() + filterState.getSelectedFormats().size()
             + filterState.getSelectedTypes().size()
             + (int) filterState.getSelectedPlatformTags().stream()
-                .filter(PLATFORM_LABELS::containsKey).count(),
+                .filter(PLATFORM_LABELS::containsKey).count()
+            + filterState.getSelectedBundleTypes().size(),
         filterState.getSelectedSourceIds(), filterState.getSelectedFormats(),
-        filterState.getSelectedTypes(), filterState.getSelectedPlatformTags()));
+        filterState.getSelectedTypes(), filterState.getSelectedPlatformTags(),
+        filterState.getSelectedBundleTypes()));
+  }
+
+  private void buildBundleTypeSection() {
+    for (BundleType bundleType : BundleType.values()) {
+      CheckBox cb = new CheckBox(bundleType.getLabel());
+      cb.setGraphic(new FontIcon(bundleTypeIconLiteral(bundleType)));
+      cb.setSelected(filterState.getSelectedBundleTypes().contains(bundleType));
+      cb.selectedProperty().addListener((obs, old, selected) -> {
+        if (selected != filterState.getSelectedBundleTypes().contains(bundleType)) {
+          if (selected) {
+            filterState.getSelectedBundleTypes().add(bundleType);
+          } else {
+            filterState.getSelectedBundleTypes().remove(bundleType);
+          }
+        }
+      });
+      filterState.getSelectedBundleTypes().addListener((SetChangeListener<BundleType>) change ->
+          cb.setSelected(filterState.getSelectedBundleTypes().contains(bundleType)));
+      bundleTypeSection.getChildren().add(cb);
+    }
+    Label hint = new Label("Installers are run manually, outside of OwlPlug.");
+    hint.setWrapText(true);
+    hint.getStyleClass().addAll("label-disabled", "plugin-filter-hint");
+    bundleTypeSection.getChildren().add(hint);
+  }
+
+  /**
+   * Returns the icon literal used to represent a bundle type across the Explore view.
+   */
+  public static String bundleTypeIconLiteral(BundleType bundleType) {
+    return bundleType == BundleType.INSTALLER ? "mdi2a-application-export" : "mdi2a-archive-outline";
   }
 
   private void buildFormatSection() {
@@ -291,12 +328,15 @@ public class ExploreFilterController {
     typeLabel.getStyleClass().add("plugin-filter-section-title");
     Label platformLabel = new Label("Target platform");
     platformLabel.getStyleClass().add("plugin-filter-section-title");
+    Label bundleTypeLabel = new Label("Package type");
+    bundleTypeLabel.getStyleClass().add("plugin-filter-section-title");
 
     content.getChildren().addAll(
         header, new Separator(),
         buildSourceSectionHeader(), sourceSection,
         new Separator(), formatLabel, formatSection,
         new Separator(), typeLabel, typeSection,
+        new Separator(), bundleTypeLabel, bundleTypeSection,
         new Separator(), platformLabel, platformSection
     );
     return content;
