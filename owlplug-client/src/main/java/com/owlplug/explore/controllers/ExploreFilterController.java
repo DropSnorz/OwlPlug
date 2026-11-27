@@ -132,14 +132,12 @@ public class ExploreFilterController {
 
     // Only platform tags with a visible checkbox (PLATFORM_LABELS) count as an active filter;
     // selectedPlatformTags can also hold OS-code/alias entries used only for package matching.
-    // The bundle type selection counts only when it differs from its default (archives only).
     activeFilterCount.bind(Bindings.createIntegerBinding(
         () -> filterState.getSelectedSourceIds().size() + filterState.getSelectedFormats().size()
             + filterState.getSelectedTypes().size()
             + (int) filterState.getSelectedPlatformTags().stream()
                 .filter(PLATFORM_LABELS::containsKey).count()
-            + (filterState.getSelectedBundleTypes().equals(ExploreFilterState.DEFAULT_BUNDLE_TYPES)
-                ? 0 : 1),
+            + filterState.getSelectedBundleTypes().size(),
         filterState.getSelectedSourceIds(), filterState.getSelectedFormats(),
         filterState.getSelectedTypes(), filterState.getSelectedPlatformTags(),
         filterState.getSelectedBundleTypes()));
@@ -163,7 +161,7 @@ public class ExploreFilterController {
           cb.setSelected(filterState.getSelectedBundleTypes().contains(bundleType)));
       bundleTypeSection.getChildren().add(cb);
     }
-    Label hint = new Label("Installers are run by your system, outside of OwlPlug.");
+    Label hint = new Label("Installers are run manually, outside of OwlPlug.");
     hint.setWrapText(true);
     hint.getStyleClass().addAll("label-disabled", "plugin-filter-hint");
     bundleTypeSection.getChildren().add(hint);

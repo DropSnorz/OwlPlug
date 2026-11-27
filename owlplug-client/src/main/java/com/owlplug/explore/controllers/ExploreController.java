@@ -27,8 +27,8 @@ import com.owlplug.core.controllers.BaseController;
 import com.owlplug.core.utils.Async;
 import com.owlplug.core.utils.FX;
 import com.owlplug.explore.components.ExploreTaskFactory;
-import com.owlplug.explore.controllers.dialogs.InstallStepDialogController;
-import com.owlplug.explore.controllers.dialogs.InstallerDialogController;
+import com.owlplug.explore.controllers.dialogs.ArchiveInstallDialogController;
+import com.owlplug.explore.controllers.dialogs.InstallerRunDialogController;
 import com.owlplug.explore.events.RemoteSourceUpdatedEvent;
 import com.owlplug.explore.events.SourceSyncEvent;
 import com.owlplug.explore.model.BundleType;
@@ -88,9 +88,9 @@ public class ExploreController extends BaseController {
   @Autowired
   private ExploreFilterController exploreFilterController;
   @Autowired
-  private InstallStepDialogController installStepDialogController;
+  private ArchiveInstallDialogController archiveInstallDialogController;
   @Autowired
-  private InstallerDialogController installerDialogController;
+  private InstallerRunDialogController installerRunDialogController;
   @Autowired
   private ExploreTaskFactory exploreTaskFactory;
 
@@ -535,9 +535,9 @@ public class ExploreController extends BaseController {
         p.put("type", bundle.getType().name().toLowerCase());
       });
       if (bundle.isInstaller()) {
-        installerDialogController.start(bundle);
+        installerRunDialogController.start(bundle);
       } else {
-        installStepDialogController.install(bundle);
+        archiveInstallDialogController.start(bundle);
       }
       return true;
     }

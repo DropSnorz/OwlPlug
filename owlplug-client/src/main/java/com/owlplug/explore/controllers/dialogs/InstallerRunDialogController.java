@@ -23,6 +23,7 @@ import com.owlplug.core.components.ImageCache;
 import com.owlplug.core.components.LazyViewRegistry;
 import com.owlplug.core.controllers.dialogs.AbstractDialogController;
 import com.owlplug.core.tasks.TaskExecutionContext;
+import com.owlplug.core.ui.Stepper;
 import com.owlplug.core.utils.FX;
 import com.owlplug.core.utils.FileUtils;
 import com.owlplug.core.utils.PlatformUtils;
@@ -33,14 +34,9 @@ import com.owlplug.explore.tasks.InstallerDownloadTask;
 import com.owlplug.plugin.components.PluginTaskFactory;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -53,9 +49,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -72,18 +65,9 @@ import org.springframework.stereotype.Controller;
  * triggers a plugin scan.
  */
 @Controller
-public class InstallerDialogController extends AbstractDialogController {
+public class InstallerRunDialogController extends AbstractDialogController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-  /** Width of a step column in the stepper, wide enough for the longest step label. */
-  private static final double STEP_WIDTH = 64;
-  /** Diameter of a step circle, must match .installer-step-circle in owlplug.css. */
-  private static final double STEP_CIRCLE_SIZE = 28;
-
-  private static final PseudoClass ACTIVE = PseudoClass.getPseudoClass("active");
-  private static final PseudoClass DONE = PseudoClass.getPseudoClass("done");
-  private static final PseudoClass ERROR = PseudoClass.getPseudoClass("error");
 
   /** Steps displayed in the stepper, in order. */
   private enum Step {
@@ -126,7 +110,7 @@ public class InstallerDialogController extends AbstractDialogController {
   @FXML
   private FlowPane targetsPane;
   @FXML
-  private HBox stepper;
+  private Stepper stepper;
   @FXML
   private VBox downloadCard;
   @FXML
@@ -172,20 +156,15 @@ public class InstallerDialogController extends AbstractDialogController {
   @FXML
   private Button primaryButton;
 
-  /** Nodes of a step in the stepper. */
-  private record StepView(VBox node, Label number, FontIcon check, FontIcon cross) {
-  }
-
-  private final Map<Step, StepView> stepViews = new LinkedHashMap<>();
-  private final List<Region> stepConnectors = new ArrayList<>();
-
   private PackageBundle bundle;
   private TaskExecutionContext downloadContext;
   private Path installerFile;
   private State state;
   private Step failedStep;
+  /** Identity of the latest installer launch, so a late failure of an older one is ignored. */
+  private Object currentLaunch;
 
-  public InstallerDialogController() {
+  public InstallerRunDialogController() {
     // No fixed size: the width comes from the view and the height follows the content, so
     // wrapped text is never clipped on small or low resolution screens.
     super();
@@ -196,7 +175,9 @@ public class InstallerDialogController extends AbstractDialogController {
    * FXML initialize.
    */
   public void initialize() {
-    buildStepper();
+    for (Step step : Step.values()) {
+      stepper.getSteps().add(step.label);
+    }
 
     Rectangle thumbnailClip = new Rectangle(56, 56);
     thumbnailClip.setArcWidth(14);
@@ -237,6 +218,7 @@ public class InstallerDialogController extends AbstractDialogController {
   private void startDownload() {
     installerFile = null;
     failedStep = null;
+    currentLaunch = null;
     downloadProgressBar.progressProperty().unbind();
     downloadProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
     downloadFileLabel.setText(bundle.getFileSize() > 0
@@ -295,12 +277,19 @@ public class InstallerDialogController extends AbstractDialogController {
       return;
     }
     setState(State.WAITING);
+    Object launch = new Object();
+    currentLaunch = launch;
     PlatformUtils.openFile(installerFile.toFile()).exceptionally(ex -> {
       log.error("Installer can't be opened: {}", installerFile, ex);
       Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
-      FX.run(() -> showError(Step.INSTALL, "The installer can't be opened",
-          "Your system refused to open the installer. You can open it manually from its folder.",
-          cause.getMessage()));
+      FX.run(() -> {
+        // Ignores failures of a previous launch, or of a flow completed or cancelled meanwhile
+        if (currentLaunch == launch && state == State.WAITING) {
+          showError(Step.INSTALL, "The installer can't be opened",
+              "Your system refused to open the installer. You can open it manually from its folder.",
+              cause.getMessage());
+        }
+      });
       return null;
     });
   }
@@ -333,6 +322,7 @@ public class InstallerDialogController extends AbstractDialogController {
       downloadContext.cancel();
     }
     deleteInstallerFile();
+    currentLaunch = null;
     state = null;
     this.close();
   }
@@ -433,7 +423,8 @@ public class InstallerDialogController extends AbstractDialogController {
     errorDetailLabel.setVisible(detail != null && !detail.isBlank());
     errorDetailLabel.setManaged(errorDetailLabel.isVisible());
     setState(State.ERROR);
-    updateStepper(step, true);
+    stepper.setCurrentStep(step.ordinal());
+    stepper.setError(true);
   }
 
   private void configureHeader(RemotePackage remotePackage) {
@@ -493,73 +484,13 @@ public class InstallerDialogController extends AbstractDialogController {
     thumbnailPlaceholder.setVisible(false);
   }
 
-  private void buildStepper() {
-    stepper.getChildren().clear();
-    // Connectors extend under the neighbor steps up to their circles, whatever the label
-    // widths, and are drawn behind the circles (opaque) so the line always meets them.
-    double connectorOverlap = (STEP_WIDTH - STEP_CIRCLE_SIZE) / 2;
-    int index = 1;
-    for (Step step : Step.values()) {
-      if (index > 1) {
-        Region connector = new Region();
-        connector.getStyleClass().add("installer-step-connector");
-        connector.setViewOrder(1);
-        HBox.setMargin(connector, new Insets(0, -connectorOverlap, 0, -connectorOverlap));
-        HBox.setHgrow(connector, Priority.ALWAYS);
-        stepConnectors.add(connector);
-        stepper.getChildren().add(connector);
-      }
-      Label number = new Label(String.valueOf(index));
-      number.getStyleClass().add("installer-step-number");
-      FontIcon check = new FontIcon("mdi2c-check");
-      check.setIconSize(14);
-      check.getStyleClass().add("installer-step-check");
-      FontIcon cross = new FontIcon("mdi2c-close");
-      cross.setIconSize(14);
-      cross.getStyleClass().add("installer-step-cross");
-      StackPane circle = new StackPane(number, check, cross);
-      circle.getStyleClass().add("installer-step-circle");
-
-      Label label = new Label(step.label);
-      label.getStyleClass().add("installer-step-label");
-
-      VBox node = new VBox(6, circle, label);
-      node.setAlignment(Pos.TOP_CENTER);
-      // Same width for every step, so circles are evenly spaced whatever their label
-      node.setMinWidth(STEP_WIDTH);
-      node.setPrefWidth(STEP_WIDTH);
-      node.setMaxWidth(STEP_WIDTH);
-      node.getStyleClass().add("installer-step");
-      stepViews.put(step, new StepView(node, number, check, cross));
-      stepper.getChildren().add(node);
-      index++;
-    }
-  }
-
   /**
    * Marks the given step as active, previous ones as done and next ones as pending.
    * A null step marks every step as done.
    */
   private void setActiveStep(Step activeStep) {
-    updateStepper(activeStep, false);
-  }
-
-  private void updateStepper(Step currentStep, boolean error) {
-    int current = currentStep == null ? Step.values().length : currentStep.ordinal();
-    for (Map.Entry<Step, StepView> entry : stepViews.entrySet()) {
-      int ordinal = entry.getKey().ordinal();
-      StepView view = entry.getValue();
-      view.node().pseudoClassStateChanged(DONE, ordinal < current);
-      view.node().pseudoClassStateChanged(ACTIVE, ordinal == current && !error);
-      view.node().pseudoClassStateChanged(ERROR, ordinal == current && error);
-      view.check().setVisible(ordinal < current);
-      view.cross().setVisible(ordinal == current && error);
-      view.number().setVisible(!view.check().isVisible() && !view.cross().isVisible());
-    }
-    for (int i = 0; i < stepConnectors.size(); i++) {
-      // Connector i links step i and step i + 1
-      stepConnectors.get(i).pseudoClassStateChanged(DONE, i < current);
-    }
+    stepper.setError(false);
+    stepper.setCurrentStep(activeStep == null ? Step.values().length : activeStep.ordinal());
   }
 
   @Override
@@ -577,7 +508,7 @@ public class InstallerDialogController extends AbstractDialogController {
     title.setGraphic(new FontIcon("mdi2a-application-export"));
     title.getStyleClass().add("heading-3");
     layout.setHeading(title);
-    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.INSTALLER_DIALOG_VIEW));
+    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.INSTALLER_RUN_VIEW));
     return layout;
   }
 }

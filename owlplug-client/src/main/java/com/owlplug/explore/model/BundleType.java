@@ -19,6 +19,8 @@
 
 package com.owlplug.explore.model;
 
+import java.util.Locale;
+
 /**
  * Kind of file a {@link PackageBundle} points to. Archives are extracted by OwlPlug into a
  * plugin directory, installers are executables handed over to the operating system.
@@ -48,7 +50,7 @@ public enum BundleType {
     if (oasType == null) {
       return null;
     }
-    return switch (oasType.trim().toLowerCase()) {
+    return switch (oasType.trim().toLowerCase(Locale.ROOT)) {
       case "archive" -> ARCHIVE;
       case "installer" -> INSTALLER;
       default -> null;

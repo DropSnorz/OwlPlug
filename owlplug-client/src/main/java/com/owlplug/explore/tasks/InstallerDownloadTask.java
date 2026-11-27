@@ -154,8 +154,9 @@ public class InstallerDownloadTask extends AbstractBundleDownloadTask {
       return FALLBACK_FILE_NAME;
     }
     String name = path.substring(path.lastIndexOf('/') + 1);
-    // Strips characters not allowed in file names on any supported OS
-    name = name.replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", "_").trim();
+    // Keeps only characters safe both as a file name on any supported OS and on the Windows
+    // "cmd /c start" command line used to launch installers (no %, &, ^, ! expansion)
+    name = name.replaceAll("[^A-Za-z0-9 ._()+-]", "_").trim();
     if (name.isEmpty() || name.startsWith(".") || !name.contains(".")) {
       return FALLBACK_FILE_NAME;
     }

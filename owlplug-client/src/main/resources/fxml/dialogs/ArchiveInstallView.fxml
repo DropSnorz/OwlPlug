@@ -5,9 +5,9 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="460.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.InstallStepDialogController">
+<BorderPane prefHeight="460.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.ArchiveInstallDialogController">
     <top>
-        <Pane fx:id="screenshotBackgroundPane" prefHeight="160.0" styleClass="install-step-screenshot" />
+        <Pane fx:id="screenshotBackgroundPane" prefHeight="160.0" styleClass="archive-install-screenshot" />
     </top>
     <center>
         <VBox>

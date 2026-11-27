@@ -49,4 +49,12 @@ public class InstallerDownloadTaskTest {
     assertEquals("evil.exe", InstallerDownloadTask.fileNameFromUrl("https://example.com/a/..%2F..%2Fevil.exe"));
     assertEquals("a_b.exe", InstallerDownloadTask.fileNameFromUrl("https://example.com/a%3Ab.exe"));
   }
+
+  @Test
+  public void testFileNameShouldStripShellMetacharacters() {
+    // Decoded names are passed to "cmd /c start" on Windows: no variable expansion or chaining
+    assertEquals("_TEMP_.exe", InstallerDownloadTask.fileNameFromUrl("https://example.com/%25TEMP%25.exe"));
+    assertEquals("a_calc.exe", InstallerDownloadTask.fileNameFromUrl("https://example.com/a%26calc.exe"));
+    assertEquals("a_b_c.msi", InstallerDownloadTask.fileNameFromUrl("https://example.com/a%5Eb%21c.msi"));
+  }
 }

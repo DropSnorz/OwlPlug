@@ -4,9 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import com.owlplug.core.ui.Stepper?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox styleClass="installer-dialog" spacing="18.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.InstallerDialogController">
+<VBox styleClass="installer-run-dialog" spacing="18.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.owlplug.explore.controllers.dialogs.InstallerRunDialogController">
 
     <!-- Package summary -->
     <HBox spacing="14.0" alignment="CENTER_LEFT" styleClass="installer-header">
@@ -22,7 +23,7 @@
     </HBox>
 
     <!-- Step indicator, filled by the controller -->
-    <HBox fx:id="stepper" styleClass="installer-stepper" alignment="TOP_CENTER" />
+    <Stepper fx:id="stepper" />
 
     <!-- One card per dialog state, only one visible at a time -->
     <StackPane VBox.vgrow="ALWAYS" alignment="TOP_LEFT" minHeight="190.0">

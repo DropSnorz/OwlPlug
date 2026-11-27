@@ -61,7 +61,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class InstallStepDialogController extends AbstractDialogController {
+public class ArchiveInstallDialogController extends AbstractDialogController {
 
   private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -117,7 +117,7 @@ public class InstallStepDialogController extends AbstractDialogController {
 
   private InstallationParameters installParams;
 
-  public InstallStepDialogController() {
+  public ArchiveInstallDialogController() {
     super(580,630);
   }
 
@@ -190,7 +190,7 @@ public class InstallStepDialogController extends AbstractDialogController {
     });
   }
 
-  public void install(PackageBundle bundle) {
+  public void start(PackageBundle bundle) {
     reset();
     installParams = new InstallationParameters();
     installParams.setBundle(bundle);
@@ -447,7 +447,7 @@ public class InstallStepDialogController extends AbstractDialogController {
     title.setGraphic(new FontIcon("mdi2d-download"));
     title.getStyleClass().add("heading-3");
     layout.setHeading(title);
-    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.INSTALL_STEP_VIEW));
+    layout.setBody(lazyViewRegistry.get(LazyViewRegistry.ARCHIVE_INSTALL_VIEW));
     return layout;
   }
 
